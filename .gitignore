@@ -1,0 +1,28 @@
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Secrets / local env
+.env
+.env.*
+!.env.example
+
+# Local operator material (studies, scratch, coding sheets)
+**/.local/
+
+# Editors / agent tooling (do not commit local IDE state)
+.vscode/
+.cursor/
+*.swp
+*~
+
+# Accidental runtime artifacts
+__pycache__/
+*.py[cod]
+node_modules/
+dist/
+build/
+.pytest_cache/
+.venv/
+venv/
