@@ -4,34 +4,53 @@
 
 ## Context
 
-This section will hold **sourced** market and product research plus **imported** sibling research (openBuggy, AITestSuite, live `~/.cursor` workflow) that informs cursorEscape architecture and evaluation.
+This section holds **sourced** market and product research plus **imported** sibling research (openBuggy, AITestSuite, live `~/.cursor` workflow) that informs cursorEscape architecture and evaluation.
 
-**Status:** Stub index only. Imports begin in [initialization Phase 2](../roadmaps/cursorEscape-initialization.md).
+**Status:** Phase 2 imports landed — closeout pending review loop + Full CI. openBuggy tree under `imported/openBuggy/`. Phase 3 adds AITestSuite and cursor-global-workflow.
+
+---
 
 ## Substance
 
-### Content boundaries (planned)
+### Content boundaries
 
 | Location | Responsibility |
 | -------- | -------------- |
-| `docs/research/*` (future) | Facts and synthesis with **Sources** subsections |
-| `docs/research/imported/` (Phase 2+) | Copied sibling docs with provenance banners |
+| `docs/research/*` (Target synthesis, future) | Facts and synthesis with **Sources** subsections |
+| `docs/research/imported/` | Copied sibling docs with provenance banners |
 | `docs/featureArchitecture/` | Target system design — link research; do not duplicate long competitor essays |
 
-### Citation rules (when research lands)
+### Citation rules
 
 1. Prefer URLs listed in canonical source lists or original imported docs.
 2. Do not invent URLs.
-3. Imported files carry provenance banners; Observed ≠ Target.
+3. Imported files carry provenance banners; **Observed ≠ Target**.
 
-### Documents
+### Import manifest
 
-*None yet — Phase 2 copies openBuggy research; Phase 3 adds AITestSuite and cursor-global-workflow imports.*
+* [COPY-MANIFEST](./imported/COPY-MANIFEST.md) — every copied file, source path, date, why, status
+
+### Imported openBuggy (Phase 2)
+
+| Area | Hub |
+| ---- | --- |
+| Feature architecture (subset) | [imported/openBuggy/featureArchitecture/](./imported/openBuggy/featureArchitecture/_index.md) |
+| Cursor BugBot Observed suite | [cursor-bugbot-agent-review/](./imported/openBuggy/featureArchitecture/cursor-bugbot-agent-review/_index.md) |
+| Product/API research | [imported/openBuggy/research/](./imported/openBuggy/research/_index.md) |
+| Reviewer effectiveness analysis | [imported/openBuggy/analysis/](./imported/openBuggy/analysis/_index.md) |
+| openBuggy design decisions (imported) | [design-decisions.md](./imported/openBuggy/review/design-decisions.md) |
+| Agent review loop SOP (imported) | [running-an-agent-review-loop](./imported/openBuggy/SOPs/running-an-agent-review-loop-with-openBuggy.md) |
+
+Sibling relationship (Target): [relationship-to-siblings](../review/relationship-to-siblings.md).
+
+---
 
 ## Implications / open questions
 
-1. `docs/research/imported/COPY-MANIFEST.md` is created in Phase 2.
-2. Host-only absolute paths in imports must be annotated in the manifest.
+1. Host-only absolute paths in imports are annotated in COPY-MANIFEST.
+2. Phase 3 updates manifest for AITestSuite and `~/.cursor` workflow imports.
+
+---
 
 ## Related
 

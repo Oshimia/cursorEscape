@@ -16,13 +16,14 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 
 1. Read [Roadmap](../Roadmap.md) and the relevant `_index.md`.
 2. Decide document kind:
-   - **featureArchitecture** — how it works (Target design; optional **Observed external harness** subdirectories when imported)
+   - **featureArchitecture** — how it works (Target design; cite Observed imports from `docs/research/imported/` — do not add Observed harness subdirectories directly under `docs/featureArchitecture/`)
    - **SOP** — how to do a task
    - **research** — sourced facts and imported sibling material
    - **roadmaps/** — multi-phase handoff conductors
    - **review/design-decisions** — intent
    - **analysis** — operator studies of local workflows (not eval scores, not proposed engine design)
-3. When tone or distribution framing changes, re-read stewardship in [design decisions](../review/design-decisions.md) (private-first; monetization is not a goal).
+3. Do not put metrics in `competitive-landscape.md` — put them in `research/` with Sources (rule from imported openBuggy documenting SOP).
+4. When tone or distribution framing changes, re-read stewardship in [design decisions](../review/design-decisions.md) (private-first; monetization is not a goal).
 
 ### Observed vs Target
 
@@ -34,9 +35,9 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 
 Imported research files carry provenance banners. **Observed ≠ Target** — never merge without classification.
 
-### Operator analysis under `docs/analysis/`
+### Operator analysis
 
-[`docs/analysis/`](../analysis/_index.md) holds **decision-grade studies** of the owner's existing loops. Do not fold those write-ups into Observed FA suites or into future eval scoring. Committed analysis docs use aliases and theme labels; UUID/path sheets stay gitignored under a study's `.local/` directory (`**/.local/` in `.gitignore`).
+[`docs/analysis/`](../analysis/_index.md) indexes **decision-grade studies** of the owner's existing loops. Phase 2 imported openBuggy operator studies live under [`docs/research/imported/openBuggy/analysis/`](../research/imported/openBuggy/analysis/_index.md) (Observed/imported) — link from `docs/analysis/_index.md`, do not duplicate under `docs/analysis/` as if native. Do not fold those write-ups into Observed FA suites or into future eval scoring. Committed analysis docs use aliases and theme labels; UUID/path sheets for imported openBuggy studies remain in the **openBuggy source repo** under gitignored `.local/` (not copied here). Future local studies may use `.local/` under `docs/analysis/**` (`**/.local/` in `.gitignore`).
 
 ### When adding a document
 
@@ -57,8 +58,9 @@ Imported research files carry provenance banners. **Observed ≠ Target** — ne
 
 | Folder | Holds |
 | ------ | ----- |
-| `docs/analysis/` | Studies of how the owner's loops behave in practice |
-| `docs/featureArchitecture/` | How cursorEscape is **intended** to work (Target) plus Observed harness references when imported |
+| `docs/analysis/` | Index for operator studies; future local studies may live here |
+| `docs/research/imported/openBuggy/analysis/` | Imported openBuggy operator studies (Observed/imported) |
+| `docs/featureArchitecture/` | How cursorEscape is **intended** to work (Target); Observed openBuggy FA under `docs/research/imported/openBuggy/featureArchitecture/` |
 
 ### After edits
 
