@@ -1,12 +1,14 @@
 # cursorEscape
 
-**Status:** Documentation foundation — initialization complete; runtime not started.
+**Status:** Documentation foundation — initialization complete; runtime not started. First recreation: **T3 Code + OpenCode**.
 
 ## What and why
 
 **What:** cursorEscape is an **open agentic workflow companion** — portable docs and (later) replaceable runtime for plan → implement → dual review → closeout on your repositories.
 
 **Why:** Escape Cursor lock-in without losing what works: structured plan/review loops, in-repo knowledge, evaluable workflow behavior, and **BYOK** backends you can swap.
+
+**First host attempt:** [T3 Code](https://t3.codes/) (control plane) + [OpenCode](https://opencode.ai/) (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Study: [host recreation](docs/analysis/host-recreation-2026-08.md).
 
 **Start here:** **[docs/Roadmap.md](docs/Roadmap.md)** — vision, principles, status, and directory map. Initialization archaeology: [initialization report](docs/review/initialization-report.md).
 
@@ -21,7 +23,7 @@
 | [`docs/skills/`](docs/skills/_index.md) | Host-agnostic workflow skill contracts |
 | [`docs/research/`](docs/research/_index.md) | Sourced facts and imported sibling research |
 | [`docs/SOPs/`](docs/SOPs/_index.md) | Procedures for maintainers and future implementers |
-| [`docs/analysis/`](docs/analysis/_index.md) | Operator studies of local workflows |
+| [`docs/analysis/`](docs/analysis/_index.md) | Operator studies ([host recreation](docs/analysis/host-recreation-2026-08.md)) |
 | [`docs/roadmaps/`](docs/roadmaps/_index.md) | Multi-phase handoff roadmaps (including [initialization](docs/roadmaps/cursorEscape-initialization.md)) |
 
 ## Repository layout
@@ -42,18 +44,18 @@ cursorEscape/
     roadmaps/
 ```
 
-Application runtime, adapters, packages, and eval runners are **out of scope** for the current initialization roadmap.
+Application runtime, adapters, packages, and eval runners are **out of scope** until an authorized implementation phase. Recreation uses external T3 + OpenCode.
 
 ## Related repositories
 
-Sibling archives under `general-projects/` (local relative links; **no standing sync**):
+Sibling archives (local relative links; **no standing sync**):
 
 | Sibling | Role |
 | ------- | ---- |
-| [openBuggy](../openBuggy/README.md) | Bug-finder engine + BugBot research/eval archive |
+| [openBuggy](../openBuggy/README.md) | Research/eval archive — not v0 bug_reviewer default |
 | [AITestSuite](../AITestSuite/README.md) | Frozen plan/review eval packaging |
 
-Longer map and import boundaries: [relationship to siblings](docs/review/relationship-to-siblings.md).
+Longer map: [relationship to siblings](docs/review/relationship-to-siblings.md).
 
 ## License / remote
 

@@ -31,38 +31,44 @@ cursorEscape is an **open agentic workflow companion** for escaping Cursor lock-
 | **Primary job** | Preserve and evolve a **personal agentic workflow** — plan, implement, dual review, repository discovery — as portable docs and (later) replaceable runtime surfaces. |
 | **Personal workflow first** | Success = the owner's loop works reliably on their repos, not market share or a general IDE product. |
 | **Not building a general IDE** | cursorEscape is a **workspace-pointing companion**, not a from-scratch editor or Cursor clone. |
-| **Bugbot leg (initial)** | Use **openBuggy** as the external Bugbot-shaped sibling for the bug-finder review leg — **not reimplemented initially** in cursorEscape. |
+| **First host attempt** | **T3 Code** (control plane: threads, diffs, file preview) + **OpenCode** (harness: skills, named subagents, parallel Task dual-gate). T3 is not a VS Code replacement and does not own agent/skill contracts. See [host recreation study](../analysis/host-recreation-2026-08.md). |
+| **Bugbot leg (initial)** | OpenCode **`bug_reviewer`** subagent + skills/rules (same pattern as `production_readiness_reviewer` / live reviewer-a). **openBuggy is not required** for v0 — research archive / optional later only. |
 | **Keys** | **BYOK** — the operator supplies model API keys; inference cost and control stay with the operator. |
-| **IDE coupling** | **VS Code is not inseparably coupled.** A future thin client is acceptable; the engine and workflow contracts are not VS Code–specific. |
+| **Inference (Desired)** | **ClinePass** (or equivalent open-weight subscription) as the likely OpenCode provider later — not a week-one gate. |
+| **IDE coupling** | **VS Code is not inseparably coupled.** T3 (or similar) is the preferred agent cockpit for observability; a thin IDE client remains acceptable. Engine and workflow contracts are not VS Code–specific. |
 | **Replaceability** | Backends, models, and execution surfaces must remain swappable without rewriting canonical intent docs. |
-| **Cursor dependency (target)** | **None** for cursorEscape runtime. Observed Cursor behavior may be imported as research/reference only. |
+| **Cursor dependency (target)** | **None** for the recreation path. Observed Cursor behavior may be imported as research/reference only. |
+| **Runtime in this repo** | **Not started.** Docs remain canonical until an explicit R0+ go-ahead; first recreation uses external T3 + OpenCode, not a cursorEscape engine. |
 | **Documentation taxonomy** | Mirror openBuggy's `docs/` layout (featureArchitecture, SOPs, research, analysis, roadmaps) — extend hubs; do not invent parallel trees. |
 
 ### Non-goals (initial)
 
 | Non-goal | Rationale |
 | -------- | --------- |
-| General-purpose IDE | Companion workflow, not an editor product. |
-| Reimplement Bugbot engine first | Delegate to openBuggy; focus on workflow portability and knowledge. |
+| General-purpose IDE | Companion workflow / contracts, not an editor product. T3 is a control plane, not a Cursor clone. |
+| Reimplement Bugbot engine first | Recreate bug-finder utility with OpenCode agent + skills; openBuggy stays research. |
+| Require openBuggy for v0 dual gate | Optional later; not a default transport. |
 | Monetization or productized SaaS | Private workflow preservation. |
-| Inseparable VS Code coupling | Thin client OK; engine and contracts stay host-agnostic. |
-| Runtime in documentation phases | Initialization roadmap is docs-only through Phase 5. |
-| Pretend stack or APIs are chosen | Record TBD until implementation explicitly starts. |
+| Inseparable VS Code coupling | T3 or thin client OK; contracts stay host-agnostic. |
+| Runtime during docs lock-in | No packages, adapters, or pretend APIs in this repository yet. |
+| Pretend every Unknown is settled | Record TBD until spikes; U2/U8 settled 2026-08 — see [unresolved questions](./unresolved-architectural-questions.md). |
 
 ---
 
 ## Implications / open questions
 
-1. When implementation starts, pick engine language and record it here.
+1. Engine language (U1) remains Unknown until a later implementation phase — first recreation does not need a cursorEscape runtime.
 2. Decide license and remote hosting only if/when pursuing an optional public release.
 3. Phase 4 Target docs classify claims (Desired / Required / Nice-to-have / Cursor-specific / Unknown) — see [feature architecture index](../featureArchitecture/_index.md).
-4. Sibling relationships documented in [relationship-to-siblings](./relationship-to-siblings.md) (Phase 2–3 imports); Phase 4 Target docs cite imports with claim taxonomy.
+4. Sibling relationships documented in [relationship-to-siblings](./relationship-to-siblings.md); openBuggy is not a v0 runtime dependency.
+5. R0 spike must still prove OpenCode parallel Tasks + parent-owned Fast CI honesty ([implementation roadmap](../roadmaps/implementation-roadmap.md)).
 
 ---
 
 ## Related
 
 - [Roadmap](../Roadmap.md)
+- [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Feature architecture index](../featureArchitecture/_index.md)
 - [Documenting this repo (SOP)](../SOPs/documenting-this-repo.md)
 - [Relationship to siblings](./relationship-to-siblings.md)

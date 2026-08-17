@@ -28,16 +28,16 @@ Imported Observed harness and workflow snapshots live under [research/imported/]
 
 | Document | Purpose |
 | -------- | ------- |
-| [intended-workflow.md](./intended-workflow.md) | Canonical loop — live workflow + openBuggy dual gate |
+| [intended-workflow.md](./intended-workflow.md) | Canonical loop — live workflow + dual gate (OpenCode bug_reviewer) |
 | [desired-behavior-vs-cursor-specific.md](./desired-behavior-vs-cursor-specific.md) | Portable vs Cursor-specific claims |
 | [cursor-behavior-to-reproduce.md](./cursor-behavior-to-reproduce.md) | Observed behaviors worth preserving |
-| [backend-and-provider-abstraction.md](./backend-and-provider-abstraction.md) | Workflow → adapter → provider layering |
+| [backend-and-provider-abstraction.md](./backend-and-provider-abstraction.md) | T3 → OpenCode → provider layering |
 | [repository-discovery-and-context.md](./repository-discovery-and-context.md) | What context agents need |
-| [workspace-model.md](./workspace-model.md) | Companion vs target workspace |
+| [workspace-model.md](./workspace-model.md) | Companion vs target workspace; T3 vs OpenCode sessions |
 | [agent-roles-and-model-assignment.md](./agent-roles-and-model-assignment.md) | Role catalog + config |
 | [evaluation-methodology.md](./evaluation-methodology.md) | How workflow quality is measured |
 
-Claim taxonomy: **Desired / Required / Nice-to-have / Cursor-specific / Unknown**.
+First host attempt: [host recreation study](../analysis/host-recreation-2026-08.md). Claim taxonomy: **Desired / Required / Nice-to-have / Cursor-specific / Unknown**.
 
 ---
 

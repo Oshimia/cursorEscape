@@ -4,7 +4,7 @@
 
 ## Context
 
-**Target** role contract. Bug-finder leg of the dual gate. **Required:** Delegate to **openBuggy** (external sibling) — not Cursor proprietary `bugbot` subagent type ([design decisions](../review/design-decisions.md)).
+**Target** role contract. Bug-finder leg of the dual gate. Recreate Bugbot-shaped utility with an OpenCode (or host-equivalent) subagent + skills/rules — the same pattern as [production_readiness_reviewer](./production_readiness_reviewer.md) / live reviewer-a. **Not** Cursor proprietary `bugbot`. **openBuggy is not required** for v0 ([design decisions](../review/design-decisions.md)).
 
 ---
 
@@ -34,26 +34,30 @@ Find bugs, security issues, concurrency problems, and high-value correctness def
 ### Must not
 
 - Require Cursor-specific subagent types at runtime
+- Require openBuggy (or any external Bugbot engine) for v0
+- Edit the workspace (`edit: deny` on OpenCode agent)
 - Block on out-of-scope items named in Custom Instructions
 - Re-run CI
 
 ### Model
 
-openBuggy engine default or matched to parent — config override.
+**Desired:** Matched to production_readiness or a stronger bug-focused model — config override. ClinePass (or BYOK) when using OpenCode.
 
-### Adapter note (Unknown)
+### Host mapping (first attempt)
 
-Transport: CLI `review --json` vs MCP — see [preliminary backend landscape](../research/preliminary-backend-landscape.md) and openBuggy [ide-and-agent-integration](../research/imported/openBuggy/featureArchitecture/ide-and-agent-integration.md).
+OpenCode markdown agent (`mode: subagent`, `permission.edit: deny`) with a bug-first system prompt and Custom Instructions envelope. Parent launches via Task in the same session as production_readiness_reviewer.
 
 ---
 
 ## Implications / open questions
 
-1. Until openBuggy adapter exists, Cursor-hosted workflow may still use Cursor Bugbot as **Cursor-specific** stand-in — not Target runtime.
+1. openBuggy CLI/MCP remains **Nice-to-have** later — research under `docs/research/imported/openBuggy/`.
+2. Until OpenCode agents are installed, Cursor-hosted workflow may still use Cursor Bugbot as **Cursor-specific** stand-in — not Target recreation path.
 
 ---
 
 ## Related
 
 - [production_readiness_reviewer](./production_readiness_reviewer.md)
-- [openBuggy agent review loop SOP](../research/imported/openBuggy/SOPs/running-an-agent-review-loop-with-openBuggy.md)
+- [Host recreation study](../analysis/host-recreation-2026-08.md)
+- [openBuggy agent review loop SOP](../research/imported/openBuggy/SOPs/running-an-agent-review-loop-with-openBuggy.md) (Observed / optional)

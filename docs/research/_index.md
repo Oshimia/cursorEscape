@@ -6,7 +6,7 @@
 
 This section holds **sourced** market and product research plus **imported** sibling research (openBuggy, AITestSuite, live `~/.cursor` workflow) that informs cursorEscape architecture and evaluation.
 
-**Status:** Phase 3 imports complete. Phase 4 added Target synthesis [preliminary-backend-landscape.md](./preliminary-backend-landscape.md).
+**Status:** Phase 3 imports complete. Phase 4 added Target synthesis [preliminary-backend-landscape.md](./preliminary-backend-landscape.md) (updated 2026-08: first-attempt OpenCode + T3).
 
 ---
 
@@ -20,11 +20,13 @@ This section holds **sourced** market and product research plus **imported** sib
 | `docs/research/imported/` | Copied sibling docs with provenance banners |
 | `docs/featureArchitecture/` | Target system design — link research; do not duplicate long competitor essays |
 
-### Target synthesis (Phase 4)
+### Target synthesis (Phase 4+)
 
 | Document | Purpose |
 | -------- | ------- |
-| [preliminary-backend-landscape.md](./preliminary-backend-landscape.md) | Cline vs OpenCode vs Aider/T3 — research, not decision |
+| [preliminary-backend-landscape.md](./preliminary-backend-landscape.md) | First attempt: OpenCode + T3 Code; ClinePass Desired later |
+
+Operator study: [host recreation](../analysis/host-recreation-2026-08.md).
 
 ### Citation rules
 
@@ -68,7 +70,7 @@ Key live workflow entry points in the import mirror:
 ## Implications / open questions
 
 1. Host-only absolute paths in imports are annotated in COPY-MANIFEST.
-2. Backend landscape remains **Unknown** until implementation spike — see [unresolved questions](../review/unresolved-architectural-questions.md).
+2. U2/U8 settled in [unresolved questions](../review/unresolved-architectural-questions.md); remaining Unknowns stay labeled.
 
 ---
 
@@ -76,4 +78,5 @@ Key live workflow entry points in the import mirror:
 
 - [Roadmap](../Roadmap.md)
 - [Feature architecture index](../featureArchitecture/_index.md)
+- [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)

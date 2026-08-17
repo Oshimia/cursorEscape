@@ -11,7 +11,7 @@ Multi-phase handoff roadmaps for cursorEscape. Each roadmap file carries **Agent
 | Roadmap | Status | Purpose |
 | ------- | ------ | ------- |
 | [cursorEscape initialization](./cursorEscape-initialization.md) | **Closeout** — Phase 5 pending Composer QC commit | Bootstrap docs, import research, Target FA docs, [initialization report](../review/initialization-report.md) |
-| [Implementation roadmap](./implementation-roadmap.md) | **Planning** | Future runtime/engine milestones — research-first |
+| [Implementation roadmap](./implementation-roadmap.md) | **Planning** — R0 T3+OpenCode dogfood | External recreation first; optional later engine |
 
 ## Implications / open questions
 

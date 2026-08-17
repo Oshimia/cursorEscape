@@ -4,7 +4,7 @@
 
 ## Context
 
-cursorEscape separates **portable workflow intent** (Desired / Required) from **Cursor IDE mechanics** (Cursor-specific). Target contracts in [agents](../agents/_index.md) and [skills](../skills/_index.md) use host-agnostic wording; Cursor is one adapter surface.
+cursorEscape separates **portable workflow intent** (Desired / Required) from **Cursor IDE mechanics** (Cursor-specific). Target contracts in [agents](../agents/_index.md) and [skills](../skills/_index.md) use host-agnostic wording; first recreation adapter is **OpenCode** (with optional **T3 Code** control plane) — see [host recreation](../analysis/host-recreation-2026-08.md).
 
 ---
 
@@ -34,6 +34,8 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 | Repository doc discovery before edits | **Required** | [discovery](../skills/discovery.md) |
 | BYOK model keys | **Required** | [design decisions](../review/design-decisions.md) |
 | Replaceable backends and models | **Required** | [backend abstraction](./backend-and-provider-abstraction.md) |
+| First host: OpenCode + T3 control plane | **Desired** | [design decisions](../review/design-decisions.md) |
+| ClinePass (or equivalent) as OpenCode provider | **Desired** | Later; U13 unproven |
 | Role + model assignment via config | **Desired** | Not hardcoded in prompts ([agent roles](./agent-roles-and-model-assignment.md)) |
 | Iteration narrowing after many launches | **Nice-to-have** | Live guidance at count ≥ 9 |
 
@@ -41,11 +43,11 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 
 | Cursor surface | Portable equivalent |
 | -------------- | ------------------- |
-| `Task` tool / `subagent_type: reviewer-a` | **production_readiness_reviewer** role contract |
-| `subagent_type: bugbot` | **bug_reviewer** via openBuggy (external) |
+| `Task` tool / `subagent_type: reviewer-a` | **production_readiness_reviewer** role contract (OpenCode subagent) |
+| `subagent_type: bugbot` | **bug_reviewer** OpenCode subagent + skills — not openBuggy-required |
 | `subagent_type: plan-reviewer` | **plan_reviewer** |
 | Composer thread + phase subagents | Orchestrator with phase handoff + QC parent |
-| `~/.cursor/skills/` paths | Host skill registry or repo-local `.cursor/skills/` mirror |
+| `~/.cursor/skills/` paths | OpenCode skill dirs / host skill registry |
 | Cursor rules (`.mdc` alwaysApply) | Host policy hooks or documented user rules |
 | Progress timeline (`UpdateCurrentStep`) | **Nice-to-have** UX; not a workflow gate |
 
@@ -55,13 +57,13 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 | ---- | ----- |
 | Reproduce Cursor's proprietary index | **Unknown** as v0 goal — see [repository discovery](./repository-discovery-and-context.md) |
 | Lock to Cursor subscription for review | **Required** non-goal per [design decisions](../review/design-decisions.md) |
-| Require VS Code | **Required** non-goal — thin client acceptable |
+| Require VS Code | **Required** non-goal — T3 or thin client acceptable |
 
 ---
 
 ## Implications / open questions
 
-1. Runtime must translate Cursor-specific examples in imported Observed docs to host-agnostic contracts without losing gate semantics.
+1. OpenCode adapters must preserve gate semantics without Cursor Task/subagent IDs.
 2. **Unknown:** Whether future cursorEscape ships Cursor rules snippets or only documents contracts.
 
 ---
@@ -70,4 +72,5 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 
 - [Cursor behavior to reproduce](./cursor-behavior-to-reproduce.md)
 - [Intended workflow](./intended-workflow.md)
+- [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Agent role contracts](../agents/_index.md)

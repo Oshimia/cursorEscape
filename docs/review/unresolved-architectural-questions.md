@@ -4,7 +4,7 @@
 
 ## Context
 
-Deliberately **Unknown** decisions — not pretend-settled. Archaeology snapshot at init closeout: [initialization report](./initialization-report.md). Runtime work waits for explicit implementation phase.
+Deliberately **Unknown** decisions — not pretend-settled — plus questions **settled** by the 2026-08 host-recreation lock-in. Archaeology snapshot at init closeout: [initialization report](./initialization-report.md). Operator study: [host recreation](../analysis/host-recreation-2026-08.md). Runtime work in this repo waits for explicit implementation phase; first recreation uses external T3 + OpenCode.
 
 Claim label: **Unknown** unless noted otherwise.
 
@@ -12,14 +12,20 @@ Claim label: **Unknown** unless noted otherwise.
 
 ## Substance
 
+### Settled (2026-08 host lock-in)
+
+| # | Question | Decision |
+| - | -------- | -------- |
+| U2 | Primary backend adapter | **OpenCode** (first attempt). **T3 Code** is the control plane (observability), not the harness. Spike still required for parallel Task honesty — see [implementation roadmap](../roadmaps/implementation-roadmap.md) R0. |
+| U8 | openBuggy as default bug_reviewer transport | **Withdrawn for v0.** Bug leg = OpenCode `bug_reviewer` subagent + skills (reviewer-a pattern). openBuggy remains research / optional later. |
+
 ### Runtime and stack
 
 | # | Question | Notes |
 | - | -------- | ----- |
-| U1 | Engine language (TypeScript, Python, …)? | Blocked until implementation roadmap spike |
-| U2 | Primary backend adapter — Cline, OpenCode, other? | [preliminary backend landscape](../research/preliminary-backend-landscape.md) |
+| U1 | Engine language (TypeScript, Python, …)? | **Unknown** — blocked until a cursorEscape runtime is authorized (not required for T3+OpenCode recreation) |
 | U3 | Companion config location — global vs `.cursorEscape/` in target repo? | [workspace model](../featureArchitecture/workspace-model.md) |
-| U4 | Unified agent API schema | [backend abstraction](../featureArchitecture/backend-and-provider-abstraction.md) |
+| U4 | Unified agent API schema | [backend abstraction](../featureArchitecture/backend-and-provider-abstraction.md) — OpenCode markdown agents are the v0 adapter surface |
 
 ### Workflow and discovery
 
@@ -33,7 +39,6 @@ Claim label: **Unknown** unless noted otherwise.
 
 | # | Question | Notes |
 | - | -------- | ----- |
-| U8 | openBuggy MCP vs CLI as default bug_reviewer transport | External sibling — not reimplemented first |
 | U9 | When to invoke optional test_reviewer vs production_readiness only | [agent roles](../featureArchitecture/agent-roles-and-model-assignment.md) |
 | U10 | Eval harness ownership — cursorEscape repo vs AITestSuite pattern | [evaluation methodology](../featureArchitecture/evaluation-methodology.md) |
 
@@ -43,7 +48,7 @@ Claim label: **Unknown** unless noted otherwise.
 | - | -------- | ----- |
 | U11 | License and public release gate | [design decisions](./design-decisions.md) |
 | U12 | Remote hosting if open-sourced | **Unknown** |
-| U13 | Default model provider per role | **Unknown** — BYOK; see [agent roles](../featureArchitecture/agent-roles-and-model-assignment.md) |
+| U13 | Default model provider per role | **Unknown** (unproven) — **Desired:** ClinePass (or equivalent) when using OpenCode; see [agent roles](../featureArchitecture/agent-roles-and-model-assignment.md) |
 
 ---
 
@@ -51,11 +56,13 @@ Claim label: **Unknown** unless noted otherwise.
 
 1. Target docs may cite these IDs when marking **Unknown** claims elsewhere.
 2. Resolving a question requires updating the relevant Target doc + this list in the same change set.
+3. Init report Q6/U2/U8 narrative is superseded by [host recreation](../analysis/host-recreation-2026-08.md) — do not treat the Phase 5 archaeology body as live adapter choice.
 
 ---
 
 ## Related
 
 - [Design decisions](./design-decisions.md)
+- [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Implementation roadmap](../roadmaps/implementation-roadmap.md)
 - [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)

@@ -4,7 +4,7 @@
 
 ## Context
 
-This document lists **Observed** Cursor behaviors worth preserving in a portable form — not a full IDE clone. Sources: imported openBuggy Cursor BugBot FA suite and live workflow imports. Classify each item; cite imports rather than re-paste long excerpts.
+This document lists **Observed** Cursor behaviors worth preserving in a portable form — not a full IDE clone. Sources: imported openBuggy Cursor BugBot FA suite and live workflow imports. First recreation maps these to **OpenCode** agents/skills (optional **T3** UI). Classify each item; cite imports rather than re-paste long excerpts.
 
 ---
 
@@ -14,9 +14,9 @@ This document lists **Observed** Cursor behaviors worth preserving in a portable
 
 | Observed behavior | Source | Target mapping |
 | ----------------- | ------ | -------------- |
-| Parent runs Fast CI once per iteration; reviewers do not re-run CI | [orchestration-and-review-loops](../research/imported/openBuggy/featureArchitecture/cursor-bugbot-agent-review/orchestration-and-review-loops.md) | Review-loop parent |
-| Parallel launch of both review legs | Same | **Required** |
-| Explicit diff scope: branch vs uncommitted | [invocation-contract](../research/imported/openBuggy/featureArchitecture/cursor-bugbot-agent-review/invocation-contract.md) | **Desired** for bug_reviewer |
+| Parent runs Fast CI once per iteration; reviewers do not re-run CI | [orchestration-and-review-loops](../research/imported/openBuggy/featureArchitecture/cursor-bugbot-agent-review/orchestration-and-review-loops.md) | Review-loop parent (OpenCode primary) |
+| Parallel launch of both review legs | Same | **Required** — two OpenCode Task calls |
+| Explicit diff scope: branch vs uncommitted | [invocation-contract](../research/imported/openBuggy/featureArchitecture/cursor-bugbot-agent-review/invocation-contract.md) | **Desired** for bug_reviewer (prompt input) |
 | Custom Instructions on bug leg; locked opener on production-readiness leg | [custom-instructions angle](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/custom-instructions.md) | **Required** pattern |
 | Empty finding lists = clean for Bugbot bar | openBuggy FA overview | bug_reviewer verdict |
 
@@ -24,7 +24,7 @@ This document lists **Observed** Cursor behaviors worth preserving in a portable
 
 | Observed behavior | Source | Target stance |
 | ----------------- | ------ | ------------- |
-| Read / Grep / Glob over workspace | [tooling-and-navigation](../research/imported/openBuggy/featureArchitecture/cursor-bugbot-agent-review/tooling-and-navigation.md) | **Desired** via backend tools |
+| Read / Grep / Glob over workspace | [tooling-and-navigation](../research/imported/openBuggy/featureArchitecture/cursor-bugbot-agent-review/tooling-and-navigation.md) | **Desired** via OpenCode tools |
 | Follow imports and callers from changed files | Same | **Desired** — see [repository discovery](./repository-discovery-and-context.md) |
 | No guarantee of whole-repo embedding | Same | **Required** — tight caps |
 
@@ -40,7 +40,8 @@ This document lists **Observed** Cursor behaviors worth preserving in a portable
 
 | Observed | Why not |
 | -------- | ------- |
-| Cursor-only `bugbot` subagent type | Use openBuggy external leg |
+| Cursor-only `bugbot` subagent type | Use OpenCode `bug_reviewer` agent + skills |
+| Require openBuggy engine for v0 | Research / optional later — [design decisions](../review/design-decisions.md) |
 | Proprietary deep links / PR bot in v0 | [ide-and-agent-integration](../research/imported/openBuggy/featureArchitecture/ide-and-agent-integration.md) non-goals |
 | Freeze eval `REVIEW_LOOP.md` unified APPROVED bar | Eval-packaging only |
 | Hardcoded streaming-media npm CI gate | Domain-specific freeze artifact |

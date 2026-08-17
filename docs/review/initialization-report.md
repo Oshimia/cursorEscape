@@ -171,12 +171,14 @@ From [implementation-roadmap](../roadmaps/implementation-roadmap.md) — **plann
 1. This report should not be edited for living status — update [Roadmap](../Roadmap.md) and Target FA docs instead.
 2. Re-import from siblings requires manifest update and explicit phase decision.
 3. Initialization conductor Phase 5 deliverables land when this report, hub links, review loop, and Full CI pass — Composer QC commit follows.
+4. **Superseded (2026-08):** Q6 / U2 / U8 adapter narrative — first attempt is T3 + OpenCode; openBuggy not v0 default. See [host recreation](../analysis/host-recreation-2026-08.md), [design decisions](./design-decisions.md), [unresolved questions](./unresolved-architectural-questions.md). Q1–9 body above remains the init archaeology snapshot.
 
 ---
 
 ## Related
 
 - [Design decisions](./design-decisions.md)
+- [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Relationship to siblings](./relationship-to-siblings.md)
 - [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md)
 - [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)

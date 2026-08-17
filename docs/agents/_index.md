@@ -4,7 +4,7 @@
 
 ## Context
 
-Host-agnostic **Target** contracts for cursorEscape orchestration. Adapters map these roles to native agent types (e.g. Cursor `reviewer-a` → production_readiness_reviewer). Imported Cursor agent files under [cursor-global-workflow](../research/imported/cursor-global-workflow/agents/) are **Observed** snapshots.
+Host-agnostic **Target** contracts for cursorEscape orchestration. Adapters map these roles to native agent types (e.g. Cursor `reviewer-a` → production_readiness_reviewer; OpenCode markdown agents for first recreation). Imported Cursor agent files under [cursor-global-workflow](../research/imported/cursor-global-workflow/agents/) are **Observed** snapshots.
 
 ---
 
@@ -47,6 +47,7 @@ Every role page defines:
 
 1. **Unknown:** Machine-readable schema for contracts (future).
 2. Do not require Cursor Task/subagent IDs in parent prompts — use role names.
+3. First host: OpenCode agents with `edit: deny` on both dual-gate reviewers — [host recreation](../analysis/host-recreation-2026-08.md).
 
 ---
 
@@ -55,3 +56,4 @@ Every role page defines:
 - [Agent roles and model assignment](../featureArchitecture/agent-roles-and-model-assignment.md)
 - [Skills index](../skills/_index.md)
 - [Intended workflow](../featureArchitecture/intended-workflow.md)
+- [Host recreation study](../analysis/host-recreation-2026-08.md)

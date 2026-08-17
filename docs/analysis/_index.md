@@ -6,7 +6,7 @@
 
 Operator studies of **local workflows** (not proposed engine design, not eval scoring, not market research). Each study has its own subdirectory with a hub `_index.md` when imported or authored.
 
-**Status:** Phase 2 openBuggy operator studies imported under `docs/research/imported/openBuggy/analysis/`. Phase 3–4 complete — Target FA and workflow contracts live in [featureArchitecture](../featureArchitecture/_index.md), [agents](../agents/_index.md), and [skills](../skills/_index.md).
+**Status:** Phase 2 openBuggy operator studies imported under `docs/research/imported/openBuggy/analysis/`. Phase 3–4 complete — Target FA and workflow contracts live in [featureArchitecture](../featureArchitecture/_index.md), [agents](../agents/_index.md), and [skills](../skills/_index.md). Local host-recreation study authored 2026-08-17.
 
 ---
 
@@ -16,10 +16,14 @@ Operator studies of **local workflows** (not proposed engine design, not eval sc
 
 | Location | Responsibility |
 | -------- | -------------- |
-| `docs/analysis/*` (future local studies) | Decision-grade studies of the owner's existing loops |
+| `docs/analysis/*` (local studies) | Decision-grade studies of the owner's existing loops |
 | [`../research/imported/openBuggy/analysis/`](../research/imported/openBuggy/analysis/_index.md) | Imported openBuggy operator studies (Observed/imported) |
 | [`../featureArchitecture/`](../featureArchitecture/_index.md) | Target system design (Phase 4); Observed openBuggy FA under `research/imported/openBuggy/featureArchitecture/` |
 | [`../research/`](../research/_index.md) | Sourced market/product facts |
+
+### Documents (local)
+
+* [Host recreation (2026-08)](./host-recreation-2026-08.md) — T3 + OpenCode first attempt; ClinePass later; skill-based bug_reviewer
 
 ### Documents (imported openBuggy)
 

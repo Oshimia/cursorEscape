@@ -4,7 +4,7 @@
 
 ## Context
 
-cursorEscape is a **docs-first companion** for escaping Cursor lock-in. It does not replace sibling archives; it imports selected research with provenance and authors **Target** synthesizing docs under `docs/featureArchitecture/`, `docs/agents/`, and `docs/skills/` (Phase 4 complete). This document is **Target** cursorEscape intent about how siblings relate — not a sync contract.
+cursorEscape is a **docs-first companion** for escaping Cursor lock-in. It does not replace sibling archives; it imports selected research with provenance and authors **Target** synthesizing docs under `docs/featureArchitecture/`, `docs/agents/`, and `docs/skills/` (Phase 4 complete). This document is **Target** cursorEscape intent about how siblings relate — not a sync contract. First recreation uses external **T3 Code + OpenCode**, not sibling runtimes ([host recreation](../analysis/host-recreation-2026-08.md)).
 
 ---
 
@@ -14,15 +14,15 @@ cursorEscape is a **docs-first companion** for escaping Cursor lock-in. It does 
 
 | Sibling | Role relative to cursorEscape | Sync? |
 | ------- | ------------------------------- | ----- |
-| **openBuggy** | External Bugbot leg + market/harness **research** archive; eval fixtures and Bugbot benchmark ops | **No sync** — one-time import under `docs/research/imported/openBuggy/` with [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md) |
+| **openBuggy** | Market/harness **research** archive; BugBot characterization; optional later bug engine — **not** a v0 runtime dependency | **No sync** — one-time import under `docs/research/imported/openBuggy/` with [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md) |
 | **AITestSuite** | Eval packaging for plan/review workflow (frozen baselines, scoring framework, USER_INPUT_STOPS) | **No sync** — Phase 3 import only; Observed/eval-packaging label |
-| **Live `~/.cursor`** | Canonical **Target workflow** for the owner's Cursor loop (skills, rules, agents, workflow docs) | **No sync** — Phase 3 import + `workflow-source-delta.md`; live remains canonical |
+| **Live `~/.cursor`** | Canonical **Target workflow** semantics for the owner's Cursor loop (skills, rules, agents, workflow docs) | **No sync** — Phase 3 import + `workflow-source-delta.md`; live remains Cursor reference |
 
 ### openBuggy (imported in Phase 2)
 
 - **What we took:** Workflow-gap narrative, proposed engine slices relevant to dual-gate loops, full Cursor BugBot Observed FA suite, reviewer-effectiveness analysis (no `.local/`), product/API research, and the agent-review-loop SOP.
 - **What we did not take:** `eval/` tree, mining ops roadmaps as imports, analysis `.local/` coding sheets, runtime code.
-- **How to use imports:** Treat as **Observed/imported** openBuggy characterization. cursorEscape **Target** design lives in [design-decisions](./design-decisions.md), [featureArchitecture](../featureArchitecture/_index.md), [agents](../agents/_index.md), and [skills](../skills/_index.md) — cite imports; do not merge without claim classification.
+- **How to use imports:** Treat as **Observed/imported** openBuggy characterization. v0 **bug_reviewer** is an OpenCode subagent + skills (reviewer-a pattern) — cite openBuggy for personality/eval research, not as Required transport. Target design: [design-decisions](./design-decisions.md), [featureArchitecture](../featureArchitecture/_index.md), [agents](../agents/_index.md), [skills](../skills/_index.md).
 
 ### AITestSuite (imported in Phase 3)
 
@@ -33,11 +33,11 @@ cursorEscape is a **docs-first companion** for escaping Cursor lock-in. It does 
 ### Live `~/.cursor` (imported in Phase 3)
 
 - **What we took:** All nine `docs/workflow/` files, three rules (including `pre-commit-ci-gate`), five skills (+ co-located `user-rules-snippet.md` where present), and two agents — mirrored under `imported/cursor-global-workflow/`.
-- **Canonical:** Live tree remains owner Target; import is dated snapshot for cursorEscape archaeology and Phase 4 synthesis.
+- **Canonical:** Live tree remains owner Cursor reference; recreation maps contracts to OpenCode. Import is dated snapshot for archaeology and Phase 4 synthesis.
 
 ### Replaceability principle
 
-cursorEscape intends to **own** workflow contracts, repo knowledge, and evaluation methodology while keeping backends and models swappable. Siblings remain **reference and packaging** sources, not upstream dependencies with automatic merge.
+cursorEscape intends to **own** workflow contracts, repo knowledge, and evaluation methodology while keeping backends and models swappable. Siblings remain **reference and packaging** sources, not upstream dependencies with automatic merge. External hosts (T3, OpenCode) are adapters, not siblings in this map.
 
 ---
 
@@ -45,15 +45,14 @@ cursorEscape intends to **own** workflow contracts, repo knowledge, and evaluati
 
 1. License and remote hosting for cursorEscape remain TBD; sibling licenses do not automatically apply to Target docs here.
 2. Re-import from openBuggy requires manifest update and explicit phase decision — no standing sync job.
-3. When runtime appears in a future branch, this file should gain concrete API/package boundaries per sibling.
+3. openBuggy is **not** wired as default bug_reviewer (U8 withdrawn) — optional later only.
 
 ---
 
 ## Related
 
-- [openBuggy README](../../../openBuggy/README.md) — sibling on disk
-- [AITestSuite README](../../../AITestSuite/README.md) — sibling on disk
 - [Design decisions](./design-decisions.md)
+- [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Feature architecture index](../featureArchitecture/_index.md)
 - [Agent contracts](../agents/_index.md)
 - [Skill contracts](../skills/_index.md)
