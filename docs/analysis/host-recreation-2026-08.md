@@ -68,7 +68,8 @@ openBuggy remains a valuable **characterization and research** sibling (imported
 
 1. Settle U2 (OpenCode + T3 control plane) and withdraw U8 (openBuggy as default transport) in [unresolved architectural questions](../review/unresolved-architectural-questions.md).
 2. Keep U1 / U3–U7 / U9–U13 Unknown until spikes; U13 notes ClinePass as **Desired** when using OpenCode.
-3. Do not authorize R1+ engine work in this repo until R0 dogfood proves the loop.
+3. OpenCode adapter install paths and smoke checklist: [opencode-host-adapter SOP](../SOPs/opencode-host-adapter.md).
+4. Do not authorize R1+ engine work in this repo until R0 dogfood proves the loop.
 
 ---
 

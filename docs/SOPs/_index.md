@@ -14,9 +14,13 @@ This index lists repeatable procedures for maintaining cursorEscape documentatio
 
 * [Documenting this repo](./documenting-this-repo.md) — how to add/update docs, indexes, and Last updated dates
 
+### Host adapters
+
+* [OpenCode host adapter](./opencode-host-adapter.md) — global `~/.config/opencode` skills/agents/always-on mapping; sync rule; R0 smoke checklist
+
 ### Future runtime operations (conceptual)
 
-*None yet — workflow contracts live under [agents](../agents/_index.md) and [skills](../skills/_index.md); runtime ops SOPs follow implementation roadmap.*
+*Additional runtime ops SOPs follow the implementation roadmap. Workflow contracts live under [agents](../agents/_index.md) and [skills](../skills/_index.md).*
 
 ## Implications / open questions
 
