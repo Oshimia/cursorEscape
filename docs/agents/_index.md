@@ -1,0 +1,57 @@
+# Agent Role Contracts
+
+**Last updated:** 2026-08-17
+
+## Context
+
+Host-agnostic **Target** contracts for cursorEscape orchestration. Adapters map these roles to native agent types (e.g. Cursor `reviewer-a` → production_readiness_reviewer). Imported Cursor agent files under [cursor-global-workflow](../research/imported/cursor-global-workflow/agents/) are **Observed** snapshots.
+
+---
+
+## Substance
+
+### Contract index
+
+| Role | Contract | Phase |
+| ---- | -------- | ----- |
+| planner | [planner.md](./planner.md) | Plan |
+| plan_reviewer | [plan_reviewer.md](./plan_reviewer.md) | Plan gate |
+| implementer | [implementer.md](./implementer.md) | Build |
+| production_readiness_reviewer | [production_readiness_reviewer.md](./production_readiness_reviewer.md) | Review (dual gate) |
+| bug_reviewer | [bug_reviewer.md](./bug_reviewer.md) | Review (dual gate) |
+| repository_explorer | [repository_explorer.md](./repository_explorer.md) | Investigate |
+
+Optional roles (catalog only — no separate page in init Phase 4): **test_reviewer** — see [agent roles and model assignment](../featureArchitecture/agent-roles-and-model-assignment.md).
+
+### Shared contract fields (Required)
+
+Every role page defines:
+
+1. **Purpose** — one paragraph
+2. **Inputs** — context the parent must supply
+3. **Outputs** — artifacts and verdict shape
+4. **Must not** — scope boundaries
+5. **Model** — config override; default suggestion only
+
+### Verdict bars
+
+| Role | APPROVED when |
+| ---- | ------------- |
+| plan_reviewer | No blocking plan issues (CHANGES REQUESTED otherwise) |
+| production_readiness_reviewer | Blocking, Non-blocking (code/process), blocking test/docs = `"None"`; Batchable deferred may remain |
+| bug_reviewer | Blocking, Non-blocking, Test gaps = `"None"` |
+
+---
+
+## Implications / open questions
+
+1. **Unknown:** Machine-readable schema for contracts (future).
+2. Do not require Cursor Task/subagent IDs in parent prompts — use role names.
+
+---
+
+## Related
+
+- [Agent roles and model assignment](../featureArchitecture/agent-roles-and-model-assignment.md)
+- [Skills index](../skills/_index.md)
+- [Intended workflow](../featureArchitecture/intended-workflow.md)

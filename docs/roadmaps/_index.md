@@ -10,13 +10,8 @@ Multi-phase handoff roadmaps for cursorEscape. Each roadmap file carries **Agent
 
 | Roadmap | Status | Purpose |
 | ------- | ------ | ------- |
-| [cursorEscape initialization](./cursorEscape-initialization.md) | **Active** | Bootstrap docs, import research, author Target FA docs, closeout report |
-
-### Future (not yet authored)
-
-| Roadmap | Expected phase |
-| ------- | -------------- |
-| Implementation roadmap | Initialization Phase 4 — runtime/engine milestones |
+| [cursorEscape initialization](./cursorEscape-initialization.md) | **Active** — Phase 5 next | Bootstrap docs, import research, author Target FA docs, closeout report |
+| [Implementation roadmap](./implementation-roadmap.md) | **Planning** | Future runtime/engine milestones — research-first |
 
 ## Implications / open questions
 
@@ -27,3 +22,4 @@ Multi-phase handoff roadmaps for cursorEscape. Each roadmap file carries **Agent
 
 - [Roadmap](../Roadmap.md)
 - [Design decisions](../review/design-decisions.md)
+- [Feature architecture index](../featureArchitecture/_index.md)

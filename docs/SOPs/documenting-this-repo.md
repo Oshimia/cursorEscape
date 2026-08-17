@@ -17,6 +17,8 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 1. Read [Roadmap](../Roadmap.md) and the relevant `_index.md`.
 2. Decide document kind:
    - **featureArchitecture** — how it works (Target design; cite Observed imports from `docs/research/imported/` — do not add Observed harness subdirectories directly under `docs/featureArchitecture/`)
+   - **agents** — host-agnostic role contracts (Target); map to host adapters — not Observed Cursor agent file copies
+   - **skills** — host-agnostic workflow skill contracts (Target); cite live imports under `docs/research/imported/cursor-global-workflow/`
    - **SOP** — how to do a task
    - **research** — sourced facts and imported sibling material
    - **roadmaps/** — multi-phase handoff conductors
@@ -72,7 +74,7 @@ Imported research files carry provenance banners. **Observed ≠ Target** — ne
 ## Implications / open questions
 
 1. When runtime code appears in a future repo or branch, extend this SOP with code↔doc sync rules.
-2. Phase 4 Target docs will use claim taxonomy: Desired / Required / Nice-to-have / Cursor-specific / Unknown.
+2. Target docs use claim taxonomy: Desired / Required / Nice-to-have / Cursor-specific / Unknown — see [feature architecture index](../featureArchitecture/_index.md).
 3. Keep this archive docs-only until an explicit implementation phase begins.
 
 ---

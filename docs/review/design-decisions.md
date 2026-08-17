@@ -55,8 +55,8 @@ cursorEscape is an **open agentic workflow companion** for escaping Cursor lock-
 
 1. When implementation starts, pick engine language and record it here.
 2. Decide license and remote hosting only if/when pursuing an optional public release.
-3. Phase 4 Target docs will classify claims (Desired / Required / Nice-to-have / Cursor-specific / Unknown).
-4. Relationship to openBuggy and AITestSuite will be documented in Phase 2–3 imports.
+3. Phase 4 Target docs classify claims (Desired / Required / Nice-to-have / Cursor-specific / Unknown) — see [feature architecture index](../featureArchitecture/_index.md).
+4. Sibling relationships documented in [relationship-to-siblings](./relationship-to-siblings.md) (Phase 2–3 imports); Phase 4 Target docs cite imports with claim taxonomy.
 
 ---
 
@@ -65,4 +65,5 @@ cursorEscape is an **open agentic workflow companion** for escaping Cursor lock-
 - [Roadmap](../Roadmap.md)
 - [Feature architecture index](../featureArchitecture/_index.md)
 - [Documenting this repo (SOP)](../SOPs/documenting-this-repo.md)
+- [Relationship to siblings](./relationship-to-siblings.md)
 - [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)

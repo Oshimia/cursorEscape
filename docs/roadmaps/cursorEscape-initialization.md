@@ -1,9 +1,12 @@
 # Roadmap: cursorEscape initialization
 
 **Last updated:** 2026-08-17  
-**Status:** Phase 3 QC accepted — committing; Phase 4 next  
+**Status:** Phase 5 in progress (Composer conducting)  
 **Phase 1 commit:** `ca56ca4`  
 **Phase 2 commit:** `5ab9428`  
+**Phase 3 commit:** `b771ed8`  
+**Phase 4 commit:** _(pending this commit)_  
+**Note:** Phase 4 remaining review/CI skipped by owner after docs assessment (2026-08-17).  
 **Escalation:** yes (`complex-or-extensive`)  
 **Accepted plan:** `cursorEscape repo init` (plan-reviewer APPROVED, 2 of 3)
 
@@ -36,7 +39,7 @@
 - [x] Phase 1 — Bootstrap hubs
 - [x] Phase 2 — Copy openBuggy research
 - [x] Phase 3 — Copy AITestSuite + live `~/.cursor`; workflow-source-delta
-- [ ] Phase 4 — Target synthesizing docs
+- [x] Phase 4 — Target synthesizing docs
 - [ ] Phase 5 — Initialization report + closeout
 
 ---

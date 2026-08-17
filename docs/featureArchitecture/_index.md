@@ -4,9 +4,9 @@
 
 ## Context
 
-This section will explain **how cursorEscape is intended to work** — Target design and workflow contracts. Unlike SOPs (how to perform a task), these documents describe system behavior and architecture.
+This section explains **how cursorEscape is intended to work** — Target design and workflow contracts. Unlike SOPs (how to perform a task), these documents describe system behavior and architecture.
 
-**Status:** Phase 2 Observed imports landed under `docs/research/imported/openBuggy/featureArchitecture/` — closeout pending review loop + Full CI. Target synthesizing docs are authored in [initialization Phase 4](../roadmaps/cursorEscape-initialization.md).
+**Status:** Phase 4 Target synthesizing docs authored. Observed imports remain under `docs/research/imported/`.
 
 ## Substance
 
@@ -14,28 +14,41 @@ This section will explain **how cursorEscape is intended to work** — Target de
 
 | Document type | Responsibility |
 | ------------- | -------------- |
-| This folder (future Target docs) | Intended workflow, backend abstraction, agent roles, evaluation methodology |
+| This folder (Target docs) | Intended workflow, backend abstraction, agent roles, evaluation methodology |
 | [`../research/`](../research/_index.md) | Sourced facts and imported sibling research |
 | [`../analysis/`](../analysis/_index.md) | Operator studies of local workflows |
+| [`../agents/`](../agents/_index.md) | Host-agnostic role contracts |
+| [`../skills/`](../skills/_index.md) | Host-agnostic skill contracts |
 
-### Observed imports (Phase 2 — openBuggy)
+### Observed imports (Phase 2–3)
 
-Imported Observed harness and proposed-engine reference slices live under [research/imported/openBuggy/featureArchitecture/](../research/imported/openBuggy/featureArchitecture/_index.md) — not Target cursorEscape design.
+Imported Observed harness and workflow snapshots live under [research/imported/](../research/imported/COPY-MANIFEST.md) — not Target cursorEscape design.
 
-### Documents (Target — Phase 4)
+### Target documents (Phase 4)
 
-*None yet — Phase 4 deliverables include `intended-workflow.md`, `backend-and-provider-abstraction.md`, and related Target leaves.*
+| Document | Purpose |
+| -------- | ------- |
+| [intended-workflow.md](./intended-workflow.md) | Canonical loop — live workflow + openBuggy dual gate |
+| [desired-behavior-vs-cursor-specific.md](./desired-behavior-vs-cursor-specific.md) | Portable vs Cursor-specific claims |
+| [cursor-behavior-to-reproduce.md](./cursor-behavior-to-reproduce.md) | Observed behaviors worth preserving |
+| [backend-and-provider-abstraction.md](./backend-and-provider-abstraction.md) | Workflow → adapter → provider layering |
+| [repository-discovery-and-context.md](./repository-discovery-and-context.md) | What context agents need |
+| [workspace-model.md](./workspace-model.md) | Companion vs target workspace |
+| [agent-roles-and-model-assignment.md](./agent-roles-and-model-assignment.md) | Role catalog + config |
+| [evaluation-methodology.md](./evaluation-methodology.md) | How workflow quality is measured |
+
+Claim taxonomy: **Desired / Required / Nice-to-have / Cursor-specific / Unknown**.
 
 ---
 
 ## Implications / open questions
 
-1. Imported Observed harness references from openBuggy are under `docs/research/imported/openBuggy/featureArchitecture/` — do not mix Observed and Target in the same doc without labels.
-2. Claim taxonomy (Desired / Required / Nice-to-have / Cursor-specific / Unknown) applies from Phase 4 onward.
+1. Do not mix Observed and Target in the same doc without labels.
+2. Runtime implementation must update these docs when behavior diverges.
 
 ## Related
 
 - [Roadmap](../Roadmap.md)
 - [Design decisions](../review/design-decisions.md)
-- [Imported openBuggy FA (Observed)](../research/imported/openBuggy/featureArchitecture/_index.md)
+- [Unresolved architectural questions](../review/unresolved-architectural-questions.md)
 - [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)

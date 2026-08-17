@@ -6,7 +6,7 @@
 
 This section holds **sourced** market and product research plus **imported** sibling research (openBuggy, AITestSuite, live `~/.cursor` workflow) that informs cursorEscape architecture and evaluation.
 
-**Status:** Phase 3 imports landed — closeout pending review loop + Full CI. openBuggy under `imported/openBuggy/`; AITestSuite + live workflow under `imported/AITestSuite/` and `imported/cursor-global-workflow/`.
+**Status:** Phase 3 imports complete. Phase 4 added Target synthesis [preliminary-backend-landscape.md](./preliminary-backend-landscape.md).
 
 ---
 
@@ -16,9 +16,15 @@ This section holds **sourced** market and product research plus **imported** sib
 
 | Location | Responsibility |
 | -------- | -------------- |
-| `docs/research/*` (Target synthesis, future) | Facts and synthesis with **Sources** subsections |
+| `docs/research/*` (Target synthesis) | Facts and synthesis with **Sources** subsections |
 | `docs/research/imported/` | Copied sibling docs with provenance banners |
 | `docs/featureArchitecture/` | Target system design — link research; do not duplicate long competitor essays |
+
+### Target synthesis (Phase 4)
+
+| Document | Purpose |
+| -------- | ------- |
+| [preliminary-backend-landscape.md](./preliminary-backend-landscape.md) | Cline vs OpenCode vs Aider/T3 — research, not decision |
 
 ### Citation rules
 
@@ -62,7 +68,7 @@ Key live workflow entry points in the import mirror:
 ## Implications / open questions
 
 1. Host-only absolute paths in imports are annotated in COPY-MANIFEST.
-2. Phase 3 manifest rows cover AITestSuite allowlist and cursor-global-workflow; see [workflow-source-delta](./imported/workflow-source-delta.md) for live vs freeze deltas.
+2. Backend landscape remains **Unknown** until implementation spike — see [unresolved questions](../review/unresolved-architectural-questions.md).
 
 ---
 

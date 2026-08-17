@@ -16,7 +16,7 @@ This index lists repeatable procedures for maintaining cursorEscape documentatio
 
 ### Future runtime operations (conceptual)
 
-*None yet — authored after Target architecture docs (initialization Phase 4+) or imported from workflow research (Phase 3).*
+*None yet — workflow contracts live under [agents](../agents/_index.md) and [skills](../skills/_index.md); runtime ops SOPs follow implementation roadmap.*
 
 ## Implications / open questions
 

@@ -12,7 +12,9 @@ Start here: **[docs/Roadmap.md](docs/Roadmap.md)**
 | ---- | ------- |
 | [`docs/Roadmap.md`](docs/Roadmap.md) | Vision, principles, status, and directory map |
 | [`docs/review/`](docs/review/_index.md) | Project intent and [design decisions](docs/review/design-decisions.md) |
-| [`docs/featureArchitecture/`](docs/featureArchitecture/_index.md) | How the system is intended to work (Target docs from Phase 4 onward) |
+| [`docs/featureArchitecture/`](docs/featureArchitecture/_index.md) | How the system is intended to work (Target) |
+| [`docs/agents/`](docs/agents/_index.md) | Host-agnostic agent role contracts |
+| [`docs/skills/`](docs/skills/_index.md) | Host-agnostic workflow skill contracts |
 | [`docs/research/`](docs/research/_index.md) | Sourced facts and imported sibling research |
 | [`docs/SOPs/`](docs/SOPs/_index.md) | Procedures for maintainers and future implementers |
 | [`docs/analysis/`](docs/analysis/_index.md) | Operator studies of local workflows |
@@ -28,6 +30,8 @@ cursorEscape/
     Roadmap.md
     review/
     featureArchitecture/
+    agents/
+    skills/
     research/
     SOPs/
     analysis/

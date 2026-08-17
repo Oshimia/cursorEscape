@@ -4,7 +4,7 @@
 
 ## Context
 
-cursorEscape is a **docs-first companion** for escaping Cursor lock-in. It does not replace sibling archives; it imports selected research with provenance and authors Target synthesizing docs in later phases. This document is **Target** cursorEscape intent about how siblings relate — not a sync contract.
+cursorEscape is a **docs-first companion** for escaping Cursor lock-in. It does not replace sibling archives; it imports selected research with provenance and authors **Target** synthesizing docs under `docs/featureArchitecture/`, `docs/agents/`, and `docs/skills/` (Phase 4 complete). This document is **Target** cursorEscape intent about how siblings relate — not a sync contract.
 
 ---
 
@@ -22,7 +22,7 @@ cursorEscape is a **docs-first companion** for escaping Cursor lock-in. It does 
 
 - **What we took:** Workflow-gap narrative, proposed engine slices relevant to dual-gate loops, full Cursor BugBot Observed FA suite, reviewer-effectiveness analysis (no `.local/`), product/API research, and the agent-review-loop SOP.
 - **What we did not take:** `eval/` tree, mining ops roadmaps as imports, analysis `.local/` coding sheets, runtime code.
-- **How to use imports:** Treat as **Observed/imported** openBuggy characterization. cursorEscape **Target** design lives in `docs/review/design-decisions.md` and Phase 4+ `docs/featureArchitecture/` synthesizers — cite imports; do not merge without claim classification.
+- **How to use imports:** Treat as **Observed/imported** openBuggy characterization. cursorEscape **Target** design lives in [design-decisions](./design-decisions.md), [featureArchitecture](../featureArchitecture/_index.md), [agents](../agents/_index.md), and [skills](../skills/_index.md) — cite imports; do not merge without claim classification.
 
 ### AITestSuite (imported in Phase 3)
 
@@ -52,6 +52,9 @@ cursorEscape intends to **own** workflow contracts, repo knowledge, and evaluati
 ## Related
 
 - [Design decisions](./design-decisions.md)
+- [Feature architecture index](../featureArchitecture/_index.md)
+- [Agent contracts](../agents/_index.md)
+- [Skill contracts](../skills/_index.md)
 - [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md)
 - [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)
 - [Imported openBuggy FA index](../research/imported/openBuggy/featureArchitecture/_index.md)

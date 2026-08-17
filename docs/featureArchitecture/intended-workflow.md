@@ -1,0 +1,89 @@
+# Intended Workflow
+
+**Last updated:** 2026-08-17
+
+## Context
+
+This document is **Target** cursorEscape design for the owner's agentic loop: plan → implement → dual review → closeout. Canonical process is the **live** `~/.cursor` workflow (imported under [cursor-global-workflow](../research/imported/cursor-global-workflow/)); AITestSuite Phase 4 freeze is **Observed/eval-packaging** only. Where they disagree, cite [workflow-source-delta](../research/imported/workflow-source-delta.md).
+
+Dual-gate review research (openBuggy) informs leg responsibilities but is **not reimplemented** here initially — the bug-finder leg delegates to **openBuggy** as an external sibling ([design decisions](../review/design-decisions.md)).
+
+---
+
+## Substance
+
+### End-to-end loop (Required)
+
+```text
+Discover repo docs (discovery)
+  → Plan (implementation-plan skill; plan_reviewer gate)
+  → Implement (implementer; phase subagent on multi-phase work)
+  → [Fast CI Observed → production_readiness_reviewer ∥ bug_reviewer → fix must-fix]* 
+  → dual APPROVED (split bars)
+  → Full CI (closeout; no reviewers)
+  → phase complete / commit (host-specific)
+```
+
+| Stage | Owner | Claim |
+| ----- | ----- | ----- |
+| Doc discovery before edits | Parent or implementer | **Required** — [discovery](../skills/discovery.md) |
+| Plan before non-trivial work | planner + plan_reviewer | **Required** unless explicitly skipped |
+| Fast CI before reviewers | Review-loop parent | **Required** — per-command Observed rows when Fast ≠ `n/a` |
+| Parallel dual review | production_readiness_reviewer ∥ bug_reviewer | **Required** for non-trivial changes |
+| Full CI at closeout | Parent (never paired with reviewers) | **Required** when Full ≠ `n/a` |
+| Composer conductor on phased roadmaps | Composer QC + phase subagent parent | **Cursor-specific** optional orchestration — see [composer skill](../skills/composer.md) |
+
+### Dual-gate review (Required)
+
+Aligned with live [implementation-review](../research/imported/cursor-global-workflow/skills/implementation-review/SKILL.md) and openBuggy dual-gate analysis ([recommendation](../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)):
+
+| Leg | Role | Target responsibility |
+| --- | ---- | --------------------- |
+| **production_readiness_reviewer** | Process, architecture drift, incomplete changesets, **blocking** test/docs | Maps to live **reviewer-a** contract |
+| **bug_reviewer** | Bugs, security, concurrency, high-value correctness | Maps to **openBuggy** external engine — not Cursor `bugbot` subagent type |
+
+**Required:** Fix every must-fix finding from either leg before re-review. **Required:** Re-launch **both** legs after each fix batch.
+
+**Required (live):** Split verdict bars — Reviewer-a may APPROVE with **Batchable (deferred)** open; Bugbot requires Blocking, Non-blocking, and Test gaps all `"None"`. Freeze eval packaging used a unified bar — **do not** copy ([workflow-source-delta](../research/imported/workflow-source-delta.md#batchable-deferred--split-verdict-bars-live-only)).
+
+**Required (live):** Observed Fast CI — no launch on fail, skipped (when Fast ≠ `n/a`), or claimed-only prose. openBuggy study ranks this enforcement highly ([ci-gating](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/ci-gating.md)).
+
+**Nice-to-have:** Per-leg launch count; narrow scope when `count >= 9` before invoke — no hard stop ([workflow-source-delta](../research/imported/workflow-source-delta.md#iteration-narrowing-live-only)).
+
+### CI ladder (Required for cursorEscape pre-runtime)
+
+| Tier | cursorEscape (docs-only) | Runtime repos (future) |
+| ---- | ------------------------ | ---------------------- |
+| **Fast** | Hub/index link integrity for phase files; claim taxonomy spot-check | Repo-specific lint/test per [ci-ladder](../research/imported/cursor-global-workflow/docs/workflow/ci-ladder.md) |
+| **Full** | Fast + deliverable checklist + no runtime scaffolding + no pretend-settled Unknowns | Commit-grade suite; never paired with reviewers |
+
+Do **not** copy freeze baseline's hardcoded four npm commands into cursorEscape pre-runtime CI ([workflow-source-delta](../research/imported/workflow-source-delta.md#ci-ladder--fast-vs-full-major-delta)).
+
+### Phased multi-agent (Nice-to-have / Cursor-specific)
+
+On initialization-style roadmaps, **Composer** conducts: phase subagent implements, owns review loop, reaches dual APPROVED, runs first Full CI when Full ≠ `n/a` (or returns after dual APPROVED when Full = `n/a`); Composer QCs report + transcripts, runs second Full CI when Full ≠ `n/a` (or obtains user ack when Full = `n/a`), then local commit (never push) ([composer](../research/imported/cursor-global-workflow/skills/composer/SKILL.md)). Host-agnostic equivalent: any orchestrator that enforces the same gates without Cursor Task IDs.
+
+### What cursorEscape does not own in v0 docs
+
+| Item | Label |
+| ---- | ----- |
+| Bugbot engine implementation | **Required** delegate to openBuggy |
+| Cursor proprietary subagent types | **Cursor-specific** — map to host-agnostic role contracts |
+| Eval runners in this repo | **Out of scope** until implementation phase |
+
+---
+
+## Implications / open questions
+
+1. **Unknown:** Exact host mapping for `bug_reviewer` when not using Cursor — CLI/MCP openBuggy vs embedded runner.
+2. **Unknown:** Whether cursorEscape runtime re-homes a repo-local `reference-docs` skill; live owner workflow uses global discovery instead ([workflow-source-delta](../research/imported/workflow-source-delta.md#reference-docs-skill-presence)).
+3. Dual APPROVED is the loop bar — not proven ship-class catch or proven no-escape ([recommendation](../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)).
+
+---
+
+## Related
+
+- [Agent roles and model assignment](./agent-roles-and-model-assignment.md)
+- [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)
+- [Evaluation methodology](./evaluation-methodology.md)
+- [Workflow source delta](../research/imported/workflow-source-delta.md)
