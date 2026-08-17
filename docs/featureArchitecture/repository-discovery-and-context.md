@@ -65,3 +65,4 @@ cursorEscape **Required:** Own repository knowledge in-repo ([design decisions](
 - [Workspace model](./workspace-model.md)
 - [Discovery skill contract](../skills/discovery.md)
 - [Cursor behavior to reproduce](./cursor-behavior-to-reproduce.md)
+- [Instruction layering](./instruction-layering.md) — process-instruction budget (not repo evidence)

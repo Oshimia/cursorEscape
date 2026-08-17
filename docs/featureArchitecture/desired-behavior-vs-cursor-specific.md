@@ -32,6 +32,7 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 | Full CI only after dual APPROVED | **Required** when Full ≠ `n/a` | When Full = `n/a`, dual APPROVED + explicit user ack before commit; never pair Full with reviewers |
 | Split Reviewer-a bar (Batchable deferred OK) | **Required** | Live workflow; not freeze unified bar |
 | Repository doc discovery before edits | **Required** | [discovery](../skills/discovery.md) |
+| Thin always-on gates; on-demand skills / deep docs / lean agents | **Required** | [instruction layering](./instruction-layering.md) |
 | BYOK model keys | **Required** | [design decisions](../review/design-decisions.md) |
 | Replaceable backends and models | **Required** | [backend abstraction](./backend-and-provider-abstraction.md) |
 | First host: OpenCode + T3 control plane | **Desired** | [design decisions](../review/design-decisions.md) |
@@ -48,7 +49,8 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 | `subagent_type: plan-reviewer` | **plan_reviewer** |
 | Composer thread + phase subagents | Orchestrator with phase handoff + QC parent |
 | `~/.cursor/skills/` paths | OpenCode skill dirs / host skill registry |
-| Cursor rules (`.mdc` alwaysApply) | Host policy hooks or documented user rules |
+| Cursor rules (`.mdc` alwaysApply) + User Rules snippets | Thin always-on host instructions ([instruction layering](./instruction-layering.md)) |
+| `disable-model-invocation` on skills | Host on-demand skill load (do not always-inject) |
 | Progress timeline (`UpdateCurrentStep`) | **Nice-to-have** UX; not a workflow gate |
 
 ### Deliberately not Cursor goals
@@ -64,7 +66,7 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 ## Implications / open questions
 
 1. OpenCode adapters must preserve gate semantics without Cursor Task/subagent IDs.
-2. **Unknown:** Whether future cursorEscape ships Cursor rules snippets or only documents contracts.
+2. Whether future cursorEscape ships host always-on snippet files (vs documenting the pattern only) is a **later** packaging question — see [instruction layering](./instruction-layering.md).
 
 ---
 
@@ -72,5 +74,6 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 
 - [Cursor behavior to reproduce](./cursor-behavior-to-reproduce.md)
 - [Intended workflow](./intended-workflow.md)
+- [Instruction layering](./instruction-layering.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Agent role contracts](../agents/_index.md)

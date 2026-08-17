@@ -46,4 +46,5 @@ Each page states: **When to use**, **Workflow steps**, **Outputs**, **Must not**
 
 - [Agents index](../agents/_index.md)
 - [Intended workflow](../featureArchitecture/intended-workflow.md)
+- [Instruction layering](../featureArchitecture/instruction-layering.md) — skills stay on-demand; always-on stays thin
 - [Workflow source delta](../research/imported/workflow-source-delta.md)

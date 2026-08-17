@@ -87,6 +87,7 @@ On initialization-style roadmaps, **Composer** conducts: phase subagent implemen
 ## Related
 
 - [Agent roles and model assignment](./agent-roles-and-model-assignment.md)
+- [Instruction layering](./instruction-layering.md)
 - [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Evaluation methodology](./evaluation-methodology.md)

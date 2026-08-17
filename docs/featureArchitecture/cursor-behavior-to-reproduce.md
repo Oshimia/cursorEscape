@@ -35,6 +35,7 @@ This document lists **Observed** Cursor behaviors worth preserving in a portable
 | implementation-plan → plan-reviewer loop | Live [implementation-plan](../research/imported/cursor-global-workflow/skills/implementation-plan/SKILL.md) | Canonical = live |
 | implementation-review Fast → dual → Full | Live [implementation-review](../research/imported/cursor-global-workflow/skills/implementation-review/SKILL.md) | Freeze lacks Fast/Full split ([delta](../research/imported/workflow-source-delta.md)) |
 | Composer phase conductor | Live [composer](../research/imported/cursor-global-workflow/skills/composer/SKILL.md) | **Cursor-specific** optional |
+| Thin User Rules snippets + on-demand skills (`disable-model-invocation`) + deep `docs/workflow` | Live [user-rules-snippet](../research/imported/cursor-global-workflow/skills/implementation-review/user-rules-snippet.md) + SKILL.md frontmatter | **Required** portable pattern — [instruction layering](./instruction-layering.md); Observed bloated agent files are **not** the agent-layer ideal |
 
 ### Behaviors explicitly not to reproduce
 
@@ -59,4 +60,5 @@ This document lists **Observed** Cursor behaviors worth preserving in a portable
 
 - [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)
 - [Intended workflow](./intended-workflow.md)
+- [Instruction layering](./instruction-layering.md)
 - [Imported BugBot FA index](../research/imported/openBuggy/featureArchitecture/cursor-bugbot-agent-review/_index.md)

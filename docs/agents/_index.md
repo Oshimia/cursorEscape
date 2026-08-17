@@ -56,4 +56,5 @@ Every role page defines:
 - [Agent roles and model assignment](../featureArchitecture/agent-roles-and-model-assignment.md)
 - [Skills index](../skills/_index.md)
 - [Intended workflow](../featureArchitecture/intended-workflow.md)
+- [Instruction layering](../featureArchitecture/instruction-layering.md) — lean role agents; do not paste full procedures
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
