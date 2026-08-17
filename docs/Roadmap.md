@@ -1,7 +1,7 @@
 # cursorEscape Roadmap
 
 **Last updated:** 2026-08-17  
-**Status:** Documentation foundation — runtime not started; [initialization roadmap](./roadmaps/cursorEscape-initialization.md) Phase 4 complete (pending Composer QC commit); Phase 5 next.
+**Status:** Documentation foundation — initialization complete; runtime not started.
 
 This repository is the owner's **open agentic workflow companion**: preserve and evolve a personal agentic loop without inseparable dependence on Cursor, a single IDE, or a single model provider.
 
@@ -32,7 +32,7 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 
 | Area | Status |
 | ---- | ------ |
-| Documentation foundation | **Phase 4 complete** — Phase 5 closeout next ([initialization roadmap](./roadmaps/cursorEscape-initialization.md)) |
+| Documentation foundation | **Phase 5 closeout** — pending Composer QC commit ([initialization report](./review/initialization-report.md)) |
 | Runtime / engine / packages | **Not started** |
 | Research imports (openBuggy) | **Complete** (Phase 2) |
 | Research imports (AITestSuite, live `~/.cursor`) | **Complete** (Phase 3) — [workflow-source-delta](./research/imported/workflow-source-delta.md) |

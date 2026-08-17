@@ -4,7 +4,7 @@
 
 ## Context
 
-Deliberately **Unknown** decisions — not pretend-settled. Phase 5 initialization report will expand archaeology; runtime work waits for explicit implementation phase.
+Deliberately **Unknown** decisions — not pretend-settled. Archaeology snapshot at init closeout: [initialization report](./initialization-report.md). Runtime work waits for explicit implementation phase.
 
 Claim label: **Unknown** unless noted otherwise.
 

@@ -1,11 +1,12 @@
 # Roadmap: cursorEscape initialization
 
 **Last updated:** 2026-08-17  
-**Status:** Phase 5 in progress (Composer conducting)  
+**Status:** Initialization complete  
 **Phase 1 commit:** `ca56ca4`  
 **Phase 2 commit:** `5ab9428`  
 **Phase 3 commit:** `b771ed8`  
-**Phase 4 commit:** _(pending this commit)_  
+**Phase 4 commit:** `65a691c`  
+**Phase 5 commit:** _(set after this commit)_  
 **Note:** Phase 4 remaining review/CI skipped by owner after docs assessment (2026-08-17).  
 **Escalation:** yes (`complex-or-extensive`)  
 **Accepted plan:** `cursorEscape repo init` (plan-reviewer APPROVED, 2 of 3)
@@ -40,7 +41,7 @@
 - [x] Phase 2 — Copy openBuggy research
 - [x] Phase 3 — Copy AITestSuite + live `~/.cursor`; workflow-source-delta
 - [x] Phase 4 — Target synthesizing docs
-- [ ] Phase 5 — Initialization report + closeout
+- [x] Phase 5 — Initialization report + closeout
 
 ---
 
@@ -160,7 +161,7 @@
 - **Fast CI:** README→Roadmap alone answers what/why
 - **Full CI:** Narrative README→Roadmap→design-decisions→intended-workflow→unresolved coherent; no runtime engine artifacts
 - **Deliverables:**
-  - [ ] Initialization report complete
-  - [ ] Coherent discovery path
-  - [ ] No runtime packages
+  - [x] Initialization report complete (§17 Q1–9)
+  - [x] Coherent discovery path
+  - [x] No runtime packages
 - **Risks:** Report duplicates Roadmap — report = archaeology/decisions snapshot; Roadmap = living hub

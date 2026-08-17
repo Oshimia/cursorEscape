@@ -1,12 +1,16 @@
 # cursorEscape
 
-**Status:** Documentation foundation — runtime not started.
+**Status:** Documentation foundation — initialization complete; runtime not started.
 
-cursorEscape is an **open agentic workflow companion** for escaping Cursor lock-in: own your workflow, repository knowledge, and evaluation methodology while keeping backends and models **replaceable**.
+## What and why
+
+**What:** cursorEscape is an **open agentic workflow companion** — portable docs and (later) replaceable runtime for plan → implement → dual review → closeout on your repositories.
+
+**Why:** Escape Cursor lock-in without losing what works: structured plan/review loops, in-repo knowledge, evaluable workflow behavior, and **BYOK** backends you can swap.
+
+**Start here:** **[docs/Roadmap.md](docs/Roadmap.md)** — vision, principles, status, and directory map. Initialization archaeology: [initialization report](docs/review/initialization-report.md).
 
 ## Documentation hub
-
-Start here: **[docs/Roadmap.md](docs/Roadmap.md)**
 
 | Path | Purpose |
 | ---- | ------- |

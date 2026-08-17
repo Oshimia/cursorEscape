@@ -34,7 +34,7 @@
 
 - [ ] Resolve U2, U4 from [unresolved questions](../review/unresolved-architectural-questions.md) with evidence
 - [ ] Document chosen adapter in [design decisions](../review/design-decisions.md)
-- [ ] Repo discovery approach written (Phase 5 initialization report Q7)
+- [x] Repo discovery approach written ([initialization report Q7](../review/initialization-report.md#q7--proposed-repository-discovery-and-context-acquisition))
 
 ### Explicit non-starters
 
