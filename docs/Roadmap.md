@@ -1,7 +1,7 @@
 # cursorEscape Roadmap
 
 **Last updated:** 2026-08-17  
-**Status:** Documentation foundation — runtime not started; [initialization roadmap](./roadmaps/cursorEscape-initialization.md) Phase 2 in progress (imports landed; closeout pending review loop + Full CI).
+**Status:** Documentation foundation — runtime not started; [initialization roadmap](./roadmaps/cursorEscape-initialization.md) Phase 3 in progress (imports landed; closeout pending review loop + Full CI).
 
 This repository is the owner's **open agentic workflow companion**: preserve and evolve a personal agentic loop without inseparable dependence on Cursor, a single IDE, or a single model provider.
 
@@ -34,8 +34,8 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 | ---- | ------ |
 | Documentation foundation | **In progress** ([initialization roadmap](./roadmaps/cursorEscape-initialization.md)) |
 | Runtime / engine / packages | **Not started** |
-| Research imports (openBuggy) | **Imports landed** — closeout pending; see [imported openBuggy](./research/imported/openBuggy/featureArchitecture/_index.md) and [COPY-MANIFEST](./research/imported/COPY-MANIFEST.md) |
-| Research imports (AITestSuite, live `~/.cursor`) | Planned Phase 3 |
+| Research imports (openBuggy) | **Complete** (Phase 2) — see [imported openBuggy](./research/imported/openBuggy/featureArchitecture/_index.md) and [COPY-MANIFEST](./research/imported/COPY-MANIFEST.md) |
+| Research imports (AITestSuite, live `~/.cursor`) | **Imports landed** — closeout pending; see [workflow-source-delta](./research/imported/workflow-source-delta.md) and [research index](./research/_index.md) |
 | Target synthesizing architecture docs | Planned Phase 4 |
 | Implementation roadmap (future build) | Planned Phase 4 — not authored yet |
 

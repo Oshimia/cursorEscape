@@ -1,0 +1,23 @@
+> **Imported research** — Source: AITestSuite `tests\ez-pz-streaming-media-phase-4\baseline\.cursor\rules\iterative-code-review.mdc`; copied 2026-08-17 into cursorEscape. Status: Observed/eval-packaging. Do not treat as Target cursorEscape design unless a Target doc cites it.
+---
+description: MANDATORY iterative Reviewer A + Bugbot review loop — per plan phase or once for single-phase work; use implementation-review skill
+alwaysApply: true
+---
+
+# Iterative Code Review (Mandatory)
+
+Unless the change is **truly trivial** (see [iterative-code-review.md](../../referenceFiles/SOPs/iterative-code-review.md) — skip criteria under **When it may be skipped**):
+
+**Multi-phase plans** (Incremental execution in [implementation-plan skill](../skills/implementation-plan/SKILL.md)): run the full loop **at the end of each phase** — dual `APPROVED` required **before** starting the next phase.
+
+**Single-phase or ad-hoc work** (no multi-phase plan): run once before declaring the task complete.
+
+1. **Implement** the current phase (or full scope if single-phase) using documented SOPs/architecture
+2. **Run CI gate** per [implementation-review skill](../skills/implementation-review/SKILL.md)
+3. **Invoke** [`reviewer-a`](../agents/reviewer-a.md) and **Bugbot** in parallel, both with `model: composer-2.5`; reset review iteration to 1 per phase
+4. **Fix every finding** (blocking, non-blocking, test gaps); re-run CI once; repeat until **both** return `APPROVED` with all finding lists `"None"`
+5. **Do not close a phase or the overall task early** — CI green alone is insufficient; confirm complete changeset per [implementation-review skill](../skills/implementation-review/SKILL.md)
+
+Works with [reference-docs-check SOP](../../referenceFiles/SOPs/reference-docs-check.md) and [reference-docs skill](../skills/reference-docs/SKILL.md), [supabase-migrations SOP](../../referenceFiles/SOPs/supabase-migrations.md) and [databaseupdates](./databaseupdates.mdc) (migration phases always require this loop), [ci-lockfile-sync](./ci-lockfile-sync.mdc).
+
+Question-only replies may recommend this process when the user describes a qualifying change, even if no code is written in that turn.

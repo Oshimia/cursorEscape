@@ -14,6 +14,8 @@ Desktop.ini
 # Editors / agent tooling (do not commit local IDE state)
 .vscode/
 .cursor/
+!docs/research/imported/**/.cursor/
+!docs/research/imported/**/.cursor/**
 *.swp
 *~
 

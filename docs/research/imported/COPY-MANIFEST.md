@@ -1,13 +1,19 @@
 # COPY-MANIFEST — imported research
 
 **Last updated:** 2026-08-17  
-**Phase:** 2 of 5 (openBuggy tree only)
+**Phase:** 2 of 5 (openBuggy); Phase 3 adds AITestSuite + cursor-global-workflow
 
 ## Context
 
-Every file under `docs/research/imported/openBuggy/` is a **copy or cursorEscape-authored trimmed index** for navigation. Status **Observed/imported** unless a Target doc explicitly cites and classifies claims.
+Every file under `docs/research/imported/` is a **copy or cursorEscape-authored trimmed index** for navigation. Status **Observed/imported** or **Observed/eval-packaging** unless a Target doc explicitly cites and classifies claims.
 
-**Source repo (read-only):** `C:\Users\admin\source\repos\general-projects\openBuggy`
+**Source repos (read-only):**
+
+- openBuggy: `C:\Users\admin\source\repos\general-projects\openBuggy`
+- AITestSuite: `C:\Users\admin\source\repos\general-projects\AITestSuite`
+- Live workflow: `C:\Users\admin\.cursor`
+
+**Authoring (not imported):** [workflow-source-delta.md](./workflow-source-delta.md) — live vs freeze delta before copy lock.
 
 ## Manifest
 
@@ -61,6 +67,55 @@ Every file under `docs/research/imported/openBuggy/` is a **copy or cursorEscape
 | `research/competitor-product-notes.md` | `docs/research/competitor-product-notes.md` | `C:\Users\admin\source\repos\general-projects\openBuggy\docs\research\competitor-product-notes.md` | 2026-08-17 | Product/market research facts | Observed/imported |  |
 | `research/latency-and-api-gap.md` | `docs/research/latency-and-api-gap.md` | `C:\Users\admin\source\repos\general-projects\openBuggy\docs\research\latency-and-api-gap.md` | 2026-08-17 | Product/market research facts | Observed/imported |  |
 
+### AITestSuite (Phase 3)
+
+| Dest (under `imported/AITestSuite/`) | Source (AITestSuite) | Source absolute | Copied | Why | Status | Host-only / broken-in-import links |
+| --- | --- | --- | --- | --- | --- | --- |
+| `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/implementation-plan/SKILL.md` | `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/implementation-plan/SKILL.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\baseline\.cursor\skills\implementation-plan\SKILL.md` | 2026-08-17 | Phase 4 freeze workflow baseline | Observed/eval-packaging | Links to baseline `referenceFiles/SOPs/` and domain paths |
+| `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/implementation-review/SKILL.md` | `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/implementation-review/SKILL.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\baseline\.cursor\skills\implementation-review\SKILL.md` | 2026-08-17 | Phase 4 freeze workflow baseline | Observed/eval-packaging | Hardcoded frontend/backend CI commands; `.env.local` guidance |
+| `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/reference-docs/SKILL.md` | `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/reference-docs/SKILL.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\baseline\.cursor\skills\reference-docs\SKILL.md` | 2026-08-17 | Freeze-only reference-docs skill | Observed/eval-packaging | Absent in live `~/.cursor`; live uses `discovery.md` |
+| `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/agents/plan-reviewer.md` | `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/agents/plan-reviewer.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\baseline\.cursor\agents\plan-reviewer.md` | 2026-08-17 | Phase 4 freeze workflow baseline | Observed/eval-packaging |  |
+| `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/agents/reviewer-a.md` | `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/agents/reviewer-a.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\baseline\.cursor\agents\reviewer-a.md` | 2026-08-17 | Phase 4 freeze workflow baseline | Observed/eval-packaging |  |
+| `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/rules/iterative-plan-review.mdc` | `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/rules/iterative-plan-review.mdc` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\baseline\.cursor\rules\iterative-plan-review.mdc` | 2026-08-17 | Phase 4 freeze workflow baseline | Observed/eval-packaging |  |
+| `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/rules/iterative-code-review.mdc` | `tests/ez-pz-streaming-media-phase-4/baseline/.cursor/rules/iterative-code-review.mdc` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\baseline\.cursor\rules\iterative-code-review.mdc` | 2026-08-17 | Phase 4 freeze workflow baseline | Observed/eval-packaging |  |
+| `tests/ez-pz-streaming-media-phase-4/baseline/referenceFiles/SOPs/iterative-plan-review.md` | `tests/ez-pz-streaming-media-phase-4/baseline/referenceFiles/SOPs/iterative-plan-review.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\baseline\referenceFiles\SOPs\iterative-plan-review.md` | 2026-08-17 | Freeze SOP mirror | Observed/eval-packaging | Baseline-relative links to `.cursor/` and domain SOPs |
+| `tests/ez-pz-streaming-media-phase-4/baseline/referenceFiles/SOPs/iterative-code-review.md` | `tests/ez-pz-streaming-media-phase-4/baseline/referenceFiles/SOPs/iterative-code-review.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\baseline\referenceFiles\SOPs\iterative-code-review.md` | 2026-08-17 | Freeze SOP mirror | Observed/eval-packaging | Links to `supabase-migrations.md` and baseline paths |
+| `tests/ez-pz-streaming-media-phase-4/baseline/referenceFiles/SOPs/review-loop-model-profiles.md` | `tests/ez-pz-streaming-media-phase-4/baseline/referenceFiles/SOPs/review-loop-model-profiles.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\baseline\referenceFiles\SOPs\review-loop-model-profiles.md` | 2026-08-17 | Freeze model-profile SOP | Observed/eval-packaging | **review-profiles/** host-only — not copied |
+| `tests/ez-pz-streaming-media-phase-4/baseline/referenceFiles/SOPs/reference-docs-check.md` | `tests/ez-pz-streaming-media-phase-4/baseline/referenceFiles/SOPs/reference-docs-check.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\baseline\referenceFiles\SOPs\reference-docs-check.md` | 2026-08-17 | Freeze reference-docs SOP | Observed/eval-packaging | Counterpart in live is `discovery.md` (different scope); links to uncopied `reference-docs-check.mdc` (not on allowlist) |
+| `tests/ez-pz-streaming-media-phase-4/REVIEW_LOOP.md` | `tests/ez-pz-streaming-media-phase-4/REVIEW_LOOP.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\REVIEW_LOOP.md` | 2026-08-17 | Candidate-facing eval prompts | Observed/eval-packaging | Test-scoped; NOT portable process |
+| `tests/ez-pz-streaming-media-phase-4/evaluation/USER_INPUT_STOPS.md` | `tests/ez-pz-streaming-media-phase-4/evaluation/USER_INPUT_STOPS.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\evaluation\USER_INPUT_STOPS.md` | 2026-08-17 | Eval autonomy boundaries | Observed/eval-packaging | `scoring-framework` link adapted for import mirror (`../../../docs/`) |
+| `tests/ez-pz-streaming-media-phase-4/meta/lessons-learned.md` | `tests/ez-pz-streaming-media-phase-4/meta/lessons-learned.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-4\meta\lessons-learned.md` | 2026-08-17 | Phase 4 eval lessons | Observed/eval-packaging | Links to uncopied agent-transcript UUID `530e8776-21cc-446d-8ac4-e7d51a2c062c` |
+| `docs/scoring-framework.md` | `docs/scoring-framework.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\docs\scoring-framework.md` | 2026-08-17 | Suite scoring framework | Observed/eval-packaging | Links to uncopied `comparing-runs.md` |
+| `tests/ez-pz-streaming-media-phase-2/meta/lessons-learned.md` | `tests/ez-pz-streaming-media-phase-2/meta/lessons-learned.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-streaming-media-phase-2\meta\lessons-learned.md` | 2026-08-17 | Phase 2 eval lessons | Observed/eval-packaging | Links to uncopied agent-transcript UUID `530e8776-21cc-446d-8ac4-e7d51a2c062c` |
+| `tests/ez-pz-phase-6-load-optimization/meta/lessons-learned.md` | `tests/ez-pz-phase-6-load-optimization/meta/lessons-learned.md` | `C:\Users\admin\source\repos\general-projects\AITestSuite\tests\ez-pz-phase-6-load-optimization\meta\lessons-learned.md` | 2026-08-17 | Phase 6 eval lessons | Observed/eval-packaging |  |
+
+### cursor-global-workflow (Phase 3 — live `~/.cursor`)
+
+| Dest (under `imported/cursor-global-workflow/`) | Source (`~/.cursor`) | Source absolute | Copied | Why | Status | Host-only / broken-in-import links |
+| --- | --- | --- | --- | --- | --- | --- |
+| `agents/plan-reviewer.md` | `agents/plan-reviewer.md` | `C:\Users\admin\.cursor\agents\plan-reviewer.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) | Relative links use import mirror paths |
+| `agents/reviewer-a.md` | `agents/reviewer-a.md` | `C:\Users\admin\.cursor\agents\reviewer-a.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) | Relative links use import mirror paths |
+| `docs/workflow/ci-ladder.md` | `docs/workflow/ci-ladder.md` | `C:\Users\admin\.cursor\docs\workflow\ci-ladder.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `docs/workflow/discovery.md` | `docs/workflow/discovery.md` | `C:\Users\admin\.cursor\docs\workflow\discovery.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `docs/workflow/documentation-architecture.md` | `docs/workflow/documentation-architecture.md` | `C:\Users\admin\.cursor\docs\workflow\documentation-architecture.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `docs/workflow/iterative-code-review.md` | `docs/workflow/iterative-code-review.md` | `C:\Users\admin\.cursor\docs\workflow\iterative-code-review.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `docs/workflow/iterative-plan-review.md` | `docs/workflow/iterative-plan-review.md` | `C:\Users\admin\.cursor\docs\workflow\iterative-plan-review.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `docs/workflow/phased-multi-agent.md` | `docs/workflow/phased-multi-agent.md` | `C:\Users\admin\.cursor\docs\workflow\phased-multi-agent.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `docs/workflow/plan-agent-context.md` | `docs/workflow/plan-agent-context.md` | `C:\Users\admin\.cursor\docs\workflow\plan-agent-context.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `docs/workflow/README.md` | `docs/workflow/README.md` | `C:\Users\admin\.cursor\docs\workflow\README.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `docs/workflow/review-subagent-models.md` | `docs/workflow/review-subagent-models.md` | `C:\Users\admin\.cursor\docs\workflow\review-subagent-models.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `rules/iterative-code-review.mdc` | `rules/iterative-code-review.mdc` | `C:\Users\admin\.cursor\rules\iterative-code-review.mdc` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `rules/iterative-plan-review.mdc` | `rules/iterative-plan-review.mdc` | `C:\Users\admin\.cursor\rules\iterative-plan-review.mdc` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `rules/pre-commit-ci-gate.mdc` | `rules/pre-commit-ci-gate.mdc` | `C:\Users\admin\.cursor\rules\pre-commit-ci-gate.mdc` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `skills/composer/SKILL.md` | `skills/composer/SKILL.md` | `C:\Users\admin\.cursor\skills\composer\SKILL.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `skills/composer/user-rules-snippet.md` | `skills/composer/user-rules-snippet.md` | `C:\Users\admin\.cursor\skills\composer\user-rules-snippet.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `skills/documentation-architecture/SKILL.md` | `skills/documentation-architecture/SKILL.md` | `C:\Users\admin\.cursor\skills\documentation-architecture\SKILL.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `skills/implementation-plan/SKILL.md` | `skills/implementation-plan/SKILL.md` | `C:\Users\admin\.cursor\skills\implementation-plan\SKILL.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `skills/implementation-plan/user-rules-snippet.md` | `skills/implementation-plan/user-rules-snippet.md` | `C:\Users\admin\.cursor\skills\implementation-plan\user-rules-snippet.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `skills/implementation-review/SKILL.md` | `skills/implementation-review/SKILL.md` | `C:\Users\admin\.cursor\skills\implementation-review\SKILL.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `skills/implementation-review/user-rules-snippet.md` | `skills/implementation-review/user-rules-snippet.md` | `C:\Users\admin\.cursor\skills\implementation-review\user-rules-snippet.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `skills/roadmap/SKILL.md` | `skills/roadmap/SKILL.md` | `C:\Users\admin\.cursor\skills\roadmap\SKILL.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+
 ## File count
 
-Total markdown files in tree: 47
+Total markdown/mdc files in imported trees: 86 (openBuggy 47 + AITestSuite 17 + cursor-global-workflow 22)

@@ -1,0 +1,16 @@
+> **Imported research** — Source: AITestSuite `tests\ez-pz-streaming-media-phase-4\baseline\.cursor\rules\iterative-plan-review.mdc`; copied 2026-08-17 into cursorEscape. Status: Observed/eval-packaging. Do not treat as Target cursorEscape design unless a Target doc cites it.
+---
+description: Non-trivial implementation plans must use the plan-reviewer subagent (max 3 passes per loop)
+alwaysApply: true
+---
+
+# Plan review before implementation
+
+Unless the change is **truly trivial** (see [iterative-plan-review.md](../../referenceFiles/SOPs/iterative-plan-review.md)):
+
+1. **Draft** using [.cursor/skills/implementation-plan/SKILL.md](../skills/implementation-plan/SKILL.md)
+2. **Invoke** [`plan-reviewer`](../agents/plan-reviewer.md) with `model: composer-2.5` on every pass (max 3); full synthesized plan each time (no prior review transcripts)
+3. **Synthesize** between passes — fix blockers; capture uncertainties as **discovery steps**
+4. **Present** to user after pass 3 or early `APPROVED`; if `CHANGES REQUESTED`, surface **outstanding requested changes** and **wait for user** before another loop or Agent mode
+
+During implementation, each plan phase ends with the [iterative code review](./iterative-code-review.mdc) loop before the next phase starts.

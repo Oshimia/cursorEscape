@@ -24,10 +24,16 @@ cursorEscape is a **docs-first companion** for escaping Cursor lock-in. It does 
 - **What we did not take:** `eval/` tree, mining ops roadmaps as imports, analysis `.local/` coding sheets, runtime code.
 - **How to use imports:** Treat as **Observed/imported** openBuggy characterization. cursorEscape **Target** design lives in `docs/review/design-decisions.md` and Phase 4+ `docs/featureArchitecture/` synthesizers — cite imports; do not merge without claim classification.
 
-### AITestSuite (Phase 3)
+### AITestSuite (imported in Phase 3)
 
-- Provides **eval packaging** for measuring workflow fidelity — not cursorEscape runtime.
-- Freeze snapshot may lag live `~/.cursor`; delta note resolves which workflow artifacts are Target vs Observed freeze.
+- **What we took:** Phase 4 freeze `.cursor/` workflow slice (skills, agents, rules), freeze `referenceFiles/SOPs/` process docs, eval-packaging `REVIEW_LOOP.md`, `USER_INPUT_STOPS.md`, phase lessons-learned (phases 2, 4, 6), and suite `scoring-framework.md`. **Hard excludes:** `review-profiles/**`, baselines' app trees, `evaluation/reference/**`.
+- **What we did not take:** Full baselines, review-profile swap machinery, runtime eval runners as imports.
+- **How to use imports:** Label **Observed/eval-packaging** for test-scoped prompts and freeze baseline. **Live `~/.cursor`** import is Observed snapshot of canonical Target — cite [workflow-source-delta](../research/imported/workflow-source-delta.md) when freeze disagrees with live.
+
+### Live `~/.cursor` (imported in Phase 3)
+
+- **What we took:** All nine `docs/workflow/` files, three rules (including `pre-commit-ci-gate`), five skills (+ co-located `user-rules-snippet.md` where present), and two agents — mirrored under `imported/cursor-global-workflow/`.
+- **Canonical:** Live tree remains owner Target; import is dated snapshot for cursorEscape archaeology and Phase 4 synthesis.
 
 ### Replaceability principle
 

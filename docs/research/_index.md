@@ -6,7 +6,7 @@
 
 This section holds **sourced** market and product research plus **imported** sibling research (openBuggy, AITestSuite, live `~/.cursor` workflow) that informs cursorEscape architecture and evaluation.
 
-**Status:** Phase 2 imports landed — closeout pending review loop + Full CI. openBuggy tree under `imported/openBuggy/`. Phase 3 adds AITestSuite and cursor-global-workflow.
+**Status:** Phase 3 imports landed — closeout pending review loop + Full CI. openBuggy under `imported/openBuggy/`; AITestSuite + live workflow under `imported/AITestSuite/` and `imported/cursor-global-workflow/`.
 
 ---
 
@@ -43,12 +43,26 @@ This section holds **sourced** market and product research plus **imported** sib
 
 Sibling relationship (Target): [relationship-to-siblings](../review/relationship-to-siblings.md).
 
+### Imported AITestSuite + live workflow (Phase 3)
+
+| Area | Hub |
+| ---- | --- |
+| Workflow source delta (authored) | [workflow-source-delta.md](./imported/workflow-source-delta.md) |
+| AITestSuite Phase 4 freeze / eval packaging | [imported/AITestSuite/](./imported/AITestSuite/) |
+| Live `~/.cursor` workflow (canonical Target) | [imported/cursor-global-workflow/](./imported/cursor-global-workflow/) |
+
+Key live workflow entry points in the import mirror:
+
+- [cursor-global-workflow/docs/workflow/README.md](./imported/cursor-global-workflow/docs/workflow/README.md)
+- [implementation-review skill](./imported/cursor-global-workflow/skills/implementation-review/SKILL.md)
+- [composer skill](./imported/cursor-global-workflow/skills/composer/SKILL.md)
+
 ---
 
 ## Implications / open questions
 
 1. Host-only absolute paths in imports are annotated in COPY-MANIFEST.
-2. Phase 3 updates manifest for AITestSuite and `~/.cursor` workflow imports.
+2. Phase 3 manifest rows cover AITestSuite allowlist and cursor-global-workflow; see [workflow-source-delta](./imported/workflow-source-delta.md) for live vs freeze deltas.
 
 ---
 
