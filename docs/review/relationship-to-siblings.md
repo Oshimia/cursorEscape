@@ -51,6 +51,8 @@ cursorEscape intends to **own** workflow contracts, repo knowledge, and evaluati
 
 ## Related
 
+- [openBuggy README](../../../openBuggy/README.md) — sibling on disk
+- [AITestSuite README](../../../AITestSuite/README.md) — sibling on disk
 - [Design decisions](./design-decisions.md)
 - [Feature architecture index](../featureArchitecture/_index.md)
 - [Agent contracts](../agents/_index.md)

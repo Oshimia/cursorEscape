@@ -44,6 +44,17 @@ cursorEscape/
 
 Application runtime, adapters, packages, and eval runners are **out of scope** for the current initialization roadmap.
 
+## Related repositories
+
+Sibling archives under `general-projects/` (local relative links; **no standing sync**):
+
+| Sibling | Role |
+| ------- | ---- |
+| [openBuggy](../openBuggy/README.md) | Bug-finder engine + BugBot research/eval archive |
+| [AITestSuite](../AITestSuite/README.md) | Frozen plan/review eval packaging |
+
+Longer map and import boundaries: [relationship to siblings](docs/review/relationship-to-siblings.md).
+
 ## License / remote
 
 Private-first. License and remote hosting remain TBD. See [design decisions](docs/review/design-decisions.md).

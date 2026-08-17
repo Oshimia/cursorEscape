@@ -97,6 +97,7 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 
 ## Related
 
+- [Relationship to siblings](./review/relationship-to-siblings.md) — openBuggy, AITestSuite, live `~/.cursor`
 - [Design decisions](./review/design-decisions.md)
 - [Documenting this repo (SOP)](./SOPs/documenting-this-repo.md)
 - [Roadmaps index](./roadmaps/_index.md)
