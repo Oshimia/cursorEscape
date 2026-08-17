@@ -72,4 +72,6 @@ When Composer conducts the phase:
 
 - [implementation-plan](./implementation-plan.md)
 - [composer](./composer.md)
+- [pre-commit-ci-gate](./pre-commit-ci-gate.md)
+- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
 - [ci-ladder](../research/imported/cursor-global-workflow/docs/workflow/ci-ladder.md)

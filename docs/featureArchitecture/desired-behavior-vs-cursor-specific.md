@@ -33,6 +33,8 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 | Split Reviewer-a bar (Batchable deferred OK) | **Required** | Live workflow; not freeze unified bar |
 | Repository doc discovery before edits | **Required** | [discovery](../skills/discovery.md) |
 | Thin always-on gates; on-demand skills / deep docs / lean agents | **Required** | [instruction layering](./instruction-layering.md) |
+| Isolated child review handoffs (no prior review transcripts) | **Required** | [clean-context isolation](./clean-context-isolation.md) |
+| Full CI before commit when Full ≠ `n/a` (on-demand policy) | **Required** | [pre-commit-ci-gate](../skills/pre-commit-ci-gate.md) |
 | BYOK model keys | **Required** | [design decisions](../review/design-decisions.md) |
 | Replaceable backends and models | **Required** | [backend abstraction](./backend-and-provider-abstraction.md) |
 | First host: OpenCode + T3 control plane | **Desired** | [design decisions](../review/design-decisions.md) |
@@ -51,6 +53,8 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 | `~/.cursor/skills/` paths | OpenCode skill dirs / host skill registry |
 | Cursor rules (`.mdc` alwaysApply) + User Rules snippets | Thin always-on host instructions ([instruction layering](./instruction-layering.md)) |
 | `disable-model-invocation` on skills | Host on-demand skill load (do not always-inject) |
+| `alwaysApply: false` pre-commit rule | On-demand Full-before-commit ([pre-commit-ci-gate](../skills/pre-commit-ci-gate.md)) |
+| Task clean-context subagents | Isolated child handoffs ([clean-context isolation](./clean-context-isolation.md)) |
 | Progress timeline (`UpdateCurrentStep`) | **Nice-to-have** UX; not a workflow gate |
 
 ### Deliberately not Cursor goals
@@ -75,5 +79,6 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 - [Cursor behavior to reproduce](./cursor-behavior-to-reproduce.md)
 - [Intended workflow](./intended-workflow.md)
 - [Instruction layering](./instruction-layering.md)
+- [Clean context and isolation](./clean-context-isolation.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Agent role contracts](../agents/_index.md)

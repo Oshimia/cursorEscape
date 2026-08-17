@@ -14,7 +14,7 @@ This section explains **how cursorEscape is intended to work** — Target design
 
 | Document type | Responsibility |
 | ------------- | -------------- |
-| This folder (Target docs) | Intended workflow, instruction layering, backend abstraction, agent roles, evaluation methodology |
+| This folder (Target docs) | Intended workflow, instruction layering, clean-context isolation, backend abstraction, agent roles, evaluation methodology |
 | [`../research/`](../research/_index.md) | Sourced facts and imported sibling research |
 | [`../analysis/`](../analysis/_index.md) | Operator studies of local workflows |
 | [`../agents/`](../agents/_index.md) | Host-agnostic role contracts |
@@ -30,6 +30,7 @@ Imported Observed harness and workflow snapshots live under [research/imported/]
 | -------- | ------- |
 | [intended-workflow.md](./intended-workflow.md) | Canonical loop — live workflow + dual gate (OpenCode bug_reviewer) |
 | [instruction-layering.md](./instruction-layering.md) | Thin always-on vs on-demand skills/docs/agents (context budget) |
+| [clean-context-isolation.md](./clean-context-isolation.md) | Isolated child handoffs; no prior review transcripts |
 | [desired-behavior-vs-cursor-specific.md](./desired-behavior-vs-cursor-specific.md) | Portable vs Cursor-specific claims |
 | [cursor-behavior-to-reproduce.md](./cursor-behavior-to-reproduce.md) | Observed behaviors worth preserving |
 | [backend-and-provider-abstraction.md](./backend-and-provider-abstraction.md) | T3 → OpenCode → provider layering |

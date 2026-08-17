@@ -59,5 +59,6 @@ OpenCode markdown agent (`mode: subagent`, `permission.edit: deny`) with a bug-f
 ## Related
 
 - [production_readiness_reviewer](./production_readiness_reviewer.md)
+- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [openBuggy agent review loop SOP](../research/imported/openBuggy/SOPs/running-an-agent-review-loop-with-openBuggy.md) (Observed / optional)

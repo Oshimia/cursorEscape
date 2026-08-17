@@ -41,6 +41,7 @@ cursorEscape is an **open agentic workflow companion** for escaping Cursor lock-
 | **Runtime in this repo** | **Not started.** Docs remain canonical until an explicit R0+ go-ahead; first recreation uses external T3 + OpenCode, not a cursorEscape engine. |
 | **Documentation taxonomy** | Mirror openBuggy's `docs/` layout (featureArchitecture, SOPs, research, analysis, roadmaps) — extend hubs; do not invent parallel trees. |
 | **Instruction budget** | **Thin always-on gates**; deeper procedure in on-demand skills and workflow docs; lean role agents. Portable pattern — see [instruction layering](../featureArchitecture/instruction-layering.md). |
+| **Isolated review handoffs** | Reviewers and phase subagents run in **clean child context**; parent packs the invoke; no prior review transcripts — see [clean-context isolation](../featureArchitecture/clean-context-isolation.md). |
 
 ### Non-goals (initial)
 
@@ -72,6 +73,7 @@ cursorEscape is an **open agentic workflow companion** for escaping Cursor lock-
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Feature architecture index](../featureArchitecture/_index.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md)
+- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
 - [Documenting this repo (SOP)](../SOPs/documenting-this-repo.md)
 - [Relationship to siblings](./relationship-to-siblings.md)
 - [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)

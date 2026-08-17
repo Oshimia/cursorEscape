@@ -21,13 +21,19 @@ AITestSuite freeze includes a **reference-docs** skill — live owner workflow u
 | discovery | [discovery.md](./discovery.md) | [discovery.md](../research/imported/cursor-global-workflow/docs/workflow/discovery.md) |
 | plan-review (concepts) | [plan-review.md](./plan-review.md) | [iterative-plan-review](../research/imported/cursor-global-workflow/docs/workflow/iterative-plan-review.md) |
 
+### Gates / on-demand policy
+
+| Skill | Contract | Live import |
+| ----- | -------- | ----------- |
+| pre-commit-ci-gate | [pre-commit-ci-gate.md](./pre-commit-ci-gate.md) | [pre-commit-ci-gate.mdc](../research/imported/cursor-global-workflow/rules/pre-commit-ci-gate.mdc) (rule, `alwaysApply: false` — not a SKILL.md) |
+
 ### Optional orchestration (Nice-to-have / Cursor-specific)
 
 | Skill | Contract | Notes |
 | ----- | -------- | ----- |
 | composer | [composer.md](./composer.md) | Phased conductor — Cursor-specific |
 | roadmap | [roadmap.md](./roadmap.md) | Multi-phase handoff authoring |
-| documentation-architecture | — | Cite live import only; no separate contract page in Phase 4 |
+| documentation-architecture | [documentation-architecture.md](./documentation-architecture.md) | Bootstrap SOPs/FA layout; [SKILL.md](../research/imported/cursor-global-workflow/skills/documentation-architecture/SKILL.md) |
 
 ### Skill contract fields (Required)
 
@@ -47,4 +53,5 @@ Each page states: **When to use**, **Workflow steps**, **Outputs**, **Must not**
 - [Agents index](../agents/_index.md)
 - [Intended workflow](../featureArchitecture/intended-workflow.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md) — skills stay on-demand; always-on stays thin
+- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
 - [Workflow source delta](../research/imported/workflow-source-delta.md)

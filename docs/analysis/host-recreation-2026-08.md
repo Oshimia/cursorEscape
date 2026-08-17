@@ -89,3 +89,4 @@ openBuggy remains a valuable **characterization and research** sibling (imported
 - [Implementation roadmap](../roadmaps/implementation-roadmap.md)
 - [Intended workflow](../featureArchitecture/intended-workflow.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md) — thin always-on vs on-demand skills/agents
+- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)

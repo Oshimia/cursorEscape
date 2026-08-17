@@ -59,4 +59,5 @@ Verdict: **APPROVED** only when loop-blocking lists are `"None"`.
 
 - [bug_reviewer](./bug_reviewer.md)
 - [implementation-review skill](../skills/implementation-review.md)
+- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
 - [openBuggy reviewer-a angle](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/reviewer-a-skill.md)

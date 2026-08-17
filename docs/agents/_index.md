@@ -20,8 +20,7 @@ Host-agnostic **Target** contracts for cursorEscape orchestration. Adapters map 
 | production_readiness_reviewer | [production_readiness_reviewer.md](./production_readiness_reviewer.md) | Review (dual gate) |
 | bug_reviewer | [bug_reviewer.md](./bug_reviewer.md) | Review (dual gate) |
 | repository_explorer | [repository_explorer.md](./repository_explorer.md) | Investigate |
-
-Optional roles (catalog only — no separate page in init Phase 4): **test_reviewer** — see [agent roles and model assignment](../featureArchitecture/agent-roles-and-model-assignment.md).
+| test_reviewer | [test_reviewer.md](./test_reviewer.md) | Review (optional; **not** default dual gate) |
 
 ### Shared contract fields (Required)
 
@@ -40,6 +39,7 @@ Every role page defines:
 | plan_reviewer | No blocking plan issues (CHANGES REQUESTED otherwise) |
 | production_readiness_reviewer | Blocking, Non-blocking (code/process), blocking test/docs = `"None"`; Batchable deferred may remain |
 | bug_reviewer | Blocking, Non-blocking, Test gaps = `"None"` |
+| test_reviewer | Advisory findings — not required for dual APPROVED unless user elevates ([test_reviewer](./test_reviewer.md)) |
 
 ---
 
@@ -48,6 +48,7 @@ Every role page defines:
 1. **Unknown:** Machine-readable schema for contracts (future).
 2. Do not require Cursor Task/subagent IDs in parent prompts — use role names.
 3. First host: OpenCode agents with `edit: deny` on both dual-gate reviewers — [host recreation](../analysis/host-recreation-2026-08.md).
+4. Isolated child handoffs: [clean-context isolation](../featureArchitecture/clean-context-isolation.md).
 
 ---
 
@@ -57,4 +58,5 @@ Every role page defines:
 - [Skills index](../skills/_index.md)
 - [Intended workflow](../featureArchitecture/intended-workflow.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md) — lean role agents; do not paste full procedures
+- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)

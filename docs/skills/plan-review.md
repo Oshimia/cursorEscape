@@ -53,3 +53,4 @@ When Composer executes phased roadmaps, phase subagent does not re-run plan-revi
 
 - [implementation-plan](./implementation-plan.md)
 - [plan_reviewer agent](../agents/plan_reviewer.md)
+- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)

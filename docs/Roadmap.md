@@ -69,6 +69,7 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 | ----- | -------- |
 | Intended workflow | [intended-workflow.md](./featureArchitecture/intended-workflow.md) |
 | Instruction layering | [instruction-layering.md](./featureArchitecture/instruction-layering.md) |
+| Clean-context isolation | [clean-context-isolation.md](./featureArchitecture/clean-context-isolation.md) |
 | Portable vs Cursor-specific | [desired-behavior-vs-cursor-specific.md](./featureArchitecture/desired-behavior-vs-cursor-specific.md) |
 | Cursor behaviors to preserve | [cursor-behavior-to-reproduce.md](./featureArchitecture/cursor-behavior-to-reproduce.md) |
 | Backend abstraction | [backend-and-provider-abstraction.md](./featureArchitecture/backend-and-provider-abstraction.md) |

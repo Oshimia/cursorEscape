@@ -39,7 +39,7 @@ Claim label: **Unknown** unless noted otherwise.
 
 | # | Question | Notes |
 | - | -------- | ----- |
-| U9 | When to invoke optional test_reviewer vs production_readiness only | [agent roles](../featureArchitecture/agent-roles-and-model-assignment.md) |
+| U9 | When to invoke optional test_reviewer vs production_readiness only | [agent roles](../featureArchitecture/agent-roles-and-model-assignment.md); contract [test_reviewer.md](../agents/test_reviewer.md) — Desired triggers only; mandatory policy still **Unknown** |
 | U10 | Eval harness ownership — cursorEscape repo vs AITestSuite pattern | [evaluation methodology](../featureArchitecture/evaluation-methodology.md) |
 
 ### Distribution

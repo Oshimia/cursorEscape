@@ -26,7 +26,7 @@ Target role catalog for cursorEscape orchestration. Roles are **configurable con
 
 Only **production_readiness_reviewer** + **bug_reviewer** run in parallel at loop closeout. openBuggy analysis: keep both legs ([recommendation](../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)).
 
-**test_reviewer** is **Nice-to-have** for explicit test-heavy phases — does not replace production_readiness_reviewer's blocking test/docs bar.
+**test_reviewer** is **Nice-to-have** for explicit test-heavy phases — does not replace production_readiness_reviewer's blocking test/docs bar. Contract: [test_reviewer.md](../agents/test_reviewer.md). When mandatory remains **Unknown (U9)**.
 
 ### Model assignment (Desired)
 
@@ -35,6 +35,7 @@ Only **production_readiness_reviewer** + **bug_reviewer** run in parallel at loo
 | plan_reviewer | Strong reasoning model | Config per repo |
 | production_readiness_reviewer | `composer-2.5` class or OpenCode equivalent | Config |
 | bug_reviewer | Matched to production_readiness or stronger bug-focused model | Config (not openBuggy-required) |
+| test_reviewer | Strong reasoning or test-aware model | Config |
 | implementer | Fast/cheap open-weight OK (e.g. Flash-class) | Config |
 | repository_explorer | Fast/cheap model OK | Config |
 
@@ -66,5 +67,7 @@ optional: test_reviewer (explicit invoke)
 
 - [Agent contracts index](../agents/_index.md)
 - [Intended workflow](./intended-workflow.md)
+- [Clean context and isolation](./clean-context-isolation.md)
+- [test_reviewer](../agents/test_reviewer.md)
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)

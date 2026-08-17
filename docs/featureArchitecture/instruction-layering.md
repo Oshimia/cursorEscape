@@ -100,18 +100,20 @@ Adapters cite this page and [docs/agents](../agents/_index.md) / [docs/skills](.
 
 1. Recreation hosts that paste full review procedures into always-on or agent prompts violate this contract even if loop *stages* look correct.
 2. Shipping packaged always-on snippet files from this repo remains a later packaging question — documenting the pattern is enough for now.
-3. Repo-local deferred rules (Cursor `alwaysApply: false`) can be mapped to host on-demand policy later; no Target schema required yet.
+3. On-demand policy hooks (e.g. Full-before-commit) now have a Target skill: [pre-commit-ci-gate](../skills/pre-commit-ci-gate.md). Host wiring details can still be validated per host.
 
 ---
 
 ## Related
 
 - [Intended workflow](./intended-workflow.md) — loop stages and dual-gate semantics
+- [Clean context and isolation](./clean-context-isolation.md) — isolation honesty (not token budget)
 - [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)
 - [Cursor behavior to reproduce](./cursor-behavior-to-reproduce.md)
 - [Repository discovery and context](./repository-discovery-and-context.md) — repo evidence, not instruction layers
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md) — different “layering”
 - [Agent role contracts](../agents/_index.md)
 - [Skill contracts](../skills/_index.md)
+- [pre-commit-ci-gate](../skills/pre-commit-ci-gate.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Design decisions](../review/design-decisions.md)

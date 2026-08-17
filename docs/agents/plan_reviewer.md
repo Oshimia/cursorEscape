@@ -18,11 +18,11 @@ Return **APPROVED** or **CHANGES REQUESTED** on a plan — up to 3 review passes
 
 | Input | Description |
 | ----- | ----------- |
-| Full plan text | Current synthesis |
+| Full plan text | Current **synthesized** plan only — each pass; no prior review transcripts ([clean-context isolation](../featureArchitecture/clean-context-isolation.md)) |
 | Task summary | Original goal |
-| Applicable docs | Architecture, roadmaps, design decisions |
+| Applicable docs | Architecture, roadmaps, design decisions (optional hints) |
 | Review iteration | 1–3 |
-| Prior feedback | If re-review |
+| Review model | Optional — parent-set model slug |
 
 ### Outputs
 
@@ -37,6 +37,7 @@ Return **APPROVED** or **CHANGES REQUESTED** on a plan — up to 3 review passes
 - Implement code
 - Approve plans with unresolved blocking scope gaps
 - Exceed 3 passes without owner escalation
+- Rely on shared chat history or prior review transcripts
 
 ### Model
 
@@ -54,3 +55,4 @@ Return **APPROVED** or **CHANGES REQUESTED** on a plan — up to 3 review passes
 
 - [planner](./planner.md)
 - [Plan review skill concepts](../skills/plan-review.md)
+- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
