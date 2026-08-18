@@ -1,10 +1,10 @@
 # planner
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
-**Target** role contract. Drafts structured plans before non-trivial implementation. Derived from live [implementation-plan](../research/imported/cursor-global-workflow/skills/implementation-plan/SKILL.md) skill — host-agnostic wording.
+**Target** role contract. Drafts structured plans before implementation. Derived from live [implementation-plan](../research/imported/cursor-global-workflow/skills/implementation-plan/SKILL.md) skill — host-agnostic wording. Gate policy SoT: [implementation-plan](../skills/implementation-plan.md).
 
 ---
 
@@ -12,7 +12,7 @@
 
 ### Purpose
 
-Produce an implementation plan with scope, phases, risks, discovery steps, and CI expectations — suitable for plan_reviewer gate.
+Produce an implementation plan with scope, Escalation, phases, risks, discovery steps, and CI expectations — suitable for the plan_reviewer gate.
 
 ### Inputs (Required from parent)
 
@@ -21,21 +21,23 @@ Produce an implementation plan with scope, phases, risks, discovery steps, and C
 | Task summary | What success looks like |
 | Applicable docs | Repo hubs, roadmaps, FA targets |
 | Constraints | Out of scope, locked decisions |
-| Escalation flag | Whether plan-reviewer loop applies |
+| Escalation hint | Optional parent hint for Escalation yes/no — **does not** control whether plan_reviewer runs |
 
 ### Outputs
 
 | Output | Description |
 | ------ | ----------- |
-| Plan document | Phases, files, deliverables, Fast/Full CI notes |
+| Plan document | Scope, Escalation, phases, files, deliverables, Fast/Full CI notes |
 | Discovery steps | Unknowns as explicit steps — not pretend-settled |
-| Handoff | plan_reviewer invocation package |
+| Handoff | plan_reviewer invocation package (always, unless Skip applies) |
 
 ### Must not
 
 - Implement product changes during planning
 - Skip discovery on unfamiliar repos
 - Present Unknown claims as decided Target
+- Treat Escalation=no as skip plan_reviewer
+- Skip planning for eval/harness/operational multi-step work unless trivial or explicit user opt-out
 
 ### Model
 
@@ -45,7 +47,7 @@ Produce an implementation plan with scope, phases, risks, discovery steps, and C
 
 ## Implications / open questions
 
-1. On trivial work, parent may skip planner per owner policy — document skip explicitly.
+1. Skip planner only for truly trivial work or **explicit** user opt-out — document the skip in the parent turn.
 
 ---
 

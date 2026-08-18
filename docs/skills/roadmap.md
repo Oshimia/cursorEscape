@@ -1,6 +1,6 @@
 # roadmap
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
@@ -16,8 +16,8 @@ Large or multi-phase initiatives needing Agent context blocks per phase and expl
 
 ### Workflow steps
 
-1. Draft roadmap with phases, inter-phase contracts, Agent context per phase
-2. plan_reviewer on roadmap when Escalation applies
+1. Draft roadmap with phases, inter-phase contracts, Agent context per phase (Escalation *when* per [implementation-plan](./implementation-plan.md))
+2. Run `plan_reviewer` on the drafted roadmap under default-on plan gate (Escalation ≠ whether the gate runs — see [plan-review](./plan-review.md))
 3. Link from `docs/roadmaps/_index.md` and [Roadmap hub](../Roadmap.md)
 4. Hand to Composer or sequential implementers
 

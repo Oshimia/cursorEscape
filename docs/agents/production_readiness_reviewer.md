@@ -1,6 +1,6 @@
 # production_readiness_reviewer
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
@@ -13,6 +13,8 @@
 ### Purpose
 
 Review changeset for incomplete work, architecture drift, CI honesty, and **blocking** test/docs gaps. Uses **split verdict bar**: Batchable (deferred) may remain on APPROVED.
+
+**Leg split:** Process/docs completeness and incomplete changesets live **here**. Product bugs (incorrect/unsafe/production-breaking, introduced by the change) belong on [bug_reviewer](./bug_reviewer.md) + [finding rubric](../featureArchitecture/bug-reviewer-finding-rubric.md) — do not duplicate that hunt on this leg.
 
 ### Inputs (Required)
 
@@ -58,6 +60,7 @@ Verdict: **APPROVED** only when loop-blocking lists are `"None"`.
 ## Related
 
 - [bug_reviewer](./bug_reviewer.md)
+- [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md)
 - [implementation-review skill](../skills/implementation-review.md)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
 - [openBuggy reviewer-a angle](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/reviewer-a-skill.md)

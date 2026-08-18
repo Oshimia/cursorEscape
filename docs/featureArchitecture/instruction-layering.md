@@ -1,6 +1,6 @@
 # Instruction Layering
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
@@ -29,13 +29,17 @@ This is a **context-budget** optimization. Loop gate semantics stay in [intended
 
 ### Layer 1 — Always-on (thin)
 
-**Required:** Always-on text states *when* to run plan review and implementation review, the skip-trivial list, and pointers to skills by name. It must **not** inline full procedures (plan template, reviewer launch scripts, CI command discovery, Agent context specimens).
+**Required:** Always-on text states that plan review and implementation review are **default on** unless truly trivial or the user **explicitly** opts out; includes **When in doubt, run the plan loop**; states that eval/harness/multi-step operational work is **not** exempt; lists the skip-trivial list; and points to skills by name (including [implementation-plan](../skills/implementation-plan.md) for Escalation *when*). It must **not** inline full procedures (plan template, reviewer launch scripts, CI command discovery, Agent context specimens).
 
 **Desired:** Keep always-on *gate* text as small as possible while gate behavior remains reliable. There is **no fixed line budget**. Measure success by expected behavior, not character count. Always-on should cover **workflow gates** only — not operator preference rules (git/PR habits, communication style, frontend taste).
 
 **Observed (Cursor):** Three lean [User Rules snippets](../research/imported/cursor-global-workflow/skills/implementation-review/user-rules-snippet.md) (plan review, implementation review, optional composer) plus parallel `alwaysApply` `.mdc` rules that note preferring the snippets for enforcement across Cursor versions. That dual-channel state is an Observed Cursor detail, not a Target requirement. Target hosts should prefer **one** always-on surface when the host allows it.
 
 **Cursor-specific mapping:** Customize → Rules → User Rules; optional `alwaysApply` rules under `~/.cursor/rules/`.
+
+### Escalation *when* ownership (Required)
+
+**Sole SoT** for Escalation *when* triggers: Target [implementation-plan](../skills/implementation-plan.md). Deep [plan-agent-context](../research/imported/cursor-global-workflow/docs/workflow/plan-agent-context.md) (Observed import) and host mirrors keep **field specimen / required headings only** and must **point to** that skill — no competing “≤3 phases usually no” when-table.
 
 ### Layer 2 — Skills (on-demand)
 

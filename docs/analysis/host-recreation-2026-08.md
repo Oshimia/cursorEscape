@@ -1,6 +1,6 @@
 # Host recreation study (2026-08)
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
@@ -70,6 +70,7 @@ openBuggy remains a valuable **characterization and research** sibling (imported
 2. Keep U1 / U3–U7 / U9–U13 Unknown until spikes; U13 notes ClinePass as **Desired** when using OpenCode.
 3. OpenCode adapter install paths and smoke checklist: [opencode-host-adapter SOP](../SOPs/opencode-host-adapter.md).
 4. Do not authorize R1+ engine work in this repo until R0 dogfood proves the loop.
+5. Instruction-gate enforcement remains **parent skill discipline** on OpenCode (not host-enforced). Observed weak in the 2026-08 DSV4F dogfood session — see [OpenCode DSV4F session study](./opencode-dsv4f-session-2026-08.md).
 
 ---
 
@@ -91,3 +92,4 @@ openBuggy remains a valuable **characterization and research** sibling (imported
 - [Intended workflow](../featureArchitecture/intended-workflow.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md) — thin always-on vs on-demand skills/agents
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
+- [OpenCode DSV4F session study (2026-08)](./opencode-dsv4f-session-2026-08.md) — instruction-loop reliability dogfood; Antigravity historical

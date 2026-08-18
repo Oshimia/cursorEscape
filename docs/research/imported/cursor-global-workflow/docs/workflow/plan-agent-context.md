@@ -1,10 +1,13 @@
-> **Imported research** — Source: live `~/.cursor`; copied 2026-08-17 into cursorEscape. Status: Observed/imported (live canonical for Target workflow). Do not treat as Target cursorEscape design unless a Target doc cites it.
+> **Imported research** — Source: live `~/.cursor`; copied 2026-08-17 into cursorEscape. Status: Observed/imported (Cursor specimen). Do not treat as Target cursorEscape design unless a Target doc cites it.
+>
+> **Escalation when SoT (Target):** [docs/skills/implementation-plan.md](../../../../../skills/implementation-plan.md#escalation-when-sole-sot) — this import keeps **field specimen / required headings only**. Competing when-tables (including “≤3 phases usually no”) are **not** Target; host adapters must point at the Target skill.
+
 # Plan Agent context (escalated plans)
 
 **Skills:** [implementation-plan](../../skills/implementation-plan/SKILL.md), [roadmap](../../skills/roadmap/SKILL.md), [composer](../../skills/composer/SKILL.md).  
 **Agent:** [plan-reviewer](../../agents/plan-reviewer.md).
 
-Use when a plan’s **Escalation** section sets `Agent context required: **yes**`. Typical ≤3-phase work stays on the light Incremental execution template (`Agent context required: **no**`).
+Use when a plan’s **Escalation** section sets `Agent context required: **yes**`.
 
 Do **not** paste this specimen into always-on rules or the plan-reviewer output schema. Load it when drafting or reviewing escalated plans only.
 
@@ -22,11 +25,7 @@ Place **immediately after Scope**:
 - Reason: `user-labeled-composer` | `complex-or-extensive` | `n/a`
 ```
 
-| Value | When |
-|-------|------|
-| **yes** + `user-labeled-composer` | User says composer-level, or asks Composer to **plan** |
-| **yes** + `complex-or-extensive` | Planner judges unusually hard / extensive (≤3 phases usually **no**; not a hard cap) |
-| **no** + `n/a` | Default light plan — do **not** write Agent context blocks |
+**When to set yes vs no:** Target SoT only — [implementation-plan Escalation when](../../../../../skills/implementation-plan.md#escalation-when-sole-sot). Do not keep a second when-table here.
 
 If unsure whether to escalate: AskQuestion; do not silently set **yes**.
 

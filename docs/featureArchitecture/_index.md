@@ -1,12 +1,12 @@
 # Feature Architecture Documentation
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
 This section explains **how cursorEscape is intended to work** — Target design and workflow contracts. Unlike SOPs (how to perform a task), these documents describe system behavior and architecture.
 
-**Status:** Phase 4 Target synthesizing docs authored. Observed imports remain under `docs/research/imported/`.
+**Status:** Phase 4 Target synthesizing docs authored. Observed imports remain under `docs/research/imported/`. Plan-gate default-on wording updated 2026-08-18.
 
 ## Substance
 
@@ -38,6 +38,7 @@ Imported Observed harness and workflow snapshots live under [research/imported/]
 | [workspace-model.md](./workspace-model.md) | Companion vs target workspace; T3 vs OpenCode sessions |
 | [agent-roles-and-model-assignment.md](./agent-roles-and-model-assignment.md) | Role catalog + config |
 | [evaluation-methodology.md](./evaluation-methodology.md) | How workflow quality is measured |
+| [bug-reviewer-finding-rubric.md](./bug-reviewer-finding-rubric.md) | bug_reviewer report vs ignore (nits / out-of-scope / pre-existing) |
 
 First host attempt: [host recreation study](../analysis/host-recreation-2026-08.md). Claim taxonomy: **Desired / Required / Nice-to-have / Cursor-specific / Unknown**.
 

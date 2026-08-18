@@ -1,6 +1,6 @@
 # Intended Workflow
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
@@ -16,7 +16,7 @@ Dual-gate review research (openBuggy) informs leg responsibilities. First recrea
 
 ```text
 Discover repo docs (discovery)
-  → Plan (implementation-plan skill; plan_reviewer gate)
+  → Plan (implementation-plan skill; plan_reviewer gate)  [default on]
   → Implement (implementer; phase subagent on multi-phase work)
   → [Fast CI Observed → production_readiness_reviewer ∥ bug_reviewer → fix must-fix]* 
   → dual APPROVED (split bars)
@@ -27,9 +27,9 @@ Discover repo docs (discovery)
 | Stage | Owner | Claim |
 | ----- | ----- | ----- |
 | Doc discovery before edits | Parent or implementer | **Required** — [discovery](../skills/discovery.md) |
-| Plan before non-trivial work | planner + plan_reviewer | **Required** unless explicitly skipped |
+| Plan + plan_reviewer | planner + plan_reviewer | **Required** default on — skip only if truly trivial **or** user **explicitly** opts out ([implementation-plan](../skills/implementation-plan.md)). Eval/harness/multi-step operational work is **not** exempt. **When in doubt, run the plan loop.** |
 | Fast CI before reviewers | Review-loop parent | **Required** — per-command Observed rows when Fast ≠ `n/a` |
-| Parallel dual review | production_readiness_reviewer ∥ bug_reviewer | **Required** for non-trivial changes |
+| Parallel dual review | production_readiness_reviewer ∥ bug_reviewer | **Required** default on for non-trivial changes — same skip list as plan gate ([implementation-review](../skills/implementation-review.md)) |
 | Full CI at closeout | Parent (never paired with reviewers) | **Required** when Full ≠ `n/a` |
 | Composer conductor on phased roadmaps | Composer QC + phase subagent parent | **Cursor-specific** optional orchestration — see [composer skill](../skills/composer.md) |
 
@@ -90,6 +90,7 @@ On initialization-style roadmaps, **Composer** conducts: phase subagent implemen
 - [Instruction layering](./instruction-layering.md)
 - [Clean context and isolation](./clean-context-isolation.md)
 - [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)
+- [bug-reviewer-finding-rubric](./bug-reviewer-finding-rubric.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Evaluation methodology](./evaluation-methodology.md)
 - [Workflow source delta](../research/imported/workflow-source-delta.md)

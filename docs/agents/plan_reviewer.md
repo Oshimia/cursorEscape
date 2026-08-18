@@ -1,6 +1,6 @@
 # plan_reviewer
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
@@ -13,6 +13,8 @@
 ### Purpose
 
 Return **APPROVED** or **CHANGES REQUESTED** on a plan — up to 3 review passes per planning episode.
+
+**Applies to every plan drafted under default-on [implementation-plan](../skills/implementation-plan.md), regardless of Escalation yes/no.** Escalation only adds Agent context / Inter-phase / Migration scaffolding requirements.
 
 ### Inputs (Required)
 
@@ -36,6 +38,7 @@ Return **APPROVED** or **CHANGES REQUESTED** on a plan — up to 3 review passes
 
 - Implement code
 - Approve plans with unresolved blocking scope gaps
+- Refuse or skip review because Escalation=no
 - Exceed 3 passes without owner escalation
 - Rely on shared chat history or prior review transcripts
 
@@ -55,4 +58,5 @@ Return **APPROVED** or **CHANGES REQUESTED** on a plan — up to 3 review passes
 
 - [planner](./planner.md)
 - [Plan review skill concepts](../skills/plan-review.md)
+- [implementation-plan — Escalation when SoT](../skills/implementation-plan.md#escalation-when-sole-sot)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)

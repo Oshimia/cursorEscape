@@ -1,10 +1,10 @@
 # implementation-review
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
-**Target** skill contract. Closeout review loop after non-trivial implementation. Full skill: [live import](../research/imported/cursor-global-workflow/skills/implementation-review/SKILL.md). Freeze eval packaging differs — cite [workflow-source-delta](../research/imported/workflow-source-delta.md).
+**Target** skill contract. Closeout review loop after implementation. Full skill: [live import](../research/imported/cursor-global-workflow/skills/implementation-review/SKILL.md). Freeze eval packaging differs — cite [workflow-source-delta](../research/imported/workflow-source-delta.md).
 
 ---
 
@@ -12,7 +12,16 @@
 
 ### When to use (Required)
 
-End of each plan phase or any non-trivial single-phase task — **when in doubt, run it.**
+**Default on** at the end of each plan phase or any completed implementation task that is not on the skip list.
+
+**When in doubt, run it.**
+
+Eval / harness / multi-step operational work that changed behavior or process artifacts is **not** exempt unless Skip applies.
+
+**Skip only if:**
+
+1. Truly trivial — one-place typo/copy, comment-only, pure formatting, cosmetic-only UI, docs-only with **no** behavior change, **or**
+2. User **explicitly** opts out (e.g. `skip review`, `no dual review`) — not inferred urgency
 
 ### Workflow steps
 
@@ -55,6 +64,7 @@ When Composer conducts the phase:
 - Treat dual APPROVED as proven no-escape
 - Skip loop across multiple plan phases
 - Commit when Composer conducts (hand off closeout report instead)
+- Infer opt-out from task urgency
 
 ### Related roles
 

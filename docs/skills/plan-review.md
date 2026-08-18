@@ -1,6 +1,6 @@
 # plan-review
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
@@ -12,7 +12,13 @@
 
 ### When to use (Required)
 
-Non-trivial plans with Escalation or multi-phase roadmaps — before implementation starts.
+**Default on** whenever a plan was drafted under [implementation-plan](./implementation-plan.md) — before implementation starts.
+
+Does **not** require Escalation=yes or a multi-phase roadmap. Escalation only controls Agent context scaffolding ([implementation-plan Escalation when](./implementation-plan.md#escalation-when-sole-sot)).
+
+**When in doubt, run the plan_reviewer loop.**
+
+**Skip only if:** truly trivial (see implementation-plan skip list), user **explicitly** opts out, or Composer is assigned for phased **execution** of an already-accepted plan.
 
 ### Workflow steps
 
@@ -29,8 +35,9 @@ Non-trivial plans with Escalation or multi-phase roadmaps — before implementat
 
 ### Must not
 
-- Start implementation before APPROVED (unless user explicitly skips)
-- Exceed 3 plan-reviewer passes without escalation
+- Start implementation before APPROVED (unless user explicitly opts out)
+- Skip the gate because Escalation=no or the work is “just docs/eval/harness”
+- Exceed 3 plan-reviewer passes without owner escalation
 - Compress plan review when Composer assigned for phased execution (planning already complete)
 
 ### Composer exception (Cursor-specific)

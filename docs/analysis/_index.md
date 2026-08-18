@@ -1,12 +1,12 @@
 # Analysis documentation
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
 Operator studies of **local workflows** (not proposed engine design, not eval scoring, not market research). Each study has its own subdirectory with a hub `_index.md` when imported or authored.
 
-**Status:** Phase 2 openBuggy operator studies imported under `docs/research/imported/openBuggy/analysis/`. Phase 3–4 complete — Target FA and workflow contracts live in [featureArchitecture](../featureArchitecture/_index.md), [agents](../agents/_index.md), and [skills](../skills/_index.md). Local host-recreation study authored 2026-08-17.
+**Status:** Phase 2 openBuggy operator studies imported under `docs/research/imported/openBuggy/analysis/`. Phase 3–4 complete — Target FA and workflow contracts live in [featureArchitecture](../featureArchitecture/_index.md), [agents](../agents/_index.md), and [skills](../skills/_index.md). Local host-recreation study authored 2026-08-17; OpenCode DSV4F session study authored 2026-08-18.
 
 ---
 
@@ -24,6 +24,7 @@ Operator studies of **local workflows** (not proposed engine design, not eval sc
 ### Documents (local)
 
 * [Host recreation (2026-08)](./host-recreation-2026-08.md) — T3 + OpenCode first attempt; ClinePass later; skill-based bug_reviewer
+* [OpenCode DSV4F session (2026-08)](./opencode-dsv4f-session-2026-08.md) — OpenCode + DeepSeek V4 Flash dogfood; resolved Antigravity routing; lasting gap = automatic plan/review loop binding
 
 ### Documents (imported openBuggy)
 

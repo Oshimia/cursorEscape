@@ -1,6 +1,6 @@
 # Desired Behavior vs Cursor-Specific
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-18
 
 ## Context
 
@@ -24,8 +24,8 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 
 | Behavior | Label | Notes |
 | -------- | ----- | ----- |
-| Plan before non-trivial implementation | **Required** | [implementation-plan](../skills/implementation-plan.md) |
-| plan_reviewer gate on plans | **Required** | Up to 3 passes; **skip** when Composer executes accepted roadmap ([plan-review](../skills/plan-review.md)) |
+| Plan + plan_reviewer before implementation | **Required** | Default on unless truly trivial or **explicit** user opt-out; eval/harness not exempt ([implementation-plan](../skills/implementation-plan.md)) |
+| plan_reviewer gate on drafted plans | **Required** | Up to 3 passes regardless of Escalation; **skip** when Composer executes accepted roadmap ([plan-review](../skills/plan-review.md)) |
 | Fast CI Observed before dual review | **Required** | Per-command rows; no claimed-only launch |
 | Parallel production_readiness_reviewer + bug_reviewer | **Required** | Complementary legs ([openBuggy synthesis](../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)) |
 | Fix all must-fix from either leg | **Required** | Re-launch both after each batch |
