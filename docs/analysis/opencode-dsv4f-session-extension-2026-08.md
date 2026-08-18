@@ -121,10 +121,11 @@ No Target always-on wording, skill-trigger, permission policy, or adapter change
 
 1. How should OpenCode skill-tool discovery expose global workflow skills (`implementation-plan`, `plan-review`, …) so parents do not only see `customize-opencode` — and stop substituting **approval-gated bash** for those loads?
 2. What always-on / skill trigger makes passes 2–3 **auto-continue** after CHANGES REQUESTED without “Please continue”?
-3. What R0 smoke / metric catches shell-approval babysitting (e.g. bash:skill ratio, or “adapter SoT loaded via skill not bash”)?
+3. What R0 smoke / metric catches shell-approval babysitting (e.g. bash:skill ratio, or “adapter SoT loaded via skill not bash”)? — SOP smoke rows **9–10** drafted; awaiting Probe A ([skill-binding discovery](./opencode-skill-binding-discovery-2026-08.md)).
 4. How should R0 smoke detect desktop `workspace:model-selection` pins (beyond empty-fast Tasks) after agent markdown looks clean?
 5. Keep openBuggy contamination-audit / transcript-exporter product work separate from cursorEscape instruction-layer binding.
 6. Live probe that gates fired remains [opencode-host-adapter](../SOPs/opencode-host-adapter.md) smoke row 1 (restart after adapter edits).
+7. **Discovery + probes (2026-08-19):** Clean-chat catalog emptiness = missing skill frontmatter `name` / path registration (not contamination). Smoke 9–10 **pass** after fix. Shell-for-native-tools remains a separate open question (model/selection).
 
 ---
 
@@ -135,11 +136,14 @@ No Target always-on wording, skill-trigger, permission policy, or adapter change
 - [OpenCode DSV4F session study (2026-08)](./opencode-dsv4f-session-2026-08.md) — first slice / Failure A–B
 - Operator Antigravity removal and agent updates (outside chat; confirmed by smoke [232]–[235])
 - Operator clarification (2026-08-19) — primary live pain = shell-approval babysitting (~every 2–3 minutes) because bash substituted for OpenCode skills
+- [OpenCode skill-binding discovery (2026-08)](./opencode-skill-binding-discovery-2026-08.md) — harness vs model vs config; Probe A–C deferred
 
 ---
 
 ## Related
 
+- [OpenCode skill-binding discovery (2026-08)](./opencode-skill-binding-discovery-2026-08.md)
+- [Authoring OpenCode adapter files](../SOPs/opencode-authoring-adapter.md)
 - [OpenCode DSV4F session study (2026-08)](./opencode-dsv4f-session-2026-08.md)
 - [Host recreation (2026-08)](./host-recreation-2026-08.md)
 - [OpenCode host adapter SOP](../SOPs/opencode-host-adapter.md)

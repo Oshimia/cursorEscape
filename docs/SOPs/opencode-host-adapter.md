@@ -1,6 +1,6 @@
 # OpenCode host adapter
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
@@ -41,7 +41,9 @@ This SOP documents the **global OpenCode adapter** installed on the operator mac
 
 **Config hooks**
 
-- `opencode.json` — `instructions` array; `agent.build` / `agent.implementer` `permission.task` allowlists for named roles
+- **Skills inventory:** each `skills/*/SKILL.md` must include frontmatter `name` (folder id) + `description` — required for skill-tool advertisement (Observed 2026-08-19).
+- `opencode.json` — `instructions`; `permission.skill: { "*": "allow" }`; `skills.paths` → global skills dir; `agent.build` / `agent.implementer` `permission.task` allowlists (+ skill allow).
+- **Resolved (discovery 2026-08-19):** empty skill-tool catalog was missing `name` / path registration, not contamination. See [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md).
 
 ### Sync rule
 
@@ -72,6 +74,8 @@ Record results when dogfooding. Expected: `pass` \| `fail` \| `deferred: <reason
 | 6 | Empty-Task fail-loud | Reviewer Task completing in ≪1s with empty result treated as routing/auth failure until log shows model stream | deferred: operator habit / future probe |
 | 7 | Escalation when single owner | Grep adapter: no competing “≤3 phases usually no” when-table in `plan-agent-context.md`; table lives in `implementation-plan` skill | **pass** (2026-08-18 Phase 3 adapt) |
 | 8 | bug_reviewer rubric path | `agents/bug_reviewer.md` references `docs/workflow/bug-reviewer-finding-rubric.md`; file exists; no `model:` pin | **pass** (2026-08-18) |
+| 9 | Skill-tool lists workflow skills | Clean chat (openBuggy; plan mode; Flash): skill tool names include `implementation-plan`, `plan-review`, … — not only `customize-opencode`. Prompt frozen in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) | **pass** (2026-08-19 A-post2: all 7 workflow skills + customize-opencode) |
+| 10 | SoT load without bash approvals | Same Probe A: load `implementation-plan` via skill tool with **zero bash approvals** for that SoT load | **pass** (2026-08-19 A-post2: loaded + Escalation row quoted) |
 
 **Fast verification (install-time):**
 
@@ -88,17 +92,22 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 
 ## Implications / open questions
 
-1. Smoke rows 1–3 need a live OpenCode session **after restart** — mark pass/fail when run; use `deferred:` until then.
+1. Smoke rows 1–3 still need live probes after restart when dogfooding those checks; rows **9–10** are **pass** (2026-08-19) — see [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md).
 2. Do **not** pin provider-specific models in agent frontmatter — roles inherit the session / `opencode.json` default so the adapter stays portable across BYOK hosts.
 3. T3 Code control plane is separate — this SOP covers the OpenCode harness adapter only.
-4. **Restart OpenCode Desktop** after this Phase 3 adapt for always-on / agent / skill changes to load.
+4. **Restart OpenCode Desktop** after adapter edits for always-on / agent / skill / permission changes to load.
+5. **Skill-binding (C/E):** Smoke 9–10 **pass** after frontmatter `name` + `skills.paths` (+ skill allow). Permission allow alone failed. Bash-for-native-tools selection still open (model/selection; Probe B optional).
+6. When adding OpenCode skills/agents/rules: follow [opencode-authoring-adapter](./opencode-authoring-adapter.md) (official docs + Observed checklist).
 
 ---
 
 ## Related
 
+- [Authoring OpenCode adapter files](./opencode-authoring-adapter.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [OpenCode DSV4F session study](../analysis/opencode-dsv4f-session-2026-08.md)
+- [OpenCode DSV4F session extension](../analysis/opencode-dsv4f-session-extension-2026-08.md)
+- [OpenCode skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md)
 - [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)

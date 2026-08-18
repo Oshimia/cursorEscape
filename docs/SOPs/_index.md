@@ -1,6 +1,6 @@
 # Standard Operating Procedures (SOPs)
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-19
 
 ## Context
 
@@ -16,7 +16,8 @@ This index lists repeatable procedures for maintaining cursorEscape documentatio
 
 ### Host adapters
 
-* [OpenCode host adapter](./opencode-host-adapter.md) — global `~/.config/opencode` skills/agents/always-on mapping; sync rule; R0 smoke checklist
+* [OpenCode host adapter](./opencode-host-adapter.md) — global `~/.config/opencode` inventory; sync rule; R0 smoke checklist
+* [Authoring OpenCode adapter files](./opencode-authoring-adapter.md) — how to write skills, agents, rules/instructions, and config (cites OpenCode docs; includes skill `name`/`description` requirements)
 
 ### Future runtime operations (conceptual)
 
