@@ -125,7 +125,7 @@ No Target always-on wording, skill-trigger, permission policy, or adapter change
 4. How should R0 smoke detect desktop `workspace:model-selection` pins (beyond empty-fast Tasks) after agent markdown looks clean?
 5. Keep openBuggy contamination-audit / transcript-exporter product work separate from cursorEscape instruction-layer binding.
 6. Live probe that gates fired remains [opencode-host-adapter](../SOPs/opencode-host-adapter.md) smoke row 1 (restart after adapter edits).
-7. **Discovery + probes (2026-08-19):** Clean-chat catalog emptiness = missing skill frontmatter `name` / path registration (not contamination). Smoke 9–10 **pass** after fix. Shell-for-native-tools remains a separate open question (model/selection).
+7. **Discovery + probes (2026-08-19):** Clean-chat catalog emptiness = missing skill frontmatter `name` / path registration (not contamination). Smoke 9–10 **pass** after fix. Native file tools / Probe B0′–B0″ + Probe C (`repository_explorer`) **pass** — shell-approval babysitting **closed** unless a later dogfood session reopens it.
 
 ---
 

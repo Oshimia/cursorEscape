@@ -21,7 +21,7 @@ Claim labels: **Observed**, **Inferred**, **Unknown**.
 | 1 | **config** | Missing `permission.skill` allow | Medium (contributing) | Allow alone failed A-post1; keep as load/allow hygiene |
 | 1b | **discovery / frontmatter** | Missing frontmatter `name` (+ explicit `skills.paths`) blocked advertisement | **Confirmed High** | A-post2 pass after `name` + `skills.paths` + restart |
 | 2 | **harness / plugin** | Desktop or plugin hides global skills | Low (not needed) | Catalog fixed without plugin removal |
-| 3 | **model** | Flash bash preference for native tools | Medium — **still open** | Separate from catalog |
+| 3 | **model** | Flash bash preference for native tools | **Low for short lookups** (B0′/B0″/C pass); reopen if long dogfood regresses | Separate from catalog; closed for R0 probes |
 | 4 | **contamination** | Long thread caused empty catalog | **Ruled out** | Clean chat reproduced pre-fix fail |
 
 ### Harness vs model (public complaints)
@@ -104,8 +104,8 @@ If you cannot see a skill in the skill tool, say so explicitly — do not list ~
 | **A-post1** | After `permission.skill` allow only | **fail** | Still only `customize-opencode` | permission alone insufficient |
 | **A-post2** | After `name` frontmatter + `skills.paths` + full restart | **pass** | Listed all 7 workflow skills + `customize-opencode`; loaded `implementation-plan`; quoted Escalation first row (`user-labeled-composer`) | **discovery/frontmatter** (+ paths); skill allow may still be needed for load |
 | **A′** | build/implementer if needed | n/a (A-post2 passed on plan) | | |
-| **B** | Stronger model | deferred | | |
-| **C** | `repository_explorer` child | deferred | | |
+| **B0 / B1** | Native file tools (Flash vs stronger) | **card frozen** — awaiting operator | see [Probe card — native file tools](#probe-card--native-file-tools-bash-vs-readglobgrep) |
+| **C** | `repository_explorer` child | deferred until B classifies | run only if B0/B1 mixed or inconclusive |
 
 **Phase 2 gate:** Probe A recorded → Phase 3 unblocked.
 
@@ -115,7 +115,155 @@ If you cannot see a skill in the skill tool, say so explicitly — do not list ~
 3. Frontmatter `name:` on all 7 skills + `skills.paths` — **required for advertisement** on this host (A-post2 pass).
 4. Smoke 9–10 → **pass** (2026-08-19 A-post2).
 
-**Still open:** bash-for-native-tools selection (model/selection); Probes B/C optional.
+**Still open:** bash-for-native-tools selection (model/selection); Probe B card below; Probe C optional after B.
+
+---
+
+## Probe card — native file tools (bash vs read/glob/grep)
+
+**Purpose:** Classify remaining shell-approval babysitting when the task is **repo file lookup**, not skill/SoT load. Catalog fix (A-post2) is in place; always-on already nudges prefer `read`/`glob`/`grep`. This card isolates **model/selection** vs **instruction/harness**.
+
+**Do not** change live adapter mid-probe. **Do not** set `bash: allow *` as the mitigation under test.
+
+### Shared metadata (fill per arm)
+
+| Field | Value |
+| ----- | ----- |
+| Desktop version | _(operator — study pin 1.18.18)_ |
+| Workspace | openBuggy (new **empty** context; do not continue stellar-tiger) |
+| Agent profile/mode | plan (parity with Probe A) |
+| Model id | **B0:** Flash (`opencode/deepseek-v4-flash-free` or session default used in study). **B1:** stronger model id operator selects (record exact id) |
+| Always-on / skills state | Post A-post2 (skill catalog fixed; prefer-native nudge present) |
+| Restart since last config edit | yes / no _(prefer yes if any adapter edit since A-post2)_ |
+| Timestamp (UTC) | |
+| Operator approvals during run | count of shell/bash approval clicks _(primary pain metric)_ |
+| Session id (optional) | for later export |
+
+### Logging fields (per arm — record after run)
+
+| Field | How to fill |
+| ----- | ----------- |
+| `bash` count | Tool calls named bash/shell during the probe turn(s) |
+| `read` / `glob` / `grep` counts | Native file tools only |
+| First tool used | Name of first tool call |
+| Bash used for file content? | yes / no — e.g. `Get-Content`, `type`, `cat`, `rg`/`findstr` via shell |
+| Quoted answer correct? | yes / no — Escalation first row matches SoT |
+| Shell approvals | Integer (0 = pass bar for babysitting) |
+| Notes | Surprises (e.g. used `skill` then read; refused; invented path) |
+
+### Prompt (frozen)
+
+```text
+Repo file lookup only — do not use bash/shell and do not load skills.
+
+(1) Using only native file tools (read, glob, and/or grep — not shell), open
+    docs/SOPs/opencode-host-adapter.md in this workspace if it exists; otherwise
+    say the path is missing.
+(2) Quote the smoke checklist row for check #9 exactly (the Check column text
+    and the How column text).
+(3) In one short sentence, list which native tools you used (names only).
+
+If you cannot complete this without shell, say so explicitly and stop — do not
+fall back to bash.
+```
+
+**Note:** openBuggy may lack `docs/SOPs/opencode-host-adapter.md` (that path is cursorEscape). If missing, **pass still requires zero bash** and an explicit “path missing” — do not shell-hunt. Optional stricter variant (same arms): open cursorEscape workspace instead so the file exists and (2) is answerable.
+
+### Prompt B″ — undirected (no tool nudges)
+
+Same deliverables; **no** “use native tools / no bash / no skills” language. Run in **cursorEscape**, empty chat, Flash (and optionally B1). Compare tool mix to B0′.
+
+```text
+In this workspace:
+
+(1) Open docs/SOPs/opencode-host-adapter.md if it exists; otherwise say the path is missing.
+(2) Quote the smoke checklist row for check #9 exactly (the Check column text and the How column text).
+(3) In one short sentence, list which tools you used (names only).
+```
+
+**Pass / fail (observer scoring — do not put this in the prompt):** same as B0′ — **pass** if zero bash/shell and correct quote when file exists; **fail** if any bash/shell for this task. Model may still pass while “allowed” to choose badly — that is the point.
+
+### Pass / fail
+
+| Result | Criteria |
+| ------ | -------- |
+| **pass** | Zero bash/shell tool calls; zero shell approvals; answer uses only `read`/`glob`/`grep` (or stops with explicit cannot-without-shell **without** calling bash); if file exists, (2) quote is correct |
+| **fail** | Any bash/shell call for this task, or any shell approval click, or silent invent without tools |
+| **inconclusive** | Host blocked native tools, or model refused for unrelated reasons |
+
+### Arms
+
+| Arm | Setup | Status | Result summary | Classification |
+| --- | ----- | ------ | -------------- | -------------- |
+| **B0** | Empty context; Flash; frozen prompt; current always-on | **partial pass** (2026-08-19 operator screenshot) | Two `glob` calls (`docs/SOPs/opencode-host-adapter.md`, `**/opencode-host-adapter.md`); explicit “path is missing”; **no bash** observed. Path-missing branch — expected if workspace ≠ cursorEscape. (2) quote N/A. Shell approvals: _operator confirm 0_. | Tool **selection** OK on absence path; does **not** yet prove Flash prefers native tools when the file **exists** (needs B0′ in cursorEscape) |
+| **B0′** | Same as B0 but **cursorEscape** workspace (file exists) | **pass** (2026-08-19 operator screenshot) | One `read` of `opencode-host-adapter.md`; quoted smoke #9 Check+How correctly; tools: `read`; **no bash** observed | Directed prompt + file present → native tools OK on Flash |
+| **B0″** | cursorEscape; Flash; **undirected** prompt (no tool nudges; operator further softened step 3 to “explain how… listing anything relevant”) | **pass** (2026-08-19 operator screenshot) | One `read`; correct #9 quote (incl. line 77); explained Read tool; **no bash** | Undirected user text still OK — always-on prefer-native may still apply (see Implications) |
+| **B1** | Empty context; **stronger model**; same prompt; same adapter | deferred (optional) | B0′/B0″ already pass on Flash | |
+| **C** | Parent Task → `repository_explorer`; parent must not open the file itself | **pass** (2026-08-19) | See Probe C arm below | Child used native glob/grep/read; correct #9 relay; issue **closed** pending dogfood |
+
+### Decision tree (after B0 + B1)
+
+| Pattern | Bucket | Next |
+| ------- | ------ | ---- |
+| B0 fail, B1 pass | **model** | R0 dogfood: prefer stronger model for file-heavy work; document Flash bash bias; optional model pin policy — not bash allow-all |
+| B0 fail, B1 fail | **instruction / harness** | Strengthen always-on or agent tool guidance; research OpenCode tool-description / permission shaping; still no bash `allow *` as primary fix |
+| B0 pass, B1 pass | **regression watch** | Mark smoke row 11 pass on Flash; keep Probe B as occasional recheck |
+| Mixed / child differs | **parent vs child** | Run Probe C; compare explorer permissions vs plan agent |
+
+### Optional smoke row (host-adapter)
+
+| # | Check | How | Result |
+| - | ----- | --- | ------ |
+| 11 | Native file tools without bash approvals | Probe B0′ / B0″ (Flash, cursorEscape) + Probe **C** (`repository_explorer`); **zero** shell approvals | **pass** (2026-08-19); native-tools babysitting **closed** unless reopened by dogfood |
+
+---
+
+## Probe C — subagent lookup (`repository_explorer`)
+
+**Purpose:** Final pre-dogfood check — does the **child** mishandle file lookup (bash babysitting / wrong tools) when the parent is forced to delegate?
+
+**Setup:** cursorEscape; new empty chat; Flash (same as B0″); current always-on; do not edit adapter mid-run.
+
+**Note:** Live `repository_explorer` already says “Prefer read/search tools” and allows some bash (`rg *`, `find *`) without ask — so child may use shell `rg` **without** approval clicks. Still score: Did child use bash? Did operator get shell approvals? Was the quote correct?
+
+### Prompt (frozen) — paste to **parent**
+
+```text
+Do not open docs/SOPs/opencode-host-adapter.md yourself (no read/glob/grep/bash on that file from the parent).
+
+Launch OpenCode agent repository_explorer via Task with:
+- Workspace root: this repo
+- Thoroughness: quick
+- Investigation question: Does docs/SOPs/opencode-host-adapter.md exist? If yes, quote the smoke checklist row for check #9 exactly (Check column text and How column text). Return key file paths.
+
+When the child returns, relay: (1) exists or missing; (2) the exact #9 Check and How quotes; (3) one short sentence on how the child achieved it (anything relevant it reported).
+```
+
+### Logging (parent + child)
+
+| Field | Fill |
+| ----- | ---- |
+| Parent used file tools on the SOP? | **no** (Observed — delegated) |
+| Task launched `repository_explorer`? | **yes** |
+| Child tools (from UI / export) | `glob` ×2 (`docs/SOPs/**/*.md`, `docs/**/opencode-host-adapter.md`); `grep` (smoke/#9 patterns); `read` (`opencode-host-adapter.md` offset 60 limit 40) |
+| Child bash? | **no** |
+| Shell approvals (operator) | **0** (Inferred from operator close-out; no approval babysitting reported) |
+| #9 quote correct? | **yes** (Check + How match host-adapter smoke row 9) |
+| Notes | Parent relay also mentioned SOP `_index.md`; UI showed glob→grep→read on the adapter SOP. Issue marked **closed** unless future dogfood reopens. |
+
+### Pass / fail
+
+| Result | Criteria |
+| ------ | -------- |
+| **pass** | Parent did not open the file; Task → `repository_explorer`; #9 quote correct; **zero** shell **approval** clicks (child may still use allowlisted `rg`/`find` — note that separately) |
+| **fail** | Parent did the lookup itself; wrong/missing Task; wrong quote; shell approvals required |
+| **soft fail (note)** | Correct quote but child used bash (`rg`/`find`/other) — document; not the same as approval babysitting |
+
+### Arms
+
+| Arm | Status | Result summary | Classification |
+| --- | ------ | -------------- | -------------- |
+| **C** | **pass** (2026-08-19 operator report + screenshot) | Child: glob → grep → read; parent relayed exists + exact #9 Check/How; no bash observed | Subagent native-tool path OK on Flash; **closed** for R0 pre-dogfood |
 
 ---
 
@@ -123,14 +271,17 @@ If you cannot see a skill in the skill tool, say so explicitly — do not list ~
 
 1. **Catalog root cause (settled):** Missing frontmatter `name` (and/or lack of explicit `skills.paths`) prevented global skills from appearing in the skill tool. `permission.skill` allow alone was **not** enough. Contamination ruled out.
 2. Adapter hygiene: follow [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) — every OpenCode `SKILL.md` must include `name` matching folder id + `description`; keep `permission.skill: { "*": "allow" }` and `skills.paths` in live `opencode.json`.
-3. Bash-for-native-tools (`read`/`glob`/`grep`) remains open — Probe B optional; always-on already nudges prefer native tools.
-4. B/C still useful for model/subagent isolation; not required for smoke 9–10.
+3. **Native file tools / shell-approval babysitting (closed for R0 probes):** Flash parent **pass** B0′/B0″; `repository_explorer` child **pass** Probe C (glob/grep/read, correct #9, no bash). Re-open only if a later full coding session reproduces approval-gated bash substitution for routine file/SoT work. Always-on prefer-native line may still contribute; historical E largely explained by empty skill catalog (C).
+4. Probe B1 remains optional; not required after B0″ + C pass.
 
 ---
 
 ## Sources
 
 - Operator Probe A / A-post1 / A-post2 (2026-08-19) — clean chat; catalog fail → permission-only fail → `name`+paths pass
+- Operator Probe B0 (2026-08-19) — Flash; two `glob`; path missing; no bash (workspace likely not cursorEscape)
+- Operator Probe B0′ / B0″ (2026-08-19) — Flash; cursorEscape; directed + undirected; `read` only; correct #9 quote
+- Operator Probe C (2026-08-19) — Flash; Task → `repository_explorer`; child glob/grep/read; parent relay correct #9; native-tools issue closed unless dogfood reopens
 - [opencode-dsv4f-session-extension-2026-08](./opencode-dsv4f-session-extension-2026-08.md)
 - [opencode-host-adapter](../SOPs/opencode-host-adapter.md)
 - [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md)

@@ -76,6 +76,7 @@ Record results when dogfooding. Expected: `pass` \| `fail` \| `deferred: <reason
 | 8 | bug_reviewer rubric path | `agents/bug_reviewer.md` references `docs/workflow/bug-reviewer-finding-rubric.md`; file exists; no `model:` pin | **pass** (2026-08-18) |
 | 9 | Skill-tool lists workflow skills | Clean chat (openBuggy; plan mode; Flash): skill tool names include `implementation-plan`, `plan-review`, … — not only `customize-opencode`. Prompt frozen in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) | **pass** (2026-08-19 A-post2: all 7 workflow skills + customize-opencode) |
 | 10 | SoT load without bash approvals | Same Probe A: load `implementation-plan` via skill tool with **zero bash approvals** for that SoT load | **pass** (2026-08-19 A-post2: loaded + Escalation row quoted) |
+| 11 | Native file tools without bash approvals | Clean chat Probe **B0′/B0″** + **C** (`repository_explorer`): frozen prompts in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) | **pass** (2026-08-19); closed unless dogfood reopens |
 
 **Fast verification (install-time):**
 
@@ -96,7 +97,7 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 2. Do **not** pin provider-specific models in agent frontmatter — roles inherit the session / `opencode.json` default so the adapter stays portable across BYOK hosts.
 3. T3 Code control plane is separate — this SOP covers the OpenCode harness adapter only.
 4. **Restart OpenCode Desktop** after adapter edits for always-on / agent / skill / permission changes to load.
-5. **Skill-binding (C/E):** Smoke 9–10 **pass** after frontmatter `name` + `skills.paths` (+ skill allow). Permission allow alone failed. Bash-for-native-tools selection still open (model/selection; Probe B optional).
+5. **Skill-binding (C/E):** Smoke 9–11 **pass** (2026-08-19). Catalog fixed via `name` + `skills.paths`; native file tools OK on Flash parent and `repository_explorer` child. Shell-approval babysitting **closed** for R0 probes — reopen only if a later coding session regresses.
 6. When adding OpenCode skills/agents/rules: follow [opencode-authoring-adapter](./opencode-authoring-adapter.md) (official docs + Observed checklist).
 
 ---
