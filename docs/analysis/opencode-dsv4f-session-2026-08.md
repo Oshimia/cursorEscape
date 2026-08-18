@@ -1,6 +1,6 @@
 # OpenCode DSV4F session study (2026-08)
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
@@ -94,6 +94,7 @@ Empty “completed” Tasks looked normal in the UI. Primary failure indicator w
 2. What live probe proves gates fired (see [opencode-host-adapter](../SOPs/opencode-host-adapter.md) smoke row 1 — quote default-on plan loop + when-in-doubt + eval/harness not exempt; requires OpenCode restart after adapter edits)?
 3. Keep **bugfinder nit/scope** tuning (openBuggy DSV4F mitigations) separate from **cursorEscape instruction-layer / loop reliability** work — Target finding rubric now lives at [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md) (M5 copy-recall still deferred).
 4. Historical Antigravity signature remains useful for smoke even though the plugin/path is removed.
+5. Post-harness continuation of this session (skill-tool binding, babysat iterative plan passes, desktop model-selection pins) is documented in [session extension study](./opencode-dsv4f-session-extension-2026-08.md).
 
 ---
 
@@ -107,6 +108,7 @@ Empty “completed” Tasks looked normal in the UI. Primary failure indicator w
 
 ## Related
 
+- [OpenCode DSV4F session extension (2026-08)](./opencode-dsv4f-session-extension-2026-08.md)
 - [Host recreation (2026-08)](./host-recreation-2026-08.md)
 - [OpenCode host adapter SOP](../SOPs/opencode-host-adapter.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md)
