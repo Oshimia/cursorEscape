@@ -4,9 +4,9 @@
 
 ## Context
 
-This document is **Target** cursorEscape design for the owner's agentic loop: plan → implement → dual review → closeout. **Loop semantics** (when to plan, dual-gate, verdict bars) are owned here and in [design decisions](../review/design-decisions.md). Current Cursor files: [docs/overlays/cursor](../overlays/cursor/_index.md) (**Observed** fat interim extract; thin wrappers in Phase 5). Phase 3 [cursor-global-workflow](../research/imported/cursor-global-workflow/) import is archaeology. AITestSuite Phase 4 freeze is **Observed/eval-packaging** only. Where freeze disagrees with live Cursor wording, cite [workflow-source-delta](../research/imported/workflow-source-delta.md). Stack variation: [skill-source-and-host-overlays](./skill-source-and-host-overlays.md).
+This document is **Target** cursorEscape design for the owner's agentic loop: plan → implement → dual review → closeout. **Loop semantics** (when to plan, dual-gate, verdict bars) are owned here and in [design decisions](../../review/design-decisions.md). Current Cursor files: [overlays/cursor](../../overlays/cursor/_index.md) (**Observed** fat interim extract; thin wrappers in Phase 5). Phase 3 [cursor-global-workflow](../../research/imported/cursor-global-workflow/) import is archaeology. AITestSuite Phase 4 freeze is **Observed/eval-packaging** only. Where freeze disagrees with live Cursor wording, cite [workflow-source-delta](../../research/imported/workflow-source-delta.md). Stack variation: [skill-source-and-host-overlays](./skill-source-and-host-overlays.md).
 
-Dual-gate review research (openBuggy) informs leg responsibilities. First recreation host: **T3 Code** (control plane) + **OpenCode** (harness). The bug-finder leg is an OpenCode **`bug_reviewer`** subagent + skills (reviewer-a pattern) — **not** an openBuggy engine requirement ([design decisions](../review/design-decisions.md), [host recreation](../analysis/host-recreation-2026-08.md)).
+Dual-gate review research (openBuggy) informs leg responsibilities. First recreation host: **T3 Code** (control plane) + **OpenCode** (harness). The bug-finder leg is an OpenCode **`bug_reviewer`** subagent + skills (reviewer-a pattern) — **not** an openBuggy engine requirement ([design decisions](../../review/design-decisions.md), [host recreation](../../analysis/host-recreation-2026-08.md)).
 
 ---
 
@@ -35,7 +35,7 @@ Discover repo docs (discovery)
 
 ### Dual-gate review (Required)
 
-Aligned with live [implementation-review](../overlays/cursor/skills/implementation-review/SKILL.md) and openBuggy dual-gate analysis ([recommendation](../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)):
+Aligned with live [implementation-review](../../overlays/cursor/skills/implementation-review/SKILL.md) and openBuggy dual-gate analysis ([recommendation](../../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)):
 
 | Leg | Role | Target responsibility |
 | --- | ---- | --------------------- |
@@ -44,11 +44,11 @@ Aligned with live [implementation-review](../overlays/cursor/skills/implementati
 
 **Required:** Fix every must-fix finding from either leg before re-review. **Required:** Re-launch **both** legs after each fix batch.
 
-**Required (live):** Split verdict bars — Reviewer-a may APPROVE with **Batchable (deferred)** open; Bugbot-shaped bar requires Blocking, Non-blocking, and Test gaps all `"None"`. Freeze eval packaging used a unified bar — **do not** copy ([workflow-source-delta](../research/imported/workflow-source-delta.md#batchable-deferred--split-verdict-bars-live-only)).
+**Required (live):** Split verdict bars — Reviewer-a may APPROVE with **Batchable (deferred)** open; Bugbot-shaped bar requires Blocking, Non-blocking, and Test gaps all `"None"`. Freeze eval packaging used a unified bar — **do not** copy ([workflow-source-delta](../../research/imported/workflow-source-delta.md#batchable-deferred--split-verdict-bars-live-only)).
 
-**Required (live):** Observed Fast CI — no launch on fail, skipped (when Fast ≠ `n/a`), or claimed-only prose. openBuggy study ranks this enforcement highly ([ci-gating](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/ci-gating.md)). On OpenCode, Fast CI remains **parent skill discipline** (not host-enforced).
+**Required (live):** Observed Fast CI — no launch on fail, skipped (when Fast ≠ `n/a`), or claimed-only prose. openBuggy study ranks this enforcement highly ([ci-gating](../../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/ci-gating.md)). On OpenCode, Fast CI remains **parent skill discipline** (not host-enforced).
 
-**Nice-to-have:** Per-leg launch count; narrow scope when `count >= 9` before invoke — no hard stop ([workflow-source-delta](../research/imported/workflow-source-delta.md#iteration-narrowing-live-only)).
+**Nice-to-have:** Per-leg launch count; narrow scope when `count >= 9` before invoke — no hard stop ([workflow-source-delta](../../research/imported/workflow-source-delta.md#iteration-narrowing-live-only)).
 
 **First host (Desired):** Dual review as **one OpenCode session** with two Task launches in parallel — not two T3 worktrees ([workspace model](./workspace-model.md)).
 
@@ -56,14 +56,14 @@ Aligned with live [implementation-review](../overlays/cursor/skills/implementati
 
 | Tier | cursorEscape (docs-only) | Runtime repos (future) |
 | ---- | ------------------------ | ---------------------- |
-| **Fast** | Hub/index link integrity for phase files; claim taxonomy spot-check | Repo-specific lint/test per [ci-ladder](../overlays/cursor/docs/workflow/ci-ladder.md) |
+| **Fast** | Hub/index link integrity for phase files; claim taxonomy spot-check | Repo-specific lint/test per [ci-ladder](../../overlays/cursor/docs/workflow/ci-ladder.md) |
 | **Full** | Fast + deliverable checklist + no runtime scaffolding + no pretend-settled Unknowns | Commit-grade suite; never paired with reviewers |
 
-Do **not** copy freeze baseline's hardcoded four npm commands into cursorEscape pre-runtime CI ([workflow-source-delta](../research/imported/workflow-source-delta.md#ci-ladder--fast-vs-full-major-delta)).
+Do **not** copy freeze baseline's hardcoded four npm commands into cursorEscape pre-runtime CI ([workflow-source-delta](../../research/imported/workflow-source-delta.md#ci-ladder--fast-vs-full-major-delta)).
 
 ### Phased multi-agent (Nice-to-have / Cursor-specific)
 
-On initialization-style roadmaps, **Composer** conducts: phase subagent implements, owns review loop, reaches dual APPROVED, runs first Full CI when Full ≠ `n/a` (or returns after dual APPROVED when Full = `n/a`); Composer QCs report + transcripts, runs second Full CI when Full ≠ `n/a` (or obtains user ack when Full = `n/a`), then local commit (never push) ([composer](../overlays/cursor/skills/composer/SKILL.md)). Host-agnostic equivalent: any orchestrator that enforces the same gates without Cursor Task IDs (OpenCode parent + Task subagents).
+On initialization-style roadmaps, **Composer** conducts: phase subagent implements, owns review loop, reaches dual APPROVED, runs first Full CI when Full ≠ `n/a` (or returns after dual APPROVED when Full = `n/a`); Composer QCs report + transcripts, runs second Full CI when Full ≠ `n/a` (or obtains user ack when Full = `n/a`), then local commit (never push) ([composer](../../overlays/cursor/skills/composer/SKILL.md)). Host-agnostic equivalent: any orchestrator that enforces the same gates without Cursor Task IDs (OpenCode parent + Task subagents).
 
 ### What cursorEscape does not own in v0
 
@@ -78,9 +78,9 @@ On initialization-style roadmaps, **Composer** conducts: phase subagent implemen
 
 ## Implications / open questions
 
-1. OpenCode expresses dual-gate **shape**; R0 must prove parallel Tasks + MCP/tool policy ([host recreation](../analysis/host-recreation-2026-08.md)).
-2. **Unknown:** Whether cursorEscape runtime re-homes a repo-local `reference-docs` skill; live owner workflow uses global discovery instead ([workflow-source-delta](../research/imported/workflow-source-delta.md#reference-docs-skill-presence)).
-3. Dual APPROVED is the loop bar — not proven ship-class catch or proven no-escape ([recommendation](../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)).
+1. OpenCode expresses dual-gate **shape**; R0 must prove parallel Tasks + MCP/tool policy ([host recreation](../../analysis/host-recreation-2026-08.md)).
+2. **Unknown:** Whether cursorEscape runtime re-homes a repo-local `reference-docs` skill; live owner workflow uses global discovery instead ([workflow-source-delta](../../research/imported/workflow-source-delta.md#reference-docs-skill-presence)).
+3. Dual APPROVED is the loop bar — not proven ship-class catch or proven no-escape ([recommendation](../../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)).
 
 ---
 
@@ -92,6 +92,6 @@ On initialization-style roadmaps, **Composer** conducts: phase subagent implemen
 - [Clean context and isolation](./clean-context-isolation.md)
 - [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)
 - [bug-reviewer-finding-rubric](./bug-reviewer-finding-rubric.md)
-- [Host recreation study](../analysis/host-recreation-2026-08.md)
+- [Host recreation study](../../analysis/host-recreation-2026-08.md)
 - [Evaluation methodology](./evaluation-methodology.md)
-- [Workflow source delta](../research/imported/workflow-source-delta.md)
+- [Workflow source delta](../../research/imported/workflow-source-delta.md)

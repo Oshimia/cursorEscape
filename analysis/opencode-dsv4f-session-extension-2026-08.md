@@ -59,7 +59,7 @@ Claim labels: **Observed** (session export / live DB / operator report), **Infer
 5. Pass 1 returned CHANGES REQUESTED ([260], ~19 min, non-empty DeepSeek). Parent revised, then after the user asked what the iterative plan-review skill requires ([263]), correctly restated max-3 clean-context rules ([266]–[267]) — and **asked permission** for pass 2 instead of auto-continuing.
 6. User “Please continue” ([268]) → passes 2–3 ([269], [271]) → APPROVED. Compaction ([273]) then host “Continue…” ([274]) mid closeout.
 
-**Target context (unchanged):** Plan → iterative `plan_reviewer` is **Required default on** unless truly trivial or **explicit** opt-out; eval/harness/multi-step is not exempt ([intended workflow](../featureArchitecture/intended-workflow.md), [opencode-host-adapter](../SOPs/opencode-host-adapter.md)). On OpenCode this remains **parent skill discipline**.
+**Target context (unchanged):** Plan → iterative `plan_reviewer` is **Required default on** unless truly trivial or **explicit** opt-out; eval/harness/multi-step is not exempt ([intended workflow](../docs/featureArchitecture/intended-workflow.md), [opencode-host-adapter](../docs/SOPs/opencode-host-adapter.md)). On OpenCode this remains **parent skill discipline**.
 
 **Inferred:** Salient user wording and even correctly quoted skill text are not enough for this parent + task shape to run passes 2–3 without chat babysitting. Study 1’s “skipped entirely” and this study’s “started but incomplete without operator” are the same R0 binding problem with a sharper evidence shape.
 
@@ -124,7 +124,7 @@ No Target always-on wording, skill-trigger, permission policy, or adapter change
 3. What R0 smoke / metric catches shell-approval babysitting (e.g. bash:skill ratio, or “adapter SoT loaded via skill not bash”)? — SOP smoke rows **9–10** drafted; awaiting Probe A ([skill-binding discovery](./opencode-skill-binding-discovery-2026-08.md)).
 4. How should R0 smoke detect desktop `workspace:model-selection` pins (beyond empty-fast Tasks) after agent markdown looks clean?
 5. Keep openBuggy contamination-audit / transcript-exporter product work separate from cursorEscape instruction-layer binding.
-6. Live probe that gates fired remains [opencode-host-adapter](../SOPs/opencode-host-adapter.md) smoke row 1 (restart after adapter edits).
+6. Live probe that gates fired remains [opencode-host-adapter](../docs/SOPs/opencode-host-adapter.md) smoke row 1 (restart after adapter edits).
 7. **Discovery + probes (2026-08-19):** Catalog fixed (smoke 9–10). Short native lookups pass (B/C). Glob-blind residual **F** mitigated — smoke **12** pass (`.ignore` + `external_directory` + listing allow); see [skill-binding discovery](./opencode-skill-binding-discovery-2026-08.md).
 
 ---
@@ -143,10 +143,10 @@ No Target always-on wording, skill-trigger, permission policy, or adapter change
 ## Related
 
 - [OpenCode skill-binding discovery (2026-08)](./opencode-skill-binding-discovery-2026-08.md)
-- [Authoring OpenCode adapter files](../SOPs/opencode-authoring-adapter.md)
+- [Authoring OpenCode adapter files](../docs/SOPs/opencode-authoring-adapter.md)
 - [OpenCode DSV4F session study (2026-08)](./opencode-dsv4f-session-2026-08.md)
 - [Host recreation (2026-08)](./host-recreation-2026-08.md)
-- [OpenCode host adapter SOP](../SOPs/opencode-host-adapter.md)
-- [Instruction layering](../featureArchitecture/instruction-layering.md)
-- [Intended workflow](../featureArchitecture/intended-workflow.md)
+- [OpenCode host adapter SOP](../docs/SOPs/opencode-host-adapter.md)
+- [Instruction layering](../docs/featureArchitecture/instruction-layering.md)
+- [Intended workflow](../docs/featureArchitecture/intended-workflow.md)
 - [Analysis index](./_index.md)

@@ -17,5 +17,5 @@ First host lock-in study: [host recreation](../analysis/host-recreation-2026-08.
 
 - [Imported openBuggy design decisions (Observed)](../research/imported/openBuggy/review/design-decisions.md)
 - [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md)
-- [Feature architecture index](../featureArchitecture/_index.md)
+- [Feature architecture index](../docs/featureArchitecture/_index.md)
 - [Theo fleet skill management (Observed)](../research/theo-fleet-skill-management.md)

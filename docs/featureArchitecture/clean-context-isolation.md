@@ -8,7 +8,7 @@ This document is **Target** design for **isolated child handoffs** — how paren
 
 **Required** portable intent: plan_reviewer, production_readiness_reviewer, bug_reviewer, and Composer phase subagents run in isolated child context; the parent packs everything they need into the invoke message. Cursor Task / OpenCode Task child sessions are **Cursor-specific** / host mappings of that intent.
 
-Observed overlay agents under [docs/overlays/cursor/agents](../overlays/cursor/agents/) illustrate the pattern (e.g. “You run in isolated context”). Live `~/.cursor` is the running install; the overlay is the in-repo **Observed** interim record (thin wrappers in Phase 5). This page is SoT for the portable isolation contract.
+Observed overlay agents under [overlays/cursor/agents](../../overlays/cursor/agents/) illustrate the pattern (e.g. “You run in isolated context”). Live `~/.cursor` is the running install; the overlay is the in-repo **Observed** interim record (thin wrappers in Phase 5). This page is SoT for the portable isolation contract.
 
 ---
 
@@ -94,4 +94,4 @@ Composer **QC** reads closeout reports and may audit child transcripts for proce
 - [implementation-review](../skills/implementation-review.md)
 - [plan-review](../skills/plan-review.md)
 - [composer](../skills/composer.md)
-- [Host recreation study](../analysis/host-recreation-2026-08.md)
+- [Host recreation study](../../analysis/host-recreation-2026-08.md)

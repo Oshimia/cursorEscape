@@ -1,7 +1,7 @@
 # Roadmap: Centralize the workflow manager
 
 **Last updated:** 2026-08-20  
-**Status:** Phase 1 **complete** (Composer ACCEPT 2026-08-20; dual-review waiver after 4+4 iterations). Phase 2 next. Na skipped. Migration: none.  
+**Status:** Phase 2 **complete** (Composer ACCEPT 2026-08-20). Phase 3 next. `analysis/` locked at repo root.  
 **Plan source:** accepted plan `shared_workflow_docs_376cecd4` (copy of Inter-phase + Agent context; do not invent scope).
 
 ## Product decisions (locked)
@@ -44,7 +44,7 @@ None. Git only. No live Cursor apply.
 ## Checklist
 
 - [x] Phase 1 — Architecture lock (taxonomy / Approach A / freeze inventory). **Composer waiver:** after 8 dual-review iterations (4 + renew 4), remaining Roadmap/desired-behavior/promotion-rule wording nits deferred; Fast/Full allowlist greps passed. Not a proven dual APPROVED bar.
-- [ ] Phase 2 — git mv research, review, analysis, overlays to root + same-phase cites
+- [x] Phase 2 — git mv research, review, analysis, overlays to root + same-phase cites. `analysis/` at repo root.
 - [ ] Phase 3 — Promote overlay workflow docs to `workflow/`
 - [ ] Phase 4 — Copy gold skills/agents/rules; fold short contracts
 - [ ] Phase 5 — Thin Cursor overlay; spawn extract

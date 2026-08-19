@@ -4,7 +4,7 @@
 
 ## Context
 
-**Target** role contract. Bug-finder leg of the dual gate. Recreate Bugbot-shaped utility with an OpenCode (or host-equivalent) subagent + skills/rules — the same pattern as [production_readiness_reviewer](./production_readiness_reviewer.md) / live reviewer-a. **Not** Cursor proprietary `bugbot`. **openBuggy is not required** for v0 ([design decisions](../review/design-decisions.md)).
+**Target** role contract. Bug-finder leg of the dual gate. Recreate Bugbot-shaped utility with an OpenCode (or host-equivalent) subagent + skills/rules — the same pattern as [production_readiness_reviewer](./production_readiness_reviewer.md) / live reviewer-a. **Not** Cursor proprietary `bugbot`. **openBuggy is not required** for v0 ([design decisions](../../review/design-decisions.md)).
 
 **Read when reviewing:** [bug-reviewer-finding-rubric.md](../featureArchitecture/bug-reviewer-finding-rubric.md) — report vs ignore SoT.
 
@@ -56,7 +56,7 @@ OpenCode markdown agent (`mode: subagent`, `permission.edit: deny`) with a bug-f
 
 ## Implications / open questions
 
-1. openBuggy CLI/MCP remains **Nice-to-have** later — research under `docs/research/imported/openBuggy/`.
+1. openBuggy CLI/MCP remains **Nice-to-have** later — research under `research/imported/openBuggy/`.
 2. Until OpenCode agents are installed, Cursor-hosted workflow may still use Cursor Bugbot as **Cursor-specific** stand-in — not Target recreation path.
 
 ---
@@ -66,5 +66,5 @@ OpenCode markdown agent (`mode: subagent`, `permission.edit: deny`) with a bug-f
 - [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md)
 - [production_readiness_reviewer](./production_readiness_reviewer.md)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
-- [Host recreation study](../analysis/host-recreation-2026-08.md)
-- [openBuggy agent review loop SOP](../research/imported/openBuggy/SOPs/running-an-agent-review-loop-with-openBuggy.md) (Observed / optional)
+- [Host recreation study](../../analysis/host-recreation-2026-08.md)
+- [openBuggy agent review loop SOP](../../research/imported/openBuggy/SOPs/running-an-agent-review-loop-with-openBuggy.md) (Observed / optional)

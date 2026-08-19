@@ -4,7 +4,7 @@
 
 ## Context
 
-**Target** skill contract. Closeout review loop after implementation. Full Cursor skill (Observed, unchanged): [overlay SKILL.md](../overlays/cursor/skills/implementation-review/SKILL.md). Freeze eval packaging differs — cite [workflow-source-delta](../research/imported/workflow-source-delta.md).
+**Target** skill contract. Closeout review loop after implementation. Full Cursor skill (Observed, unchanged): [overlay SKILL.md](../../overlays/cursor/skills/implementation-review/SKILL.md). Freeze eval packaging differs — cite [workflow-source-delta](../../research/imported/workflow-source-delta.md).
 
 ---
 
@@ -84,4 +84,4 @@ When Composer conducts the phase:
 - [composer](./composer.md)
 - [pre-commit-ci-gate](./pre-commit-ci-gate.md)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
-- [ci-ladder](../overlays/cursor/docs/workflow/ci-ladder.md)
+- [ci-ladder](../../overlays/cursor/docs/workflow/ci-ladder.md)

@@ -6,7 +6,7 @@
 
 This section holds **sourced** market and product research plus **imported** sibling research (openBuggy, AITestSuite, live `~/.cursor` workflow) that informs cursorEscape architecture and evaluation.
 
-**Status:** Phase 3 imports complete. Phase 4 added Target synthesis [preliminary-backend-landscape.md](./preliminary-backend-landscape.md). Identity research: [theo-fleet-skill-management.md](./theo-fleet-skill-management.md) (2026-08-19). Current Cursor workflow: [docs/overlays/cursor](../overlays/cursor/_index.md). Overlay FA: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md).
+**Status:** Phase 3 imports complete. Phase 4 added Target synthesis [preliminary-backend-landscape.md](./preliminary-backend-landscape.md). Identity research: [theo-fleet-skill-management.md](./theo-fleet-skill-management.md) (2026-08-19). Current Cursor workflow: [overlays/cursor](../overlays/cursor/_index.md). Overlay FA: [skill-source-and-host-overlays](../docs/featureArchitecture/skill-source-and-host-overlays.md).
 
 ---
 
@@ -16,8 +16,8 @@ This section holds **sourced** market and product research plus **imported** sib
 
 | Location | Responsibility |
 | -------- | -------------- |
-| `docs/research/*` (authored leaves) | Facts and synthesis with **Sources**; label **Observed** vs **Target** per leaf (e.g. [theo-fleet](./theo-fleet-skill-management.md) is Observed) |
-| `docs/research/imported/` | Copied sibling docs with provenance banners |
+| `research/*` (authored leaves) | Facts and synthesis with **Sources**; label **Observed** vs **Target** per leaf (e.g. [theo-fleet](./theo-fleet-skill-management.md) is Observed) |
+| `research/imported/` | Copied sibling docs with provenance banners |
 | `docs/featureArchitecture/` | Target system design — link research; do not duplicate long competitor essays |
 
 ### Target synthesis (Phase 4+)
@@ -64,7 +64,7 @@ Sibling relationship (Target): [relationship-to-siblings](../review/relationship
 | Workflow source delta (authored) | [workflow-source-delta.md](./imported/workflow-source-delta.md) — Observed freeze-vs-live archaeology |
 | AITestSuite Phase 4 freeze / eval packaging | [imported/AITestSuite/](./imported/AITestSuite/) |
 | Live `~/.cursor` workflow (Phase 3 bannered snapshot) | [imported/cursor-global-workflow/](./imported/cursor-global-workflow/) |
-| Current Cursor workflow (verbatim extract) | [docs/overlays/cursor](../overlays/cursor/_index.md) |
+| Current Cursor workflow (verbatim extract) | [overlays/cursor](../overlays/cursor/_index.md) |
 
 Key live workflow entry points in the import mirror:
 
@@ -77,13 +77,13 @@ Key live workflow entry points in the import mirror:
 
 1. Host-only absolute paths in imports are annotated in COPY-MANIFEST.
 2. U2/U8 settled in [unresolved questions](../review/unresolved-architectural-questions.md); remaining Unknowns stay labeled.
-3. Do not treat the Phase 3 live `~/.cursor` import as Target overlay SoT. Current Cursor workflow files: [overlays/cursor](../overlays/cursor/_index.md). Contracts in this repo are Target. Overlay FA: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md).
+3. Do not treat the Phase 3 live `~/.cursor` import as Target overlay SoT. Current Cursor workflow files: [overlays/cursor](../overlays/cursor/_index.md). Contracts in this repo are Target. Overlay FA: [skill-source-and-host-overlays](../docs/featureArchitecture/skill-source-and-host-overlays.md).
 
 ---
 
 ## Related
 
-- [Roadmap](../Roadmap.md)
-- [Feature architecture index](../featureArchitecture/_index.md)
+- [Roadmap](../docs/Roadmap.md)
+- [Feature architecture index](../docs/featureArchitecture/_index.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
-- [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)
+- [Initialization roadmap](../docs/roadmaps/cursorEscape-initialization.md)

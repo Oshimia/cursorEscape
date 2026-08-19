@@ -4,7 +4,7 @@
 
 ## Context
 
-Operator study of how to recreate the owner's Cursor plan → implement → dual-review loop **outside** Cursor, without building a cursorEscape runtime first. Informs Target lock-in in [design decisions](../review/design-decisions.md) and [implementation roadmap](../roadmaps/implementation-roadmap.md). Claim labels: **Target** decisions below; product capabilities cited as **Observed** from public docs.
+Operator study of how to recreate the owner's Cursor plan → implement → dual-review loop **outside** Cursor, without building a cursorEscape runtime first. Informs Target lock-in in [design decisions](../review/design-decisions.md) and [implementation roadmap](../docs/roadmaps/implementation-roadmap.md). Claim labels: **Target** decisions below; product capabilities cited as **Observed** from public docs.
 
 ---
 
@@ -47,7 +47,7 @@ Provider (BYOK; ClinePass Desired later)
 
 ### openBuggy stance
 
-openBuggy remains a valuable **characterization and research** sibling (imported under `docs/research/imported/openBuggy/`). For v0 recreation, the bug-finder leg is **not** required to use that engine. Recreate Bugbot-shaped utility with an OpenCode `bug_reviewer` subagent + skills/rules — the same pattern as `production_readiness_reviewer` / live reviewer-a. Optional openBuggy wire-up later is Nice-to-have, not Required.
+openBuggy remains a valuable **characterization and research** sibling (imported under `research/imported/openBuggy/`). For v0 recreation, the bug-finder leg is **not** required to use that engine. Recreate Bugbot-shaped utility with an OpenCode `bug_reviewer` subagent + skills/rules — the same pattern as `production_readiness_reviewer` / live reviewer-a. Optional openBuggy wire-up later is Nice-to-have, not Required.
 
 ### OpenCode parallel subagents vs the loop
 
@@ -68,7 +68,7 @@ openBuggy remains a valuable **characterization and research** sibling (imported
 
 1. Settle U2 (OpenCode + T3 control plane) and withdraw U8 (openBuggy as default transport) in [unresolved architectural questions](../review/unresolved-architectural-questions.md).
 2. Keep U1 / U3–U7 / U9–U13 Unknown until spikes; U13 notes ClinePass as **Desired** when using OpenCode.
-3. OpenCode adapter install paths and smoke checklist: [opencode-host-adapter SOP](../SOPs/opencode-host-adapter.md).
+3. OpenCode adapter install paths and smoke checklist: [opencode-host-adapter SOP](../docs/SOPs/opencode-host-adapter.md).
 4. Do not authorize R1+ engine work in this repo until R0 dogfood proves the loop.
 5. Instruction-gate enforcement remains **parent skill discipline** on OpenCode (not host-enforced). Observed weak in the 2026-08 DSV4F dogfood session — see [OpenCode DSV4F session study](./opencode-dsv4f-session-2026-08.md).
 
@@ -88,8 +88,8 @@ openBuggy remains a valuable **characterization and research** sibling (imported
 
 - [Design decisions](../review/design-decisions.md)
 - [Preliminary backend landscape](../research/preliminary-backend-landscape.md)
-- [Implementation roadmap](../roadmaps/implementation-roadmap.md)
-- [Intended workflow](../featureArchitecture/intended-workflow.md)
-- [Instruction layering](../featureArchitecture/instruction-layering.md) — thin always-on vs on-demand skills/agents
-- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
+- [Implementation roadmap](../docs/roadmaps/implementation-roadmap.md)
+- [Intended workflow](../docs/featureArchitecture/intended-workflow.md)
+- [Instruction layering](../docs/featureArchitecture/instruction-layering.md) — thin always-on vs on-demand skills/agents
+- [Clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md)
 - [OpenCode DSV4F session study (2026-08)](./opencode-dsv4f-session-2026-08.md) — instruction-loop reliability dogfood; Antigravity historical

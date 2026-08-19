@@ -8,7 +8,7 @@ This document is the **canonical record of project intent** for cursorEscape whi
 
 ## Context
 
-cursorEscape is the owner's **skill and workflow manager**: preserve and evolve personal agentic skills and the plan → implement → dual review loop, and apply them across **stacks** without binding to one IDE subscription or one model vendor. Analog to Theo's `fleet` repo ([Observed](../research/theo-fleet-skill-management.md)); **not** a multi-machine fleet. See [Roadmap](../Roadmap.md).
+cursorEscape is the owner's **skill and workflow manager**: preserve and evolve personal agentic skills and the plan → implement → dual review loop, and apply them across **stacks** without binding to one IDE subscription or one model vendor. Analog to Theo's `fleet` repo ([Observed](../research/theo-fleet-skill-management.md)); **not** a multi-machine fleet. See [Roadmap](../docs/Roadmap.md).
 
 ---
 
@@ -40,9 +40,9 @@ cursorEscape is the owner's **skill and workflow manager**: preserve and evolve 
 | **Replaceability** | Backends, models, and execution surfaces must remain swappable without rewriting canonical intent docs. |
 | **Cursor dependency (target)** | **None** for the recreation path. Observed Cursor behavior may be imported as research/reference only. |
 | **Runtime in this repo** | **Not started.** Docs remain canonical until an explicit R0+ go-ahead; first recreation uses external T3 + OpenCode, not a cursorEscape engine. |
-| **Documentation taxonomy** | **Target (Approach A):** repo-root `workflow/`, `skills/`, `agents/`, `rules/`, `research/`, `review/`, `analysis/`, `overlays/`; `docs/` for this-repo-only FA, SOPs, roadmaps, `Roadmap.md`. Mirror openBuggy's taxonomy — extend hubs; do not invent parallel trees. Phases 2–5 move trees per [shared-workflow-docs](../roadmaps/shared-workflow-docs.md). |
-| **Instruction budget** | **Thin always-on gates**; deeper procedure in on-demand skills and workflow docs; lean role agents. Portable pattern — see [instruction layering](../featureArchitecture/instruction-layering.md). |
-| **Isolated review handoffs** | Reviewers and phase subagents run in **clean child context**; parent packs the invoke; no prior review transcripts — see [clean-context isolation](../featureArchitecture/clean-context-isolation.md). |
+| **Documentation taxonomy** | **Target (Approach A):** repo-root `workflow/`, `skills/`, `agents/`, `rules/`, `research/`, `review/`, `analysis/`, `overlays/`; `docs/` for this-repo-only FA, SOPs, roadmaps, `Roadmap.md`. Mirror openBuggy's taxonomy — extend hubs; do not invent parallel trees. Phases 3–5 promote bases and thin overlay per [shared-workflow-docs](../docs/roadmaps/shared-workflow-docs.md). |
+| **Instruction budget** | **Thin always-on gates**; deeper procedure in on-demand skills and workflow docs; lean role agents. Portable pattern — see [instruction layering](../docs/featureArchitecture/instruction-layering.md). |
+| **Isolated review handoffs** | Reviewers and phase subagents run in **clean child context**; parent packs the invoke; no prior review transcripts — see [clean-context isolation](../docs/featureArchitecture/clean-context-isolation.md). |
 
 ### Non-goals (initial)
 
@@ -63,21 +63,21 @@ cursorEscape is the owner's **skill and workflow manager**: preserve and evolve 
 
 1. Engine language (U1) remains Unknown until a later implementation phase — first recreation does not need a cursorEscape runtime.
 2. Decide license and remote hosting only if/when pursuing an optional public release.
-3. Phase 4 Target docs classify claims (Desired / Required / Nice-to-have / Cursor-specific / Unknown) — see [feature architecture index](../featureArchitecture/_index.md).
+3. Phase 4 Target docs classify claims (Desired / Required / Nice-to-have / Cursor-specific / Unknown) — see [feature architecture index](../docs/featureArchitecture/_index.md).
 4. Sibling relationships documented in [relationship-to-siblings](./relationship-to-siblings.md); openBuggy is not a v0 runtime dependency.
-5. R0 spike must still prove OpenCode parallel Tasks + parent-owned Fast CI honesty ([implementation roadmap](../roadmaps/implementation-roadmap.md)).
-6. Overlay FA (shared procedure + additive host constraints) is Target staging — do not dual-author Cursor vs OpenCode review loops. Cursor workflow overlay extract: [docs/overlays/cursor](../overlays/cursor/_index.md). Init report remains archaeology; do not treat its Q3/Q6 body as live adapter or openBuggy-required text.
+5. R0 spike must still prove OpenCode parallel Tasks + parent-owned Fast CI honesty ([implementation roadmap](../docs/roadmaps/implementation-roadmap.md)).
+6. Overlay FA (shared procedure + additive host constraints) is Target staging — do not dual-author Cursor vs OpenCode review loops. Cursor workflow overlay extract: [overlays/cursor](../overlays/cursor/_index.md). Init report remains archaeology; do not treat its Q3/Q6 body as live adapter or openBuggy-required text.
 
 ---
 
 ## Related
 
-- [Roadmap](../Roadmap.md)
+- [Roadmap](../docs/Roadmap.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
-- [Feature architecture index](../featureArchitecture/_index.md)
-- [Instruction layering](../featureArchitecture/instruction-layering.md)
-- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
-- [Documenting this repo (SOP)](../SOPs/documenting-this-repo.md)
+- [Feature architecture index](../docs/featureArchitecture/_index.md)
+- [Instruction layering](../docs/featureArchitecture/instruction-layering.md)
+- [Clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md)
+- [Documenting this repo (SOP)](../docs/SOPs/documenting-this-repo.md)
 - [Relationship to siblings](./relationship-to-siblings.md)
-- [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)
+- [Initialization roadmap](../docs/roadmaps/cursorEscape-initialization.md)
 - [Theo fleet skill management (Observed)](../research/theo-fleet-skill-management.md)

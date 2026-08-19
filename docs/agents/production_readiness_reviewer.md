@@ -4,7 +4,7 @@
 
 ## Context
 
-**Target** role contract. Production-readiness / process leg of the dual gate. Semantically aligned with live **reviewer-a** ([Observed overlay file](../overlays/cursor/agents/reviewer-a.md)) and openBuggy "Reviewer-a" analysis — host-agnostic name here.
+**Target** role contract. Production-readiness / process leg of the dual gate. Semantically aligned with live **reviewer-a** ([Observed overlay file](../../overlays/cursor/agents/reviewer-a.md)) and openBuggy "Reviewer-a" analysis — host-agnostic name here.
 
 ---
 
@@ -47,7 +47,7 @@ Verdict: **APPROVED** only when loop-blocking lists are `"None"`.
 
 ### Model
 
-**Desired:** `composer-2.5` — config override ([review-subagent-models](../overlays/cursor/docs/workflow/review-subagent-models.md)).
+**Desired:** `composer-2.5` — config override ([review-subagent-models](../../overlays/cursor/docs/workflow/review-subagent-models.md)).
 
 ---
 
@@ -63,4 +63,4 @@ Verdict: **APPROVED** only when loop-blocking lists are `"None"`.
 - [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md)
 - [implementation-review skill](../skills/implementation-review.md)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
-- [openBuggy reviewer-a angle](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/reviewer-a-skill.md)
+- [openBuggy reviewer-a angle](../../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/reviewer-a-skill.md)

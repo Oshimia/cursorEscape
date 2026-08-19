@@ -4,7 +4,7 @@
 
 ## Context
 
-Discovery for R0 babysitting from **bash substituted for workflow skills** (failure modes **C** + **E** in [opencode-dsv4f-session-extension-2026-08](./opencode-dsv4f-session-extension-2026-08.md)). Process SoT: [opencode-host-adapter](../SOPs/opencode-host-adapter.md).
+Discovery for R0 babysitting from **bash substituted for workflow skills** (failure modes **C** + **E** in [opencode-dsv4f-session-extension-2026-08](./opencode-dsv4f-session-extension-2026-08.md)). Process SoT: [opencode-host-adapter](../docs/SOPs/opencode-host-adapter.md).
 
 **Host pin:** OpenCode Desktop study evidence = **1.18.18**. CLI on this machine reports **1.4.6** — treat CLI vs Desktop as version-skew (**Unknown** whether behavior matches).
 
@@ -61,7 +61,7 @@ Claim labels: **Observed**, **Inferred**, **Unknown**.
 1. **Config skill allow** — applied (hygiene; alone insufficient).
 2. **Frontmatter `name` + `skills.paths`** — **required** for advertisement (A-post2).
 3. **Always-on anti-bash-for-SoT** — applied.
-4. **Authoring SOP** — [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md).
+4. **Authoring SOP** — [opencode-authoring-adapter](../docs/SOPs/opencode-authoring-adapter.md).
 5. **Never** primary-fix with bash `allow *`.
 
 ---
@@ -277,7 +277,7 @@ When the child returns, relay: (1) exists or missing; (2) the exact #9 Check and
 
 ### Always-run whitelist audit (Phase 1b)
 
-**Observed 2026-08-19:** table `permission` in `opencode.db` had **0** durable rows. Session “Allow always” may still accumulate in-memory until restart. Prefer **once**; promote intentional patterns into reviewed config. Procedure: [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) § Always-run audit.
+**Observed 2026-08-19:** table `permission` in `opencode.db` had **0** durable rows. Session “Allow always” may still accumulate in-memory until restart. Prefer **once**; promote intentional patterns into reviewed config. Procedure: [opencode-authoring-adapter](../docs/SOPs/opencode-authoring-adapter.md) § Always-run audit.
 
 ### Frozen probes — smoke row 12
 
@@ -321,7 +321,7 @@ Do not implement.
 ## Implications / open questions
 
 1. **Catalog root cause (settled):** Missing frontmatter `name` (and/or lack of explicit `skills.paths`) prevented global skills from appearing in the skill tool. `permission.skill` allow alone was **not** enough. Contamination ruled out.
-2. Adapter hygiene: follow [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) — every OpenCode `SKILL.md` must include `name` matching folder id + `description`; keep `permission.skill: { "*": "allow" }` and `skills.paths` in live `opencode.json`.
+2. Adapter hygiene: follow [opencode-authoring-adapter](../docs/SOPs/opencode-authoring-adapter.md) — every OpenCode `SKILL.md` must include `name` matching folder id + `description`; keep `permission.skill: { "*": "allow" }` and `skills.paths` in live `opencode.json`.
 3. **Short native file tools (B0′/B0″/C):** pass on Flash. **Failure mode F** mitigated — smoke **12** pass (2026-08-19): `.ignore` + `external_directory` + narrow listing allow + guidance.
 4. Probe B1 remains optional; not required after B0″ + C pass.
 5. Durable Always-run DB was empty at audit; re-check after dogfood.
@@ -338,8 +338,8 @@ Do not implement.
 - Operator Failure F / Phase 1 (2026-08-19) — glob-blind on gitignored `eval/runs` + adapter Shell list; durable `permission` table **0** rows; `.ignore` + external_directory + listing allow applied
 - Operator Thin-plan smoke 13 (2026-08-19) — Flash; thin README “pretend refactor” plan omit Assumptions/Unknowns → plan_reviewer CHANGES REQUESTED (SoT blockers); no soft-approve
 - [opencode-dsv4f-session-extension-2026-08](./opencode-dsv4f-session-extension-2026-08.md)
-- [opencode-host-adapter](../SOPs/opencode-host-adapter.md)
-- [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md)
+- [opencode-host-adapter](../docs/SOPs/opencode-host-adapter.md)
+- [opencode-authoring-adapter](../docs/SOPs/opencode-authoring-adapter.md)
 - Live adapter edits 2026-08-19 (not committed to cursorEscape)
 - [anomalyco/opencode#7069](https://github.com/anomalyco/opencode/issues/7069)
 - [opencode.ai/docs/skills](https://opencode.ai/docs/skills/) — required `name` + `description`
@@ -349,8 +349,8 @@ Do not implement.
 
 ## Related
 
-- [Authoring OpenCode adapter files](../SOPs/opencode-authoring-adapter.md)
+- [Authoring OpenCode adapter files](../docs/SOPs/opencode-authoring-adapter.md)
 - [OpenCode DSV4F session extension](./opencode-dsv4f-session-extension-2026-08.md)
-- [OpenCode host adapter SOP](../SOPs/opencode-host-adapter.md)
-- [Instruction layering](../featureArchitecture/instruction-layering.md)
+- [OpenCode host adapter SOP](../docs/SOPs/opencode-host-adapter.md)
+- [Instruction layering](../docs/featureArchitecture/instruction-layering.md)
 - [Analysis index](./_index.md)

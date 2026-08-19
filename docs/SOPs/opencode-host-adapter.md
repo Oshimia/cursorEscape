@@ -43,7 +43,7 @@ This SOP documents the **global OpenCode adapter** installed on the operator mac
 
 - **Skills inventory:** each `skills/*/SKILL.md` must include frontmatter `name` (folder id) + `description` — required for skill-tool advertisement (Observed 2026-08-19).
 - `opencode.json` — `instructions`; `permission.skill: { "*": "allow" }`; `skills.paths` → global skills dir; `agent.build` / `agent.implementer` `permission.task` allowlists (+ skill allow).
-- **Resolved (discovery 2026-08-19):** empty skill-tool catalog was missing `name` / path registration, not contamination. See [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md).
+- **Resolved (discovery 2026-08-19):** empty skill-tool catalog was missing `name` / path registration, not contamination. See [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
 
 ### Sync rule
 
@@ -74,15 +74,15 @@ Record results when dogfooding. Expected: `pass` \| `fail` \| `deferred: <reason
 | 6 | Empty-Task fail-loud | Reviewer Task completing in ≪1s with empty result treated as routing/auth failure until log shows model stream | deferred: operator habit / future probe |
 | 7 | Escalation when single owner | Grep adapter: no competing “≤3 phases usually no” when-table in `plan-agent-context.md`; table lives in `implementation-plan` skill | **pass** (2026-08-18 Phase 3 adapt) |
 | 8 | bug_reviewer rubric path | `agents/bug_reviewer.md` references `docs/workflow/bug-reviewer-finding-rubric.md`; file exists; no `model:` pin | **pass** (2026-08-18) |
-| 9 | Skill-tool lists workflow skills | Clean chat (openBuggy; plan mode; Flash): skill tool names include `implementation-plan`, `plan-review`, … — not only `customize-opencode`. Prompt frozen in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) | **pass** (2026-08-19 A-post2: all 7 workflow skills + customize-opencode) |
+| 9 | Skill-tool lists workflow skills | Clean chat (openBuggy; plan mode; Flash): skill tool names include `implementation-plan`, `plan-review`, … — not only `customize-opencode`. Prompt frozen in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) | **pass** (2026-08-19 A-post2: all 7 workflow skills + customize-opencode) |
 | 10 | SoT load without bash approvals | Same Probe A: load `implementation-plan` via skill tool with **zero bash approvals** for that SoT load | **pass** (2026-08-19 A-post2: loaded + Escalation row quoted) |
-| 11 | Native file tools without bash approvals | Clean chat Probe **B0′/B0″** + **C** (`repository_explorer`): frozen prompts in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) | **pass** (2026-08-19); short lookups closed; see row **12** for glob-blind residual |
-| 12 | Glob-blind paths without serial Shell asks | openBuggy workspace; frozen prompts in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) § Failure mode F — (a) glob `eval/runs/2026-08-17T143458Z-dsv4flash/**`; (b) absolute `read` adapter workflow doc; (c) `Test-Path` once → **0** listing approvals | **pass** (2026-08-19): 12a non-empty glob; 12b Skill line quoted; 12c `Test-Path` → True |
-| 13 | Thin-plan template rejection | Clean chat; Flash; frozen prompt in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) § Thin-plan smoke (row 13) — omit Assumptions/Unknowns → invoke `plan_reviewer` → **CHANGES REQUESTED** citing those gaps | **pass** (2026-08-19 operator): CHANGES REQUESTED — missing Assumptions + missing Unknowns/Discovery (missing-Inputs urgency; no soft-approve) |
+| 11 | Native file tools without bash approvals | Clean chat Probe **B0′/B0″** + **C** (`repository_explorer`): frozen prompts in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) | **pass** (2026-08-19); short lookups closed; see row **12** for glob-blind residual |
+| 12 | Glob-blind paths without serial Shell asks | openBuggy workspace; frozen prompts in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Failure mode F — (a) glob `eval/runs/2026-08-17T143458Z-dsv4flash/**`; (b) absolute `read` adapter workflow doc; (c) `Test-Path` once → **0** listing approvals | **pass** (2026-08-19): 12a non-empty glob; 12b Skill line quoted; 12c `Test-Path` → True |
+| 13 | Thin-plan template rejection | Clean chat; Flash; frozen prompt in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Thin-plan smoke (row 13) — omit Assumptions/Unknowns → invoke `plan_reviewer` → **CHANGES REQUESTED** citing those gaps | **pass** (2026-08-19 operator): CHANGES REQUESTED — missing Assumptions + missing Unknowns/Discovery (missing-Inputs urgency; no soft-approve) |
 
 **Frozen probe paths (row 12):** run id `2026-08-17T143458Z-dsv4flash` (exists on disk; gitignored). Adapter doc: `C:/Users/admin/.config/opencode/docs/workflow/iterative-plan-review.md`.
 
-**Frozen probe (row 13):** see [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) § Thin-plan smoke (row 13). **pass** 2026-08-19 after Desktop restart.
+**Frozen probe (row 13):** see [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Thin-plan smoke (row 13). **pass** 2026-08-19 after Desktop restart.
 
 **Fast verification (install-time):**
 
@@ -99,7 +99,7 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 
 ## Implications / open questions
 
-1. Smoke rows 1–3 still need live probes after restart when dogfooding those checks; rows **9–10** are **pass** (2026-08-19) — see [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md).
+1. Smoke rows 1–3 still need live probes after restart when dogfooding those checks; rows **9–10** are **pass** (2026-08-19) — see [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
 2. Do **not** pin provider-specific models in agent frontmatter — roles inherit the session / `opencode.json` default so the adapter stays portable across BYOK hosts.
 3. T3 Code control plane is separate — this SOP covers the OpenCode harness adapter only.
 4. **Restart OpenCode Desktop** after adapter edits for always-on / agent / skill / permission changes to load.
@@ -113,10 +113,10 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 
 - [Skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)
 - [Authoring OpenCode adapter files](./opencode-authoring-adapter.md)
-- [Host recreation study](../analysis/host-recreation-2026-08.md)
-- [OpenCode DSV4F session study](../analysis/opencode-dsv4f-session-2026-08.md)
-- [OpenCode DSV4F session extension](../analysis/opencode-dsv4f-session-extension-2026-08.md)
-- [OpenCode skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md)
+- [Host recreation study](../../analysis/host-recreation-2026-08.md)
+- [OpenCode DSV4F session study](../../analysis/opencode-dsv4f-session-2026-08.md)
+- [OpenCode DSV4F session extension](../../analysis/opencode-dsv4f-session-extension-2026-08.md)
+- [OpenCode skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md)
 - [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)

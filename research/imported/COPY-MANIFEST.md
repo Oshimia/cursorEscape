@@ -5,7 +5,7 @@
 
 ## Context
 
-Every file under `docs/research/imported/` is a **copy or cursorEscape-authored trimmed index** for navigation. Status **Observed/imported** or **Observed/eval-packaging** unless a Target doc explicitly cites and classifies claims. Live `~/.cursor` workflow **bodies as of 2026-08-20** are recorded under [docs/overlays/cursor](../../overlays/cursor/_index.md) (not this manifest). Phase 3 `cursor-global-workflow` copies here remain the 2026-08-17 bannered snapshot.
+Every file under `research/imported/` is a **copy or cursorEscape-authored trimmed index** for navigation. Status **Observed/imported** or **Observed/eval-packaging** unless a Target doc explicitly cites and classifies claims. Live `~/.cursor` workflow **bodies as of 2026-08-20** are recorded under [overlays/cursor](../../overlays/cursor/_index.md) (not this manifest). Phase 3 `cursor-global-workflow` copies here remain the 2026-08-17 bannered snapshot.
 
 **Source repos (read-only):**
 

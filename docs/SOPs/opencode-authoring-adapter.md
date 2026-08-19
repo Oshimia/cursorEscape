@@ -9,7 +9,7 @@ How to write and maintain the **OpenCode host adapter** under `~/.config/opencod
 **Install root (this machine):** `C:\Users\admin\.config\opencode\`
 
 **Process SoT for inventory / smoke:** [opencode-host-adapter](./opencode-host-adapter.md)  
-**Evidence for skill-catalog failures:** [opencode-skill-binding-discovery](../analysis/opencode-skill-binding-discovery-2026-08.md)
+**Evidence for skill-catalog failures:** [opencode-skill-binding-discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)
 
 Official OpenCode documentation (read before inventing local conventions):
 
@@ -69,7 +69,7 @@ Single section-checklist SoT: [implementation-plan](../skills/implementation-pla
 
 ### Skills (required checklist)
 
-Follow [OpenCode Agent Skills](https://opencode.ai/docs/skills/) exactly. Observed dogfood (2026-08-19): skills with **description only** and **no `name`** did **not** appear in the skill tool (only built-in `customize-opencode` showed) until `name` was added and `skills.paths` was set — see [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md).
+Follow [OpenCode Agent Skills](https://opencode.ai/docs/skills/) exactly. Observed dogfood (2026-08-19): skills with **description only** and **no `name`** did **not** appear in the skill tool (only built-in `customize-opencode` showed) until `name` was added and `skills.paths` was set — see [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
 
 #### Layout
 
@@ -322,7 +322,7 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 1. Frontmatter: every skill has matching `name` + `description`.  
 2. `opencode.json` validates against schema (starts without crash).  
 3. **Full restart** OpenCode.  
-4. Clean-chat Probe A (from [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md)): skill tool lists workflow ids; load `implementation-plan`; quote Escalation row.  
+4. Clean-chat Probe A (from [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)): skill tool lists workflow ids; load `implementation-plan`; quote Escalation row.  
 5. Update [host adapter](./opencode-host-adapter.md) smoke rows 4–5 / 9–10 as appropriate.  
 6. If Target semantics changed, update cursorEscape contracts in the **same** doc change set ([documenting-this-repo](./documenting-this-repo.md)).
 
@@ -331,7 +331,7 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 ## Implications / open questions
 
 1. Skill-tool catalog emptiness is usually **authoring/discovery** (`name`, paths, restart, permissions) — not native tool failure and not session contamination.  
-2. Bash-for-`read`/`glob`/`grep` on short prompts was OK in Probe B/C; residual babysitting is often **glob-blind** (gitignore / external_directory) — see Failure mode F in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md).  
+2. Bash-for-`read`/`glob`/`grep` on short prompts was OK in Probe B/C; residual babysitting is often **glob-blind** (gitignore / external_directory) — see Failure mode F in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).  
 3. Re-check this SOP when OpenCode Desktop major versions change schema (nested `permission` vs v2 `permissions[]`). Periodically audit durable Always-run rows (`opencode.db` `permission`).
 
 ---
@@ -344,7 +344,7 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 - [OpenCode Rules](https://opencode.ai/docs/rules/)
 - [OpenCode Config](https://opencode.ai/docs/config/)
 - [opencode.ai/config.json](https://opencode.ai/config.json)
-- [opencode-skill-binding-discovery-2026-08](../analysis/opencode-skill-binding-discovery-2026-08.md) — Observed `name` / `skills.paths` / permission allow sequence
+- [opencode-skill-binding-discovery-2026-08](../../analysis/opencode-skill-binding-discovery-2026-08.md) — Observed `name` / `skills.paths` / permission allow sequence
 
 ---
 

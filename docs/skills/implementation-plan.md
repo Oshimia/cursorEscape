@@ -4,7 +4,7 @@
 
 ## Context
 
-**Target** skill contract. Draft structured plans before work. Full Cursor skill (Observed, unchanged): [overlay SKILL.md](../overlays/cursor/skills/implementation-plan/SKILL.md). **Escalation *when* table SoT is this page** — deep `plan-agent-context` holds specimen headings only and must point here ([instruction layering](../featureArchitecture/instruction-layering.md)).
+**Target** skill contract. Draft structured plans before work. Full Cursor skill (Observed, unchanged): [overlay SKILL.md](../../overlays/cursor/skills/implementation-plan/SKILL.md). **Escalation *when* table SoT is this page** — deep `plan-agent-context` holds specimen headings only and must point here ([instruction layering](../featureArchitecture/instruction-layering.md)).
 
 ---
 
@@ -25,7 +25,7 @@ Eval / harness / multi-step operational work is **not** exempt unless it meets S
 
 ### Escalation when (sole SoT)
 
-Place **Escalation** immediately after Scope on every non-trivial plan. Specimen field shape and Agent context headings: [plan-agent-context](../overlays/cursor/docs/workflow/plan-agent-context.md) (Observed overlay — **Escalation when-triggers SoT is this skill**, not that overlay file).
+Place **Escalation** immediately after Scope on every non-trivial plan. Specimen field shape and Agent context headings: [plan-agent-context](../../overlays/cursor/docs/workflow/plan-agent-context.md) (Observed overlay — **Escalation when-triggers SoT is this skill**, not that overlay file).
 
 ```markdown
 ### Escalation
@@ -39,7 +39,7 @@ Place **Escalation** immediately after Scope on every non-trivial plan. Specimen
 | **yes** + `complex-or-extensive` | Multi-phase **roadmap** (e.g. initialization roadmap); cross-repo; migration/external apply; ambiguous architecture with multiple plan-changing approaches; planner judges unusually hard |
 | **no** + `n/a` | Ordinary work including ordinary multi-file doc edits or ≤3 light implementation phases that are **not** a roadmap handoff |
 
-If unsure Escalation=yes: ask the user; do not silently escalate. Escalation **yes** requires Inter-phase contracts, Migration/external apply order (or **none**), and full Agent context blocks per [plan-agent-context](../overlays/cursor/docs/workflow/plan-agent-context.md).
+If unsure Escalation=yes: ask the user; do not silently escalate. Escalation **yes** requires Inter-phase contracts, Migration/external apply order (or **none**), and full Agent context blocks per [plan-agent-context](../../overlays/cursor/docs/workflow/plan-agent-context.md).
 
 **Escalation ≠ whether plan_reviewer runs.** plan_reviewer gates every plan drafted under default-on regardless of Escalation yes/no.
 
@@ -69,7 +69,7 @@ Treat missing required sections with the **same urgency as missing Required Inpu
 - Alternative approaches
 - External dependencies
 - Architecture and docs
-- If Escalation=yes: Agent context per [plan-agent-context](../overlays/cursor/docs/workflow/plan-agent-context.md) (including Inter-phase / Migration when applicable)
+- If Escalation=yes: Agent context per [plan-agent-context](../../overlays/cursor/docs/workflow/plan-agent-context.md) (including Inter-phase / Migration when applicable)
 
 Do **not** invent fixed always-on line/character budgets in Success, Verification, or phase wording ([instruction-layering](../featureArchitecture/instruction-layering.md)).
 
@@ -108,4 +108,4 @@ This section is the **sole SoT** for the plan section checklist. [plan-review](.
 
 - [plan-review](./plan-review.md)
 - [implementation-review](./implementation-review.md)
-- [plan-agent-context (Observed overlay)](../overlays/cursor/docs/workflow/plan-agent-context.md)
+- [plan-agent-context (Observed overlay)](../../overlays/cursor/docs/workflow/plan-agent-context.md)

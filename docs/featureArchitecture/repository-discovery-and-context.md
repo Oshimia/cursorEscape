@@ -19,7 +19,7 @@ Before plan or implement:
 | Where is the doc hub? | Avoid inventing parallel trees ([discovery](../skills/discovery.md)) |
 | What process SOPs exist? | Plan/review expectations |
 | What is Target vs Observed in this repo? | Prevent mixing harness imports with product intent |
-| What CI commands apply? | Fast/Full mapping ([ci-ladder](../overlays/cursor/docs/workflow/ci-ladder.md)) |
+| What CI commands apply? | Fast/Full mapping ([ci-ladder](../../overlays/cursor/docs/workflow/ci-ladder.md)) |
 | What is out of scope for this task? | Phase boundaries on roadmaps |
 
 ### Context for implementation (Desired)
@@ -29,10 +29,10 @@ Per change set, agents should gather **evidence**, not whole-repo dumps:
 | Signal | Label | Reference |
 | ------ | ----- | --------- |
 | Changed files + diff hunks | **Required** | Universal |
-| Nearby definitions / callers | **Desired** | [openBuggy context-retrieval](../research/imported/openBuggy/featureArchitecture/context-retrieval.md) (Observed proposal) |
+| Nearby definitions / callers | **Desired** | [openBuggy context-retrieval](../../research/imported/openBuggy/featureArchitecture/context-retrieval.md) (Observed proposal) |
 | Tests touching area | **Desired** | Same |
 | `AGENTS.md`, README, section `_index.md` | **Required** when present | [discovery](../skills/discovery.md) |
-| Project rules / design decisions | **Required** for intent changes | cursorEscape `docs/review/` |
+| Project rules / design decisions | **Required** for intent changes | cursorEscape `review/` |
 | Embedding index of entire repo | **Not a v0 goal** | Token/cost control |
 
 ### Ownership alternatives (Unknown — research-first)
@@ -44,7 +44,7 @@ Per change set, agents should gather **evidence**, not whole-repo dumps:
 | **Generated index** (tree-sitter, LSP, embeddings) | Higher fidelity; build cost |
 | **Host-provided index** (Cursor, IDE) | Convenient; lock-in risk |
 
-cursorEscape **Required:** Own repository knowledge in-repo ([design decisions](../review/design-decisions.md)). **Unknown:** Which generated index tier (if any) ships in v1 runtime.
+cursorEscape **Required:** Own repository knowledge in-repo ([design decisions](../../review/design-decisions.md)). **Unknown:** Which generated index tier (if any) ships in v1 runtime.
 
 ### Non-goals
 

@@ -4,7 +4,7 @@
 
 ## Context
 
-**Target** skill concepts for iterative plan review — not a separate executable skill in live `~/.cursor` (plan gate lives in [implementation-plan](./implementation-plan.md) + [plan_reviewer](../agents/plan_reviewer.md)). Process doc: [iterative-plan-review](../overlays/cursor/docs/workflow/iterative-plan-review.md).
+**Target** skill concepts for iterative plan review — not a separate executable skill in live `~/.cursor` (plan gate lives in [implementation-plan](./implementation-plan.md) + [plan_reviewer](../agents/plan_reviewer.md)). Process doc: [iterative-plan-review](../../overlays/cursor/docs/workflow/iterative-plan-review.md).
 
 ---
 

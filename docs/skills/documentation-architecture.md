@@ -4,7 +4,7 @@
 
 ## Context
 
-**Target** skill contract for bootstrapping or extending repository documentation with a procedures-vs-design layout. Full Cursor skill (Observed, unchanged): [overlay SKILL.md](../overlays/cursor/skills/documentation-architecture/SKILL.md). Deep procedure: [documentation-architecture.md](../overlays/cursor/docs/workflow/documentation-architecture.md). Positive example of lean skill → deep doc ([instruction layering](../featureArchitecture/instruction-layering.md)).
+**Target** skill contract for bootstrapping or extending repository documentation with a procedures-vs-design layout. Full Cursor skill (Observed, unchanged): [overlay SKILL.md](../../overlays/cursor/skills/documentation-architecture/SKILL.md). Deep procedure: [documentation-architecture.md](../../overlays/cursor/docs/workflow/documentation-architecture.md). Positive example of lean skill → deep doc ([instruction layering](../featureArchitecture/instruction-layering.md)).
 
 ---
 
@@ -41,7 +41,7 @@
 
 - Invent parallel doc trees beside an existing coherent layout
 - Leave new leaves unlinked from section indexes
-- Treat Observed import paths under `docs/research/imported/` as Target homes for product docs
+- Treat Observed import paths under `research/imported/` as Target homes for product docs
 
 ### Related roles
 
@@ -61,4 +61,4 @@
 - [roadmap](./roadmap.md)
 - [Documenting this repo (SOP)](../SOPs/documenting-this-repo.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md)
-- [Live deep doc](../overlays/cursor/docs/workflow/documentation-architecture.md)
+- [Live deep doc](../../overlays/cursor/docs/workflow/documentation-architecture.md)

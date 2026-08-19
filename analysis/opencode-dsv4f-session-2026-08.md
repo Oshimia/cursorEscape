@@ -45,7 +45,7 @@ Claim labels: **Observed** (session export, logs, operator report), **Inferred**
 
 **Observed:** After orientation, the parent drove straight into harness setup (bootstrap, isolate, quarantine, envelopes, Task launches, scoring/docs). It did **not** load or enforce the OpenCode-adapted plan-review / implementation-review gate skills for that work. Later, when a protocol-update plan needed `plan_reviewer`, the gate failed for the (then still live) Antigravity routing issue — but the earlier gap was **skipping the loop entirely**, not only broken reviewer models.
 
-**Target context:** Always-on text is thin **gate pointers**; skills and deep docs are **on-demand** ([instruction layering](../featureArchitecture/instruction-layering.md)). Plan → dual review → closeout is **Required default on** unless truly trivial or the user **explicitly** opts out — eval/harness/multi-step operational work is **not** exempt ([intended workflow](../featureArchitecture/intended-workflow.md), [opencode-host-adapter](../SOPs/opencode-host-adapter.md)). On OpenCode, Fast CI and dual-gate discipline remain **parent skill discipline**, not host-enforced ([host recreation](./host-recreation-2026-08.md)).
+**Target context:** Always-on text is thin **gate pointers**; skills and deep docs are **on-demand** ([instruction layering](../docs/featureArchitecture/instruction-layering.md)). Plan → dual review → closeout is **Required default on** unless truly trivial or the user **explicitly** opts out — eval/harness/multi-step operational work is **not** exempt ([intended workflow](../docs/featureArchitecture/intended-workflow.md), [opencode-host-adapter](../docs/SOPs/opencode-host-adapter.md)). On OpenCode, Fast CI and dual-gate discipline remain **parent skill discipline**, not host-enforced ([host recreation](./host-recreation-2026-08.md)).
 
 **Inferred:** Global adapter files (`instructions/`, skills, agents under `~/.config/opencode/`) existed but were **not sufficiently binding** for this parent + task shape: cheap free parent, eval/harness-shaped ask, weak gate salience relative to “get the run done.”
 
@@ -91,8 +91,8 @@ Empty “completed” Tasks looked normal in the UI. Primary failure indicator w
 ## Implications / open questions
 
 1. How should always-on vs on-demand skill triggers be strengthened so eval-like and “get on with it” tasks still hit plan / dual-review gates on OpenCode?
-2. What live probe proves gates fired (see [opencode-host-adapter](../SOPs/opencode-host-adapter.md) smoke row 1 — quote default-on plan loop + when-in-doubt + eval/harness not exempt; requires OpenCode restart after adapter edits)?
-3. Keep **bugfinder nit/scope** tuning (openBuggy DSV4F mitigations) separate from **cursorEscape instruction-layer / loop reliability** work — Target finding rubric now lives at [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md) (M5 copy-recall still deferred).
+2. What live probe proves gates fired (see [opencode-host-adapter](../docs/SOPs/opencode-host-adapter.md) smoke row 1 — quote default-on plan loop + when-in-doubt + eval/harness not exempt; requires OpenCode restart after adapter edits)?
+3. Keep **bugfinder nit/scope** tuning (openBuggy DSV4F mitigations) separate from **cursorEscape instruction-layer / loop reliability** work — Target finding rubric now lives at [bug-reviewer-finding-rubric](../docs/featureArchitecture/bug-reviewer-finding-rubric.md) (M5 copy-recall still deferred).
 4. Historical Antigravity signature remains useful for smoke even though the plugin/path is removed.
 5. Post-harness continuation of this session (skill-tool binding, babysat iterative plan passes, desktop model-selection pins) is documented in [session extension study](./opencode-dsv4f-session-extension-2026-08.md).
 
@@ -110,8 +110,8 @@ Empty “completed” Tasks looked normal in the UI. Primary failure indicator w
 
 - [OpenCode DSV4F session extension (2026-08)](./opencode-dsv4f-session-extension-2026-08.md)
 - [Host recreation (2026-08)](./host-recreation-2026-08.md)
-- [OpenCode host adapter SOP](../SOPs/opencode-host-adapter.md)
-- [Instruction layering](../featureArchitecture/instruction-layering.md)
-- [Intended workflow](../featureArchitecture/intended-workflow.md)
-- [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md)
+- [OpenCode host adapter SOP](../docs/SOPs/opencode-host-adapter.md)
+- [Instruction layering](../docs/featureArchitecture/instruction-layering.md)
+- [Intended workflow](../docs/featureArchitecture/intended-workflow.md)
+- [bug-reviewer-finding-rubric](../docs/featureArchitecture/bug-reviewer-finding-rubric.md)
 - [Analysis index](./_index.md)

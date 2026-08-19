@@ -4,7 +4,7 @@
 
 ## Context
 
-**Target** optional skill for authoring multi-phase handoff roadmaps. Full Cursor skill (Observed, unchanged): [overlay SKILL.md](../overlays/cursor/skills/roadmap/SKILL.md). Distinct from [implementation roadmap](../roadmaps/implementation-roadmap.md) (future runtime work).
+**Target** optional skill for authoring multi-phase handoff roadmaps. Full Cursor skill (Observed, unchanged): [overlay SKILL.md](../../overlays/cursor/skills/roadmap/SKILL.md). Distinct from [implementation roadmap](../roadmaps/implementation-roadmap.md) (future runtime work).
 
 ---
 

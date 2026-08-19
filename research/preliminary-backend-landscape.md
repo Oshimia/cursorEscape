@@ -70,13 +70,13 @@ openBuggy remains **research** (dual-gate evidence, BugBot FA). v0 **bug_reviewe
 - [ClinePass](https://docs.cline.bot/getting-started/clinepass)
 - [Imported openBuggy competitive landscape](./imported/openBuggy/featureArchitecture/competitive-landscape.md)
 - [Imported competitor product notes](./imported/openBuggy/research/competitor-product-notes.md)
-- [Backend and provider abstraction](../featureArchitecture/backend-and-provider-abstraction.md)
+- [Backend and provider abstraction](../docs/featureArchitecture/backend-and-provider-abstraction.md)
 
 ---
 
 ## Implications / open questions
 
-1. R0 dogfood on T3+OpenCode before any cursorEscape engine ([implementation roadmap](../roadmaps/implementation-roadmap.md)).
+1. R0 dogfood on T3+OpenCode before any cursorEscape engine ([implementation roadmap](../docs/roadmaps/implementation-roadmap.md)).
 2. Do not treat init-report Q6 “neither chosen” as current — superseded by this lock-in.
 
 ---
@@ -84,5 +84,5 @@ openBuggy remains **research** (dual-gate evidence, BugBot FA). v0 **bug_reviewe
 ## Related
 
 - [Unresolved architectural questions](../review/unresolved-architectural-questions.md)
-- [Implementation roadmap](../roadmaps/implementation-roadmap.md)
+- [Implementation roadmap](../docs/roadmaps/implementation-roadmap.md)
 - [Design decisions](../review/design-decisions.md)

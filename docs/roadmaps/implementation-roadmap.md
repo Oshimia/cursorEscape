@@ -4,7 +4,7 @@
 
 ## Context
 
-**Future work** after initialization — distinct from the [cursorEscape initialization](./cursorEscape-initialization.md) conductor. First recreation is **external**: dogfood **T3 Code + OpenCode** using contracts in this repo — **not** building a cursorEscape engine yet. See [host recreation](../analysis/host-recreation-2026-08.md) and [design decisions](../review/design-decisions.md).
+**Future work** after initialization — distinct from the [cursorEscape initialization](./cursorEscape-initialization.md) conductor. First recreation is **external**: dogfood **T3 Code + OpenCode** using contracts in this repo — **not** building a cursorEscape engine yet. See [host recreation](../../analysis/host-recreation-2026-08.md) and [design decisions](../../review/design-decisions.md).
 
 **Status:** Planning document — R0 authorized as owner dogfood outside this repo; R1+ engine work **not** authorized until R0 proves the loop.
 
@@ -33,18 +33,18 @@
 
 ### Research-first gates
 
-- [x] Resolve U2 (OpenCode + T3) — [unresolved questions](../review/unresolved-architectural-questions.md)
+- [x] Resolve U2 (OpenCode + T3) — [unresolved questions](../../review/unresolved-architectural-questions.md)
 - [x] Withdraw U8 (openBuggy default) — same
 - [ ] R0 evidence: parallel Tasks, deny-edit reviewers, Fast CI honesty
 - [ ] Document ClinePass (or chosen) provider wiring when ready (U13)
-- [x] Repo discovery approach written ([initialization report Q7](../review/initialization-report.md#q7--proposed-repository-discovery-and-context-acquisition))
+- [x] Repo discovery approach written ([initialization report Q7](../../review/initialization-report.md#q7--proposed-repository-discovery-and-context-acquisition))
 - [ ] Copy-out overlay tree into git — **not authorized**
 
 ### Explicit non-starters
 
 | Item | Rationale |
 | ---- | --------- |
-| Cursor clone IDE | [design decisions](../review/design-decisions.md) non-goal |
+| Cursor clone IDE | [design decisions](../../review/design-decisions.md) non-goal |
 | Inline Bugbot engine / require openBuggy for v0 | Skill-based bug_reviewer |
 | Skipping dual-gate | [intended workflow](../featureArchitecture/intended-workflow.md) |
 | Building R1+ engine before R0 dogfood | Premature |
@@ -62,7 +62,7 @@
 ## Related
 
 - [Initialization roadmap](./cursorEscape-initialization.md)
-- [Host recreation study](../analysis/host-recreation-2026-08.md)
+- [Host recreation study](../../analysis/host-recreation-2026-08.md)
 - [Roadmap hub](../Roadmap.md)
 - [Backend and provider abstraction](../featureArchitecture/backend-and-provider-abstraction.md)
 - [Skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)

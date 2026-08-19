@@ -4,7 +4,7 @@
 
 ## Context
 
-Phase 5 closeout archaeology for cursorEscape — answers user §17 Q1–9 from the accepted initialization plan. This report is a **decisions snapshot** at init completion; the living hub remains [Roadmap](../Roadmap.md). **Do not start** tasks listed under Q9 until explicit owner go-ahead.
+Phase 5 closeout archaeology for cursorEscape — answers user §17 Q1–9 from the accepted initialization plan. This report is a **decisions snapshot** at init completion; the living hub remains [Roadmap](../docs/Roadmap.md). **Do not start** tasks listed under Q9 until explicit owner go-ahead.
 
 **SoT (2026-08-19):** Q2 status **Observed/imported (live Target)** for the `~/.cursor` import is **superseded**. Companion repo is Target contract SoT; that import is **Observed interim** Cursor wording. Do not treat Q3/Q6 body as live adapter choice.
 
@@ -20,7 +20,7 @@ Phase 5 closeout archaeology for cursorEscape — answers user §17 Q1–9 from 
 
 | Finding | Relevance to cursorEscape |
 | ------- | ------------------------- |
-| Dual-gate review is complementary — keep both legs in parallel ([recommendation](../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)) | **Required** loop shape in [intended-workflow](../featureArchitecture/intended-workflow.md) |
+| Dual-gate review is complementary — keep both legs in parallel ([recommendation](../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)) | **Required** loop shape in [intended-workflow](../docs/featureArchitecture/intended-workflow.md) |
 | Fast CI Observed before reviewers — parents must not launch on skip or claimed-only prose ([ci-gating](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/ci-gating.md)) | **Required** enforcement in live workflow import |
 | Split verdict bars — Reviewer-a may APPROVED with Batchable (deferred); Bugbot requires all lists `"None"` | Live-only; freeze eval used unified bar — see [workflow-source-delta](../research/imported/workflow-source-delta.md) |
 | Cursor BugBot harness characterization (full FA suite under `imported/openBuggy/featureArchitecture/cursor-bugbot-agent-review/`) | **Observed** reference for what to preserve vs escape — not runtime target |
@@ -42,12 +42,12 @@ Phase 5 closeout archaeology for cursorEscape — answers user §17 Q1–9 from 
 
 Full manifest: [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md) (86 markdown/mdc files).
 
-| Source | Destination | Phase | Status label |
+| Source | Destination (current after Phase 2) | Phase | Status label |
 | ------ | ----------- | ----- | ------------ |
-| openBuggy `docs/` (selected FA, analysis, research, SOPs) | `docs/research/imported/openBuggy/` | 2 | Observed/imported |
-| AITestSuite Phase 4 freeze + lessons + scoring | `docs/research/imported/AITestSuite/` | 3 | Observed/eval-packaging |
-| Live `~/.cursor` workflow (9 docs, 3 rules, 5 skills, 2 agents) | `docs/research/imported/cursor-global-workflow/` | 3 | Observed/imported (live Target at init; **superseded 2026-08-19** → Observed interim) |
-| Live vs freeze delta (authored) | `docs/research/imported/workflow-source-delta.md` | 3 | Observed freeze-vs-live archaeology (not forever Target vs companion repo) |
+| openBuggy `docs/` (selected FA, analysis, research, SOPs) | `research/imported/openBuggy/` | 2 | Observed/imported |
+| AITestSuite Phase 4 freeze + lessons + scoring | `research/imported/AITestSuite/` | 3 | Observed/eval-packaging |
+| Live `~/.cursor` workflow (9 docs, 3 rules, 5 skills, 2 agents) | `research/imported/cursor-global-workflow/` | 3 | Observed/imported (live Target at init; **superseded 2026-08-19** → Observed interim) |
+| Live vs freeze delta (authored) | `research/imported/workflow-source-delta.md` | 3 | Observed freeze-vs-live archaeology (not forever Target vs companion repo) |
 
 **Not copied:** openBuggy `eval/`; AITestSuite `review-profiles/**`, app baselines, goldens; analysis `.local/` sheets.
 
@@ -75,10 +75,10 @@ From [design-decisions](./design-decisions.md) and Phase 4 Target docs:
 
 | Risk | Why it hurts | Mitigation (documented, not implemented) |
 | ---- | ------------ | ---------------------------------------- |
-| **Backend adapter mismatch** — Cline/OpenCode/other may not support parallel subagents, explicit diff scope, or openBuggy wire-up | Blocks honest dual-gate loop outside Cursor | R0 spike before large build ([implementation-roadmap](../roadmaps/implementation-roadmap.md)) |
-| **Workflow sequencing drift** — backend-owned review vs parent-owned Fast/Full CI | Reintroduces lock-in and skip patterns openBuggy study flags | [intended-workflow](../featureArchitecture/intended-workflow.md) + live [implementation-review](../research/imported/cursor-global-workflow/skills/implementation-review/SKILL.md) |
-| **Repository discovery gap** — agents invent parallel doc trees or miss CI mapping | Wrong plan/review assumptions | [repository-discovery-and-context](../featureArchitecture/repository-discovery-and-context.md), [discovery skill](../skills/discovery.md) |
-| **False confidence from dual APPROVED** — not proven ship-class catch or no-escape | Operator over-trusts loop bar | Cited in openBuggy recommendation + [intended-workflow](../featureArchitecture/intended-workflow.md) |
+| **Backend adapter mismatch** — Cline/OpenCode/other may not support parallel subagents, explicit diff scope, or openBuggy wire-up | Blocks honest dual-gate loop outside Cursor | R0 spike before large build ([implementation-roadmap](../docs/roadmaps/implementation-roadmap.md)) |
+| **Workflow sequencing drift** — backend-owned review vs parent-owned Fast/Full CI | Reintroduces lock-in and skip patterns openBuggy study flags | [intended-workflow](../docs/featureArchitecture/intended-workflow.md) + live [implementation-review](../research/imported/cursor-global-workflow/skills/implementation-review/SKILL.md) |
+| **Repository discovery gap** — agents invent parallel doc trees or miss CI mapping | Wrong plan/review assumptions | [repository-discovery-and-context](../docs/featureArchitecture/repository-discovery-and-context.md), [discovery skill](../docs/skills/discovery.md) |
+| **False confidence from dual APPROVED** — not proven ship-class catch or no-escape | Operator over-trusts loop bar | Cited in openBuggy recommendation + [intended-workflow](../docs/featureArchitecture/intended-workflow.md) |
 | **Pretend-settled stack** — recording Cline/OpenCode winner without eval | Wasted implementation on wrong adapter | [preliminary-backend-landscape](../research/preliminary-backend-landscape.md) stays **Unknown** until spike |
 
 ---
@@ -132,7 +132,7 @@ Step 5: gather change-set evidence (diff, changed files, nearby tests) — not w
 | **Desired** | Callers/definitions near edits ([context-retrieval](../research/imported/openBuggy/featureArchitecture/context-retrieval.md) pattern) | LSP-assisted snippets |
 | **Not v0** | Full embedding index | U6 in [unresolved questions](./unresolved-architectural-questions.md) |
 
-**repository_explorer** role explores; **implementer** consumes summarized context ([agent roles](../featureArchitecture/agent-roles-and-model-assignment.md)).
+**repository_explorer** role explores; **implementer** consumes summarized context ([agent roles](../docs/featureArchitecture/agent-roles-and-model-assignment.md)).
 
 ---
 
@@ -154,12 +154,12 @@ Canonical list: [unresolved-architectural-questions](./unresolved-architectural-
 
 ### Q9 — Recommended next tasks (do not start)
 
-From [implementation-roadmap](../roadmaps/implementation-roadmap.md) — **planning only**:
+From [implementation-roadmap](../docs/roadmaps/implementation-roadmap.md) — **planning only**:
 
 1. **R0 spike** — one dogfood repo: spawn roles, parallel review, branch vs uncommitted diff scope on Cline and/or OpenCode.
 2. **Resolve U2, U4 with evidence** — document chosen adapter in design-decisions if spike succeeds.
 3. **R1 discovery module** — implement Q7 minimum (hub walk, changed files, rules) without embedding index.
-4. **R2 workflow runner** — host-agnostic plan → implement → dual review gates aligned with [skills](../skills/_index.md) contracts.
+4. **R2 workflow runner** — host-agnostic plan → implement → dual review gates aligned with [skills](../docs/skills/_index.md) contracts.
 5. **R3 openBuggy wire-up** — production path for bug_reviewer adapter.
 6. **R4 eval hook** — transcript + rubric (AITestSuite patterns as reference, not port).
 7. **Optional R5 thin client** — only after R3 loop is honest on Fast/Full.
@@ -170,7 +170,7 @@ From [implementation-roadmap](../roadmaps/implementation-roadmap.md) — **plann
 
 ## Implications
 
-1. This report should not be edited for living status — update [Roadmap](../Roadmap.md) and Target FA docs instead.
+1. This report should not be edited for living status — update [Roadmap](../docs/Roadmap.md) and Target FA docs instead.
 2. Re-import from siblings requires manifest update and explicit phase decision.
 3. Initialization conductor Phase 5 deliverables land when this report, hub links, review loop, and Full CI pass — Composer QC commit follows.
 4. **Superseded (2026-08):** Q6 / U2 / U8 adapter narrative — first attempt is T3 + OpenCode; openBuggy not v0 default. See [host recreation](../analysis/host-recreation-2026-08.md), [design decisions](./design-decisions.md), [unresolved questions](./unresolved-architectural-questions.md). Q1–9 body above remains the init archaeology snapshot.
@@ -183,5 +183,5 @@ From [implementation-roadmap](../roadmaps/implementation-roadmap.md) — **plann
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Relationship to siblings](./relationship-to-siblings.md)
 - [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md)
-- [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)
-- [Implementation roadmap](../roadmaps/implementation-roadmap.md)
+- [Initialization roadmap](../docs/roadmaps/cursorEscape-initialization.md)
+- [Implementation roadmap](../docs/roadmaps/implementation-roadmap.md)

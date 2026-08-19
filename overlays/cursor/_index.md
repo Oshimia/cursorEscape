@@ -6,7 +6,7 @@
 
 Fat **Observed interim extract** of the owner's **currently active** Cursor workflow from `C:\Users\admin\.cursor` on **2026-08-20** (skills also hashed 2026-08-19; unchanged since extract). Extract bodies carry no provenance banners inside skill, rule, agent, or workflow files. Cursor product trees (`skills-cursor`, extensions, plugins, plans) were **not** copied.
 
-This tree is **Observed** Cursor file wording — **not** a permanent freeze target (thin wrappers in Phase 5). Portable **Target** contracts: interim [docs/skills](../../skills/_index.md) and [docs/agents](../../agents/_index.md) (→ gold bases after Phase 4). The 2026-08-17 bannered snapshot stays under [imported/cursor-global-workflow](../../research/imported/cursor-global-workflow/) for archaeology.
+This tree is **Observed** Cursor file wording — **not** a permanent freeze target (thin wrappers in Phase 5). Portable **Target** contracts: interim [docs/skills](../../docs/skills/_index.md) and [docs/agents](../../docs/agents/_index.md) (→ gold bases after Phase 4). The 2026-08-17 bannered snapshot stays under [imported/cursor-global-workflow](../../research/imported/cursor-global-workflow/) for archaeology.
 
 ## Substance
 
@@ -32,8 +32,8 @@ This tree is **Observed** Cursor file wording — **not** a permanent freeze tar
 
 | Agent | File | Target contract |
 | ----- | ---- | --------------- |
-| plan-reviewer | [plan-reviewer.md](./agents/plan-reviewer.md) | [plan_reviewer](../../agents/plan_reviewer.md) |
-| reviewer-a | [reviewer-a.md](./agents/reviewer-a.md) | [production_readiness_reviewer](../../agents/production_readiness_reviewer.md) |
+| plan-reviewer | [plan-reviewer.md](./agents/plan-reviewer.md) | [plan_reviewer](../../docs/agents/plan_reviewer.md) |
+| reviewer-a | [reviewer-a.md](./agents/reviewer-a.md) | [production_readiness_reviewer](../../docs/agents/production_readiness_reviewer.md) |
 
 There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subagent.
 
@@ -82,7 +82,7 @@ Live path `~/.cursor/docs/workflow/` → [docs/workflow/](./docs/workflow/README
 
 ### How to treat these files (index policy — Approach A)
 
-- **Bodies:** Fat Observed interim extract as of the extract date. **Not** a permanent freeze target — Phase 5 replaces them with thin wrappers pointing at gold bases (`skills/`, `agents/`, `rules/`, `workflow/`). Do **not** edit overlay SKILL/agent/rule bodies for portable procedure during Phases 1–4; portable edits go to interim `docs/skills/`, `docs/agents/`, FA, or overlay **index** per [overlay FA](../../featureArchitecture/skill-source-and-host-overlays.md) promotion rule.
+- **Bodies:** Fat Observed interim extract as of the extract date. **Not** a permanent freeze target — Phase 5 replaces them with thin wrappers pointing at gold bases (`skills/`, `agents/`, `rules/`, `workflow/`). Do **not** edit overlay SKILL/agent/rule bodies for portable procedure during Phases 1–4; portable edits go to interim `docs/skills/`, `docs/agents/`, FA, or overlay **index** per [overlay FA](../../docs/featureArchitecture/skill-source-and-host-overlays.md) promotion rule.
 - **Do not** copy them to repo-root `.cursor/` (this repo is not a Cursor project tree).
 - Refresh extract by re-copying from live `~/.cursor` and updating hashes here when authorized.
 - Copy-out **back** to `~/.cursor` is not authorized.
@@ -95,7 +95,7 @@ Live path `~/.cursor/docs/workflow/` → [docs/workflow/](./docs/workflow/README
 ## Related
 
 - [Overlays index](../_index.md)
-- [Skill contracts](../../skills/_index.md)
-- [Agent contracts](../../agents/_index.md)
-- [Skill source and host overlays](../../featureArchitecture/skill-source-and-host-overlays.md)
+- [Skill contracts](../../docs/skills/_index.md)
+- [Agent contracts](../../docs/agents/_index.md)
+- [Skill source and host overlays](../../docs/featureArchitecture/skill-source-and-host-overlays.md)
 - [Phase 3 import (bannered)](../../research/imported/cursor-global-workflow/)

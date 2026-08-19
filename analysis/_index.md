@@ -6,7 +6,7 @@
 
 Operator studies of **local workflows** (not proposed engine design, not eval scoring, not market research). Each study has its own subdirectory with a hub `_index.md` when imported or authored.
 
-**Status:** Phase 2 openBuggy operator studies imported under `docs/research/imported/openBuggy/analysis/`. Phase 3–4 complete — Target FA and workflow contracts live in [featureArchitecture](../featureArchitecture/_index.md), [agents](../agents/_index.md), and [skills](../skills/_index.md). Local host-recreation study authored 2026-08-17; OpenCode DSV4F session study authored 2026-08-18; session extension study (skill binding / babysat plan loop) authored 2026-08-19; skill-binding discovery authored 2026-08-19.
+**Status:** Phase 2 openBuggy operator studies imported under `research/imported/openBuggy/analysis/`. Phase 3–4 complete — Target FA and workflow contracts live in [featureArchitecture](../docs/featureArchitecture/_index.md), [agents](../docs/agents/_index.md), and [skills](../docs/skills/_index.md). Local host-recreation study authored 2026-08-17; OpenCode DSV4F session study authored 2026-08-18; session extension study (skill binding / babysat plan loop) authored 2026-08-19; skill-binding discovery authored 2026-08-19.
 
 ---
 
@@ -16,9 +16,9 @@ Operator studies of **local workflows** (not proposed engine design, not eval sc
 
 | Location | Responsibility |
 | -------- | -------------- |
-| `docs/analysis/*` (local studies) | Decision-grade studies of the owner's existing loops |
+| `analysis/*` (local studies) | Decision-grade studies of the owner's existing loops |
 | [`../research/imported/openBuggy/analysis/`](../research/imported/openBuggy/analysis/_index.md) | Imported openBuggy operator studies (Observed/imported) |
-| [`../featureArchitecture/`](../featureArchitecture/_index.md) | Target system design (Phase 4); Observed openBuggy FA under `research/imported/openBuggy/featureArchitecture/` |
+| [`../docs/featureArchitecture/`](../docs/featureArchitecture/_index.md) | Target system design (Phase 4); Observed openBuggy FA under `research/imported/openBuggy/featureArchitecture/` |
 | [`../research/`](../research/_index.md) | Sourced market/product facts |
 
 ### Documents (local)
@@ -33,7 +33,7 @@ Operator studies of **local workflows** (not proposed engine design, not eval sc
 * [Reviewer-a / BugBot effectiveness](../research/imported/openBuggy/analysis/reviewer-effectiveness/_index.md) — dual-reviewer loop study (Phases 1–5 complete in source archive)
 * [Catch + escape follow-on](../research/imported/openBuggy/analysis/reviewer-effectiveness/follow-on-catch-escape/_index.md)
 
-Target synthesis of dual-gate findings: [intended-workflow](../featureArchitecture/intended-workflow.md), [evaluation-methodology](../featureArchitecture/evaluation-methodology.md).
+Target synthesis of dual-gate findings: [intended-workflow](../docs/featureArchitecture/intended-workflow.md), [evaluation-methodology](../docs/featureArchitecture/evaluation-methodology.md).
 
 ---
 
@@ -47,6 +47,6 @@ Target synthesis of dual-gate findings: [intended-workflow](../featureArchitectu
 ## Related
 
 - [Design decisions](../review/design-decisions.md)
-- [Documenting this repo (SOP)](../SOPs/documenting-this-repo.md)
-- [Roadmap](../Roadmap.md)
+- [Documenting this repo (SOP)](../docs/SOPs/documenting-this-repo.md)
+- [Roadmap](../docs/Roadmap.md)
 - [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md)
