@@ -1,10 +1,10 @@
 # Agent Role Contracts
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
-Host-agnostic **Target** contracts for cursorEscape orchestration. Portable contracts live in this folder (companion-repo **Target** SoT). Adapters map these roles to native agent types (e.g. Cursor `reviewer-a` → production_readiness_reviewer; OpenCode markdown agents for first recreation). Imported Cursor agent files under [cursor-global-workflow](../research/imported/cursor-global-workflow/agents/) are **Observed interim** snapshots of Cursor wording, not a second procedure tree.
+Host-agnostic **Target** contracts for cursorEscape orchestration. Portable contracts live in this folder. Current Cursor agent files (unchanged bodies) live under [docs/overlays/cursor/agents](../overlays/cursor/agents/) (**Observed** extract). The 2026-08-17 bannered copy remains under [cursor-global-workflow/agents](../research/imported/cursor-global-workflow/agents/) (archaeology). These pages use host-agnostic role names, not Cursor Task IDs as the contract identity.
 
 ---
 
@@ -12,15 +12,15 @@ Host-agnostic **Target** contracts for cursorEscape orchestration. Portable cont
 
 ### Contract index
 
-| Role | Contract | Phase |
-| ---- | -------- | ----- |
-| planner | [planner.md](./planner.md) | Plan |
-| plan_reviewer | [plan_reviewer.md](./plan_reviewer.md) | Plan gate |
-| implementer | [implementer.md](./implementer.md) | Build |
-| production_readiness_reviewer | [production_readiness_reviewer.md](./production_readiness_reviewer.md) | Review (dual gate) |
-| bug_reviewer | [bug_reviewer.md](./bug_reviewer.md) | Review (dual gate) |
-| repository_explorer | [repository_explorer.md](./repository_explorer.md) | Investigate |
-| test_reviewer | [test_reviewer.md](./test_reviewer.md) | Review (optional; **not** default dual gate) |
+| Role | Contract | Phase | Cursor overlay (Observed) |
+| ---- | -------- | ----- | ------------------------- |
+| planner | [planner.md](./planner.md) | Plan | (no Cursor agent file) |
+| plan_reviewer | [plan_reviewer.md](./plan_reviewer.md) | Plan gate | [plan-reviewer.md](../overlays/cursor/agents/plan-reviewer.md) |
+| implementer | [implementer.md](./implementer.md) | Build | (no Cursor agent file) |
+| production_readiness_reviewer | [production_readiness_reviewer.md](./production_readiness_reviewer.md) | Review (dual gate) | [reviewer-a.md](../overlays/cursor/agents/reviewer-a.md) |
+| bug_reviewer | [bug_reviewer.md](./bug_reviewer.md) | Review (dual gate) | Cursor product Bugbot (no owner file) |
+| repository_explorer | [repository_explorer.md](./repository_explorer.md) | Investigate | (no Cursor agent file) |
+| test_reviewer | [test_reviewer.md](./test_reviewer.md) | Review (optional; **not** default dual gate) | (no Cursor agent file) |
 
 ### Shared contract fields (Required)
 
@@ -59,4 +59,5 @@ Every role page defines:
 - [Intended workflow](../featureArchitecture/intended-workflow.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md) — lean role agents; do not paste full procedures
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
+- [Cursor overlay](../overlays/cursor/_index.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)

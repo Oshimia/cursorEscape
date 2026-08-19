@@ -1,12 +1,12 @@
 # Documenting This Repo
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
 cursorEscape's value is its documentation. Drift (undocumented decisions, broken indexes, invented parallel trees) destroys that value. This SOP is the local equivalent of a "reference docs check" discipline — adapted to `docs/` paths only.
 
-**SoT:** Companion-repo contracts (`docs/featureArchitecture/`, `docs/agents/`, `docs/skills/`) are **Target**. Live `~/.cursor` import under `docs/research/imported/cursor-global-workflow/` is **Observed interim** Cursor wording until overlay copy-out — cite it, do not treat it as a second authored procedure tree. Identity: skill/workflow manager across **stacks**, not machines ([design decisions](../review/design-decisions.md)).
+**SoT:** Companion-repo contracts (`docs/featureArchitecture/`, `docs/agents/`, `docs/skills/`) are **Target**. Cursor-native workflow files under [docs/overlays/cursor](../overlays/cursor/_index.md) are **Observed** frozen copies of live `~/.cursor` (skills, rules, agents, `docs/workflow`; no banners inside those files). Phase 3 import under `docs/research/imported/cursor-global-workflow/` is archaeology. Identity: skill/workflow manager across **stacks**, not machines ([design decisions](../review/design-decisions.md)).
 
 Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cursorEscape-local.
 
@@ -19,8 +19,9 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 1. Read [Roadmap](../Roadmap.md) and the relevant `_index.md`.
 2. Decide document kind:
    - **featureArchitecture** — how it works (Target design). Host extra restrictiveness: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md) (promotion rule). Cite Observed imports from `docs/research/imported/` — do not add Observed harness subdirectories directly under `docs/featureArchitecture/`
-   - **agents** — host-agnostic role contracts (Target); map to host adapters — not Observed Cursor agent file copies
-   - **skills** — host-agnostic workflow skill contracts (Target); cite Observed interim live imports under `docs/research/imported/cursor-global-workflow/` (not a second SoT)
+   - **agents** — host-agnostic role contracts (Target); Cursor-native agent files under [docs/overlays/cursor/agents](../overlays/cursor/agents/) (Observed, frozen)
+   - **skills** — host-agnostic workflow skill contracts (Target); cite Cursor overlay for live `SKILL.md`
+   - **overlays** — host-native recorded files (Observed; do not rewrite bodies)
    - **SOP** — how to do a task
    - **research** — sourced facts and imported sibling material
    - **roadmaps/** — multi-phase handoff conductors
@@ -37,7 +38,7 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 | **Target** | cursorEscape's intended workflow and architecture (Phase 4+ synthesizing docs) |
 | **Inferred** / **Unknown** | Mark explicitly; do not present as settled Target |
 
-Imported research files carry provenance banners. **Observed ≠ Target** — never merge without classification.
+Imported research files carry provenance banners. Overlay `SKILL.md` files do **not** — provenance lives in the overlay `_index.md`. **Observed ≠ Target** — never merge without classification.
 
 ### Operator analysis
 
@@ -54,9 +55,10 @@ Imported research files carry provenance banners. **Observed ≠ Target** — ne
 
 | Allowed | Forbidden |
 | ------- | --------- |
-| Relative links under `docs/` | Copying sibling `.cursor/skills` or `.cursor/agents` paths as if they lived here |
+| Relative links under `docs/` | Copying live skills into repo-root `.cursor/skills` or `.cursor/agents` as if this were a Cursor project |
 | Prose mentioning external sibling projects by absolute path or name | Pretending runtime APIs are implemented |
 | Importing under `docs/research/imported/` with manifest updates (Phase 2+) | Ignoring COPY-MANIFEST when adding imports |
+| Recording host-native files under `docs/overlays/<host>/` with an index (hashes, date, live source) | Editing overlay skill, rule, agent, or workflow-doc bodies to “improve” them |
 
 ### Analysis vs featureArchitecture
 

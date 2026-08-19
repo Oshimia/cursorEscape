@@ -1,12 +1,12 @@
 # Standard Operating Procedures (SOPs)
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
 This index lists repeatable procedures for maintaining cursorEscape documentation and for operating the workflow **once a runtime exists**. Until then, runtime SOPs are conceptual targets.
 
-**Path rule:** In-repo links use `docs/` paths only. External sibling projects (openBuggy, AITestSuite, live `~/.cursor`) may be cited in prose or imported under `docs/research/imported/` — do not copy their `.cursor/` trees as if they lived here.
+**Path rule:** In-repo links use `docs/` paths only. External sibling projects (openBuggy, AITestSuite, live `~/.cursor`) may be cited in prose, imported under `docs/research/imported/`, or recorded as frozen host-native files under `docs/overlays/` — do not copy their trees to repo-root `.cursor/`.
 
 ## Substance
 
@@ -33,4 +33,5 @@ This index lists repeatable procedures for maintaining cursorEscape documentatio
 * [Roadmap](../Roadmap.md)
 * [Design decisions](../review/design-decisions.md)
 * [Feature architecture index](../featureArchitecture/_index.md)
+* [Overlays](../overlays/_index.md)
 * [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)

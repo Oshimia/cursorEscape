@@ -1,10 +1,10 @@
 # roadmap
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
-**Target** optional skill for authoring multi-phase handoff roadmaps. Full skill: [live import](../research/imported/cursor-global-workflow/skills/roadmap/SKILL.md). Distinct from [implementation roadmap](../roadmaps/implementation-roadmap.md) (future runtime work).
+**Target** optional skill for authoring multi-phase handoff roadmaps. Full Cursor skill (Observed, unchanged): [overlay SKILL.md](../overlays/cursor/skills/roadmap/SKILL.md). Distinct from [implementation roadmap](../roadmaps/implementation-roadmap.md) (future runtime work).
 
 ---
 

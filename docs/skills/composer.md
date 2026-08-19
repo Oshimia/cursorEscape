@@ -1,10 +1,10 @@
 # composer
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-20
 
 ## Context
 
-**Target** optional orchestration skill — **Cursor-specific** phased conductor. Full skill: [live import](../research/imported/cursor-global-workflow/skills/composer/SKILL.md). Host-agnostic workflows may omit Composer if another orchestrator enforces the same gates.
+**Target** optional orchestration skill — **Cursor-specific** phased conductor. Full Cursor skill (Observed, unchanged): [overlay SKILL.md](../overlays/cursor/skills/composer/SKILL.md). Host-agnostic workflows may omit Composer if another orchestrator enforces the same gates.
 
 ---
 
@@ -59,4 +59,4 @@ User assigns Composer for multi-phase roadmap execution with Incremental executi
 - [implementation-review](./implementation-review.md)
 - [pre-commit-ci-gate](./pre-commit-ci-gate.md)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md) — transcript audit stays on Composer; not next-reviewer memory
-- [phased-multi-agent](../research/imported/cursor-global-workflow/docs/workflow/phased-multi-agent.md)
+- [phased-multi-agent](../overlays/cursor/docs/workflow/phased-multi-agent.md)

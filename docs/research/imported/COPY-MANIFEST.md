@@ -1,11 +1,11 @@
 # COPY-MANIFEST — imported research
 
-**Last updated:** 2026-08-19  
+**Last updated:** 2026-08-20  
 **Phase:** 2 of 5 (openBuggy); Phase 3 adds AITestSuite + cursor-global-workflow. Status labels on live `~/.cursor` rows updated 2026-08-19 (Observed interim; companion repo Target SoT).
 
 ## Context
 
-Every file under `docs/research/imported/` is a **copy or cursorEscape-authored trimmed index** for navigation. Status **Observed/imported** or **Observed/eval-packaging** unless a Target doc explicitly cites and classifies claims. Live `~/.cursor` rows are **Observed interim Cursor wording** (not forever Target vs this companion repo).
+Every file under `docs/research/imported/` is a **copy or cursorEscape-authored trimmed index** for navigation. Status **Observed/imported** or **Observed/eval-packaging** unless a Target doc explicitly cites and classifies claims. Live `~/.cursor` workflow **bodies as of 2026-08-20** are recorded under [docs/overlays/cursor](../../overlays/cursor/_index.md) (not this manifest). Phase 3 `cursor-global-workflow` copies here remain the 2026-08-17 bannered snapshot.
 
 **Source repos (read-only):**
 

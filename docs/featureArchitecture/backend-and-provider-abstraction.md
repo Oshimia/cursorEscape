@@ -1,6 +1,6 @@
 # Backend and Provider Abstraction
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
@@ -37,7 +37,7 @@ Model provider — BYOK; ClinePass Desired later
 1. **Workflow docs never embed** provider-specific API shapes — adapters translate.
 2. **Role contracts** are host-agnostic markdown; OpenCode agents map role names to native files.
 3. **bug_reviewer** is an OpenCode subagent + skills (`edit: deny`) — not inlined Bugbot logic; openBuggy is **not** the v0 adapter.
-4. **One orchestration parent** per phase owns CI + reviewer launches (live [implementation-review](../research/imported/cursor-global-workflow/skills/implementation-review/SKILL.md)).
+4. **One orchestration parent** per phase owns CI + reviewer launches (live [implementation-review](../overlays/cursor/skills/implementation-review/SKILL.md)).
 5. **T3 does not own** skills/agents — it drives OpenCode (or other) CLIs.
 
 ### Adapter responsibilities (Desired)

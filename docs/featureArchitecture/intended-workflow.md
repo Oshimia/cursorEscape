@@ -1,10 +1,10 @@
 # Intended Workflow
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
-This document is **Target** cursorEscape design for the owner's agentic loop: plan → implement → dual review → closeout. **Loop semantics** (when to plan, dual-gate, verdict bars) are owned here and in [design decisions](../review/design-decisions.md). Live `~/.cursor` (imported under [cursor-global-workflow](../research/imported/cursor-global-workflow/)) is **Observed interim Cursor file wording** until overlay copy-out — not a second procedure SoT. AITestSuite Phase 4 freeze is **Observed/eval-packaging** only. Where freeze disagrees with live Cursor import, cite [workflow-source-delta](../research/imported/workflow-source-delta.md). Stack variation: [skill-source-and-host-overlays](./skill-source-and-host-overlays.md).
+This document is **Target** cursorEscape design for the owner's agentic loop: plan → implement → dual review → closeout. **Loop semantics** (when to plan, dual-gate, verdict bars) are owned here and in [design decisions](../review/design-decisions.md). Current Cursor files: [docs/overlays/cursor](../overlays/cursor/_index.md) (**Observed**, frozen). Phase 3 [cursor-global-workflow](../research/imported/cursor-global-workflow/) import is archaeology. AITestSuite Phase 4 freeze is **Observed/eval-packaging** only. Where freeze disagrees with live Cursor wording, cite [workflow-source-delta](../research/imported/workflow-source-delta.md). Stack variation: [skill-source-and-host-overlays](./skill-source-and-host-overlays.md).
 
 Dual-gate review research (openBuggy) informs leg responsibilities. First recreation host: **T3 Code** (control plane) + **OpenCode** (harness). The bug-finder leg is an OpenCode **`bug_reviewer`** subagent + skills (reviewer-a pattern) — **not** an openBuggy engine requirement ([design decisions](../review/design-decisions.md), [host recreation](../analysis/host-recreation-2026-08.md)).
 
@@ -35,7 +35,7 @@ Discover repo docs (discovery)
 
 ### Dual-gate review (Required)
 
-Aligned with live [implementation-review](../research/imported/cursor-global-workflow/skills/implementation-review/SKILL.md) and openBuggy dual-gate analysis ([recommendation](../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)):
+Aligned with live [implementation-review](../overlays/cursor/skills/implementation-review/SKILL.md) and openBuggy dual-gate analysis ([recommendation](../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)):
 
 | Leg | Role | Target responsibility |
 | --- | ---- | --------------------- |
@@ -56,14 +56,14 @@ Aligned with live [implementation-review](../research/imported/cursor-global-wor
 
 | Tier | cursorEscape (docs-only) | Runtime repos (future) |
 | ---- | ------------------------ | ---------------------- |
-| **Fast** | Hub/index link integrity for phase files; claim taxonomy spot-check | Repo-specific lint/test per [ci-ladder](../research/imported/cursor-global-workflow/docs/workflow/ci-ladder.md) |
+| **Fast** | Hub/index link integrity for phase files; claim taxonomy spot-check | Repo-specific lint/test per [ci-ladder](../overlays/cursor/docs/workflow/ci-ladder.md) |
 | **Full** | Fast + deliverable checklist + no runtime scaffolding + no pretend-settled Unknowns | Commit-grade suite; never paired with reviewers |
 
 Do **not** copy freeze baseline's hardcoded four npm commands into cursorEscape pre-runtime CI ([workflow-source-delta](../research/imported/workflow-source-delta.md#ci-ladder--fast-vs-full-major-delta)).
 
 ### Phased multi-agent (Nice-to-have / Cursor-specific)
 
-On initialization-style roadmaps, **Composer** conducts: phase subagent implements, owns review loop, reaches dual APPROVED, runs first Full CI when Full ≠ `n/a` (or returns after dual APPROVED when Full = `n/a`); Composer QCs report + transcripts, runs second Full CI when Full ≠ `n/a` (or obtains user ack when Full = `n/a`), then local commit (never push) ([composer](../research/imported/cursor-global-workflow/skills/composer/SKILL.md)). Host-agnostic equivalent: any orchestrator that enforces the same gates without Cursor Task IDs (OpenCode parent + Task subagents).
+On initialization-style roadmaps, **Composer** conducts: phase subagent implements, owns review loop, reaches dual APPROVED, runs first Full CI when Full ≠ `n/a` (or returns after dual APPROVED when Full = `n/a`); Composer QCs report + transcripts, runs second Full CI when Full ≠ `n/a` (or obtains user ack when Full = `n/a`), then local commit (never push) ([composer](../overlays/cursor/skills/composer/SKILL.md)). Host-agnostic equivalent: any orchestrator that enforces the same gates without Cursor Task IDs (OpenCode parent + Task subagents).
 
 ### What cursorEscape does not own in v0
 

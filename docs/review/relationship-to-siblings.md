@@ -1,6 +1,6 @@
 # Relationship to Sibling Repositories
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
@@ -16,7 +16,7 @@ cursorEscape is the owner's **skill/workflow manager** (docs-first until copy-ou
 | ------- | ------------------------------- | ----- |
 | **openBuggy** | Market/harness **research** archive; BugBot characterization; optional later bug engine — **not** a v0 runtime dependency | **No sync** — one-time import under `docs/research/imported/openBuggy/` with [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md) |
 | **AITestSuite** | Eval packaging for plan/review workflow (frozen baselines, scoring framework, USER_INPUT_STOPS) | **No sync** — Phase 3 import only; Observed/eval-packaging label |
-| **Live `~/.cursor`** | **Observed interim** Cursor loop wording (skills, rules, agents, workflow docs). Companion repo is **Target** contract SoT. | **No sync** — Phase 3 import + `workflow-source-delta.md`; live remains Cursor reference until overlay extract |
+| **Live `~/.cursor`** | **Observed** Cursor loop. Skills, rules, agents, and `docs/workflow` extracted to [docs/overlays/cursor](../overlays/cursor/_index.md) (verbatim). Companion repo is **Target** contract SoT. | **No sync** — overlay extract is a dated copy; live install still loads `~/.cursor` |
 
 ### openBuggy (imported in Phase 2)
 
@@ -33,7 +33,7 @@ cursorEscape is the owner's **skill/workflow manager** (docs-first until copy-ou
 ### Live `~/.cursor` (imported in Phase 3)
 
 - **What we took:** All nine `docs/workflow/` files, three rules (including `pre-commit-ci-gate`), five skills (+ co-located `user-rules-snippet.md` where present), and two agents — mirrored under `imported/cursor-global-workflow/`.
-- **Cursor file reference (Observed interim):** Live tree remains owner Cursor wording until overlay extract. Recreation maps **Target** contracts in this repo to OpenCode. Import is a dated snapshot for archaeology and Phase 4 synthesis.
+- **Cursor file reference (Observed):** [docs/overlays/cursor](../overlays/cursor/_index.md) (2026-08-20, byte-identical to live at extract: skills, rules, agents, `docs/workflow`). Phase 3 import under `imported/cursor-global-workflow/` remains a bannered 2026-08-17 snapshot. Recreation maps **Target** contracts in this repo to OpenCode.
 
 ### Replaceability principle
 

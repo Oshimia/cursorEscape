@@ -1,6 +1,6 @@
 # Instruction Layering
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
@@ -8,7 +8,7 @@ This document is **Target** design for how workflow instructions are **budgeted 
 
 **Required** portable intent: keep always-on text minimal; load skills, deep procedure docs, and role agents only when needed. Cursor User Rules, `.mdc` rules, and `disable-model-invocation` are **Cursor-specific** mappings of that intent.
 
-Observed Cursor files under [cursor-global-workflow](../research/imported/cursor-global-workflow/) illustrate the pattern and some anti-patterns. Live `~/.cursor` is **Observed interim Cursor wording** until overlay extract (not a procedure SoT). This page is SoT for the portable layering contract. Companion-repo contracts are Target inventory ([design decisions](../review/design-decisions.md)).
+Observed Cursor files under [docs/overlays/cursor](../overlays/cursor/_index.md) illustrate the pattern and some anti-patterns. Live `~/.cursor` is the running install; the overlay is the in-repo **Observed** record (not Target procedure). This page is SoT for the portable layering contract. Companion-repo contracts are Target inventory ([design decisions](../review/design-decisions.md)).
 
 ---
 
@@ -33,13 +33,13 @@ This is a **context-budget** optimization. Loop gate semantics stay in [intended
 
 **Desired:** Keep always-on *gate* text as small as possible while gate behavior remains reliable. There is **no fixed line budget** — not for the whole always-on file, and not as “≤N new lines” Success/Verification metrics. Measure success by expected gate behavior, not character or line count. Always-on sizing is still being dogfooded; do not invent a numeric budget while that is unsettled. Always-on should cover **workflow gates** only — not operator preference rules (git/PR habits, communication style, frontend taste).
 
-**Observed (Cursor):** Three lean [User Rules snippets](../research/imported/cursor-global-workflow/skills/implementation-review/user-rules-snippet.md) (plan review, implementation review, optional composer) plus parallel `alwaysApply` `.mdc` rules that note preferring the snippets for enforcement across Cursor versions. That dual-channel state is an Observed Cursor detail, not a Target requirement. Target hosts should prefer **one** always-on surface when the host allows it.
+**Observed (Cursor):** Three lean [User Rules snippets](../overlays/cursor/skills/implementation-review/user-rules-snippet.md) (plan review, implementation review, optional composer) plus parallel `alwaysApply` `.mdc` rules that note preferring the snippets for enforcement across Cursor versions. That dual-channel state is an Observed Cursor detail, not a Target requirement. Target hosts should prefer **one** always-on surface when the host allows it.
 
 **Cursor-specific mapping:** Customize → Rules → User Rules; optional `alwaysApply` rules under `~/.cursor/rules/`.
 
 ### Escalation *when* ownership (Required)
 
-**Sole SoT** for Escalation *when* triggers: Target [implementation-plan](../skills/implementation-plan.md). Deep [plan-agent-context](../research/imported/cursor-global-workflow/docs/workflow/plan-agent-context.md) (Observed import) and host mirrors keep **field specimen / required headings only** and must **point to** that skill — no competing “≤3 phases usually no” when-table.
+**Sole SoT** for Escalation *when* triggers: Target [implementation-plan](../skills/implementation-plan.md). Deep [plan-agent-context](../overlays/cursor/docs/workflow/plan-agent-context.md) (Observed overlay) and host mirrors keep **field specimen / required headings only** and must **point to** that skill — no competing “≤3 phases usually no” when-table.
 
 ### Layer 2 — Skills (on-demand)
 
@@ -47,7 +47,7 @@ This is a **context-budget** optimization. Loop gate semantics stay in [intended
 
 **Cursor-specific mapping:** `disable-model-invocation: true` on SKILL.md (agent loads via skill tool / explicit read, not ambient injection).
 
-**Positive Observed example:** [documentation-architecture SKILL.md](../research/imported/cursor-global-workflow/skills/documentation-architecture/SKILL.md) is a lean entry that points to deep [documentation-architecture.md](../research/imported/cursor-global-workflow/docs/workflow/documentation-architecture.md).
+**Positive Observed example:** [documentation-architecture SKILL.md](../overlays/cursor/skills/documentation-architecture/SKILL.md) is a lean entry that points to deep [documentation-architecture.md](../overlays/cursor/docs/workflow/documentation-architecture.md).
 
 Target skill contracts: [docs/skills/](../skills/_index.md).
 
@@ -55,9 +55,9 @@ Target skill contracts: [docs/skills/](../skills/_index.md).
 
 **Required:** Full procedures (`discovery`, `iterative-plan-review`, `iterative-code-review`, `ci-ladder`, `plan-agent-context`, `phased-multi-agent`, etc.) live in companion workflow docs. Load only when a skill or escalated plan says so.
 
-**Example:** [plan-agent-context.md](../research/imported/cursor-global-workflow/docs/workflow/plan-agent-context.md) must **not** be pasted into always-on rules or the plan_reviewer output schema — load only when drafting or reviewing escalated plans.
+**Example:** [plan-agent-context.md](../overlays/cursor/docs/workflow/plan-agent-context.md) must **not** be pasted into always-on rules or the plan_reviewer output schema — load only when drafting or reviewing escalated plans.
 
-Observed index: [workflow README](../research/imported/cursor-global-workflow/docs/workflow/README.md). Host adapters may mirror under a host-local `docs/workflow/` path; contracts remain in this repo.
+Observed index: [workflow README](../overlays/cursor/docs/workflow/README.md). Host adapters may mirror under a host-local `docs/workflow/` path; contracts remain in this repo.
 
 ### Layer 4 — Role agents
 
@@ -65,7 +65,7 @@ Observed index: [workflow README](../research/imported/cursor-global-workflow/do
 
 **Lean SoT:** Target pages under [docs/agents/](../agents/_index.md) (e.g. [plan_reviewer.md](../agents/plan_reviewer.md), [production_readiness_reviewer.md](../agents/production_readiness_reviewer.md)).
 
-**Caution — Observed imports:** Imported Cursor agent snapshots such as [plan-reviewer.md](../research/imported/cursor-global-workflow/agents/plan-reviewer.md) and [reviewer-a.md](../research/imported/cursor-global-workflow/agents/reviewer-a.md) embed large procedure bodies. Treat those as **legacy / bloated reference snapshots**, not the recreation pattern. Whether live Cursor agent files are slimmed later depends on where the workflow lives: if it stays on Cursor for a while, those files may be updated regularly; if the workflow moves to another host, Cursor copies are likely deprecated rather than maintained as SoT.
+**Caution — Observed Cursor agents:** Overlay files [plan-reviewer.md](../overlays/cursor/agents/plan-reviewer.md) and [reviewer-a.md](../overlays/cursor/agents/reviewer-a.md) embed large procedure bodies. Treat those as **legacy / bloated live Cursor wording**, not the recreation pattern. Whether live Cursor agent files are slimmed later depends on where the workflow lives: if it stays on Cursor for a while, those files may be updated regularly; if the workflow moves to another host, Cursor copies are likely deprecated rather than maintained as SoT.
 
 ### Anti-patterns (Required non-goals)
 

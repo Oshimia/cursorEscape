@@ -1,6 +1,6 @@
 # cursorEscape Roadmap
 
-**Last updated:** 2026-08-19  
+**Last updated:** 2026-08-20  
 **Status:** Documentation foundation — initialization complete; runtime not started. First recreation: **T3 Code + OpenCode** (external). Identity: **skill/workflow manager across stacks** (not machines).
 
 This repository is the owner's **skill and workflow manager**: preserve and evolve personal agentic skills and the plan → implement → dual review loop, and apply them across stacks without inseparable dependence on Cursor, a single IDE, or a single model provider. Analog: Theo `fleet` ([Observed](./research/theo-fleet-skill-management.md)). Non-goal: multi-machine sync.
@@ -9,7 +9,7 @@ This repository is the owner's **skill and workflow manager**: preserve and evol
 
 ## Context
 
-cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy (feature architecture, SOPs, research, analysis, roadmaps) adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is **Observed interim Cursor wording**; this repo is **Target** contract SoT. Stack variation: [skill source and host overlays](./featureArchitecture/skill-source-and-host-overlays.md).
+cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy (feature architecture, SOPs, research, analysis, roadmaps) adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is a **Phase 3 archaeology** snapshot; current Cursor workflow files: [overlays/cursor](./overlays/cursor/_index.md). This repo is **Target** contract SoT. Stack variation: [skill source and host overlays](./featureArchitecture/skill-source-and-host-overlays.md).
 
 **First host attempt:** T3 Code (control plane) + OpenCode (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Operator study: [host recreation](./analysis/host-recreation-2026-08.md).
 
@@ -43,7 +43,7 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 | Target synthesizing architecture docs | **Complete** (Phase 4) — [feature architecture index](./featureArchitecture/_index.md) |
 | Agent & skill contracts | **Complete** (Phase 4) — [agents](./agents/_index.md) · [skills](./skills/_index.md) |
 | Implementation roadmap | [implementation-roadmap.md](./roadmaps/implementation-roadmap.md) — R0 dogfood |
-| Skill-manager identity | **Phase 1 committed** (`9c104b1`). **Phase 2 overlay FA landed** — [skill-source-and-host-overlays](./featureArchitecture/skill-source-and-host-overlays.md). |
+| Skill-manager identity | **Phase 1 committed** (`9c104b1`). **Phase 2 overlay FA landed.** **Cursor workflow overlay extract** — [docs/overlays/cursor](./overlays/cursor/_index.md). |
 
 ---
 
@@ -56,6 +56,7 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 | [`featureArchitecture/`](./featureArchitecture/_index.md) | Intended system behavior (Target) |
 | [`agents/`](./agents/_index.md) | Host-agnostic role contracts |
 | [`skills/`](./skills/_index.md) | Host-agnostic skill contracts |
+| [`overlays/`](./overlays/_index.md) | Host-native recorded files (Cursor workflow extract) |
 | [`research/`](./research/_index.md) | Sourced facts and imported sibling research |
 | [`SOPs/`](./SOPs/_index.md) | How maintainers and future implementers work |
 | [`analysis/`](./analysis/_index.md) | Operator studies of local workflows |

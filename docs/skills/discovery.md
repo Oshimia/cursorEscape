@@ -1,10 +1,10 @@
 # discovery
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
-**Target** skill contract for repository documentation discovery before changes. Replaces freeze **reference-docs** skill for live owner workflow ([workflow-source-delta](../research/imported/workflow-source-delta.md)). Live doc: [discovery.md](../research/imported/cursor-global-workflow/docs/workflow/discovery.md).
+**Target** skill contract for repository documentation discovery before changes. Replaces freeze **reference-docs** skill for live owner workflow ([workflow-source-delta](../research/imported/workflow-source-delta.md)). Live doc: [discovery.md](../overlays/cursor/docs/workflow/discovery.md).
 
 ---
 
@@ -34,7 +34,7 @@ Before any non-trivial doc or code change — first step of [implementation-plan
 
 ### Freeze note (Observed)
 
-AITestSuite baseline includes [reference-docs skill](../research/imported/AITestSuite/tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/reference-docs/SKILL.md) — use when evaluating freeze baselines. This page is the **Target** discovery contract in the companion repo; the live import under [cursor-global-workflow](../research/imported/cursor-global-workflow/docs/workflow/discovery.md) is **Observed interim** Cursor wording.
+AITestSuite baseline includes [reference-docs skill](../research/imported/AITestSuite/tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/reference-docs/SKILL.md) — use when evaluating freeze baselines. This page is the **Target** discovery contract in the companion repo; the live overlay under [discovery.md](../overlays/cursor/docs/workflow/discovery.md) is **Observed** Cursor wording.
 
 ### Related roles
 

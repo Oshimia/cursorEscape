@@ -1,6 +1,6 @@
 # Clean Context and Isolation
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
@@ -8,7 +8,7 @@ This document is **Target** design for **isolated child handoffs** — how paren
 
 **Required** portable intent: plan_reviewer, production_readiness_reviewer, bug_reviewer, and Composer phase subagents run in isolated child context; the parent packs everything they need into the invoke message. Cursor Task / OpenCode Task child sessions are **Cursor-specific** / host mappings of that intent.
 
-Observed imports under [cursor-global-workflow](../research/imported/cursor-global-workflow/) illustrate the pattern (e.g. “You run in isolated context”). Live `~/.cursor` is **Observed interim Cursor wording** until overlay extract (not a procedure SoT). This page is SoT for the portable isolation contract.
+Observed overlay agents under [docs/overlays/cursor/agents](../overlays/cursor/agents/) illustrate the pattern (e.g. “You run in isolated context”). Live `~/.cursor` is the running install; the overlay is the in-repo **Observed** record. This page is SoT for the portable isolation contract.
 
 ---
 

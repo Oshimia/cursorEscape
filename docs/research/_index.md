@@ -1,12 +1,12 @@
 # Research Documentation
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
 This section holds **sourced** market and product research plus **imported** sibling research (openBuggy, AITestSuite, live `~/.cursor` workflow) that informs cursorEscape architecture and evaluation.
 
-**Status:** Phase 3 imports complete. Phase 4 added Target synthesis [preliminary-backend-landscape.md](./preliminary-backend-landscape.md). Identity research: [theo-fleet-skill-management.md](./theo-fleet-skill-management.md) (2026-08-19). Live `~/.cursor` import is **Observed interim Cursor wording**. Overlay FA: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md).
+**Status:** Phase 3 imports complete. Phase 4 added Target synthesis [preliminary-backend-landscape.md](./preliminary-backend-landscape.md). Identity research: [theo-fleet-skill-management.md](./theo-fleet-skill-management.md) (2026-08-19). Current Cursor workflow: [docs/overlays/cursor](../overlays/cursor/_index.md). Overlay FA: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md).
 
 ---
 
@@ -63,13 +63,13 @@ Sibling relationship (Target): [relationship-to-siblings](../review/relationship
 | ---- | --- |
 | Workflow source delta (authored) | [workflow-source-delta.md](./imported/workflow-source-delta.md) — Observed freeze-vs-live archaeology |
 | AITestSuite Phase 4 freeze / eval packaging | [imported/AITestSuite/](./imported/AITestSuite/) |
-| Live `~/.cursor` workflow (**Observed interim** Cursor wording) | [imported/cursor-global-workflow/](./imported/cursor-global-workflow/) |
+| Live `~/.cursor` workflow (Phase 3 bannered snapshot) | [imported/cursor-global-workflow/](./imported/cursor-global-workflow/) |
+| Current Cursor workflow (verbatim extract) | [docs/overlays/cursor](../overlays/cursor/_index.md) |
 
 Key live workflow entry points in the import mirror:
 
 - [cursor-global-workflow/docs/workflow/README.md](./imported/cursor-global-workflow/docs/workflow/README.md)
-- [implementation-review skill](./imported/cursor-global-workflow/skills/implementation-review/SKILL.md)
-- [composer skill](./imported/cursor-global-workflow/skills/composer/SKILL.md)
+- Current overlay: [workflow README](../overlays/cursor/docs/workflow/README.md), [implementation-review](../overlays/cursor/skills/implementation-review/SKILL.md), [reviewer-a](../overlays/cursor/agents/reviewer-a.md)
 
 ---
 
@@ -77,7 +77,7 @@ Key live workflow entry points in the import mirror:
 
 1. Host-only absolute paths in imports are annotated in COPY-MANIFEST.
 2. U2/U8 settled in [unresolved questions](../review/unresolved-architectural-questions.md); remaining Unknowns stay labeled.
-3. Do not treat live `~/.cursor` import as Target overlay SoT; contracts in this repo are Target. Overlay FA: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md).
+3. Do not treat the Phase 3 live `~/.cursor` import as Target overlay SoT. Current Cursor workflow files: [overlays/cursor](../overlays/cursor/_index.md). Contracts in this repo are Target. Overlay FA: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md).
 
 ---
 

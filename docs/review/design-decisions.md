@@ -1,6 +1,6 @@
 # Design Decisions & Project Intent
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 This document is the **canonical record of project intent** for cursorEscape while the repository is documentation-only. Implementation must not contradict these decisions without updating this file in the same change set.
 
@@ -29,7 +29,7 @@ cursorEscape is the owner's **skill and workflow manager**: preserve and evolve 
 | ----- | -------- |
 | **Project name** | **cursorEscape** (folder and display name). |
 | **Primary job** | **Manage skills and workflows that work** — plan, implement, dual review, repository discovery — as portable contracts in this repo, applied across stacks; later copy-out of thin host overlays (not authorized yet). |
-| **Canonical skill tree (Target)** | This companion repo is the intended SoT for skill/agent/gate inventory. Host dirs (`~/.config/opencode`, `~/.cursor`) are **copy-out targets**, not a second authored procedure tree. Files are **not** moved in the identity/overlay-docs work. |
+| **Canonical skill tree (Target)** | Portable contracts live in this repo (`docs/skills`, `docs/agents`). Host dirs (`~/.config/opencode`, `~/.cursor`) are **copy-out targets**, not a second authored procedure tree. Cursor-native workflow files are recorded under [docs/overlays/cursor](../overlays/cursor/_index.md) (**Observed**, bodies unchanged). Copy-out into host dirs is not authorized. |
 | **Personal workflow first** | Success = the owner's loop works reliably on their repos, not market share or a general IDE product. |
 | **Not building a general IDE** | cursorEscape is a **workspace-pointing companion**, not a from-scratch editor or Cursor clone. |
 | **First host attempt** | **T3 Code** (control plane: threads, diffs, file preview) + **OpenCode** (harness: skills, named subagents, parallel Task dual-gate). T3 is not a VS Code replacement and does not own agent/skill contracts. See [host recreation study](../analysis/host-recreation-2026-08.md). |
@@ -66,7 +66,7 @@ cursorEscape is the owner's **skill and workflow manager**: preserve and evolve 
 3. Phase 4 Target docs classify claims (Desired / Required / Nice-to-have / Cursor-specific / Unknown) — see [feature architecture index](../featureArchitecture/_index.md).
 4. Sibling relationships documented in [relationship-to-siblings](./relationship-to-siblings.md); openBuggy is not a v0 runtime dependency.
 5. R0 spike must still prove OpenCode parallel Tasks + parent-owned Fast CI honesty ([implementation roadmap](../roadmaps/implementation-roadmap.md)).
-6. Overlay FA (shared procedure + additive host constraints) is Target staging — do not dual-author Cursor vs OpenCode review loops. Init report remains archaeology; do not treat its Q3/Q6 body as live adapter or openBuggy-required text.
+6. Overlay FA (shared procedure + additive host constraints) is Target staging — do not dual-author Cursor vs OpenCode review loops. Cursor workflow overlay extract: [docs/overlays/cursor](../overlays/cursor/_index.md). Init report remains archaeology; do not treat its Q3/Q6 body as live adapter or openBuggy-required text.
 
 ---
 

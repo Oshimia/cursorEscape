@@ -1,10 +1,10 @@
 # Skill Contracts
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
-Host-agnostic **Target** summaries of workflow skills. Portable contracts live in this folder. Live `~/.cursor` (imported [cursor-global-workflow](../research/imported/cursor-global-workflow/skills/)) is **Observed interim Cursor file wording** until overlay copy-out — not a second authored procedure tree. These pages avoid Cursor Task/subagent IDs.
+Host-agnostic **Target** summaries of workflow skills. Portable contracts live in this folder. Current Cursor workflow files (unchanged bodies) live under [docs/overlays/cursor](../overlays/cursor/_index.md) (**Observed** extract). The 2026-08-17 bannered copy remains under [cursor-global-workflow](../research/imported/cursor-global-workflow/skills/) (archaeology). These pages avoid Cursor Task/subagent IDs.
 
 AITestSuite freeze includes a **reference-docs** skill — live owner workflow uses [discovery](./discovery.md) instead ([workflow-source-delta](../research/imported/workflow-source-delta.md)).
 
@@ -14,26 +14,26 @@ AITestSuite freeze includes a **reference-docs** skill — live owner workflow u
 
 ### Core skills (Required)
 
-| Skill | Contract | Live import |
-| ----- | -------- | ----------- |
-| implementation-plan | [implementation-plan.md](./implementation-plan.md) | [SKILL.md](../research/imported/cursor-global-workflow/skills/implementation-plan/SKILL.md) |
-| implementation-review | [implementation-review.md](./implementation-review.md) | [SKILL.md](../research/imported/cursor-global-workflow/skills/implementation-review/SKILL.md) |
-| discovery | [discovery.md](./discovery.md) | [discovery.md](../research/imported/cursor-global-workflow/docs/workflow/discovery.md) |
-| plan-review (concepts) | [plan-review.md](./plan-review.md) | [iterative-plan-review](../research/imported/cursor-global-workflow/docs/workflow/iterative-plan-review.md) |
+| Skill | Contract | Cursor overlay (Observed) |
+| ----- | -------- | ------------------------- |
+| implementation-plan | [implementation-plan.md](./implementation-plan.md) | [SKILL.md](../overlays/cursor/skills/implementation-plan/SKILL.md) |
+| implementation-review | [implementation-review.md](./implementation-review.md) | [SKILL.md](../overlays/cursor/skills/implementation-review/SKILL.md) |
+| discovery | [discovery.md](./discovery.md) | [discovery.md](../overlays/cursor/docs/workflow/discovery.md) |
+| plan-review (concepts) | [plan-review.md](./plan-review.md) | [iterative-plan-review](../overlays/cursor/docs/workflow/iterative-plan-review.md) |
 
 ### Gates / on-demand policy
 
 | Skill | Contract | Live import |
 | ----- | -------- | ----------- |
-| pre-commit-ci-gate | [pre-commit-ci-gate.md](./pre-commit-ci-gate.md) | [pre-commit-ci-gate.mdc](../research/imported/cursor-global-workflow/rules/pre-commit-ci-gate.mdc) (rule, `alwaysApply: false` — not a SKILL.md) |
+| pre-commit-ci-gate | [pre-commit-ci-gate.md](./pre-commit-ci-gate.md) | [pre-commit-ci-gate.mdc](../overlays/cursor/rules/pre-commit-ci-gate.mdc) (rule, `alwaysApply: false` — not a SKILL.md) |
 
 ### Optional orchestration (Nice-to-have / Cursor-specific)
 
 | Skill | Contract | Notes |
 | ----- | -------- | ----- |
-| composer | [composer.md](./composer.md) | Phased conductor — Cursor-specific |
-| roadmap | [roadmap.md](./roadmap.md) | Multi-phase handoff authoring |
-| documentation-architecture | [documentation-architecture.md](./documentation-architecture.md) | Bootstrap SOPs/FA layout; [SKILL.md](../research/imported/cursor-global-workflow/skills/documentation-architecture/SKILL.md) |
+| composer | [composer.md](./composer.md) | Phased conductor — Cursor-specific; [SKILL.md](../overlays/cursor/skills/composer/SKILL.md) |
+| roadmap | [roadmap.md](./roadmap.md) | Multi-phase handoff authoring; [SKILL.md](../overlays/cursor/skills/roadmap/SKILL.md) |
+| documentation-architecture | [documentation-architecture.md](./documentation-architecture.md) | Bootstrap SOPs/FA layout; [SKILL.md](../overlays/cursor/skills/documentation-architecture/SKILL.md) |
 
 ### Skill contract fields (Required)
 
@@ -43,8 +43,8 @@ Each page states: **When to use**, **Workflow steps**, **Outputs**, **Must not**
 
 ## Implications / open questions
 
-1. Runtime may mirror skills under `.cursor/skills/` or host registry — contracts stay in `docs/skills/`.
-2. Companion repo is **Target** contract SoT. Live `~/.cursor` is **Observed interim Cursor wording** (not a procedure SoT) until overlay copy-out. Copy-out **timing** remains **Unknown** (not authorized this phase). Not a two-way peer-sync Unknown.
+1. Runtime may mirror skills under a host registry — portable contracts stay in `docs/skills/`. Do not treat repo-root `.cursor/skills` as this archive's layout.
+2. Companion repo is **Target** contract SoT. Cursor-native files: [overlays/cursor](../overlays/cursor/_index.md) (**Observed**, frozen). Live `~/.cursor/skills` is still the running Cursor install. Copy-out **timing** remains **Unknown**.
 
 ---
 
@@ -54,4 +54,5 @@ Each page states: **When to use**, **Workflow steps**, **Outputs**, **Must not**
 - [Intended workflow](../featureArchitecture/intended-workflow.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md) — skills stay on-demand; always-on stays thin
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
+- [Cursor overlay skills](../overlays/cursor/_index.md)
 - [Workflow source delta](../research/imported/workflow-source-delta.md)

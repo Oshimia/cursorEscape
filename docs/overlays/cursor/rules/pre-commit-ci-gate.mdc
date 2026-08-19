@@ -1,0 +1,19 @@
+---
+description: >-
+  Conceptual Fast/Full pre-commit gate — discover repo CI; degrade for small
+  repos; defer to project pre-commit rule when present
+alwaysApply: false
+---
+
+# Pre-commit CI gate (fallback)
+
+**Fallback only.** If the project has `.cursor/rules/pre-commit-ci-gate.mdc` (or equivalent), **follow that** — do not apply a second Full command set.
+
+Otherwise:
+
+1. Map Fast/Full via `~/.cursor/docs/workflow/ci-ladder.md` (and project README/scripts).
+2. Before any `git commit`, Full must pass — or Full = `n/a` with **explicit user acknowledgment**.
+3. Never substitute Fast for Full when Full exists.
+4. If install/test steps fail due to locked `node_modules` / busy processes, ask the user to stop those processes and re-run Full.
+
+**Composer:** same Full (or `n/a` ack) before automatic local phase commits; never `git push`.

@@ -1,10 +1,10 @@
 # documentation-architecture
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-20
 
 ## Context
 
-**Target** skill contract for bootstrapping or extending repository documentation with a procedures-vs-design layout. Full skill: [live import](../research/imported/cursor-global-workflow/skills/documentation-architecture/SKILL.md). Deep procedure: [documentation-architecture.md](../research/imported/cursor-global-workflow/docs/workflow/documentation-architecture.md). Positive example of lean skill → deep doc ([instruction layering](../featureArchitecture/instruction-layering.md)).
+**Target** skill contract for bootstrapping or extending repository documentation with a procedures-vs-design layout. Full Cursor skill (Observed, unchanged): [overlay SKILL.md](../overlays/cursor/skills/documentation-architecture/SKILL.md). Deep procedure: [documentation-architecture.md](../overlays/cursor/docs/workflow/documentation-architecture.md). Positive example of lean skill → deep doc ([instruction layering](../featureArchitecture/instruction-layering.md)).
 
 ---
 
@@ -61,4 +61,4 @@
 - [roadmap](./roadmap.md)
 - [Documenting this repo (SOP)](../SOPs/documenting-this-repo.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md)
-- [Live deep doc](../research/imported/cursor-global-workflow/docs/workflow/documentation-architecture.md)
+- [Live deep doc](../overlays/cursor/docs/workflow/documentation-architecture.md)

@@ -1,6 +1,6 @@
 # Cursor Behavior to Reproduce
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
@@ -32,12 +32,12 @@ This document lists **Observed** Cursor behaviors worth preserving in a portable
 
 | Observed behavior | Source | Delta note |
 | ----------------- | ------ | ---------- |
-| implementation-plan → plan-reviewer loop | Live [implementation-plan](../research/imported/cursor-global-workflow/skills/implementation-plan/SKILL.md) | Prefer live import over freeze; companion repo owns Target loop semantics |
-| implementation-review Fast → dual → Full | Live [implementation-review](../research/imported/cursor-global-workflow/skills/implementation-review/SKILL.md) | Freeze lacks Fast/Full split ([delta](../research/imported/workflow-source-delta.md)) |
-| Composer phase conductor | Live [composer](../research/imported/cursor-global-workflow/skills/composer/SKILL.md) | **Cursor-specific** optional |
-| Thin User Rules snippets + on-demand skills (`disable-model-invocation`) + deep `docs/workflow` | Live [user-rules-snippet](../research/imported/cursor-global-workflow/skills/implementation-review/user-rules-snippet.md) + SKILL.md frontmatter | **Required** portable pattern — [instruction layering](./instruction-layering.md); Observed bloated agent files are **not** the agent-layer ideal |
-| Isolated subagent context; parent packs invoke; no prior review transcripts | Live [plan-reviewer](../research/imported/cursor-global-workflow/agents/plan-reviewer.md) / [reviewer-a](../research/imported/cursor-global-workflow/agents/reviewer-a.md) opener lines | **Required** — [clean-context isolation](./clean-context-isolation.md) |
-| Deferred pre-commit Full gate (`alwaysApply: false`) | Live [pre-commit-ci-gate.mdc](../research/imported/cursor-global-workflow/rules/pre-commit-ci-gate.mdc) | **Required** semantics — [pre-commit-ci-gate](../skills/pre-commit-ci-gate.md) |
+| implementation-plan → plan-reviewer loop | Live [implementation-plan](../overlays/cursor/skills/implementation-plan/SKILL.md) | Prefer live overlay over freeze; companion repo owns Target loop semantics |
+| implementation-review Fast → dual → Full | Live [implementation-review](../overlays/cursor/skills/implementation-review/SKILL.md) | Freeze lacks Fast/Full split ([delta](../research/imported/workflow-source-delta.md)) |
+| Composer phase conductor | Live [composer](../overlays/cursor/skills/composer/SKILL.md) | **Cursor-specific** optional |
+| Thin User Rules snippets + on-demand skills (`disable-model-invocation`) + deep `docs/workflow` | Live [user-rules-snippet](../overlays/cursor/skills/implementation-review/user-rules-snippet.md) + SKILL.md frontmatter | **Required** portable pattern — [instruction layering](./instruction-layering.md); Observed bloated agent files are **not** the agent-layer ideal |
+| Isolated subagent context; parent packs invoke; no prior review transcripts | Live [plan-reviewer](../overlays/cursor/agents/plan-reviewer.md) / [reviewer-a](../overlays/cursor/agents/reviewer-a.md) opener lines | **Required** — [clean-context isolation](./clean-context-isolation.md) |
+| Deferred pre-commit Full gate (`alwaysApply: false`) | Live [pre-commit-ci-gate.mdc](../overlays/cursor/rules/pre-commit-ci-gate.mdc) | **Required** semantics — [pre-commit-ci-gate](../skills/pre-commit-ci-gate.md) |
 
 ### Behaviors explicitly not to reproduce
 

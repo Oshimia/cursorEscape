@@ -4,7 +4,7 @@
 
 ## Context
 
-**Target** role contract. Reviews plans before implementation. Maps to live [plan-reviewer](../research/imported/cursor-global-workflow/agents/plan-reviewer.md) (Observed file) with host-agnostic interface.
+**Target** role contract. Reviews plans before implementation. Maps to live [plan-reviewer](../overlays/cursor/agents/plan-reviewer.md) (Observed overlay file) with host-agnostic interface.
 
 ---
 

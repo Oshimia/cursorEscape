@@ -1,10 +1,10 @@
 # production_readiness_reviewer
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-20
 
 ## Context
 
-**Target** role contract. Production-readiness / process leg of the dual gate. Semantically aligned with live **reviewer-a** ([Observed agent file](../research/imported/cursor-global-workflow/agents/reviewer-a.md)) and openBuggy "Reviewer-a" analysis — host-agnostic name here.
+**Target** role contract. Production-readiness / process leg of the dual gate. Semantically aligned with live **reviewer-a** ([Observed overlay file](../overlays/cursor/agents/reviewer-a.md)) and openBuggy "Reviewer-a" analysis — host-agnostic name here.
 
 ---
 
@@ -47,7 +47,7 @@ Verdict: **APPROVED** only when loop-blocking lists are `"None"`.
 
 ### Model
 
-**Desired:** `composer-2.5` — config override ([review-subagent-models](../research/imported/cursor-global-workflow/docs/workflow/review-subagent-models.md)).
+**Desired:** `composer-2.5` — config override ([review-subagent-models](../overlays/cursor/docs/workflow/review-subagent-models.md)).
 
 ---
 
