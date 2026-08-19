@@ -9,7 +9,7 @@ This repository is the owner's **skill and workflow manager**: preserve and evol
 
 ## Context
 
-cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy (feature architecture, SOPs, research, analysis, roadmaps) adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is a **Phase 3 archaeology** snapshot; current Cursor workflow files: [overlays/cursor](./overlays/cursor/_index.md). This repo is **Target** contract SoT. Stack variation: [skill source and host overlays](./featureArchitecture/skill-source-and-host-overlays.md).
+cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is a **Phase 3 archaeology** snapshot; current Cursor overlay: [overlays/cursor](./overlays/cursor/_index.md) (fat interim extract). Gold-base contracts are **Target** SoT (Approach A — interim: `docs/skills/`, `docs/agents/`). Stack variation: [skill source and host overlays](./featureArchitecture/skill-source-and-host-overlays.md).
 
 **First host attempt:** T3 Code (control plane) + OpenCode (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Operator study: [host recreation](./analysis/host-recreation-2026-08.md).
 

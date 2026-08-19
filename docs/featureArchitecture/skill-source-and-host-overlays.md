@@ -16,30 +16,47 @@ Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 
 ### Job (Required)
 
-This repo is the **canonical manager** of portable skills, agent roles, always-on gates, and (later) thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`) are **copy-out / install targets**, not a second authored procedure tree. Copy-out **into** those dirs is **not authorized**. Cursor-native workflow files (skills, rules, agents, `docs/workflow`) are recorded under [docs/overlays/cursor](../overlays/cursor/_index.md) (Observed verbatim extract). Do not create repo-root `adapters/` directories.
+This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and (later) thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`) are **copy-out / install targets**, not a second authored procedure tree. Copy-out **into** those dirs is **not authorized**. Cursor-native workflow files are recorded under [docs/overlays/cursor](../overlays/cursor/_index.md) (Observed interim extract; thin wrappers in Phase 5). Do not create repo-root `adapters/` directories.
+
+### Target taxonomy — Approach A (Required)
+
+**Approach A (locked):** Gold procedure and contracts live at **repo-root** bases (`workflow/`, `skills/`, `agents/`, `rules/`). The Cursor overlay becomes **thin wrappers** in Phase 5 that point at those bases. `docs/skills/` and `docs/agents/` fold into root bases in Phase 4; `research/`, `review/`, `analysis/`, and `overlays/` move to root in Phase 2. `docs/` retains **this-repo-only** FA, SOPs, roadmaps, and `Roadmap.md`.
+
+**Rejected alternatives (locked):**
+
+- **B:** Lean `docs/skills` / `docs/agents` contracts as the sole portable SoT while bulk procedure stays under `overlays/cursor` — rejected (two homes; overlay becomes perpetual SoT).
+- **C:** Hybrid bulk still in overlay with lean contracts elsewhere — rejected (same upkeep bug as B).
+
+**Interim (until Phases 2–5 land):** Portable contracts remain under `docs/skills/` and `docs/agents/`; shared deep procedure remains in the overlay extract (`docs/overlays/cursor/docs/workflow/` until Phase 3). Overlay tree lives under `docs/overlays/` until Phase 2. Do **not** claim present-tense “root `skills/` is SoT” before Phase 4 trees exist.
+
+**Temporary exception (Phase 4 → Phase 5):** Gold bases may contain Cursor Task / `subagent_type` / Bugbot IDs until Phase 5 extracts them into overlay wrappers — interim FA exception, not end-state.
+
+| Kind | Target home (Approach A) | Interim (pre-Phase 4) | May vary by host? |
+| ---- | ------------------------ | --------------------- | ----------------- |
+| Shared loop | `workflow/` + [intended-workflow](./intended-workflow.md) | Phases 1–2: [intended-workflow](./intended-workflow.md) (FA); **Phases 3–4:** `workflow/` + FA (→ root after Phase 3) | **No** |
+| Shared deep docs | `workflow/` (discovery, plan/review loops, ci-ladder, …) | Phases 1–2: `docs/overlays/cursor/docs/workflow/` (→ `overlays/cursor/docs/workflow/` after Phase 2); **Phases 3–4:** `workflow/` (→ root after Phase 3) | **No** |
+| Shared skill contracts | `skills/*/SKILL.md` | `docs/skills/` | **No** host IDs in shared bodies (interim exception above) |
+| Shared agent contracts | `agents/*.md` | `docs/agents/` | **No** |
+| Shared always-on gates | `rules/*.md` | `docs/skills/pre-commit-ci-gate.md` → `rules/` in Phase 4 | **No** |
+| Host overlay | `overlays/cursor/` (thin after Phase 5) | `docs/overlays/cursor/` (→ `overlays/cursor/` after Phase 2; fat Observed extract) | **Yes** — harness mechanics, spawn IDs, additive safety |
+| Copy-out install | `~/.cursor`, `~/.config/opencode` | Not authorized | Install target only |
 
 ### Authored layers vs copy-out (Required)
 
-Shared loop, shared deep docs, and shared skill/agent contracts are **three authored SoTs** for procedure. **Host overlay** is the fourth layer: today the Cursor overlay is an **Observed verbatim extract** of live skills, rules, agents, and `docs/workflow`; thin authored wrappers remain later. **Copy-out** is install, not a fifth SoT.
+**Target (Approach A):** Shared loop, shared deep docs, and shared skill/agent contracts are **three authored SoTs** for procedure at gold bases (`workflow/`, `skills/`, `agents/`). **Host overlay** is the fourth layer: **thin wrappers** at `overlays/cursor/` after Phase 5. **Copy-out** is install, not a fifth SoT.
+
+**Interim (Phase 1):** Gold bases are not yet on disk. Portable procedure is authored in `docs/skills/`, `docs/agents/`, FA, and (for deep procedure) recorded in the fat overlay extract at `docs/overlays/cursor/` — overlay **bodies** are not the portable edit surface during Phases 1–4.
 
 ```text
-Shared loop (when to plan, dual-review, verdict bars)     authored
-        ↓
-Shared deep docs (full steps, specimens, CI ladder)       authored
-        ↓
-Shared skill/agent contracts (triggers, outline, must-not) authored
-        ↓
-Host overlay (Cursor: Observed extract; thin wrappers later)  recorded / authored
-        ↓
-Copy-out to host config dirs                              install later; not SoT
-```
+Target (after Phases 3–5):
+Shared loop (when to plan, dual-review, verdict bars)     → workflow/
+Shared deep docs (full steps, specimens, CI ladder)       → workflow/
+Shared skill/agent contracts (triggers, outline, must-not) → skills/, agents/
+Host overlay (Cursor: thin wrappers)                      → overlays/cursor/
+Copy-out to host config dirs                              → install later; not SoT
 
-| Kind | Home | May vary by host? |
-| ---- | ---- | ----------------- |
-| Shared loop | [intended-workflow](./intended-workflow.md), [agents](../agents/_index.md) verdict bars | **No** — same meaning or label Cursor-specific / Unknown |
-| Shared deep docs | Imported/adapted workflow docs; skills **point**, they do not paste | **No** |
-| Shared contracts | [docs/skills](../skills/_index.md), [docs/agents](../agents/_index.md) | **No** host IDs (`subagent_type`, OpenCode filenames) |
-| Host overlay | [docs/overlays/cursor](../overlays/cursor/_index.md) for Cursor-native skills, rules, agents, and workflow docs (Observed extract). Thin authored wrappers and OpenCode overlay path remain **Unknown** (`adapters/<host>/` still prose-only). | **Yes** — harness mechanics, additive safety, and frozen host-native files |
+Interim (Phase 1): docs/skills/, docs/agents/, docs/overlays/cursor/ (fat extract)
+```
 
 Instruction **budget** (thin always-on vs on-demand vs deep docs) stays in [instruction-layering](./instruction-layering.md). Overlays sit **beside** that budget; they do not replace it.
 
@@ -47,8 +64,8 @@ Instruction **budget** (thin always-on vs on-demand vs deep docs) stays in [inst
 
 When editing a sentence, ask: would this still be true if we deleted this host tomorrow?
 
-- **Yes** → shared loop, shared skill, or shared deep doc. One edit.
-- **No** (how this host wires or extra-constrains) → overlay only.
+- **Yes** → shared loop, shared skill, or shared deep doc. **Target:** gold bases (`workflow/`, `skills/`, `agents/`). **Interim (Phases 1–4):** edit `docs/skills/`, `docs/agents/`, FA, or overlay **index** policy — **not** overlay SKILL/agent/rule bodies for portable procedure.
+- **No** (how this host wires or extra-constrains) → overlay only (spawn blocks, harness IDs, additive safety).
 - **Same paragraph appearing in two overlays** → it was shared; promote it. Dual overlays of procedure is the bug.
 - **OpenCode cannot meet a Required gate** → change the portable Required, or mark Cursor-specific / Unknown. Never write an “OpenCode edition” of the loop.
 
@@ -79,36 +96,37 @@ Those lines change when **the product** changes, not when **you** change discove
 - Task / `subagent_type` IDs (`reviewer-a`, `plan-reviewer`, `bugbot`).
 - User Rules snippets and optional `alwaysApply` `.mdc` dual-channel — **Cursor-specific** mapping of thin always-on ([instruction-layering](./instruction-layering.md)).
 
-Do **not** put Cursor Task IDs in shared skill bodies. Do **not** put OpenCode permission JSON in shared loop docs.
+Do **not** put Cursor Task IDs in shared skill bodies (except interim Phase 4 exception above). Do **not** put OpenCode permission JSON in shared loop docs.
 
 ### Forbidden (Required)
 
 - Two authored deep-doc trees (`implementation-review` for Cursor vs OpenCode).
 - Host `# Cursor` / `# OpenCode` sections inside one SKILL.md that both models will load.
 - Committing secrets, machine paths, or `~/.config/opencode` into this git repo ([opencode-host-adapter](../SOPs/opencode-host-adapter.md)).
-- Pretend repo-root `adapters/` or copy-out into `~/.cursor` / `~/.config/opencode` exists. Recorded overlay files live under `docs/overlays/` only.
+- Pretend repo-root `adapters/` or copy-out into `~/.cursor` / `~/.config/opencode` exists. Recorded overlay files live under `docs/overlays/` (→ `overlays/` after Phase 2).
+- Claiming `overlays/cursor/` or overlay `docs/workflow/` as the **permanent** procedure SoT after Phase 3–5 land.
 
 ### Copy-out vs authorship (Desired later)
 
-Later, copy-out may generate host-native wrappers that `Read` shared deep docs. You still **author the procedure once**. Secrets stay out of git.
+Later, copy-out may generate host-native wrappers that `Read` shared deep docs. You still **author the procedure once** at gold bases. Secrets stay out of git.
 
-**Migration order (Observed 2026-08-20):** Cursor skills, rules, agents, and `docs/workflow` extracted into [docs/overlays/cursor](../overlays/cursor/_index.md) (bodies unchanged). OpenCode overlay extract and copy-out remain later. That is sequencing, not a competing architecture.
+**Migration order (Target):** Phases 2–5 of [shared-workflow-docs](../roadmaps/shared-workflow-docs.md) — move deliverable trees to root, promote overlay gold to bases, thin overlay. OpenCode overlay extract and copy-out remain later. That is sequencing, not a competing architecture.
 
-**Unknown:** thin authored overlay wrappers; OpenCode overlay path; extract method (manual vs script) for later refreshes; copy-out calendar.
+**Unknown:** OpenCode overlay path; extract method (manual vs script) for later refreshes; copy-out calendar.
 
-### Rejected alternatives
+### Other rejected patterns (detail)
 
-- **B:** Host sections in one SKILL.md — wrong host text loads into context.
-- **C:** Two authored full skill trees — the upkeep this page exists to avoid. Generated copy-out artifacts are fine; two SoTs are not.
+- **Host sections in one SKILL.md** — wrong host text loads into context.
+- **Two authored full skill trees** — the upkeep this page exists to avoid. Generated copy-out artifacts are fine; two SoTs are not.
 
 ---
 
 ## Implications / open questions
 
-1. U3 is **partial**: skill/adapter inventory SoT = this companion repo; host dirs = copy-out targets; per-target `.cursorEscape/` remains **Unknown** ([unresolved questions](../review/unresolved-architectural-questions.md), [workspace model](./workspace-model.md)).
+1. U3 is **partial**: skill/adapter inventory SoT = this companion repo (**Target:** gold bases; **interim:** `docs/skills/`, `docs/agents/`, overlay extract); host dirs = copy-out targets; per-target `.cursorEscape/` remains **Unknown** ([unresolved questions](../review/unresolved-architectural-questions.md), [workspace model](./workspace-model.md)).
 2. Remaining incidental “canonical” phrasing in untouched leaves is **not** a second identity project — fix when that leaf is edited, or in a dedicated sweep, not by expanding review scope.
 3. R0 dogfood continues on the current global OpenCode adapter until copy-out is authorized.
-4. Cursor overlay skill, rule, agent, and workflow-doc bodies are frozen Observed copies — do not fork a second `implementation-review` procedure in this tree.
+4. Overlay bodies are **not** a permanent freeze target — fat extract is interim; Phase 5 thin wrappers point at gold bases. Do not fork a second `implementation-review` procedure in this tree.
 
 ---
 
@@ -120,6 +138,6 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md)
 - [Workspace model](./workspace-model.md)
 - [OpenCode host adapter](../SOPs/opencode-host-adapter.md)
-- [Implementation roadmap](../roadmaps/implementation-roadmap.md)
+- [Shared workflow docs roadmap](../roadmaps/shared-workflow-docs.md)
 - [Cursor overlay](../overlays/cursor/_index.md)
 - [Theo fleet skill management (Observed)](../research/theo-fleet-skill-management.md)

@@ -29,7 +29,7 @@ cursorEscape is the owner's **skill and workflow manager**: preserve and evolve 
 | ----- | -------- |
 | **Project name** | **cursorEscape** (folder and display name). |
 | **Primary job** | **Manage skills and workflows that work** — plan, implement, dual review, repository discovery — as portable contracts in this repo, applied across stacks; later copy-out of thin host overlays (not authorized yet). |
-| **Canonical skill tree (Target)** | Portable contracts live in this repo (`docs/skills`, `docs/agents`). Host dirs (`~/.config/opencode`, `~/.cursor`) are **copy-out targets**, not a second authored procedure tree. Cursor-native workflow files are recorded under [docs/overlays/cursor](../overlays/cursor/_index.md) (**Observed**, bodies unchanged). Copy-out into host dirs is not authorized. |
+| **Canonical skill tree (Target — Approach A)** | Gold procedure and contracts at repo-root `workflow/`, `skills/`, `agents/`, `rules/` (Phases 3–5). **Interim:** `docs/skills/`, `docs/agents/`, overlay extract. Host dirs are **copy-out targets**, not a second authored tree. Overlay becomes thin wrappers in Phase 5. Copy-out into host dirs is not authorized. |
 | **Personal workflow first** | Success = the owner's loop works reliably on their repos, not market share or a general IDE product. |
 | **Not building a general IDE** | cursorEscape is a **workspace-pointing companion**, not a from-scratch editor or Cursor clone. |
 | **First host attempt** | **T3 Code** (control plane: threads, diffs, file preview) + **OpenCode** (harness: skills, named subagents, parallel Task dual-gate). T3 is not a VS Code replacement and does not own agent/skill contracts. See [host recreation study](../analysis/host-recreation-2026-08.md). |
@@ -40,7 +40,7 @@ cursorEscape is the owner's **skill and workflow manager**: preserve and evolve 
 | **Replaceability** | Backends, models, and execution surfaces must remain swappable without rewriting canonical intent docs. |
 | **Cursor dependency (target)** | **None** for the recreation path. Observed Cursor behavior may be imported as research/reference only. |
 | **Runtime in this repo** | **Not started.** Docs remain canonical until an explicit R0+ go-ahead; first recreation uses external T3 + OpenCode, not a cursorEscape engine. |
-| **Documentation taxonomy** | Mirror openBuggy's `docs/` layout (featureArchitecture, SOPs, research, analysis, roadmaps) — extend hubs; do not invent parallel trees. |
+| **Documentation taxonomy** | **Target (Approach A):** repo-root `workflow/`, `skills/`, `agents/`, `rules/`, `research/`, `review/`, `analysis/`, `overlays/`; `docs/` for this-repo-only FA, SOPs, roadmaps, `Roadmap.md`. Mirror openBuggy's taxonomy — extend hubs; do not invent parallel trees. Phases 2–5 move trees per [shared-workflow-docs](../roadmaps/shared-workflow-docs.md). |
 | **Instruction budget** | **Thin always-on gates**; deeper procedure in on-demand skills and workflow docs; lean role agents. Portable pattern — see [instruction layering](../featureArchitecture/instruction-layering.md). |
 | **Isolated review handoffs** | Reviewers and phase subagents run in **clean child context**; parent packs the invoke; no prior review transcripts — see [clean-context isolation](../featureArchitecture/clean-context-isolation.md). |
 

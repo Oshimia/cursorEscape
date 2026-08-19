@@ -6,7 +6,7 @@
 
 This index lists repeatable procedures for maintaining cursorEscape documentation and for operating the workflow **once a runtime exists**. Until then, runtime SOPs are conceptual targets.
 
-**Path rule:** In-repo links use `docs/` paths only. External sibling projects (openBuggy, AITestSuite, live `~/.cursor`) may be cited in prose, imported under `docs/research/imported/`, or recorded as frozen host-native files under `docs/overlays/` — do not copy their trees to repo-root `.cursor/`.
+**Path rule:** In-repo links use repo paths. External sibling projects (openBuggy, AITestSuite, live `~/.cursor`) may be cited in prose, imported under `docs/research/imported/`, or recorded as host-native files under `docs/overlays/` (thin after Phase 5) — do not copy their trees to repo-root `.cursor/`.
 
 ## Substance
 

@@ -6,7 +6,7 @@
 
 This section explains **how cursorEscape is intended to work** — Target design and workflow contracts. Unlike SOPs (how to perform a task), these documents describe system behavior and architecture.
 
-**Status:** Phase 4 Target synthesizing docs authored. Observed imports remain under `docs/research/imported/`. Identity (2026-08-19): companion repo is **Target** contract SoT. Cursor workflow overlay: [docs/overlays/cursor](../overlays/cursor/_index.md). Overlay FA: [skill-source-and-host-overlays.md](./skill-source-and-host-overlays.md).
+**Status:** Phase 4 Target synthesizing docs authored. Observed imports remain under `docs/research/imported/`. Identity (2026-08-19): companion repo is **Target** contract SoT at gold bases (Approach A — interim: `docs/skills/`, `docs/agents/`). Cursor overlay: [docs/overlays/cursor](../overlays/cursor/_index.md) (fat interim extract). Overlay FA: [skill-source-and-host-overlays.md](./skill-source-and-host-overlays.md).
 
 ## Substance
 
@@ -19,7 +19,7 @@ This section explains **how cursorEscape is intended to work** — Target design
 | [`../analysis/`](../analysis/_index.md) | Operator studies of local workflows |
 | [`../agents/`](../agents/_index.md) | Host-agnostic role contracts |
 | [`../skills/`](../skills/_index.md) | Host-agnostic skill contracts |
-| [`../overlays/`](../overlays/_index.md) | Host-native recorded files (Cursor workflow extract) |
+| [`../overlays/`](../overlays/_index.md) | Host-native recorded files (Cursor fat interim extract; thin after Phase 5) |
 
 ### Observed imports (Phase 2–3)
 

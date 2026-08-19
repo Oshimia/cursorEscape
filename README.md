@@ -6,7 +6,7 @@
 
 **What:** cursorEscape is the owner's **skill and workflow manager** — a git home for personal agentic skills, agent roles, and gates (plan → implement → dual review → closeout), applied across **stacks** (Cursor, OpenCode; T3 as control plane). Analogous to Theo's T3 `fleet` repo ([Observed](docs/research/theo-fleet-skill-management.md)), except this is **not** multi-machine sync.
 
-**Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. This repo is **Target** SoT for contracts. Cursor-native workflow files are recorded under [docs/overlays/cursor](docs/overlays/cursor/_index.md) (**Observed**, bodies unchanged). Live `~/.cursor` remains the running Cursor install. Stack variation: [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
+**Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. Gold-base contracts (Approach A: `workflow/`, `skills/`, `agents/`, `rules/` — interim: `docs/skills/`, `docs/agents/`) are **Target** SoT. Cursor overlay under [docs/overlays/cursor](docs/overlays/cursor/_index.md) is a **fat Observed interim extract** (thin wrappers in Phase 5). Live `~/.cursor` remains the running Cursor install. Stack variation: [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
 
 **First host attempt:** [T3 Code](https://t3.codes/) (control plane) + [OpenCode](https://opencode.ai/) (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Study: [host recreation](docs/analysis/host-recreation-2026-08.md).
 
@@ -21,7 +21,7 @@
 | [`docs/featureArchitecture/`](docs/featureArchitecture/_index.md) | How the system is intended to work (Target) |
 | [`docs/agents/`](docs/agents/_index.md) | Host-agnostic agent role contracts |
 | [`docs/skills/`](docs/skills/_index.md) | Host-agnostic workflow skill contracts |
-| [`docs/overlays/`](docs/overlays/_index.md) | Host-native recorded files (Cursor skills, rules, agents, workflow docs) |
+| [`docs/overlays/`](docs/overlays/_index.md) | Host-native recorded files (Cursor fat interim extract; thin after Phase 5) |
 | [`docs/research/`](docs/research/_index.md) | Sourced facts and imported sibling research |
 | [`docs/SOPs/`](docs/SOPs/_index.md) | Procedures for maintainers and future implementers |
 | [`docs/analysis/`](docs/analysis/_index.md) | Operator studies ([host recreation](docs/analysis/host-recreation-2026-08.md)) |
