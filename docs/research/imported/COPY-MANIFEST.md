@@ -1,11 +1,11 @@
 # COPY-MANIFEST — imported research
 
-**Last updated:** 2026-08-17  
-**Phase:** 2 of 5 (openBuggy); Phase 3 adds AITestSuite + cursor-global-workflow
+**Last updated:** 2026-08-19  
+**Phase:** 2 of 5 (openBuggy); Phase 3 adds AITestSuite + cursor-global-workflow. Status labels on live `~/.cursor` rows updated 2026-08-19 (Observed interim; companion repo Target SoT).
 
 ## Context
 
-Every file under `docs/research/imported/` is a **copy or cursorEscape-authored trimmed index** for navigation. Status **Observed/imported** or **Observed/eval-packaging** unless a Target doc explicitly cites and classifies claims.
+Every file under `docs/research/imported/` is a **copy or cursorEscape-authored trimmed index** for navigation. Status **Observed/imported** or **Observed/eval-packaging** unless a Target doc explicitly cites and classifies claims. Live `~/.cursor` rows are **Observed interim Cursor wording** (not forever Target vs this companion repo).
 
 **Source repos (read-only):**
 
@@ -93,28 +93,28 @@ Every file under `docs/research/imported/` is a **copy or cursorEscape-authored 
 
 | Dest (under `imported/cursor-global-workflow/`) | Source (`~/.cursor`) | Source absolute | Copied | Why | Status | Host-only / broken-in-import links |
 | --- | --- | --- | --- | --- | --- | --- |
-| `agents/plan-reviewer.md` | `agents/plan-reviewer.md` | `C:\Users\admin\.cursor\agents\plan-reviewer.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) | Relative links use import mirror paths |
-| `agents/reviewer-a.md` | `agents/reviewer-a.md` | `C:\Users\admin\.cursor\agents\reviewer-a.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) | Relative links use import mirror paths |
-| `docs/workflow/ci-ladder.md` | `docs/workflow/ci-ladder.md` | `C:\Users\admin\.cursor\docs\workflow\ci-ladder.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `docs/workflow/discovery.md` | `docs/workflow/discovery.md` | `C:\Users\admin\.cursor\docs\workflow\discovery.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `docs/workflow/documentation-architecture.md` | `docs/workflow/documentation-architecture.md` | `C:\Users\admin\.cursor\docs\workflow\documentation-architecture.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `docs/workflow/iterative-code-review.md` | `docs/workflow/iterative-code-review.md` | `C:\Users\admin\.cursor\docs\workflow\iterative-code-review.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `docs/workflow/iterative-plan-review.md` | `docs/workflow/iterative-plan-review.md` | `C:\Users\admin\.cursor\docs\workflow\iterative-plan-review.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `docs/workflow/phased-multi-agent.md` | `docs/workflow/phased-multi-agent.md` | `C:\Users\admin\.cursor\docs\workflow\phased-multi-agent.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `docs/workflow/plan-agent-context.md` | `docs/workflow/plan-agent-context.md` | `C:\Users\admin\.cursor\docs\workflow\plan-agent-context.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `docs/workflow/README.md` | `docs/workflow/README.md` | `C:\Users\admin\.cursor\docs\workflow\README.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `docs/workflow/review-subagent-models.md` | `docs/workflow/review-subagent-models.md` | `C:\Users\admin\.cursor\docs\workflow\review-subagent-models.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `rules/iterative-code-review.mdc` | `rules/iterative-code-review.mdc` | `C:\Users\admin\.cursor\rules\iterative-code-review.mdc` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `rules/iterative-plan-review.mdc` | `rules/iterative-plan-review.mdc` | `C:\Users\admin\.cursor\rules\iterative-plan-review.mdc` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `rules/pre-commit-ci-gate.mdc` | `rules/pre-commit-ci-gate.mdc` | `C:\Users\admin\.cursor\rules\pre-commit-ci-gate.mdc` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `skills/composer/SKILL.md` | `skills/composer/SKILL.md` | `C:\Users\admin\.cursor\skills\composer\SKILL.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `skills/composer/user-rules-snippet.md` | `skills/composer/user-rules-snippet.md` | `C:\Users\admin\.cursor\skills\composer\user-rules-snippet.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `skills/documentation-architecture/SKILL.md` | `skills/documentation-architecture/SKILL.md` | `C:\Users\admin\.cursor\skills\documentation-architecture\SKILL.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `skills/implementation-plan/SKILL.md` | `skills/implementation-plan/SKILL.md` | `C:\Users\admin\.cursor\skills\implementation-plan\SKILL.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `skills/implementation-plan/user-rules-snippet.md` | `skills/implementation-plan/user-rules-snippet.md` | `C:\Users\admin\.cursor\skills\implementation-plan\user-rules-snippet.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `skills/implementation-review/SKILL.md` | `skills/implementation-review/SKILL.md` | `C:\Users\admin\.cursor\skills\implementation-review\SKILL.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `skills/implementation-review/user-rules-snippet.md` | `skills/implementation-review/user-rules-snippet.md` | `C:\Users\admin\.cursor\skills\implementation-review\user-rules-snippet.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
-| `skills/roadmap/SKILL.md` | `skills/roadmap/SKILL.md` | `C:\Users\admin\.cursor\skills\roadmap\SKILL.md` | 2026-08-17 | Live canonical workflow | Observed/imported (live Target) |  |
+| `agents/plan-reviewer.md` | `agents/plan-reviewer.md` | `C:\Users\admin\.cursor\agents\plan-reviewer.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) | Relative links use import mirror paths |
+| `agents/reviewer-a.md` | `agents/reviewer-a.md` | `C:\Users\admin\.cursor\agents\reviewer-a.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) | Relative links use import mirror paths |
+| `docs/workflow/ci-ladder.md` | `docs/workflow/ci-ladder.md` | `C:\Users\admin\.cursor\docs\workflow\ci-ladder.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `docs/workflow/discovery.md` | `docs/workflow/discovery.md` | `C:\Users\admin\.cursor\docs\workflow\discovery.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `docs/workflow/documentation-architecture.md` | `docs/workflow/documentation-architecture.md` | `C:\Users\admin\.cursor\docs\workflow\documentation-architecture.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `docs/workflow/iterative-code-review.md` | `docs/workflow/iterative-code-review.md` | `C:\Users\admin\.cursor\docs\workflow\iterative-code-review.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `docs/workflow/iterative-plan-review.md` | `docs/workflow/iterative-plan-review.md` | `C:\Users\admin\.cursor\docs\workflow\iterative-plan-review.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `docs/workflow/phased-multi-agent.md` | `docs/workflow/phased-multi-agent.md` | `C:\Users\admin\.cursor\docs\workflow\phased-multi-agent.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `docs/workflow/plan-agent-context.md` | `docs/workflow/plan-agent-context.md` | `C:\Users\admin\.cursor\docs\workflow\plan-agent-context.md` | 2026-08-17 | Live Cursor workflow (Cursor specimen; Observed interim wording) | Observed/imported (Cursor specimen; Observed interim; companion Target SoT) |  |
+| `docs/workflow/README.md` | `docs/workflow/README.md` | `C:\Users\admin\.cursor\docs\workflow\README.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `docs/workflow/review-subagent-models.md` | `docs/workflow/review-subagent-models.md` | `C:\Users\admin\.cursor\docs\workflow\review-subagent-models.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `rules/iterative-code-review.mdc` | `rules/iterative-code-review.mdc` | `C:\Users\admin\.cursor\rules\iterative-code-review.mdc` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `rules/iterative-plan-review.mdc` | `rules/iterative-plan-review.mdc` | `C:\Users\admin\.cursor\rules\iterative-plan-review.mdc` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `rules/pre-commit-ci-gate.mdc` | `rules/pre-commit-ci-gate.mdc` | `C:\Users\admin\.cursor\rules\pre-commit-ci-gate.mdc` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `skills/composer/SKILL.md` | `skills/composer/SKILL.md` | `C:\Users\admin\.cursor\skills\composer\SKILL.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `skills/composer/user-rules-snippet.md` | `skills/composer/user-rules-snippet.md` | `C:\Users\admin\.cursor\skills\composer\user-rules-snippet.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `skills/documentation-architecture/SKILL.md` | `skills/documentation-architecture/SKILL.md` | `C:\Users\admin\.cursor\skills\documentation-architecture\SKILL.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `skills/implementation-plan/SKILL.md` | `skills/implementation-plan/SKILL.md` | `C:\Users\admin\.cursor\skills\implementation-plan\SKILL.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `skills/implementation-plan/user-rules-snippet.md` | `skills/implementation-plan/user-rules-snippet.md` | `C:\Users\admin\.cursor\skills\implementation-plan\user-rules-snippet.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `skills/implementation-review/SKILL.md` | `skills/implementation-review/SKILL.md` | `C:\Users\admin\.cursor\skills\implementation-review\SKILL.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `skills/implementation-review/user-rules-snippet.md` | `skills/implementation-review/user-rules-snippet.md` | `C:\Users\admin\.cursor\skills\implementation-review\user-rules-snippet.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
+| `skills/roadmap/SKILL.md` | `skills/roadmap/SKILL.md` | `C:\Users\admin\.cursor\skills\roadmap\SKILL.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) |  |
 
 ## File count
 

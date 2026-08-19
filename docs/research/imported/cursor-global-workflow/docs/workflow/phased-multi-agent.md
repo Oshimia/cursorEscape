@@ -1,4 +1,4 @@
-> **Imported research** — Source: live `~/.cursor`; copied 2026-08-17 into cursorEscape. Status: Observed/imported (live canonical for Target workflow). Do not treat as Target cursorEscape design unless a Target doc cites it.
+> **Imported research** — Source: live `~/.cursor`; copied 2026-08-17 into cursorEscape. Status: Observed/imported (Observed interim Cursor wording; companion repo is Target contract SoT). Do not treat as Target cursorEscape design unless a Target doc cites it.
 # Phased multi-agent plans (large & complex)
 
 **Skills:** [implementation-plan](../../skills/implementation-plan/SKILL.md) (draft), [roadmap](../../skills/roadmap/SKILL.md) (repo handoff file), [composer](../../skills/composer/SKILL.md) (optional conductor).

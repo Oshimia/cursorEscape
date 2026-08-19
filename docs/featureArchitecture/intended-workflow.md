@@ -1,10 +1,10 @@
 # Intended Workflow
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
-This document is **Target** cursorEscape design for the owner's agentic loop: plan → implement → dual review → closeout. Canonical process is the **live** `~/.cursor` workflow (imported under [cursor-global-workflow](../research/imported/cursor-global-workflow/)); AITestSuite Phase 4 freeze is **Observed/eval-packaging** only. Where they disagree, cite [workflow-source-delta](../research/imported/workflow-source-delta.md).
+This document is **Target** cursorEscape design for the owner's agentic loop: plan → implement → dual review → closeout. **Loop semantics** (when to plan, dual-gate, verdict bars) are owned here and in [design decisions](../review/design-decisions.md). Live `~/.cursor` (imported under [cursor-global-workflow](../research/imported/cursor-global-workflow/)) is **Observed interim Cursor file wording** until overlay copy-out — not a second procedure SoT. AITestSuite Phase 4 freeze is **Observed/eval-packaging** only. Where freeze disagrees with live Cursor import, cite [workflow-source-delta](../research/imported/workflow-source-delta.md). Overlay architecture (shared procedure + additive host constraints) is the next Target FA page.
 
 Dual-gate review research (openBuggy) informs leg responsibilities. First recreation host: **T3 Code** (control plane) + **OpenCode** (harness). The bug-finder leg is an OpenCode **`bug_reviewer`** subagent + skills (reviewer-a pattern) — **not** an openBuggy engine requirement ([design decisions](../review/design-decisions.md), [host recreation](../analysis/host-recreation-2026-08.md)).
 

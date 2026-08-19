@@ -1,10 +1,10 @@
 # Skill Contracts
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
-Host-agnostic **Target** summaries of workflow skills. Canonical full text lives in live `~/.cursor` (imported [cursor-global-workflow](../research/imported/cursor-global-workflow/skills/)); these pages define portable contracts without hard dependency on Cursor Task/subagent IDs.
+Host-agnostic **Target** summaries of workflow skills. Portable contracts live in this folder. Live `~/.cursor` (imported [cursor-global-workflow](../research/imported/cursor-global-workflow/skills/)) is **Observed interim Cursor file wording** until overlay copy-out — not a second authored procedure tree. These pages avoid Cursor Task/subagent IDs.
 
 AITestSuite freeze includes a **reference-docs** skill — live owner workflow uses [discovery](./discovery.md) instead ([workflow-source-delta](../research/imported/workflow-source-delta.md)).
 
@@ -44,7 +44,7 @@ Each page states: **When to use**, **Workflow steps**, **Outputs**, **Must not**
 ## Implications / open questions
 
 1. Runtime may mirror skills under `.cursor/skills/` or host registry — contracts stay in `docs/skills/`.
-2. **Unknown:** Versioning/sync between live `~/.cursor` and cursorEscape repo.
+2. Companion repo is **Target** contract SoT. Live `~/.cursor` is **Observed interim Cursor wording** (not a procedure SoT) until overlay copy-out. Copy-out **timing** remains **Unknown** (not authorized this phase). Not a two-way peer-sync Unknown.
 
 ---
 

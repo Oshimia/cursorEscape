@@ -1,10 +1,12 @@
 # Initialization Report
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-19
 
 ## Context
 
 Phase 5 closeout archaeology for cursorEscape — answers user §17 Q1–9 from the accepted initialization plan. This report is a **decisions snapshot** at init completion; the living hub remains [Roadmap](../Roadmap.md). **Do not start** tasks listed under Q9 until explicit owner go-ahead.
+
+**SoT (2026-08-19):** Q2 status **Observed/imported (live Target)** for the `~/.cursor` import is **superseded**. Companion repo is Target contract SoT; that import is **Observed interim** Cursor wording. Do not treat Q3/Q6 body as live adapter choice.
 
 **Prior phases:** Bootstrap (Phase 1 `ca56ca4`), openBuggy import (Phase 2 `5ab9428`), AITestSuite + live `~/.cursor` import (Phase 3 `b771ed8`), Target FA docs (Phase 4 `65a691c`).
 
@@ -44,8 +46,8 @@ Full manifest: [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md) (86 markdo
 | ------ | ----------- | ----- | ------------ |
 | openBuggy `docs/` (selected FA, analysis, research, SOPs) | `docs/research/imported/openBuggy/` | 2 | Observed/imported |
 | AITestSuite Phase 4 freeze + lessons + scoring | `docs/research/imported/AITestSuite/` | 3 | Observed/eval-packaging |
-| Live `~/.cursor` workflow (9 docs, 3 rules, 5 skills, 2 agents) | `docs/research/imported/cursor-global-workflow/` | 3 | Observed/imported (live Target) |
-| Live vs freeze delta (authored) | `docs/research/imported/workflow-source-delta.md` | 3 | Target cursorEscape note |
+| Live `~/.cursor` workflow (9 docs, 3 rules, 5 skills, 2 agents) | `docs/research/imported/cursor-global-workflow/` | 3 | Observed/imported (live Target at init; **superseded 2026-08-19** → Observed interim) |
+| Live vs freeze delta (authored) | `docs/research/imported/workflow-source-delta.md` | 3 | Observed freeze-vs-live archaeology (not forever Target vs companion repo) |
 
 **Not copied:** openBuggy `eval/`; AITestSuite `review-profiles/**`, app baselines, goldens; analysis `.local/` sheets.
 
@@ -63,7 +65,7 @@ From [design-decisions](./design-decisions.md) and Phase 4 Target docs:
 | Portable repository knowledge (discovery, SOPs, FA in-repo) | **Required** |
 | Evaluable workflow behavior (documented imports, deltas, methodology) | **Required** |
 | Backends and models replaceable (BYOK, thin adapter) | **Required** |
-| Bugbot-shaped leg delegates to **openBuggy** initially | **Required** |
+| Bugbot-shaped leg delegates to **openBuggy** initially | **Required** at init; **superseded 2026-08-19** — OpenCode `bug_reviewer`; openBuggy research/optional later ([design decisions](./design-decisions.md)) |
 | Docs before runtime — no pretend-settled Unknowns | **Required** |
 | Not a general IDE, not monetized SaaS, private-first | **Required** non-goals |
 

@@ -1,12 +1,12 @@
 # Feature Architecture Documentation
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
 This section explains **how cursorEscape is intended to work** — Target design and workflow contracts. Unlike SOPs (how to perform a task), these documents describe system behavior and architecture.
 
-**Status:** Phase 4 Target synthesizing docs authored. Observed imports remain under `docs/research/imported/`. Plan-gate default-on wording updated 2026-08-18.
+**Status:** Phase 4 Target synthesizing docs authored. Observed imports remain under `docs/research/imported/`. Plan-gate default-on wording updated 2026-08-18. Identity (2026-08-19): companion repo is **Target** contract SoT; live `~/.cursor` is **Observed interim** Cursor wording. Overlay FA page not landed yet.
 
 ## Substance
 
@@ -28,7 +28,7 @@ Imported Observed harness and workflow snapshots live under [research/imported/]
 
 | Document | Purpose |
 | -------- | ------- |
-| [intended-workflow.md](./intended-workflow.md) | Canonical loop — live workflow + dual gate (OpenCode bug_reviewer) |
+| [intended-workflow.md](./intended-workflow.md) | Target loop (dual gate; OpenCode bug_reviewer). Live Cursor import = Observed interim wording |
 | [instruction-layering.md](./instruction-layering.md) | Thin always-on vs on-demand skills/docs/agents (context budget) |
 | [clean-context-isolation.md](./clean-context-isolation.md) | Isolated child handoffs; no prior review transcripts |
 | [desired-behavior-vs-cursor-specific.md](./desired-behavior-vs-cursor-specific.md) | Portable vs Cursor-specific claims |
@@ -48,6 +48,7 @@ First host attempt: [host recreation study](../analysis/host-recreation-2026-08.
 
 1. Do not mix Observed and Target in the same doc without labels.
 2. Runtime implementation must update these docs when behavior diverges.
+3. Do not treat live `~/.cursor` as a second Target procedure tree while overlay FA is pending.
 
 ## Related
 

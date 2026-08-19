@@ -1,4 +1,4 @@
-> **Imported research** — Source: live `~/.cursor`; copied 2026-08-17 into cursorEscape. Status: Observed/imported (live canonical for Target workflow). Do not treat as Target cursorEscape design unless a Target doc cites it.
+> **Imported research** — Source: live `~/.cursor`; copied 2026-08-17 into cursorEscape. Status: Observed/imported (Observed interim Cursor wording; companion repo is Target contract SoT). Do not treat as Target cursorEscape design unless a Target doc cites it.
 # CI ladder (Fast / Full)
 
 Discover commands from README, `package.json`, `Makefile`, `scripts/`, `.github/workflows/`, or AGENTS.md. Also see [discovery.md](discovery.md).

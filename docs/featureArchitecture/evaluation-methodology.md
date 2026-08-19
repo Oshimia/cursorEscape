@@ -1,10 +1,10 @@
 # Evaluation Methodology
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-19
 
 ## Context
 
-How cursorEscape measures workflow quality over time. Pre-runtime: evaluation is **documented methodology + imported eval research** — no eval runners in this repo. AITestSuite imports are **Observed/eval-packaging**; live workflow is **Target** for process gates.
+How cursorEscape measures workflow quality over time. Pre-runtime: evaluation is **documented methodology + imported eval research** — no eval runners in this repo. AITestSuite imports are **Observed/eval-packaging**. Process-gate semantics are **Target** in companion-repo contracts ([intended-workflow](./intended-workflow.md), [skills](../skills/_index.md)). Live `~/.cursor` import is **Observed interim** Cursor wording, not a second Target procedure.
 
 ---
 
@@ -14,7 +14,7 @@ How cursorEscape measures workflow quality over time. Pre-runtime: evaluation is
 
 | Dimension | Question | Source bias |
 | --------- | -------- | ----------- |
-| **Loop adherence** | Fast CI Observed before reviewers? Dual parallel? Full only at closeout? | Live workflow + openBuggy [ci-gating](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/ci-gating.md) |
+| **Loop adherence** | Fast CI Observed before reviewers? Dual parallel? Full only at closeout? | Target contracts + Observed live import + openBuggy [ci-gating](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/ci-gating.md) |
 | **Catch mix** | Logic/security vs process/docs findings by leg | openBuggy [overlap](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/overlap-and-redundancy.md) |
 | **Iteration cost** | Launches per phase; re-scope triggers | [iteration-policy](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/iteration-policy.md) |
 | **Doc quality** | Hub links, claim taxonomy, Observed ≠ Target | cursorEscape pre-runtime CI |
@@ -27,7 +27,7 @@ How cursorEscape measures workflow quality over time. Pre-runtime: evaluation is
 | AITestSuite scoring framework | Test packaging rubric | Observed/eval-packaging |
 | AITestSuite REVIEW_LOOP.md | Candidate prompts | Observed — not portable process |
 | openBuggy reviewer-effectiveness | Dual-gate operator study | Observed/imported |
-| workflow-source-delta | Live vs freeze regression | Target archaeology |
+| workflow-source-delta | Freeze-vs-live archaeology | Observed archaeology (not forever Target vs companion repo) |
 
 ### cursorEscape pre-runtime checks (Required)
 

@@ -1,10 +1,10 @@
 # Workspace Model
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-19
 
 ## Context
 
-cursorEscape is a **workspace-pointing companion**: it operates *on* a target repository's working tree and docs, not as a monolithic application repo. This Target doc defines how workspaces relate to orchestration and adapters. First recreation: **T3 Code** (control plane) + **OpenCode** (harness) — see [host recreation](../analysis/host-recreation-2026-08.md).
+cursorEscape is the owner's **skill/workflow manager** and a **workspace-pointing companion**: it operates *on* a target repository's working tree and docs, not as a monolithic application repo. This Target doc defines how workspaces relate to orchestration and adapters. First recreation: **T3 Code** (control plane) + **OpenCode** (harness) — see [host recreation](../analysis/host-recreation-2026-08.md).
 
 ---
 
@@ -47,7 +47,7 @@ Operator
 | -------- | ----- |
 | Runtime | **None** — docs only |
 | CI | Link/manifest checks ([initialization roadmap](../roadmaps/cursorEscape-initialization.md)) |
-| Canonical workflow source | Live `~/.cursor` import + [workflow-source-delta](../research/imported/workflow-source-delta.md) |
+| Canonical workflow source | **Target:** this companion repo (contracts). **Observed interim Cursor wording:** live `~/.cursor` import. **Observed archaeology:** [workflow-source-delta](../research/imported/workflow-source-delta.md) (freeze vs live; not a second procedure SoT) |
 | First recreation host | External T3 + OpenCode — not in-repo packages |
 
 ### Multi-root / monorepo (Unknown)

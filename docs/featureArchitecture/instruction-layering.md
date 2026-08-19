@@ -8,7 +8,7 @@ This document is **Target** design for how workflow instructions are **budgeted 
 
 **Required** portable intent: keep always-on text minimal; load skills, deep procedure docs, and role agents only when needed. Cursor User Rules, `.mdc` rules, and `disable-model-invocation` are **Cursor-specific** mappings of that intent.
 
-Observed Cursor files under [cursor-global-workflow](../research/imported/cursor-global-workflow/) illustrate the pattern and some anti-patterns. Live `~/.cursor` remains SoT for Cursor file wording; this page is SoT for the portable layering contract.
+Observed Cursor files under [cursor-global-workflow](../research/imported/cursor-global-workflow/) illustrate the pattern and some anti-patterns. Live `~/.cursor` is **Observed interim Cursor wording** until overlay extract (not a procedure SoT). This page is SoT for the portable layering contract. Companion-repo contracts are Target inventory ([design decisions](../review/design-decisions.md)).
 
 ---
 
@@ -97,7 +97,7 @@ Adapters cite this page and [docs/agents](../agents/_index.md) / [docs/skills](.
 | Exact always-on line budget | **None** — not for the whole file, and not as invented “≤N new lines” Success metrics. Minimize while gate behavior holds. Dogfood still discovers the right size; agents must **not** invent a budget in plans or Verification. |
 | Ship host snippet files from cursorEscape | **Later** — not a near-term decision ([desired-behavior](./desired-behavior-vs-cursor-specific.md)). |
 | Repo-local `alwaysApply: false` → portable on-demand hooks | **Low priority** — validate on a host when needed; not a design blocker. |
-| Slim Observed Cursor agent snapshots | **Host-dependent** — keep Target agents lean; Cursor import hygiene follows whether Cursor remains the live workflow home. |
+| Slim Observed Cursor agent snapshots | **Host-dependent** — keep Target agents lean. Cursor import hygiene is **Observed interim** wording, not a second Target procedure tree. |
 
 ---
 

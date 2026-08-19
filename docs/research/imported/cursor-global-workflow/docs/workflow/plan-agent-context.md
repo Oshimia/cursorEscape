@@ -1,4 +1,4 @@
-> **Imported research** — Source: live `~/.cursor`; copied 2026-08-17 into cursorEscape. Status: Observed/imported (Cursor specimen). Do not treat as Target cursorEscape design unless a Target doc cites it.
+> **Imported research** — Source: live `~/.cursor`; copied 2026-08-17 into cursorEscape. Status: Observed/imported (Cursor specimen; Observed interim wording; companion repo is Target contract SoT). Do not treat as Target cursorEscape design unless a Target doc cites it.
 >
 > **Escalation when SoT (Target):** [docs/skills/implementation-plan.md](../../../../../skills/implementation-plan.md#escalation-when-sole-sot) — this import keeps **field specimen / required headings only**. Competing when-tables (including “≤3 phases usually no”) are **not** Target; host adapters must point at the Target skill.
 

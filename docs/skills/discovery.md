@@ -1,6 +1,6 @@
 # discovery
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-19
 
 ## Context
 
@@ -34,7 +34,7 @@ Before any non-trivial doc or code change — first step of [implementation-plan
 
 ### Freeze note (Observed)
 
-AITestSuite baseline includes [reference-docs skill](../research/imported/AITestSuite/tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/reference-docs/SKILL.md) — use when evaluating freeze baselines; live canonical path is this discovery contract.
+AITestSuite baseline includes [reference-docs skill](../research/imported/AITestSuite/tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/reference-docs/SKILL.md) — use when evaluating freeze baselines. This page is the **Target** discovery contract in the companion repo; the live import under [cursor-global-workflow](../research/imported/cursor-global-workflow/docs/workflow/discovery.md) is **Observed interim** Cursor wording.
 
 ### Related roles
 

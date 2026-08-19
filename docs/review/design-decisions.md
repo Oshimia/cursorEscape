@@ -1,6 +1,6 @@
 # Design Decisions & Project Intent
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-19
 
 This document is the **canonical record of project intent** for cursorEscape while the repository is documentation-only. Implementation must not contradict these decisions without updating this file in the same change set.
 
@@ -8,7 +8,7 @@ This document is the **canonical record of project intent** for cursorEscape whi
 
 ## Context
 
-cursorEscape is an **open agentic workflow companion** for escaping Cursor lock-in: the owner keeps a reliable plan → implement → review loop, portable repository knowledge, and evaluable workflow behavior without binding to one IDE subscription or one model vendor. See [Roadmap](../Roadmap.md).
+cursorEscape is the owner's **skill and workflow manager**: preserve and evolve personal agentic skills and the plan → implement → dual review loop, and apply them across **stacks** without binding to one IDE subscription or one model vendor. Analog to Theo's `fleet` repo ([Observed](../research/theo-fleet-skill-management.md)); **not** a multi-machine fleet. See [Roadmap](../Roadmap.md).
 
 ---
 
@@ -28,7 +28,8 @@ cursorEscape is an **open agentic workflow companion** for escaping Cursor lock-
 | Topic | Decision |
 | ----- | -------- |
 | **Project name** | **cursorEscape** (folder and display name). |
-| **Primary job** | Preserve and evolve a **personal agentic workflow** — plan, implement, dual review, repository discovery — as portable docs and (later) replaceable runtime surfaces. |
+| **Primary job** | **Manage skills and workflows that work** — plan, implement, dual review, repository discovery — as portable contracts in this repo, applied across stacks; later copy-out of thin host overlays (not authorized yet). |
+| **Canonical skill tree (Target)** | This companion repo is the intended SoT for skill/agent/gate inventory. Host dirs (`~/.config/opencode`, `~/.cursor`) are **copy-out targets**, not a second authored procedure tree. Files are **not** moved in the identity/overlay-docs work. |
 | **Personal workflow first** | Success = the owner's loop works reliably on their repos, not market share or a general IDE product. |
 | **Not building a general IDE** | cursorEscape is a **workspace-pointing companion**, not a from-scratch editor or Cursor clone. |
 | **First host attempt** | **T3 Code** (control plane: threads, diffs, file preview) + **OpenCode** (harness: skills, named subagents, parallel Task dual-gate). T3 is not a VS Code replacement and does not own agent/skill contracts. See [host recreation study](../analysis/host-recreation-2026-08.md). |
@@ -54,6 +55,7 @@ cursorEscape is an **open agentic workflow companion** for escaping Cursor lock-
 | Inseparable VS Code coupling | T3 or thin client OK; contracts stay host-agnostic. |
 | Runtime during docs lock-in | No packages, adapters, or pretend APIs in this repository yet. |
 | Pretend every Unknown is settled | Record TBD until spikes; U2/U8 settled 2026-08 — see [unresolved questions](./unresolved-architectural-questions.md). |
+| Multi-machine skill fleet | Unlike Theo `fleet`, device sync is **not** a goal. Variation is **stacks** (Cursor vs OpenCode), not laptops. |
 
 ---
 
@@ -64,6 +66,7 @@ cursorEscape is an **open agentic workflow companion** for escaping Cursor lock-
 3. Phase 4 Target docs classify claims (Desired / Required / Nice-to-have / Cursor-specific / Unknown) — see [feature architecture index](../featureArchitecture/_index.md).
 4. Sibling relationships documented in [relationship-to-siblings](./relationship-to-siblings.md); openBuggy is not a v0 runtime dependency.
 5. R0 spike must still prove OpenCode parallel Tasks + parent-owned Fast CI honesty ([implementation roadmap](../roadmaps/implementation-roadmap.md)).
+6. Overlay FA (shared procedure + additive host constraints) is Target staging — do not dual-author Cursor vs OpenCode review loops. Init report remains archaeology; do not treat its Q3/Q6 body as live adapter or openBuggy-required text.
 
 ---
 
@@ -77,3 +80,4 @@ cursorEscape is an **open agentic workflow companion** for escaping Cursor lock-
 - [Documenting this repo (SOP)](../SOPs/documenting-this-repo.md)
 - [Relationship to siblings](./relationship-to-siblings.md)
 - [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)
+- [Theo fleet skill management (Observed)](../research/theo-fleet-skill-management.md)

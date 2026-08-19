@@ -1,10 +1,12 @@
 # Documenting This Repo
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-19
 
 ## Context
 
 cursorEscape's value is its documentation. Drift (undocumented decisions, broken indexes, invented parallel trees) destroys that value. This SOP is the local equivalent of a "reference docs check" discipline — adapted to `docs/` paths only.
+
+**SoT:** Companion-repo contracts (`docs/featureArchitecture/`, `docs/agents/`, `docs/skills/`) are **Target**. Live `~/.cursor` import under `docs/research/imported/cursor-global-workflow/` is **Observed interim** Cursor wording until overlay copy-out — cite it, do not treat it as a second authored procedure tree. Identity: skill/workflow manager across **stacks**, not machines ([design decisions](../review/design-decisions.md)).
 
 Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cursorEscape-local.
 
@@ -18,7 +20,7 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 2. Decide document kind:
    - **featureArchitecture** — how it works (Target design; cite Observed imports from `docs/research/imported/` — do not add Observed harness subdirectories directly under `docs/featureArchitecture/`)
    - **agents** — host-agnostic role contracts (Target); map to host adapters — not Observed Cursor agent file copies
-   - **skills** — host-agnostic workflow skill contracts (Target); cite live imports under `docs/research/imported/cursor-global-workflow/`
+   - **skills** — host-agnostic workflow skill contracts (Target); cite Observed interim live imports under `docs/research/imported/cursor-global-workflow/` (not a second SoT)
    - **SOP** — how to do a task
    - **research** — sourced facts and imported sibling material
    - **roadmaps/** — multi-phase handoff conductors

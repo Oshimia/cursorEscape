@@ -1,10 +1,10 @@
 # Workflow source delta — live `~/.cursor` vs AITestSuite Phase 4 freeze
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-19
 
 ## Context
 
-Phase 3 imports two workflow corpora: **live** `C:\Users\admin\.cursor\` (canonical **Target** for cursorEscape workflow synthesis in Phase 4) and **Observed** AITestSuite Phase 4 freeze (`tests/ez-pz-streaming-media-phase-4/baseline/` plus eval-packaging siblings). This note records material deltas discovered **before** copy lock so Phase 4 Target docs cite live workflow without treating the freeze snapshot as sole authority.
+Phase 3 imports two workflow corpora: **live** `C:\Users\admin\.cursor\` (**Observed interim** Cursor wording used as the Phase 4 synthesis *input*) and **Observed** AITestSuite Phase 4 freeze (`tests/ez-pz-streaming-media-phase-4/baseline/` plus eval-packaging siblings). This note records material deltas discovered **before** copy lock so Phase 4 Target docs cite live-vs-freeze correctly. Companion-repo contracts in `docs/featureArchitecture/`, `docs/agents/`, and `docs/skills/` are **Target** SoT as of 2026-08-19 identity lock-in; this file remains freeze-vs-live archaeology — see [research index](../_index.md).
 
 **Comparison method:** Line-level `Compare-Object` on paired artifacts (freeze `.cursor/*` vs live equivalents; freeze `referenceFiles/SOPs/*` vs live `docs/workflow/*` counterparts). Diffs are summarized by theme, not line-by-line.
 
@@ -16,10 +16,10 @@ Phase 3 imports two workflow corpora: **live** `C:\Users\admin\.cursor\` (canoni
 
 | Corpus | Role in cursorEscape | Label |
 | ------ | -------------------- | ----- |
-| Live `~/.cursor` | Canonical owner workflow — skills, rules, agents, global workflow docs | **Target** (live remains canonical; import is Observed snapshot) |
+| Live `~/.cursor` | Owner Cursor workflow used as Phase 4 synthesis *input* (skills, rules, agents, global workflow docs) | **Observed interim** (import snapshot; not forever Target vs companion repo) |
 | AITestSuite Phase 4 freeze `.cursor/` | Eval-packaging baseline frozen for streaming-media test | **Observed/eval-packaging** |
 | Freeze `referenceFiles/SOPs/` | Project-scoped SOP copies inside test baseline | **Observed/eval-packaging** (paths point at baseline tree) |
-| Live `~/.cursor/docs/workflow/` | Global, repo-agnostic workflow process docs | **Target** (imported under `cursor-global-workflow/`) |
+| Live `~/.cursor/docs/workflow/` | Global, repo-agnostic workflow process docs | **Observed interim** (imported under `cursor-global-workflow/`) |
 
 ### CI ladder — Fast vs Full (major delta)
 
@@ -96,11 +96,12 @@ Live-only co-located artifacts: `user-rules-snippet.md` beside `implementation-p
 
 ## Implications / open questions
 
-1. **Phase 4 Target** `intended-workflow.md` must treat **live import** as canonical; cite this delta when freeze eval packaging disagrees.
+1. **Phase 4 Target** `intended-workflow.md` owns loop semantics in this repo; cite this delta when freeze eval packaging disagrees with the **Observed** live Cursor import.
 2. **cursorEscape CI** is docs-only (link/manifest/allowlist) — do not copy freeze four-command npm gate into cursorEscape pre-runtime CI.
 3. **review-profiles/** links in freeze SOPs and skills are host-only — COPY-MANIFEST annotates; no mirror under cursorEscape.
 4. Whether to re-home a repo-local `reference-docs` skill in cursorEscape runtime is **Unknown** — live owner workflow uses global discovery + documentation-architecture instead.
 5. Re-diff before major AITestSuite re-import; freeze is a point-in-time Observed snapshot.
+6. “Canonical Target” in older Phase 3 prose meant live-vs-freeze for Cursor import, not forever-SoT versus this companion repo ([design decisions](../../review/design-decisions.md)).
 
 ---
 

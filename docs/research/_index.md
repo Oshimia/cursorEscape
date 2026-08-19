@@ -1,12 +1,12 @@
 # Research Documentation
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-19
 
 ## Context
 
 This section holds **sourced** market and product research plus **imported** sibling research (openBuggy, AITestSuite, live `~/.cursor` workflow) that informs cursorEscape architecture and evaluation.
 
-**Status:** Phase 3 imports complete. Phase 4 added Target synthesis [preliminary-backend-landscape.md](./preliminary-backend-landscape.md) (updated 2026-08: first-attempt OpenCode + T3).
+**Status:** Phase 3 imports complete. Phase 4 added Target synthesis [preliminary-backend-landscape.md](./preliminary-backend-landscape.md). Identity research: [theo-fleet-skill-management.md](./theo-fleet-skill-management.md) (2026-08-19). Live `~/.cursor` import is **Observed interim Cursor wording**, not forever Target SoT vs this companion repo (Target overlay FA next — [feature architecture index](../featureArchitecture/_index.md)).
 
 ---
 
@@ -16,7 +16,7 @@ This section holds **sourced** market and product research plus **imported** sib
 
 | Location | Responsibility |
 | -------- | -------------- |
-| `docs/research/*` (Target synthesis) | Facts and synthesis with **Sources** subsections |
+| `docs/research/*` (authored leaves) | Facts and synthesis with **Sources**; label **Observed** vs **Target** per leaf (e.g. [theo-fleet](./theo-fleet-skill-management.md) is Observed) |
 | `docs/research/imported/` | Copied sibling docs with provenance banners |
 | `docs/featureArchitecture/` | Target system design — link research; do not duplicate long competitor essays |
 
@@ -25,6 +25,12 @@ This section holds **sourced** market and product research plus **imported** sib
 | Document | Purpose |
 | -------- | ------- |
 | [preliminary-backend-landscape.md](./preliminary-backend-landscape.md) | First attempt: OpenCode + T3 Code; ClinePass Desired later |
+
+### Observed synthesis (identity)
+
+| Document | Purpose |
+| -------- | ------- |
+| [theo-fleet-skill-management.md](./theo-fleet-skill-management.md) | Observed: Theo `fleet` repo; stacks analog / machines delta |
 
 Operator study: [host recreation](../analysis/host-recreation-2026-08.md).
 
@@ -55,9 +61,9 @@ Sibling relationship (Target): [relationship-to-siblings](../review/relationship
 
 | Area | Hub |
 | ---- | --- |
-| Workflow source delta (authored) | [workflow-source-delta.md](./imported/workflow-source-delta.md) |
+| Workflow source delta (authored) | [workflow-source-delta.md](./imported/workflow-source-delta.md) — Observed freeze-vs-live archaeology |
 | AITestSuite Phase 4 freeze / eval packaging | [imported/AITestSuite/](./imported/AITestSuite/) |
-| Live `~/.cursor` workflow (canonical Target) | [imported/cursor-global-workflow/](./imported/cursor-global-workflow/) |
+| Live `~/.cursor` workflow (**Observed interim** Cursor wording) | [imported/cursor-global-workflow/](./imported/cursor-global-workflow/) |
 
 Key live workflow entry points in the import mirror:
 
@@ -71,6 +77,7 @@ Key live workflow entry points in the import mirror:
 
 1. Host-only absolute paths in imports are annotated in COPY-MANIFEST.
 2. U2/U8 settled in [unresolved questions](../review/unresolved-architectural-questions.md); remaining Unknowns stay labeled.
+3. Do not treat live `~/.cursor` import as Target overlay SoT; contracts in this repo are Target. Overlay FA pending.
 
 ---
 

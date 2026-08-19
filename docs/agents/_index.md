@@ -1,10 +1,10 @@
 # Agent Role Contracts
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
-Host-agnostic **Target** contracts for cursorEscape orchestration. Adapters map these roles to native agent types (e.g. Cursor `reviewer-a` → production_readiness_reviewer; OpenCode markdown agents for first recreation). Imported Cursor agent files under [cursor-global-workflow](../research/imported/cursor-global-workflow/agents/) are **Observed** snapshots.
+Host-agnostic **Target** contracts for cursorEscape orchestration. Portable contracts live in this folder (companion-repo **Target** SoT). Adapters map these roles to native agent types (e.g. Cursor `reviewer-a` → production_readiness_reviewer; OpenCode markdown agents for first recreation). Imported Cursor agent files under [cursor-global-workflow](../research/imported/cursor-global-workflow/agents/) are **Observed interim** snapshots of Cursor wording, not a second procedure tree.
 
 ---
 

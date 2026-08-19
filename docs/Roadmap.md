@@ -1,15 +1,15 @@
 # cursorEscape Roadmap
 
-**Last updated:** 2026-08-17  
-**Status:** Documentation foundation — initialization complete; runtime not started. First recreation: **T3 Code + OpenCode** (external).
+**Last updated:** 2026-08-19  
+**Status:** Documentation foundation — initialization complete; runtime not started. First recreation: **T3 Code + OpenCode** (external). Identity: **skill/workflow manager across stacks** (not machines).
 
-This repository is the owner's **open agentic workflow companion**: preserve and evolve a personal agentic loop without inseparable dependence on Cursor, a single IDE, or a single model provider.
+This repository is the owner's **skill and workflow manager**: preserve and evolve personal agentic skills and the plan → implement → dual review loop, and apply them across stacks without inseparable dependence on Cursor, a single IDE, or a single model provider. Analog: Theo `fleet` ([Observed](./research/theo-fleet-skill-management.md)). Non-goal: multi-machine sync.
 
 ---
 
 ## Context
 
-cursorEscape exists to escape Cursor lock-in while keeping what works: structured plan/review loops, repository-local knowledge, and evaluable workflow behavior. Documentation follows the openBuggy taxonomy (feature architecture, SOPs, research, analysis, roadmaps) adapted for a **workspace-pointing companion** rather than a Bugbot-only engine.
+cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy (feature architecture, SOPs, research, analysis, roadmaps) adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is **Observed interim** Cursor wording; this repo is **Target** contract SoT. Overlay FA (shared procedure + additive host constraints) is the next Target page — see [feature architecture index](./featureArchitecture/_index.md).
 
 **First host attempt:** T3 Code (control plane) + OpenCode (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Operator study: [host recreation](./analysis/host-recreation-2026-08.md).
 
@@ -22,6 +22,7 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 | Principle | Detail |
 | --------- | ------ |
 | **Own the workflow** | Plan, review, and agent roles are first-class artifacts — not hidden in IDE defaults. |
+| **Own the skill inventory** | Skills, agents, and gates live in this git repo (Theo `fleet` analog across **stacks**, not machines). |
 | **Own repository knowledge** | Discovery, context, and SOPs live in-repo and remain portable. |
 | **Own evaluation** | Workflow quality is measurable; imports and deltas are documented. |
 | **Backends replaceable** | Models, providers, and execution surfaces (CLI, MCP, thin IDE, T3) swap without rewriting intent docs. |
@@ -42,6 +43,7 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 | Target synthesizing architecture docs | **Complete** (Phase 4) — [feature architecture index](./featureArchitecture/_index.md) |
 | Agent & skill contracts | **Complete** (Phase 4) — [agents](./agents/_index.md) · [skills](./skills/_index.md) |
 | Implementation roadmap | [implementation-roadmap.md](./roadmaps/implementation-roadmap.md) — R0 dogfood |
+| Skill-manager identity | **Phase 1 landed** (hubs + [theo-fleet](./research/theo-fleet-skill-management.md)). Dual-review loop **stopped by owner** 2026-08-19 — remaining SoT/overlay FA is Phase 2. |
 
 ---
 
@@ -98,6 +100,8 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 1. Engine language and license remain **Unknown**; U2/U8 settled — see [unresolved architectural questions](./review/unresolved-architectural-questions.md).
 2. Bugbot-shaped review uses OpenCode `bug_reviewer` + skills; openBuggy is research / optional later.
 3. Keep hub docs extend-only; do not fork parallel taxonomies.
+4. Multi-machine skill sync remains a **non-goal**. Overlay architecture must not create two authored review procedures.
+5. Overlay FA (`skill-source-and-host-overlays.md`) is **Phase 2** — shared procedure + additive host overlays; remaining SoT wording lives there, not in another identity review loop.
 
 ---
 
@@ -108,3 +112,4 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 - [Host recreation study](./analysis/host-recreation-2026-08.md)
 - [Documenting this repo (SOP)](./SOPs/documenting-this-repo.md)
 - [Roadmaps index](./roadmaps/_index.md)
+- [Theo fleet skill management (Observed)](./research/theo-fleet-skill-management.md)
