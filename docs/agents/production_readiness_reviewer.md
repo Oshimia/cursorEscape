@@ -47,7 +47,7 @@ Verdict: **APPROVED** only when loop-blocking lists are `"None"`.
 
 ### Model
 
-**Desired:** `composer-2.5` — config override ([review-subagent-models](../../overlays/cursor/docs/workflow/review-subagent-models.md)).
+**Desired:** `composer-2.5` — config override ([review-subagent-models](../../overlays/cursor/review-subagent-models.md)).
 
 ---
 

@@ -16,9 +16,9 @@ If `.cursor/skills/reference-docs/SKILL.md` exists in the active repo, **follow 
 
 ## Workflow process (any repo)
 
-When the repo has no process SOPs, read these Cursor workflow docs for plan/review/Composer expectations only — not for product architecture:
+When the repo has no process SOPs, read these workflow docs for plan/review/Composer expectations only — not for product architecture:
 
-- [README.md](README.md) — full index
+- [_index.md](_index.md) — full index
 - [iterative-plan-review.md](iterative-plan-review.md)
 - [iterative-code-review.md](iterative-code-review.md)
 - [phased-multi-agent.md](phased-multi-agent.md)
@@ -26,12 +26,12 @@ When the repo has no process SOPs, read these Cursor workflow docs for plan/revi
 - [ci-ladder.md](ci-ladder.md)
 - [documentation-architecture.md](documentation-architecture.md)
 
-Absolute root: `C:/Users/admin/.cursor/docs/workflow/`
+Repo root: `workflow/` (this file). Live Cursor copy-out: `~/.cursor/docs/workflow/`.
 
 ## Related skills
 
-- [implementation-plan](../../skills/implementation-plan/SKILL.md)
-- [implementation-review](../../skills/implementation-review/SKILL.md)
-- [composer](../../skills/composer/SKILL.md)
-- [roadmap](../../skills/roadmap/SKILL.md)
-- [documentation-architecture](../../skills/documentation-architecture/SKILL.md)
+- [implementation-plan](../docs/skills/implementation-plan.md)
+- [implementation-review](../docs/skills/implementation-review.md)
+- [composer](../docs/skills/composer.md)
+- [roadmap](../docs/skills/roadmap.md)
+- [documentation-architecture](../docs/skills/documentation-architecture.md)

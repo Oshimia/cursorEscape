@@ -39,7 +39,7 @@ This is a **context-budget** optimization. Loop gate semantics stay in [intended
 
 ### Escalation *when* ownership (Required)
 
-**Sole SoT** for Escalation *when* triggers: Target [implementation-plan](../skills/implementation-plan.md) (→ `skills/implementation-plan/SKILL.md` after Phase 4). Deep [plan-agent-context](../../overlays/cursor/docs/workflow/plan-agent-context.md) (Observed overlay interim) and host mirrors keep **field specimen / required headings only** and must **point to** that skill — no competing “≤3 phases usually no” when-table.
+**Sole SoT** for Escalation *when* triggers: Target [implementation-plan](../skills/implementation-plan.md) (→ `skills/implementation-plan/SKILL.md` after Phase 4). Deep [plan-agent-context](../../workflow/plan-agent-context.md) and host mirrors keep **field specimen / required headings only** and must **point to** that skill — no competing “≤3 phases usually no” when-table.
 
 ### Layer 2 — Skills (on-demand)
 
@@ -47,17 +47,17 @@ This is a **context-budget** optimization. Loop gate semantics stay in [intended
 
 **Cursor-specific mapping:** `disable-model-invocation: true` on SKILL.md (agent loads via skill tool / explicit read, not ambient injection).
 
-**Positive Observed example:** [documentation-architecture SKILL.md](../../overlays/cursor/skills/documentation-architecture/SKILL.md) is a lean entry that points to deep [documentation-architecture.md](../../overlays/cursor/docs/workflow/documentation-architecture.md).
+**Positive layering pattern (Target):** Lean skill entry → deep doc at repo-root [`workflow/`](../../workflow/_index.md). **Observed fat extract caveat:** overlay SKILL bodies still link `../../docs/workflow/` (non-navigable in-repo until Phase 5); gold deep doc is [documentation-architecture.md](../../workflow/documentation-architecture.md).
 
 Target skill contracts: [docs/skills/](../skills/_index.md) (→ `skills/` after Phase 4).
 
 ### Layer 3 — Deep workflow docs
 
-**Required:** Full procedures (`discovery`, `iterative-plan-review`, `iterative-code-review`, `ci-ladder`, `plan-agent-context`, `phased-multi-agent`, etc.) live in companion workflow docs at gold bases (`workflow/` after Phase 3). Load only when a skill or escalated plan says so.
+**Required:** Full procedures (`discovery`, `iterative-plan-review`, `iterative-code-review`, `ci-ladder`, `plan-agent-context`, `phased-multi-agent`, etc.) live in companion workflow docs at gold bases ([`workflow/`](../../workflow/_index.md)). Load only when a skill or escalated plan says so.
 
-**Example (interim Phases 1–2):** [plan-agent-context.md](../../overlays/cursor/docs/workflow/plan-agent-context.md) must **not** be pasted into always-on rules or the plan_reviewer output schema — load only when drafting or reviewing escalated plans. After Phase 3, the same leaf lives under `workflow/plan-agent-context.md`.
+**Example:** [plan-agent-context.md](../../workflow/plan-agent-context.md) must **not** be pasted into always-on rules or the plan_reviewer output schema — load only when drafting or reviewing escalated plans.
 
-Observed interim index: [workflow README](../../overlays/cursor/docs/workflow/README.md) (overlay Phases 1–2 only). Host adapters may mirror under a host-local `docs/workflow/` path; **Target** contracts land at gold bases (`workflow/` after Phase 3); **interim** deep procedure: overlay extract Phases 1–2, then `workflow/` Phases 3–4 (→ root after Phase 3).
+Gold index: [workflow/_index.md](../../workflow/_index.md). Host adapters may mirror under a host-local `docs/workflow/` path; **Target** contracts land at gold bases (`workflow/` after Phase 3).
 
 ### Layer 4 — Role agents
 

@@ -69,7 +69,7 @@ Sibling relationship (Target): [relationship-to-siblings](../review/relationship
 Key live workflow entry points in the import mirror:
 
 - [cursor-global-workflow/docs/workflow/README.md](./imported/cursor-global-workflow/docs/workflow/README.md)
-- Current overlay: [workflow README](../overlays/cursor/docs/workflow/README.md), [implementation-review](../overlays/cursor/skills/implementation-review/SKILL.md), [reviewer-a](../overlays/cursor/agents/reviewer-a.md)
+- Current overlay: [workflow index](../workflow/_index.md), [implementation-review](../overlays/cursor/skills/implementation-review/SKILL.md), [reviewer-a](../overlays/cursor/agents/reviewer-a.md)
 
 ---
 

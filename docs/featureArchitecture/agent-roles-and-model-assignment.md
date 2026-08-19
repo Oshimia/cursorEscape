@@ -4,7 +4,7 @@
 
 ## Context
 
-Target role catalog for cursorEscape orchestration. Roles are **configurable contracts** ([agents](../agents/_index.md)) — not hardcoded Cursor subagent type strings. First host maps roles to **OpenCode** markdown agents. Model assignment per role is **Desired** via config; live workflow recommends `composer-2.5` for reviewers ([review-subagent-models](../../overlays/cursor/docs/workflow/review-subagent-models.md)). **Desired** later provider: ClinePass (or equivalent) — U13 unproven.
+Target role catalog for cursorEscape orchestration. Roles are **configurable contracts** ([agents](../agents/_index.md)) — not hardcoded Cursor subagent type strings. First host maps roles to **OpenCode** markdown agents. Model assignment per role is **Desired** via config; live workflow recommends `composer-2.5` for reviewers ([review-subagent-models](../../overlays/cursor/review-subagent-models.md)). **Desired** later provider: ClinePass (or equivalent) — U13 unproven.
 
 ---
 

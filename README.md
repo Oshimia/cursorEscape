@@ -6,7 +6,7 @@
 
 **What:** cursorEscape is the owner's **skill and workflow manager** — a git home for personal agentic skills, agent roles, and gates (plan → implement → dual review → closeout), applied across **stacks** (Cursor, OpenCode; T3 as control plane). Analogous to Theo's T3 `fleet` repo ([Observed](research/theo-fleet-skill-management.md)), except this is **not** multi-machine sync.
 
-**Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. Gold-base contracts (Approach A: `workflow/`, `skills/`, `agents/`, `rules/` — interim: `docs/skills/`, `docs/agents/`) are **Target** SoT. Cursor overlay under [overlays/cursor](overlays/cursor/_index.md) is a **fat Observed interim extract** (thin wrappers in Phase 5). Live `~/.cursor` remains the running Cursor install. Stack variation: [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
+**Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. Gold-base contracts (Approach A: `workflow/`, `skills/`, `agents/`, `rules/` — interim: repo-root [`workflow/`](workflow/_index.md) for deep procedure since Phase 3; `docs/skills/`, `docs/agents/` until Phase 4) are **Target** SoT. Cursor overlay under [overlays/cursor](overlays/cursor/_index.md) is a **fat Observed interim extract** (thin wrappers in Phase 5). Live `~/.cursor` remains the running Cursor install. Stack variation: [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
 
 **First host attempt:** [T3 Code](https://t3.codes/) (control plane) + [OpenCode](https://opencode.ai/) (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Study: [host recreation](analysis/host-recreation-2026-08.md).
 
@@ -16,6 +16,7 @@
 
 | Path | Purpose |
 | ---- | ------- |
+| [`workflow/`](workflow/_index.md) | Shared deep procedure (plan/review loops, discovery, CI ladder) |
 | [`docs/Roadmap.md`](docs/Roadmap.md) | Vision, principles, status, and directory map |
 | [`review/`](review/_index.md) | Project intent and [design decisions](review/design-decisions.md) |
 | [`docs/featureArchitecture/`](docs/featureArchitecture/_index.md) | How the system is intended to work (Target) |
@@ -32,6 +33,7 @@
 ```text
 cursorEscape/
   README.md
+  workflow/
   .gitignore
   docs/
     Roadmap.md

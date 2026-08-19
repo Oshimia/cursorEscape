@@ -43,7 +43,7 @@ Stewardship and non-goals: [design decisions](../review/design-decisions.md).
 | Target synthesizing architecture docs | **Complete** (Phase 4) — [feature architecture index](./featureArchitecture/_index.md) |
 | Agent & skill contracts | **Complete** (Phase 4) — [agents](./agents/_index.md) · [skills](./skills/_index.md) |
 | Implementation roadmap | [implementation-roadmap.md](./roadmaps/implementation-roadmap.md) — R0 dogfood |
-| Skill-manager identity | **Phase 1 committed** (`9c104b1`). **Phase 2 overlay FA landed.** **Cursor workflow overlay extract** — [overlays/cursor](../overlays/cursor/_index.md). |
+| Skill-manager identity | **Phase 1 committed** (`9c104b1`). **Phase 2 overlay FA landed.** **Cursor overlay extract** — [overlays/cursor](../overlays/cursor/_index.md); shared deep procedure — [workflow/](../workflow/_index.md). |
 
 ---
 
@@ -51,12 +51,13 @@ Stewardship and non-goals: [design decisions](../review/design-decisions.md).
 
 | Path | Purpose |
 | ---- | ------- |
+| [`workflow/`](../workflow/_index.md) | Shared deep procedure (plan/review loops, discovery, CI ladder) |
 | [`README.md`](../README.md) | Repo entry; points here |
 | [`review/`](../review/_index.md) | Project intent and design decisions |
 | [`featureArchitecture/`](./featureArchitecture/_index.md) | Intended system behavior (Target) |
 | [`agents/`](./agents/_index.md) | Host-agnostic role contracts |
 | [`skills/`](./skills/_index.md) | Host-agnostic skill contracts |
-| [`overlays/`](../overlays/_index.md) | Host-native recorded files (Cursor workflow extract) |
+| [`overlays/`](../overlays/_index.md) | Host-native recorded files (Cursor fat interim extract; deep procedure at `workflow/`) |
 | [`research/`](../research/_index.md) | Sourced facts and imported sibling research |
 | [`SOPs/`](./SOPs/_index.md) | How maintainers and future implementers work |
 | [`analysis/`](../analysis/_index.md) | Operator studies of local workflows |

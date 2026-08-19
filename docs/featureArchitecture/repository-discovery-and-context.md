@@ -19,7 +19,7 @@ Before plan or implement:
 | Where is the doc hub? | Avoid inventing parallel trees ([discovery](../skills/discovery.md)) |
 | What process SOPs exist? | Plan/review expectations |
 | What is Target vs Observed in this repo? | Prevent mixing harness imports with product intent |
-| What CI commands apply? | Fast/Full mapping ([ci-ladder](../../overlays/cursor/docs/workflow/ci-ladder.md)) |
+| What CI commands apply? | Fast/Full mapping ([ci-ladder](../../workflow/ci-ladder.md)) |
 | What is out of scope for this task? | Phase boundaries on roadmaps |
 
 ### Context for implementation (Desired)

@@ -27,14 +27,14 @@ This repo is the **canonical manager** of portable skills, agent roles, always-o
 - **B:** Lean `docs/skills` / `docs/agents` contracts as the sole portable SoT while bulk procedure stays under `overlays/cursor` — rejected (two homes; overlay becomes perpetual SoT).
 - **C:** Hybrid bulk still in overlay with lean contracts elsewhere — rejected (same upkeep bug as B).
 
-**Interim (until Phases 3–5 land):** Portable contracts remain under `docs/skills/` and `docs/agents/`; shared deep procedure remains in the overlay extract (`overlays/cursor/docs/workflow/` until Phase 3). Do **not** claim present-tense “root `skills/` is SoT” before Phase 4 trees exist.
+**Interim (Phases 3–4):** Portable contracts remain under `docs/skills/` and `docs/agents/`; shared deep procedure lives at repo-root [`workflow/`](../../workflow/_index.md) (Phase 3+). Do **not** claim present-tense “root `skills/` is SoT” before Phase 4 trees exist.
 
 **Temporary exception (Phase 4 → Phase 5):** Gold bases may contain Cursor Task / `subagent_type` / Bugbot IDs until Phase 5 extracts them into overlay wrappers — interim FA exception, not end-state.
 
 | Kind | Target home (Approach A) | Interim (pre-Phase 4) | May vary by host? |
 | ---- | ------------------------ | --------------------- | ----------------- |
-| Shared loop | `workflow/` + [intended-workflow](./intended-workflow.md) | Phases 1–2: [intended-workflow](./intended-workflow.md) (FA); **Phases 3–4:** `workflow/` + FA (→ root after Phase 3) | **No** |
-| Shared deep docs | `workflow/` (discovery, plan/review loops, ci-ladder, …) | Phases 1–2: `overlays/cursor/docs/workflow/`; **Phases 3–4:** `workflow/` (→ root after Phase 3) | **No** |
+| Shared loop | `workflow/` + [intended-workflow](./intended-workflow.md) | [`workflow/`](../../workflow/_index.md) + FA | **No** |
+| Shared deep docs | `workflow/` (discovery, plan/review loops, ci-ladder, …) | Phase 3+: [`workflow/`](../../workflow/_index.md) | **No** |
 | Shared skill contracts | `skills/*/SKILL.md` | `docs/skills/` | **No** host IDs in shared bodies (interim exception above) |
 | Shared agent contracts | `agents/*.md` | `docs/agents/` | **No** |
 | Shared always-on gates | `rules/*.md` | `docs/skills/pre-commit-ci-gate.md` → `rules/` in Phase 4 | **No** |
@@ -45,7 +45,7 @@ This repo is the **canonical manager** of portable skills, agent roles, always-o
 
 **Target (Approach A):** Shared loop, shared deep docs, and shared skill/agent contracts are **three authored SoTs** for procedure at gold bases (`workflow/`, `skills/`, `agents/`). **Host overlay** is the fourth layer: **thin wrappers** at `overlays/cursor/` after Phase 5. **Copy-out** is install, not a fifth SoT.
 
-**Interim (Phase 1):** Gold bases are not yet on disk. Portable procedure is authored in `docs/skills/`, `docs/agents/`, FA, and (for deep procedure) recorded in the fat overlay extract at `overlays/cursor/` — overlay **bodies** are not the portable edit surface during Phases 1–4.
+**Interim (Phases 1–4):** Gold bases are partially on disk. Portable procedure is authored in `docs/skills/`, `docs/agents/`, FA, and (for deep procedure) repo-root [`workflow/`](../../workflow/_index.md) since Phase 3. Overlay **bodies** are not the portable edit surface during Phases 1–4.
 
 ```text
 Target (after Phases 3–5):
@@ -55,7 +55,7 @@ Shared skill/agent contracts (triggers, outline, must-not) → skills/, agents/
 Host overlay (Cursor: thin wrappers)                      → overlays/cursor/
 Copy-out to host config dirs                              → install later; not SoT
 
-Interim (Phase 1): docs/skills/, docs/agents/, overlays/cursor/ (fat extract)
+Interim (Phases 3–4): workflow/, docs/skills/, docs/agents/, overlays/cursor/ (fat extract)
 ```
 
 Instruction **budget** (thin always-on vs on-demand vs deep docs) stays in [instruction-layering](./instruction-layering.md). Overlays sit **beside** that budget; they do not replace it.
@@ -64,7 +64,7 @@ Instruction **budget** (thin always-on vs on-demand vs deep docs) stays in [inst
 
 When editing a sentence, ask: would this still be true if we deleted this host tomorrow?
 
-- **Yes** → shared loop, shared skill, or shared deep doc. **Target:** gold bases (`workflow/`, `skills/`, `agents/`). **Interim (Phases 1–4):** edit `docs/skills/`, `docs/agents/`, FA, or overlay **index** policy — **not** overlay SKILL/agent/rule bodies for portable procedure.
+- **Yes** → shared loop, shared skill, or shared deep doc. **Target:** gold bases (`workflow/`, `skills/`, `agents/`). **Interim (Phases 1–4):** edit `workflow/` (deep procedure), `docs/skills/`, `docs/agents/`, FA, or overlay **index** policy — **not** overlay SKILL/agent/rule bodies for portable procedure.
 - **No** (how this host wires or extra-constrains) → overlay only (spawn blocks, harness IDs, additive safety).
 - **Same paragraph appearing in two overlays** → it was shared; promote it. Dual overlays of procedure is the bug.
 - **OpenCode cannot meet a Required gate** → change the portable Required, or mark Cursor-specific / Unknown. Never write an “OpenCode edition” of the loop.

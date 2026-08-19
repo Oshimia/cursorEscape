@@ -14,12 +14,12 @@ AITestSuite freeze includes a **reference-docs** skill — live owner workflow u
 
 ### Core skills (Required)
 
-| Skill | Contract | Cursor overlay (Observed) |
-| ----- | -------- | ------------------------- |
+| Skill | Contract | Deep procedure / overlay SKILL |
+| ----- | -------- | ------------------------------ |
 | implementation-plan | [implementation-plan.md](./implementation-plan.md) | [SKILL.md](../../overlays/cursor/skills/implementation-plan/SKILL.md) |
 | implementation-review | [implementation-review.md](./implementation-review.md) | [SKILL.md](../../overlays/cursor/skills/implementation-review/SKILL.md) |
-| discovery | [discovery.md](./discovery.md) | [discovery.md](../../overlays/cursor/docs/workflow/discovery.md) |
-| plan-review (concepts) | [plan-review.md](./plan-review.md) | [iterative-plan-review](../../overlays/cursor/docs/workflow/iterative-plan-review.md) |
+| discovery | [discovery.md](./discovery.md) | [workflow/discovery.md](../../workflow/discovery.md) |
+| plan-review (concepts) | [plan-review.md](./plan-review.md) | [workflow/iterative-plan-review.md](../../workflow/iterative-plan-review.md) |
 
 ### Gates / on-demand policy
 

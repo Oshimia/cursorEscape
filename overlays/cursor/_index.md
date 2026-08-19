@@ -6,7 +6,7 @@
 
 Fat **Observed interim extract** of the owner's **currently active** Cursor workflow from `C:\Users\admin\.cursor` on **2026-08-20** (skills also hashed 2026-08-19; unchanged since extract). Extract bodies carry no provenance banners inside skill, rule, agent, or workflow files. Cursor product trees (`skills-cursor`, extensions, plugins, plans) were **not** copied.
 
-This tree is **Observed** Cursor file wording — **not** a permanent freeze target (thin wrappers in Phase 5). Portable **Target** contracts: interim [docs/skills](../../docs/skills/_index.md) and [docs/agents](../../docs/agents/_index.md) (→ gold bases after Phase 4). The 2026-08-17 bannered snapshot stays under [imported/cursor-global-workflow](../../research/imported/cursor-global-workflow/) for archaeology.
+This tree is **Observed** Cursor file wording — **not** a permanent freeze target (thin wrappers in Phase 5). Portable **Target** contracts: repo-root [`workflow/`](../../workflow/_index.md) (deep procedure since Phase 3); interim [docs/skills](../../docs/skills/_index.md) and [docs/agents](../../docs/agents/_index.md) (→ gold bases after Phase 4). The 2026-08-17 bannered snapshot stays under [imported/cursor-global-workflow](../../research/imported/cursor-global-workflow/) for archaeology.
 
 ## Substance
 
@@ -39,19 +39,14 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 
 ### Deep workflow docs
 
-Live path `~/.cursor/docs/workflow/` → [docs/workflow/](./docs/workflow/README.md).
+**Gold SoT (Phase 3+):** repo-root [workflow/_index.md](../../workflow/_index.md). Live Cursor copy-out: `~/.cursor/docs/workflow/` (not overwritten from this repo).
 
 | Doc | File |
 | --- | ---- |
-| Index | [README.md](./docs/workflow/README.md) |
-| ci-ladder | [ci-ladder.md](./docs/workflow/ci-ladder.md) |
-| discovery | [discovery.md](./docs/workflow/discovery.md) |
-| documentation-architecture | [documentation-architecture.md](./docs/workflow/documentation-architecture.md) |
-| iterative-code-review | [iterative-code-review.md](./docs/workflow/iterative-code-review.md) |
-| iterative-plan-review | [iterative-plan-review.md](./docs/workflow/iterative-plan-review.md) |
-| phased-multi-agent | [phased-multi-agent.md](./docs/workflow/phased-multi-agent.md) |
-| plan-agent-context | [plan-agent-context.md](./docs/workflow/plan-agent-context.md) |
-| review-subagent-models | [review-subagent-models.md](./docs/workflow/review-subagent-models.md) |
+| Index + used-by matrix | [workflow/_index.md](../../workflow/_index.md) |
+| review-subagent-models (overlay-only) | [review-subagent-models.md](./review-subagent-models.md) |
+
+**Fat extract contract (Phases 3–4):** SKILL.md, agent, and rule **bodies** in this overlay still contain `../../docs/workflow/` links from the live extract. Those paths are **non-navigable in-repo** until Phase 5 thin wrappers retarget them at `workflow/`. Do **not** edit fat bodies for link repair during Phases 3–4; use repo-root `workflow/` for deep procedure.
 
 ### SHA256 at extract (live = overlay)
 
@@ -70,19 +65,12 @@ Live path `~/.cursor/docs/workflow/` → [docs/workflow/](./docs/workflow/README
 | `rules/pre-commit-ci-gate.mdc` | `FF04B91FDAC4D743E623773B0526FFF5A989FEE93FB4B2418944920E3C4CD015` |
 | `agents/plan-reviewer.md` | `250D7A06AD24E0CF6558B26C9EFAF56B9D3ABCF88DDA1057E633F7C615D96D97` |
 | `agents/reviewer-a.md` | `417A82D3C6AD1E87F25D47C38135134E1D40D99372C58414D679D778653EBA3D` |
-| `docs/workflow/ci-ladder.md` | `E65EA861F78F95480E640E78C8E190457CF46F427CD856DA477BE42B67110DEC` |
-| `docs/workflow/discovery.md` | `75AAB56E3C9CED2A078D2E83EF2E28494061D08500C0F5F6D228B64CB122F87B` |
-| `docs/workflow/documentation-architecture.md` | `13F4DAF01DC429418F0B1D72BF0548A010935325337412212CC43302AED305EC` |
-| `docs/workflow/iterative-code-review.md` | `832FAA757508CF864872C76A7BB328B82DCF065FA2E86D136451EAD1070D9D13` |
-| `docs/workflow/iterative-plan-review.md` | `4E1D825A3E971B51FCC32ADA0B1A7746CE14C542CD2838AD76E02FED21B4E0CD` |
-| `docs/workflow/phased-multi-agent.md` | `7C54BD26DCBE1C8337D1C86464AFD3D559E2E1AF542C95FE897309545457F275` |
-| `docs/workflow/plan-agent-context.md` | `84E2F43167D52792770D04FD73381E4424CE9850BD42AA2FC111087BF287AC83` |
-| `docs/workflow/README.md` | `CA7992181535FFE95D91EBA09CD125109A002B48EB35A8D793A65814652272D2` |
-| `docs/workflow/review-subagent-models.md` | `DB7F24FDDEB1E619D4D54D6F7A80E28883F7940997B378AD4C8F238373A90E6B` |
+
+Deep workflow procedure moved to repo-root [`workflow/`](../../workflow/_index.md) in Phase 3 — `docs/workflow/` SHA256 rows retired. `review-subagent-models.md` relocated to overlay root and link-updated (hash not tracked post-move).
 
 ### How to treat these files (index policy — Approach A)
 
-- **Bodies:** Fat Observed interim extract as of the extract date. **Not** a permanent freeze target — Phase 5 replaces them with thin wrappers pointing at gold bases (`skills/`, `agents/`, `rules/`, `workflow/`). Do **not** edit overlay SKILL/agent/rule bodies for portable procedure during Phases 1–4; portable edits go to interim `docs/skills/`, `docs/agents/`, FA, or overlay **index** per [overlay FA](../../docs/featureArchitecture/skill-source-and-host-overlays.md) promotion rule.
+- **Bodies:** Fat Observed interim extract as of the extract date. **Not** a permanent freeze target — Phase 5 replaces them with thin wrappers pointing at gold bases (`skills/`, `agents/`, `rules/`, `workflow/`). Do **not** edit overlay SKILL/agent/rule bodies for portable procedure during Phases 1–4; portable edits go to repo-root `workflow/`, interim `docs/skills/`, `docs/agents/`, FA, or overlay **index** per [overlay FA](../../docs/featureArchitecture/skill-source-and-host-overlays.md) promotion rule.
 - **Do not** copy them to repo-root `.cursor/` (this repo is not a Cursor project tree).
 - Refresh extract by re-copying from live `~/.cursor` and updating hashes here when authorized.
 - Copy-out **back** to `~/.cursor` is not authorized.

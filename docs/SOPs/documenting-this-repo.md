@@ -6,7 +6,7 @@
 
 cursorEscape's value is its documentation. Drift (undocumented decisions, broken indexes, invented parallel trees) destroys that value. This SOP is the local equivalent of a "reference docs check" discipline — adapted to repo paths.
 
-**SoT (Target — Approach A):** Gold procedure and contracts land at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` (Phases 3–5 of [shared-workflow-docs](../roadmaps/shared-workflow-docs.md)). **Interim:** portable contracts under `docs/skills/` and `docs/agents/`; shared deep procedure in the overlay extract. `docs/` holds **this-repo-only** FA, SOPs, roadmaps, and `Roadmap.md`. Cursor overlay under `overlays/cursor/` is a **fat Observed interim extract** (thin wrappers in Phase 5). Phase 3 import under `research/imported/cursor-global-workflow/` is archaeology. Identity: skill/workflow manager across **stacks**, not machines ([design decisions](../../review/design-decisions.md)).
+**SoT (Target — Approach A):** Gold procedure and contracts land at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` (Phases 3–5 of [shared-workflow-docs](../roadmaps/shared-workflow-docs.md)). **Interim:** portable contracts under `docs/skills/` and `docs/agents/`; shared deep procedure at repo-root [`workflow/`](../../workflow/_index.md) (Phase 3+). `docs/` holds **this-repo-only** FA, SOPs, roadmaps, and `Roadmap.md`. Cursor overlay under `overlays/cursor/` is a **fat Observed interim extract** (thin wrappers in Phase 5). Phase 3 import under `research/imported/cursor-global-workflow/` is archaeology. Identity: skill/workflow manager across **stacks**, not machines ([design decisions](../../review/design-decisions.md)).
 
 Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cursorEscape-local.
 
@@ -26,7 +26,7 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 | Kind | Target home | Interim (pre-Phase 4/5) | Edit rule |
 | ---- | ----------- | ----------------------- | --------- |
 | **featureArchitecture** | `docs/featureArchitecture/` | Same | Target design. Host extra restrictiveness: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md). Cite Observed imports from `research/imported/` — do not add Observed harness subdirectories directly under `docs/featureArchitecture/` |
-| **workflow** (shared deep procedure) | `workflow/` | Phases 1–2: `overlays/cursor/docs/workflow/`; Phases 3–4: `workflow/` (→ root after Phase 3) | One authored procedure per leaf; skills **point**, they do not paste |
+| **workflow** (shared deep procedure) | `workflow/` | Phase 3+: [`workflow/`](../../workflow/_index.md) | One authored procedure per leaf; skills **point**, they do not paste |
 | **skills** | `skills/*/SKILL.md` | `docs/skills/` | Host-agnostic workflow skill contracts (Target) |
 | **agents** | `agents/*.md` | `docs/agents/` | Host-agnostic role contracts (Target) |
 | **rules** | `rules/*.md` | `docs/skills/pre-commit-ci-gate.md` → `rules/` in Phase 4 | Always-on gate contracts |

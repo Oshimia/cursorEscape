@@ -59,4 +59,4 @@ User assigns Composer for multi-phase roadmap execution with Incremental executi
 - [implementation-review](./implementation-review.md)
 - [pre-commit-ci-gate](./pre-commit-ci-gate.md)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md) — transcript audit stays on Composer; not next-reviewer memory
-- [phased-multi-agent](../../overlays/cursor/docs/workflow/phased-multi-agent.md)
+- [phased-multi-agent](../../workflow/phased-multi-agent.md)

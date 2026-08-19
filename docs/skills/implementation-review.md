@@ -84,4 +84,4 @@ When Composer conducts the phase:
 - [composer](./composer.md)
 - [pre-commit-ci-gate](./pre-commit-ci-gate.md)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
-- [ci-ladder](../../overlays/cursor/docs/workflow/ci-ladder.md)
+- [ci-ladder](../../workflow/ci-ladder.md)

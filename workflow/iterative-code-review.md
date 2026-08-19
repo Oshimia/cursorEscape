@@ -1,12 +1,12 @@
 # Iterative code review (Reviewer A + Bugbot)
 
-**Skill:** [implementation-review](../../skills/implementation-review/SKILL.md). **Agents:** [reviewer-a](../../agents/reviewer-a.md) + Bugbot (built-in).
+**Skill:** [implementation-review](../docs/skills/implementation-review.md). **Agents:** [production_readiness_reviewer](../docs/agents/production_readiness_reviewer.md) + Bugbot (built-in).
 
 ## When mandatory
 
 Same bar as plan review — multi-file, large single-file, cross-layer, behavioral, new modules, migrations, each plan phase. **When in doubt, run it.**
 
-**Composer exception:** When the user assigns [composer](../../skills/composer/SKILL.md), the **phase subagent** is the review-loop parent for Nb. Composer does QC (closeout report + transcript audit) + Full CI + local commit only.
+**Composer exception:** When the user assigns [composer](../docs/skills/composer.md), the **phase subagent** is the review-loop parent for Nb. Composer does QC (closeout report + transcript audit) + Full CI + local commit only.
 
 ## Per-phase rule
 
@@ -24,15 +24,15 @@ Implement → [Fast CI Observed → Reviewer A + Bugbot → fix must-fix]* → d
 4. Full CI only — do **not** re-launch reviewers after dual APPROVED unless code changed. Closeout attests per-leg launch counts and **Batchable (deferred)** punch list; dual APPROVED ≠ proven ship-class catch or proven no-escape
 5. Report `task-phase-complete`
 
-Recommended model: see [review-subagent-models.md](review-subagent-models.md).
+Recommended model: see [review-subagent-models.md](../overlays/cursor/review-subagent-models.md).
 
 ## Related
 
 - [discovery.md](discovery.md)
 - [ci-ladder.md](ci-ladder.md)
-- [review-subagent-models.md](review-subagent-models.md)
+- [review-subagent-models.md](../overlays/cursor/review-subagent-models.md)
 - [iterative-plan-review.md](iterative-plan-review.md)
 - [phased-multi-agent.md](phased-multi-agent.md)
-- [implementation-review](../../skills/implementation-review/SKILL.md)
-- [composer](../../skills/composer/SKILL.md)
-- [README.md](README.md)
+- [implementation-review](../docs/skills/implementation-review.md)
+- [composer](../docs/skills/composer.md)
+- [_index.md](_index.md)

@@ -1,9 +1,9 @@
 # Plan Agent context (escalated plans)
 
-**Skills:** [implementation-plan](../../skills/implementation-plan/SKILL.md), [roadmap](../../skills/roadmap/SKILL.md), [composer](../../skills/composer/SKILL.md).  
-**Agent:** [plan-reviewer](../../agents/plan-reviewer.md).
+**Skills:** [implementation-plan](../docs/skills/implementation-plan.md), [roadmap](../docs/skills/roadmap.md), [composer](../docs/skills/composer.md).  
+**Agent:** [plan_reviewer](../docs/agents/plan_reviewer.md).
 
-Use when a plan’s **Escalation** section sets `Agent context required: **yes**`. Typical ≤3-phase work stays on the light Incremental execution template (`Agent context required: **no**`).
+Use when a plan’s **Escalation** section sets `Agent context required: **yes**`. For Escalation *when* triggers, read [implementation-plan](../docs/skills/implementation-plan.md) — this file holds field shape and Agent context headings only.
 
 Do **not** paste this specimen into always-on rules or the plan-reviewer output schema. Load it when drafting or reviewing escalated plans only.
 
@@ -13,6 +13,8 @@ For a real multi-phase specimen in a product repo, read Accounts `docs/roadmaps/
 
 ## Escalation field (every non-trivial plan)
 
+**Escalation *when* triggers SoT:** [implementation-plan](../docs/skills/implementation-plan.md) (Phase 4 merges when-table into gold `skills/implementation-plan/SKILL.md`). This section shows **field shape only** — no when-table here.
+
 Place **immediately after Scope**:
 
 ```markdown
@@ -21,19 +23,13 @@ Place **immediately after Scope**:
 - Reason: `user-labeled-composer` | `complex-or-extensive` | `n/a`
 ```
 
-| Value | When |
-|-------|------|
-| **yes** + `user-labeled-composer` | User says composer-level, or asks Composer to **plan** |
-| **yes** + `complex-or-extensive` | Planner judges unusually hard / extensive (≤3 phases usually **no**; not a hard cap) |
-| **no** + `n/a` | Default light plan — do **not** write Agent context blocks |
-
-If unsure whether to escalate: AskQuestion; do not silently set **yes**.
+If unsure whether to escalate: read [implementation-plan](../docs/skills/implementation-plan.md); do not silently set **yes**.
 
 ---
 
 ## Required sections when Escalation is **yes**
 
-Beyond the standard [implementation-plan](../../skills/implementation-plan/SKILL.md) template:
+Beyond the standard [implementation-plan](../docs/skills/implementation-plan.md) template:
 
 1. **Inter-phase contracts** — signatures, behavior matrices, metadata keys, deploy units, shared files (extend-only). **N/A** allowed for a single-phase escalated plan.
 2. **Migration / external apply order** — when the repo has user-apply gates; otherwise state none.
@@ -95,10 +91,10 @@ For each execution phase, use this block (heading text must be recognizable to p
 | **yes** | **Copy** Agent context (and contracts) from the accepted plan. Fail-closed if missing or stub. Never invent scope. |
 | **no** | Optional roadmap for Composer later: **may restructure** thin Incremental execution bullets into Agent context headings **without adding new scope**. |
 
-See [phased-multi-agent.md](phased-multi-agent.md) and [roadmap](../../skills/roadmap/SKILL.md).
+See [phased-multi-agent.md](phased-multi-agent.md) and [roadmap](../docs/skills/roadmap.md).
 
 ## Related
 
 - [phased-multi-agent.md](phased-multi-agent.md)
 - [iterative-plan-review.md](iterative-plan-review.md)
-- [README.md](README.md)
+- [_index.md](_index.md)

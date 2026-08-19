@@ -21,6 +21,6 @@ If a project `.cursor/rules/pre-commit-ci-gate.mdc` (or equivalent) exists, **fo
 ## Related
 
 - [iterative-code-review.md](iterative-code-review.md)
-- [implementation-review](../../skills/implementation-review/SKILL.md)
-- [composer](../../skills/composer/SKILL.md)
-- [README.md](README.md)
+- [implementation-review](../docs/skills/implementation-review.md)
+- [composer](../docs/skills/composer.md)
+- [_index.md](_index.md)

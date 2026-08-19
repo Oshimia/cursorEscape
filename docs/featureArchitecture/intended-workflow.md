@@ -56,7 +56,7 @@ Aligned with live [implementation-review](../../overlays/cursor/skills/implement
 
 | Tier | cursorEscape (docs-only) | Runtime repos (future) |
 | ---- | ------------------------ | ---------------------- |
-| **Fast** | Hub/index link integrity for phase files; claim taxonomy spot-check | Repo-specific lint/test per [ci-ladder](../../overlays/cursor/docs/workflow/ci-ladder.md) |
+| **Fast** | Hub/index link integrity for phase files; claim taxonomy spot-check | Repo-specific lint/test per [ci-ladder](../../workflow/ci-ladder.md) |
 | **Full** | Fast + deliverable checklist + no runtime scaffolding + no pretend-settled Unknowns | Commit-grade suite; never paired with reviewers |
 
 Do **not** copy freeze baseline's hardcoded four npm commands into cursorEscape pre-runtime CI ([workflow-source-delta](../../research/imported/workflow-source-delta.md#ci-ladder--fast-vs-full-major-delta)).

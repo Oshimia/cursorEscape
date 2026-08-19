@@ -12,13 +12,13 @@ Architecture: [skill source and host overlays](../docs/featureArchitecture/skill
 
 | Host | Contents | Status |
 | ---- | -------- | ------ |
-| [cursor/](./cursor/_index.md) | Skills, rules, agents, and `docs/workflow` from live `~/.cursor` | **Observed** fat interim extract; **thin wrappers** in Phase 5 |
+| [cursor/](./cursor/_index.md) | Skills, rules, agents from live `~/.cursor`; deep procedure at repo-root [`workflow/`](../workflow/_index.md) | **Observed** fat interim extract; **thin wrappers** in Phase 5 |
 
 OpenCode overlay files are **not** in this tree. Live adapter remains under `C:\Users\admin\.config\opencode\` ([opencode-host-adapter](../docs/SOPs/opencode-host-adapter.md)).
 
 ## Implications / open questions
 
-1. Portable procedure edits: **Target** → gold bases; **interim (Phases 1–4)** → `docs/skills/`, `docs/agents/`, FA, or overlay index ([overlay FA](../docs/featureArchitecture/skill-source-and-host-overlays.md) promotion rule). Overlay refresh: re-copy from live, or thin-wrapper rewrite in Phase 5 — not a second authored procedure tree.
+1. Portable procedure edits: **Target** → gold bases; **interim (Phases 1–4)** → repo-root `workflow/` (deep procedure), `docs/skills/`, `docs/agents/`, FA, or overlay index ([overlay FA](../docs/featureArchitecture/skill-source-and-host-overlays.md) promotion rule). Overlay refresh: re-copy from live, or thin-wrapper rewrite in Phase 5 — not a second authored procedure tree.
 2. Do not invent `adapters/` at repo root for copy-out until that phase is authorized.
 
 ## Related
