@@ -1,6 +1,6 @@
 # Unresolved Architectural Questions
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-19
 
 ## Context
 
@@ -19,12 +19,18 @@ Claim label: **Unknown** unless noted otherwise.
 | U2 | Primary backend adapter | **OpenCode** (first attempt). **T3 Code** is the control plane (observability), not the harness. Spike still required for parallel Task honesty — see [implementation roadmap](../roadmaps/implementation-roadmap.md) R0. |
 | U8 | openBuggy as default bug_reviewer transport | **Withdrawn for v0.** Bug leg = OpenCode `bug_reviewer` subagent + skills (reviewer-a pattern). openBuggy remains research / optional later. |
 
+### Partial (2026-08-19 identity / overlay)
+
+| # | Question | Decision |
+| - | -------- | -------- |
+| U3 (skill inventory) | Where is the canonical skill/adapter tree? | **This companion repo** is Target SoT. Host dirs (`~/.config/opencode`, `~/.cursor`) are **copy-out targets**. See [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md). |
+| U3 (target-repo config) | Companion config in target repo (`.cursorEscape/`) vs global? | Still **Unknown** — [workspace model](../featureArchitecture/workspace-model.md). Do not treat skill-inventory SoT as settling this. |
+
 ### Runtime and stack
 
 | # | Question | Notes |
 | - | -------- | ----- |
 | U1 | Engine language (TypeScript, Python, …)? | **Unknown** — blocked until a cursorEscape runtime is authorized (not required for T3+OpenCode recreation) |
-| U3 | Companion config location — global vs `.cursorEscape/` in target repo? | [workspace model](../featureArchitecture/workspace-model.md) |
 | U4 | Unified agent API schema | [backend abstraction](../featureArchitecture/backend-and-provider-abstraction.md) — OpenCode markdown agents are the v0 adapter surface |
 
 ### Workflow and discovery
@@ -66,3 +72,4 @@ Claim label: **Unknown** unless noted otherwise.
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Implementation roadmap](../roadmaps/implementation-roadmap.md)
 - [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)
+- [Skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)

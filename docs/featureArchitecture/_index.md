@@ -6,7 +6,7 @@
 
 This section explains **how cursorEscape is intended to work** — Target design and workflow contracts. Unlike SOPs (how to perform a task), these documents describe system behavior and architecture.
 
-**Status:** Phase 4 Target synthesizing docs authored. Observed imports remain under `docs/research/imported/`. Plan-gate default-on wording updated 2026-08-18. Identity (2026-08-19): companion repo is **Target** contract SoT; live `~/.cursor` is **Observed interim** Cursor wording. Overlay FA page not landed yet.
+**Status:** Phase 4 Target synthesizing docs authored. Observed imports remain under `docs/research/imported/`. Identity (2026-08-19): companion repo is **Target** contract SoT; live `~/.cursor` is **Observed interim Cursor wording**. Overlay FA: [skill-source-and-host-overlays.md](./skill-source-and-host-overlays.md).
 
 ## Substance
 
@@ -14,7 +14,7 @@ This section explains **how cursorEscape is intended to work** — Target design
 
 | Document type | Responsibility |
 | ------------- | -------------- |
-| This folder (Target docs) | Intended workflow, instruction layering, clean-context isolation, backend abstraction, agent roles, evaluation methodology |
+| This folder (Target docs) | Intended workflow, instruction layering, clean-context isolation, **skill source and host overlays**, backend abstraction, agent roles, evaluation methodology |
 | [`../research/`](../research/_index.md) | Sourced facts and imported sibling research |
 | [`../analysis/`](../analysis/_index.md) | Operator studies of local workflows |
 | [`../agents/`](../agents/_index.md) | Host-agnostic role contracts |
@@ -36,6 +36,7 @@ Imported Observed harness and workflow snapshots live under [research/imported/]
 | [backend-and-provider-abstraction.md](./backend-and-provider-abstraction.md) | T3 → OpenCode → provider layering |
 | [repository-discovery-and-context.md](./repository-discovery-and-context.md) | What context agents need |
 | [workspace-model.md](./workspace-model.md) | Companion vs target workspace; T3 vs OpenCode sessions |
+| [skill-source-and-host-overlays.md](./skill-source-and-host-overlays.md) | One procedure; additive host overlays; promotion rule |
 | [agent-roles-and-model-assignment.md](./agent-roles-and-model-assignment.md) | Role catalog + config |
 | [evaluation-methodology.md](./evaluation-methodology.md) | How workflow quality is measured |
 | [bug-reviewer-finding-rubric.md](./bug-reviewer-finding-rubric.md) | bug_reviewer report vs ignore (nits / out-of-scope / pre-existing) |
@@ -48,7 +49,7 @@ First host attempt: [host recreation study](../analysis/host-recreation-2026-08.
 
 1. Do not mix Observed and Target in the same doc without labels.
 2. Runtime implementation must update these docs when behavior diverges.
-3. Do not treat live `~/.cursor` as a second Target procedure tree while overlay FA is pending.
+3. Host extra restrictiveness lives in overlays ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)), not a second procedure tree.
 
 ## Related
 

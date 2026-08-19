@@ -85,6 +85,7 @@ Observed index: [workflow README](../research/imported/cursor-global-workflow/do
 | ----- | ---------------- | ------------------ |
 | Always-on | Thin gate markdown | OpenCode `instructions` / root `AGENTS.md`; Cursor User Rules |
 | Skills | On-demand skill entries | OpenCode `skills/*/SKILL.md`; Cursor `~/.cursor/skills/` |
+| Host overlay | Additive harness constraints only | [skill-source-and-host-overlays](./skill-source-and-host-overlays.md) — not a second loop |
 | Deep docs | Companion workflow docs | Host `docs/workflow/` adapted from contracts |
 | Role agents | Named subagents; reviewers deny edit | OpenCode `agents/*.md` with `permission.edit: deny` |
 
@@ -106,6 +107,7 @@ Adapters cite this page and [docs/agents](../agents/_index.md) / [docs/skills](.
 1. Recreation hosts that paste full review procedures into always-on or agent prompts violate this contract even if loop *stages* look correct.
 2. Shipping packaged always-on snippet files from this repo remains a later packaging question — documenting the pattern is enough for now.
 3. On-demand policy hooks (e.g. Full-before-commit) now have a Target skill: [pre-commit-ci-gate](../skills/pre-commit-ci-gate.md). Host wiring details can still be validated per host.
+4. Extra host restrictiveness (OpenCode anti-bash, deny-edit) belongs in overlays, not always-on shared contracts — [skill-source-and-host-overlays](./skill-source-and-host-overlays.md).
 
 ---
 
@@ -117,6 +119,7 @@ Adapters cite this page and [docs/agents](../agents/_index.md) / [docs/skills](.
 - [Cursor behavior to reproduce](./cursor-behavior-to-reproduce.md)
 - [Repository discovery and context](./repository-discovery-and-context.md) — repo evidence, not instruction layers
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md) — different “layering”
+- [Skill source and host overlays](./skill-source-and-host-overlays.md) — host axis of the instruction budget
 - [Agent role contracts](../agents/_index.md)
 - [Skill contracts](../skills/_index.md)
 - [pre-commit-ci-gate](../skills/pre-commit-ci-gate.md)

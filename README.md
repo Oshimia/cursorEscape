@@ -6,7 +6,7 @@
 
 **What:** cursorEscape is the owner's **skill and workflow manager** — a git home for personal agentic skills, agent roles, and gates (plan → implement → dual review → closeout), applied across **stacks** (Cursor, OpenCode; T3 as control plane). Analogous to Theo's T3 `fleet` repo ([Observed](docs/research/theo-fleet-skill-management.md)), except this is **not** multi-machine sync.
 
-**Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. This repo is **Target** SoT for contracts; live `~/.cursor` is **Observed interim** Cursor wording until overlay copy-out ([overlay architecture](docs/featureArchitecture/_index.md) — Target page in the next docs phase).
+**Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. This repo is **Target** SoT for contracts; live `~/.cursor` is **Observed interim Cursor wording**. Stack variation: [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
 
 **First host attempt:** [T3 Code](https://t3.codes/) (control plane) + [OpenCode](https://opencode.ai/) (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Study: [host recreation](docs/analysis/host-recreation-2026-08.md).
 

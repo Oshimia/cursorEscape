@@ -4,7 +4,7 @@
 
 ## Context
 
-This SOP documents the **global OpenCode adapter** installed on the operator machine for R0 dogfood of the cursorEscape loop. Contracts remain in this repo ([agents](../agents/_index.md), [skills](../skills/_index.md), [instruction-layering](../featureArchitecture/instruction-layering.md), [clean-context-isolation](../featureArchitecture/clean-context-isolation.md), [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md)). Files under `~/.config/opencode/` are the **host adapter**, not a second SoT.
+This SOP documents the **global OpenCode adapter** installed on the operator machine for R0 dogfood of the cursorEscape loop. **Target SoT** is this companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md), [agents](../agents/_index.md), [skills](../skills/_index.md)). Files under `~/.config/opencode/` are the **host adapter / copy-out target**, not a second procedure tree. They stay host-local until an authorized copy-out phase.
 
 **Install root (this machine):** `C:\Users\admin\.config\opencode\`
 
@@ -47,9 +47,9 @@ This SOP documents the **global OpenCode adapter** installed on the operator mac
 
 ### Sync rule
 
-1. Update **cursorEscape** contracts first (Target FA / agents / skills).
+1. Update **cursorEscape** contracts first (Target FA / agents / skills / overlay rules).
 2. Re-adapt OpenCode files second — do not invent gate semantics only in `~/.config/opencode`.
-3. Do **not** commit `~/.config/opencode` into this git repo (secrets, machine paths, provider plugins).
+3. Do **not** commit `~/.config/opencode` into this git repo (secrets, machine paths, provider plugins). Copy-out later still excludes secrets.
 4. After saving changes to `opencode.json`, an agent file, a skill, instructions, or other config-time file: **quit and restart OpenCode** (no hot-reload — DSV4F Observed).
 
 ### Dual review on OpenCode
@@ -111,6 +111,7 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 
 ## Related
 
+- [Skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)
 - [Authoring OpenCode adapter files](./opencode-authoring-adapter.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [OpenCode DSV4F session study](../analysis/opencode-dsv4f-session-2026-08.md)

@@ -101,7 +101,7 @@ Live-only co-located artifacts: `user-rules-snippet.md` beside `implementation-p
 3. **review-profiles/** links in freeze SOPs and skills are host-only — COPY-MANIFEST annotates; no mirror under cursorEscape.
 4. Whether to re-home a repo-local `reference-docs` skill in cursorEscape runtime is **Unknown** — live owner workflow uses global discovery + documentation-architecture instead.
 5. Re-diff before major AITestSuite re-import; freeze is a point-in-time Observed snapshot.
-6. “Canonical Target” in older Phase 3 prose meant live-vs-freeze for Cursor import, not forever-SoT versus this companion repo ([design decisions](../../review/design-decisions.md)).
+6. “Canonical Target” in older Phase 3 prose meant live-vs-freeze for Cursor import, not forever-SoT versus this companion repo ([design decisions](../../review/design-decisions.md)). Overlay rules: [skill-source-and-host-overlays](../../featureArchitecture/skill-source-and-host-overlays.md).
 
 ---
 
@@ -111,3 +111,4 @@ Live-only co-located artifacts: `user-rules-snippet.md` beside `implementation-p
 - [Relationship to siblings](../../review/relationship-to-siblings.md)
 - [Initialization roadmap Phase 3](../../roadmaps/cursorEscape-initialization.md)
 - Imported trees: [AITestSuite](./AITestSuite/) · [cursor-global-workflow](./cursor-global-workflow/)
+- [Skill source and host overlays](../../featureArchitecture/skill-source-and-host-overlays.md)

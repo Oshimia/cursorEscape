@@ -4,7 +4,7 @@
 
 ## Context
 
-Observed characterization of how Theo (t3.gg) manages AI skills in a git repo named **fleet**, from a video walkthrough. This is **not** Target cursorEscape design. Target analog (skill/workflow manager across **stacks**, not machines) lives in [design decisions](../review/design-decisions.md) and [Roadmap](../Roadmap.md). Overlay architecture (how stacks vary without dual documentation trees) is Target FA — see [feature architecture index](../featureArchitecture/_index.md) (page lands with the overlay SoT change).
+Observed characterization of how Theo (t3.gg) manages AI skills in a git repo named **fleet**, from a video walkthrough. This is **not** Target cursorEscape design. Target analog (skill/workflow manager across **stacks**, not machines) lives in [design decisions](../review/design-decisions.md) and [Roadmap](../Roadmap.md). Overlay architecture (how stacks vary without dual documentation trees): [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md).
 
 Claim labels: **Observed** (transcript), **Target** (cursorEscape intent cited from hubs).
 
@@ -60,3 +60,4 @@ cursorEscape remains docs-first until an authorized copy-out: host folders (`~/.
 - [Roadmap](../Roadmap.md)
 - [Host recreation](../analysis/host-recreation-2026-08.md)
 - [Research index](./_index.md)
+- [Skill source and host overlays (Target)](../featureArchitecture/skill-source-and-host-overlays.md)

@@ -64,7 +64,7 @@ Operator
 ## Implications / open questions
 
 1. Future optional runtime must accept `workspace_root` as an explicit parameter to adapters.
-2. **Unknown:** Whether companion config lives in target repo (`.cursorEscape/`) vs global operator / OpenCode config.
+2. **Unknown:** Per-target `.cursorEscape/` companion config (U3 remainder). Skill/adapter inventory SoT is this repo — [skill-source-and-host-overlays](./skill-source-and-host-overlays.md).
 
 ---
 
@@ -74,3 +74,4 @@ Operator
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md)
 - [Design decisions](../review/design-decisions.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
+- [Skill source and host overlays](./skill-source-and-host-overlays.md)

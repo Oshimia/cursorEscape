@@ -6,7 +6,7 @@
 
 This section holds **sourced** market and product research plus **imported** sibling research (openBuggy, AITestSuite, live `~/.cursor` workflow) that informs cursorEscape architecture and evaluation.
 
-**Status:** Phase 3 imports complete. Phase 4 added Target synthesis [preliminary-backend-landscape.md](./preliminary-backend-landscape.md). Identity research: [theo-fleet-skill-management.md](./theo-fleet-skill-management.md) (2026-08-19). Live `~/.cursor` import is **Observed interim Cursor wording**, not forever Target SoT vs this companion repo (Target overlay FA next — [feature architecture index](../featureArchitecture/_index.md)).
+**Status:** Phase 3 imports complete. Phase 4 added Target synthesis [preliminary-backend-landscape.md](./preliminary-backend-landscape.md). Identity research: [theo-fleet-skill-management.md](./theo-fleet-skill-management.md) (2026-08-19). Live `~/.cursor` import is **Observed interim Cursor wording**. Overlay FA: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md).
 
 ---
 
@@ -77,7 +77,7 @@ Key live workflow entry points in the import mirror:
 
 1. Host-only absolute paths in imports are annotated in COPY-MANIFEST.
 2. U2/U8 settled in [unresolved questions](../review/unresolved-architectural-questions.md); remaining Unknowns stay labeled.
-3. Do not treat live `~/.cursor` import as Target overlay SoT; contracts in this repo are Target. Overlay FA pending.
+3. Do not treat live `~/.cursor` import as Target overlay SoT; contracts in this repo are Target. Overlay FA: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md).
 
 ---
 

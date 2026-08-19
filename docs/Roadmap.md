@@ -9,7 +9,7 @@ This repository is the owner's **skill and workflow manager**: preserve and evol
 
 ## Context
 
-cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy (feature architecture, SOPs, research, analysis, roadmaps) adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is **Observed interim** Cursor wording; this repo is **Target** contract SoT. Overlay FA (shared procedure + additive host constraints) is the next Target page — see [feature architecture index](./featureArchitecture/_index.md).
+cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy (feature architecture, SOPs, research, analysis, roadmaps) adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is **Observed interim Cursor wording**; this repo is **Target** contract SoT. Stack variation: [skill source and host overlays](./featureArchitecture/skill-source-and-host-overlays.md).
 
 **First host attempt:** T3 Code (control plane) + OpenCode (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Operator study: [host recreation](./analysis/host-recreation-2026-08.md).
 
@@ -43,7 +43,7 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 | Target synthesizing architecture docs | **Complete** (Phase 4) — [feature architecture index](./featureArchitecture/_index.md) |
 | Agent & skill contracts | **Complete** (Phase 4) — [agents](./agents/_index.md) · [skills](./skills/_index.md) |
 | Implementation roadmap | [implementation-roadmap.md](./roadmaps/implementation-roadmap.md) — R0 dogfood |
-| Skill-manager identity | **Phase 1 landed** (hubs + [theo-fleet](./research/theo-fleet-skill-management.md)). Dual-review loop **stopped by owner** 2026-08-19 — remaining SoT/overlay FA is Phase 2. |
+| Skill-manager identity | **Phase 1 committed** (`9c104b1`). **Phase 2 overlay FA landed** — [skill-source-and-host-overlays](./featureArchitecture/skill-source-and-host-overlays.md). |
 
 ---
 
@@ -77,6 +77,7 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 | Backend abstraction | [backend-and-provider-abstraction.md](./featureArchitecture/backend-and-provider-abstraction.md) |
 | Repository discovery | [repository-discovery-and-context.md](./featureArchitecture/repository-discovery-and-context.md) |
 | Workspace model | [workspace-model.md](./featureArchitecture/workspace-model.md) |
+| Skill source and host overlays | [skill-source-and-host-overlays.md](./featureArchitecture/skill-source-and-host-overlays.md) |
 | Agent roles | [agent-roles-and-model-assignment.md](./featureArchitecture/agent-roles-and-model-assignment.md) |
 | Evaluation | [evaluation-methodology.md](./featureArchitecture/evaluation-methodology.md) |
 | Backend landscape | [preliminary-backend-landscape.md](./research/preliminary-backend-landscape.md) |
@@ -101,7 +102,7 @@ Stewardship and non-goals: [design decisions](./review/design-decisions.md).
 2. Bugbot-shaped review uses OpenCode `bug_reviewer` + skills; openBuggy is research / optional later.
 3. Keep hub docs extend-only; do not fork parallel taxonomies.
 4. Multi-machine skill sync remains a **non-goal**. Overlay architecture must not create two authored review procedures.
-5. Overlay FA (`skill-source-and-host-overlays.md`) is **Phase 2** — shared procedure + additive host overlays; remaining SoT wording lives there, not in another identity review loop.
+5. Overlay FA ([skill-source-and-host-overlays](./featureArchitecture/skill-source-and-host-overlays.md)) is the SoT for shared procedure vs additive host overlays. Do not fork two authored review procedures.
 
 ---
 

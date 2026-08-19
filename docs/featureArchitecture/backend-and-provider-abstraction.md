@@ -1,6 +1,6 @@
 # Backend and Provider Abstraction
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-19
 
 ## Context
 
@@ -29,7 +29,7 @@ Model provider — BYOK; ClinePass Desired later
 | Workflow | Plan/review sequencing, Fast/Full CI, phase boundaries | [intended-workflow](./intended-workflow.md), [skills](../skills/_index.md) |
 | Agent abstraction | Role identity, inputs/outputs, verdict bars | [agents](../agents/_index.md) |
 | Control plane | Observability UI (not skill ownership) | External: T3 Code — [preliminary backend landscape](../research/preliminary-backend-landscape.md) |
-| Harness adapter | Spawn agent, stream tools, map diff scope | **OpenCode** (first attempt) — markdown agents under host config |
+| Harness adapter | Spawn agent, stream tools, map diff scope | **OpenCode** (first attempt) — markdown agents; extra restrictiveness in **host overlay**, not a forked loop ([overlays](./skill-source-and-host-overlays.md)) |
 | Provider | API keys, model routing, rate limits | **Required** BYOK; **Desired** ClinePass later |
 
 ### Thin boundary rules (Required)
@@ -64,6 +64,7 @@ Model provider — BYOK; ClinePass Desired later
 
 1. R0 spike proves OpenCode parallel Tasks before any cursorEscape engine ([implementation roadmap](../roadmaps/implementation-roadmap.md)).
 2. Distinguishing **T3 Code** (pingdotgg control plane) from a from-scratch “T3/custom stack” fallback — see [preliminary backend landscape](../research/preliminary-backend-landscape.md).
+3. T3 does not get a third skill tree. Host variation is overlay-only ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)).
 
 ---
 
@@ -73,3 +74,4 @@ Model provider — BYOK; ClinePass Desired later
 - [Agent roles and model assignment](./agent-roles-and-model-assignment.md)
 - [Workspace model](./workspace-model.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
+- [Skill source and host overlays](./skill-source-and-host-overlays.md)

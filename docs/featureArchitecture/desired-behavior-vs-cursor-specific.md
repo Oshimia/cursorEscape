@@ -1,10 +1,10 @@
 # Desired Behavior vs Cursor-Specific
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
-cursorEscape separates **portable workflow intent** (Desired / Required) from **Cursor IDE mechanics** (Cursor-specific). Target contracts in [agents](../agents/_index.md) and [skills](../skills/_index.md) use host-agnostic wording; first recreation adapter is **OpenCode** (with optional **T3 Code** control plane) — see [host recreation](../analysis/host-recreation-2026-08.md).
+cursorEscape separates **portable workflow intent** (Desired / Required) from **Cursor IDE mechanics** (Cursor-specific). Target contracts in [agents](../agents/_index.md) and [skills](../skills/_index.md) use host-agnostic wording; host IDs and extra restrictiveness live in overlays ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)). First recreation adapter is **OpenCode** (with optional **T3 Code** control plane) — see [host recreation](../analysis/host-recreation-2026-08.md).
 
 ---
 
@@ -71,6 +71,7 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 
 1. OpenCode adapters must preserve gate semantics without Cursor Task/subagent IDs.
 2. Whether future cursorEscape ships host always-on snippet files (vs documenting the pattern only) is a **later** packaging question — see [instruction layering](./instruction-layering.md).
+3. Cursor Task / `subagent_type` IDs stay Cursor-overlay or this mapping table — never in shared skill bodies ([overlays](./skill-source-and-host-overlays.md)).
 
 ---
 
@@ -82,3 +83,4 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 - [Clean context and isolation](./clean-context-isolation.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Agent role contracts](../agents/_index.md)
+- [Skill source and host overlays](./skill-source-and-host-overlays.md)

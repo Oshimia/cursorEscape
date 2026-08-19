@@ -18,7 +18,7 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 
 1. Read [Roadmap](../Roadmap.md) and the relevant `_index.md`.
 2. Decide document kind:
-   - **featureArchitecture** — how it works (Target design; cite Observed imports from `docs/research/imported/` — do not add Observed harness subdirectories directly under `docs/featureArchitecture/`)
+   - **featureArchitecture** — how it works (Target design). Host extra restrictiveness: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md) (promotion rule). Cite Observed imports from `docs/research/imported/` — do not add Observed harness subdirectories directly under `docs/featureArchitecture/`
    - **agents** — host-agnostic role contracts (Target); map to host adapters — not Observed Cursor agent file copies
    - **skills** — host-agnostic workflow skill contracts (Target); cite Observed interim live imports under `docs/research/imported/cursor-global-workflow/` (not a second SoT)
    - **SOP** — how to do a task
