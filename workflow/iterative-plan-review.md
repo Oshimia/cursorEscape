@@ -1,6 +1,6 @@
 # Iterative plan review
 
-**Skill:** [implementation-plan](../skills/implementation-plan/SKILL.md). **Agent:** [plan_reviewer](../agents/plan_reviewer.md).
+**Skills:** [plan-review](../skills/plan-review/SKILL.md) (loop gate), [implementation-plan](../skills/implementation-plan/SKILL.md) (draft + Incomplete until SoT). **Agent:** [plan_reviewer](../agents/plan_reviewer.md).
 
 ## When mandatory
 
@@ -35,6 +35,8 @@ Draft → review → synthesize (max 3) → present to user → user decides
 - Start implementation before APPROVED (unless user explicitly opts out)
 - Skip the gate because Escalation=no or the work is “just docs/eval/harness”
 - Exceed 3 plan-reviewer passes without owner escalation
+- Feed previous child transcripts into the next `plan_reviewer` Task
+- Duplicate the full Incomplete until section enum — point at [implementation-plan Incomplete until](../skills/implementation-plan/SKILL.md#incomplete-until-section-sot)
 - Compress plan review when Composer assigned for phased execution (planning already complete)
 
 ## After acceptance
@@ -48,6 +50,7 @@ Implement one phase at a time. Each phase ends with [iterative-code-review.md](i
 - [iterative-code-review.md](iterative-code-review.md)
 - [phased-multi-agent.md](phased-multi-agent.md)
 - [review-subagent-models.md](../overlays/cursor/review-subagent-models.md)
+- [plan-review](../skills/plan-review/SKILL.md)
 - [implementation-plan](../skills/implementation-plan/SKILL.md)
 - [composer](../skills/composer/SKILL.md)
 - [_index.md](_index.md)

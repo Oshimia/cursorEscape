@@ -24,7 +24,9 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 
 | Skill | Path |
 |-------|------|
-| [implementation-plan](../skills/implementation-plan/SKILL.md) | Plan drafting + plan-reviewer loop |
+| [discovery](../skills/discovery/SKILL.md) | Repo doc discovery (Step 0 + fallback) |
+| [plan-review](../skills/plan-review/SKILL.md) | Plan → plan-reviewer loop gate |
+| [implementation-plan](../skills/implementation-plan/SKILL.md) | Plan drafting + Incomplete until SoT |
 | [implementation-review](../skills/implementation-review/SKILL.md) | Per-phase Reviewer A + Bugbot |
 | [composer](../skills/composer/SKILL.md) | Phased execution conductor |
 | [roadmap](../skills/roadmap/SKILL.md) | Repo multi-phase handoff files |
@@ -50,8 +52,8 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 
 | Workflow leaf | Base skill | Base agent(s) | Cursor overlay | Rule overlay |
 | ------------- | ---------- | ------------- | -------------- | ------------ |
-| `discovery.md` | (none) | `planner`, `repository_explorer` | skill Read pointers | — |
-| `iterative-plan-review.md` | `skills/implementation-plan/SKILL.md` | `plan_reviewer` | overlay plan SKILL | `iterative-plan-review.mdc` |
+| `discovery.md` | `skills/discovery/SKILL.md` | `planner`, `implementer`, `repository_explorer` | overlay discovery SKILL (Phase 2) | — |
+| `iterative-plan-review.md` | `skills/plan-review/SKILL.md`, `skills/implementation-plan/SKILL.md` | `plan_reviewer` | overlay plan SKILL | `iterative-plan-review.mdc` |
 | `iterative-code-review.md` | `skills/implementation-review/SKILL.md` | `production_readiness_reviewer`, `bug_reviewer` | review SKILL + `reviewer-a.md` | `iterative-code-review.mdc` |
 | `ci-ladder.md` | `implementation-review`, `rules/pre-commit-ci-gate.md` | implementer (parent) | review skill Read | `pre-commit-ci-gate.mdc` |
 | `plan-agent-context.md` | `implementation-plan` | `plan_reviewer` | plan skill Read | — |

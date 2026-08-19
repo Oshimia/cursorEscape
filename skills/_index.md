@@ -16,8 +16,8 @@ Host-agnostic **portable** workflow skills at repo root. Portable procedure live
 | ----- | --------- | -------------------- |
 | implementation-plan | [implementation-plan/SKILL.md](./implementation-plan/SKILL.md) | [SKILL.md](../overlays/cursor/skills/implementation-plan/SKILL.md) |
 | implementation-review | [implementation-review/SKILL.md](./implementation-review/SKILL.md) | [SKILL.md](../overlays/cursor/skills/implementation-review/SKILL.md) |
-| discovery | [workflow/discovery.md](../workflow/discovery.md) | (no SKILL.md — workflow procedure) |
-| plan-review (concepts) | [workflow/iterative-plan-review.md](../workflow/iterative-plan-review.md) | overlay plan SKILL |
+| discovery | [discovery/SKILL.md](./discovery/SKILL.md) | Phase 2 overlay (not authored) |
+| plan-review | [plan-review/SKILL.md](./plan-review/SKILL.md) | Phase 2 overlay (not authored) |
 
 ### Gates / on-demand policy
 

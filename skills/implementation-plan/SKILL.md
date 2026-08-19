@@ -19,7 +19,9 @@ This skill is **repo-agnostic**. Do not assume a fixed doc tree or scripts.
 | Doc | When |
 |-----|------|
 | [discovery.md](../../workflow/discovery.md) | Find repo docs (Step 0 + fallback) |
+| [discovery](../discovery/SKILL.md) | Thin skill entry (on-demand load) |
 | [iterative-plan-review.md](../../workflow/iterative-plan-review.md) | Plan → plan-reviewer loop |
+| [plan-review](../plan-review/SKILL.md) | Thin plan-review loop gate |
 | [plan-agent-context.md](../../workflow/plan-agent-context.md) | Escalation field + Agent context when escalated |
 | [phased-multi-agent.md](../../workflow/phased-multi-agent.md) | Multi-phase / Composer handoffs |
 | [review-subagent-models.md](../../overlays/cursor/review-subagent-models.md) | Recommended `plan-reviewer` model |
