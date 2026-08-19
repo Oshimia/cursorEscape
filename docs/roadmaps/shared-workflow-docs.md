@@ -1,7 +1,7 @@
 # Roadmap: Centralize the workflow manager
 
 **Last updated:** 2026-08-20  
-**Status:** Phase 4 **complete** (Composer ACCEPT 2026-08-20). Phase 5 next.  
+**Status:** Phase 5 **complete** (Composer ACCEPT 2026-08-20). Phase 6 next.  
 **Plan source:** accepted plan `shared_workflow_docs_376cecd4` (copy of Inter-phase + Agent context; do not invent scope).
 
 ## Product decisions (locked)
@@ -47,7 +47,7 @@ None. Git only. No live Cursor apply.
 - [x] Phase 2 — git mv research, review, analysis, overlays to root + same-phase cites. `analysis/` at repo root.
 - [x] Phase 3 — Promote overlay workflow docs to `workflow/`. `review-subagent-models.md` parked on overlay. Fat SKILL `docs/workflow` links non-navigable until Phase 5.
 - [x] Phase 4 — Copy gold skills/agents/rules; fold short contracts. Overlay fat files still in place.
-- [ ] Phase 5 — Thin Cursor overlay; spawn extract
+- [x] Phase 5 — Thin Cursor overlay; spawn extract. SHA256 byte-identical tables retired.
 - [ ] Phase 6 — Cite sweep closeout
 
 ---

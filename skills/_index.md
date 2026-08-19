@@ -4,7 +4,7 @@
 
 ## Context
 
-Host-agnostic **gold-standard** workflow skills at repo root. Portable procedure lives in `skills/*/SKILL.md`. Cursor overlay extract (Observed, fat until Phase 5): [overlays/cursor](../overlays/cursor/_index.md). The 2026-08-17 bannered copy remains under [cursor-global-workflow](../research/imported/cursor-global-workflow/skills/) (archaeology).
+Host-agnostic **gold-standard** workflow skills at repo root. Portable procedure lives in `skills/*/SKILL.md`. Cursor overlay **thin wrappers** (spawn + Read tables): [overlays/cursor](../overlays/cursor/_index.md). The 2026-08-17 bannered copy remains under [cursor-global-workflow](../research/imported/cursor-global-workflow/skills/) (archaeology).
 
 ---
 

@@ -4,7 +4,7 @@
 
 ## Context
 
-Host-agnostic **gold-standard** agent contracts at repo root. Portable contracts live in `agents/*.md`. Current Cursor agent files (Observed, fat until Phase 5) live under [overlays/cursor/agents](../overlays/cursor/agents/). The 2026-08-17 bannered copy remains under [cursor-global-workflow/agents](../research/imported/cursor-global-workflow/agents/) (archaeology). These pages use host-agnostic role names, not Cursor Task IDs as the contract identity.
+Host-agnostic **gold-standard** agent contracts at repo root. Portable contracts live in `agents/*.md`. Cursor overlay **thin wrappers** (spawn one-pagers + Read): [overlays/cursor/agents](../overlays/cursor/agents/). The 2026-08-17 bannered copy remains under [cursor-global-workflow/agents](../research/imported/cursor-global-workflow/agents/) (archaeology). These pages use host-agnostic role names, not Cursor Task IDs as the contract identity.
 
 ---
 
@@ -12,7 +12,7 @@ Host-agnostic **gold-standard** agent contracts at repo root. Portable contracts
 
 ### Contract index
 
-| Role | Contract | Phase | Cursor overlay (Observed) |
+| Role | Contract | Phase | Cursor overlay (thin wrapper) |
 | ---- | -------- | ----- | ------------------------- |
 | planner | [planner.md](./planner.md) | Plan | (no Cursor agent file) |
 | plan_reviewer | [plan_reviewer.md](./plan_reviewer.md) | Plan gate | [plan-reviewer.md](../overlays/cursor/agents/plan-reviewer.md) |

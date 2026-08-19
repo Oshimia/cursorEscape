@@ -8,29 +8,18 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Documentation architecture
+# Documentation architecture (Cursor overlay)
 
-Lean entry point. **Full detail:** [documentation-architecture.md](../../docs/workflow/documentation-architecture.md)
+Thin wrapper. Full procedure: [skills/documentation-architecture/SKILL.md](../../../../skills/documentation-architecture/SKILL.md).
 
-Absolute fallback: `C:/Users/admin/.cursor/docs/workflow/documentation-architecture.md`.
+**Read when bootstrapping docs:**
 
-## Instructions
+| Doc | When |
+|-----|------|
+| [SKILL.md](../../../../skills/documentation-architecture/SKILL.md) | Entry + instructions |
+| [documentation-architecture.md](../../../../workflow/documentation-architecture.md) | Full procedure |
+| [discovery.md](../../../../workflow/discovery.md) | Step 0 local `reference-docs` if present |
+| [phased-multi-agent.md](../../../../workflow/phased-multi-agent.md) | Roadmap / Composer context |
+| [_index.md](../../../../workflow/_index.md) | Index of all workflow docs |
 
-1. Run [discovery.md](../../docs/workflow/discovery.md) (Step 0 local `reference-docs` if present).
-2. If the repo already has a coherent docs layout → **follow it**. Map procedures vs design onto existing folders.
-3. If greenfield / user asks to adopt defaults → bootstrap under the docs root (or create `docs/`):
-
-   - `SOPs/_index.md` — how-tos
-   - `featureArchitecture/_index.md` — design/behavior
-   - `roadmaps/` — multi-phase handoffs (see [`roadmap`](../roadmap/SKILL.md) skill)
-
-4. New or changed patterns: update docs + indexes in the **same changeset** as code.
-5. Do not force `SOPs` / `featureArchitecture` names onto a repo that already chose differently.
-
----
-
-## Related
-
-**Skills:** [`roadmap`](../roadmap/SKILL.md), [`implementation-plan`](../implementation-plan/SKILL.md), [`composer`](../composer/SKILL.md)
-
-**Workflow docs:** [documentation-architecture.md](../../docs/workflow/documentation-architecture.md), [discovery.md](../../docs/workflow/discovery.md), [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md), [README.md](../../docs/workflow/README.md)
+Copy-out fallback: `C:/Users/admin/.cursor/docs/workflow/` (live mirror — not overwritten from this repo).

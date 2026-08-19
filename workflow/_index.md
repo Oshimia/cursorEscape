@@ -18,7 +18,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [iterative-code-review.md](iterative-code-review.md) | Per-phase Reviewer A + Bugbot loop |
 | [ci-ladder.md](ci-ladder.md) | Fast/Full CI discovery for any repo |
 
-Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; stays on overlay until Phase 5).
+Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; overlay-only).
 
 ## Skills
 

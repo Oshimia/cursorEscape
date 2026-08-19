@@ -63,24 +63,7 @@ Research docs → draft plan → review (max 3) → synthesize between passes �
 
 1. **Research** — [discovery.md](../../workflow/discovery.md) Step 0 / fallback. Skip missing paths; do not invent a required layout.
 2. **Draft** using the [plan template](#plan-template) below. Fill every section.
-3. **Invoke plan-reviewer** with **clean context** — repository path, task summary, review pass number, and **synthesized plan text only**. Do **not** attach prior review transcripts.
-
-   ```text
-   Launch the plan-reviewer subagent with:
-   - subagent_type: "plan-reviewer"
-   - model: composer-2.5   (recommended default; override only if user asks)
-   - readonly: true
-   - run_in_background: false
-
-   Use the plan-reviewer subagent to review this plan.
-
-   Repository path: <absolute path>
-   Task summary: <one paragraph>
-   Review pass: <1|2|3> of 3
-   Review model: <model slug used for this launch>
-   Plan under review:
-   <full plan text>
-   ```
+3. **Invoke plan-reviewer** with **clean context** — repository path, task summary, review pass number, and **synthesized plan text only**. Do **not** attach prior review transcripts. Cursor Task spawn: [implementation-plan overlay](../../overlays/cursor/skills/implementation-plan/SKILL.md#invoke-plan-reviewer-cursor-task).
 
 4. **Synthesize** between passes (see [Synthesis between passes](#synthesis-between-passes)).
 5. Repeat until `APPROVED` **or** 3 passes complete — then [present to user](#final-presentation).

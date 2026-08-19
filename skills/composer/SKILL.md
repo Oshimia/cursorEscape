@@ -70,7 +70,7 @@ User ── git push (manual) ──► origin
 - Build disposable **Na** previews only when the roadmap/repo docs call for sign-off
 - Draft migration / external-apply artifacts only when the repo documents a user-apply gate; wait for user confirmation
 - Follow [discovery](../../workflow/discovery.md) (Step 0 local `reference-docs` if present)
-- Launch one phase subagent at a time (see [Launch contract](#phase-subagent-launch-contract))
+- Launch one phase subagent at a time (Cursor Task spawn: [composer overlay](../../overlays/cursor/skills/composer/SKILL.md#phase-subagent-launch-contract))
 - QC closeout reports **and audit transcripts** (see [Composer QC](#composer-qc)); resume/relaunch on rejection (max 2 substantive rejections)
 - Update roadmap status after QC accept
 - After QC accept: run **Full** CI (per [ci-ladder](../../workflow/ci-ladder.md)), then **automatic local `git commit`**
@@ -138,32 +138,6 @@ Only if the repo documents a user-apply process (migrations, secrets, manual ops
 | File + app code in reviewed changeset | Phase subagent (Nb)             |
 
 Never commit migration-only before Nb dual APPROVED.
-
----
-
-## Phase subagent launch contract
-
-```text
-Launch Task:
-- subagent_type: generalPurpose
-- model: composer-2.5   (or user override)
-- run_in_background: false
-
-Rule overrides:
-- You are implementing agent + review-loop parent. Follow implementation-review completely.
-- Before code: discovery Step 0 (local reference-docs if present) else discovery fallback. Roadmap "Where to read context" is an index, not a substitute.
-- Do NOT git commit or git push. Return closeout report; Composer commits after QC.
-- Complete only after dual APPROVED (Fast + review-loop) then Full CI. Never launch reviewers with Full.
-- After dual APPROVED (Bugbot all None; Reviewer-a blocking lists None — Batchable (deferred) may remain): Full CI only — do not re-launch reviewers.
-
-Prompt (mandatory):
-  0. Docs mandate (above)
-  1. Phase N of M + roadmap path + prior phases complete
-  2. Locked product decisions
-  3. Inter-phase contracts (full)
-  4. Agent context — Phase N (full)
-  5. Closeout report schema (include docs consulted + subagent/reviewer Task ids)
-```
 
 **Resume vs relaunch:** QC reject → `resume` with gap list when possible; else fresh launch with Current state. Max 2 substantive QC rejections → escalate to user.
 

@@ -8,7 +8,7 @@ This document is **Target** design for how workflow instructions are **budgeted 
 
 **Required** portable intent: keep always-on text minimal; load skills, deep procedure docs, and role agents only when needed. Cursor User Rules, `.mdc` rules, and `disable-model-invocation` are **Cursor-specific** mappings of that intent.
 
-Observed Cursor files under [overlays/cursor](../../overlays/cursor/_index.md) illustrate the pattern and some anti-patterns (fat interim extract; thin wrappers in Phase 5). Live `~/.cursor` is the running install; the overlay is the in-repo **Observed** record (not Target procedure). This page is SoT for the portable layering contract. Gold-base contracts are Target inventory ([design decisions](../../review/design-decisions.md)).
+Observed Cursor files under [overlays/cursor](../../overlays/cursor/_index.md) illustrate the pattern (**thin wrappers** since Phase 5). Live `~/.cursor` is the running install; the overlay is the in-repo copy-out map (not Target procedure). This page is SoT for the portable layering contract. Gold-base contracts are Target inventory ([design decisions](../../review/design-decisions.md)).
 
 ---
 
@@ -25,11 +25,11 @@ Agents that always carry full plan/review procedures waste context and dilute ga
 | **Deep workflow docs** | Full procedures, specimens, CI ladder detail | When a skill (or escalated plan) says to read them |
 | **Role agents** | Purpose, inputs, outputs, must-not, “load skill / read doc Y” | Isolated child session for that role |
 
-This is a **context-budget** optimization. Loop gate semantics stay in [intended-workflow.md](./intended-workflow.md); role I/O stays in [docs/agents/](../agents/_index.md).
+This is a **context-budget** optimization. Loop gate semantics stay in [intended-workflow.md](./intended-workflow.md); role I/O stays in [agents/_index.md](../../agents/_index.md).
 
 ### Layer 1 — Always-on (thin)
 
-**Required:** Always-on text states that plan review and implementation review are **default on** unless truly trivial or the user **explicitly** opts out; includes **When in doubt, run the plan loop**; states that eval/harness/multi-step operational work is **not** exempt; lists the skip-trivial list; and points to skills by name (including [implementation-plan](../skills/implementation-plan.md) for Escalation *when*). It must **not** inline full procedures (plan template, reviewer launch scripts, CI command discovery, Agent context specimens).
+**Required:** Always-on text states that plan review and implementation review are **default on** unless truly trivial or the user **explicitly** opts out; includes **When in doubt, run the plan loop**; states that eval/harness/multi-step operational work is **not** exempt; lists the skip-trivial list; and points to skills by name (including [implementation-plan/SKILL.md](../../skills/implementation-plan/SKILL.md) for Escalation *when*). It must **not** inline full procedures (plan template, reviewer launch scripts, CI command discovery, Agent context specimens).
 
 **Desired:** Keep always-on *gate* text as small as possible while gate behavior remains reliable. There is **no fixed line budget** — not for the whole always-on file, and not as “≤N new lines” Success/Verification metrics. Measure success by expected gate behavior, not character or line count. Always-on sizing is still being dogfooded; do not invent a numeric budget while that is unsettled. Always-on should cover **workflow gates** only — not operator preference rules (git/PR habits, communication style, frontend taste).
 
@@ -39,7 +39,7 @@ This is a **context-budget** optimization. Loop gate semantics stay in [intended
 
 ### Escalation *when* ownership (Required)
 
-**Sole SoT** for Escalation *when* triggers: Target [implementation-plan](../skills/implementation-plan.md) (→ `skills/implementation-plan/SKILL.md` after Phase 4). Deep [plan-agent-context](../../workflow/plan-agent-context.md) and host mirrors keep **field specimen / required headings only** and must **point to** that skill — no competing “≤3 phases usually no” when-table.
+**Sole SoT** for Escalation *when* triggers: [implementation-plan/SKILL.md](../../skills/implementation-plan/SKILL.md). Deep [plan-agent-context](../../workflow/plan-agent-context.md) and host mirrors keep **field specimen / required headings only** and must **point to** that skill — no competing “≤3 phases usually no” when-table.
 
 ### Layer 2 — Skills (on-demand)
 
@@ -47,9 +47,9 @@ This is a **context-budget** optimization. Loop gate semantics stay in [intended
 
 **Cursor-specific mapping:** `disable-model-invocation: true` on SKILL.md (agent loads via skill tool / explicit read, not ambient injection).
 
-**Positive layering pattern (Target):** Lean skill entry → deep doc at repo-root [`workflow/`](../../workflow/_index.md). **Observed fat extract caveat:** overlay SKILL bodies still link `../../docs/workflow/` (non-navigable in-repo until Phase 5); gold deep doc is [documentation-architecture.md](../../workflow/documentation-architecture.md).
+**Positive layering pattern (Target):** Lean skill entry at gold `skills/*/SKILL.md` → deep doc at repo-root [`workflow/`](../../workflow/_index.md). **Cursor overlay:** thin wrapper SKILLs add spawn blocks + Read tables pointing at gold bases and `workflow/` ([documentation-architecture.md](../../workflow/documentation-architecture.md) example).
 
-Target skill contracts: [docs/skills/](../skills/_index.md) (→ `skills/` after Phase 4).
+Target skill contracts: [skills/_index.md](../../skills/_index.md).
 
 ### Layer 3 — Deep workflow docs
 
@@ -63,9 +63,9 @@ Gold index: [workflow/_index.md](../../workflow/_index.md). Host adapters may mi
 
 **Required:** Agent bodies are **role + I/O + must-not + “load skill X / read doc Y”**. Do **not** paste `iterative-code-review` / `iterative-plan-review` into the agent system prompt. Reviewers run in **isolated** child context; the parent passes what they need.
 
-**Lean SoT (Target):** Gold-base agent contracts — interim [docs/agents/](../agents/_index.md) (e.g. [plan_reviewer.md](../agents/plan_reviewer.md), [production_readiness_reviewer.md](../agents/production_readiness_reviewer.md)); → `agents/` after Phase 4.
+**Lean SoT (Target):** Gold-base agent contracts — [agents/_index.md](../../agents/_index.md) (e.g. [plan_reviewer.md](../../agents/plan_reviewer.md), [production_readiness_reviewer.md](../../agents/production_readiness_reviewer.md)).
 
-**Caution — Observed Cursor agents (interim fat extract):** Overlay files [plan-reviewer.md](../../overlays/cursor/agents/plan-reviewer.md) and [reviewer-a.md](../../overlays/cursor/agents/reviewer-a.md) embed large procedure bodies. Treat those as **legacy / bloated live Cursor wording**, not the recreation pattern. Phase 5 thin wrappers point at gold `agents/`; overlay fat is not the agent-layer ideal.
+**Cursor overlay agents:** [plan-reviewer.md](../../overlays/cursor/agents/plan-reviewer.md) and [reviewer-a.md](../../overlays/cursor/agents/reviewer-a.md) are **thin wrappers** (Cursor name + spawn one-pager + Read → gold `agents/`). Do not paste full loop procedure into overlay agent files.
 
 ### Anti-patterns (Required non-goals)
 
@@ -75,7 +75,7 @@ Gold index: [workflow/_index.md](../../workflow/_index.md). Host adapters may mi
 | Inventing a fixed always-on line/character budget (e.g. “≤3 lines”, “≤N new lines”) in plans, Success metrics, Verification, smoke criteria, or adapter SOPs | **Recurring agent failure mode** during dogfood. There is **no** set budget yet; measure by gate behavior. Thin pointers yes; numeric budgets no. |
 | Full SKILL.md pasted into agent system prompts | Context bloat; duplicates skill registry |
 | Always-injecting skill bodies | Defeats on-demand loading |
-| Using Observed bloated agent imports as the agent-layer ideal | Wrong SoT — use Target gold-base `agents/` (interim `docs/agents/`) |
+| Using Observed bloated agent imports as the agent-layer ideal | Wrong SoT — use Target gold-base `agents/` |
 | Conflating this page with repository discovery | Repo evidence ≠ process-instruction layers |
 | Re-documenting stage tables from intended-workflow here | Duplicate SoT; drift risk |
 
@@ -89,7 +89,7 @@ Gold index: [workflow/_index.md](../../workflow/_index.md). Host adapters may mi
 | Deep docs | Companion workflow docs | Host `docs/workflow/` adapted from contracts |
 | Role agents | Named subagents; reviewers deny edit | OpenCode `agents/*.md` with `permission.edit: deny` |
 
-Adapters cite this page and gold-base [agents](../agents/_index.md) / [skills](../skills/_index.md). Do not reverse the SoT (host overlay files are not Target contracts).
+Adapters cite this page and gold-base [agents/_index.md](../../agents/_index.md) / [skills/_index.md](../../skills/_index.md). Do not reverse the SoT (host overlay files are not Target contracts).
 
 ### Operator resolutions (2026-08-17; clarified 2026-08-19)
 
@@ -106,7 +106,7 @@ Adapters cite this page and gold-base [agents](../agents/_index.md) / [skills](.
 
 1. Recreation hosts that paste full review procedures into always-on or agent prompts violate this contract even if loop *stages* look correct.
 2. Shipping packaged always-on snippet files from this repo remains a later packaging question — documenting the pattern is enough for now.
-3. On-demand policy hooks (e.g. Full-before-commit) now have a Target skill: [pre-commit-ci-gate](../skills/pre-commit-ci-gate.md). Host wiring details can still be validated per host.
+3. On-demand policy hooks (e.g. Full-before-commit) now have a Target rule: [pre-commit-ci-gate.md](../../rules/pre-commit-ci-gate.md). Host wiring details can still be validated per host.
 4. Extra host restrictiveness (OpenCode anti-bash, deny-edit) belongs in overlays, not always-on shared contracts — [skill-source-and-host-overlays](./skill-source-and-host-overlays.md).
 
 ---
@@ -120,8 +120,8 @@ Adapters cite this page and gold-base [agents](../agents/_index.md) / [skills](.
 - [Repository discovery and context](./repository-discovery-and-context.md) — repo evidence, not instruction layers
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md) — different “layering”
 - [Skill source and host overlays](./skill-source-and-host-overlays.md) — host axis of the instruction budget
-- [Agent role contracts](../agents/_index.md)
-- [Skill contracts](../skills/_index.md)
-- [pre-commit-ci-gate](../skills/pre-commit-ci-gate.md)
+- [Agent role contracts](../../agents/_index.md)
+- [Skill contracts](../../skills/_index.md)
+- [pre-commit-ci-gate](../../rules/pre-commit-ci-gate.md)
 - [Host recreation study](../../analysis/host-recreation-2026-08.md)
 - [Design decisions](../../review/design-decisions.md)
