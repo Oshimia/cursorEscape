@@ -26,8 +26,8 @@ Model provider — BYOK; ClinePass Desired later
 
 | Layer | Responsibility | cursorEscape artifact |
 | ----- | -------------- | --------------------- |
-| Workflow | Plan/review sequencing, Fast/Full CI, phase boundaries | [intended-workflow](./intended-workflow.md), [skills](../skills/_index.md) |
-| Agent abstraction | Role identity, inputs/outputs, verdict bars | [agents](../agents/_index.md) |
+| Workflow | Plan/review sequencing, Fast/Full CI, phase boundaries | [intended-workflow](./intended-workflow.md), [skills](../../skills/_index.md) |
+| Agent abstraction | Role identity, inputs/outputs, verdict bars | [agents](../../agents/_index.md) |
 | Control plane | Observability UI (not skill ownership) | External: T3 Code — [preliminary backend landscape](../../research/preliminary-backend-landscape.md) |
 | Harness adapter | Spawn agent, stream tools, map diff scope | **OpenCode** (first attempt) — markdown agents; extra restrictiveness in **host overlay**, not a forked loop ([overlays](./skill-source-and-host-overlays.md)) |
 | Provider | API keys, model routing, rate limits | **Required** BYOK; **Desired** ClinePass later |

@@ -24,7 +24,7 @@ Operator studies of **local workflows** (not proposed engine design, not eval sc
 ### Documents (local)
 
 * [Host recreation (2026-08)](./host-recreation-2026-08.md) — T3 + OpenCode first attempt; ClinePass later; skill-based bug_reviewer
-* [OpenCode DSV4F session (2026-08)](./opencode-dsv4f-session-2026-08.md) — OpenCode + DeepSeek V4 Flash dogfood; resolved Antigravity routing; lasting gap = automatic plan/review loop binding
+* [OpenCode DSV4F session (2026-08)](./opencode-dsv4f-session-2026-08.md) — OpenCode + DeepSeek V4 Flash live trial; resolved Antigravity routing; lasting gap = automatic plan/review loop binding
 * [OpenCode DSV4F session extension (2026-08)](./opencode-dsv4f-session-extension-2026-08.md) — same session continued; skill-tool catalog binding → bash substitution; shell-approval babysitting (~2–3 min); iterative plan loop still operator-prompted; desktop model-selection pin detail
 * [OpenCode skill-binding discovery (2026-08)](./opencode-skill-binding-discovery-2026-08.md) — harness vs model vs config triage for C/E; Probe A–C; catalog fixed via skill `name` + `skills.paths`
 

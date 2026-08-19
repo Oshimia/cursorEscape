@@ -91,7 +91,7 @@
 
 - **Goal:** Import AITestSuite Phase 4 freeze + live `~/.cursor` workflow; produce source-delta note
 - **Depends on / entry gate:** Phase 2 complete; **live-vs-freeze diff discovery completed** before copy lock
-- **Do not touch:** `review-profiles/**`; app trees; goldens; openBuggy re-copy beyond manifest updates
+- **Do not touch:** `review-profiles/**`; app trees; eval fixtures; openBuggy re-copy beyond manifest updates
 - **In scope ΓÇö AITestSuite allowlist only** under `tests/ez-pz-streaming-media-phase-4/` (plus suite/meta as listed):
   - `baseline/.cursor/skills/{implementation-plan,implementation-review,reference-docs}/SKILL.md`
   - `baseline/.cursor/agents/{plan-reviewer,reviewer-a}.md`

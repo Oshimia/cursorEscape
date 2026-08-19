@@ -76,7 +76,7 @@ openBuggy remains **research** (dual-gate evidence, BugBot FA). v0 **bug_reviewe
 
 ## Implications / open questions
 
-1. R0 dogfood on T3+OpenCode before any cursorEscape engine ([implementation roadmap](../docs/roadmaps/implementation-roadmap.md)).
+1. R0 live trial on T3+OpenCode before any cursorEscape engine ([implementation roadmap](../docs/roadmaps/implementation-roadmap.md)).
 2. Do not treat init-report Q6 “neither chosen” as current — superseded by this lock-in.
 
 ---

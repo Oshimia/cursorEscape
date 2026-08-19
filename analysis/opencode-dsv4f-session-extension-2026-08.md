@@ -101,7 +101,7 @@ User: "use the planning skill + iterative review"
 
 **Inferred:** C (undiscoverable / unbound workflow skills) is not only a correctness problem for plan/review gates; it is an **attention-cost** problem. Even when the parent is “making progress,” the wrong tool class keeps the human in the approval loop. R0 reliability includes “gates fire” **and** “routine SoT loads do not require a human click every few minutes.”
 
-**cursorEscape analytical focus:** Prefer skill-tool (or other non-approval) paths for adapter/SoT material so exploratory babysitting is not the default cost of OpenCode dogfood. **This document does not prescribe the fix** (permission policy vs catalog registration vs always-on pointers).
+**cursorEscape analytical focus:** Prefer skill-tool (or other non-approval) paths for adapter/SoT material so exploratory babysitting is not the default cost of OpenCode live trials. **This document does not prescribe the fix** (permission policy vs catalog registration vs always-on pointers).
 
 ### What worked (Observed)
 

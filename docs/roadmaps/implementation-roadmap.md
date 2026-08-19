@@ -4,9 +4,9 @@
 
 ## Context
 
-**Future work** after initialization — distinct from the [cursorEscape initialization](./cursorEscape-initialization.md) conductor. First recreation is **external**: dogfood **T3 Code + OpenCode** using contracts in this repo — **not** building a cursorEscape engine yet. See [host recreation](../../analysis/host-recreation-2026-08.md) and [design decisions](../../review/design-decisions.md).
+**Future work** after initialization — distinct from the [cursorEscape initialization](./cursorEscape-initialization.md) conductor. First recreation is **external**: try **T3 Code + OpenCode** hands-on using contracts in this repo — **not** building a cursorEscape engine yet. See [host recreation](../../analysis/host-recreation-2026-08.md) and [design decisions](../../review/design-decisions.md).
 
-**Status:** Planning document — R0 authorized as owner dogfood outside this repo; R1+ engine work **not** authorized until R0 proves the loop.
+**Status:** Planning document — R0 authorized as owner live trial outside this repo; R1+ engine work **not** authorized until R0 proves the loop.
 
 ---
 
@@ -23,7 +23,7 @@
 
 | Phase | Goal | Entry gate | Out of scope |
 | ----- | ---- | ---------- | ------------ |
-| **R0 — Dogfood** | Encode roles as OpenCode agents; dual Task review; parent Fast CI skill; T3 for file/diff observability on one dogfood repo | Init complete + this lock-in | cursorEscape packages; openBuggy-required path |
+| **R0 — Live trial** | Encode roles as OpenCode agents; dual Task review; parent Fast CI skill; T3 for file/diff observability on one trial target repo | Init complete + this lock-in | cursorEscape packages; openBuggy-required path |
 | **Copy-out overlays (later)** | Put thin host overlays in git (no secrets); generate/copy into host dirs | Explicit owner go-ahead; [overlay FA](../featureArchitecture/skill-source-and-host-overlays.md) | Creating empty `adapters/` now; committing `~/.config/opencode` |
 | **R1 — Discovery hygiene** | Confirm hub-walk / discovery skill works on OpenCode against target repos | R0 loop usable | Embedding index; in-repo discovery module |
 | **R2 — Workflow runner (optional)** | Only if OpenCode cannot hold the loop — thin host-agnostic orchestration | R0 failed on capability | Custom IDE |
@@ -47,7 +47,7 @@
 | Cursor clone IDE | [design decisions](../../review/design-decisions.md) non-goal |
 | Inline Bugbot engine / require openBuggy for v0 | Skill-based bug_reviewer |
 | Skipping dual-gate | [intended workflow](../featureArchitecture/intended-workflow.md) |
-| Building R1+ engine before R0 dogfood | Premature |
+| Building R1+ engine before R0 live trial | Premature |
 
 ---
 

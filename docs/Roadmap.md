@@ -1,7 +1,7 @@
 # cursorEscape Roadmap
 
 **Last updated:** 2026-08-20  
-**Status:** Documentation foundation — initialization complete; runtime not started. First recreation: **T3 Code + OpenCode** (external). Identity: **skill/workflow manager across stacks** (not machines).
+**Status:** Phase 6 closeout — shared-workflow-docs hub/cite sweep (pending Composer QC commit); runtime not started. First recreation: **T3 Code + OpenCode** (external). Identity: **skill/workflow manager across stacks** (not machines).
 
 This repository is the owner's **skill and workflow manager**: preserve and evolve personal agentic skills and the plan → implement → dual review loop, and apply them across stacks without inseparable dependence on Cursor, a single IDE, or a single model provider. Analog: Theo `fleet` ([Observed](../research/theo-fleet-skill-management.md)). Non-goal: multi-machine sync.
 
@@ -9,7 +9,7 @@ This repository is the owner's **skill and workflow manager**: preserve and evol
 
 ## Context
 
-cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is a **Phase 3 archaeology** snapshot; current Cursor overlay: [overlays/cursor](../overlays/cursor/_index.md) (fat interim extract). Gold-base contracts are **Target** SoT (Approach A — interim: `docs/skills/`, `docs/agents/`). Stack variation: [skill source and host overlays](./featureArchitecture/skill-source-and-host-overlays.md).
+cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is a **Phase 3 archaeology** snapshot; current Cursor overlay: [overlays/cursor](../overlays/cursor/_index.md) (thin wrappers). repo-root contracts are **Target** SoT at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` (Approach A). Stack variation: [skill source and host overlays](./featureArchitecture/skill-source-and-host-overlays.md).
 
 **First host attempt:** T3 Code (control plane) + OpenCode (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Operator study: [host recreation](../analysis/host-recreation-2026-08.md).
 
@@ -35,15 +35,15 @@ Stewardship and non-goals: [design decisions](../review/design-decisions.md).
 
 | Area | Status |
 | ---- | ------ |
-| Documentation foundation | **Phase 5 closeout** — pending Composer QC commit ([initialization report](../review/initialization-report.md)) |
+| Documentation foundation | **Phase 6 closeout** — hub/cite sweep pending Composer QC ([initialization report](../review/initialization-report.md)) |
 | First host lock-in | **T3 + OpenCode** — [host recreation](../analysis/host-recreation-2026-08.md); U2 settled, U8 withdrawn |
 | Runtime / engine / packages | **Not started** (recreation is external) |
 | Research imports (openBuggy) | **Complete** (Phase 2) — research only, not v0 bug transport |
 | Research imports (AITestSuite, live `~/.cursor`) | **Complete** (Phase 3) — [workflow-source-delta](../research/imported/workflow-source-delta.md) |
 | Target synthesizing architecture docs | **Complete** (Phase 4) — [feature architecture index](./featureArchitecture/_index.md) |
-| Agent & skill contracts | **Complete** (Phase 4) — [agents](./agents/_index.md) · [skills](./skills/_index.md) |
-| Implementation roadmap | [implementation-roadmap.md](./roadmaps/implementation-roadmap.md) — R0 dogfood |
-| Skill-manager identity | **Phase 1 committed** (`9c104b1`). **Phase 2 overlay FA landed.** **Cursor overlay extract** — [overlays/cursor](../overlays/cursor/_index.md); shared deep procedure — [workflow/](../workflow/_index.md). |
+| Agent & skill contracts | **Complete** (Phase 4–5) — [agents](../agents/_index.md) · [skills](../skills/_index.md) · [rules](../rules/_index.md) |
+| Implementation roadmap | [implementation-roadmap.md](./roadmaps/implementation-roadmap.md) — R0 live trial |
+| Skill-manager identity | **Phases 1–6 complete** — bases at repo root; **thin Cursor overlay** — [overlays/cursor](../overlays/cursor/_index.md); shared deep procedure — [workflow/](../workflow/_index.md). |
 
 ---
 
@@ -52,12 +52,13 @@ Stewardship and non-goals: [design decisions](../review/design-decisions.md).
 | Path | Purpose |
 | ---- | ------- |
 | [`workflow/`](../workflow/_index.md) | Shared deep procedure (plan/review loops, discovery, CI ladder) |
+| [`skills/`](../skills/_index.md) | Host-agnostic skill contracts |
+| [`agents/`](../agents/_index.md) | Host-agnostic role contracts |
+| [`rules/`](../rules/_index.md) | Always-on gate contracts |
 | [`README.md`](../README.md) | Repo entry; points here |
 | [`review/`](../review/_index.md) | Project intent and design decisions |
 | [`featureArchitecture/`](./featureArchitecture/_index.md) | Intended system behavior (Target) |
-| [`agents/`](./agents/_index.md) | Host-agnostic role contracts |
-| [`skills/`](./skills/_index.md) | Host-agnostic skill contracts |
-| [`overlays/`](../overlays/_index.md) | Host-native recorded files (Cursor fat interim extract; deep procedure at `workflow/`) |
+| [`overlays/`](../overlays/_index.md) | Host-native thin wrappers (Cursor spawn + Read tables) |
 | [`research/`](../research/_index.md) | Sourced facts and imported sibling research |
 | [`SOPs/`](./SOPs/_index.md) | How maintainers and future implementers work |
 | [`analysis/`](../analysis/_index.md) | Operator studies of local workflows |
@@ -94,7 +95,7 @@ Stewardship and non-goals: [design decisions](../review/design-decisions.md).
 | Roadmap | Purpose |
 | ------- | ------- |
 | [cursorEscape initialization](./roadmaps/cursorEscape-initialization.md) | Bootstrap docs, import research, author Target FA docs, closeout report |
-| [Implementation roadmap](./roadmaps/implementation-roadmap.md) | R0 T3+OpenCode dogfood; optional later engine |
+| [Implementation roadmap](./roadmaps/implementation-roadmap.md) | R0 T3+OpenCode live trial; optional later engine |
 
 ---
 

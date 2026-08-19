@@ -47,7 +47,7 @@ Operator
 | -------- | ----- |
 | Runtime | **None** — docs only |
 | CI | Link/manifest checks ([initialization roadmap](../roadmaps/cursorEscape-initialization.md)) |
-| Canonical workflow source | **Target:** gold bases in this companion repo (`workflow/`, `skills/`, `agents/`, `rules/` — interim: `docs/skills/` and `docs/agents/` until Phase 4; deep procedure at [`workflow/`](../../workflow/_index.md) since Phase 3). **Observed archaeology:** [workflow-source-delta](../../research/imported/workflow-source-delta.md) (eval freeze vs live; not a second procedure SoT) |
+| Canonical workflow source | **Target:** repo-root bases in this companion repo (`workflow/`, `skills/`, `agents/`, `rules/`). **Observed archaeology:** [workflow-source-delta](../../research/imported/workflow-source-delta.md) (eval freeze vs live; not a second procedure SoT) |
 | First recreation host | External T3 + OpenCode — not in-repo packages |
 
 ### Multi-root / monorepo (Unknown)

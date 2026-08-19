@@ -1,11 +1,11 @@
 # Cursor overlay — copy-out map
 
 **Last updated:** 2026-08-20  
-**Status:** Phase 5 thin wrappers (gold bases at repo-root `workflow/`, `skills/`, `agents/`, `rules/`).
+**Status:** Phase 5 thin wrappers (bases at repo-root `workflow/`, `skills/`, `agents/`, `rules/`).
 
 ## Context
 
-Thin **Cursor host overlay** for copy-out to `~/.cursor/`. Portable procedure lives at repo-root gold bases — overlay files add YAML, `disable-model-invocation`, Cursor Task spawn blocks, and copy-out-relative Read tables only.
+Thin **Cursor host overlay** for copy-out to `~/.cursor/`. Portable procedure lives at repo-root bases — overlay files add YAML, `disable-model-invocation`, Cursor Task spawn blocks, and copy-out-relative Read tables only.
 
 Live `~/.cursor` is **not** overwritten from this repo. Copy-out is **not authorized** unless the owner manually syncs.
 
@@ -16,11 +16,11 @@ Live `~/.cursor` is **not** overwritten from this repo. Copy-out is **not author
 | **This repo (SoT)** | [`workflow/_index.md`](../../workflow/_index.md) |
 | **Live Cursor (copy-out)** | `~/.cursor/docs/workflow/` |
 
-Overlay Read tables may cite `C:/Users/admin/.cursor/docs/workflow/` as copy-out fallback. In-repo navigation uses repo-root `workflow/`. Do not mix copy-out paths into gold base files.
+Overlay Read tables may cite `C:/Users/admin/.cursor/docs/workflow/` as copy-out fallback. In-repo navigation uses repo-root `workflow/`. Do not mix copy-out paths into repo-root base files.
 
 ## Copy-out map
 
-| Copy to `~/.cursor/` | Overlay source | Points at (repo gold) |
+| Copy to `~/.cursor/` | Overlay source | Points at (repo-root base) |
 | --------------------- | -------------- | --------------------- |
 | `skills/implementation-plan/SKILL.md` | [skills/implementation-plan/SKILL.md](./skills/implementation-plan/SKILL.md) | [skills/implementation-plan/SKILL.md](../../skills/implementation-plan/SKILL.md), spawn + [workflow/](../../workflow/_index.md) |
 | `skills/implementation-review/SKILL.md` | [skills/implementation-review/SKILL.md](./skills/implementation-review/SKILL.md) | [skills/implementation-review/SKILL.md](../../skills/implementation-review/SKILL.md), spawn + workflow |
@@ -70,7 +70,7 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 
 ## Provenance
 
-Fat Observed extract (2026-08-20) promoted to gold bases in Phase 4. Phase 5 replaced overlay bodies with thin wrappers; **SHA256 byte-identical tables retired** (no longer a freeze target).
+Fat Observed extract (2026-08-20) promoted to repo-root bases in Phase 4. Phase 5 replaced overlay bodies with thin wrappers; **SHA256 byte-identical tables retired** (no longer a freeze target).
 
 Refresh copy-out by re-copying from live `~/.cursor` when authorized; update this index — do not claim live install tracks git automatically.
 

@@ -20,14 +20,14 @@ This repo is the **canonical manager** of portable skills, agent roles, always-o
 
 ### Target taxonomy — Approach A (Required)
 
-**Approach A (locked):** Gold procedure and contracts live at **repo-root** bases (`workflow/`, `skills/`, `agents/`, `rules/`). The Cursor overlay is **thin wrappers** at `overlays/cursor/` that point at those bases. `docs/skills/` and `docs/agents/` folded into root bases in Phase 4; `research/`, `review/`, `analysis/`, and `overlays/` moved to root in Phase 2. `docs/` retains **this-repo-only** FA, SOPs, roadmaps, and `Roadmap.md`.
+**Approach A (locked):** Portable procedure and contracts live at **repo-root** bases (`workflow/`, `skills/`, `agents/`, `rules/`). The Cursor overlay is **thin wrappers** at `overlays/cursor/` that point at those bases. `docs/skills/` and `docs/agents/` folded into root bases in Phase 4; `research/`, `review/`, `analysis/`, and `overlays/` moved to root in Phase 2. `docs/` retains **this-repo-only** FA, SOPs, roadmaps, and `Roadmap.md`.
 
 **Rejected alternatives (locked):**
 
 - **B:** Lean `docs/skills` / `docs/agents` contracts as the sole portable SoT while bulk procedure stays under `overlays/cursor` — rejected (two homes; overlay becomes perpetual SoT).
 - **C:** Hybrid bulk still in overlay with lean contracts elsewhere — rejected (same upkeep bug as B).
 
-**Phase 5 complete:** Cursor Task / `subagent_type` / Bugbot spawn blocks live in overlay wrappers only — **not** in gold `skills/` or `agents/` bodies.
+**Phase 5 complete:** Cursor Task / `subagent_type` / Bugbot spawn blocks live in overlay wrappers only — **not** in `skills/` or `agents/` bodies.
 
 | Kind | Target home (Approach A) | May vary by host? |
 | ---- | ------------------------ | ----------------- |
@@ -41,7 +41,7 @@ This repo is the **canonical manager** of portable skills, agent roles, always-o
 
 ### Authored layers vs copy-out (Required)
 
-**Target (Approach A):** Shared loop, shared deep docs, and shared skill/agent contracts are **three authored SoTs** for procedure at gold bases (`workflow/`, `skills/`, `agents/`). **Host overlay** is the fourth layer: **thin wrappers** at `overlays/cursor/`. **Copy-out** is install, not a fifth SoT.
+**Target (Approach A):** Shared loop, shared deep docs, and shared skill/agent contracts are **three authored SoTs** for procedure at repo-root bases (`workflow/`, `skills/`, `agents/`). **Host overlay** is the fourth layer: **thin wrappers** at `overlays/cursor/`. **Copy-out** is install, not a fifth SoT.
 
 ```text
 Target (after Phases 3–5):
@@ -51,7 +51,7 @@ Shared skill/agent contracts (triggers, outline, must-not) → skills/, agents/
 Host overlay (Cursor: thin wrappers)                      → overlays/cursor/
 Copy-out to host config dirs                              → install later; not SoT
 
-Interim (Phases 3–4): workflow/, docs/skills/, docs/agents/, overlays/cursor/ (fat extract)
+Interim (Phases 3–4, historical): workflow/, docs/skills/, docs/agents/, overlays/cursor/ (fat extract) — folded into repo-root bases Phase 4–6.
 ```
 
 Instruction **budget** (thin always-on vs on-demand vs deep docs) stays in [instruction-layering](./instruction-layering.md). Overlays sit **beside** that budget; they do not replace it.
@@ -60,7 +60,7 @@ Instruction **budget** (thin always-on vs on-demand vs deep docs) stays in [inst
 
 When editing a sentence, ask: would this still be true if we deleted this host tomorrow?
 
-- **Yes** → shared loop, shared skill, or shared deep doc. **Target:** gold bases (`workflow/`, `skills/`, `agents/`, `rules/`, FA). **Not** overlay SKILL/agent/rule bodies for portable procedure.
+- **Yes** → shared loop, shared skill, or shared deep doc. **Target:** repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`, FA). **Not** overlay SKILL/agent/rule bodies for portable procedure.
 - **No** (how this host wires or extra-constrains) → overlay only (spawn blocks, harness IDs, additive safety).
 - **Same paragraph appearing in two overlays** → it was shared; promote it. Dual overlays of procedure is the bug.
 - **OpenCode cannot meet a Required gate** → change the portable Required, or mark Cursor-specific / Unknown. Never write an “OpenCode edition” of the loop.
@@ -104,9 +104,9 @@ Do **not** put Cursor Task IDs in shared skill bodies. Do **not** put OpenCode p
 
 ### Copy-out vs authorship (Desired later)
 
-Later, copy-out may generate host-native wrappers that `Read` shared deep docs. You still **author the procedure once** at gold bases. Secrets stay out of git.
+Later, copy-out may generate host-native wrappers that `Read` shared deep docs. You still **author the procedure once** at repo-root bases. Secrets stay out of git.
 
-**Migration order (Target):** Phases 2–5 of [shared-workflow-docs](../roadmaps/shared-workflow-docs.md) — move deliverable trees to root, promote overlay gold to bases, thin overlay. OpenCode overlay extract and copy-out remain later. That is sequencing, not a competing architecture.
+**Migration order (Target):** Phases 2–5 of [shared-workflow-docs](../roadmaps/shared-workflow-docs.md) — move deliverable trees to root, promote overlay extract to bases, thin overlay. OpenCode overlay extract and copy-out remain later. That is sequencing, not a competing architecture.
 
 **Unknown:** OpenCode overlay path; extract method (manual vs script) for later refreshes; copy-out calendar.
 
@@ -119,10 +119,10 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 
 ## Implications / open questions
 
-1. U3 is **partial**: skill/adapter inventory SoT = this companion repo (**Target:** gold bases at `workflow/`, `skills/`, `agents/`, `rules/`; overlay = thin wrappers); host dirs = copy-out targets; per-target `.cursorEscape/` remains **Unknown** ([unresolved questions](../../review/unresolved-architectural-questions.md), [workspace model](./workspace-model.md)).
+1. U3 is **partial**: skill/adapter inventory SoT = this companion repo (**Target:** repo-root bases at `workflow/`, `skills/`, `agents/`, `rules/`; overlay = thin wrappers); host dirs = copy-out targets; per-target `.cursorEscape/` remains **Unknown** ([unresolved questions](../../review/unresolved-architectural-questions.md), [workspace model](./workspace-model.md)).
 2. Remaining incidental “canonical” phrasing in untouched leaves is **not** a second identity project — fix when that leaf is edited, or in a dedicated sweep, not by expanding review scope.
-3. R0 dogfood continues on the current global OpenCode adapter until copy-out is authorized.
-4. Overlay bodies are **thin wrappers** pointing at gold bases — not a second `implementation-review` procedure in this tree.
+3. R0 live trial continues on the current global OpenCode adapter until copy-out is authorized.
+4. Overlay bodies are **thin wrappers** pointing at repo-root bases — not a second `implementation-review` procedure in this tree.
 
 ---
 

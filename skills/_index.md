@@ -4,7 +4,7 @@
 
 ## Context
 
-Host-agnostic **gold-standard** workflow skills at repo root. Portable procedure lives in `skills/*/SKILL.md`. Cursor overlay **thin wrappers** (spawn + Read tables): [overlays/cursor](../overlays/cursor/_index.md). The 2026-08-17 bannered copy remains under [cursor-global-workflow](../research/imported/cursor-global-workflow/skills/) (archaeology).
+Host-agnostic **portable** workflow skills at repo root. Portable procedure lives in `skills/*/SKILL.md`. Cursor overlay **thin wrappers** (spawn + Read tables): [overlays/cursor](../overlays/cursor/_index.md). The 2026-08-17 bannered copy remains under [cursor-global-workflow](../research/imported/cursor-global-workflow/skills/) (archaeology).
 
 ---
 
@@ -43,7 +43,7 @@ Each SKILL states: **When to use**, **Workflow steps**, **Outputs**, **Must not*
 
 - [Agents index](../agents/_index.md)
 - [Workflow index](../workflow/_index.md)
-- [Rules](../rules/)
+- [Rules](../rules/_index.md)
 - [Intended workflow](../docs/featureArchitecture/intended-workflow.md)
 - [Instruction layering](../docs/featureArchitecture/instruction-layering.md)
 - [Cursor overlay](../overlays/cursor/_index.md)

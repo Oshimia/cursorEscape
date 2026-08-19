@@ -1,12 +1,12 @@
 # cursorEscape
 
-**Status:** Documentation foundation — initialization complete; runtime not started. First recreation: **T3 Code + OpenCode**.
+**Status:** Phase 6 closeout — shared-workflow-docs hub/cite sweep (pending Composer QC commit); runtime not started. First recreation: **T3 Code + OpenCode**.
 
 ## What and why
 
 **What:** cursorEscape is the owner's **skill and workflow manager** — a git home for personal agentic skills, agent roles, and gates (plan → implement → dual review → closeout), applied across **stacks** (Cursor, OpenCode; T3 as control plane). Analogous to Theo's T3 `fleet` repo ([Observed](research/theo-fleet-skill-management.md)), except this is **not** multi-machine sync.
 
-**Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. Gold-base contracts (Approach A: `workflow/`, `skills/`, `agents/`, `rules/` — interim: repo-root [`workflow/`](workflow/_index.md) for deep procedure since Phase 3; `docs/skills/`, `docs/agents/` until Phase 4) are **Target** SoT. Cursor overlay under [overlays/cursor](overlays/cursor/_index.md) is a **fat Observed interim extract** (thin wrappers in Phase 5). Live `~/.cursor` remains the running Cursor install. Stack variation: [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
+**Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. repo-root contracts (Approach A: [`workflow/`](workflow/_index.md), [`skills/`](skills/_index.md), [`agents/`](agents/_index.md), [`rules/`](rules/_index.md)) are **Target** SoT. Cursor overlay under [overlays/cursor](overlays/cursor/_index.md) is **thin wrappers** (spawn + Read tables). Live `~/.cursor` remains the running Cursor install. Stack variation: [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
 
 **First host attempt:** [T3 Code](https://t3.codes/) (control plane) + [OpenCode](https://opencode.ai/) (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Study: [host recreation](analysis/host-recreation-2026-08.md).
 
@@ -17,12 +17,13 @@
 | Path | Purpose |
 | ---- | ------- |
 | [`workflow/`](workflow/_index.md) | Shared deep procedure (plan/review loops, discovery, CI ladder) |
+| [`skills/`](skills/_index.md) | Host-agnostic workflow skill contracts |
+| [`agents/`](agents/_index.md) | Host-agnostic agent role contracts |
+| [`rules/`](rules/_index.md) | Always-on gate contracts |
 | [`docs/Roadmap.md`](docs/Roadmap.md) | Vision, principles, status, and directory map |
 | [`review/`](review/_index.md) | Project intent and [design decisions](review/design-decisions.md) |
 | [`docs/featureArchitecture/`](docs/featureArchitecture/_index.md) | How the system is intended to work (Target) |
-| [`docs/agents/`](docs/agents/_index.md) | Host-agnostic agent role contracts |
-| [`docs/skills/`](docs/skills/_index.md) | Host-agnostic workflow skill contracts |
-| [`overlays/`](overlays/_index.md) | Host-native recorded files (Cursor fat interim extract; thin after Phase 5) |
+| [`overlays/`](overlays/_index.md) | Host-native thin wrappers (Cursor spawn + Read tables) |
 | [`research/`](research/_index.md) | Sourced facts and imported sibling research |
 | [`docs/SOPs/`](docs/SOPs/_index.md) | Procedures for maintainers and future implementers |
 | [`analysis/`](analysis/_index.md) | Operator studies ([host recreation](analysis/host-recreation-2026-08.md)) |
@@ -33,19 +34,10 @@
 ```text
 cursorEscape/
   README.md
-  workflow/
-  .gitignore
-  docs/
-    Roadmap.md
-    featureArchitecture/
-    agents/
-    skills/
-    SOPs/
-    roadmaps/
-  research/
-  review/
-  analysis/
-  overlays/
+  workflow/ skills/ agents/ rules/
+  docs/                         # FA, SOPs, roadmaps, Roadmap.md
+  overlays/cursor/              # thin Cursor wrappers
+  research/ review/ analysis/
 ```
 
 Application runtime, adapters, packages, and eval runners are **out of scope** until an authorized implementation phase. Recreation uses external T3 + OpenCode.

@@ -4,7 +4,7 @@
 
 ## Context
 
-cursorEscape is the owner's **skill/workflow manager** (docs-first until copy-out). It does not replace sibling archives; it imports selected research with provenance and authors **Target** synthesizing docs under `docs/featureArchitecture/`, `docs/agents/`, and `docs/skills/` (Phase 4 complete). This document is **Target** cursorEscape intent about how siblings relate — not a sync contract. First recreation uses external **T3 Code + OpenCode**, not sibling runtimes ([host recreation](../analysis/host-recreation-2026-08.md)).
+cursorEscape is the owner's **skill/workflow manager** (docs-first until copy-out). It does not replace sibling archives; it imports selected research with provenance and authors **Target** synthesizing docs under `docs/featureArchitecture/` and bases at repo-root `workflow/`, `skills/`, `agents/`, and `rules/`. This document is **Target** cursorEscape intent about how siblings relate — not a sync contract. First recreation uses external **T3 Code + OpenCode**, not sibling runtimes ([host recreation](../analysis/host-recreation-2026-08.md)).
 
 ---
 
@@ -16,13 +16,13 @@ cursorEscape is the owner's **skill/workflow manager** (docs-first until copy-ou
 | ------- | ------------------------------- | ----- |
 | **openBuggy** | Market/harness **research** archive; BugBot characterization; optional later bug engine — **not** a v0 runtime dependency | **No sync** — one-time import under `research/imported/openBuggy/` with [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md) |
 | **AITestSuite** | Eval packaging for plan/review workflow (frozen baselines, scoring framework, USER_INPUT_STOPS) | **No sync** — Phase 3 import only; Observed/eval-packaging label |
-| **Live `~/.cursor`** | **Observed** Cursor loop. Skills, rules, agents, and `docs/workflow` extracted to [overlays/cursor](../overlays/cursor/_index.md) (fat interim extract; thin wrappers in Phase 5). Gold-base contracts are **Target** SoT (interim: `docs/skills/`, `docs/agents/`). | **No sync** — overlay extract is a dated copy; live install still loads `~/.cursor` |
+| **Live `~/.cursor`** | **Observed** Cursor loop. Skills, rules, agents, and `docs/workflow` extracted to [overlays/cursor](../overlays/cursor/_index.md) (thin wrappers). repo-root contracts are **Target** SoT at repo root. | **No sync** — overlay extract is a dated copy; live install still loads `~/.cursor` |
 
 ### openBuggy (imported in Phase 2)
 
 - **What we took:** Workflow-gap narrative, proposed engine slices relevant to dual-gate loops, full Cursor BugBot Observed FA suite, reviewer-effectiveness analysis (no `.local/`), product/API research, and the agent-review-loop SOP.
 - **What we did not take:** `eval/` tree, mining ops roadmaps as imports, analysis `.local/` coding sheets, runtime code.
-- **How to use imports:** Treat as **Observed/imported** openBuggy characterization. v0 **bug_reviewer** is an OpenCode subagent + skills (reviewer-a pattern) — cite openBuggy for personality/eval research, not as Required transport. Target design: [design-decisions](./design-decisions.md), [featureArchitecture](../docs/featureArchitecture/_index.md), [agents](../docs/agents/_index.md), [skills](../docs/skills/_index.md).
+- **How to use imports:** Treat as **Observed/imported** openBuggy characterization. v0 **bug_reviewer** is an OpenCode subagent + skills (reviewer-a pattern) — cite openBuggy for personality/eval research, not as Required transport. Target design: [design-decisions](./design-decisions.md), [featureArchitecture](../docs/featureArchitecture/_index.md), [agents](../agents/_index.md), [skills](../skills/_index.md).
 
 ### AITestSuite (imported in Phase 3)
 
@@ -33,7 +33,7 @@ cursorEscape is the owner's **skill/workflow manager** (docs-first until copy-ou
 ### Live `~/.cursor` (imported in Phase 3)
 
 - **What we took:** All nine `docs/workflow/` files, three rules (including `pre-commit-ci-gate`), five skills (+ co-located `user-rules-snippet.md` where present), and two agents — mirrored under `imported/cursor-global-workflow/`.
-- **Cursor file reference (Observed):** [overlays/cursor](../overlays/cursor/_index.md) (2026-08-20 fat interim extract from live `~/.cursor`; thin wrappers in Phase 5). Phase 3 import under `imported/cursor-global-workflow/` remains a bannered 2026-08-17 snapshot. Recreation maps **Target** gold-base contracts in this repo to OpenCode.
+- **Cursor file reference (Observed):** [overlays/cursor](../overlays/cursor/_index.md) (thin wrappers from live `~/.cursor`). Phase 3 import under `imported/cursor-global-workflow/` remains a bannered 2026-08-17 snapshot. Recreation maps **Target** repo-root contracts in this repo to OpenCode.
 
 ### Replaceability principle
 
@@ -46,7 +46,7 @@ cursorEscape intends to **own** workflow contracts, repo knowledge, and evaluati
 1. License and remote hosting for cursorEscape remain TBD; sibling licenses do not automatically apply to Target docs here.
 2. Re-import from openBuggy requires manifest update and explicit phase decision — no standing sync job.
 3. openBuggy is **not** wired as default bug_reviewer (U8 withdrawn) — optional later only.
-4. Live `~/.cursor` is **Observed interim** Cursor wording; companion-repo contracts are Target.
+4. Live `~/.cursor` is **Observed** Cursor wording; companion-repo repo-root contracts are Target.
 
 ---
 
@@ -55,8 +55,8 @@ cursorEscape intends to **own** workflow contracts, repo knowledge, and evaluati
 - [Design decisions](./design-decisions.md)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [Feature architecture index](../docs/featureArchitecture/_index.md)
-- [Agent contracts](../docs/agents/_index.md)
-- [Skill contracts](../docs/skills/_index.md)
+- [Agent contracts](../agents/_index.md)
+- [Skill contracts](../skills/_index.md)
 - [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md)
 - [Initialization roadmap](../docs/roadmaps/cursorEscape-initialization.md)
 - [Theo fleet skill management (Observed)](../research/theo-fleet-skill-management.md)

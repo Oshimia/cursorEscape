@@ -4,7 +4,7 @@
 
 ## Context
 
-Target role catalog for cursorEscape orchestration. Roles are **configurable contracts** ([agents](../agents/_index.md)) — not hardcoded Cursor subagent type strings. First host maps roles to **OpenCode** markdown agents. Model assignment per role is **Desired** via config; live workflow recommends `composer-2.5` for reviewers ([review-subagent-models](../../overlays/cursor/review-subagent-models.md)). **Desired** later provider: ClinePass (or equivalent) — U13 unproven.
+Target role catalog for cursorEscape orchestration. Roles are **configurable contracts** ([agents](../../agents/_index.md)) — not hardcoded Cursor subagent type strings. First host maps roles to **OpenCode** markdown agents. Model assignment per role is **Desired** via config; live workflow recommends `composer-2.5` for reviewers ([review-subagent-models](../../overlays/cursor/review-subagent-models.md)). **Desired** later provider: ClinePass (or equivalent) — U13 unproven.
 
 ---
 
@@ -26,7 +26,7 @@ Target role catalog for cursorEscape orchestration. Roles are **configurable con
 
 Only **production_readiness_reviewer** + **bug_reviewer** run in parallel at loop closeout. openBuggy analysis: keep both legs ([recommendation](../../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)).
 
-**test_reviewer** is **Nice-to-have** for explicit test-heavy phases — does not replace production_readiness_reviewer's blocking test/docs bar. Contract: [test_reviewer.md](../agents/test_reviewer.md). When mandatory remains **Unknown (U9)**.
+**test_reviewer** is **Nice-to-have** for explicit test-heavy phases — does not replace production_readiness_reviewer's blocking test/docs bar. Contract: [test_reviewer.md](../../agents/test_reviewer.md). When mandatory remains **Unknown (U9)**.
 
 ### Model assignment (Desired)
 
@@ -59,15 +59,15 @@ optional: test_reviewer (explicit invoke)
 ## Implications / open questions
 
 1. **Unknown:** Config schema for role→model→provider triples (OpenCode native config is the v0 surface).
-2. Role pages under `docs/agents/` are the portable contracts; imported Cursor agent files remain Observed.
+2. Role pages under `agents/` are the portable contracts; imported Cursor agent files remain Observed.
 
 ---
 
 ## Related
 
-- [Agent contracts index](../agents/_index.md)
+- [Agent contracts index](../../agents/_index.md)
 - [Intended workflow](./intended-workflow.md)
 - [Clean context and isolation](./clean-context-isolation.md)
-- [test_reviewer](../agents/test_reviewer.md)
+- [test_reviewer](../../agents/test_reviewer.md)
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md)
 - [Host recreation study](../../analysis/host-recreation-2026-08.md)

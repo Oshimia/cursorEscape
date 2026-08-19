@@ -1,15 +1,15 @@
 # Roadmap: Centralize the workflow manager
 
 **Last updated:** 2026-08-20  
-**Status:** Phase 5 **complete** (Composer ACCEPT 2026-08-20). Phase 6 next.  
+**Status:** Phase 6 **complete** (Composer ACCEPT 2026-08-20). Program closed. Copy-out still unauthorized.  
 **Plan source:** accepted plan `shared_workflow_docs_376cecd4` (copy of Inter-phase + Agent context; do not invent scope).
 
 ## Product decisions (locked)
 
-- Approach **A**: gold overlay wording at root `workflow/` + `skills/*/SKILL.md` + `agents/*.md` + `rules/*.md`; thin `overlays/cursor/` after Phase 5; fold/delete `docs/skills` and `docs/agents`.
+- Approach **A**: live Cursor extract wording at root `workflow/` + `skills/*/SKILL.md` + `agents/*.md` + `rules/*.md`; thin `overlays/cursor/` after Phase 5; fold/delete `docs/skills` and `docs/agents`.
 - **B** and **C** rejected (lean contracts as SoT; hybrid bulk still in overlay).
 - Live `~/.cursor` is not overwritten. Copy-out unauthorized. No `adapters/`. No OpenCode extract this program.
-- Promote mechanic: **copy** overlay gold to bases; overlay stays fat until Phase 5.
+- Promote mechanic: **copy** overlay extract to bases; overlay stays fat until Phase 5.
 - This-program review-loop cap: phase agents ≤4 dual-review iterations, then Composer triage (renew ≤4 / waive process nits / change approach). Fast/Full failures are not waivable.
 
 ## Target layout (end state)
@@ -29,8 +29,8 @@ cursorEscape/
 - One authored procedure per skill/agent/workflow leaf. Overlay must Read / point at base, not paste the loop.
 - In-repo links use repo-relative paths. Overlay wrappers may keep copy-out-relative paths matching live `~/.cursor` — documented on overlay index, not mixed into base files.
 - Name map (index only): `plan-reviewer` → `plan_reviewer`; `reviewer-a` → `production_readiness_reviewer`; Bugbot → `bug_reviewer`.
-- Unique content in short contracts merges into gold bases — no parallel `docs/skills/*.md` after Phase 4.
-- **Promote mechanic (Phase 4):** Copy overlay gold bodies into root `skills/` / `agents/` / `rules/`. Overlay files stay fat until Phase 5 replaces them. Do not `git mv` overlay SKILL.md / agent files away in Phase 4.
+- Unique content in short contracts merges into repo-root bases — no parallel `docs/skills/*.md` after Phase 4.
+- **Promote mechanic (Phase 4):** Copy overlay extract bodies into root `skills/` / `agents/` / `rules/`. Overlay files stay fat until Phase 5 replaces them. Do not `git mv` overlay SKILL.md / agent files away in Phase 4.
 - **Escalation when-table precedence (Phase 4):** Target `docs/skills/implementation-plan.md` **When** rows win. Overlay SKILL body supplies the rest. `workflow/plan-agent-context.md` points at `skills/implementation-plan/SKILL.md`. Full CI asserts one when-table in that SKILL.
 - **`pre-commit-ci-gate` destination:** Target contract + overlay `.mdc` body → `rules/pre-commit-ci-gate.md`. Overlay keeps thin `.mdc`. Not a sixth SKILL.md.
 - **Leaf map:** see Phase 4 Named leaf map. No extra `docs/skills` or `docs/agents` markdown leaves beyond that table.
@@ -46,9 +46,9 @@ None. Git only. No live Cursor apply.
 - [x] Phase 1 — Architecture lock (taxonomy / Approach A / freeze inventory). **Composer waiver:** after 8 dual-review iterations (4 + renew 4), remaining Roadmap/desired-behavior/promotion-rule wording nits deferred; Fast/Full allowlist greps passed. Not a proven dual APPROVED bar.
 - [x] Phase 2 — git mv research, review, analysis, overlays to root + same-phase cites. `analysis/` at repo root.
 - [x] Phase 3 — Promote overlay workflow docs to `workflow/`. `review-subagent-models.md` parked on overlay. Fat SKILL `docs/workflow` links non-navigable until Phase 5.
-- [x] Phase 4 — Copy gold skills/agents/rules; fold short contracts. Overlay fat files still in place.
+- [x] Phase 4 — Copy skills/agents/rules; fold short contracts. Overlay fat files still in place.
 - [x] Phase 5 — Thin Cursor overlay; spawn extract. SHA256 byte-identical tables retired.
-- [ ] Phase 6 — Cite sweep closeout
+- [x] Phase 6 — Cite sweep closeout. **Composer waiver:** Bugbot false-positive on deleted `docs/skills/`; Reviewer-a APPROVED; Full CI hub checks passed.
 
 ---
 
@@ -57,7 +57,7 @@ None. Git only. No live Cursor apply.
 - **Goal:** Architecture lock so later moves are not a second taxonomy fight.
 - **Depends on / entry gate:** This plan accepted.
 - **Do not touch:** Overlay file bodies; `research/imported/**` content; live `~/.cursor`.
-- **In scope:** Overlay FA, instruction-layering, intended-workflow, desired-behavior-vs-cursor-specific, cursor-behavior-to-reproduce, clean-context-isolation, agent-roles-and-model-assignment; `docs/SOPs/documenting-this-repo.md`, `docs/SOPs/_index.md`, `docs/Roadmap.md`, `README.md`, `docs/review/design-decisions.md` (still under `docs/` until Phase 2). Grep inventory of Required “lean agent / docs/skills contract SoT / bloated overlay anti-pattern / no host IDs in shared contracts” **and freeze / do-not-rewrite overlay bodies** claims (documenting SOP Forbidden, overlay `_index` “bodies frozen”, design-decisions “bodies unchanged”). Update **all allowlist hits** to Approach A this phase: gold bases may be authored; overlay becomes thin wrappers in Phase 5 (no longer a frozen byte-identical extract). **Temporary exception (do not re-block Phase 4):** gold bases may contain Cursor Task / `subagent_type` / Bugbot IDs until Phase 5 extracts them — interim FA exception, not end-state. Revise design-decisions taxonomy row (openBuggy `docs/` mirror) so root `workflow/`/`skills/`/`research/` is allowed.
+- **In scope:** Overlay FA, instruction-layering, intended-workflow, desired-behavior-vs-cursor-specific, cursor-behavior-to-reproduce, clean-context-isolation, agent-roles-and-model-assignment; `docs/SOPs/documenting-this-repo.md`, `docs/SOPs/_index.md`, `docs/Roadmap.md`, `README.md`, `docs/review/design-decisions.md` (still under `docs/` until Phase 2). Grep inventory of Required “lean agent / docs/skills contract SoT / bloated overlay anti-pattern / no host IDs in shared contracts” **and freeze / do-not-rewrite overlay bodies** claims (documenting SOP Forbidden, overlay `_index` “bodies frozen”, design-decisions “bodies unchanged”). Update **all allowlist hits** to Approach A this phase: repo-root bases may be authored; overlay becomes thin wrappers in Phase 5 (no longer a frozen byte-identical extract). **Temporary exception (do not re-block Phase 4):** repo-root bases may contain Cursor Task / `subagent_type` / Bugbot IDs until Phase 5 extracts them — interim FA exception, not end-state. Revise design-decisions taxonomy row (openBuggy `docs/` mirror) so root `workflow/`/`skills/`/`research/` is allowed.
 - **Out of scope:** `git mv`; thinning overlays; rewriting conductor Agent context in this file (Composer owns status after QC).
 - **Files expected:** Taxonomy table; Approach A recorded; lean-claim inventory closed (zero remaining Required contradictions).
 - **Where to read context:** this roadmap A/B/C; overlay FA promotion rule; documenting SOP.
@@ -107,12 +107,12 @@ None. Git only. No live Cursor apply.
 
 #### Agent context — Phase 4
 
-- **Goal:** Root `skills/`, `agents/`, `rules/` are the gold-standard bases; `docs/skills` and `docs/agents` gone.
+- **Goal:** Root `skills/`, `agents/`, `rules/` are the repo-root bases; `docs/skills` and `docs/agents` gone.
 - **Depends on / entry gate:** Phase 3 dual APPROVED. Extra: grep `workflow/` for `docs/skills` / `docs/agents` — must be retargeted this phase.
 - **Do not touch:** Live `~/.cursor`; `research/imported/**` skill copies; thinning (Phase 5).
 - **In scope (promote = copy):** Copy overlay `SKILL.md` bodies → `skills/<name>/SKILL.md` (overlay originals stay). Apply when-table merge rule. Same phase: rewrite all copied `skills/` and `agents/` deep-doc links from `docs/workflow/` to repo-root `workflow/` (`review-subagent-models` overlay-only). Apply named leaf map; delete `docs/skills/` and `docs/agents/` only after every row is done; retarget `workflow/` cites of `docs/skills`/`docs/agents`.
-  - Overlay gold `plan-reviewer.md` body → `agents/plan_reviewer.md`. Merge unique from lean, then delete lean. One file, portable name.
-  - Overlay gold `reviewer-a.md` body → `agents/production_readiness_reviewer.md`. Merge unique from lean, then delete lean.
+  - overlay extract `plan-reviewer.md` body → `agents/plan_reviewer.md`. Merge unique from lean, then delete lean. One file, portable name.
+  - overlay extract `reviewer-a.md` body → `agents/production_readiness_reviewer.md`. Merge unique from lean, then delete lean.
   - Lean-only: `git mv` `planner.md`, `implementer.md`, `bug_reviewer.md`, `repository_explorer.md`, `test_reviewer.md` → `agents/<same>.md`.
   - Do not keep both `plan-reviewer.md` and `plan_reviewer.md` at root.
 - **Named leaf map:**
@@ -130,8 +130,8 @@ None. Git only. No live Cursor apply.
 
   `docs/agents/`:
   - `_index.md` → rewrite as `agents/_index.md`
-  - `plan_reviewer.md` → merge unique into copied gold → `agents/plan_reviewer.md`; then delete lean
-  - `production_readiness_reviewer.md` → merge unique into copied gold → `agents/production_readiness_reviewer.md`; then delete lean
+  - `plan_reviewer.md` → merge unique into copied overlay extract → `agents/plan_reviewer.md`; then delete lean
+  - `production_readiness_reviewer.md` → merge unique into copied overlay extract → `agents/production_readiness_reviewer.md`; then delete lean
   - `planner.md`, `implementer.md`, `bug_reviewer.md`, `repository_explorer.md`, `test_reviewer.md` → `git mv` to `agents/<same>.md`
 
   Overlay (copy body; originals stay fat):
@@ -139,7 +139,7 @@ None. Git only. No live Cursor apply.
   - `overlays/cursor/agents/plan-reviewer.md` → `agents/plan_reviewer.md`
   - `overlays/cursor/agents/reviewer-a.md` → `agents/production_readiness_reviewer.md`
   - overlay `.mdc` bodies → `rules/*.md`; `.mdc` remain overlay until Phase 5
-- **Where to read context:** gold overlay files; short contracts for merge-only; this named leaf map.
+- **Where to read context:** overlay extract files; short contracts for merge-only; this named leaf map.
 - **Out of scope:** Writing thin overlays; `git mv` of overlay skill/agent files.
 - **Files expected:** Five `skills/*/SKILL.md`; seven `agents/*.md`; three `rules/*.md`; two indexes; overlay fat files still present; `docs/skills/` and `docs/agents/` gone; leaf-map rows ticked.
 - **Fast CI:** Indexes list every skill/agent/rule; no `docs/skills` leftover; when-table matches Target When rows; grep `skills/` and `agents/` for `docs/workflow` — zero hits; sample SKILL.md links open to `workflow/`.

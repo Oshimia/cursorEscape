@@ -30,7 +30,7 @@ Repo root: `workflow/` (this file). Live Cursor copy-out: `~/.cursor/docs/workfl
 
 ## Freeze note (Observed)
 
-AITestSuite baseline includes [reference-docs skill](../research/imported/AITestSuite/tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/reference-docs/SKILL.md) — use when evaluating freeze baselines. Deep procedure lives at repo-root `workflow/discovery.md` (gold base; Observed Cursor wording preserved from overlay extract).
+AITestSuite baseline includes [reference-docs skill](../research/imported/AITestSuite/tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/reference-docs/SKILL.md) — use when evaluating freeze baselines. Deep procedure lives at repo-root `workflow/discovery.md` (repo-root base; Observed Cursor wording preserved from overlay extract).
 
 ## Related skills
 

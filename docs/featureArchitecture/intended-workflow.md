@@ -4,7 +4,7 @@
 
 ## Context
 
-This document is **Target** cursorEscape design for the owner's agentic loop: plan → implement → dual review → closeout. **Loop semantics** (when to plan, dual-gate, verdict bars) are owned here and in [design decisions](../../review/design-decisions.md). Current Cursor files: [overlays/cursor](../../overlays/cursor/_index.md) (**Observed** fat interim extract; thin wrappers in Phase 5). Phase 3 [cursor-global-workflow](../../research/imported/cursor-global-workflow/) import is archaeology. AITestSuite Phase 4 freeze is **Observed/eval-packaging** only. Where freeze disagrees with live Cursor wording, cite [workflow-source-delta](../../research/imported/workflow-source-delta.md). Stack variation: [skill-source-and-host-overlays](./skill-source-and-host-overlays.md).
+This document is **Target** cursorEscape design for the owner's agentic loop: plan → implement → dual review → closeout. **Loop semantics** (when to plan, dual-gate, verdict bars) are owned here and in [design decisions](../../review/design-decisions.md). Current Cursor files: [overlays/cursor](../../overlays/cursor/_index.md) (**Observed** thin wrappers). Phase 3 [cursor-global-workflow](../../research/imported/cursor-global-workflow/) import is archaeology. AITestSuite Phase 4 freeze is **Observed/eval-packaging** only. Where freeze disagrees with live Cursor wording, cite [workflow-source-delta](../../research/imported/workflow-source-delta.md). Stack variation: [skill-source-and-host-overlays](./skill-source-and-host-overlays.md).
 
 Dual-gate review research (openBuggy) informs leg responsibilities. First recreation host: **T3 Code** (control plane) + **OpenCode** (harness). The bug-finder leg is an OpenCode **`bug_reviewer`** subagent + skills (reviewer-a pattern) — **not** an openBuggy engine requirement ([design decisions](../../review/design-decisions.md), [host recreation](../../analysis/host-recreation-2026-08.md)).
 
@@ -26,12 +26,12 @@ Discover repo docs (discovery)
 
 | Stage | Owner | Claim |
 | ----- | ----- | ----- |
-| Doc discovery before edits | Parent or implementer | **Required** — [discovery](../skills/discovery.md) |
-| Plan + plan_reviewer | planner + plan_reviewer | **Required** default on — skip only if truly trivial **or** user **explicitly** opts out ([implementation-plan](../skills/implementation-plan.md)). Eval/harness/multi-step operational work is **not** exempt. **When in doubt, run the plan loop.** |
+| Doc discovery before edits | Parent or implementer | **Required** — [discovery](../../workflow/discovery.md) |
+| Plan + plan_reviewer | planner + plan_reviewer | **Required** default on — skip only if truly trivial **or** user **explicitly** opts out ([implementation-plan](../../skills/implementation-plan/SKILL.md)). Eval/harness/multi-step operational work is **not** exempt. **When in doubt, run the plan loop.** |
 | Fast CI before reviewers | Review-loop parent | **Required** — per-command Observed rows when Fast ≠ `n/a` |
-| Parallel dual review | production_readiness_reviewer ∥ bug_reviewer | **Required** default on for non-trivial changes — same skip list as plan gate ([implementation-review](../skills/implementation-review.md)) |
+| Parallel dual review | production_readiness_reviewer ∥ bug_reviewer | **Required** default on for non-trivial changes — same skip list as plan gate ([implementation-review](../../skills/implementation-review/SKILL.md)) |
 | Full CI at closeout | Parent (never paired with reviewers) | **Required** when Full ≠ `n/a` |
-| Composer conductor on phased roadmaps | Composer QC + phase subagent parent | **Cursor-specific** optional orchestration — see [composer skill](../skills/composer.md) |
+| Composer conductor on phased roadmaps | Composer QC + phase subagent parent | **Cursor-specific** optional orchestration — see [composer skill](../../skills/composer/SKILL.md) |
 
 ### Dual-gate review (Required)
 

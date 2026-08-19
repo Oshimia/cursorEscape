@@ -4,7 +4,7 @@
 
 ## Context
 
-Host-agnostic **gold-standard** agent contracts at repo root. Portable contracts live in `agents/*.md`. Cursor overlay **thin wrappers** (spawn one-pagers + Read): [overlays/cursor/agents](../overlays/cursor/agents/). The 2026-08-17 bannered copy remains under [cursor-global-workflow/agents](../research/imported/cursor-global-workflow/agents/) (archaeology). These pages use host-agnostic role names, not Cursor Task IDs as the contract identity.
+Host-agnostic **portable** agent contracts at repo root. Portable contracts live in `agents/*.md`. Cursor overlay **thin wrappers** (spawn one-pagers + Read): [overlays/cursor/agents](../overlays/cursor/agents/). The 2026-08-17 bannered copy remains under [cursor-global-workflow/agents](../research/imported/cursor-global-workflow/agents/) (archaeology). These pages use host-agnostic role names, not Cursor Task IDs as the contract identity.
 
 ---
 
@@ -47,6 +47,7 @@ Every role page defines:
 
 - [Agent roles and model assignment](../docs/featureArchitecture/agent-roles-and-model-assignment.md)
 - [Skills index](../skills/_index.md)
+- [Rules index](../rules/_index.md)
 - [Workflow index](../workflow/_index.md)
 - [Intended workflow](../docs/featureArchitecture/intended-workflow.md)
 - [Instruction layering](../docs/featureArchitecture/instruction-layering.md)

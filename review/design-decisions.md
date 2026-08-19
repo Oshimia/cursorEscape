@@ -29,7 +29,7 @@ cursorEscape is the owner's **skill and workflow manager**: preserve and evolve 
 | ----- | -------- |
 | **Project name** | **cursorEscape** (folder and display name). |
 | **Primary job** | **Manage skills and workflows that work** — plan, implement, dual review, repository discovery — as portable contracts in this repo, applied across stacks; later copy-out of thin host overlays (not authorized yet). |
-| **Canonical skill tree (Target — Approach A)** | Gold procedure and contracts at repo-root `workflow/`, `skills/`, `agents/`, `rules/` (Phases 3–5). **Interim:** `docs/skills/`, `docs/agents/`, overlay extract. Host dirs are **copy-out targets**, not a second authored tree. Overlay becomes thin wrappers in Phase 5. Copy-out into host dirs is not authorized. |
+| **Canonical skill tree (Target — Approach A)** | Portable procedure and contracts at repo-root `workflow/`, `skills/`, `agents/`, `rules/` (Phases 3–5). **Interim:** `docs/skills/`, `docs/agents/`, overlay extract. Host dirs are **copy-out targets**, not a second authored tree. Overlay becomes thin wrappers in Phase 5. Copy-out into host dirs is not authorized. |
 | **Personal workflow first** | Success = the owner's loop works reliably on their repos, not market share or a general IDE product. |
 | **Not building a general IDE** | cursorEscape is a **workspace-pointing companion**, not a from-scratch editor or Cursor clone. |
 | **First host attempt** | **T3 Code** (control plane: threads, diffs, file preview) + **OpenCode** (harness: skills, named subagents, parallel Task dual-gate). T3 is not a VS Code replacement and does not own agent/skill contracts. See [host recreation study](../analysis/host-recreation-2026-08.md). |

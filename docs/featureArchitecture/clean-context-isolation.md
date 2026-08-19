@@ -8,7 +8,7 @@ This document is **Target** design for **isolated child handoffs** — how paren
 
 **Required** portable intent: plan_reviewer, production_readiness_reviewer, bug_reviewer, and Composer phase subagents run in isolated child context; the parent packs everything they need into the invoke message. Cursor Task / OpenCode Task child sessions are **Cursor-specific** / host mappings of that intent.
 
-Observed overlay agents under [overlays/cursor/agents](../../overlays/cursor/agents/) illustrate the pattern (e.g. “You run in isolated context”). Live `~/.cursor` is the running install; the overlay is the in-repo **Observed** interim record (thin wrappers in Phase 5). This page is SoT for the portable isolation contract.
+Observed overlay agents under [overlays/cursor/agents](../../overlays/cursor/agents/) illustrate the pattern (e.g. “You run in isolated context”). Live `~/.cursor` is the running install; the overlay is the in-repo **Observed** record (thin wrappers). This page is SoT for the portable isolation contract.
 
 ---
 
@@ -22,12 +22,12 @@ Shared parent chat history lets a child “remember” prior review transcripts,
 
 | Role / actor | Isolation |
 | ------------ | --------- |
-| [plan_reviewer](../agents/plan_reviewer.md) | Child session; full synthesized plan each pass — **no** prior review transcripts |
-| [production_readiness_reviewer](../agents/production_readiness_reviewer.md) | Child session; locked opener; parent supplies Completion gate + CI Observed |
-| [bug_reviewer](../agents/bug_reviewer.md) | Child session; Custom Instructions envelope for scope |
-| Composer phase subagent | Child implementer + review-loop parent for phase Nb ([composer](../skills/composer.md)) |
+| [plan_reviewer](../../agents/plan_reviewer.md) | Child session; full synthesized plan each pass — **no** prior review transcripts |
+| [production_readiness_reviewer](../../agents/production_readiness_reviewer.md) | Child session; locked opener; parent supplies Completion gate + CI Observed |
+| [bug_reviewer](../../agents/bug_reviewer.md) | Child session; Custom Instructions envelope for scope |
+| Composer phase subagent | Child implementer + review-loop parent for phase Nb ([composer](../../skills/composer/SKILL.md)) |
 
-[repository_explorer](../agents/repository_explorer.md) and optional [test_reviewer](../agents/test_reviewer.md) should follow the same pack-everything-in-invoke pattern when launched as children.
+[repository_explorer](../../agents/repository_explorer.md) and optional [test_reviewer](../../agents/test_reviewer.md) should follow the same pack-everything-in-invoke pattern when launched as children.
 
 ### Parent duties (Required)
 
@@ -54,7 +54,7 @@ If the parent passes a closeout / Full / `task-phase-complete` gate to a dual-ga
 
 ### Composer transcript audit (Required when using Composer)
 
-Composer **QC** reads closeout reports and may audit child transcripts for process honesty (wrong actor committed, skipped gates). That audit stays on the **Composer parent**. It must **not** be used as “prior review memory” stuffed into the next plan_reviewer or dual-gate invoke. See [composer.md](../skills/composer.md) and [intended-workflow.md](./intended-workflow.md).
+Composer **QC** reads closeout reports and may audit child transcripts for process honesty (wrong actor committed, skipped gates). That audit stays on the **Composer parent**. It must **not** be used as “prior review memory” stuffed into the next plan_reviewer or dual-gate invoke. See [composer](../../skills/composer/SKILL.md) and [intended-workflow.md](./intended-workflow.md).
 
 ### Anti-patterns (Required non-goals)
 
@@ -79,7 +79,7 @@ Composer **QC** reads closeout reports and may audit child transcripts for proce
 ## Implications / open questions
 
 1. Recreation hosts that share one long chat with “reviewer mode” without child isolation violate this contract even if dual-gate *roles* exist.
-2. Target [plan_reviewer](../agents/plan_reviewer.md) Inputs must not imply prior-transcript handoff — parent synthesizes into the plan text.
+2. Target [plan_reviewer](../../agents/plan_reviewer.md) Inputs must not imply prior-transcript handoff — parent synthesizes into the plan text.
 3. Isolation and instruction layering reinforce each other: lean agent bodies + packed invokes, not full procedure paste + chat memory.
 
 ---
@@ -90,8 +90,8 @@ Composer **QC** reads closeout reports and may audit child transcripts for proce
 - [Intended workflow](./intended-workflow.md)
 - [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)
 - [Cursor behavior to reproduce](./cursor-behavior-to-reproduce.md)
-- [Agent role contracts](../agents/_index.md)
-- [implementation-review](../skills/implementation-review.md)
-- [plan-review](../skills/plan-review.md)
-- [composer](../skills/composer.md)
+- [Agent role contracts](../../agents/_index.md)
+- [implementation-review](../../skills/implementation-review/SKILL.md)
+- [iterative-plan-review](../../workflow/iterative-plan-review.md)
+- [composer](../../skills/composer/SKILL.md)
 - [Host recreation study](../../analysis/host-recreation-2026-08.md)

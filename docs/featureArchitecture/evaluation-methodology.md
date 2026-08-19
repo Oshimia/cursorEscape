@@ -1,10 +1,10 @@
 # Evaluation Methodology
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
-How cursorEscape measures workflow quality over time. Pre-runtime: evaluation is **documented methodology + imported eval research** — no eval runners in this repo. AITestSuite imports are **Observed/eval-packaging**. Process-gate semantics are **Target** in companion-repo contracts ([intended-workflow](./intended-workflow.md), [skills](../skills/_index.md)). Live `~/.cursor` import is **Observed interim** Cursor wording, not a second Target procedure.
+How cursorEscape measures workflow quality over time. Pre-runtime: evaluation is **documented methodology + imported eval research** — no eval runners in this repo. AITestSuite imports are **Observed/eval-packaging**. Process-gate semantics are **Target** in companion-repo contracts ([intended-workflow](./intended-workflow.md), [skills](../../skills/_index.md)). Live `~/.cursor` import is **Observed** Cursor wording, not a second Target procedure.
 
 ---
 
@@ -43,7 +43,7 @@ How cursorEscape measures workflow quality over time. Pre-runtime: evaluation is
 | Item | Status |
 | ---- | ------ |
 | Harness repo location | **Unknown** — may stay external (AITestSuite pattern) |
-| Golden transcripts per role | **Desired** |
+| Reference transcripts per role | **Desired** |
 | Automated scoring vs human rubric | **Unknown** |
 
 ### Non-goals

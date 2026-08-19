@@ -21,7 +21,7 @@ Claim labels: **Observed**, **Inferred**, **Unknown**.
 | 1 | **config** | Missing `permission.skill` allow | Medium (contributing) | Allow alone failed A-post1; keep as load/allow hygiene |
 | 1b | **discovery / frontmatter** | Missing frontmatter `name` (+ explicit `skills.paths`) blocked advertisement | **Confirmed High** | A-post2 pass after `name` + `skills.paths` + restart |
 | 2 | **harness / plugin** | Desktop or plugin hides global skills | Low (not needed) | Catalog fixed without plugin removal |
-| 3 | **model** | Flash bash preference for native tools | **Low for short lookups** (B0′/B0″/C pass); reopen if long dogfood regresses | Separate from catalog; closed for R0 probes |
+| 3 | **model** | Flash bash preference for native tools | **Low for short lookups** (B0′/B0″/C pass); reopen if long live trials regress | Separate from catalog; closed for R0 probes |
 | 4 | **contamination** | Long thread caused empty catalog | **Ruled out** | Clean chat reproduced pre-fix fail |
 
 ### Harness vs model (public complaints)
@@ -199,13 +199,13 @@ In this workspace:
 | **B0′** | Same as B0 but **cursorEscape** workspace (file exists) | **pass** (2026-08-19 operator screenshot) | One `read` of `opencode-host-adapter.md`; quoted smoke #9 Check+How correctly; tools: `read`; **no bash** observed | Directed prompt + file present → native tools OK on Flash |
 | **B0″** | cursorEscape; Flash; **undirected** prompt (no tool nudges; operator further softened step 3 to “explain how… listing anything relevant”) | **pass** (2026-08-19 operator screenshot) | One `read`; correct #9 quote (incl. line 77); explained Read tool; **no bash** | Undirected user text still OK — always-on prefer-native may still apply (see Implications) |
 | **B1** | Empty context; **stronger model**; same prompt; same adapter | deferred (optional) | B0′/B0″ already pass on Flash | |
-| **C** | Parent Task → `repository_explorer`; parent must not open the file itself | **pass** (2026-08-19) | See Probe C arm below | Child used native glob/grep/read; correct #9 relay; issue **closed** pending dogfood |
+| **C** | Parent Task → `repository_explorer`; parent must not open the file itself | **pass** (2026-08-19) | See Probe C arm below | Child used native glob/grep/read; correct #9 relay; issue **closed** pending further live use |
 
 ### Decision tree (after B0 + B1)
 
 | Pattern | Bucket | Next |
 | ------- | ------ | ---- |
-| B0 fail, B1 pass | **model** | R0 dogfood: prefer stronger model for file-heavy work; document Flash bash bias; optional model pin policy — not bash allow-all |
+| B0 fail, B1 pass | **model** | R0 live trial: prefer stronger model for file-heavy work; document Flash bash bias; optional model pin policy — not bash allow-all |
 | B0 fail, B1 fail | **instruction / harness** | Strengthen always-on or agent tool guidance; research OpenCode tool-description / permission shaping; still no bash `allow *` as primary fix |
 | B0 pass, B1 pass | **regression watch** | Mark smoke row 11 pass on Flash; keep Probe B as occasional recheck |
 | Mixed / child differs | **parent vs child** | Run Probe C; compare explorer permissions vs plan agent |
@@ -214,13 +214,13 @@ In this workspace:
 
 | # | Check | How | Result |
 | - | ----- | --- | ------ |
-| 11 | Native file tools without bash approvals | Probe B0′ / B0″ (Flash, cursorEscape) + Probe **C** (`repository_explorer`); **zero** shell approvals | **pass** (2026-08-19); native-tools babysitting **closed** unless reopened by dogfood |
+| 11 | Native file tools without bash approvals | Probe B0′ / B0″ (Flash, cursorEscape) + Probe **C** (`repository_explorer`); **zero** shell approvals | **pass** (2026-08-19); native-tools babysitting **closed** unless reopened by further live use |
 
 ---
 
 ## Probe C — subagent lookup (`repository_explorer`)
 
-**Purpose:** Final pre-dogfood check — does the **child** mishandle file lookup (bash babysitting / wrong tools) when the parent is forced to delegate?
+**Purpose:** Final pre-trial check — does the **child** mishandle file lookup (bash babysitting / wrong tools) when the parent is forced to delegate?
 
 **Setup:** cursorEscape; new empty chat; Flash (same as B0″); current always-on; do not edit adapter mid-run.
 
@@ -249,7 +249,7 @@ When the child returns, relay: (1) exists or missing; (2) the exact #9 Check and
 | Child bash? | **no** |
 | Shell approvals (operator) | **0** (Inferred from operator close-out; no approval babysitting reported) |
 | #9 quote correct? | **yes** (Check + How match host-adapter smoke row 9) |
-| Notes | Parent relay also mentioned SOP `_index.md`; UI showed glob→grep→read on the adapter SOP. Issue marked **closed** unless future dogfood reopens. |
+| Notes | Parent relay also mentioned SOP `_index.md`; UI showed glob→grep→read on the adapter SOP. Issue marked **closed** unless further live use reopens. |
 
 ### Pass / fail
 
@@ -324,7 +324,7 @@ Do not implement.
 2. Adapter hygiene: follow [opencode-authoring-adapter](../docs/SOPs/opencode-authoring-adapter.md) — every OpenCode `SKILL.md` must include `name` matching folder id + `description`; keep `permission.skill: { "*": "allow" }` and `skills.paths` in live `opencode.json`.
 3. **Short native file tools (B0′/B0″/C):** pass on Flash. **Failure mode F** mitigated — smoke **12** pass (2026-08-19): `.ignore` + `external_directory` + narrow listing allow + guidance.
 4. Probe B1 remains optional; not required after B0″ + C pass.
-5. Durable Always-run DB was empty at audit; re-check after dogfood.
+5. Durable Always-run DB was empty at audit; re-check after further live trials.
 6. **Thin-plan (row 13):** **pass** (2026-08-19 Flash) — CHANGES REQUESTED for missing Assumptions + Unknowns/Discovery; no soft-approve. Portable Cursor self-check also pass earlier same day.
 
 ---
@@ -334,7 +334,7 @@ Do not implement.
 - Operator Probe A / A-post1 / A-post2 (2026-08-19) — clean chat; catalog fail → permission-only fail → `name`+paths pass
 - Operator Probe B0 (2026-08-19) — Flash; two `glob`; path missing; no bash (workspace likely not cursorEscape)
 - Operator Probe B0′ / B0″ (2026-08-19) — Flash; cursorEscape; directed + undirected; `read` only; correct #9 quote
-- Operator Probe C (2026-08-19) — Flash; Task → `repository_explorer`; child glob/grep/read; parent relay correct #9; native-tools issue closed unless dogfood reopens
+- Operator Probe C (2026-08-19) — Flash; Task → `repository_explorer`; child glob/grep/read; parent relay correct #9; native-tools issue closed unless further live use reopens
 - Operator Failure F / Phase 1 (2026-08-19) — glob-blind on gitignored `eval/runs` + adapter Shell list; durable `permission` table **0** rows; `.ignore` + external_directory + listing allow applied
 - Operator Thin-plan smoke 13 (2026-08-19) — Flash; thin README “pretend refactor” plan omit Assumptions/Unknowns → plan_reviewer CHANGES REQUESTED (SoT blockers); no soft-approve
 - [opencode-dsv4f-session-extension-2026-08](./opencode-dsv4f-session-extension-2026-08.md)

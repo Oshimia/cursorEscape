@@ -69,8 +69,8 @@ openBuggy remains a valuable **characterization and research** sibling (imported
 1. Settle U2 (OpenCode + T3 control plane) and withdraw U8 (openBuggy as default transport) in [unresolved architectural questions](../review/unresolved-architectural-questions.md).
 2. Keep U1 / U3–U7 / U9–U13 Unknown until spikes; U13 notes ClinePass as **Desired** when using OpenCode.
 3. OpenCode adapter install paths and smoke checklist: [opencode-host-adapter SOP](../docs/SOPs/opencode-host-adapter.md).
-4. Do not authorize R1+ engine work in this repo until R0 dogfood proves the loop.
-5. Instruction-gate enforcement remains **parent skill discipline** on OpenCode (not host-enforced). Observed weak in the 2026-08 DSV4F dogfood session — see [OpenCode DSV4F session study](./opencode-dsv4f-session-2026-08.md).
+4. Do not authorize R1+ engine work in this repo until the R0 live trial proves the loop.
+5. Instruction-gate enforcement remains **parent skill discipline** on OpenCode (not host-enforced). Observed weak in the 2026-08 DSV4F live trial session — see [OpenCode DSV4F session study](./opencode-dsv4f-session-2026-08.md).
 
 ---
 
@@ -92,4 +92,4 @@ openBuggy remains a valuable **characterization and research** sibling (imported
 - [Intended workflow](../docs/featureArchitecture/intended-workflow.md)
 - [Instruction layering](../docs/featureArchitecture/instruction-layering.md) — thin always-on vs on-demand skills/agents
 - [Clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md)
-- [OpenCode DSV4F session study (2026-08)](./opencode-dsv4f-session-2026-08.md) — instruction-loop reliability dogfood; Antigravity historical
+- [OpenCode DSV4F session study (2026-08)](./opencode-dsv4f-session-2026-08.md) — instruction-loop reliability live trial; Antigravity historical

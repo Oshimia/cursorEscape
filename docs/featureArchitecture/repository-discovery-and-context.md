@@ -16,7 +16,7 @@ Before plan or implement:
 
 | Question | Why |
 | -------- | --- |
-| Where is the doc hub? | Avoid inventing parallel trees ([discovery](../skills/discovery.md)) |
+| Where is the doc hub? | Avoid inventing parallel trees ([discovery](../../workflow/discovery.md)) |
 | What process SOPs exist? | Plan/review expectations |
 | What is Target vs Observed in this repo? | Prevent mixing harness imports with product intent |
 | What CI commands apply? | Fast/Full mapping ([ci-ladder](../../workflow/ci-ladder.md)) |
@@ -31,7 +31,7 @@ Per change set, agents should gather **evidence**, not whole-repo dumps:
 | Changed files + diff hunks | **Required** | Universal |
 | Nearby definitions / callers | **Desired** | [openBuggy context-retrieval](../../research/imported/openBuggy/featureArchitecture/context-retrieval.md) (Observed proposal) |
 | Tests touching area | **Desired** | Same |
-| `AGENTS.md`, README, section `_index.md` | **Required** when present | [discovery](../skills/discovery.md) |
+| `AGENTS.md`, README, section `_index.md` | **Required** when present | [discovery](../../workflow/discovery.md) |
 | Project rules / design decisions | **Required** for intent changes | cursorEscape `review/` |
 | Embedding index of entire repo | **Not a v0 goal** | Token/cost control |
 
@@ -63,6 +63,6 @@ cursorEscape **Required:** Own repository knowledge in-repo ([design decisions](
 ## Related
 
 - [Workspace model](./workspace-model.md)
-- [Discovery skill contract](../skills/discovery.md)
+- [Discovery skill contract](../../workflow/discovery.md)
 - [Cursor behavior to reproduce](./cursor-behavior-to-reproduce.md)
 - [Instruction layering](./instruction-layering.md) — process-instruction budget (not repo evidence)

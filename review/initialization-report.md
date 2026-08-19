@@ -49,7 +49,7 @@ Full manifest: [COPY-MANIFEST](../research/imported/COPY-MANIFEST.md) (86 markdo
 | Live `~/.cursor` workflow (9 docs, 3 rules, 5 skills, 2 agents) | `research/imported/cursor-global-workflow/` | 3 | Observed/imported (live Target at init; **superseded 2026-08-19** → Observed interim) |
 | Live vs freeze delta (authored) | `research/imported/workflow-source-delta.md` | 3 | Observed freeze-vs-live archaeology (not forever Target vs companion repo) |
 
-**Not copied:** openBuggy `eval/`; AITestSuite `review-profiles/**`, app baselines, goldens; analysis `.local/` sheets.
+**Not copied:** openBuggy `eval/`; AITestSuite `review-profiles/**`, app baselines, eval fixtures; analysis `.local/` sheets.
 
 Sibling intent: [relationship-to-siblings](./relationship-to-siblings.md).
 
@@ -156,7 +156,7 @@ Canonical list: [unresolved-architectural-questions](./unresolved-architectural-
 
 From [implementation-roadmap](../docs/roadmaps/implementation-roadmap.md) — **planning only**:
 
-1. **R0 spike** — one dogfood repo: spawn roles, parallel review, branch vs uncommitted diff scope on Cline and/or OpenCode.
+1. **R0 spike** — one trial target repo: spawn roles, parallel review, branch vs uncommitted diff scope on Cline and/or OpenCode.
 2. **Resolve U2, U4 with evidence** — document chosen adapter in design-decisions if spike succeeds.
 3. **R1 discovery module** — implement Q7 minimum (hub walk, changed files, rules) without embedding index.
 4. **R2 workflow runner** — host-agnostic plan → implement → dual review gates aligned with [skills](../docs/skills/_index.md) contracts.

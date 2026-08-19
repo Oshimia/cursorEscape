@@ -1,10 +1,10 @@
 # OpenCode host adapter
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
-This SOP documents the **global OpenCode adapter** installed on the operator machine for R0 dogfood of the cursorEscape loop. **Target SoT** is this companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md), [agents](../agents/_index.md), [skills](../skills/_index.md)). Files under `~/.config/opencode/` are the **host adapter / copy-out target**, not a second procedure tree. They stay host-local until an authorized copy-out phase.
+This SOP documents the **global OpenCode adapter** installed on the operator machine for R0 live trial of the cursorEscape loop. **Target SoT** is this companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md), [agents](../../agents/_index.md), [skills](../../skills/_index.md)). Files under `~/.config/opencode/` are the **host adapter / copy-out target**, not a second procedure tree. They stay host-local until an authorized copy-out phase.
 
 **Install root (this machine):** `C:\Users\admin\.config\opencode\`
 
@@ -17,9 +17,9 @@ This SOP documents the **global OpenCode adapter** installed on the operator mac
 | Layer | Portable contract | OpenCode adapter path |
 | ----- | ----------------- | --------------------- |
 | Always-on (thin) | Gate pointers only | `instructions/cursor-escape-loop.md` (wired via `opencode.json` → `instructions`) |
-| Skills (on-demand) | [docs/skills/](../skills/_index.md) | `skills/*/SKILL.md` |
+| Skills (on-demand) | [skills/](../../skills/_index.md) | `skills/*/SKILL.md` |
 | Deep workflow docs | Imported/adapted procedures | `docs/workflow/*.md` (incl. `bug-reviewer-finding-rubric.md`, `plan-agent-context.md`) |
-| Role agents | [docs/agents/](../agents/_index.md) | `agents/*.md` (`permission.edit: deny` on reviewers) |
+| Role agents | [agents/](../../agents/_index.md) | `agents/*.md` (`permission.edit: deny` on reviewers) |
 
 ### Inventory
 
@@ -62,7 +62,7 @@ This SOP documents the **global OpenCode adapter** installed on the operator mac
 
 ### Smoke checklist (R0)
 
-Record results when dogfooding. Expected: `pass` \| `fail` \| `deferred: <reason>`.
+Record results when running live checks. Expected: `pass` \| `fail` \| `deferred: <reason>`.
 
 | # | Check | How | Result |
 | - | ----- | --- | ------ |
@@ -99,7 +99,7 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 
 ## Implications / open questions
 
-1. Smoke rows 1–3 still need live probes after restart when dogfooding those checks; rows **9–10** are **pass** (2026-08-19) — see [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
+1. Smoke rows 1–3 still need live probes after restart when running those live checks; rows **9–10** are **pass** (2026-08-19) — see [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
 2. Do **not** pin provider-specific models in agent frontmatter — roles inherit the session / `opencode.json` default so the adapter stays portable across BYOK hosts.
 3. T3 Code control plane is separate — this SOP covers the OpenCode harness adapter only.
 4. **Restart OpenCode Desktop** after adapter edits for always-on / agent / skill / permission changes to load.
@@ -120,6 +120,6 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 - [Instruction layering](../featureArchitecture/instruction-layering.md)
 - [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
-- [Agent contracts](../agents/_index.md)
-- [Skill contracts](../skills/_index.md)
+- [Agent contracts](../../agents/_index.md)
+- [Skill contracts](../../skills/_index.md)
 - [Documenting this repo](./documenting-this-repo.md)

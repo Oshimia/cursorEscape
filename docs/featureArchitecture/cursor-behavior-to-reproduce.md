@@ -37,7 +37,7 @@ This document lists **Observed** Cursor behaviors worth preserving in a portable
 | Composer phase conductor | Live [composer](../../overlays/cursor/skills/composer/SKILL.md) | **Cursor-specific** optional |
 | Thin User Rules snippets + on-demand skills (`disable-model-invocation`) + deep `docs/workflow` | Live [user-rules-snippet](../../overlays/cursor/skills/implementation-review/user-rules-snippet.md) + SKILL.md frontmatter | **Required** portable pattern — [instruction layering](./instruction-layering.md); Observed bloated agent files are **not** the agent-layer ideal |
 | Isolated subagent context; parent packs invoke; no prior review transcripts | Live [plan-reviewer](../../overlays/cursor/agents/plan-reviewer.md) / [reviewer-a](../../overlays/cursor/agents/reviewer-a.md) opener lines | **Required** — [clean-context isolation](./clean-context-isolation.md) |
-| Deferred pre-commit Full gate (`alwaysApply: false`) | Live [pre-commit-ci-gate.mdc](../../overlays/cursor/rules/pre-commit-ci-gate.mdc) | **Required** semantics — [pre-commit-ci-gate](../skills/pre-commit-ci-gate.md) |
+| Deferred pre-commit Full gate (`alwaysApply: false`) | Live [pre-commit-ci-gate.mdc](../../overlays/cursor/rules/pre-commit-ci-gate.mdc) | **Required** semantics — [pre-commit-ci-gate](../../rules/pre-commit-ci-gate.md) |
 
 ### Behaviors explicitly not to reproduce
 

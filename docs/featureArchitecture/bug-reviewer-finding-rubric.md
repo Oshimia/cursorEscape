@@ -1,10 +1,10 @@
 # bug_reviewer finding rubric
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-20
 
 ## Context
 
-**Target** companion for the [bug_reviewer](../agents/bug_reviewer.md) role. Encodes **what to report vs ignore** so spawned bug-finder agents suppress nits, out-of-scope, and pre-existing issues while still hunting **introduced production** defects.
+**Target** companion for the [bug_reviewer](../../agents/bug_reviewer.md) role. Encodes **what to report vs ignore** so spawned bug-finder agents suppress nits, out-of-scope, and pre-existing issues while still hunting **introduced production** defects.
 
 Grounded in:
 
@@ -44,7 +44,7 @@ If nothing meets all four: emit **empty findings** (host XML empty `<answer></an
 | Speculative / env-coupled | Claims needing environments, grants, or schemas not evidenced on the fixture/workspace |
 | Harness / stub / doc-table nits | CWD/runner coupling, malformed README tables on stubs — unless scope includes them |
 | Pre-existing | Present on base (`main` / prior revision) and not introduced by the change — verify when diff mode allows |
-| Process/docs completeness | Incomplete SOPs, missing tests as process — owned by [production_readiness_reviewer](../agents/production_readiness_reviewer.md) unless framed as a real production/doc bug |
+| Process/docs completeness | Incomplete SOPs, missing tests as process — owned by [production_readiness_reviewer](../../agents/production_readiness_reviewer.md) unless framed as a real production/doc bug |
 
 ### Clean / validated-fix context (Required)
 
@@ -87,7 +87,7 @@ Parents may name out-of-scope themes, regressions to re-check, and clean-case si
 
 ## Related
 
-- [bug_reviewer](../agents/bug_reviewer.md)
-- [production_readiness_reviewer](../agents/production_readiness_reviewer.md)
+- [bug_reviewer](../../agents/bug_reviewer.md)
+- [production_readiness_reviewer](../../agents/production_readiness_reviewer.md)
 - [intended-workflow](./intended-workflow.md)
 - [instruction-layering](./instruction-layering.md)

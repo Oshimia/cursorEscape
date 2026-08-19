@@ -1,10 +1,10 @@
 # Desired Behavior vs Cursor-Specific
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
-cursorEscape separates **portable workflow intent** (Desired / Required) from **Cursor IDE mechanics** (Cursor-specific). Target contracts in [agents](../agents/_index.md) and [skills](../skills/_index.md) use host-agnostic wording; host IDs and extra restrictiveness live in overlays ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)). First recreation adapter is **OpenCode** (with optional **T3 Code** control plane) — see [host recreation](../../analysis/host-recreation-2026-08.md).
+cursorEscape separates **portable workflow intent** (Desired / Required) from **Cursor IDE mechanics** (Cursor-specific). Target contracts in [agents](../../agents/_index.md) and [skills](../../skills/_index.md) use host-agnostic wording; host IDs and extra restrictiveness live in overlays ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)). First recreation adapter is **OpenCode** (with optional **T3 Code** control plane) — see [host recreation](../../analysis/host-recreation-2026-08.md).
 
 ---
 
@@ -24,17 +24,17 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 
 | Behavior | Label | Notes |
 | -------- | ----- | ----- |
-| Plan + plan_reviewer before implementation | **Required** | Default on unless truly trivial or **explicit** user opt-out; eval/harness not exempt ([implementation-plan](../skills/implementation-plan.md)) |
-| plan_reviewer gate on drafted plans | **Required** | Up to 3 passes regardless of Escalation; **skip** when Composer executes accepted roadmap ([plan-review](../skills/plan-review.md)) |
+| Plan + plan_reviewer before implementation | **Required** | Default on unless truly trivial or **explicit** user opt-out; eval/harness not exempt ([implementation-plan](../../skills/implementation-plan/SKILL.md)) |
+| plan_reviewer gate on drafted plans | **Required** | Up to 3 passes regardless of Escalation; **skip** when Composer executes accepted roadmap ([iterative-plan-review](../../workflow/iterative-plan-review.md)) |
 | Fast CI Observed before dual review | **Required** | Per-command rows; no claimed-only launch |
 | Parallel production_readiness_reviewer + bug_reviewer | **Required** | Complementary legs ([openBuggy synthesis](../../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)) |
 | Fix all must-fix from either leg | **Required** | Re-launch both after each batch |
 | Full CI only after dual APPROVED | **Required** when Full ≠ `n/a` | When Full = `n/a`, dual APPROVED + explicit user ack before commit; never pair Full with reviewers |
 | Split Reviewer-a bar (Batchable deferred OK) | **Required** | Live workflow; not freeze unified bar |
-| Repository doc discovery before edits | **Required** | [discovery](../skills/discovery.md) |
+| Repository doc discovery before edits | **Required** | [discovery](../../workflow/discovery.md) |
 | Thin always-on gates; on-demand skills / deep docs / lean agents | **Required** | [instruction layering](./instruction-layering.md) |
 | Isolated child review handoffs (no prior review transcripts) | **Required** | [clean-context isolation](./clean-context-isolation.md) |
-| Full CI before commit when Full ≠ `n/a` (on-demand policy) | **Required** | [pre-commit-ci-gate](../skills/pre-commit-ci-gate.md) |
+| Full CI before commit when Full ≠ `n/a` (on-demand policy) | **Required** | [pre-commit-ci-gate](../../rules/pre-commit-ci-gate.md) |
 | BYOK model keys | **Required** | [design decisions](../../review/design-decisions.md) |
 | Replaceable backends and models | **Required** | [backend abstraction](./backend-and-provider-abstraction.md) |
 | First host: OpenCode + T3 control plane | **Desired** | [design decisions](../../review/design-decisions.md) |
@@ -53,7 +53,7 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 | `~/.cursor/skills/` paths | OpenCode skill dirs / host skill registry |
 | Cursor rules (`.mdc` alwaysApply) + User Rules snippets | Thin always-on host instructions ([instruction layering](./instruction-layering.md)) |
 | `disable-model-invocation` on skills | Host on-demand skill load (do not always-inject) |
-| `alwaysApply: false` pre-commit rule | On-demand Full-before-commit ([pre-commit-ci-gate](../skills/pre-commit-ci-gate.md)) |
+| `alwaysApply: false` pre-commit rule | On-demand Full-before-commit ([pre-commit-ci-gate](../../rules/pre-commit-ci-gate.md)) |
 | Task clean-context subagents | Isolated child handoffs ([clean-context isolation](./clean-context-isolation.md)) |
 | Progress timeline (`UpdateCurrentStep`) | **Nice-to-have** UX; not a workflow gate |
 
@@ -82,5 +82,5 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 - [Instruction layering](./instruction-layering.md)
 - [Clean context and isolation](./clean-context-isolation.md)
 - [Host recreation study](../../analysis/host-recreation-2026-08.md)
-- [Agent role contracts](../agents/_index.md)
+- [Agent role contracts](../../agents/_index.md)
 - [Skill source and host overlays](./skill-source-and-host-overlays.md)

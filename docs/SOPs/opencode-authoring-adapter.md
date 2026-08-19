@@ -1,10 +1,10 @@
 # Authoring OpenCode adapter files (skills, agents, rules, config)
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
-How to write and maintain the **OpenCode host adapter** under `~/.config/opencode/` (and optional project `.opencode/`) so skills, agents, always-on instructions, and permissions actually load. Portable **contracts** stay in cursorEscape ([agents](../agents/_index.md), [skills](../skills/_index.md), [instruction-layering](../featureArchitecture/instruction-layering.md)); this SOP is the **authoring checklist** for the OpenCode mirror.
+How to write and maintain the **OpenCode host adapter** under `~/.config/opencode/` (and optional project `.opencode/`) so skills, agents, always-on instructions, and permissions actually load. Portable **contracts** stay in cursorEscape ([agents](../../agents/_index.md), [skills](../../skills/_index.md), [instruction-layering](../featureArchitecture/instruction-layering.md)); this SOP is the **authoring checklist** for the OpenCode mirror.
 
 **Install root (this machine):** `C:\Users\admin\.config\opencode\`
 
@@ -50,7 +50,7 @@ Keep always-on / AGENTS / instructions **thin** (gate pointers). Put full loops 
 
 ### Hard gates vs soft lists (audit log)
 
-Soft-spot audit from 2026-08-19 dogfood; status after this harden pass:
+Soft-spot audit from the 2026-08-19 live trial; status after this harden pass:
 
 | Target | Soft spot (pre-harden) | Status |
 | ------ | ---------------------- | ------ |
@@ -63,13 +63,13 @@ Soft-spot audit from 2026-08-19 dogfood; status after this harden pass:
 | composer QC | Soft | **LOW — defer** |
 | discovery / documentation-architecture / explorers / test_reviewer / dual-reviewers / pre-commit | Prefer or already hard | **skip** |
 
-Single section-checklist SoT: [implementation-plan](../skills/implementation-plan.md) **Incomplete until**. `plan-review` / `plan_reviewer` point at that SoT — do not paste a second full enum.
+Single section-checklist SoT: [implementation-plan](../../skills/implementation-plan/SKILL.md) **Incomplete until**. `plan-review` / `plan_reviewer` point at that SoT — do not paste a second full enum.
 
 ---
 
 ### Skills (required checklist)
 
-Follow [OpenCode Agent Skills](https://opencode.ai/docs/skills/) exactly. Observed dogfood (2026-08-19): skills with **description only** and **no `name`** did **not** appear in the skill tool (only built-in `customize-opencode` showed) until `name` was added and `skills.paths` was set — see [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
+Follow [OpenCode Agent Skills](https://opencode.ai/docs/skills/) exactly. Observed live trial (2026-08-19): skills with **description only** and **no `name`** did **not** appear in the skill tool (only built-in `customize-opencode` showed) until `name` was added and `skills.paths` was set — see [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
 
 #### Layout
 
@@ -169,7 +169,7 @@ skill({ name: "implementation-plan" })
 
 | In cursorEscape | On OpenCode adapter |
 | --------------- | ------------------- |
-| `docs/skills/<id>.md` (portable contract) | `skills/<id>/SKILL.md` (host entry + frontmatter) |
+| `skills/<id>/SKILL.md` (portable contract at repo root) | `skills/<id>/SKILL.md` (host entry + frontmatter) |
 | Deep procedure in FA / imported workflow docs | Mirror under `docs/workflow/` and **Read when** from the skill |
 
 Do not paste full iterative-plan / dual-review essays into always-on instructions.
@@ -313,7 +313,7 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 3. Prefer approving **once** unless promoting a pattern into config SoT.
 4. After revokes or config edits: full Desktop restart; re-count rows (lean table).
 
-**Observed 2026-08-19:** durable `permission` table had **0** rows on this host at audit time — session Always and intentional config are the live surfaces. Re-audit after dogfood if the table grows.
+**Observed 2026-08-19:** durable `permission` table had **0** rows on this host at audit time — session Always and intentional config are the live surfaces. Re-audit after further trials if the table grows.
 
 ---
 
@@ -353,6 +353,6 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 - [OpenCode host adapter](./opencode-host-adapter.md)
 - [Documenting this repo](./documenting-this-repo.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md)
-- [Skill contracts](../skills/_index.md)
-- [Agent contracts](../agents/_index.md)
+- [Skill contracts](../../skills/_index.md)
+- [Agent contracts](../../agents/_index.md)
 - [SOPs index](./_index.md)
