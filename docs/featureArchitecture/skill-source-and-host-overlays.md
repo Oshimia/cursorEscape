@@ -128,6 +128,8 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 
 ## Related
 
+- [Host adaptation fidelity](./host-adaptation-fidelity.md) — binding wiring bar and C1–C6 verification matrix for every stack
+- **Forward (Phase 2):** OpenCode copy-out authorization in this doc and hubs flips when `overlays/opencode/` lands — do not authorize live sync until Phase 2 dual APPROVED ([opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md))
 - [Instruction layering](./instruction-layering.md)
 - [Intended workflow](./intended-workflow.md)
 - [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)

@@ -40,6 +40,7 @@ Imported Observed harness and workflow snapshots live under [research/imported/]
 | [repository-discovery-and-context.md](./repository-discovery-and-context.md) | What context agents need |
 | [workspace-model.md](./workspace-model.md) | Companion vs target workspace; T3 vs OpenCode sessions |
 | [skill-source-and-host-overlays.md](./skill-source-and-host-overlays.md) | One procedure; additive host overlays; promotion rule |
+| [host-adaptation-fidelity.md](./host-adaptation-fidelity.md) | Host wiring bar; C1–C6 matrix; anti-patterns; Done definition (OpenCode overlay program Phase 0) |
 | [agent-roles-and-model-assignment.md](./agent-roles-and-model-assignment.md) | Role catalog + config |
 | [evaluation-methodology.md](./evaluation-methodology.md) | How workflow quality is measured |
 | [bug-reviewer-finding-rubric.md](./bug-reviewer-finding-rubric.md) | bug_reviewer report vs ignore (nits / out-of-scope / pre-existing) |

@@ -25,6 +25,12 @@ Official OpenCode documentation (read before inventing local conventions):
 
 ## Substance
 
+### Must / Must-not (host adaptation fidelity)
+
+**Must:** Author to [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) — OpenCode load surfaces (`instructions`, `skills` with `name`+`description`, `agents`, `skills.paths`); thin always-on; overlay Read paths host-relative; full restart after config edits.
+
+**Must-not:** Invent gate semantics only on the host; use Cursor `rules/` layout on OpenCode; treat on-disk folders as Done without smoke rows in the host-adapter table.
+
 ### Sync rule (cursorEscape first)
 
 Same as [opencode-host-adapter](./opencode-host-adapter.md):
@@ -350,6 +356,7 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 
 ## Related
 
+- [Host adaptation fidelity](../featureArchitecture/host-adaptation-fidelity.md)
 - [OpenCode host adapter](./opencode-host-adapter.md)
 - [Documenting this repo](./documenting-this-repo.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md)

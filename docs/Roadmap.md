@@ -26,6 +26,7 @@ Stewardship and non-goals: [design decisions](../review/design-decisions.md).
 | **Own repository knowledge** | Discovery, context, and SOPs live in-repo and remain portable. |
 | **Own evaluation** | Workflow quality is measurable; imports and deltas are documented. |
 | **Backends replaceable** | Models, providers, and execution surfaces (CLI, MCP, thin IDE, T3) swap without rewriting intent docs. |
+| **Full plug-in per stack** | New hosts require complete [host-adaptation fidelity](./featureArchitecture/host-adaptation-fidelity.md) — not cosmetic folder shape. |
 | **Docs before runtime** | This archive prevents parallel invented architecture; recreation uses external hosts first. |
 | **Personal workflow first** | Built for the owner's loop, not a general IDE product or commercial offering. |
 
@@ -81,6 +82,7 @@ Stewardship and non-goals: [design decisions](../review/design-decisions.md).
 | Repository discovery | [repository-discovery-and-context.md](./featureArchitecture/repository-discovery-and-context.md) |
 | Workspace model | [workspace-model.md](./featureArchitecture/workspace-model.md) |
 | Skill source and host overlays | [skill-source-and-host-overlays.md](./featureArchitecture/skill-source-and-host-overlays.md) |
+| Host adaptation fidelity | [host-adaptation-fidelity.md](./featureArchitecture/host-adaptation-fidelity.md) |
 | Agent roles | [agent-roles-and-model-assignment.md](./featureArchitecture/agent-roles-and-model-assignment.md) |
 | Evaluation | [evaluation-methodology.md](./featureArchitecture/evaluation-methodology.md) |
 | Backend landscape | [preliminary-backend-landscape.md](../research/preliminary-backend-landscape.md) |
