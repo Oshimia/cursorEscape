@@ -46,7 +46,24 @@ Same as [opencode-host-adapter](./opencode-host-adapter.md):
 | **Agents** | Primary / subagent roles | `~/.config/opencode/agents/*.md` and/or `opencode.json` → `agent` | Role prompt when selected / Task-invoked |
 | **Deep docs** | Full procedures | `~/.config/opencode/docs/workflow/*.md` | No — load when a skill/agent says to `read` |
 
-Keep always-on / AGENTS / instructions **thin** (gate pointers). Put full loops in skills + deep docs — [instruction-layering](../featureArchitecture/instruction-layering.md).
+Keep always-on / AGENTS / instructions **thin** (gate pointers). Put full loops in skills + deep docs — [instruction-layering](../featureArchitecture/instruction-layering.md). Always-on edits: short gate pointers only; **do not invent** fixed line/character budgets (“≤3 lines”, “≤N new lines”) in plans, Success, Verification, or this SOP — measure by gate behavior ([instruction-layering](../featureArchitecture/instruction-layering.md) Anti-patterns).
+
+### Hard gates vs soft lists (audit log)
+
+Soft-spot audit from 2026-08-19 dogfood; status after this harden pass:
+
+| Target | Soft spot (pre-harden) | Status |
+| ------ | ---------------------- | ------ |
+| implementation-plan | Advisory Step 2 section list | **done 2026-08-19** — Incomplete until SoT |
+| plan-review / plan_reviewer / planner | APPROVED / handoff without section bar | **done 2026-08-19** |
+| always-on | No incompleteness pointer | **done 2026-08-19** — short gate pointer (no line budget) |
+| implementer | No phase Incomplete until | **done 2026-08-19** |
+| instruction-layering (+ this SOP) | Agents invent ≤N always-on budgets | **done 2026-08-19** — forbid invented budgets |
+| implementation-review dual “when possible” | Soft | **LOW — defer** |
+| composer QC | Soft | **LOW — defer** |
+| discovery / documentation-architecture / explorers / test_reviewer / dual-reviewers / pre-commit | Prefer or already hard | **skip** |
+
+Single section-checklist SoT: [implementation-plan](../skills/implementation-plan.md) **Incomplete until**. `plan-review` / `plan_reviewer` point at that SoT — do not paste a second full enum.
 
 ---
 
@@ -242,7 +259,7 @@ Use for project facts and personal prefs — **not** for full plan/review proced
 
 Paths, globs, and remote URLs are supported ([docs](https://opencode.ai/docs/rules/#custom-instructions)). Combined with AGENTS.md.
 
-**This adapter:** thin gate file `instructions/cursor-escape-loop.md` — default-on plan/dual-review pointers; skill ids; prefer skill tool; prefer read/glob/grep over bash for files; empty-Task fail-loud.
+**This adapter:** thin gate file `instructions/cursor-escape-loop.md` — default-on plan/dual-review pointers; plan **Incomplete until** / template-fidelity pointer (load skill `implementation-plan` for the list; no invented line budgets); skill ids; prefer skill tool; prefer read/glob/grep over bash for files; empty-Task fail-loud.
 
 ---
 

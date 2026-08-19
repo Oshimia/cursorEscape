@@ -1,6 +1,6 @@
 # Instruction Layering
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
@@ -31,7 +31,7 @@ This is a **context-budget** optimization. Loop gate semantics stay in [intended
 
 **Required:** Always-on text states that plan review and implementation review are **default on** unless truly trivial or the user **explicitly** opts out; includes **When in doubt, run the plan loop**; states that eval/harness/multi-step operational work is **not** exempt; lists the skip-trivial list; and points to skills by name (including [implementation-plan](../skills/implementation-plan.md) for Escalation *when*). It must **not** inline full procedures (plan template, reviewer launch scripts, CI command discovery, Agent context specimens).
 
-**Desired:** Keep always-on *gate* text as small as possible while gate behavior remains reliable. There is **no fixed line budget**. Measure success by expected behavior, not character count. Always-on should cover **workflow gates** only — not operator preference rules (git/PR habits, communication style, frontend taste).
+**Desired:** Keep always-on *gate* text as small as possible while gate behavior remains reliable. There is **no fixed line budget** — not for the whole always-on file, and not as “≤N new lines” Success/Verification metrics. Measure success by expected gate behavior, not character or line count. Always-on sizing is still being dogfooded; do not invent a numeric budget while that is unsettled. Always-on should cover **workflow gates** only — not operator preference rules (git/PR habits, communication style, frontend taste).
 
 **Observed (Cursor):** Three lean [User Rules snippets](../research/imported/cursor-global-workflow/skills/implementation-review/user-rules-snippet.md) (plan review, implementation review, optional composer) plus parallel `alwaysApply` `.mdc` rules that note preferring the snippets for enforcement across Cursor versions. That dual-channel state is an Observed Cursor detail, not a Target requirement. Target hosts should prefer **one** always-on surface when the host allows it.
 
@@ -72,6 +72,7 @@ Observed index: [workflow README](../research/imported/cursor-global-workflow/do
 | Anti-pattern | Why |
 | ------------ | --- |
 | Full loop essays in always-on | Crowds every turn; gates get lost |
+| Inventing a fixed always-on line/character budget (e.g. “≤3 lines”, “≤N new lines”) in plans, Success metrics, Verification, smoke criteria, or adapter SOPs | **Recurring agent failure mode** during dogfood. There is **no** set budget yet; measure by gate behavior. Thin pointers yes; numeric budgets no. |
 | Full SKILL.md pasted into agent system prompts | Context bloat; duplicates skill registry |
 | Always-injecting skill bodies | Defeats on-demand loading |
 | Using Observed bloated agent imports as the agent-layer ideal | Wrong SoT — use Target `docs/agents/` |
@@ -89,11 +90,11 @@ Observed index: [workflow README](../research/imported/cursor-global-workflow/do
 
 Adapters cite this page and [docs/agents](../agents/_index.md) / [docs/skills](../skills/_index.md). Do not reverse the SoT (host files are not Target contracts).
 
-### Operator resolutions (2026-08-17)
+### Operator resolutions (2026-08-17; clarified 2026-08-19)
 
 | Former open item | Stance |
 | ---------------- | ------ |
-| Exact always-on line budget | **None.** Minimize while gate behavior holds. |
+| Exact always-on line budget | **None** — not for the whole file, and not as invented “≤N new lines” Success metrics. Minimize while gate behavior holds. Dogfood still discovers the right size; agents must **not** invent a budget in plans or Verification. |
 | Ship host snippet files from cursorEscape | **Later** — not a near-term decision ([desired-behavior](./desired-behavior-vs-cursor-specific.md)). |
 | Repo-local `alwaysApply: false` → portable on-demand hooks | **Low priority** — validate on a host when needed; not a design blocker. |
 | Slim Observed Cursor agent snapshots | **Host-dependent** — keep Target agents lean; Cursor import hygiene follows whether Cursor remains the live workflow home. |

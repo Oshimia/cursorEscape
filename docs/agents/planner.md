@@ -1,6 +1,6 @@
 # planner
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
@@ -31,12 +31,17 @@ Produce an implementation plan with scope, Escalation, phases, risks, discovery 
 | Discovery steps | Unknowns as explicit steps — not pretend-settled |
 | Handoff | plan_reviewer invocation package (always, unless Skip applies) |
 
+### Incomplete until
+
+Plan handoff to [plan_reviewer](./plan_reviewer.md) is **incomplete** until [implementation-plan Incomplete until](../skills/implementation-plan.md#incomplete-until-section-sot) is met (unless Skip). Same urgency as missing Required Inputs.
+
 ### Must not
 
 - Implement product changes during planning
 - Skip discovery on unfamiliar repos
 - Present Unknown claims as decided Target
 - Treat Escalation=no as skip plan_reviewer
+- Invoke plan_reviewer or present implement-ready before Incomplete until bar is met (unless Skip)
 - Skip planning for eval/harness/operational multi-step work unless trivial or explicit user opt-out
 
 ### Model

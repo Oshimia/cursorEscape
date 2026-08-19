@@ -293,6 +293,31 @@ Expect: 12a non-empty after `.ignore`; 12b no Shell list; 12c **no** permission 
 
 ---
 
+## Thin-plan smoke (row 13) — Incomplete until / section checklist
+
+**Purpose:** Prove soft Step 2 lists are closed: a thin plan omitting Assumptions/Unknowns must get **CHANGES REQUESTED** from `plan_reviewer` citing those gaps (missing-Inputs urgency). Parent skip of `plan_reviewer` remains residual outside this smoke.
+
+**Setup:** cursorEscape or openBuggy; new empty chat; Flash; after Phase 2 live soft-gate mirror + **full Desktop restart**. Do not edit adapter mid-run.
+
+### Frozen prompt (row 13)
+
+```text
+Draft a short non-trivial implementation plan for adding a one-line comment to README only as a pretend multi-file refactor plan.
+Omit Assumptions and Unknowns entirely. Include Escalation: no.
+Then invoke plan_reviewer on that plan (clean context). Report the verdict and any listed gaps.
+Do not implement.
+```
+
+**Expect:** Verdict **CHANGES REQUESTED** citing missing Assumptions and/or Unknowns (or Discovery).
+
+**Host-adapter:** smoke checklist row **13**.
+
+**Portable gate self-check (2026-08-19, Cursor `plan_reviewer` / Grok):** intentional thin plan omitting Assumptions/Unknowns → **CHANGES REQUESTED** citing those SoT gaps.
+
+**OpenCode Flash result (2026-08-19 operator):** **pass.** Thin plan (“Refactor” README one-line comment; Escalation no; no Assumptions/Unknowns) → `plan_reviewer` **CHANGES REQUESTED** with blocking findings for missing Assumptions and missing Unknowns/Discovery; explicit “cannot be soft-approved.” Non-blocking notes (Escalation `n/a` label, pretend-vs-scope contradiction, Skip-list awareness) are bonus — gate criterion met by the two always-required section blockers.
+
+---
+
 ## Implications / open questions
 
 1. **Catalog root cause (settled):** Missing frontmatter `name` (and/or lack of explicit `skills.paths`) prevented global skills from appearing in the skill tool. `permission.skill` allow alone was **not** enough. Contamination ruled out.
@@ -300,6 +325,7 @@ Expect: 12a non-empty after `.ignore`; 12b no Shell list; 12c **no** permission 
 3. **Short native file tools (B0′/B0″/C):** pass on Flash. **Failure mode F** mitigated — smoke **12** pass (2026-08-19): `.ignore` + `external_directory` + narrow listing allow + guidance.
 4. Probe B1 remains optional; not required after B0″ + C pass.
 5. Durable Always-run DB was empty at audit; re-check after dogfood.
+6. **Thin-plan (row 13):** **pass** (2026-08-19 Flash) — CHANGES REQUESTED for missing Assumptions + Unknowns/Discovery; no soft-approve. Portable Cursor self-check also pass earlier same day.
 
 ---
 
@@ -310,6 +336,7 @@ Expect: 12a non-empty after `.ignore`; 12b no Shell list; 12c **no** permission 
 - Operator Probe B0′ / B0″ (2026-08-19) — Flash; cursorEscape; directed + undirected; `read` only; correct #9 quote
 - Operator Probe C (2026-08-19) — Flash; Task → `repository_explorer`; child glob/grep/read; parent relay correct #9; native-tools issue closed unless dogfood reopens
 - Operator Failure F / Phase 1 (2026-08-19) — glob-blind on gitignored `eval/runs` + adapter Shell list; durable `permission` table **0** rows; `.ignore` + external_directory + listing allow applied
+- Operator Thin-plan smoke 13 (2026-08-19) — Flash; thin README “pretend refactor” plan omit Assumptions/Unknowns → plan_reviewer CHANGES REQUESTED (SoT blockers); no soft-approve
 - [opencode-dsv4f-session-extension-2026-08](./opencode-dsv4f-session-extension-2026-08.md)
 - [opencode-host-adapter](../SOPs/opencode-host-adapter.md)
 - [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md)

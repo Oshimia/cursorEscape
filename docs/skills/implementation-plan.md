@@ -1,6 +1,6 @@
 # implementation-plan
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
@@ -46,9 +46,34 @@ If unsure Escalation=yes: ask the user; do not silently escalate. Escalation **y
 ### Workflow steps
 
 1. **Discovery** — [discovery](./discovery.md) Step 0 + repo indexes
-2. **Draft plan** — template: goal, scope, Escalation, assumptions, discovery, A/B/C when architectural, phases, verification; Agent context when Escalation=yes
-3. **plan_reviewer loop** — up to 3 passes until APPROVED (**skip** only when Composer is assigned for phased **execution** — accepted roadmap already gated — or user explicitly opted out of planning)
+2. **Draft plan** — fill every section per [Incomplete until](#incomplete-until-section-sot) (Goal, Scope, Escalation, Assumptions, Unknowns or Discovery, Incremental execution, Verification; when-required or **N/A**; Agent context when Escalation=yes)
+3. **plan_reviewer loop** — only after Incomplete until bar is met; up to 3 passes until APPROVED (**skip** only when Composer is assigned for phased **execution** — accepted roadmap already gated — or user explicitly opted out of planning)
 4. **Handoff** — implementer or phase subagent
+
+### Incomplete until (section SoT)
+
+Treat missing required sections with the **same urgency as missing Required Inputs**. The plan is **incomplete** — must **not** invoke [plan_reviewer](../agents/plan_reviewer.md) or present as implement-ready — **until** the bar below is met (**unless** Skip applies).
+
+**Always required** (non-empty):
+
+- Goal
+- Scope
+- Escalation
+- Assumptions
+- Unknowns **or** Discovery steps
+- Incremental execution (phases)
+- Verification
+
+**When-required** (explicit **N/A** OK only when truly not applicable):
+
+- Alternative approaches
+- External dependencies
+- Architecture and docs
+- If Escalation=yes: Agent context per [plan-agent-context](../research/imported/cursor-global-workflow/docs/workflow/plan-agent-context.md) (including Inter-phase / Migration when applicable)
+
+Do **not** invent fixed always-on line/character budgets in Success, Verification, or phase wording ([instruction-layering](../featureArchitecture/instruction-layering.md)).
+
+This section is the **sole SoT** for the plan section checklist. [plan-review](./plan-review.md) and [plan_reviewer](../agents/plan_reviewer.md) require compliance — they must **not** paste a second full enum.
 
 ### Outputs
 
@@ -61,8 +86,10 @@ If unsure Escalation=yes: ask the user; do not silently escalate. Escalation **y
 - Implement during planning (except disposable Na previews per Composer policy)
 - Omit Escalation field on non-trivial plans
 - Treat Escalation=no as skip plan_reviewer
+- Invoke plan_reviewer or present implement-ready before Incomplete until bar is met (unless Skip)
 - Invent required doc trees without discovery
 - Infer opt-out from task urgency
+- Invent fixed always-on line/character budgets in Success / Verification
 
 ### Related roles
 

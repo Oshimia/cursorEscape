@@ -1,6 +1,6 @@
 # plan-review
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ## Context
 
@@ -22,11 +22,13 @@ Does **not** require Escalation=yes or a multi-phase roadmap. Escalation only co
 
 ### Workflow steps
 
-1. Planner produces full synthesized plan each pass
-2. plan_reviewer reviews with clean context (no prior review transcript dependency)
+1. Planner produces full synthesized plan each pass — plan incomplete until [implementation-plan Incomplete until](./implementation-plan.md#incomplete-until-section-sot) SoT is met
+2. plan_reviewer reviews with clean context (no prior review transcript dependency); APPROVED requires SoT compliance ([plan_reviewer](../agents/plan_reviewer.md))
 3. Planner synthesizes — fix blockers; Unknowns → discovery steps
 4. Repeat up to **3 passes** or early APPROVED
 5. Present to user on CHANGES REQUESTED with outstanding items
+
+**Parent incomplete until** APPROVED, or after pass 3 with outstanding blockers surfaced to the user. Do not start implementation while CHANGES REQUESTED blockers remain (unless user explicitly opts out).
 
 ### Outputs
 
@@ -39,6 +41,7 @@ Does **not** require Escalation=yes or a multi-phase roadmap. Escalation only co
 - Skip the gate because Escalation=no or the work is “just docs/eval/harness”
 - Exceed 3 plan-reviewer passes without owner escalation
 - Compress plan review when Composer assigned for phased execution (planning already complete)
+- Duplicate the full Incomplete until section enum here — point at [implementation-plan](./implementation-plan.md#incomplete-until-section-sot)
 
 ### Composer exception (Cursor-specific)
 
