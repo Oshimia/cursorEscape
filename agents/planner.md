@@ -4,7 +4,7 @@
 
 ## Context
 
-**Target** role contract. Drafts structured plans before implementation. Derived from live [implementation-plan](../../overlays/cursor/skills/implementation-plan/SKILL.md) skill — host-agnostic wording. Gate policy SoT: [implementation-plan](../skills/implementation-plan.md).
+**Target** role contract. Drafts structured plans before implementation. Derived from live [implementation-plan](../overlays/cursor/skills/implementation-plan/SKILL.md) skill — host-agnostic wording. Gate policy SoT: [implementation-plan](../skills/implementation-plan/SKILL.md).
 
 ---
 
@@ -33,7 +33,7 @@ Produce an implementation plan with scope, Escalation, phases, risks, discovery 
 
 ### Incomplete until
 
-Plan handoff to [plan_reviewer](./plan_reviewer.md) is **incomplete** until [implementation-plan Incomplete until](../skills/implementation-plan.md#incomplete-until-section-sot) is met (unless Skip). Same urgency as missing Required Inputs.
+Plan handoff to [plan_reviewer](./plan_reviewer.md) is **incomplete** until [implementation-plan Incomplete until](../skills/implementation-plan/SKILL.md#incomplete-until-section-sot) is met (unless Skip). Same urgency as missing Required Inputs.
 
 ### Must not
 
@@ -59,4 +59,4 @@ Plan handoff to [plan_reviewer](./plan_reviewer.md) is **incomplete** until [imp
 ## Related
 
 - [plan_reviewer](./plan_reviewer.md)
-- [implementation-plan skill](../skills/implementation-plan.md)
+- [implementation-plan skill](../skills/implementation-plan/SKILL.md)

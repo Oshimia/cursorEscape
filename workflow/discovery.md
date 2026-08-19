@@ -28,10 +28,19 @@ When the repo has no process SOPs, read these workflow docs for plan/review/Comp
 
 Repo root: `workflow/` (this file). Live Cursor copy-out: `~/.cursor/docs/workflow/`.
 
+## Freeze note (Observed)
+
+AITestSuite baseline includes [reference-docs skill](../research/imported/AITestSuite/tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/reference-docs/SKILL.md) — use when evaluating freeze baselines. Deep procedure lives at repo-root `workflow/discovery.md` (gold base; Observed Cursor wording preserved from overlay extract).
+
 ## Related skills
 
-- [implementation-plan](../docs/skills/implementation-plan.md)
-- [implementation-review](../docs/skills/implementation-review.md)
-- [composer](../docs/skills/composer.md)
-- [roadmap](../docs/skills/roadmap.md)
-- [documentation-architecture](../docs/skills/documentation-architecture.md)
+- [implementation-plan](../skills/implementation-plan/SKILL.md)
+- [implementation-review](../skills/implementation-review/SKILL.md)
+- [composer](../skills/composer/SKILL.md)
+- [roadmap](../skills/roadmap/SKILL.md)
+- [documentation-architecture](../skills/documentation-architecture/SKILL.md)
+
+## Related agents
+
+- [planner](../agents/planner.md)
+- [repository_explorer](../agents/repository_explorer.md)

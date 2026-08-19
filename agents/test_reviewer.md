@@ -4,7 +4,7 @@
 
 ## Context
 
-**Target** role contract. Optional test-strategy / coverage reviewer. **Nice-to-have** — not part of the default dual gate. Does **not** replace [production_readiness_reviewer](./production_readiness_reviewer.md) blocking test/docs. When to make this mandatory remains **Unknown (U9)** — see [unresolved architectural questions](../../review/unresolved-architectural-questions.md).
+**Target** role contract. Optional test-strategy / coverage reviewer. **Nice-to-have** — not part of the default dual gate. Does **not** replace [production_readiness_reviewer](./production_readiness_reviewer.md) blocking test/docs. When to make this mandatory remains **Unknown (U9)** — see [unresolved architectural questions](../review/unresolved-architectural-questions.md).
 
 ---
 
@@ -31,7 +31,7 @@ Do not invent a third required parallel leg unless the user adds it for that pha
 | Applicable test docs | Existing test SOPs, coverage expectations if any |
 | Note | Parent-verified Fast CI when dual gate also ran — do not re-run CI |
 
-Follow [clean-context isolation](../featureArchitecture/clean-context-isolation.md): pack the invoke; no prior review transcripts.
+Follow [clean-context isolation](../docs/featureArchitecture/clean-context-isolation.md): pack the invoke; no prior review transcripts.
 
 ### Outputs
 
@@ -53,7 +53,7 @@ Follow [clean-context isolation](../featureArchitecture/clean-context-isolation.
 
 ### Model
 
-**Desired:** Strong reasoning or test-aware model — config override ([agent roles](../featureArchitecture/agent-roles-and-model-assignment.md)).
+**Desired:** Strong reasoning or test-aware model — config override ([agent roles](../docs/featureArchitecture/agent-roles-and-model-assignment.md)).
 
 ---
 
@@ -68,6 +68,6 @@ Follow [clean-context isolation](../featureArchitecture/clean-context-isolation.
 
 - [production_readiness_reviewer](./production_readiness_reviewer.md)
 - [bug_reviewer](./bug_reviewer.md)
-- [Agent roles and model assignment](../featureArchitecture/agent-roles-and-model-assignment.md)
-- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
-- [Unresolved architectural questions](../../review/unresolved-architectural-questions.md) (U9)
+- [Agent roles and model assignment](../docs/featureArchitecture/agent-roles-and-model-assignment.md)
+- [Clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md)
+- [Unresolved architectural questions](../review/unresolved-architectural-questions.md) (U9)

@@ -4,9 +4,9 @@
 
 ## Context
 
-**Target** role contract. Bug-finder leg of the dual gate. Recreate Bugbot-shaped utility with an OpenCode (or host-equivalent) subagent + skills/rules — the same pattern as [production_readiness_reviewer](./production_readiness_reviewer.md) / live reviewer-a. **Not** Cursor proprietary `bugbot`. **openBuggy is not required** for v0 ([design decisions](../../review/design-decisions.md)).
+**Target** role contract. Bug-finder leg of the dual gate. Recreate Bugbot-shaped utility with an OpenCode (or host-equivalent) subagent + skills/rules — the same pattern as [production_readiness_reviewer](./production_readiness_reviewer.md) / live reviewer-a. **Not** Cursor proprietary `bugbot`. **openBuggy is not required** for v0 ([design decisions](../review/design-decisions.md)).
 
-**Read when reviewing:** [bug-reviewer-finding-rubric.md](../featureArchitecture/bug-reviewer-finding-rubric.md) — report vs ignore SoT.
+**Read when reviewing:** [bug-reviewer-finding-rubric.md](../docs/featureArchitecture/bug-reviewer-finding-rubric.md) — report vs ignore SoT.
 
 ---
 
@@ -40,7 +40,7 @@ Process/docs completeness belongs on [production_readiness_reviewer](./productio
 - Require Cursor-specific subagent types at runtime
 - Require openBuggy (or any external Bugbot engine) for v0
 - Edit the workspace (`edit: deny` on OpenCode agent)
-- Report style/nits, out-of-scope items, pre-existing conditions, speculative env claims, or harness/doc nits — see [finding rubric](../featureArchitecture/bug-reviewer-finding-rubric.md)
+- Report style/nits, out-of-scope items, pre-existing conditions, speculative env claims, or harness/doc nits — see [finding rubric](../docs/featureArchitecture/bug-reviewer-finding-rubric.md)
 - Block on out-of-scope items named in Custom Instructions
 - Re-run CI
 
@@ -63,8 +63,8 @@ OpenCode markdown agent (`mode: subagent`, `permission.edit: deny`) with a bug-f
 
 ## Related
 
-- [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md)
+- [bug-reviewer-finding-rubric](../docs/featureArchitecture/bug-reviewer-finding-rubric.md)
 - [production_readiness_reviewer](./production_readiness_reviewer.md)
-- [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
-- [Host recreation study](../../analysis/host-recreation-2026-08.md)
-- [openBuggy agent review loop SOP](../../research/imported/openBuggy/SOPs/running-an-agent-review-loop-with-openBuggy.md) (Observed / optional)
+- [Clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md)
+- [Host recreation study](../analysis/host-recreation-2026-08.md)
+- [openBuggy agent review loop SOP](../research/imported/openBuggy/SOPs/running-an-agent-review-loop-with-openBuggy.md) (Observed / optional)

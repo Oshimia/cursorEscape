@@ -1,6 +1,6 @@
 # Documentation architecture (default for new docs)
 
-**Skill:** [documentation-architecture](../docs/skills/documentation-architecture.md) (lean entry point).
+**Skill:** [documentation-architecture](../skills/documentation-architecture/SKILL.md) (procedure entry point).
 
 ## When to use
 
@@ -32,7 +32,7 @@ docs/
 | Design | `featureArchitecture/` | Why it works, contracts, state flows |
 | Roadmaps | `roadmaps/` | Multi-phase Agent context (repo docs) |
 
-Keep indexes current in the **same changeset** as new docs. Multi-phase roadmaps: [roadmap](../docs/skills/roadmap.md) skill + [phased-multi-agent.md](phased-multi-agent.md). Escalated plans (in-plan Agent context): [plan-agent-context.md](plan-agent-context.md).
+Keep indexes current in the **same changeset** as new docs. Multi-phase roadmaps: [roadmap](../skills/roadmap/SKILL.md) skill + [phased-multi-agent.md](phased-multi-agent.md). Escalated plans (in-plan Agent context): [plan-agent-context.md](plan-agent-context.md).
 
 ## Existing layouts
 
@@ -51,6 +51,6 @@ When code introduces or changes a pattern:
 - [discovery.md](discovery.md)
 - [phased-multi-agent.md](phased-multi-agent.md)
 - [plan-agent-context.md](plan-agent-context.md)
-- [documentation-architecture](../docs/skills/documentation-architecture.md)
-- [roadmap](../docs/skills/roadmap.md)
+- [documentation-architecture](../skills/documentation-architecture/SKILL.md)
+- [roadmap](../skills/roadmap/SKILL.md)
 - [_index.md](_index.md)

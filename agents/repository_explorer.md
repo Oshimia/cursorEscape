@@ -51,5 +51,5 @@ Explore the target workspace (read, search, list) within a stated question; retu
 
 ## Related
 
-- [Repository discovery and context](../featureArchitecture/repository-discovery-and-context.md)
-- [discovery skill](../skills/discovery.md)
+- [Repository discovery and context](../docs/featureArchitecture/repository-discovery-and-context.md)
+- [discovery procedure](../workflow/discovery.md)

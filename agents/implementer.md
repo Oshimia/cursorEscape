@@ -12,7 +12,7 @@
 
 ### Purpose
 
-Deliver the phase changeset; run discovery; invoke review loop at phase end per [implementation-review](../skills/implementation-review.md).
+Deliver the phase changeset; run discovery; invoke review loop at phase end per [implementation-review](../skills/implementation-review/SKILL.md).
 
 ### Inputs (Required)
 
@@ -36,7 +36,7 @@ Deliver the phase changeset; run discovery; invoke review loop at phase end per 
 The phase is **incomplete** — must **not** claim phase complete, start the next phase, or hand Composer “done” as shippable — **until**:
 
 1. Observed Fast CI when Fast ≠ `n/a` (do not launch reviewers on fail / skipped / claimed-only), **then**
-2. Dual `APPROVED` (`production_readiness_reviewer` + `bug_reviewer`) per [implementation-review](../skills/implementation-review.md), **then**
+2. Dual `APPROVED` (`production_readiness_reviewer` + `bug_reviewer`) per [implementation-review](../skills/implementation-review/SKILL.md), **then**
 3. Full CI closeout when Full ≠ `n/a`; when Full = `n/a`, dual APPROVED + explicit user ack (or Composer handoff — return closeout only, no commit)
 
 Does **not** change the dual-review APPROVED bar — wording-only gate on phase closeout.
@@ -49,7 +49,7 @@ Does **not** change the dual-review APPROVED bar — wording-only gate on phase 
 - Claim phase complete / start next phase before Incomplete until predicate is met
 - Commit without Full CI pass when Full ≠ `n/a`
 - When Full = `n/a` and **not** under Composer: commit only after dual APPROVED + explicit user acknowledgment
-- **`git commit` or `git push` when Composer conducts the phase** — phase subagent returns closeout report only; Composer runs second Full CI when Full ≠ `n/a` (or user ack when Full = `n/a`) then local commit after QC ([composer](../skills/composer.md))
+- **`git commit` or `git push` when Composer conducts the phase** — phase subagent returns closeout report only; Composer runs second Full CI when Full ≠ `n/a` (or user ack when Full = `n/a`) then local commit after QC ([composer](../skills/composer/SKILL.md))
 
 ### Model
 
@@ -67,4 +67,4 @@ Operator preference — config override.
 
 - [production_readiness_reviewer](./production_readiness_reviewer.md)
 - [bug_reviewer](./bug_reviewer.md)
-- [implementer phase parent duties](../featureArchitecture/intended-workflow.md)
+- [implementer phase parent duties](../docs/featureArchitecture/intended-workflow.md)

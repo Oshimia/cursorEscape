@@ -20,23 +20,31 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 
 Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; stays on overlay until Phase 5).
 
-## Skills (interim contracts — Phase 4 retargets to root `skills/`)
+## Skills
 
 | Skill | Path |
 |-------|------|
-| [implementation-plan](../docs/skills/implementation-plan.md) | Plan drafting + plan-reviewer loop |
-| [implementation-review](../docs/skills/implementation-review.md) | Per-phase Reviewer A + Bugbot |
-| [composer](../docs/skills/composer.md) | Phased execution conductor |
-| [roadmap](../docs/skills/roadmap.md) | Repo multi-phase handoff files |
-| [documentation-architecture](../docs/skills/documentation-architecture.md) | Bootstrap/extend repo docs layout |
+| [implementation-plan](../skills/implementation-plan/SKILL.md) | Plan drafting + plan-reviewer loop |
+| [implementation-review](../skills/implementation-review/SKILL.md) | Per-phase Reviewer A + Bugbot |
+| [composer](../skills/composer/SKILL.md) | Phased execution conductor |
+| [roadmap](../skills/roadmap/SKILL.md) | Repo multi-phase handoff files |
+| [documentation-architecture](../skills/documentation-architecture/SKILL.md) | Bootstrap/extend repo docs layout |
 
-## Agents (interim contracts — Phase 4 retargets to root `agents/`)
+## Agents
 
 | Display name | Portable contract | Role |
 |--------------|-------------------|------|
-| plan-reviewer | [plan_reviewer](../docs/agents/plan_reviewer.md) | Adversarial plan review |
-| reviewer-a | [production_readiness_reviewer](../docs/agents/production_readiness_reviewer.md) | Production-readiness code review |
-| Bugbot | [bug_reviewer](../docs/agents/bug_reviewer.md) | Cursor product subagent (no owner-authored overlay file) |
+| plan-reviewer | [plan_reviewer](../agents/plan_reviewer.md) | Adversarial plan review |
+| reviewer-a | [production_readiness_reviewer](../agents/production_readiness_reviewer.md) | Production-readiness code review |
+| Bugbot | [bug_reviewer](../agents/bug_reviewer.md) | Cursor product subagent (no owner-authored overlay file) |
+
+## Rules
+
+| Rule | Path |
+| ---- | ---- |
+| iterative-plan-review | [rules/iterative-plan-review.md](../rules/iterative-plan-review.md) |
+| iterative-code-review | [rules/iterative-code-review.md](../rules/iterative-code-review.md) |
+| pre-commit-ci-gate | [rules/pre-commit-ci-gate.md](../rules/pre-commit-ci-gate.md) |
 
 ## Used-by matrix
 

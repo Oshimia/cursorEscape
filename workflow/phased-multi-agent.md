@@ -1,6 +1,6 @@
 # Phased multi-agent plans (large & complex)
 
-**Skills:** [implementation-plan](../docs/skills/implementation-plan.md) (draft), [roadmap](../docs/skills/roadmap.md) (repo handoff file), [composer](../docs/skills/composer.md) (optional conductor).
+**Skills:** [implementation-plan](../skills/implementation-plan/SKILL.md) (draft), [roadmap](../skills/roadmap/SKILL.md) (repo handoff file), [composer](../skills/composer/SKILL.md) (optional conductor).
 
 **In-plan Agent context** is required when the plan’s **Escalation** sets `Agent context required: **yes**` (user-labeled composer-level, or unusually complex / extensive). Typical ≤3-phase work stays on the light Incremental execution template. Full Escalation field, required headings, and dummy example: [plan-agent-context.md](plan-agent-context.md).
 
@@ -16,7 +16,7 @@ Draft plan (Escalation yes → Agent context in plan; no → light Incremental e
 
 ## Roadmap location
 
-Resolve via the [roadmap](../docs/skills/roadmap.md) skill — **never** assume a fixed folder name. Default when no convention: `docs/roadmaps/<feature>.md`. See [discovery.md](discovery.md).
+Resolve via the [roadmap](../skills/roadmap/SKILL.md) skill — **never** assume a fixed folder name. Default when no convention: `docs/roadmaps/<feature>.md`. See [discovery.md](discovery.md).
 
 ## Required roadmap sections
 
@@ -29,14 +29,14 @@ Same schema as escalated plans — see [plan-agent-context.md](plan-agent-contex
 
 ## Composer
 
-When the user assigns [composer](../docs/skills/composer.md), follow that skill’s phase lifecycle. Composer multi-phase **requires** a repo roadmap file. Composer verifies subagent process via transcripts (Nb, nested reviewers, and its own Na/migration work) before advancing each phase.
+When the user assigns [composer](../skills/composer/SKILL.md), follow that skill’s phase lifecycle. Composer multi-phase **requires** a repo roadmap file. Composer verifies subagent process via transcripts (Nb, nested reviewers, and its own Na/migration work) before advancing each phase.
 
-If the user asks Composer to **plan**, stay in Plan mode / [implementation-plan](../docs/skills/implementation-plan.md) with Escalation **yes** — Composer does not draft plans while conducting.
+If the user asks Composer to **plan**, stay in Plan mode / [implementation-plan](../skills/implementation-plan/SKILL.md) with Escalation **yes** — Composer does not draft plans while conducting.
 
-Without Composer, one clean-context agent per phase still ends with the [implementation-review](../docs/skills/implementation-review.md) loop before the next phase.
+Without Composer, one clean-context agent per phase still ends with the [implementation-review](../skills/implementation-review/SKILL.md) loop before the next phase.
 
 ## Related
 
 **Workflow docs:** [plan-agent-context.md](plan-agent-context.md), [iterative-plan-review.md](iterative-plan-review.md), [iterative-code-review.md](iterative-code-review.md), [discovery.md](discovery.md), [ci-ladder.md](ci-ladder.md), [documentation-architecture.md](documentation-architecture.md), [_index.md](_index.md)
 
-**Skills / agents:** [implementation-plan](../docs/skills/implementation-plan.md), [roadmap](../docs/skills/roadmap.md), [composer](../docs/skills/composer.md), [implementation-review](../docs/skills/implementation-review.md), [plan_reviewer](../docs/agents/plan_reviewer.md), [production_readiness_reviewer](../docs/agents/production_readiness_reviewer.md)
+**Skills / agents:** [implementation-plan](../skills/implementation-plan/SKILL.md), [roadmap](../skills/roadmap/SKILL.md), [composer](../skills/composer/SKILL.md), [implementation-review](../skills/implementation-review/SKILL.md), [plan_reviewer](../agents/plan_reviewer.md), [production_readiness_reviewer](../agents/production_readiness_reviewer.md)
