@@ -275,9 +275,28 @@ Minimum skill-related hooks for this adapter:
 
 (Extend `task` allowlists to match [host adapter inventory](./opencode-host-adapter.md).)
 
-Permission keys include `read`, `edit`, `bash`, `task`, `skill`, etc. ([Agents → Permissions](https://opencode.ai/docs/agents/#permissions)). Prefer pattern objects with `"*"` first, then specific overrides (last matching rule wins).
+Permission keys include `read`, `edit`, `bash`, `task`, `skill`, `external_directory`, etc. ([Agents → Permissions](https://opencode.ai/docs/agents/#permissions); [Permissions](https://opencode.ai/docs/permissions/)). Prefer pattern objects with `"*"` first, then specific overrides (last matching rule wins).
+
+**Glob / gitignore:** `glob`/`grep` use ripgrep and respect `.gitignore`. To let agents see gitignored trees (e.g. openBuggy `eval/runs/`), add a repo-root [`.ignore`](https://opencode.ai/docs/tools/) with un-ignore lines such as `!eval/runs/`. Do not track those trees in git solely for agent convenience.
+
+**Out-of-workspace adapter paths:** `external_directory` defaults to **ask**. For this host, allow `~/.config/opencode/**` (and absolute Windows form if needed) so native `read`/`glob` can reach global workflow docs without Shell listing. Prefer `edit: deny` under that tree if configuring edit rules.
+
+**Narrow listing bash allow (safety net only):** when models still fall back after empty glob, allow only `Get-ChildItem*` and `Test-Path*` (keep `bash: "*": ask`). Do **not** set `bash: allow *`. Skip `dir`/`ls` unless probes prove `Get-ChildItem*` alone fails. Do not allowlist `python -c *` by default.
 
 **Do not** “fix” skill babysitting by setting parent bash to `allow *` as the primary mitigation.
+
+#### Always-run / durable permission audit
+
+UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%USERPROFILE%\.local\share\opencode\opencode.db` table `permission` (`project_id`, `action`, `resource`). Session-only Always clears on Desktop restart.
+
+**Procedure (re-run when click-fatigue accumulates):**
+
+1. Inventory: `SELECT p.action, p.resource, pr.worktree FROM permission p JOIN project pr ON pr.id = p.project_id` (read-only).
+2. Classify: keep & promote to reviewed `opencode.json` / agent bash → revoke junk (esp. `resource=*`, destructive, obsolete) → narrow broad patterns.
+3. Prefer approving **once** unless promoting a pattern into config SoT.
+4. After revokes or config edits: full Desktop restart; re-count rows (lean table).
+
+**Observed 2026-08-19:** durable `permission` table had **0** rows on this host at audit time — session Always and intentional config are the live surfaces. Re-audit after dogfood if the table grows.
 
 ---
 
@@ -295,8 +314,8 @@ Permission keys include `read`, `edit`, `bash`, `task`, `skill`, etc. ([Agents �
 ## Implications / open questions
 
 1. Skill-tool catalog emptiness is usually **authoring/discovery** (`name`, paths, restart, permissions) — not native tool failure and not session contamination.  
-2. Bash-for-`read`/`glob`/`grep` remains a separate model/selection concern after the catalog is healthy.  
-3. Re-check this SOP when OpenCode Desktop major versions change schema (nested `permission` vs v2 `permissions[]`).
+2. Bash-for-`read`/`glob`/`grep` on short prompts was OK in Probe B/C; residual babysitting is often **glob-blind** (gitignore / external_directory) — see Failure mode F in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md).  
+3. Re-check this SOP when OpenCode Desktop major versions change schema (nested `permission` vs v2 `permissions[]`). Periodically audit durable Always-run rows (`opencode.db` `permission`).
 
 ---
 

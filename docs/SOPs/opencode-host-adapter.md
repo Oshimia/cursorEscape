@@ -76,7 +76,10 @@ Record results when dogfooding. Expected: `pass` \| `fail` \| `deferred: <reason
 | 8 | bug_reviewer rubric path | `agents/bug_reviewer.md` references `docs/workflow/bug-reviewer-finding-rubric.md`; file exists; no `model:` pin | **pass** (2026-08-18) |
 | 9 | Skill-tool lists workflow skills | Clean chat (openBuggy; plan mode; Flash): skill tool names include `implementation-plan`, `plan-review`, … — not only `customize-opencode`. Prompt frozen in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) | **pass** (2026-08-19 A-post2: all 7 workflow skills + customize-opencode) |
 | 10 | SoT load without bash approvals | Same Probe A: load `implementation-plan` via skill tool with **zero bash approvals** for that SoT load | **pass** (2026-08-19 A-post2: loaded + Escalation row quoted) |
-| 11 | Native file tools without bash approvals | Clean chat Probe **B0′/B0″** + **C** (`repository_explorer`): frozen prompts in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) | **pass** (2026-08-19); closed unless dogfood reopens |
+| 11 | Native file tools without bash approvals | Clean chat Probe **B0′/B0″** + **C** (`repository_explorer`): frozen prompts in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) | **pass** (2026-08-19); short lookups closed; see row **12** for glob-blind residual |
+| 12 | Glob-blind paths without serial Shell asks | openBuggy workspace; frozen prompts in [skill-binding discovery](../analysis/opencode-skill-binding-discovery-2026-08.md) § Failure mode F — (a) glob `eval/runs/2026-08-17T143458Z-dsv4flash/**`; (b) absolute `read` adapter workflow doc; (c) `Test-Path` once → **0** listing approvals | **pass** (2026-08-19): 12a non-empty glob; 12b Skill line quoted; 12c `Test-Path` → True |
+
+**Frozen probe paths (row 12):** run id `2026-08-17T143458Z-dsv4flash` (exists on disk; gitignored). Adapter doc: `C:/Users/admin/.config/opencode/docs/workflow/iterative-plan-review.md`.
 
 **Fast verification (install-time):**
 
@@ -97,8 +100,8 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 2. Do **not** pin provider-specific models in agent frontmatter — roles inherit the session / `opencode.json` default so the adapter stays portable across BYOK hosts.
 3. T3 Code control plane is separate — this SOP covers the OpenCode harness adapter only.
 4. **Restart OpenCode Desktop** after adapter edits for always-on / agent / skill / permission changes to load.
-5. **Skill-binding (C/E):** Smoke 9–11 **pass** (2026-08-19). Catalog fixed via `name` + `skills.paths`; native file tools OK on Flash parent and `repository_explorer` child. Shell-approval babysitting **closed** for R0 probes — reopen only if a later coding session regresses.
-6. When adding OpenCode skills/agents/rules: follow [opencode-authoring-adapter](./opencode-authoring-adapter.md) (official docs + Observed checklist).
+5. **Skill-binding (C/E/F):** Smoke 9–**12** **pass** (2026-08-19). Catalog fixed; short native lookups OK; glob-blind residual mitigated (`.ignore` + `external_directory` + listing allow + guidance).
+6. When adding OpenCode skills/agents/rules: follow [opencode-authoring-adapter](./opencode-authoring-adapter.md) (official docs + Observed checklist). Periodically audit durable Always-run rows in `opencode.db` `permission` table (see authoring SOP).
 
 ---
 

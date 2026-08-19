@@ -263,7 +263,33 @@ When the child returns, relay: (1) exists or missing; (2) the exact #9 Check and
 
 | Arm | Status | Result summary | Classification |
 | --- | ------ | -------------- | -------------- |
-| **C** | **pass** (2026-08-19 operator report + screenshot) | Child: glob → grep → read; parent relayed exists + exact #9 Check/How; no bash observed | Subagent native-tool path OK on Flash; **closed** for R0 pre-dogfood |
+| **C** | **pass** (2026-08-19 operator report + screenshot) | Child: glob → grep → read; parent relayed exists + exact #9 Check/How; no bash observed | Subagent native-tool path OK on Flash; short lookups closed |
+
+---
+
+## Failure mode F — glob-blind → serial Shell approvals (2026-08-19)
+
+**Observed (stellar-garden / plan_reviewer):** After empty `glob` on `eval/runs/.../**` (path exists but **gitignored**), child fell back to approval-gated `Get-ChildItem` / `Test-Path`. Parent likewise Shell-listed `~/.config/opencode/docs` after absolute `glob` failed, then correctly `read` absolute paths. Approving one Shell often produced another within seconds (serial babysitting).
+
+**Harness (docs):** OpenCode `glob`/`grep` use ripgrep and respect `.gitignore`; use repo [`.ignore`](https://opencode.ai/docs/tools/) to un-ignore (`!eval/runs/`). `external_directory` defaults to ask for paths outside the workspace ([permissions](https://opencode.ai/docs/permissions/)).
+
+**Mitigation package (Applied 2026-08-19; smoke 12 pass):** openBuggy `.ignore`; live `external_directory` allow for `~/.config/opencode/**`; always-on empty-glob ≠ missing + absolute `read`; narrow bash allow `Get-ChildItem*` / `Test-Path*`. Not `bash: allow *`.
+
+### Always-run whitelist audit (Phase 1b)
+
+**Observed 2026-08-19:** table `permission` in `opencode.db` had **0** durable rows. Session “Allow always” may still accumulate in-memory until restart. Prefer **once**; promote intentional patterns into reviewed config. Procedure: [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) § Always-run audit.
+
+### Frozen probes — smoke row 12
+
+**Frozen run path:** `eval/runs/2026-08-17T143458Z-dsv4flash` (openBuggy; exists; gitignored).
+
+**12a — glob runs** — **pass** (2026-08-19 operator): non-empty (`summary.json`, case artifacts under `bb-05-…`, etc.).
+
+**12b — adapter read** — **pass** (2026-08-19): quoted `**Skill:** implementation-plan. **Agent:** plan_reviewer.` via absolute `read` (no Shell list).
+
+**12c — listing allow** — **pass** (2026-08-19): `Test-Path -LiteralPath "…\iterative-plan-review.md"` → `True` (allowlist / no serial Shell ask reported).
+
+Expect: 12a non-empty after `.ignore`; 12b no Shell list; 12c **no** permission prompt after narrow allowlist + restart. **All met.**
 
 ---
 
@@ -271,8 +297,9 @@ When the child returns, relay: (1) exists or missing; (2) the exact #9 Check and
 
 1. **Catalog root cause (settled):** Missing frontmatter `name` (and/or lack of explicit `skills.paths`) prevented global skills from appearing in the skill tool. `permission.skill` allow alone was **not** enough. Contamination ruled out.
 2. Adapter hygiene: follow [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) — every OpenCode `SKILL.md` must include `name` matching folder id + `description`; keep `permission.skill: { "*": "allow" }` and `skills.paths` in live `opencode.json`.
-3. **Native file tools / shell-approval babysitting (closed for R0 probes):** Flash parent **pass** B0′/B0″; `repository_explorer` child **pass** Probe C (glob/grep/read, correct #9, no bash). Re-open only if a later full coding session reproduces approval-gated bash substitution for routine file/SoT work. Always-on prefer-native line may still contribute; historical E largely explained by empty skill catalog (C).
+3. **Short native file tools (B0′/B0″/C):** pass on Flash. **Failure mode F** mitigated — smoke **12** pass (2026-08-19): `.ignore` + `external_directory` + narrow listing allow + guidance.
 4. Probe B1 remains optional; not required after B0″ + C pass.
+5. Durable Always-run DB was empty at audit; re-check after dogfood.
 
 ---
 
@@ -282,6 +309,7 @@ When the child returns, relay: (1) exists or missing; (2) the exact #9 Check and
 - Operator Probe B0 (2026-08-19) — Flash; two `glob`; path missing; no bash (workspace likely not cursorEscape)
 - Operator Probe B0′ / B0″ (2026-08-19) — Flash; cursorEscape; directed + undirected; `read` only; correct #9 quote
 - Operator Probe C (2026-08-19) — Flash; Task → `repository_explorer`; child glob/grep/read; parent relay correct #9; native-tools issue closed unless dogfood reopens
+- Operator Failure F / Phase 1 (2026-08-19) — glob-blind on gitignored `eval/runs` + adapter Shell list; durable `permission` table **0** rows; `.ignore` + external_directory + listing allow applied
 - [opencode-dsv4f-session-extension-2026-08](./opencode-dsv4f-session-extension-2026-08.md)
 - [opencode-host-adapter](../SOPs/opencode-host-adapter.md)
 - [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md)
