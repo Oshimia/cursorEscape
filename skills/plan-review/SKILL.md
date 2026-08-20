@@ -32,6 +32,7 @@ Gate drafted plans through [`plan_reviewer`](../../agents/plan_reviewer.md) befo
 | Doc | When |
 |-----|------|
 | [iterative-plan-review.md](../../workflow/iterative-plan-review.md) | Full loop rules + Must not |
+| [plan-reviewer-report.md](../../workflow/plan-reviewer-report.md) | Plan-reviewer output schema (limits + exact report structure) |
 | [plan-agent-context.md](../../workflow/plan-agent-context.md) | Escalated plan headings (not Escalation when-table) |
 | [implementation-plan](../implementation-plan/SKILL.md) | Draft template + **Incomplete until** SoT |
 

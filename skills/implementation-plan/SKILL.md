@@ -22,6 +22,7 @@ This skill is **repo-agnostic**. Do not assume a fixed doc tree or scripts.
 | [discovery](../discovery/SKILL.md) | Thin skill entry (on-demand load) |
 | [iterative-plan-review.md](../../workflow/iterative-plan-review.md) | Plan → plan-reviewer loop |
 | [plan-review](../plan-review/SKILL.md) | Thin plan-review loop gate |
+| [plan-reviewer-report.md](../../workflow/plan-reviewer-report.md) | Plan-reviewer output schema when synthesizing review output |
 | [plan-agent-context.md](../../workflow/plan-agent-context.md) | Escalation field + Agent context when escalated |
 | [phased-multi-agent.md](../../workflow/phased-multi-agent.md) | Multi-phase / Composer handoffs |
 | [review-subagent-models.md](../../overlays/cursor/review-subagent-models.md) | Recommended `plan-reviewer` model |
@@ -361,4 +362,4 @@ After approval, use the [`roadmap`](../roadmap/SKILL.md) skill to write a **repo
 
 **Skills / agents:** [`roadmap`](../roadmap/SKILL.md), [`implementation-review`](../implementation-review/SKILL.md), [`composer`](../composer/SKILL.md), [`documentation-architecture`](../documentation-architecture/SKILL.md), [`plan-reviewer`](../../agents/plan_reviewer.md)
 
-**Workflow docs:** [discovery.md](../../workflow/discovery.md), [iterative-plan-review.md](../../workflow/iterative-plan-review.md), [plan-agent-context.md](../../workflow/plan-agent-context.md), [phased-multi-agent.md](../../workflow/phased-multi-agent.md), [iterative-code-review.md](../../workflow/iterative-code-review.md), [review-subagent-models.md](../../overlays/cursor/review-subagent-models.md), [_index.md](../../workflow/_index.md)
+**Workflow docs:** [discovery.md](../../workflow/discovery.md), [iterative-plan-review.md](../../workflow/iterative-plan-review.md), [plan-reviewer-report.md](../../workflow/plan-reviewer-report.md), [plan-agent-context.md](../../workflow/plan-agent-context.md), [phased-multi-agent.md](../../workflow/phased-multi-agent.md), [iterative-code-review.md](../../workflow/iterative-code-review.md), [review-subagent-models.md](../../overlays/cursor/review-subagent-models.md), [_index.md](../../workflow/_index.md)

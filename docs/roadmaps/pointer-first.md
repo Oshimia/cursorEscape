@@ -1,7 +1,7 @@
 # Roadmap: Companion pointer-first architecture
 
 **Last updated:** 2026-08-20  
-**Status:** **In progress** — pointer-first-0 **ACCEPT** (Composer QC 2026-08-20). Dual APPROVED not achieved after initial 4 + renew 4 review iters; **Composer waiver:** Fast/Full hub greps pass; remaining always-on `docs/workflow/` prose + sync-rule AGENTS nit deferred to **pointer-first-2** (in-scope stub rewrite). Next: pointer-first-1.  
+**Status:** **In progress** — pointer-first-1 complete pending Composer QC. pointer-first-0 committed `0078420` (Composer ACCEPT + waiver 2026-08-20).  
 **Plan source:** accepted plan `plan_reviewer_report_sot_e3211634` (Companion pointer-first architecture).  
 **Program id:** `pointer-first` (phases **pointer-first-0 … pointer-first-4**). Do not confuse with [opencode-overlays-sot](./opencode-overlays-sot.md) phases 0–3.
 
@@ -22,7 +22,7 @@
 ## Phase checklist
 
 - [x] **pointer-first-0** — FA lock + C4/SOP/C6 cascade + this roadmap + opencode-overlays-sot supersession note (Composer ACCEPT + waiver 2026-08-20)
-- [ ] **pointer-first-1** — `workflow/plan-reviewer-report.md`; thin portable plan_reviewer; skills Read when
+- [x] **pointer-first-1** — `workflow/plan-reviewer-report.md`; thin portable plan_reviewer; skills Read when
 - [ ] **pointer-first-2** — OpenCode stubs + COMPANION_ROOT; skills.paths discovery; live stub sync (backup first)
 - [ ] **pointer-first-3** — Cursor overlay/live companion reachability audit
 - [ ] **pointer-first-4** — Smoke C6 set 1,2,3,4,8,9–10,13,14; companion-edit proof; mirror disposition; closeout
@@ -48,6 +48,20 @@
 - **Risks:** Phase-number collision — always say `pointer-first-0`.
 
 **Dirty tree note (pointer-first-0 closeout):** Deliverables `docs/roadmaps/pointer-first.md` and `overlays/opencode/AGENTS.md` exist on disk; Composer stages/commits after dual APPROVED + Full CI. Do not expand into stubs/schemas in pointer-first-0.
+
+## Agent context — pointer-first-1 (deep schemas)
+
+- **Goal:** Report schemas in `workflow/`; portable agents/skills thin + Read when.
+- **Depends on / entry gate:** pointer-first-0 commit `0078420` (Composer ACCEPT + waiver).
+- **Do not touch:** Live OpenCode; overlay stub blast (except Read when cites if needed later); plan file under `.cursor/plans`.
+- **In scope:** `workflow/plan-reviewer-report.md`; thin `agents/plan_reviewer.md`; **defer** production_readiness/bug_reviewer schema extract to ticket `pointer-first-dual-report-schemas`; skills plan-review + implementation-plan Read when; workflow/_index.
+- **Out of scope:** Dual-review schema extract this phase (ticketed defer); pointer-first-2+.
+- **Files expected:** plan-reviewer-report.md; thinned plan_reviewer; skill Read rows; index.
+- **Where to read context:** portable plan_reviewer pre-extract Output format (now in `workflow/plan-reviewer-report.md`); instruction-layering L3/L4; this roadmap.
+- **Fast CI:** No full Output format specimen inside `agents/plan_reviewer.md`.
+- **Full CI:** Doc-link integrity for `workflow/plan-reviewer-report.md` + `_index` + skill Read rows.
+- **Deliverables:** [x] plan_reviewer report SoT [x] dual-review deferred ticket named on roadmap [x] skills point at deep doc
+- **Risks:** Over-thin agent — keep purpose/inputs/must-not.
 
 ## Related
 

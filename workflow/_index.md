@@ -14,6 +14,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [documentation-architecture.md](documentation-architecture.md) | Default layout when bootstrapping **new** docs |
 | [phased-multi-agent.md](phased-multi-agent.md) | Large multi-phase handoffs + roadmap shape |
 | [plan-agent-context.md](plan-agent-context.md) | Escalation field + Agent context headings (escalated plans only) |
+| [plan-reviewer-report.md](plan-reviewer-report.md) | Plan-reviewer output schema (limits, severity, exact report structure) |
 | [iterative-plan-review.md](iterative-plan-review.md) | Plan → plan-reviewer loop |
 | [iterative-code-review.md](iterative-code-review.md) | Per-phase Reviewer A + Bugbot loop |
 | [ci-ladder.md](ci-ladder.md) | Fast/Full CI discovery for any repo |
@@ -54,6 +55,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | ------------- | ---------- | ------------- | -------------- | ------------ |
 | `discovery.md` | `skills/discovery/SKILL.md` | `planner`, `implementer`, `repository_explorer` | overlay discovery SKILL (Phase 2) | — |
 | `iterative-plan-review.md` | `skills/plan-review/SKILL.md`, `skills/implementation-plan/SKILL.md` | `plan_reviewer` | overlay plan SKILL | `iterative-plan-review.mdc` |
+| `plan-reviewer-report.md` | `skills/plan-review/SKILL.md`, `skills/implementation-plan/SKILL.md` | `plan_reviewer` | — | — |
 | `iterative-code-review.md` | `skills/implementation-review/SKILL.md` | `production_readiness_reviewer`, `bug_reviewer` | review SKILL + `reviewer-a.md` | `iterative-code-review.mdc` |
 | `ci-ladder.md` | `implementation-review`, `rules/pre-commit-ci-gate.md` | implementer (parent) | review skill Read | `pre-commit-ci-gate.mdc` |
 | `plan-agent-context.md` | `implementation-plan` | `plan_reviewer` | plan skill Read | — |

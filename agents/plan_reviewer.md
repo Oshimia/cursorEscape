@@ -30,20 +30,29 @@ If repository path, task summary, or plan text is missing, return `CHANGES REQUE
 
 ---
 
-## Read-only research (when the plan touches the repo)
+## Read when
 
-Before judging architecture alignment:
+| Doc | When |
+|-----|------|
+| [plan-reviewer-report.md](../workflow/plan-reviewer-report.md) | **Always** before emitting review output (output limits, severity ranking, exact report structure) |
+| `.cursor/skills/reference-docs/SKILL.md` | Step 0 when present in target repo |
+| [discovery.md](../workflow/discovery.md) | Repo doc discovery fallback |
+| [iterative-plan-review.md](../workflow/iterative-plan-review.md) | Portable process expectations |
+| [phased-multi-agent.md](../workflow/phased-multi-agent.md) | Multi-phase plan |
+| [plan-agent-context.md](../workflow/plan-agent-context.md) | Escalation **yes**, or planning Composer signal in task/plan |
+| [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) | Model defaults |
+| [_index.md](../workflow/_index.md) | Full workflow index |
 
-1. If `.cursor/skills/reference-docs/SKILL.md` exists → follow it (repo-specific)
+---
+
+## Repo discovery (before architecture alignment)
+
+When the plan touches the repo, complete this **ordered** sequence **before** judging architecture alignment (audit duty §9):
+
+1. If `.cursor/skills/reference-docs/SKILL.md` exists in the target repo → follow it (Step 0; repo-specific indexes)
 2. Else: root `README` / `AGENTS.md` / `CONTRIBUTING.md`; project `.cursor/rules/`; docs roots/indexes if present
-3. For portable **process** expectations when the repo has none, read:
-   - [discovery.md](../workflow/discovery.md)
-   - [iterative-plan-review.md](../workflow/iterative-plan-review.md)
-   - [phased-multi-agent.md](../workflow/phased-multi-agent.md) (if multi-phase)
-   - [plan-agent-context.md](../workflow/plan-agent-context.md) — **only** when Escalation is **yes**, or the task summary / plan shows a **planning** Composer signal (`composer-level`, `asked to plan`, `user-labeled-composer`, “plan with Composer”)
-   - [review-subagent-models.md](../overlays/cursor/review-subagent-models.md)
-   - [_index.md](../workflow/_index.md) — full index
-4. Every doc that clearly applies to areas the plan touches
+3. For portable **process** expectations when the repo has none, load from **Read when** above — [discovery.md](../workflow/discovery.md), [iterative-plan-review.md](../workflow/iterative-plan-review.md), [phased-multi-agent.md](../workflow/phased-multi-agent.md) (if multi-phase), [plan-agent-context.md](../workflow/plan-agent-context.md) (Escalation **yes** or planning Composer signal only), [review-subagent-models.md](../overlays/cursor/review-subagent-models.md), [_index.md](../workflow/_index.md)
+4. Read **every doc that clearly applies** to areas the plan touches (including parent **Applicable docs** hints when provided)
 
 Skip missing paths silently. Do not invent a required doc layout. Do not assume unstated codebase facts.
 
@@ -107,11 +116,13 @@ Rate: **PASS**, **FAIL**, or **CONCERNS** — with sequencing risks and mitigati
 
 ### 9. Architecture alignment
 
+**Precondition:** complete [Repo discovery](#repo-discovery-before-architecture-alignment) first.
+
 Does the plan follow documented conventions and existing patterns in this repo, or invent parallel patterns? Are doc updates called out when behavior or public surfaces change?
 
 ### 10. Escalation and Agent context
 
-Canonical field and headings: [plan-agent-context.md](../workflow/plan-agent-context.md) (read when Escalation is **yes** or a planning Composer signal is present — see Read-only research).
+Canonical field and headings: [plan-agent-context.md](../workflow/plan-agent-context.md) (read when Escalation is **yes** or a planning Composer signal is present — see Read when).
 
 **Blocking:**
 
@@ -126,7 +137,7 @@ Canonical field and headings: [plan-agent-context.md](../workflow/plan-agent-con
 - Conduct-only Composer language (“you are the composer/conductor”, “conduct phase N”, “execute the roadmap”) with Escalation **no** after an accepted light plan
 - 4+ phases with Escalation **no** → **non-blocking**: note that parent should AskQuestion; do not auto-demand Agent context
 
-Do **not** add Escalation / Agent context headings to the output schema below.
+Do **not** add Escalation / Agent context headings to the review output — see [plan-reviewer-report.md](../workflow/plan-reviewer-report.md).
 
 ### APPROVED section checklist
 
@@ -142,7 +153,7 @@ Otherwise return **CHANGES REQUESTED** listing the missing/empty sections (and a
 
 ### Single pass or passes 1–2
 
-Full adversarial audit. Emit highest-severity findings up to output limits (see below).
+Full adversarial audit. Emit highest-severity findings up to [output limits](../workflow/plan-reviewer-report.md#output-limits).
 
 ### Pass 3 of 3 (when a multi-pass loop is used)
 
@@ -157,7 +168,7 @@ Still adversarial, but:
 
 ## Verdict bar
 
-Audit thoroughly internally, then emit only the highest-severity items up to the [output limits](#output-limits). Always note omitted counts and themes when truncated. Do not omit items to achieve `APPROVED` — if blockers exist beyond the cap, verdict remains `CHANGES REQUESTED`.
+Audit thoroughly internally, then emit only the highest-severity items up to the [output limits](../workflow/plan-reviewer-report.md#output-limits). Always note omitted counts and themes when truncated. Do not omit items to achieve `APPROVED` — if blockers exist beyond the cap, verdict remains `CHANGES REQUESTED`.
 
 **`APPROVED` when:**
 
@@ -176,113 +187,7 @@ Audit thoroughly internally, then emit only the highest-severity items up to the
 
 **Non-blocking findings** may remain on `APPROVED`. List up to the cap for the user to decide.
 
----
-
-## Output limits
-
-Audit every category below, but **emit** only the highest-severity items per cap. Apply [severity ranking](#severity-ranking) before capping.
-
-| List                                 | Max items | Notes                                                            |
-| ------------------------------------ | --------- | ---------------------------------------------------------------- |
-| **Blocking findings**                | 5         | Includes unacknowledged verification gaps                        |
-| **Non-blocking findings**            | 10        | Optional improvements only                                       |
-| **Assumptions table**                | 5 rows    | Highest-risk only (Low confidence or critical path)              |
-| **Unknowns**                         | 5         | Highest impact first                                             |
-| **Areas requiring verification**     | 5         | Highest impact first                                             |
-| **Unacknowledged verification gaps** | 3         | Count toward blocking cap if also listed under Blocking findings |
-
-Already bounded: **Failure forecast** = exactly 3; **Cost challenge** = 1 short paragraph; **Architecture alignment** = 1 short paragraph.
-
-### Severity ranking
-
-**Blocking** (highest first):
-
-1. Plan would fail or ship unsafe behavior if unfixed
-2. Unacknowledged verification gap on critical path
-3. Repo SOP post-apply / operator checklist items buried only under External dependencies (not Incremental execution or Verification)
-4. Escalation omitted; Escalation **yes** missing Agent context / contracts; planning Composer signal with Escalation **no**
-5. Missing required A/B/C for architectural change
-6. Violates documented architecture / conventions with no justification
-7. Incremental execution FAIL (big-bang step)
-
-**Non-blocking** (highest first):
-
-1. Cost challenge / simpler path not considered in plan
-2. Failure forecast item not captured in discovery steps
-3. Medium-confidence assumption without validation
-4. Missing “simpler options considered” note (optional A/B/C)
-5. Sequencing CONCERNS with mitigation possible
-6. 4+ phases with Escalation **no** (parent should AskQuestion)
-
-### Overflow lines (required when truncated)
-
-After **Blocking findings** and **Non-blocking findings**, add one line each when items were omitted:
-
-```markdown
-(+N additional blocking findings omitted — themes: ...)
-(+N additional non-blocking findings omitted — themes: ...)
-```
-
-Themes = short phrases (e.g. "test coverage", "migration ordering"), not full findings.
-
----
-
-## Output format
-
-Use this **exact** structure:
-
-```markdown
-## Verdict
-APPROVED | CHANGES REQUESTED (with reason)
-
-## Findings summary
-Blocking emitted: N (max 5) | Non-blocking emitted: N (max 10)
-Omitted: +X blocking, +Y non-blocking (themes: ...)
-
-## Assumptions
-| Assumption | Confidence | Evidence | Validation method |
-(up to 5 highest-risk rows, or "None")
-
-## Unknowns
-(up to 5, highest impact first; write "None" if empty)
-
-## External dependencies
-(numbered list; write "None" if empty)
-
-## Areas requiring verification
-(up to 5 — what, how, when; write "None" if empty)
-
-## Alternative approaches
-(Required: yes/no. Adequate A/B/C or recommended approach? Propose alternatives if weak.)
-
-## Cost challenge
-(One short paragraph — fewer files/abstractions/dependencies? Modify existing vs new code?)
-
-## Failure forecast
-1. ...
-2. ...
-3. ...
-
-## Incremental execution and safety
-(PASS/FAIL/CONCERNS — risks and mitigations)
-
-## Blocking findings
-(up to 5, severity-ranked; write "None" if empty)
-(+N additional blocking findings omitted — themes: ...)  ← only when truncated
-
-## Non-blocking findings
-(up to 10, severity-ranked; write "None" if empty)
-(+N additional non-blocking findings omitted — themes: ...)  ← only when truncated
-
-## Verification gaps
-### Unacknowledged
-(up to 3; write "None" if empty)
-### Captured as discovery steps
-(numbered list; write "None" if empty)
-
-## Architecture alignment
-(One short paragraph — documented patterns followed? Doc drift or parallel inventions?)
-```
+**Output:** Use the exact structure in [plan-reviewer-report.md](../workflow/plan-reviewer-report.md#output-format).
 
 ---
 
@@ -293,3 +198,4 @@ Omitted: +X blocking, +Y non-blocking (themes: ...)
 - Do not rely on conversation history or prior review transcripts
 - Do not abbreviate review on re-runs — each pass is a full audit (pass 3 uses the focus rules above)
 - Do not require a specific repo doc layout; use what exists and flag gaps as unknowns when needed
+- Do not paste the full output schema here — load [plan-reviewer-report.md](../workflow/plan-reviewer-report.md) when emitting

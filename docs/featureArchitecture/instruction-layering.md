@@ -53,11 +53,11 @@ Target skill contracts: [skills/_index.md](../../skills/_index.md).
 
 ### Layer 3 — Deep workflow docs
 
-**Required:** Full procedures (`discovery`, `iterative-plan-review`, `iterative-code-review`, `ci-ladder`, `plan-agent-context`, `phased-multi-agent`, etc.) live in companion workflow docs at repo-root bases ([`workflow/`](../../workflow/_index.md)). Load only when a skill or escalated plan says so.
+**Required:** Full procedures (`discovery`, `iterative-plan-review`, `iterative-code-review`, `ci-ladder`, `plan-agent-context`, `plan-reviewer-report`, `phased-multi-agent`, etc.) live in companion workflow docs at repo-root bases ([`workflow/`](../../workflow/_index.md)). Load only when a skill or escalated plan says so.
 
 **Required (pointer-first):** Host adapters must **not** rely on a host `docs/workflow/` procedure mirror as SoT. Thin harness skills and agents **Read** absolute companion paths — e.g. `{{COMPANION_ROOT}}/workflow/<leaf>.md` (example: `C:/Users/admin/source/repos/general-projects/cursorEscape/workflow/iterative-code-review.md`). A mirrored copy under host `docs/workflow/` (if still present from [opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md) Phase 3) is **transitional** only; [pointer-first](../roadmaps/pointer-first.md) supersedes mirror-as-load-path. Rubric stays companion FA + absolute Read (`{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md`).
 
-**Example:** [plan-agent-context.md](../../workflow/plan-agent-context.md) must **not** be pasted into always-on rules or the plan_reviewer output schema — load only when drafting or reviewing escalated plans.
+**Example:** [plan-agent-context.md](../../workflow/plan-agent-context.md) must **not** be pasted into always-on rules — load only when drafting or reviewing escalated plans. [plan-reviewer-report.md](../../workflow/plan-reviewer-report.md) is the on-demand L3 SoT for plan-reviewer output limits, severity ranking, overflow lines, and exact report structure — load via agent/skill Read when, not into always-on or skill bodies.
 
 Workflow index: [workflow/_index.md](../../workflow/_index.md). **Target** contracts land at repo-root `workflow/`; host mirror is not a second authored procedure tree.
 
