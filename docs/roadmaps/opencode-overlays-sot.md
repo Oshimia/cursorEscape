@@ -1,7 +1,7 @@
 # Roadmap: OpenCode overlays SoT
 
 **Last updated:** 2026-08-20  
-**Status:** Phase 1 **complete** (Composer ACCEPT 2026-08-20). Phase 2 next. Na skipped.  
+**Status:** Phase 2 **complete** (Composer ACCEPT 2026-08-20). Phase 3 next (live sync). Na skipped.  
 **Plan source:** accepted plan `opencode_overlays_sot_1788a195` (copy of Inter-phase + Agent context; do not invent scope).
 
 ## Product decisions (locked)
@@ -69,7 +69,7 @@ Minimum Phase 3 smoke: **1, 2, 3, 4, 8, 9–10, 13, 14**.
 
 - [x] Phase 0 — Host-adaptation fidelity FA + hub/SOP wiring. Dual APPROVED iter 4 after Composer QC rejects on Bugbot transcript mismatches; Fast/Full doc greps passed.
 - [x] Phase 1 — Thin discovery + plan-review skills; merge Must-nots. Dual APPROVED after Composer renew for eval-freeze Step 0 guidance.
-- [ ] Phase 2 — `overlays/opencode/` + authorization flip + archived pwsh
+- [x] Phase 2 — `overlays/opencode/` + authorization flip + archived pwsh. Dual APPROVED after Composer renews (implementer.task allow, rubric `-IncludeRubric`).
 - [ ] Phase 3 — Backup + live sync + C1–C6 smoke attestation
 
 ---

@@ -16,7 +16,7 @@ Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 
 ### Job (Required)
 
-This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`) are **copy-out / install targets**, not a second authored procedure tree. Copy-out **into** those dirs is **not authorized**. Cursor-native workflow files are recorded under [overlays/cursor](../../overlays/cursor/_index.md) (**thin wrappers** — spawn + Read tables). Do not create repo-root `adapters/` directories.
+This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`) are **copy-out / install targets**, not a second authored procedure tree. **OpenCode** host-plugged copy-out from [overlays/opencode](../../overlays/opencode/_index.md) is **authorized** (Phase 2 of [opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md)); Phase 3 executes live sync. **Cursor** copy-out to `~/.cursor` remains manual / not repo-authorized. Cursor overlay: [overlays/cursor](../../overlays/cursor/_index.md) (**thin wrappers**). Do not create repo-root `adapters/` directories.
 
 ### Target taxonomy — Approach A (Required)
 
@@ -36,12 +36,12 @@ This repo is the **canonical manager** of portable skills, agent roles, always-o
 | Shared skill contracts | `skills/*/SKILL.md` | **No** host IDs in shared bodies |
 | Shared agent contracts | `agents/*.md` | **No** |
 | Shared always-on gates | `rules/*.md` | **No** |
-| Host overlay | `overlays/cursor/` (thin wrappers) | **Yes** — harness mechanics, spawn IDs, additive safety |
+| Host overlay | `overlays/cursor/` (thin wrappers); `overlays/opencode/` (OpenCode harness) | **Yes** — harness mechanics, spawn IDs, additive safety |
 | Copy-out install | `~/.cursor`, `~/.config/opencode` | Install target only |
 
 ### Authored layers vs copy-out (Required)
 
-**Target (Approach A):** Shared loop, shared deep docs, and shared skill/agent contracts are **three authored SoTs** for procedure at repo-root bases (`workflow/`, `skills/`, `agents/`). **Host overlay** is the fourth layer: **thin wrappers** at `overlays/cursor/`. **Copy-out** is install, not a fifth SoT.
+**Target (Approach A):** Shared loop, shared deep docs, and shared skill/agent contracts are **three authored SoTs** for procedure at repo-root bases (`workflow/`, `skills/`, `agents/`). **Host overlay** is the fourth layer: **thin wrappers** at `overlays/cursor/` and the **OpenCode harness** at `overlays/opencode/` (instructions, skills, agents, specimen config, workflow mirror recipe). **Copy-out** is install, not a fifth SoT.
 
 ```text
 Target (after Phases 3–5):
@@ -49,7 +49,8 @@ Shared loop (when to plan, dual-review, verdict bars)     → workflow/
 Shared deep docs (full steps, specimens, CI ladder)       → workflow/
 Shared skill/agent contracts (triggers, outline, must-not) → skills/, agents/
 Host overlay (Cursor: thin wrappers)                      → overlays/cursor/
-Copy-out to host config dirs                              → install later; not SoT
+Host overlay (OpenCode: harness + specimen)               → overlays/opencode/  (copy-out authorized Phase 2)
+Copy-out to host config dirs                              → install; not SoT
 
 Interim (Phases 3–4, historical): workflow/, docs/skills/, docs/agents/, overlays/cursor/ (fat extract) — folded into repo-root bases Phase 4–6.
 ```
@@ -106,9 +107,11 @@ Do **not** put Cursor Task IDs in shared skill bodies. Do **not** put OpenCode p
 
 Later, copy-out may generate host-native wrappers that `Read` shared deep docs. You still **author the procedure once** at repo-root bases. Secrets stay out of git.
 
-**Migration order (Target):** Phases 2–5 of [shared-workflow-docs](../roadmaps/shared-workflow-docs.md) — move deliverable trees to root, promote overlay extract to bases, thin overlay. OpenCode overlay extract and copy-out remain later. That is sequencing, not a competing architecture.
+**Migration order (Target):** Phases 2–5 of [shared-workflow-docs](../roadmaps/shared-workflow-docs.md) — move deliverable trees to root, promote overlay extract to bases, thin overlay (complete). OpenCode overlay and copy-out authorization: [opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md) Phases 2–3.
 
-**Unknown:** OpenCode overlay path; extract method (manual vs script) for later refreshes; copy-out calendar.
+**Unknown:** Copy-out calendar; whether Phase 3+ refresh is fully scripted vs operator-merge for `opencode.json` provider/model keys.
+
+**Resolved (Phase 2 — OpenCode overlays SoT):** OpenCode overlay path = [`overlays/opencode/`](../../overlays/opencode/_index.md); workflow mirror transform = archived [`Rewrite-OpenCodeWorkflowLinks.ps1`](../../overlays/opencode/scripts/Rewrite-OpenCodeWorkflowLinks.ps1) (sync method A); host-plugged copy-out **authorized** (live sync Phase 3).
 
 ### Other rejected patterns (detail)
 
@@ -121,7 +124,7 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 
 1. U3 is **partial**: skill/adapter inventory SoT = this companion repo (**Target:** repo-root bases at `workflow/`, `skills/`, `agents/`, `rules/`; overlay = thin wrappers); host dirs = copy-out targets; per-target `.cursorEscape/` remains **Unknown** ([unresolved questions](../../review/unresolved-architectural-questions.md), [workspace model](./workspace-model.md)).
 2. Remaining incidental “canonical” phrasing in untouched leaves is **not** a second identity project — fix when that leaf is edited, or in a dedicated sweep, not by expanding review scope.
-3. R0 live trial continues on the current global OpenCode adapter until copy-out is authorized.
+3. R0 live trial continues on the current global OpenCode adapter until Phase 3 sync from [overlays/opencode](../../overlays/opencode/_index.md).
 4. Overlay bodies are **thin wrappers** pointing at repo-root bases — not a second `implementation-review` procedure in this tree.
 
 ---
@@ -129,7 +132,7 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 ## Related
 
 - [Host adaptation fidelity](./host-adaptation-fidelity.md) — binding wiring bar and C1–C6 verification matrix for every stack
-- **Forward (Phase 2):** OpenCode copy-out authorization in this doc and hubs flips when `overlays/opencode/` lands — do not authorize live sync until Phase 2 dual APPROVED ([opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md))
+- [OpenCode overlay](../../overlays/opencode/_index.md) — host-plugged copy-out **authorized** (Phase 2); live sync Phase 3 ([opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md))
 - [Instruction layering](./instruction-layering.md)
 - [Intended workflow](./intended-workflow.md)
 - [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)

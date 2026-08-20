@@ -1,0 +1,102 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "instructions/cursor-escape-loop.md"
+  ],
+  "permission": {
+    "skill": {
+      "*": "allow"
+    },
+    "external_directory": {
+      "{{OPENCODE_HOME}}/**": "allow",
+      "{{COMPANION_ROOT}}/**": "allow"
+    },
+    "edit": {
+      "{{OPENCODE_HOME}}/**": "deny"
+    },
+    "bash": {
+      "*": "ask",
+      "Get-ChildItem*": "allow",
+      "Test-Path*": "allow"
+    }
+  },
+  "skills": {
+    "paths": [
+      "{{OPENCODE_HOME}}/skills"
+    ]
+  },
+  "agent": {
+    "plan": {
+      "permission": {
+        "bash": {
+          "*": "ask",
+          "Get-ChildItem*": "allow",
+          "Test-Path*": "allow",
+          "git status*": "allow",
+          "git log*": "allow",
+          "git diff*": "allow",
+          "git show*": "allow"
+        }
+      }
+    },
+    "build": {
+      "permission": {
+        "skill": {
+          "*": "allow"
+        },
+        "bash": {
+          "*": "ask",
+          "Get-ChildItem*": "allow",
+          "Test-Path*": "allow",
+          "git status*": "allow",
+          "git log*": "allow",
+          "git diff*": "allow",
+          "git show*": "allow"
+        },
+        "task": {
+          "*": "deny",
+          "planner": "allow",
+          "plan_reviewer": "allow",
+          "implementer": "allow",
+          "production_readiness_reviewer": "allow",
+          "bug_reviewer": "allow",
+          "repository_explorer": "allow",
+          "test_reviewer": "ask",
+          "general": "allow",
+          "explore": "allow",
+          "scout": "allow"
+        }
+      }
+    },
+    "implementer": {
+      "mode": "primary",
+      "permission": {
+        "skill": {
+          "*": "allow"
+        },
+        "bash": {
+          "*": "ask",
+          "Get-ChildItem*": "allow",
+          "Test-Path*": "allow",
+          "git status*": "allow",
+          "git log*": "allow",
+          "git diff*": "allow",
+          "git show*": "allow"
+        },
+        "task": {
+          "*": "deny",
+          "planner": "allow",
+          "plan_reviewer": "allow",
+          "implementer": "allow",
+          "production_readiness_reviewer": "allow",
+          "bug_reviewer": "allow",
+          "repository_explorer": "allow",
+          "test_reviewer": "ask",
+          "general": "allow",
+          "explore": "allow",
+          "scout": "allow"
+        }
+      }
+    }
+  }
+}

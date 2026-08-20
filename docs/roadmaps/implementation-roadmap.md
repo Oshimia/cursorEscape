@@ -38,7 +38,7 @@
 - [ ] R0 evidence: parallel Tasks, deny-edit reviewers, Fast CI honesty
 - [ ] Document ClinePass (or chosen) provider wiring when ready (U13)
 - [x] Repo discovery approach written ([initialization report Q7](../../review/initialization-report.md#q7--proposed-repository-discovery-and-context-acquisition))
-- [ ] Copy-out overlay tree into git — **not authorized**
+- [ ] OpenCode overlay in git + copy-out authorized — [overlays/opencode](../../overlays/opencode/_index.md) (Phase 2 opencode-overlays-sot); live sync Phase 3
 
 ### Explicit non-starters
 

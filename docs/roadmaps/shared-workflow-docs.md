@@ -1,14 +1,14 @@
 # Roadmap: Centralize the workflow manager
 
 **Last updated:** 2026-08-20  
-**Status:** Phase 6 **complete** (Composer ACCEPT 2026-08-20). Program closed. Copy-out still unauthorized.  
+**Status:** Phase 6 **complete** (Composer ACCEPT 2026-08-20). Program closed. Cursor copy-out still unauthorized. OpenCode host-plugged copy-out authorized separately ([opencode-overlays-sot](./opencode-overlays-sot.md) Phase 2).  
 **Plan source:** accepted plan `shared_workflow_docs_376cecd4` (copy of Inter-phase + Agent context; do not invent scope).
 
 ## Product decisions (locked)
 
 - Approach **A**: live Cursor extract wording at root `workflow/` + `skills/*/SKILL.md` + `agents/*.md` + `rules/*.md`; thin `overlays/cursor/` after Phase 5; fold/delete `docs/skills` and `docs/agents`.
 - **B** and **C** rejected (lean contracts as SoT; hybrid bulk still in overlay).
-- Live `~/.cursor` is not overwritten. Copy-out unauthorized. No `adapters/`. No OpenCode extract this program.
+- Live `~/.cursor` is not overwritten. Cursor copy-out unauthorized. **OpenCode** host-plugged copy-out authorized via [opencode-overlays-sot](./opencode-overlays-sot.md) Phase 2 (`overlays/opencode/`). No `adapters/`.
 - Promote mechanic: **copy** overlay extract to bases; overlay stays fat until Phase 5.
 - This-program review-loop cap: phase agents ≤4 dual-review iterations, then Composer triage (renew ≤4 / waive process nits / change approach). Fast/Full failures are not waivable.
 

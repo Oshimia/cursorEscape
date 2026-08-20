@@ -84,7 +84,7 @@ Claim labels: **Observed**, **Inferred**, **Unknown**.
 
 | # | Check | Result |
 | - | ----- | ------ |
-| 9 | Skill-tool lists workflow skills | **pass** (2026-08-19 A-post2): composer, discovery, documentation-architecture, implementation-plan, implementation-review, plan-review, pre-commit-ci-gate (+ customize-opencode) |
+| 9 | Skill-tool lists workflow skills | **pass** (2026-08-19 A-post2, seven skills) — **C2 author-time (Phase 2):** expected catalog = **8 workflow skills including `roadmap`**: `composer`, `discovery`, `documentation-architecture`, `implementation-plan`, `implementation-review`, `plan-review`, `pre-commit-ci-gate`, **`roadmap`** (+ `customize-opencode` built-in). Re-probe live host after Phase 3 sync. |
 | 10 | SoT load without bash approvals | **pass** (2026-08-19 A-post2): loaded `implementation-plan`; quoted Escalation first row |
 
 ### Prompt
@@ -103,6 +103,7 @@ If you cannot see a skill in the skill tool, say so explicitly — do not list ~
 | **A** | New empty-context session; skill probe prompt | **done** (pre-fix) | Only `customize-opencode` | discovery/config; not contamination |
 | **A-post1** | After `permission.skill` allow only | **fail** | Still only `customize-opencode` | permission alone insufficient |
 | **A-post2** | After `name` frontmatter + `skills.paths` + full restart | **pass** | Listed all 7 workflow skills + `customize-opencode`; loaded `implementation-plan`; quoted Escalation first row (`user-labeled-composer`) | **discovery/frontmatter** (+ paths); skill allow may still be needed for load |
+| **A-post2b** | Phase 2 overlay adds `roadmap` skill (author-time C2) | **pending** | Expected: 8 workflow skills incl. `roadmap` on live host after Phase 3 sync | catalog expansion |
 | **A′** | build/implementer if needed | n/a (A-post2 passed on plan) | | |
 | **B0 / B1** | Native file tools (Flash vs stronger) | **card frozen** — awaiting operator | see [Probe card — native file tools](#probe-card--native-file-tools-bash-vs-readglobgrep) |
 | **C** | `repository_explorer` child | deferred until B classifies | run only if B0/B1 mixed or inconclusive |
@@ -112,7 +113,7 @@ If you cannot see a skill in the skill tool, say so explicitly — do not list ~
 **Phase 3 status (closed for catalog):**
 1. `permission.skill: { "*": "allow" }` — necessary candidate; alone did **not** expose skills.
 2. Always-on skill-tool guidance — applied.
-3. Frontmatter `name:` on all 7 skills + `skills.paths` — **required for advertisement** on this host (A-post2 pass).
+3. Frontmatter `name:` on all **8** skills + `skills.paths` — **required for advertisement** on this host (A-post2 pass on 7; `roadmap` added Phase 2 overlay).
 4. Smoke 9–10 → **pass** (2026-08-19 A-post2).
 
 **Still open:** bash-for-native-tools selection (model/selection); Probe B card below; Probe C optional after B.

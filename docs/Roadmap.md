@@ -9,7 +9,7 @@ This repository is the owner's **skill and workflow manager**: preserve and evol
 
 ## Context
 
-cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is a **Phase 3 archaeology** snapshot; current Cursor overlay: [overlays/cursor](../overlays/cursor/_index.md) (thin wrappers). repo-root contracts are **Target** SoT at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` (Approach A). Stack variation: [skill source and host overlays](./featureArchitecture/skill-source-and-host-overlays.md).
+cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is a **Phase 3 archaeology** snapshot; host overlays: [overlays/cursor](../overlays/cursor/_index.md) (thin Cursor wrappers) and [overlays/opencode](../overlays/opencode/_index.md) (OpenCode harness — host-plugged copy-out **authorized**; live sync Phase 3). repo-root contracts are **Target** SoT at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` (Approach A). Stack variation: [skill source and host overlays](./featureArchitecture/skill-source-and-host-overlays.md).
 
 **First host attempt:** T3 Code (control plane) + OpenCode (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Operator study: [host recreation](../analysis/host-recreation-2026-08.md).
 
@@ -44,7 +44,7 @@ Stewardship and non-goals: [design decisions](../review/design-decisions.md).
 | Target synthesizing architecture docs | **Complete** (Phase 4) — [feature architecture index](./featureArchitecture/_index.md) |
 | Agent & skill contracts | **Complete** (Phase 4–5) — [agents](../agents/_index.md) · [skills](../skills/_index.md) · [rules](../rules/_index.md) |
 | Implementation roadmap | [implementation-roadmap.md](./roadmaps/implementation-roadmap.md) — R0 live trial |
-| Skill-manager identity | **Phases 1–6 complete** — bases at repo root; **thin Cursor overlay** — [overlays/cursor](../overlays/cursor/_index.md); shared deep procedure — [workflow/](../workflow/_index.md). |
+| Skill-manager identity | **Phases 1–6 complete** — bases at repo root; **thin Cursor overlay** — [overlays/cursor](../overlays/cursor/_index.md); **OpenCode overlay** — [overlays/opencode](../overlays/opencode/_index.md) (copy-out authorized); shared deep procedure — [workflow/](../workflow/_index.md). |
 
 ---
 
@@ -59,7 +59,7 @@ Stewardship and non-goals: [design decisions](../review/design-decisions.md).
 | [`README.md`](../README.md) | Repo entry; points here |
 | [`review/`](../review/_index.md) | Project intent and design decisions |
 | [`featureArchitecture/`](./featureArchitecture/_index.md) | Intended system behavior (Target) |
-| [`overlays/`](../overlays/_index.md) | Host-native thin wrappers (Cursor spawn + Read tables) |
+| [`overlays/`](../overlays/_index.md) | Host overlays — [Cursor](../overlays/cursor/_index.md) thin wrappers; [OpenCode](../overlays/opencode/_index.md) harness (copy-out authorized) |
 | [`research/`](../research/_index.md) | Sourced facts and imported sibling research |
 | [`SOPs/`](./SOPs/_index.md) | How maintainers and future implementers work |
 | [`analysis/`](../analysis/_index.md) | Operator studies of local workflows |

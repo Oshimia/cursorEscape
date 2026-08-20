@@ -4,7 +4,7 @@
 
 ## Context
 
-Host-agnostic **portable** workflow skills at repo root. Portable procedure lives in `skills/*/SKILL.md`. Cursor overlay **thin wrappers** (spawn + Read tables): [overlays/cursor](../overlays/cursor/_index.md). The 2026-08-17 bannered copy remains under [cursor-global-workflow](../research/imported/cursor-global-workflow/skills/) (archaeology).
+Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overlays/cursor](../overlays/cursor/_index.md). OpenCode overlay: [overlays/opencode](../overlays/opencode/_index.md).
 
 ---
 
@@ -12,26 +12,26 @@ Host-agnostic **portable** workflow skills at repo root. Portable procedure live
 
 ### Core skills (Required)
 
-| Skill | Procedure | Cursor overlay SKILL |
-| ----- | --------- | -------------------- |
-| implementation-plan | [implementation-plan/SKILL.md](./implementation-plan/SKILL.md) | [SKILL.md](../overlays/cursor/skills/implementation-plan/SKILL.md) |
-| implementation-review | [implementation-review/SKILL.md](./implementation-review/SKILL.md) | [SKILL.md](../overlays/cursor/skills/implementation-review/SKILL.md) |
-| discovery | [discovery/SKILL.md](./discovery/SKILL.md) | Phase 2 overlay (not authored) |
-| plan-review | [plan-review/SKILL.md](./plan-review/SKILL.md) | Phase 2 overlay (not authored) |
-
-### Gates / on-demand policy
-
-| Skill / rule | Procedure | Live import |
-| ------------ | --------- | ----------- |
-| pre-commit-ci-gate | [rules/pre-commit-ci-gate.md](../rules/pre-commit-ci-gate.md) | [pre-commit-ci-gate.mdc](../overlays/cursor/rules/pre-commit-ci-gate.mdc) (`alwaysApply: false`) |
+| Skill | Procedure | Cursor overlay | OpenCode overlay |
+| ----- | --------- | -------------- | ---------------- |
+| implementation-plan | [implementation-plan/SKILL.md](./implementation-plan/SKILL.md) | [SKILL.md](../overlays/cursor/skills/implementation-plan/SKILL.md) | [SKILL.md](../overlays/opencode/skills/implementation-plan/SKILL.md) |
+| implementation-review | [implementation-review/SKILL.md](./implementation-review/SKILL.md) | [SKILL.md](../overlays/cursor/skills/implementation-review/SKILL.md) | [SKILL.md](../overlays/opencode/skills/implementation-review/SKILL.md) |
+| discovery | [discovery/SKILL.md](./discovery/SKILL.md) | — | [SKILL.md](../overlays/opencode/skills/discovery/SKILL.md) |
+| plan-review | [plan-review/SKILL.md](./plan-review/SKILL.md) | — | [SKILL.md](../overlays/opencode/skills/plan-review/SKILL.md) |
 
 ### Optional orchestration (Nice-to-have / Cursor-specific)
 
-| Skill | Procedure | Notes |
-| ----- | --------- | ----- |
-| composer | [composer/SKILL.md](./composer/SKILL.md) | Phased conductor — Cursor-specific |
-| roadmap | [roadmap/SKILL.md](./roadmap/SKILL.md) | Multi-phase handoff authoring |
-| documentation-architecture | [documentation-architecture/SKILL.md](./documentation-architecture/SKILL.md) | Bootstrap SOPs/FA layout |
+| Skill | Procedure | Cursor overlay | OpenCode overlay |
+| ----- | --------- | -------------- | ---------------- |
+| composer | [composer/SKILL.md](./composer/SKILL.md) | [SKILL.md](../overlays/cursor/skills/composer/SKILL.md) | [SKILL.md](../overlays/opencode/skills/composer/SKILL.md) |
+| roadmap | [roadmap/SKILL.md](./roadmap/SKILL.md) | [SKILL.md](../overlays/cursor/skills/roadmap/SKILL.md) | [SKILL.md](../overlays/opencode/skills/roadmap/SKILL.md) |
+| documentation-architecture | [documentation-architecture/SKILL.md](./documentation-architecture/SKILL.md) | [SKILL.md](../overlays/cursor/skills/documentation-architecture/SKILL.md) | [SKILL.md](../overlays/opencode/skills/documentation-architecture/SKILL.md) |
+
+### Gates / on-demand policy (extended)
+
+| Skill / rule | Procedure | Cursor overlay | OpenCode overlay |
+| ------------ | --------- | -------------- | ---------------- |
+| pre-commit-ci-gate | [rules/pre-commit-ci-gate.md](../rules/pre-commit-ci-gate.md) | [pre-commit-ci-gate.mdc](../overlays/cursor/rules/pre-commit-ci-gate.mdc) | [SKILL.md](../overlays/opencode/skills/pre-commit-ci-gate/SKILL.md) |
 
 ### Skill contract fields (Required)
 
@@ -47,4 +47,5 @@ Each SKILL states: **When to use**, **Workflow steps**, **Outputs**, **Must not*
 - [Intended workflow](../docs/featureArchitecture/intended-workflow.md)
 - [Instruction layering](../docs/featureArchitecture/instruction-layering.md)
 - [Cursor overlay](../overlays/cursor/_index.md)
+- [OpenCode overlay](../overlays/opencode/_index.md)
 - [Workflow source delta](../research/imported/workflow-source-delta.md)

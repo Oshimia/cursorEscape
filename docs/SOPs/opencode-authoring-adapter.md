@@ -359,6 +359,7 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 - [Host adaptation fidelity](../featureArchitecture/host-adaptation-fidelity.md)
 - [OpenCode host adapter](./opencode-host-adapter.md)
 - [Documenting this repo](./documenting-this-repo.md)
+- [OpenCode overlay](../../overlays/opencode/_index.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md)
 - [Skill contracts](../../skills/_index.md)
 - [Agent contracts](../../agents/_index.md)
