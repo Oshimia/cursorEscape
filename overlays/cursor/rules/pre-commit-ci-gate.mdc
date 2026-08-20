@@ -7,6 +7,6 @@ alwaysApply: false
 
 # Pre-commit CI gate (fallback)
 
-Portable procedure: [rules/pre-commit-ci-gate.md](../../../rules/pre-commit-ci-gate.md).
+Portable procedure: Read `{{COMPANION_ROOT}}/rules/pre-commit-ci-gate.md`.
 
-Copy-out: live `~/.cursor/rules/pre-commit-ci-gate.mdc` points at repo `rules/` when synced manually — not authorized from this repo.
+**Companion reachability:** `{{COMPANION_ROOT}}` resolves to the cursorEscape SoT checkout — required when workspace ≠ cursorEscape. On copy-out, merge `{{COMPANION_ROOT}}` → absolute companion path (see `{{COMPANION_ROOT}}/docs/SOPs/cursor-host-adapter.md`).

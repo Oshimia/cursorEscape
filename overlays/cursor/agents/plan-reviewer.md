@@ -9,7 +9,7 @@ description: >-
 
 # plan-reviewer (Cursor overlay)
 
-Cursor `subagent_type: "plan-reviewer"`. Portable contract: [plan_reviewer.md](../../../agents/plan_reviewer.md).
+Cursor `subagent_type: "plan-reviewer"`. Portable contract: Read `{{COMPANION_ROOT}}/agents/plan_reviewer.md`.
 
 ## Parent spawn (Cursor Task)
 

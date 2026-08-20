@@ -10,21 +10,21 @@ disable-model-invocation: true
 
 # Implementation plan (Cursor overlay)
 
-Thin wrapper. Full procedure: [skills/implementation-plan/SKILL.md](../../../../skills/implementation-plan/SKILL.md).
+Thin harness. Full procedure: Read `{{COMPANION_ROOT}}/skills/implementation-plan/SKILL.md`.
 
 **Read when planning:**
 
 | Doc | When |
 |-----|------|
-| [SKILL.md](../../../../skills/implementation-plan/SKILL.md) | Full plan procedure |
-| [discovery.md](../../../../workflow/discovery.md) | Find repo docs (Step 0 + fallback) |
-| [iterative-plan-review.md](../../../../workflow/iterative-plan-review.md) | Plan → plan-reviewer loop |
-| [plan-agent-context.md](../../../../workflow/plan-agent-context.md) | Escalation field + Agent context when escalated |
-| [phased-multi-agent.md](../../../../workflow/phased-multi-agent.md) | Multi-phase / Composer handoffs |
-| [review-subagent-models.md](../../review-subagent-models.md) | Recommended `plan-reviewer` model |
-| [_index.md](../../../../workflow/_index.md) | Index of all workflow docs |
+| [SKILL.md]({{COMPANION_ROOT}}/skills/implementation-plan/SKILL.md) | Full plan procedure |
+| [discovery.md]({{COMPANION_ROOT}}/workflow/discovery.md) | Find repo docs (Step 0 + fallback) |
+| [iterative-plan-review.md]({{COMPANION_ROOT}}/workflow/iterative-plan-review.md) | Plan → plan-reviewer loop |
+| [plan-agent-context.md]({{COMPANION_ROOT}}/workflow/plan-agent-context.md) | Escalation field + Agent context when escalated |
+| [phased-multi-agent.md]({{COMPANION_ROOT}}/workflow/phased-multi-agent.md) | Multi-phase / Composer handoffs |
+| [review-subagent-models.md](../../review-subagent-models.md) | Recommended `plan-reviewer` model (overlay leaf) |
+| [_index.md]({{COMPANION_ROOT}}/workflow/_index.md) | Index of all workflow docs |
 
-Copy-out fallback: `C:/Users/admin/.cursor/docs/workflow/` (live mirror — not overwritten from this repo).
+**Companion reachability:** `{{COMPANION_ROOT}}` resolves to the cursorEscape SoT checkout — required when workspace ≠ cursorEscape. Copy-out fallback (transitional mirror only): `C:/Users/admin/.cursor/docs/workflow/`.
 
 ---
 

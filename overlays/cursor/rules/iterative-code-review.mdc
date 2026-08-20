@@ -7,8 +7,8 @@ alwaysApply: true
 
 # Iterative code review (mandatory)
 
-Portable procedure: [rules/iterative-code-review.md](../../../rules/iterative-code-review.md).
+Portable procedure: Read `{{COMPANION_ROOT}}/rules/iterative-code-review.md`.
 
-Spawn: [overlays/cursor/skills/implementation-review/SKILL.md](../skills/implementation-review/SKILL.md). Paste target: [user-rules-snippet.md](../skills/implementation-review/user-rules-snippet.md).
+Spawn: [skills/implementation-review/SKILL.md](../skills/implementation-review/SKILL.md). Paste target: [user-rules-snippet.md](../skills/implementation-review/user-rules-snippet.md).
 
-Copy-out: live `~/.cursor/rules/iterative-code-review.mdc` points at repo `rules/` when synced manually — not authorized from this repo.
+**Companion reachability:** `{{COMPANION_ROOT}}` resolves to the cursorEscape SoT checkout — required when workspace ≠ cursorEscape. On copy-out, merge `{{COMPANION_ROOT}}` → absolute companion path (see `{{COMPANION_ROOT}}/docs/SOPs/cursor-host-adapter.md`). Live `~/.cursor/rules/` may retain fat gate bodies from pre-pointer-first extract — acceptable for C1 until harness-only sync.

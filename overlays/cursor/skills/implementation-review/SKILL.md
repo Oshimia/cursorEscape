@@ -11,20 +11,20 @@ disable-model-invocation: true
 
 # Implementation review (Cursor overlay)
 
-Thin wrapper. Full procedure: [skills/implementation-review/SKILL.md](../../../../skills/implementation-review/SKILL.md).
+Thin harness. Full procedure: Read `{{COMPANION_ROOT}}/skills/implementation-review/SKILL.md`.
 
 **Read when reviewing:**
 
 | Doc | When |
 |-----|------|
-| [SKILL.md](../../../../skills/implementation-review/SKILL.md) | Full review-loop procedure |
-| [discovery.md](../../../../workflow/discovery.md) | Find repo docs before judging architecture |
-| [iterative-code-review.md](../../../../workflow/iterative-code-review.md) | Loop rules, per-phase boundaries, Composer carve-out |
-| [ci-ladder.md](../../../../workflow/ci-ladder.md) | Fast/Full CI mapping |
-| [review-subagent-models.md](../../review-subagent-models.md) | Recommended reviewer models |
-| [_index.md](../../../../workflow/_index.md) | Index of all workflow docs |
+| [SKILL.md]({{COMPANION_ROOT}}/skills/implementation-review/SKILL.md) | Full review-loop procedure |
+| [discovery.md]({{COMPANION_ROOT}}/workflow/discovery.md) | Find repo docs before judging architecture |
+| [iterative-code-review.md]({{COMPANION_ROOT}}/workflow/iterative-code-review.md) | Loop rules, per-phase boundaries, Composer carve-out |
+| [ci-ladder.md]({{COMPANION_ROOT}}/workflow/ci-ladder.md) | Fast/Full CI mapping |
+| [review-subagent-models.md](../../review-subagent-models.md) | Recommended reviewer models (overlay leaf) |
+| [_index.md]({{COMPANION_ROOT}}/workflow/_index.md) | Index of all workflow docs |
 
-Copy-out fallback: `C:/Users/admin/.cursor/docs/workflow/` (live mirror — not overwritten from this repo).
+**Companion reachability:** `{{COMPANION_ROOT}}` resolves to the cursorEscape SoT checkout — required when workspace ≠ cursorEscape. Copy-out fallback (transitional mirror only): `C:/Users/admin/.cursor/docs/workflow/`.
 
 ---
 

@@ -1,37 +1,38 @@
 # Cursor overlay — copy-out map
 
 **Last updated:** 2026-08-20  
-**Status:** Phase 5 thin wrappers (bases at repo-root `workflow/`, `skills/`, `agents/`, `rules/`).
+**Status:** pointer-first-3 — thin harness with `{{COMPANION_ROOT}}` absolute Reads (bases at repo-root `workflow/`, `skills/`, `agents/`, `rules/`).
 
 ## Context
 
-Thin **Cursor host overlay** for copy-out to `~/.cursor/`. Portable procedure lives at repo-root bases — overlay files add YAML, `disable-model-invocation`, Cursor Task spawn blocks, and copy-out-relative Read tables only.
+Thin **Cursor host overlay** for copy-out to `~/.cursor/`. Portable procedure lives at repo-root bases — overlay files add YAML, `disable-model-invocation`, Cursor Task spawn blocks, and **absolute companion Read tables** (`{{COMPANION_ROOT}}/…`).
 
-Live `~/.cursor` is **not** overwritten from this repo. Copy-out is **not authorized** unless the owner manually syncs.
+Live `~/.cursor` is **not** overwritten from this repo. Copy-out is **not authorized** unless the owner manually syncs. See [cursor-host-adapter](../../docs/SOPs/cursor-host-adapter.md) for live inventory and token merge.
 
-## Workflow path mismatch (copy-out)
+## Companion reachability (pointer-first Target)
 
-| Location | Deep workflow docs |
-| -------- | ------------------ |
-| **This repo (SoT)** | [`workflow/_index.md`](../../workflow/_index.md) |
-| **Live Cursor (copy-out)** | `~/.cursor/docs/workflow/` |
+| Location | Deep procedure load path |
+| -------- | ------------------------ |
+| **Companion SoT** | `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/`, `rules/` |
+| **Overlay harness (author-time)** | Read tables cite `{{COMPANION_ROOT}}/…` — **not** repo-relative hops |
+| **Live Cursor (transitional)** | Fat skills + `~/.cursor/docs/workflow/` mirror may still exist — not SoT; disposition [pointer-first-4](../../docs/roadmaps/pointer-first.md) |
 
-Overlay Read tables may cite `C:/Users/admin/.cursor/docs/workflow/` as copy-out fallback. In-repo navigation uses repo-root `workflow/`. Do not mix copy-out paths into repo-root base files.
+On copy-out: merge `{{COMPANION_ROOT}}` → absolute path to this repo (e.g. `C:/Users/admin/source/repos/general-projects/cursorEscape`). Required when **workspace ≠ cursorEscape**.
 
 ## Copy-out map
 
-| Copy to `~/.cursor/` | Overlay source | Points at (repo-root base) |
-| --------------------- | -------------- | --------------------- |
-| `skills/implementation-plan/SKILL.md` | [skills/implementation-plan/SKILL.md](./skills/implementation-plan/SKILL.md) | [skills/implementation-plan/SKILL.md](../../skills/implementation-plan/SKILL.md), spawn + [workflow/](../../workflow/_index.md) |
-| `skills/implementation-review/SKILL.md` | [skills/implementation-review/SKILL.md](./skills/implementation-review/SKILL.md) | [skills/implementation-review/SKILL.md](../../skills/implementation-review/SKILL.md), spawn + workflow |
-| `skills/composer/SKILL.md` | [skills/composer/SKILL.md](./skills/composer/SKILL.md) | [skills/composer/SKILL.md](../../skills/composer/SKILL.md), Task spawn |
-| `skills/roadmap/SKILL.md` | [skills/roadmap/SKILL.md](./skills/roadmap/SKILL.md) | [skills/roadmap/SKILL.md](../../skills/roadmap/SKILL.md) |
-| `skills/documentation-architecture/SKILL.md` | [skills/documentation-architecture/SKILL.md](./skills/documentation-architecture/SKILL.md) | [skills/documentation-architecture/SKILL.md](../../skills/documentation-architecture/SKILL.md) |
-| `skills/*/user-rules-snippet.md` | overlay only (paste targets) | [rules/](../../rules/) — not copied under repo `skills/` |
-| `agents/plan-reviewer.md` | [agents/plan-reviewer.md](./agents/plan-reviewer.md) | [agents/plan_reviewer.md](../../agents/plan_reviewer.md) |
-| `agents/reviewer-a.md` | [agents/reviewer-a.md](./agents/reviewer-a.md) | [agents/production_readiness_reviewer.md](../../agents/production_readiness_reviewer.md) |
-| `rules/*.mdc` | [rules/](./rules/) | [rules/](../../rules/) |
-| `review-subagent-models.md` | [review-subagent-models.md](./review-subagent-models.md) | overlay-only (model slugs) |
+| Copy to `~/.cursor/` | Overlay source | Points at (companion base) |
+| --------------------- | -------------- | -------------------------- |
+| `skills/implementation-plan/SKILL.md` | [skills/implementation-plan/SKILL.md](./skills/implementation-plan/SKILL.md) | `{{COMPANION_ROOT}}/skills/implementation-plan/SKILL.md` + workflow |
+| `skills/implementation-review/SKILL.md` | [skills/implementation-review/SKILL.md](./skills/implementation-review/SKILL.md) | `{{COMPANION_ROOT}}/skills/implementation-review/SKILL.md` + workflow |
+| `skills/composer/SKILL.md` | [skills/composer/SKILL.md](./skills/composer/SKILL.md) | `{{COMPANION_ROOT}}/skills/composer/SKILL.md` |
+| `skills/roadmap/SKILL.md` | [skills/roadmap/SKILL.md](./skills/roadmap/SKILL.md) | `{{COMPANION_ROOT}}/skills/roadmap/SKILL.md` |
+| `skills/documentation-architecture/SKILL.md` | [skills/documentation-architecture/SKILL.md](./skills/documentation-architecture/SKILL.md) | `{{COMPANION_ROOT}}/skills/documentation-architecture/SKILL.md` |
+| `skills/*/user-rules-snippet.md` | overlay only (paste targets) | `{{COMPANION_ROOT}}/rules/` — not copied under repo `skills/` |
+| `agents/plan-reviewer.md` | [agents/plan-reviewer.md](./agents/plan-reviewer.md) | `{{COMPANION_ROOT}}/agents/plan_reviewer.md` |
+| `agents/reviewer-a.md` | [agents/reviewer-a.md](./agents/reviewer-a.md) | `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md` |
+| `rules/*.mdc` | [rules/](./rules/) | `{{COMPANION_ROOT}}/rules/` (+ spawn blocks to host `skills/`) |
+| `review-subagent-models.md` | [review-subagent-models.md](./review-subagent-models.md) | overlay leaf; companion cites in body |
 
 There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subagent. Spawn recipe: [implementation-review overlay SKILL](./skills/implementation-review/SKILL.md).
 
@@ -42,6 +43,14 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 | `plan-reviewer` | `plan_reviewer` |
 | `reviewer-a` | `production_readiness_reviewer` |
 | Bugbot | `bug_reviewer` (Target contract only) |
+
+### Skills without Cursor overlay harness (by design)
+
+| Portable skill | Cursor overlay | Notes |
+| -------------- | -------------- | ----- |
+| `discovery` | — | Loaded via `{{COMPANION_ROOT}}/workflow/discovery.md` from other harness stubs |
+| `plan-review` | — | Plan loop via `implementation-plan` harness |
+| `pre-commit-ci-gate` | [pre-commit-ci-gate.mdc](./rules/pre-commit-ci-gate.mdc) only | Rule surface, not skill advertisement |
 
 ## Skills
 
@@ -57,28 +66,29 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 
 | Rule | Overlay | Base |
 | ---- | ------- | ---- |
-| iterative-plan-review | [iterative-plan-review.mdc](./rules/iterative-plan-review.mdc) | [iterative-plan-review.md](../../rules/iterative-plan-review.md) |
-| iterative-code-review | [iterative-code-review.mdc](./rules/iterative-code-review.mdc) | [iterative-code-review.md](../../rules/iterative-code-review.md) |
-| pre-commit-ci-gate | [pre-commit-ci-gate.mdc](./rules/pre-commit-ci-gate.mdc) | [pre-commit-ci-gate.md](../../rules/pre-commit-ci-gate.md) |
+| iterative-plan-review | [iterative-plan-review.mdc](./rules/iterative-plan-review.mdc) | `{{COMPANION_ROOT}}/rules/iterative-plan-review.md` |
+| iterative-code-review | [iterative-code-review.mdc](./rules/iterative-code-review.mdc) | `{{COMPANION_ROOT}}/rules/iterative-code-review.md` |
+| pre-commit-ci-gate | [pre-commit-ci-gate.mdc](./rules/pre-commit-ci-gate.mdc) | `{{COMPANION_ROOT}}/rules/pre-commit-ci-gate.md` |
 
 ## Agents
 
 | Agent | Overlay | Base |
 | ----- | ------- | ---- |
-| plan-reviewer | [plan-reviewer.md](./agents/plan-reviewer.md) | [plan_reviewer.md](../../agents/plan_reviewer.md) |
-| reviewer-a | [reviewer-a.md](./agents/reviewer-a.md) | [production_readiness_reviewer.md](../../agents/production_readiness_reviewer.md) |
+| plan-reviewer | [plan-reviewer.md](./agents/plan-reviewer.md) | `{{COMPANION_ROOT}}/agents/plan_reviewer.md` |
+| reviewer-a | [reviewer-a.md](./agents/reviewer-a.md) | `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md` |
 
 ## Provenance
 
-Fat Observed extract (2026-08-20) promoted to repo-root bases in Phase 4. Phase 5 replaced overlay bodies with thin wrappers; **SHA256 byte-identical tables retired** (no longer a freeze target).
+Fat Observed extract (2026-08-20) promoted to repo-root bases in Phase 4. Phase 5 replaced overlay bodies with thin wrappers; pointer-first-3 replaced wrong-base repo-relative hops with `{{COMPANION_ROOT}}` absolute Reads.
 
-Refresh copy-out by re-copying from live `~/.cursor` when authorized; update this index — do not claim live install tracks git automatically.
+Refresh copy-out by re-copying from [overlays/cursor](./_index.md) when authorized; merge tokens per [cursor-host-adapter](../../docs/SOPs/cursor-host-adapter.md) — do not claim live install tracks git automatically.
 
 ## Related
 
 - [Overlays index](../_index.md)
+- [Cursor host adapter SOP](../../docs/SOPs/cursor-host-adapter.md)
 - [Skills index](../../skills/_index.md)
 - [Agents index](../../agents/_index.md)
 - [Workflow index](../../workflow/_index.md)
 - [Skill source and host overlays](../../docs/featureArchitecture/skill-source-and-host-overlays.md)
-- [Phase 3 import (bannered)](../../research/imported/cursor-global-workflow/)
+- [pointer-first roadmap](../../docs/roadmaps/pointer-first.md)

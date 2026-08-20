@@ -14,7 +14,7 @@ Multi-phase handoff roadmaps for cursorEscape. Each roadmap file carries **Agent
 | [Implementation roadmap](./implementation-roadmap.md) | **Planning** — R0 T3+OpenCode live trial | External recreation first; optional later engine |
 | [Centralize the workflow manager](./shared-workflow-docs.md) | **Complete** — Phases 1–6 | bases at repo root; thin Cursor overlay; `docs/` = this repo only |
 | [OpenCode overlays SoT](./opencode-overlays-sot.md) | **Complete** (historical) — Phase 3 live sync 2026-08-20; **load path superseded** by [pointer-first](./pointer-first.md) | First OpenCode overlay + bulk copy-out (transitional) |
-| [Companion pointer-first](./pointer-first.md) | **In progress** — pointer-first-2 | Companion SoT; thin harness; no procedure mirror |
+| [Companion pointer-first](./pointer-first.md) | **In progress** — pointer-first-4 review-loop | Companion SoT; thin harness; no procedure mirror |
 
 ## Implications / open questions
 

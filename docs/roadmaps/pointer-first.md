@@ -1,7 +1,7 @@
 # Roadmap: Companion pointer-first architecture
 
 **Last updated:** 2026-08-20  
-**Status:** **In progress** — pointer-first-3 next. pointer-first-2 dual APPROVED (Reviewer-a d5679765 + Bugbot 94775b70); Probe A deferred. pointer-first-1 `6cdb1c5`; pointer-first-0 `0078420`.  
+**Status:** **In progress** — pointer-first-4 next. pointer-first-3 dual APPROVED iter 3; pf2 `fec0c75`; pf1 `6cdb1c5`; pf0 `0078420`.
 **Plan source:** accepted plan `plan_reviewer_report_sot_e3211634` (Companion pointer-first architecture).  
 **Program id:** `pointer-first` (phases **pointer-first-0 … pointer-first-4**). Do not confuse with [opencode-overlays-sot](./opencode-overlays-sot.md) phases 0–3.
 
@@ -24,7 +24,7 @@
 - [x] **pointer-first-0** — FA lock + C4/SOP/C6 cascade + this roadmap + opencode-overlays-sot supersession note (Composer ACCEPT + waiver 2026-08-20)
 - [x] **pointer-first-1** — `workflow/plan-reviewer-report.md`; thin portable plan_reviewer; skills Read when
 - [x] **pointer-first-2** — OpenCode stubs + COMPANION_ROOT; skills.paths discovery; live stub sync (backup first) — Probe A deferred (operator restart)
-- [ ] **pointer-first-3** — Cursor overlay/live companion reachability audit
+- [x] **pointer-first-3** — Cursor overlay/live companion reachability audit
 - [ ] **pointer-first-4** — Smoke C6 set 1,2,3,4,8,9–10,13,14; companion-edit proof; mirror disposition; closeout
 
 ## Follow-on tickets
@@ -77,6 +77,20 @@
 - **Deliverables:** [ ] Stubs [ ] Map without mirror SoT [ ] Live stub sync [ ] skills.paths discovery recorded [ ] Backup path attested
 - **Risks:** Empty skill catalog — keep host stubs with `name` until companion skills.paths Observed.
 - **Migration:** Backup live `C:/Users/admin/.config/opencode` before any write. Sync stubs only (not procedure mirror). Do not delete live `docs/workflow/`.
+
+## Agent context — pointer-first-3 (Cursor audit)
+
+- **Goal:** Confirm Cursor thin wrappers + companion reachability when workspace ≠ cursorEscape.
+- **Depends on / entry gate:** pointer-first-2 commit `fec0c75`.
+- **Do not touch:** plan file under `.cursor/plans`; live OpenCode unless documenting only.
+- **In scope:** Audit `overlays/cursor` vs portable `skills/`/`agents/`/`workflow/`; SOP note for live `~/.cursor` pointers; fix only **blocking** gaps (C1/C2 fail). Audit table in [analysis/cursor-pointer-first-3-audit-2026-08.md](../../analysis/cursor-pointer-first-3-audit-2026-08.md).
+- **Out of scope:** Full live Cursor reinstall if non-blocking fat history; OpenCode live; deleting mirrors.
+- **Files expected:** `overlays/cursor/**` harness `{{COMPANION_ROOT}}` rewrites; `docs/SOPs/cursor-host-adapter.md`; audit note; `overlays/cursor/_index.md`.
+- **Where to read context:** [overlays/cursor/_index.md](../../overlays/cursor/_index.md); [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) Wrong path resolution base; pointer-first-2 probe note.
+- **Fast CI:** Zero wrong-base hops in `overlays/cursor`; `{{COMPANION_ROOT}}` in harness Read tables; `rg` clean.
+- **Full CI:** Doc link integrity for new SOP + audit + overlay index.
+- **Deliverables:** [ ] Audit table [ ] Blocking gaps fixed (COMPANION_ROOT hops) [ ] Live gaps deferred with reason [ ] cursor-host-adapter SOP
+- **Risks:** Historical fat `~/.cursor` — document, don't require full rewrite unless C1/C2 fail.
 
 ## Related
 

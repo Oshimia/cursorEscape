@@ -10,7 +10,7 @@ description: >-
 
 # reviewer-a (Cursor overlay)
 
-Cursor `subagent_type: "reviewer-a"`. Portable contract: [production_readiness_reviewer.md](../../../agents/production_readiness_reviewer.md).
+Cursor `subagent_type: "reviewer-a"`. Portable contract: Read `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md`.
 
 Bugbot (`subagent_type: "bugbot"`) spawn lives in [implementation-review overlay SKILL](../skills/implementation-review/SKILL.md).
 

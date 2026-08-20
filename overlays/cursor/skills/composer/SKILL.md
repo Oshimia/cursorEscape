@@ -11,22 +11,22 @@ disable-model-invocation: true
 
 # Composer (Cursor overlay)
 
-Thin wrapper. Full conductor procedure: [skills/composer/SKILL.md](../../../../skills/composer/SKILL.md).
+Thin harness. Full conductor procedure: Read `{{COMPANION_ROOT}}/skills/composer/SKILL.md`.
 
 **Read before conducting:**
 
 | Doc | When |
 |-----|------|
-| [SKILL.md](../../../../skills/composer/SKILL.md) | Full conductor procedure |
-| [phased-multi-agent.md](../../../../workflow/phased-multi-agent.md) | Phase handoffs, roadmap shape, Composer lifecycle context |
-| [plan-agent-context.md](../../../../workflow/plan-agent-context.md) | Agent context headings Nb must receive |
-| [discovery.md](../../../../workflow/discovery.md) | How to find repo docs (Step 0 + fallback) |
-| [iterative-code-review.md](../../../../workflow/iterative-code-review.md) | Review loop the phase subagent must run |
-| [ci-ladder.md](../../../../workflow/ci-ladder.md) | Fast/Full CI mapping for any repo |
-| [review-subagent-models.md](../../review-subagent-models.md) | Recommended models + chat override |
-| [_index.md](../../../../workflow/_index.md) | Index of all workflow docs |
+| [SKILL.md]({{COMPANION_ROOT}}/skills/composer/SKILL.md) | Full conductor procedure |
+| [phased-multi-agent.md]({{COMPANION_ROOT}}/workflow/phased-multi-agent.md) | Phase handoffs, roadmap shape, Composer lifecycle context |
+| [plan-agent-context.md]({{COMPANION_ROOT}}/workflow/plan-agent-context.md) | Agent context headings Nb must receive |
+| [discovery.md]({{COMPANION_ROOT}}/workflow/discovery.md) | How to find repo docs (Step 0 + fallback) |
+| [iterative-code-review.md]({{COMPANION_ROOT}}/workflow/iterative-code-review.md) | Review loop the phase subagent must run |
+| [ci-ladder.md]({{COMPANION_ROOT}}/workflow/ci-ladder.md) | Fast/Full CI mapping for any repo |
+| [review-subagent-models.md](../../review-subagent-models.md) | Recommended models + chat override (overlay leaf) |
+| [_index.md]({{COMPANION_ROOT}}/workflow/_index.md) | Index of all workflow docs |
 
-Copy-out fallback: `C:/Users/admin/.cursor/docs/workflow/` (live mirror — not overwritten from this repo).
+**Companion reachability:** `{{COMPANION_ROOT}}` resolves to the cursorEscape SoT checkout — required when workspace ≠ cursorEscape. Copy-out fallback (transitional mirror only): `C:/Users/admin/.cursor/docs/workflow/`.
 
 **Cursor conductor notes:** Phase subagent is the implementer and review-loop parent. Composer does not implement Nb, run reviewers for phase work, or fix product findings. Composer QC's closeout + transcript audit, then Full CI + automatic local commit (never `git push`).
 

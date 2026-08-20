@@ -7,8 +7,8 @@ alwaysApply: true
 
 # Plan review before implementation
 
-Portable procedure: [rules/iterative-plan-review.md](../../../rules/iterative-plan-review.md).
+Portable procedure: Read `{{COMPANION_ROOT}}/rules/iterative-plan-review.md`.
 
-Spawn: [overlays/cursor/skills/implementation-plan/SKILL.md](../skills/implementation-plan/SKILL.md). Paste target: [user-rules-snippet.md](../skills/implementation-plan/user-rules-snippet.md).
+Spawn: [skills/implementation-plan/SKILL.md](../skills/implementation-plan/SKILL.md). Paste target: [user-rules-snippet.md](../skills/implementation-plan/user-rules-snippet.md).
 
-Copy-out: live `~/.cursor/rules/iterative-plan-review.mdc` points at repo `rules/` when synced manually — not authorized from this repo.
+**Companion reachability:** `{{COMPANION_ROOT}}` resolves to the cursorEscape SoT checkout — required when workspace ≠ cursorEscape. On copy-out, merge `{{COMPANION_ROOT}}` → absolute companion path (see `{{COMPANION_ROOT}}/docs/SOPs/cursor-host-adapter.md`).
