@@ -1,13 +1,13 @@
 # Cursor overlay — copy-out map
 
-**Last updated:** 2026-08-20  
-**Status:** pointer-first-3 — thin harness with `{{COMPANION_ROOT}}` absolute Reads (bases at repo-root `workflow/`, `skills/`, `agents/`, `rules/`).
+**Last updated:** 2026-08-21  
+**Status:** pointer-first live sync **applied** 2026-08-21 — thin skills/agents + hybrid rules on `~/.cursor`. Backup: `C:/Users/admin/.cursor-backup-pre-pointer-sync-20260821-002858`.
 
 ## Context
 
 Thin **Cursor host overlay** for copy-out to `~/.cursor/`. Portable procedure lives at repo-root bases — overlay files add YAML, `disable-model-invocation`, Cursor Task spawn blocks, and **absolute companion Read tables** (`{{COMPANION_ROOT}}/…`).
 
-Live `~/.cursor` is **not** overwritten from this repo. Copy-out is **not authorized** unless the owner manually syncs. See [cursor-host-adapter](../../docs/SOPs/cursor-host-adapter.md) for live inventory and token merge.
+**Live sync (2026-08-21):** Operator-authorized copy-out applied (skills, agents, `review-subagent-models.md`, hybrid rules). `docs/workflow/` mirror **retained** (transitional). See [cursor-host-adapter](../../docs/SOPs/cursor-host-adapter.md).
 
 ## Companion reachability (pointer-first Target)
 
@@ -15,9 +15,11 @@ Live `~/.cursor` is **not** overwritten from this repo. Copy-out is **not author
 | -------- | ------------------------ |
 | **Companion SoT** | `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/`, `rules/` |
 | **Overlay harness (author-time)** | Read tables cite `{{COMPANION_ROOT}}/…` — **not** repo-relative hops |
-| **Live Cursor (transitional)** | Fat skills + `~/.cursor/docs/workflow/` mirror may still exist — not SoT; see [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md) (OpenCode mirror deleted; Cursor live sync operator-gated) |
+| **Live Cursor (2026-08-21)** | Thin skills/agents with absolute companion Reads; **hybrid** `.mdc` rules (companion gate body); `docs/workflow/` mirror retained — **not SoT** |
 
 On copy-out: merge `{{COMPANION_ROOT}}` → absolute path to this repo (e.g. `C:/Users/admin/source/repos/general-projects/cursorEscape`). Required when **workspace ≠ cursorEscape**.
+
+**Rules hybrid script:** [scripts/Write-HybridCursorRules.ps1](./scripts/Write-HybridCursorRules.ps1) — do not overwrite live rules with thin-pointer-only overlay `.mdc`.
 
 ## Copy-out map
 
