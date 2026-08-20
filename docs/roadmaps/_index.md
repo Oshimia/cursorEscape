@@ -13,7 +13,7 @@ Multi-phase handoff roadmaps for cursorEscape. Each roadmap file carries **Agent
 | [cursorEscape initialization](./cursorEscape-initialization.md) | **Complete** — initialization closeout ([initialization report](../../review/initialization-report.md)) | Bootstrap docs, import research, Target FA docs |
 | [Implementation roadmap](./implementation-roadmap.md) | **Planning** — R0 T3+OpenCode live trial | External recreation first; optional later engine |
 | [Centralize the workflow manager](./shared-workflow-docs.md) | **Complete** — Phases 1–6 | bases at repo root; thin Cursor overlay; `docs/` = this repo only |
-| [OpenCode overlays SoT](./opencode-overlays-sot.md) | **In progress** — Phase 2 complete; Phase 3 next | Host-adaptation fidelity; OpenCode overlay; live sync |
+| [OpenCode overlays SoT](./opencode-overlays-sot.md) | **Phase 3 complete** (2026-08-20 live sync; Desktop runtime smoke deferred operator) | Host-adaptation fidelity; OpenCode overlay; live sync |
 
 ## Implications / open questions
 

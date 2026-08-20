@@ -1,6 +1,6 @@
 # Implementation Roadmap
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
@@ -24,7 +24,7 @@
 | Phase | Goal | Entry gate | Out of scope |
 | ----- | ---- | ---------- | ------------ |
 | **R0 — Live trial** | Encode roles as OpenCode agents; dual Task review; parent Fast CI skill; T3 for file/diff observability on one trial target repo | Init complete + this lock-in | cursorEscape packages; openBuggy-required path |
-| **Copy-out overlays (later)** | Put thin host overlays in git (no secrets); generate/copy into host dirs | Explicit owner go-ahead; [overlay FA](../featureArchitecture/skill-source-and-host-overlays.md) | Creating empty `adapters/` now; committing `~/.config/opencode` |
+| **Copy-out overlays** | OpenCode overlay in git + live sync applied ([overlays/opencode](../../overlays/opencode/_index.md) Phase 3 2026-08-20); Cursor copy-out manual | opencode-overlays-sot Phases 2–3 | Committing `~/.config/opencode` |
 | **R1 — Discovery hygiene** | Confirm hub-walk / discovery skill works on OpenCode against target repos | R0 loop usable | Embedding index; in-repo discovery module |
 | **R2 — Workflow runner (optional)** | Only if OpenCode cannot hold the loop — thin host-agnostic orchestration | R0 failed on capability | Custom IDE |
 | **R3 — openBuggy (optional)** | Wire openBuggy if skill-based bug_reviewer proves insufficient | Explicit owner decision | Default path |
@@ -38,7 +38,7 @@
 - [ ] R0 evidence: parallel Tasks, deny-edit reviewers, Fast CI honesty
 - [ ] Document ClinePass (or chosen) provider wiring when ready (U13)
 - [x] Repo discovery approach written ([initialization report Q7](../../review/initialization-report.md#q7--proposed-repository-discovery-and-context-acquisition))
-- [ ] OpenCode overlay in git + copy-out authorized — [overlays/opencode](../../overlays/opencode/_index.md) (Phase 2 opencode-overlays-sot); live sync Phase 3
+- [x] OpenCode overlay in git + copy-out authorized and applied — [overlays/opencode](../../overlays/opencode/_index.md) (Phase 3 live sync 2026-08-20; Desktop runtime smoke deferred operator)
 
 ### Explicit non-starters
 

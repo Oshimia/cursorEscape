@@ -1,12 +1,12 @@
 # OpenCode overlay — copy-out map
 
 **Last updated:** 2026-08-20  
-**Status:** Phase 2 authored — **copy-out authorized** for OpenCode host-plugged paths (Phase 3 executes live sync).  
+**Status:** Phase 3 **live sync complete** (2026-08-20) — copy-out authorized and applied to `~/.config/opencode`. Desktop runtime smoke deferred to operator (restart + rows 1–4, 9–10, 13).  
 **Fidelity bar:** [host-adaptation-fidelity](../../docs/featureArchitecture/host-adaptation-fidelity.md) (C1–C6).
 
 ## Context
 
-OpenCode-native **host overlay** at `overlays/opencode/`. Portable procedure stays at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`). Overlay = thin harness + host-native agent bodies (**strategy A** — 1:1 copy-out). Live `~/.config/opencode` is **not** overwritten until Phase 3 backup + operator sync.
+OpenCode-native **host overlay** at `overlays/opencode/`. Portable procedure stays at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`). Overlay = thin harness + host-native agent bodies (**strategy A** — 1:1 copy-out). Live `~/.config/opencode` was synced from this overlay in Phase 3 (backup first — see [host-adapter smoke](../../docs/SOPs/opencode-host-adapter.md)).
 
 **Tokens (Phase 3 merge):** `{{COMPANION_ROOT}}` = absolute path to this git repo; `{{OPENCODE_HOME}}` = absolute path to OpenCode global config (e.g. `C:/Users/admin/.config/opencode`).
 
@@ -69,7 +69,7 @@ Grep-clean rubric contract = zero raw `](../../research/`, `](../../analysis/`, 
 
 ## Portable agent contract diff trigger
 
-When repo-root `agents/*.md` changes, re-diff overlay `agents/*.md` vs portable contracts and vs live `{{OPENCODE_HOME}}/agents/*.md` before Phase 3 sync. Record intentional deltas on this index.
+When repo-root `agents/*.md` changes, re-diff overlay `agents/*.md` vs portable contracts and vs live `{{OPENCODE_HOME}}/agents/*.md` before the next live re-sync. Record intentional deltas on this index.
 
 ## Specimen vs live `agent.*` keys (row 14)
 
@@ -82,9 +82,9 @@ Compared `opencode.specimen.json` vs live `C:/Users/admin/.config/opencode/openc
 | `agent.build.permission.bash` | git + listing allowlist | same | **yes** |
 | `agent.build.permission.task` | deny `*`; allow workflow subagents + general/explore/scout | same ids | **yes** |
 | `agent.implementer.mode` | primary | primary | **yes** |
-| `agent.implementer.permission.task` | deny `*`; same as build **plus** `implementer`: allow (Composer Task → phase implementer) | omits `implementer` (same gap as pre-fix live) | **no** — specimen fixes fidelity; **Phase 3 merge must set** `agent.implementer.permission.task.implementer` = `allow` on live `opencode.json` |
+| `agent.implementer.permission.task` | deny `*`; same as build **plus** `implementer`: allow (Composer Task → phase implementer) | same (Phase 3 merge 2026-08-20) | **yes** — live merge set `implementer`: `allow` |
 
-**Not in specimen (operator merge in Phase 3):** top-level `model`, `provider`, absolute paths in `external_directory` / `skills.paths` (specimen uses `{{OPENCODE_HOME}}` / `{{COMPANION_ROOT}}` tokens).
+**Not in specimen (preserved on live at Phase 3 merge — complete 2026-08-20):** top-level `model`, `provider`, absolute paths in `external_directory` / `skills.paths` (specimen uses `{{OPENCODE_HOME}}` / `{{COMPANION_ROOT}}` tokens; live merge resolved tokens and preserved operator `model`/`provider`).
 
 ### Rewrite script dry-run (no `COMPANION_ROOT` required)
 

@@ -106,7 +106,7 @@ Future refresh of [overlays/cursor](../../overlays/cursor/_index.md) or live `~/
 
 1. Phase 0 authors this matrix; Phase 2/3 **execute** it — reviewers must not invent new smoke methods outside this table and [opencode-host-adapter](../SOPs/opencode-host-adapter.md).
 2. Empty skill-tool catalog after correct authoring = **failed adaptation**, not model preference ([skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)).
-3. Copy-out into `~/.config/opencode` is **authorized** from [overlays/opencode](../../overlays/opencode/_index.md) (Phase 2); Phase 3 executes live sync. Cursor copy-out remains manual.
+3. Copy-out into `~/.config/opencode` is **authorized and applied** from [overlays/opencode](../../overlays/opencode/_index.md) (Phase 3 live sync 2026-08-20). Desktop runtime smoke deferred operator ([opencode-host-adapter](../SOPs/opencode-host-adapter.md) smoke table). Cursor copy-out remains manual.
 
 ---
 

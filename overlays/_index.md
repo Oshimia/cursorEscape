@@ -6,16 +6,16 @@
 
 This folder holds **host-native** skill, agent, rule, and deep-workflow files recorded from a live stack. It is **not** the portable Target contract tree (repo-root bases: [`skills/`](../skills/_index.md), [`agents/`](../agents/_index.md), [`rules/`](../rules/)) and **not** the Phase 3 research import ([cursor-global-workflow](../research/imported/cursor-global-workflow/)).
 
-Architecture: [skill source and host overlays](../docs/featureArchitecture/skill-source-and-host-overlays.md) (Approach A). **OpenCode** host-plugged copy-out is **authorized** from [overlays/opencode/](./opencode/_index.md) (Phase 2). **Cursor** copy-out to `~/.cursor` remains manual / not repo-authorized.
+Architecture: [skill source and host overlays](../docs/featureArchitecture/skill-source-and-host-overlays.md) (Approach A). **OpenCode** host-plugged copy-out is **authorized and applied** from [overlays/opencode/](./opencode/_index.md) (Phase 3 live sync 2026-08-20). **Cursor** copy-out to `~/.cursor` remains manual / not repo-authorized.
 
 ## Substance
 
 | Host | Contents | Status |
 | ---- | -------- | ------ |
 | [cursor/](./cursor/_index.md) | Skills, rules, agents from live `~/.cursor`; deep procedure at repo-root [`workflow/`](../workflow/_index.md) | **Thin wrappers** — spawn + Read tables; bases at repo root |
-| [opencode/](./opencode/_index.md) | OpenCode harness: instructions, 8 skills, 7 agents, specimen config, workflow mirror recipe | **Phase 2 authored** — pending dual APPROVED; live sync Phase 3 |
+| [opencode/](./opencode/_index.md) | OpenCode harness: instructions, 8 skills, 7 agents, specimen config, workflow mirror recipe | **Phase 3 live sync complete** (2026-08-20); Desktop runtime smoke deferred operator |
 
-Live OpenCode adapter remains under `C:\Users\admin\.config\opencode\` until Phase 3 operator sync.
+Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlays/opencode/](./opencode/_index.md) Phase 3 (backup first). Operator: restart + deferred smoke rows 1–4, 9–10, 13.
 
 ## Implications / open questions
 
