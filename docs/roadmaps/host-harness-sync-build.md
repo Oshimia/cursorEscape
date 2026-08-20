@@ -1,7 +1,7 @@
 # Roadmap: Host harness sync build (modular Cursor + OpenCode)
 
 **Last updated:** 2026-08-21  
-**Status:** **Active** — Phase 0 QC ACCEPT; Phase 1 next (backup policy revised 2026-08-21).  
+**Status:** **Active** — Phase 1 QC ACCEPT (`198b02c`); Phase 2 next.  
 **Plan source:** accepted plan `host_harness_sync_build_a0d9438d` (Host harness sync build), **amended** by operator 2026-08-21 (no per-sync backups).  
 **Program id:** `host-harness-sync` (phases **0 … 3**).  
 **Companion HEAD at roadmap create:** `fbd4724`.
@@ -58,8 +58,8 @@
 
 ## Phase checklist
 
-- [x] **Phase 0** — Baseline live harness backups + `baseline-backups.paths.json` (QC ACCEPT 2026-08-21)
-- [ ] **Phase 1** — Core + contract + Cursor adapter (**no** per-sync backup)
+- [x] **Phase 0** — Baseline live harness backups + `baseline-backups.paths.json` (QC ACCEPT 2026-08-21, `f5f1661`)
+- [x] **Phase 1** — Core + contract + Cursor adapter (**no** per-sync backup) (`198b02c`)
 - [ ] **Phase 2** — OpenCode adapter
 - [ ] **Phase 3** — Entry polish + docs (document: companion SoT; Phase 0 baselines for restore-only; sync does not backup)
 
