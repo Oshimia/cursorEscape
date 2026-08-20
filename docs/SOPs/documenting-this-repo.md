@@ -1,12 +1,14 @@
 # Documenting This Repo
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 
 ## Context
 
 cursorEscape's value is its documentation. Drift (undocumented decisions, broken indexes, invented parallel trees) destroys that value. This SOP is the local equivalent of a "reference docs check" discipline — adapted to repo paths.
 
 **SoT (Target — Approach A):** Portable procedure and contracts at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` ([shared-workflow-docs](../roadmaps/shared-workflow-docs.md) Phases 3–6 complete). `docs/` holds **this-repo-only** FA, SOPs, roadmaps, and `Roadmap.md`. Cursor overlay under `overlays/cursor/` is **thin wrappers** (spawn + Read tables). Phase 3 import under `research/imported/cursor-global-workflow/` is archaeology. Identity: skill/workflow manager across **stacks**, not machines ([design decisions](../../review/design-decisions.md)).
+
+**Changing portable workflow / gates / review loops:** follow [editing-companion-workflow](./editing-companion-workflow.md) (same-changeset cascade to Cursor + OpenCode thin harness) before editing.
 
 Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cursorEscape-local.
 
@@ -37,7 +39,11 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 | **analysis** | `analysis/` | Operator studies of local workflows |
 | **roadmaps/** | `docs/roadmaps/` | Multi-phase handoff conductors |
 
-Promotion rule: **Target** portable procedure edits go to repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`, FA). Overlay refresh is re-copy, thin-wrapper rewrite, or spawn-extract — not a second authored tree ([overlay FA](../featureArchitecture/skill-source-and-host-overlays.md)).
+Promotion rule: **Target** portable procedure edits go to repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`, FA). Overlay refresh is thin-wrapper / harness **echo** of changed gates (Steps, always-on summary, Read when) — not a second authored procedure tree. Full cascade checklist: [editing-companion-workflow](./editing-companion-workflow.md).
+
+### Changing portable workflow
+
+Non-trivial edits to plan/review loops, Composer, always-on gates, or L3 schemas: **read [editing-companion-workflow](./editing-companion-workflow.md) first**, then apply the edit-map cascade in the **same changeset** (companion SoT + Cursor overlay + OpenCode harness + FA claims if Required wording moved).
 
 ### Observed vs Target
 
@@ -67,7 +73,8 @@ Imported research files carry provenance banners. Overlay `SKILL.md` files do **
 | Relative links under repo paths | Copying live skills into repo-root `.cursor/skills` or `.cursor/agents` as if this were a Cursor project |
 | Prose mentioning external sibling projects by absolute path or name | Pretending runtime APIs are implemented |
 | Importing under `research/imported/` with manifest updates (Phase 2+) | Ignoring COPY-MANIFEST when adding imports |
-| Recording host-native files under `overlays/<host>/` with an index (hashes, date, live source) | Editing overlay SKILL/agent/rule **bodies** except authorized extract refresh; portable procedure edits go to repo-root bases or FA |
+| Recording host-native files under `overlays/<host>/` with an index (hashes, date, live source) | Pasting full portable procedure essays into overlay skill/agent/rule **bodies** (second SoT) |
+| Updating thin overlay harness **echo** (Steps outline, always-on summary, spawn Inputs, Read when) when companion SoT gates change — same changeset | Leaving OpenCode/Cursor harness text on a superseded loop (e.g. unbounded “until dual APPROVED” after pressure-release SoT) |
 
 ### Analysis vs featureArchitecture
 
@@ -99,3 +106,4 @@ Imported research files carry provenance banners. Overlay `SKILL.md` files do **
 - [SOPs index](./_index.md)
 - [Shared workflow docs roadmap](../roadmaps/shared-workflow-docs.md)
 - [Skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)
+- [Editing companion workflow](./editing-companion-workflow.md)

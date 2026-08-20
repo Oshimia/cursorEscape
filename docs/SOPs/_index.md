@@ -1,6 +1,6 @@
 # Standard Operating Procedures (SOPs)
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 
 ## Context
 
@@ -12,6 +12,7 @@ This index lists repeatable procedures for maintaining cursorEscape documentatio
 
 ### Documentation hygiene
 
+* [Editing companion workflow](./editing-companion-workflow.md) — **agent entry:** where portable loop/gate edits land (Approach A + pointer-first cascade)
 * [Documenting this repo](./documenting-this-repo.md) — how to add/update docs, indexes, and Last updated dates
 
 ### Host adapters
@@ -31,6 +32,7 @@ This index lists repeatable procedures for maintaining cursorEscape documentatio
 
 ## Related
 
+* [Editing companion workflow](./editing-companion-workflow.md)
 * [Roadmap](../Roadmap.md)
 * [Design decisions](../../review/design-decisions.md)
 * [Feature architecture index](../featureArchitecture/_index.md)

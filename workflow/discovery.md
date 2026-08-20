@@ -17,10 +17,11 @@ Do **not** substitute the global adapter's [`discovery`](../skills/discovery/SKI
 ## Fallback (skip missing)
 
 1. `AGENTS.md` / `CLAUDE.md` / root `README.md` / `CONTRIBUTING.md`
-2. Project `.cursor/rules/**`
-3. Common docs roots if present: `docs/`, `documentation/`, `referenceFiles/`, or paths named in README
-4. Indexes only if present (e.g. `**/SOPs/_index.md`, `**/featureArchitecture/_index.md`, or equivalents)
-5. User hints and paths listed in the active roadmap
+2. **When the target repo is this companion (cursorEscape):** also read [`docs/SOPs/editing-companion-workflow.md`](../docs/SOPs/editing-companion-workflow.md) before non-trivial edits to `workflow/`, `skills/`, `agents/`, `rules/`, or `overlays/` (Approach A + pointer-first cascade). Skip this step when editing a different product repo.
+3. Project `.cursor/rules/**`
+4. Common docs roots if present: `docs/`, `documentation/`, `referenceFiles/`, or paths named in README
+5. Indexes only if present (e.g. `**/SOPs/_index.md`, `**/featureArchitecture/_index.md`, or equivalents)
+6. User hints and paths listed in the active roadmap
 
 ## Workflow process (any repo)
 

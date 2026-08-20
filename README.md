@@ -29,6 +29,8 @@
 | [`analysis/`](analysis/_index.md) | Operator studies ([host recreation](analysis/host-recreation-2026-08.md)) |
 | [`docs/roadmaps/`](docs/roadmaps/_index.md) | Multi-phase handoff roadmaps (including [initialization](docs/roadmaps/cursorEscape-initialization.md)) |
 
+**For agents editing this repo:** Before changing portable loops, gates, skills, agents, or overlays, read [editing companion workflow](docs/SOPs/editing-companion-workflow.md) (same-changeset cascade) and [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
+
 ## Repository layout
 
 ```text

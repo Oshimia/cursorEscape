@@ -1,6 +1,6 @@
 # Feature Architecture Documentation
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 
 ## Context
 
@@ -61,3 +61,4 @@ First host attempt: [host recreation study](../../analysis/host-recreation-2026-
 - [Design decisions](../../review/design-decisions.md)
 - [Unresolved architectural questions](../../review/unresolved-architectural-questions.md)
 - [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)
+- [Editing companion workflow](../SOPs/editing-companion-workflow.md) — operational edit map (cascade) for Approach A + pointer-first
