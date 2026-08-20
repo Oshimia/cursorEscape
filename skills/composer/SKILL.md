@@ -181,6 +181,7 @@ Never commit migration-only before Nb dual APPROVED.
 - Reviewer A final: APPROVED (iter #) | CHANGES REQUESTED
 - Bugbot final: APPROVED (iter #) | CHANGES REQUESTED
 - Bugbot finding lists all "None": yes | no
+  - (If nested Bugbot transcript empty/redacted: yes only when same-Task-id Task UI/result zero-findings evidence was used — see Gate B)
 - Reviewer-a blocking lists "None" (Blocking / Non-blocking / blocking test/docs): yes | no
 - Batchable (deferred): None | [punch list copied from Reviewer-a]
 - Reviewer-a launches this phase (cumulative): N
@@ -280,7 +281,7 @@ Compare report to **attestation** `git diff --name-only` (not the live tree afte
 
 ### B. Transcript audit (hard gate)
 
-After Nb returns (and after any Na / migration Composer did for this phase), read transcripts and audit for **evidence in the transcript**, not self-attestation alone.
+After Nb returns (and after any Na / migration Composer did for this phase), read transcripts and audit for **evidence in the transcript** (or, for nested Bugbot only, harness Task UI/result summary per [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence)), not self-attestation alone.
 
 **On cap-exhausted handoff:** run this audit **before** triage.
 
@@ -292,12 +293,16 @@ After Nb returns (and after any Na / migration Composer did for this phase), rea
 | Nested `reviewer-a` / Bugbot | Each nested reviewer’s transcript when IDs or transcript paths appear in the Nb transcript or Task results |
 | Composer (self) | This thread’s own actions for Na preview and migration/external-apply drafts for this phase |
 
-If a nested reviewer transcript cannot be located after a reasonable search, **REJECT** — do not ACCEPT on trust of the closeout claim alone. Missing Task ids in the closeout report alone is not automatic accept; Composer must still find and read transcripts.
+If a nested **Reviewer-a** transcript cannot be located after a reasonable search, **REJECT** — do not ACCEPT on trust of the closeout claim alone. Missing Task ids in the closeout report alone is not automatic accept; Composer must still find and read Reviewer-a transcripts. For **Bugbot**, prefer the transcript when readable; if the body is empty/redacted, apply [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence) before REJECT.
+
+#### Acceptable Bugbot zero-findings evidence
+
+When the nested Bugbot transcript body is empty, redacted, or only `<answer></answer>`, **but** the Cursor Task UI or Task result summary for **that same Bugbot Task id** shows **“Bugbot found no bugs”** (or equivalent zero-findings wording), treat Bugbot as **APPROVED** with all finding lists `"None"`. Do **not** REJECT and do **not** re-launch Bugbot solely for an empty/redacted transcript body. Still **REJECT** if: the Bugbot Task cannot be located; **or** there is no transcript **and** no UI/Task zero-findings summary for that id; **or** the UI/summary shows findings / non-zero bugs; **or** the closeout claims Bugbot APPROVED with neither transcript lists nor UI/Task zero-findings evidence for the cited Task id. (Reviewer-a still requires readable Blocking / Non-blocking / blocking test/docs lists in its transcript — this exception is Bugbot-only.)
 
 **REJECT** (with a concrete gap list for `resume`) if any of:
 
 - **Discovery / SOP skip:** no reads of discovery Step 0 / required repo docs / roadmap “Where to read context” before implementing
-- **Review loop skip or compression:** missing Fast CI before reviewers; missing parallel `reviewer-a` + Bugbot; claimed APPROVED without matching reviewer output; must-fix findings left open on closeout path (Bugbot any list, or Reviewer-a Blocking / Non-blocking / blocking test/docs); do **not** treat Reviewer-a Batchable (deferred) as findings left open; iteration count doesn’t match launches/fixes
+- **Review loop skip or compression:** missing Fast CI before reviewers; missing parallel `reviewer-a` + Bugbot; claimed APPROVED without matching reviewer output (**except** Bugbot when [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence) applies); must-fix findings left open on closeout path (Bugbot any list, or Reviewer-a Blocking / Non-blocking / blocking test/docs); do **not** treat Reviewer-a Batchable (deferred) as findings left open; iteration count doesn’t match launches/fixes
 - **Pressure-release misuse:** 5th reviewer pair in a block; Full CI run on cap-exhausted handoff; self-renew past the block without Composer triage; Normal-agent-style Terminate used by Nb to claim phase complete
 - **Gate misuse:** reviewers launched with Full CI; reviewers re-launched after dual APPROVED with no code changes; Full CI skipped or run before dual APPROVED on the closeout path
 - **Shortcut closeout:** empty/fake docs-consulted; Na folder not deleted when required; `git commit` / `git push` by subagent
@@ -350,7 +355,9 @@ Against attestation paths vs **this phase’s Agent context** — do not assume 
 | Hard-code one repo’s docs tree | Discovery Step 0 / fallback   |
 | Trust closeout report without reading transcripts | Transcript audit before ACCEPT |
 | Advance after “looks done” summary | Verify SOP + review-loop evidence in transcripts |
-| Skip nested reviewer transcripts | Read each reviewer transcript when available; REJECT if missing |
+| Skip nested Reviewer-a transcripts | Read Reviewer-a transcript; REJECT if missing |
+| Skip Bugbot evidence (no transcript lists and no Task UI/result zero-findings for that Task id) | Prefer Bugbot transcript when readable; else apply [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence); REJECT only if neither exists |
+| Re-launch Bugbot only because nested transcript is empty/redacted when Task UI already shows no bugs for that Task id | ACCEPT Bugbot leg via [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence); continue QC |
 
 | Situation                         | Behavior                                                   |
 | --------------------------------- | ---------------------------------------------------------- |

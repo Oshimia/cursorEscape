@@ -28,7 +28,7 @@ Thin harness. Full conductor procedure: Read `{{COMPANION_ROOT}}/skills/composer
 
 **Companion reachability:** `{{COMPANION_ROOT}}` resolves to the cursorEscape SoT checkout — required when workspace ≠ cursorEscape. Copy-out fallback (transitional mirror only): `C:/Users/admin/.cursor/docs/workflow/`.
 
-**Cursor conductor notes:** Phase subagent is the implementer and review-loop parent (≤4 dual-review iterations per pressure-release block). Composer does not implement Nb, run reviewers for phase work, or fix product findings. On dual APPROVED closeout: Composer QC's closeout + transcript audit, then Full CI + automatic local commit (never `git push`). On cap-exhausted handoff: audit → triage per companion composer skill (schemas live there).
+**Cursor conductor notes:** Phase subagent is the implementer and review-loop parent (≤4 dual-review iterations per pressure-release block). Composer does not implement Nb, run reviewers for phase work, or fix product findings. On dual APPROVED closeout: Composer QC's closeout + transcript audit, then Full CI + automatic local commit (never `git push`). On cap-exhausted handoff: audit → triage per companion composer skill (schemas live there). Bugbot QC evidence (incl. Task UI “found no bugs” when the nested transcript is empty/redacted) is defined in companion Composer QC Gate B — do not re-launch Bugbot solely for that pattern.
 
 ---
 

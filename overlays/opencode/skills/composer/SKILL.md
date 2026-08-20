@@ -16,7 +16,7 @@ User assigns Composer for multi-phase roadmap execution after an accepted plan.
 
 ## Steps
 
-1. Read companion skill for division of labor, QC gates, and cap-exhausted triage.
+1. Read companion skill for division of labor, QC gates (incl. Bugbot Task UI "found no bugs" when nested transcript empty/redacted — Gate B), and cap-exhausted triage.
 2. Per phase: Task → `implementer` (phase subagent = implementer + review-loop parent; ≤4 iterations/block; no 5th pair).
 3. On **dual APPROVED closeout:** QC report + transcript audit → ACCEPT → Full CI (when Full ≠ `n/a`) or user ack → local commit — never push.
 4. On **cap-exhausted handoff** (iter 4 without dual APPROVED, no Full): transcript audit → triage Renew | Focus-narrow | Terminate | Waive (process/out-of-spec only; Fast/Full never waivable) — schemas in companion composer skill.

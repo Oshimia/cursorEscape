@@ -6,7 +6,7 @@
 
 Same bar as plan review — multi-file, large single-file, cross-layer, behavioral, new modules, migrations, each plan phase. **When in doubt, run it.**
 
-**Composer exception:** When the user assigns [composer](../skills/composer/SKILL.md), the **phase subagent** is the review-loop parent for Nb. After dual APPROVED, Composer does QC (closeout report + transcript audit) + Full CI + local commit only. After a 4-iteration block without dual APPROVED, the subagent returns a **cap-exhausted handoff** (no Full) for Composer triage (Renew | Focus-narrow | Terminate | Waive) — see composer skill.
+**Composer exception:** When the user assigns [composer](../skills/composer/SKILL.md), the **phase subagent** is the review-loop parent for Nb. After dual APPROVED, Composer does QC (closeout report + transcript audit) + Full CI + local commit only. After a 4-iteration block without dual APPROVED, the subagent returns a **cap-exhausted handoff** (no Full) for Composer triage (Renew | Focus-narrow | Terminate | Waive) — see composer skill. QC evidence rules (including Bugbot Task UI zero-findings when the nested transcript is empty/redacted) live in [composer Gate B](../skills/composer/SKILL.md#b-transcript-audit-hard-gate).
 
 ## Per-phase rule
 
