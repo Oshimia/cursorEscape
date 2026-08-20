@@ -1,13 +1,13 @@
 # Cursor overlay — copy-out map
 
 **Last updated:** 2026-08-21  
-**Status:** pointer-first live sync **applied** 2026-08-21 — thin skills/agents + hybrid rules on `~/.cursor`. Backup: `C:/Users/admin/.cursor-backup-pre-pointer-sync-20260821-002858`.
+**Status:** pointer-first live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) — thin skills/agents + hybrid rules on `~/.cursor`. Phase 0 baseline (restore-only): `C:/Users/admin/.cursor-backup-pre-host-sync-build-20260821-012600`. Sync does **not** create backups.
 
 ## Context
 
 Thin **Cursor host overlay** for copy-out to `~/.cursor/`. Portable procedure lives at repo-root bases — overlay files add YAML, `disable-model-invocation`, Cursor Task spawn blocks, and **absolute companion Read tables** (`{{COMPANION_ROOT}}/…`).
 
-**Live sync (2026-08-21):** Operator-authorized copy-out applied (skills, agents, `review-subagent-models.md`, hybrid rules). `docs/workflow/` mirror **retained** (transitional). See [cursor-host-adapter](../../docs/SOPs/cursor-host-adapter.md).
+**Live sync:** Operator entry [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (`-Target Cursor`; `-Apply` for live writes). See [cursor-host-adapter](../../docs/SOPs/cursor-host-adapter.md) and [host-sync README](../../scripts/host-sync/README.md). `docs/workflow/` mirror **retained** (transitional).
 
 ## Companion reachability (pointer-first Target)
 
@@ -83,7 +83,7 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 
 Fat Observed extract (2026-08-20) promoted to repo-root bases in Phase 4. Phase 5 replaced overlay bodies with thin wrappers; pointer-first-3 replaced wrong-base repo-relative hops with `{{COMPANION_ROOT}}` absolute Reads.
 
-Refresh copy-out by re-copying from [overlays/cursor](./_index.md) when authorized; merge tokens per [cursor-host-adapter](../../docs/SOPs/cursor-host-adapter.md) — do not claim live install tracks git automatically.
+Refresh copy-out with `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor` when authorized; dry-run first without `-Apply`. Merge tokens and hybrid rules are handled by the sync script — do not claim live install tracks git automatically.
 
 ## Related
 

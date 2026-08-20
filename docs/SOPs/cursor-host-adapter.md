@@ -6,13 +6,15 @@
 
 This SOP documents the **global Cursor adapter** on the operator machine. **Target SoT** is this companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md), [agents](../../agents/_index.md), [skills](../../skills/_index.md)). Files under `~/.cursor/` are the **host adapter / copy-out target**, not a second procedure tree.
 
-**Cursor copy-out:** operator-authorized **pointer-first live sync** applied **2026-08-21** (backup first). OpenCode copy-out is separately authorized ([opencode-host-adapter](./opencode-host-adapter.md)).
+**Cursor copy-out:** operator-authorized live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` for live writes). OpenCode uses the same entry script ([opencode-host-adapter](./opencode-host-adapter.md)).
 
 **Install root (this machine):** `C:\Users\admin\.cursor\`
 
 **Companion root (this machine):** `C:\Users\admin\source\repos\general-projects\cursorEscape`
 
-**Backup (restore SoT):** `C:\Users\admin\.cursor-backup-pre-pointer-sync-20260821-002858` — see `BACKUP_MANIFEST.md` in that folder. Companion SHA at backup: `06b16a8`.
+**Phase 0 baseline (restore-only):** `C:\Users\admin\.cursor-backup-pre-host-sync-build-20260821-012600` — see `BACKUP_MANIFEST.md` in that folder (`Kind: Baseline`). Gate artifact: [`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json). **Sync does not create backups** — baselines are for restore if Apply testing breaks the live harness.
+
+**Legacy backup (archaeology):** `C:\Users\admin\.cursor-backup-pre-pointer-sync-20260821-002858` — superseded by Phase 0 baseline for restore precedence.
 
 ---
 
@@ -36,16 +38,38 @@ This SOP documents the **global Cursor adapter** on the operator machine. **Targ
 | Role agents | [agents/](../../agents/_index.md) — thin harness | `agents/*.md` (spawn blocks; portable contract via companion Read) |
 | Model hints | Overlay leaf only | `review-subagent-models.md` |
 
-### Token merge on copy-out
+### Live sync (Sync-HostHarness)
 
-When syncing from [overlays/cursor](../../overlays/cursor/_index.md) to live `~/.cursor/`:
+Operator entry: [`scripts/Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1). Modular layout: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
 
-1. **Backup** live harness first (timestamped sibling folder outside `~/.cursor`).
-2. Copy harness files only (skills, agents, review-subagent-models) — **not** bulk procedure re-copy into `docs/workflow/`.
-3. Replace `{{COMPANION_ROOT}}` with the absolute companion checkout path.
-4. **Rules (hybrid):** overlay YAML frontmatter + **companion** `rules/<id>.md` gate body + spawn/snippet pointers — script: [Write-HybridCursorRules.ps1](../../overlays/cursor/scripts/Write-HybridCursorRules.ps1). Do **not** ship thin-pointer-only `.mdc` as the sole always-on text.
-5. Leave `docs/workflow/` mirror in place until post-sync smoke (transitional; not SoT).
-6. Restart Cursor after skill/rule changes when smoke-testing. Paste User Rules snippets from live `skills/*/user-rules-snippet.md`.
+```powershell
+# Dry-run (default) — no live writes
+pwsh ./scripts/Sync-HostHarness.ps1 -Target Cursor
+
+# Live write — requires Phase 0 baseline gate; does NOT create backup trees
+pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor
+```
+
+On `-Apply`, the script:
+
+1. Asserts Phase 0 baseline paths exist ([`baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json)) — read-only gate only.
+2. Copies harness files from [`overlays/cursor`](../../overlays/cursor/_index.md) per [`cursor.manifest.psd1`](../../scripts/host-sync/manifests/cursor.manifest.psd1) — **not** bulk procedure re-copy into `docs/workflow/`.
+3. Merges `{{COMPANION_ROOT}}` with the absolute companion checkout path.
+4. Writes **hybrid** rules via manifest `HybridRuleIds` + [Write-HybridCursorRules.ps1](../../overlays/cursor/scripts/Write-HybridCursorRules.ps1) — do **not** ship thin-pointer-only `.mdc` as sole always-on text.
+5. Leaves `docs/workflow/` mirror in place (`NeverTouch`); **not SoT**.
+6. Does **not** touch `skills-cursor/` or `settings.json` (hard excludes).
+
+After Apply: fully quit and restart Cursor; paste User Rules snippets from live `skills/*/user-rules-snippet.md` when reinforcing always-on gates.
+
+### Token merge (manual reference)
+
+When syncing outside the script (not recommended):
+
+1. Copy harness files only (skills, agents, review-subagent-models) — **not** bulk procedure re-copy into `docs/workflow/`.
+2. Replace `{{COMPANION_ROOT}}` with the absolute companion checkout path.
+3. **Rules (hybrid):** overlay YAML frontmatter + **companion** `rules/<id>.md` gate body + spawn/snippet pointers — script: [Write-HybridCursorRules.ps1](../../overlays/cursor/scripts/Write-HybridCursorRules.ps1).
+4. Leave `docs/workflow/` mirror in place until post-sync smoke (transitional; not SoT).
+5. Restart Cursor after skill/rule changes when smoke-testing.
 
 ### Live inventory (pointer-first sync — 2026-08-21)
 
@@ -91,7 +115,7 @@ When syncing from [overlays/cursor](../../overlays/cursor/_index.md) to live `~/
 | 2 | Skill → companion | Load `implementation-review`; confirm Read hits `…/cursorEscape/skills/` or `workflow/` — not only `~/.cursor/docs/workflow/` | **pass** (2026-08-21) |
 | 3 | Workspace ≠ companion (optional) | Other folder open; skill Read still absolute companion | **operator optional** |
 | 4 | User Rules | Paste snippets from `~/.cursor/skills/*/user-rules-snippet.md` into Customize → Rules | **deferred** (operator skipped second-layer reinforcement) |
-| 5 | Restore drill | Confirm backup folder + `BACKUP_MANIFEST.md` restore commands | **pass** (backup `…-20260821-002858`) |
+| 5 | Restore drill | Confirm Phase 0 baseline folder + `BACKUP_MANIFEST.md` restore commands | **pass** (Phase 0 baseline `…-pre-host-sync-build-20260821-012600`) |
 
 **Smoke notes (2026-08-21):** Skill→companion **pass**. Restore drill **pass**. Fresh-chat C1 **pass** (default-on + when-in-doubt + pressure-release ≤4; not `count≥9`). User Rules paste **deferred**. Hybrid script fixed doubled `ci-ladder` URL. Phrase **eval/harness not exempt** remains OpenCode-style C1 wording — not required in Cursor hybrid gate bodies for this sync.
 
@@ -99,14 +123,20 @@ When syncing from [overlays/cursor](../../overlays/cursor/_index.md) to live `~/
 
 ### Restore
 
+**Precedence:** Phase 0 `pre-host-sync-build` baseline → legacy archaeology only (`pre-pointer-sync`, older timestamped folders).
+
 1. Fully quit Cursor.
-2. Follow restore PowerShell in `C:\Users\admin\.cursor-backup-pre-pointer-sync-20260821-002858\BACKUP_MANIFEST.md`.
+2. Follow restore PowerShell in `C:\Users\admin\.cursor-backup-pre-host-sync-build-20260821-012600\BACKUP_MANIFEST.md`.
 3. Restart Cursor.
+
+Sync/Apply **does not** create backup trees. Ongoing harness SoT is this companion repo.
 
 ---
 
 ## Related
 
+- [Host harness sync README](../../scripts/host-sync/README.md)
+- [Sync-HostHarness.ps1](../../scripts/Sync-HostHarness.ps1)
 - [Cursor overlay copy-out map](../../overlays/cursor/_index.md)
 - [pointer-first-3 audit](../../analysis/cursor-pointer-first-3-audit-2026-08.md)
 - [Editing companion workflow](./editing-companion-workflow.md)

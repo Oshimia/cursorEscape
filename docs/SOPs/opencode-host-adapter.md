@@ -1,14 +1,16 @@
 # OpenCode host adapter
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 
 ## Context
 
-This SOP documents the **global OpenCode adapter** installed on the operator machine for R0 live trial of the cursorEscape loop. **Target SoT** is this companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md), [agents](../../agents/_index.md), [skills](../../skills/_index.md)). Files under `~/.config/opencode/` are the **host adapter / copy-out target**, not a second procedure tree. **OpenCode host-plugged harness copy-out is authorized and applied** from [overlays/opencode](../../overlays/opencode/_index.md) (Phase 3 live sync 2026-08-20; backup first). **Procedure mirror deleted** pointer-first-4 (2026-08-20). **C6 minimum smoke rows 1–4, 8, 9–10, 13: pass** (2026-08-20 operator post-mirror). Row **14**: install-time pass (live re-diff optional/skipped). See [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).
+This SOP documents the **global OpenCode adapter** installed on the operator machine for R0 live trial of the cursorEscape loop. **Target SoT** is this companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md), [agents](../../agents/_index.md), [skills](../../skills/_index.md)). Files under `~/.config/opencode/` are the **host adapter / copy-out target**, not a second procedure tree. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) from [overlays/opencode](../../overlays/opencode/_index.md). **Procedure mirror deleted** pointer-first-4 (2026-08-20). **C6 minimum smoke rows 1–4, 8, 9–10, 13: pass** (2026-08-20 operator post-mirror). Row **14**: install-time pass (live re-diff optional/skipped). See [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).
 
 **Install root (this machine):** `C:\Users\admin\.config\opencode\`
 
----
+**Phase 0 baseline (restore-only):** `C:\Users\admin\.config\opencode-backup-pre-host-sync-build-20260821-012600` — see `BACKUP_MANIFEST.md` in that folder (`Kind: Baseline`). Gate artifact: [`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json). **Sync does not create backups** — baselines are for restore if Apply testing breaks the live harness.
+
+**Legacy backup (archaeology):** `C:\Users\admin\.config\opencode-backup-20260820-153803` — superseded by Phase 0 baseline for restore precedence.
 
 ## Substance
 
@@ -55,11 +57,37 @@ This SOP documents the **global OpenCode adapter** installed on the operator mac
 - `opencode.json` — `instructions`; `permission.skill: { "*": "allow" }`; `skills.paths` → global skills dir; `agent.build` / `agent.implementer` `permission.task` allowlists (+ skill allow).
 - **Resolved (discovery 2026-08-19):** empty skill-tool catalog was missing `name` / path registration, not contamination. See [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
 
-### Sync rule
+### Live sync (Sync-HostHarness)
+
+Operator entry: [`scripts/Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1). Modular layout + expansion recipe: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
+
+```powershell
+# Dry-run (default) — no live writes
+pwsh ./scripts/Sync-HostHarness.ps1 -Target OpenCode
+
+# Live write — requires Phase 0 baseline gate; does NOT create backup trees
+pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target OpenCode
+
+# All registered stacks (Cursor then OpenCode; continue-with-report)
+pwsh ./scripts/Sync-HostHarness.ps1 -Target All
+pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target All
+```
+
+On `-Apply`, the script:
+
+1. Asserts Phase 0 baseline paths exist — read-only gate only.
+2. Copies thin harness from [`overlays/opencode`](../../overlays/opencode/_index.md) per [`opencode.manifest.psd1`](../../scripts/host-sync/manifests/opencode.manifest.psd1).
+3. Merges `{{COMPANION_ROOT}}` / `{{OPENCODE_HOME}}` tokens; preserves live `model` / `provider` in `opencode.json`.
+4. Dual-writes always-on gates to `instructions/cursor-escape-loop.md` and `AGENTS.md` (byte-identical — C1).
+5. Does **not** bulk re-copy procedure mirror (`docs/workflow/` — `NeverTouch` / hard exclude); `review-subagent-models` stays companion overlay-Read only.
+
+After Apply: fully quit and restart OpenCode before smoke.
+
+### Sync rule (authoring order)
 
 1. Update **cursorEscape** contracts first (Target FA / agents / skills / overlay rules).
 2. Re-adapt OpenCode files second — do not invent gate semantics only in `~/.config/opencode`.
-3. When updating always-on gates: edit overlay `instructions/cursor-escape-loop.md`, copy the **same body** to live `instructions/` **and** `AGENTS.md` (byte-identical — required for C1); keep specimen `instructions` as `{{OPENCODE_HOME}}/…` absolute form.
+3. When updating always-on gates: edit overlay `instructions/cursor-escape-loop.md`, then deploy with `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target OpenCode` (adapter dual-writes byte-identical `instructions/` and `AGENTS.md` — C1). Manual copy to live paths is **not recommended** (bypasses token merge and JSON specimen merge).
 4. Do **not** commit `~/.config/opencode` into this git repo (secrets, machine paths, provider plugins). Copy-out later still excludes secrets.
 5. After saving changes to `opencode.json`, an agent file, a skill, `instructions`, `AGENTS.md`, or other config-time file: **quit and restart OpenCode** (no hot-reload — DSV4F Observed).
 
@@ -135,6 +163,13 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 5. **Skill-binding (C/E/F):** Smoke **9–10** **pass** (2026-08-20 operator); **11** **pass** (2026-08-19); row **12** historical pass on host mirror — **12b/12c companion re-probe not run** post-pf4. Row **14** install-time pass Phase 3.
 6. When adding OpenCode skills/agents/rules: follow [opencode-authoring-adapter](./opencode-authoring-adapter.md) (official docs + Observed checklist). Periodically audit durable Always-run rows in `opencode.db` `permission` table (see authoring SOP).
 7. Smoke **13** gate **pass** (2026-08-20 operator — Incomplete until / Assumptions). Marker spot-check not reported. **Format (pointer-first-2):** overlay [`plan_reviewer`](../../overlays/opencode/agents/plan_reviewer.md) harness cites `{{COMPANION_ROOT}}/workflow/plan-reviewer-report.md` before emit.
+8. **Restore precedence:** Phase 0 `pre-host-sync-build` baseline → legacy archaeology only. Sync/Apply does not create backup trees.
+
+### Restore
+
+1. Fully quit OpenCode.
+2. Follow restore PowerShell in `C:\Users\admin\.config\opencode-backup-pre-host-sync-build-20260821-012600\BACKUP_MANIFEST.md`.
+3. Restart OpenCode.
 
 ---
 
@@ -152,5 +187,7 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)
 - [Agent contracts](../../agents/_index.md)
 - [Skill contracts](../../skills/_index.md)
+- [Host harness sync README](../../scripts/host-sync/README.md)
+- [Sync-HostHarness.ps1](../../scripts/Sync-HostHarness.ps1)
 - [OpenCode overlay](../../overlays/opencode/_index.md)
 - [Companion pointer-first](../roadmaps/pointer-first.md)

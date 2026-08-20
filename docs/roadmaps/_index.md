@@ -15,7 +15,7 @@ Multi-phase handoff roadmaps for cursorEscape. Each roadmap file carries **Agent
 | [Centralize the workflow manager](./shared-workflow-docs.md) | **Complete** — Phases 1–6 | bases at repo root; thin Cursor overlay; `docs/` = this repo only |
 | [OpenCode overlays SoT](./opencode-overlays-sot.md) | **Complete** (historical) — Phase 3 live sync 2026-08-20; **load path superseded** by [pointer-first](./pointer-first.md) | First OpenCode overlay + bulk copy-out (transitional) |
 | [Companion pointer-first](./pointer-first.md) | **Complete** — pointer-first-4 closeout 2026-08-20 | Companion SoT; thin harness; procedure mirror deleted (OpenCode) |
-| [Host harness sync build](./host-harness-sync-build.md) | **Active** — Phase 0 gate (operator authorize live copy) | Modular `Sync-HostHarness.ps1` + Cursor/OpenCode adapters; Phase 0 baselines first |
+| [Host harness sync build](./host-harness-sync-build.md) | **Complete** — Phase 3 docs + `Sync-HostHarness.ps1` operator surface | Modular sync core + Cursor/OpenCode adapters; Phase 0 baselines restore-only |
 
 ## Implications / open questions
 

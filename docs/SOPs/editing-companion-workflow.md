@@ -50,8 +50,10 @@ Change portable loop/gate
 
 | Host | Overlay home | Live sync |
 | ---- | ------------ | --------- |
-| OpenCode | [`overlays/opencode/`](../../overlays/opencode/_index.md) | [opencode-host-adapter](./opencode-host-adapter.md) — backup first; harness-only; resolve `{{COMPANION_ROOT}}` |
-| Cursor | [`overlays/cursor/`](../../overlays/cursor/_index.md) | [cursor-host-adapter](./cursor-host-adapter.md) — manual / not repo-authorized by default |
+| OpenCode | [`overlays/opencode/`](../../overlays/opencode/_index.md) | `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target OpenCode` — see [opencode-host-adapter](./opencode-host-adapter.md) |
+| Cursor | [`overlays/cursor/`](../../overlays/cursor/_index.md) | `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor` — see [cursor-host-adapter](./cursor-host-adapter.md) |
+
+Dry-run default (no live writes): omit `-Apply`. Sync **does not create backups**; Phase 0 baselines are restore-only ([`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json)). Modular layout: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
 
 Do **not** write live installs unless the user explicitly asks. After overlay edits, note “live sync deferred” in the closeout if applicable.
 
@@ -88,3 +90,4 @@ Expect: zero matches on the first `rg` after migrating off unbounded loops; C1 h
 - [Discovery](../../workflow/discovery.md)
 - [OpenCode host adapter](./opencode-host-adapter.md)
 - [Cursor host adapter](./cursor-host-adapter.md)
+- [Host harness sync README](../../scripts/host-sync/README.md)

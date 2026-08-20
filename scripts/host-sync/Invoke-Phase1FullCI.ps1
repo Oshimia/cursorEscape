@@ -51,10 +51,11 @@ foreach ($entry in $manifest.CopyEntries) {
 }
 Assert-Pass 'overlay copy token merge simulation' $overlayTokenOk
 
-# Registry stacks listed in entry help
+# Registry stacks listed in entry help (registry-driven validation)
 $entrySource = Get-Content -LiteralPath $syncScript -Raw
-Assert-Pass 'entry documents Cursor target' ($entrySource -match "ValidateSet\('Cursor'")
-Assert-Pass 'entry documents OpenCode target' ($entrySource -match 'OpenCode')
+Assert-Pass 'entry uses Get-RegisteredStackIds' ($entrySource -match 'Get-RegisteredStackIds')
+Assert-Pass 'entry documents registry stacks in comment help' ($entrySource -match 'Registry stacks: Cursor, OpenCode')
+Assert-Pass 'entry documents invalid Target message' ($entrySource -match 'Invalid -Target')
 
 # Fast CI re-run as part of closeout suite
 & pwsh -NoProfile -File (Join-Path $hostSyncRoot 'Invoke-Phase1FastCI.ps1')

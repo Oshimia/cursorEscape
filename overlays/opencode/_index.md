@@ -1,12 +1,12 @@
 # OpenCode overlay — harness copy-out map
 
-**Last updated:** 2026-08-20  
-**Status:** **pointer-first-4 complete** (2026-08-20) — harness stubs use absolute `{{COMPANION_ROOT}}` Reads; live procedure mirror **deleted** from `{{OPENCODE_HOME}}/docs/workflow/`; `review-subagent-models` overlay-Read only. See [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).  
+**Last updated:** 2026-08-21  
+**Status:** **pointer-first-4 complete** (2026-08-20) — harness stubs use absolute `{{COMPANION_ROOT}}` Reads; live procedure mirror **deleted** from `{{OPENCODE_HOME}}/docs/workflow/`; `review-subagent-models` overlay-Read only. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1). Phase 0 baseline (restore-only): `C:/Users/admin/.config/opencode-backup-pre-host-sync-build-20260821-012600`. Sync does **not** create backups. See [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).  
 **Fidelity bar:** [host-adaptation-fidelity](../../docs/featureArchitecture/host-adaptation-fidelity.md) (C1–C6).
 
 ## Context
 
-OpenCode-native **host overlay** at `overlays/opencode/`. Portable procedure stays at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`). Overlay = **thin harness** + host-native agent bodies. Live `~/.config/opencode` harness synced from this overlay (backup first — see [host-adapter smoke](../../docs/SOPs/opencode-host-adapter.md)). **pointer-first-4:** procedure mirror **deleted** from live OpenCode; harness-only sync only.
+OpenCode-native **host overlay** at `overlays/opencode/`. Portable procedure stays at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`). Overlay = **thin harness** + host-native agent bodies. Live `~/.config/opencode` harness synced via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (`-Target OpenCode`; `-Apply` for live writes) — see [opencode-host-adapter](../../docs/SOPs/opencode-host-adapter.md) and [host-sync README](../../scripts/host-sync/README.md). **pointer-first-4:** procedure mirror **deleted** from live OpenCode; harness-only sync only.
 
 **Tokens (Phase 3 merge):** `{{COMPANION_ROOT}}` = absolute path to this git repo; `{{OPENCODE_HOME}}` = absolute path to OpenCode global config (e.g. `C:/Users/admin/.config/opencode`).
 

@@ -1,8 +1,8 @@
 # Roadmap: Host harness sync build (modular Cursor + OpenCode)
 
 **Last updated:** 2026-08-21  
-**Status:** **Active** — Phase 1 QC ACCEPT (`198b02c`); Phase 2 next.  
-**Plan source:** accepted plan `host_harness_sync_build_a0d9438d` (Host harness sync build), **amended** by operator 2026-08-21 (no per-sync backups).  
+**Status:** **Complete** — Phase 3 QC pending (`2cebed3` + Phase 3 docs); operator surface shipped.  
+**Plan source:** accepted plan `host_harness_sync_build_a0d9438d` (Host harness sync build), **amended** by operator 2026-08-21 (no per-sync backups; no per-Apply re-prompt).  
 **Program id:** `host-harness-sync` (phases **0 … 3**).  
 **Companion HEAD at roadmap create:** `fbd4724`.
 
@@ -54,14 +54,14 @@
 3. `-Apply -Target OpenCode` → write → verify → **user restarts OpenCode** → smoke
 4. Or `-Target All` (sequential; continue-with-report default; optional `-FailFast`; restart each host after its Apply before smoke)
 
-**Owner:** agent runs `-Apply` only when user authorizes; user owns host restart + optional smoke. Sync never writes backup trees.
+**Owner:** during this program, Composer/Nb may `-Apply` without re-prompt (Phase 0 baselines + git); user owns host restart + optional smoke. Sync never writes backup trees.
 
 ## Phase checklist
 
 - [x] **Phase 0** — Baseline live harness backups + `baseline-backups.paths.json` (QC ACCEPT 2026-08-21, `f5f1661`)
 - [x] **Phase 1** — Core + contract + Cursor adapter (**no** per-sync backup) (`198b02c`)
-- [ ] **Phase 2** — OpenCode adapter
-- [ ] **Phase 3** — Entry polish + docs (document: companion SoT; Phase 0 baselines for restore-only; sync does not backup)
+- [x] **Phase 2** — OpenCode adapter (`2cebed3`)
+- [x] **Phase 3** — Entry polish + docs (document: companion SoT; Phase 0 baselines for restore-only; sync does not backup)
 
 ## Agent context — Phase 0
 
@@ -122,9 +122,9 @@
 - **Fast CI:** `-Target All` dry-run; help lists registry stacks.
 - **Full CI:** doc links; excludes in help; editing-companion-workflow Cursor row matches script; both host-adapter SOPs cite the script + Phase 0 baseline paths as restore-only; docs state sync does not backup.
 - **Deliverables:**
-  - [ ] Docs + expansion recipe
-  - [ ] Registry-driven targets
-  - [ ] Cursor auth flip + both host-adapter SOP updates
+  - [x] Docs + expansion recipe
+  - [x] Registry-driven targets
+  - [x] Cursor auth flip + both host-adapter SOP updates
 - **Risks:** Docs imply auto-sync on every edit; citing a non-existent consolidated `host-adapters` file; docs still requiring per-Apply backup.
 
 **Ships:** Maintainable operator surface.

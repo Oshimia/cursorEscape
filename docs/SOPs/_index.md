@@ -17,8 +17,9 @@ This index lists repeatable procedures for maintaining cursorEscape documentatio
 
 ### Host adapters
 
-* [OpenCode host adapter](./opencode-host-adapter.md) — global `~/.config/opencode` inventory; sync rule; R0 smoke checklist
-* [Cursor host adapter](./cursor-host-adapter.md) — global `~/.cursor` inventory; `{{COMPANION_ROOT}}` token merge; pointer-first-3 audit
+* [OpenCode host adapter](./opencode-host-adapter.md) — global `~/.config/opencode` inventory; [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1); R0 smoke checklist
+* [Cursor host adapter](./cursor-host-adapter.md) — global `~/.cursor` inventory; [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1); hybrid rules
+* [Host harness sync README](../../scripts/host-sync/README.md) — modular layout, Phase 0 restore-only baselines, expansion recipe
 * [Authoring OpenCode adapter files](./opencode-authoring-adapter.md) — how to write skills, agents, rules/instructions, and config (cites OpenCode docs; includes skill `name`/`description` requirements)
 
 ### Future runtime operations (conceptual)
