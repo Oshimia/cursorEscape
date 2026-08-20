@@ -28,11 +28,11 @@ Roadmaps are **repo documentation**. Never write them under the OpenCode adapter
 
 | Doc | When |
 |-----|------|
-| [plan-agent-context.md](../../docs/workflow/plan-agent-context.md) | Escalation dual path + Agent context headings |
-| [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md) | When to use, Composer handoff |
-| [discovery.md](../../docs/workflow/discovery.md) | Find existing docs / roadmap conventions |
-| [documentation-architecture.md](../../docs/workflow/documentation-architecture.md) | Default `docs/roadmaps/` layout when bootstrapping |
-| [README.md](../../docs/workflow/README.md) | Workflow doc index |
+| [plan-agent-context.md](docs/workflow/plan-agent-context.md) | Escalation dual path + Agent context headings |
+| [phased-multi-agent.md](docs/workflow/phased-multi-agent.md) | When to use, Composer handoff |
+| [discovery.md](docs/workflow/discovery.md) | Find existing docs / roadmap conventions |
+| [documentation-architecture.md](docs/workflow/documentation-architecture.md) | Default `docs/roadmaps/` layout when bootstrapping |
+| [README.md](docs/workflow/README.md) | Workflow doc index |
 
 ## Must not
 

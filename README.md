@@ -1,12 +1,12 @@
 # cursorEscape
 
-**Status:** shared-workflow-docs **Phase 6 complete**; OpenCode overlays SoT **Phase 3 live sync complete** (2026-08-20; Desktop runtime smoke deferred operator). Runtime not started. First recreation: **T3 Code + OpenCode**.
+**Status:** shared-workflow-docs **Phase 6 complete**; OpenCode overlays SoT **Phase 3 live sync complete** (2026-08-20; runtime smoke rows **1–4**, **9–10**, **13** pass per [host-adapter](docs/SOPs/opencode-host-adapter.md)); [pointer-first](docs/roadmaps/pointer-first.md) **in progress** (pointer-first-0). Runtime not started. First recreation: **T3 Code + OpenCode**.
 
 ## What and why
 
 **What:** cursorEscape is the owner's **skill and workflow manager** — a git home for personal agentic skills, agent roles, and gates (plan → implement → dual review → closeout), applied across **stacks** (Cursor, OpenCode; T3 as control plane). Analogous to Theo's T3 `fleet` repo ([Observed](research/theo-fleet-skill-management.md)), except this is **not** multi-machine sync.
 
-**Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. repo-root contracts (Approach A: [`workflow/`](workflow/_index.md), [`skills/`](skills/_index.md), [`agents/`](agents/_index.md), [`rules/`](rules/_index.md)) are **Target** SoT. Host overlays: [overlays/cursor](overlays/cursor/_index.md) (thin Cursor wrappers) and [overlays/opencode](overlays/opencode/_index.md) (OpenCode harness — **host-plugged copy-out authorized and applied** 2026-08-20; Desktop runtime smoke deferred operator). Live `~/.cursor` / `~/.config/opencode` remain operator installs. Stack variation: [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
+**Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. repo-root contracts (Approach A: [`workflow/`](workflow/_index.md), [`skills/`](skills/_index.md), [`agents/`](agents/_index.md), [`rules/`](rules/_index.md)) are **Target** SoT. Host overlays: [overlays/cursor](overlays/cursor/_index.md) (thin Cursor wrappers) and [overlays/opencode](overlays/opencode/_index.md) (OpenCode harness — **host-plugged copy-out authorized and applied** 2026-08-20). Load path superseded by [pointer-first](docs/roadmaps/pointer-first.md). Live `~/.cursor` / `~/.config/opencode` remain operator installs. Stack variation: [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
 
 **First host attempt:** [T3 Code](https://t3.codes/) (control plane) + [OpenCode](https://opencode.ai/) (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Study: [host recreation](analysis/host-recreation-2026-08.md).
 

@@ -16,7 +16,7 @@ Before any `git commit` (implementer or Composer phase commit). When Full ≠ `n
 ## Steps
 
 1. If the target repo has a local pre-commit CI rule → **follow that**.
-2. Else map Fast/Full via [ci-ladder.md](../../docs/workflow/ci-ladder.md) and project scripts.
+2. Else map Fast/Full via [ci-ladder.md](docs/workflow/ci-ladder.md) and project scripts.
 3. Before commit: **Full** must pass — or Full = `n/a` with **explicit user acknowledgment**.
 4. Never substitute Fast for Full when Full exists.
 5. Never pair Full CI with dual-gate reviewer launch.
@@ -27,8 +27,8 @@ Before any `git commit` (implementer or Composer phase commit). When Full ≠ `n
 
 | Doc | When |
 |-----|------|
-| [ci-ladder.md](../../docs/workflow/ci-ladder.md) | Discover Fast/Full for this repo |
-| [iterative-code-review.md](../../docs/workflow/iterative-code-review.md) | Closeout vs review-loop |
+| [ci-ladder.md](docs/workflow/ci-ladder.md) | Discover Fast/Full for this repo |
+| [iterative-code-review.md](docs/workflow/iterative-code-review.md) | Closeout vs review-loop |
 
 ## Must not
 

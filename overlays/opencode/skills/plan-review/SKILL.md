@@ -31,8 +31,8 @@ Gate drafted plans through `plan_reviewer` before implementation.
 
 | Doc | When |
 |-----|------|
-| [iterative-plan-review.md](../../docs/workflow/iterative-plan-review.md) | Full loop rules |
-| [plan-agent-context.md](../../docs/workflow/plan-agent-context.md) | Escalated plan headings (not Escalation when-table) |
+| [iterative-plan-review.md](docs/workflow/iterative-plan-review.md) | Full loop rules |
+| [plan-agent-context.md](docs/workflow/plan-agent-context.md) | Escalated plan headings (not Escalation when-table) |
 
 ## Must not
 

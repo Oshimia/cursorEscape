@@ -1,7 +1,7 @@
 # cursorEscape Roadmap
 
 **Last updated:** 2026-08-20  
-**Status:** shared-workflow-docs **Phase 6 complete**; OpenCode overlays SoT **Phase 3 live sync complete** (2026-08-20; Desktop runtime smoke deferred operator). Runtime not started. First recreation: **T3 Code + OpenCode** (external). Identity: **skill/workflow manager across stacks** (not machines).
+**Status:** shared-workflow-docs **Phase 6 complete**; OpenCode overlays SoT **Phase 3 live sync complete** (2026-08-20; runtime smoke rows **1–4**, **9–10**, **13** pass per [host-adapter](./SOPs/opencode-host-adapter.md)); [pointer-first](./roadmaps/pointer-first.md) **in progress** (pointer-first-0). Runtime not started. First recreation: **T3 Code + OpenCode** (external). Identity: **skill/workflow manager across stacks** (not machines).
 
 This repository is the owner's **skill and workflow manager**: preserve and evolve personal agentic skills and the plan → implement → dual review loop, and apply them across stacks without inseparable dependence on Cursor, a single IDE, or a single model provider. Analog: Theo `fleet` ([Observed](../research/theo-fleet-skill-management.md)). Non-goal: multi-machine sync.
 
@@ -9,7 +9,7 @@ This repository is the owner's **skill and workflow manager**: preserve and evol
 
 ## Context
 
-cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is a **Phase 3 archaeology** snapshot; host overlays: [overlays/cursor](../overlays/cursor/_index.md) (thin Cursor wrappers) and [overlays/opencode](../overlays/opencode/_index.md) (OpenCode harness — host-plugged copy-out **authorized and applied** 2026-08-20; Desktop runtime smoke deferred operator). repo-root contracts are **Target** SoT at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` (Approach A). Stack variation: [skill source and host overlays](./featureArchitecture/skill-source-and-host-overlays.md).
+cursorEscape exists to **own the skill inventory and the loop** that work for the owner, then run them on replaceable hosts — escape Cursor lock-in without losing structured plan/review, repository-local knowledge, or evaluable workflow behavior. Documentation follows the openBuggy taxonomy adapted for a **workspace-pointing companion**, not a Bugbot-only engine. Live `~/.cursor` import is a **Phase 3 archaeology** snapshot; host overlays: [overlays/cursor](../overlays/cursor/_index.md) (thin Cursor wrappers) and [overlays/opencode](../overlays/opencode/_index.md) (OpenCode harness — host-plugged copy-out **authorized and applied** 2026-08-20). Load path superseded by [pointer-first](./roadmaps/pointer-first.md). repo-root contracts are **Target** SoT at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` (Approach A). Stack variation: [skill source and host overlays](./featureArchitecture/skill-source-and-host-overlays.md).
 
 **First host attempt:** T3 Code (control plane) + OpenCode (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Operator study: [host recreation](../analysis/host-recreation-2026-08.md).
 

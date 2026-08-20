@@ -57,11 +57,11 @@ This section is the **sole SoT** for the plan section checklist. Skill `plan-rev
 
 | Doc | When |
 |-----|------|
-| [iterative-plan-review.md](../../docs/workflow/iterative-plan-review.md) | Plan → plan_reviewer loop |
-| [plan-agent-context.md](../../docs/workflow/plan-agent-context.md) | Escalation = yes (specimen headings) |
-| [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md) | Multi-phase / Composer |
-| [ci-ladder.md](../../docs/workflow/ci-ladder.md) | Fast/Full notes in plan |
-| [discovery.md](../../docs/workflow/discovery.md) | Finding repo docs |
+| [iterative-plan-review.md](docs/workflow/iterative-plan-review.md) | Plan → plan_reviewer loop |
+| [plan-agent-context.md](docs/workflow/plan-agent-context.md) | Escalation = yes (specimen headings) |
+| [phased-multi-agent.md](docs/workflow/phased-multi-agent.md) | Multi-phase / Composer |
+| [ci-ladder.md](docs/workflow/ci-ladder.md) | Fast/Full notes in plan |
+| [discovery.md](docs/workflow/discovery.md) | Finding repo docs |
 
 ## Must not
 

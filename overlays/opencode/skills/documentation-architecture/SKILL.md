@@ -29,8 +29,8 @@ Repo already has a coherent docs layout — **follow it**.
 
 | Doc | When |
 |-----|------|
-| [documentation-architecture.md](../../docs/workflow/documentation-architecture.md) | Full bootstrap procedure |
-| [discovery.md](../../docs/workflow/discovery.md) | Find existing layout first |
+| [documentation-architecture.md](docs/workflow/documentation-architecture.md) | Full bootstrap procedure |
+| [discovery.md](docs/workflow/discovery.md) | Find existing layout first |
 
 ## Must not
 

@@ -37,12 +37,14 @@ Per leg: if launch count ≥ 9, narrow scope before invoke — no hard stop.
 
 ## Read when
 
+Paths are relative to the OpenCode config root (`OPENCODE_HOME`), not this skill file. Prefer absolute read under that root when the workspace is a different repo.
+
 | Doc | When |
 |-----|------|
-| [iterative-code-review.md](../../docs/workflow/iterative-code-review.md) | Loop rules, per-phase boundaries |
-| [ci-ladder.md](../../docs/workflow/ci-ladder.md) | Fast/Full mapping |
-| [review-subagent-models.md](../../docs/workflow/review-subagent-models.md) | Model hints |
-| [discovery.md](../../docs/workflow/discovery.md) | Before judging architecture |
+| [iterative-code-review.md](docs/workflow/iterative-code-review.md) | Loop rules, per-phase boundaries |
+| [ci-ladder.md](docs/workflow/ci-ladder.md) | Fast/Full mapping |
+| [review-subagent-models.md](docs/workflow/review-subagent-models.md) | Model hints |
+| [discovery.md](docs/workflow/discovery.md) | Before judging architecture |
 
 ## Must not
 

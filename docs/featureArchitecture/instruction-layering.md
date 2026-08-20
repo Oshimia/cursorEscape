@@ -55,9 +55,11 @@ Target skill contracts: [skills/_index.md](../../skills/_index.md).
 
 **Required:** Full procedures (`discovery`, `iterative-plan-review`, `iterative-code-review`, `ci-ladder`, `plan-agent-context`, `phased-multi-agent`, etc.) live in companion workflow docs at repo-root bases ([`workflow/`](../../workflow/_index.md)). Load only when a skill or escalated plan says so.
 
+**Required (pointer-first):** Host adapters must **not** rely on a host `docs/workflow/` procedure mirror as SoT. Thin harness skills and agents **Read** absolute companion paths — e.g. `{{COMPANION_ROOT}}/workflow/<leaf>.md` (example: `C:/Users/admin/source/repos/general-projects/cursorEscape/workflow/iterative-code-review.md`). A mirrored copy under host `docs/workflow/` (if still present from [opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md) Phase 3) is **transitional** only; [pointer-first](../roadmaps/pointer-first.md) supersedes mirror-as-load-path. Rubric stays companion FA + absolute Read (`{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md`).
+
 **Example:** [plan-agent-context.md](../../workflow/plan-agent-context.md) must **not** be pasted into always-on rules or the plan_reviewer output schema — load only when drafting or reviewing escalated plans.
 
-Workflow index: [workflow/_index.md](../../workflow/_index.md). Host adapters may mirror under a host-local `docs/workflow/` path; **Target** contracts land at repo-root bases (`workflow/` after Phase 3).
+Workflow index: [workflow/_index.md](../../workflow/_index.md). **Target** contracts land at repo-root `workflow/`; host mirror is not a second authored procedure tree.
 
 ### Layer 4 — Role agents
 
@@ -86,7 +88,7 @@ Workflow index: [workflow/_index.md](../../workflow/_index.md). Host adapters ma
 | Always-on | Thin gate markdown | OpenCode `instructions` / root `AGENTS.md`; Cursor User Rules |
 | Skills | On-demand skill entries | OpenCode `skills/*/SKILL.md`; Cursor `~/.cursor/skills/` |
 | Host overlay | Additive harness constraints only | [skill-source-and-host-overlays](./skill-source-and-host-overlays.md) — not a second loop |
-| Deep docs | Companion workflow docs | Host `docs/workflow/` adapted from contracts |
+| Deep docs | Companion workflow docs at `{{COMPANION_ROOT}}/workflow/` | Absolute Read from thin harness; legacy host `docs/workflow/` mirror transitional only ([pointer-first](../roadmaps/pointer-first.md)) |
 | Role agents | Named subagents; reviewers deny edit | OpenCode `agents/*.md` with `permission.edit: deny` |
 
 Adapters cite this page and [agents/_index.md](../../agents/_index.md) / [skills/_index.md](../../skills/_index.md). Do not reverse the SoT (host overlay files are not Target contracts).
@@ -125,3 +127,4 @@ Adapters cite this page and [agents/_index.md](../../agents/_index.md) / [skills
 - [pre-commit-ci-gate](../../rules/pre-commit-ci-gate.md)
 - [Host recreation study](../../analysis/host-recreation-2026-08.md)
 - [Design decisions](../../review/design-decisions.md)
+- [Companion pointer-first](../roadmaps/pointer-first.md)

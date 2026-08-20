@@ -24,8 +24,8 @@ Before any non-trivial plan or implementation. First step of `implementation-pla
 
 | Doc | When |
 |-----|------|
-| [discovery.md](../../docs/workflow/discovery.md) | Full discovery procedure |
-| [README.md](../../docs/workflow/README.md) | Workflow doc index |
+| [discovery.md](docs/workflow/discovery.md) | Full discovery procedure |
+| [README.md](docs/workflow/README.md) | Workflow doc index |
 
 ## Must not
 

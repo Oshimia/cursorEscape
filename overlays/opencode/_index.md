@@ -1,69 +1,77 @@
-# OpenCode overlay — copy-out map
+# OpenCode overlay — harness copy-out map
 
 **Last updated:** 2026-08-20  
-**Status:** Phase 3 **live sync complete** (2026-08-20) — copy-out authorized and applied to `~/.config/opencode`. Desktop runtime smoke deferred to operator (restart + rows 1–4, 9–10, 13).  
+**Status:** Phase 3 **live sync complete** (2026-08-20) — harness copy-out authorized and applied to `~/.config/opencode`. **Load path superseded** by [pointer-first](../../docs/roadmaps/pointer-first.md) (`pointer-first-0` … `pointer-first-4`): companion SoT + thin harness; deep procedure via `{{COMPANION_ROOT}}/workflow/` Reads — **not** host `docs/workflow/` mirror as SoT.  
 **Fidelity bar:** [host-adaptation-fidelity](../../docs/featureArchitecture/host-adaptation-fidelity.md) (C1–C6).
 
 ## Context
 
-OpenCode-native **host overlay** at `overlays/opencode/`. Portable procedure stays at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`). Overlay = thin harness + host-native agent bodies (**strategy A** — 1:1 copy-out). Live `~/.config/opencode` was synced from this overlay in Phase 3 (backup first — see [host-adapter smoke](../../docs/SOPs/opencode-host-adapter.md)).
+OpenCode-native **host overlay** at `overlays/opencode/`. Portable procedure stays at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`). Overlay = **thin harness** + host-native agent bodies. Live `~/.config/opencode` was synced from this overlay in Phase 3 (backup first — see [host-adapter smoke](../../docs/SOPs/opencode-host-adapter.md)). **pointer-first-0 lock:** harness-only sync below; mirrored `docs/workflow/*` is **legacy transitional** — not sync SoT.
 
 **Tokens (Phase 3 merge):** `{{COMPANION_ROOT}}` = absolute path to this git repo; `{{OPENCODE_HOME}}` = absolute path to OpenCode global config (e.g. `C:/Users/admin/.config/opencode`).
 
-## Copy-out map (host-plugged)
+**C1 merge Must (Failure mode I / wrong-base class):** Specimen `instructions` must stay `{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md` (absolute after merge). Never reintroduce bare relative `instructions/…` in global config. Copy the same body to live `AGENTS.md`.
+
+**C4 merge Must (Failure mode J / transitional):** Until pointer-first-2 stub rewrite, harness leaves use host-root `docs/workflow|skills|agents/...` from `OPENCODE_HOME` — **zero** `../../docs|skills|agents/` hops. **Target (pointer-first-0 lock):** author-time docs and smoke row **4** cite absolute `{{COMPANION_ROOT}}/workflow/...`; harness bodies still on transitional host paths until pointer-first-2. See [Wrong path resolution base](../../docs/featureArchitecture/host-adaptation-fidelity.md#wrong-path-resolution-base-failure-class--i--j).
+
+## Copy-out map (harness-only — pointer-first Target)
 
 | Copy to `{{OPENCODE_HOME}}/` | Overlay source | Notes |
 | ---------------------------- | -------------- | ----- |
-| `instructions/cursor-escape-loop.md` | [instructions/cursor-escape-loop.md](./instructions/cursor-escape-loop.md) | Always-on gates (C1) |
-| `skills/<id>/SKILL.md` (×8) | [skills/](./skills/) | On-demand harness; `name` + `description` required (C2) |
-| `agents/<role>.md` (×7) | [agents/](./agents/) | Strategy A host-native bodies (C3) |
-| `docs/workflow/*` | Companion `workflow/` + [scripts/Rewrite-OpenCodeWorkflowLinks.ps1](./scripts/Rewrite-OpenCodeWorkflowLinks.ps1) | Mirrored deep docs (C4) |
-| `docs/workflow/review-subagent-models.md` | [review-subagent-models.md](./review-subagent-models.md) | Model hints (not in companion `workflow/`) |
-| `docs/workflow/bug-reviewer-finding-rubric.md` | Companion `docs/featureArchitecture/bug-reviewer-finding-rubric.md` | Rubric for bug_reviewer — **transform via script `-IncludeRubric`** (Phase 3 copy) |
+| `instructions/cursor-escape-loop.md` | [instructions/cursor-escape-loop.md](./instructions/cursor-escape-loop.md) | Always-on gates body (C1) |
+| `AGENTS.md` | [AGENTS.md](./AGENTS.md) | **Same gates** — OpenCode global rules surface (must match `instructions/cursor-escape-loop.md`) |
+| `skills/<id>/SKILL.md` (×8) | [skills/](./skills/) | Thin harness stubs → absolute `{{COMPANION_ROOT}}` Reads (C2; pointer-first-2 rewrites bodies) |
+| `agents/<role>.md` (×7) | [agents/](./agents/) | Thin harness bodies (C3) |
 | `opencode.json` (harness merge) | [opencode.specimen.json](./opencode.specimen.json) | Merge tokens; **preserve** operator `model` / `provider` (not in specimen sole form) |
+| `docs/workflow/review-subagent-models.md` | [review-subagent-models.md](./review-subagent-models.md) | Thin overlay leaf (model hints) — harness sync; **not** companion `workflow/` SoT |
 
-**README-only host workflow:** After sync, `docs/workflow/README.md` is the workflow index on the host (transformed from companion `workflow/_index.md`). Do not author a second procedure tree under the adapter.
+**Legacy transitional (not harness-only sync SoT — disposition pointer-first-4):** mirrored `docs/workflow/*` (procedure leaves), rubric under `docs/workflow/`. Produced by archived [Rewrite-OpenCodeWorkflowLinks.ps1](./scripts/Rewrite-OpenCodeWorkflowLinks.ps1) — **not primary sync** after pointer-first-0; retained for Phase 3 live tree until mirror delete proof.
 
-## Sync vs pointer
+**README-only host workflow (legacy):** After historical sync, `docs/workflow/README.md` was the workflow index on the host. **Target:** companion `{{COMPANION_ROOT}}/workflow/_index.md` via absolute Read — do not author a second procedure tree under the adapter.
 
-| Class | Paths | Phase 3 action |
-| ----- | ----- | -------------- |
-| **Sync (copy-out)** | `instructions/*`, `skills/*/SKILL.md`, `agents/*.md`, harness keys in `opencode.json`, mirrored `docs/workflow/*`, `review-subagent-models.md`, rubric | Copy overlay + transformed workflow mirror |
-| **Pointer (companion-resident)** | `docs/featureArchitecture/**`, `docs/SOPs/**`, `docs/roadmaps/**`, `research/**`, `analysis/**`, maintainer indexes | `external_directory` allow on `{{COMPANION_ROOT}}/**` (C5) |
+## Sync vs pointer (pointer-first-0 lock)
+
+| Class | Paths | Action |
+| ----- | ----- | ------ |
+| **Sync (harness-only)** | `instructions/*`, `AGENTS.md` (same body as loop instructions), thin `skills/*/SKILL.md`, thin `agents/*.md`, `docs/workflow/review-subagent-models.md` (from [review-subagent-models.md](./review-subagent-models.md)), harness keys in `opencode.json` | Copy overlay harness; deploy review-subagent-models to host `docs/workflow/`; stub bodies **Target** (pointer-first-2) Read `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — transitional host-root `docs/workflow/` until then |
+| **Pointer (companion-resident — SoT)** | `workflow/**`, repo-root `skills/**`, `agents/**`, `rules/**`, `docs/featureArchitecture/**`, `docs/SOPs/**`, `docs/roadmaps/**`, `research/**`, `analysis/**`, maintainer indexes | `external_directory` allow on `{{COMPANION_ROOT}}/**` (C5); absolute Reads from harness |
+| **Legacy transitional (not sync SoT)** | Mirrored host `docs/workflow/*` (procedure leaves), rubric on host under `docs/workflow/` | Remains on disk from Phase 3 until [pointer-first-4](../../docs/roadmaps/pointer-first.md) mirror disposition; **do not treat as procedure SoT** |
 | **Contract SoT (diff only)** | Repo-root `agents/*.md` | Portable contracts — **do not paste** onto host files; re-diff when portable `agents/` change |
 
-## Transform table (workflow mirror — sync method A)
+## Transform table (workflow mirror — archived; not primary sync)
 
-Applied by [Rewrite-OpenCodeWorkflowLinks.ps1](./scripts/Rewrite-OpenCodeWorkflowLinks.ps1) when copying companion `workflow/` → host `docs/workflow/`:
+**Status (pointer-first-0):** [Rewrite-OpenCodeWorkflowLinks.ps1](./scripts/Rewrite-OpenCodeWorkflowLinks.ps1) is **archived** — used for Phase 3 historical mirror only. **Not** the Target load path after pointer-first-0. **Target load path (pointer-first-2):** harness stub bodies Read `{{COMPANION_ROOT}}/workflow/<leaf>.md` directly. Mirror delete proof: [pointer-first-4](../../docs/roadmaps/pointer-first.md).
+
+Applied historically by the script when copying companion `workflow/` → host `docs/workflow/`:
 
 | Companion `workflow/` link | Host `docs/workflow/` link |
 | -------------------------- | -------------------------- |
-| `](../skills/` | `](../../skills/` |
-| `](../agents/` | `](../../agents/` |
+| `](../skills/` | `](skills/` (**host-root** — not `../../skills/`; Failure mode J class) |
+| `](../agents/` | `](agents/` (same) |
 | `](../rules/` | Plain text note (OpenCode uses instructions + skills) |
 | `](../research/` | Plain text note (companion-resident — `{{COMPANION_ROOT}}/research/...`) |
 | `](../overlays/cursor/review-subagent-models.md)` | `](review-subagent-models.md)` |
 | `](_index.md)` | `](README.md)` |
 | `+ Bugbot (built-in)` | `+ bug_reviewer` |
 
-Idempotent: re-run after edits; grep-clean contract = zero `](../workflow/`, `](../skills/` (from workflow mirror), `](../rules/`, `](../overlays/` in host `docs/workflow/`.
+Idempotent: re-run after edits; grep-clean contract = zero `](../workflow/`, `](../skills/`, `](../../skills/`, `](../../agents/`, `](../rules/`, `](../overlays/` in host `docs/workflow/`.
 
 **Rubric copy-out (same script, `-IncludeRubric`):** companion `docs/featureArchitecture/bug-reviewer-finding-rubric.md` → host `docs/workflow/bug-reviewer-finding-rubric.md`. No second authored rubric SoT — single FA source, transformed on copy.
 
 | Companion rubric link | Host `docs/workflow/` after transform |
 | --------------------- | ------------------------------------- |
-| `](../../agents/` | `](../../agents/` (unchanged — host adapter root) |
+| `](../../agents/` | `](agents/` (host-root — Failure mode J class) |
 | `](../../research/` | Plain text note (companion-resident — `{{COMPANION_ROOT}}/research/...`) |
 | `](../../analysis/` | Plain text note (companion-resident — `{{COMPANION_ROOT}}/analysis/...`) |
 | `](./<fa-leaf>.md)` (sibling FA) | Plain text note (companion FA — `{{COMPANION_ROOT}}/docs/featureArchitecture/<fa-leaf>.md`) |
 
-Grep-clean rubric contract = zero raw `](../../research/`, `](../../analysis/`, `](./` sibling FA hops in host `docs/workflow/bug-reviewer-finding-rubric.md` after `-IncludeRubric` transform.
+Grep-clean rubric contract = zero raw `](../../agents/`, `](../../research/`, `](../../analysis/`, `](./` sibling FA hops in host `docs/workflow/bug-reviewer-finding-rubric.md` after `-IncludeRubric` transform.
 
 ## Agent authoring recipe (strategy A)
 
 1. Edit portable contract at repo-root `agents/<role>.md` when **semantics** change.
 2. Re-adapt overlay `agents/<role>.md` from live specimen or portable contract — **host-native** body with OpenCode frontmatter (`description`, `mode`, `permission.edit: deny` on reviewers).
-3. Use **stack-local** Read paths only: `docs/workflow/...`, `skills/<id>` via skill tool — **never** `../workflow/`, `../skills/`, `../rules/`, `../overlays/` hops in overlay harness.
+3. Use **stack-local** Read paths only: `docs/workflow/...`, `skills/<id>` via skill tool — **never** `../../docs/workflow/`, `../workflow/`, `../skills/`, `../rules/`, `../overlays/` hops in overlay harness (skills included — Failure mode J).
 4. Re-diff portable vs overlay when portable `agents/` change (trigger below).
 5. Full quit + restart OpenCode after config-time edits.
 
@@ -148,10 +156,10 @@ Phase 3 smoke: leaf count must match this baseline unless this table is updated 
 
 | # | Item | Phase 2 evidence |
 | - | ---- | ---------------- |
-| **C1** | Always-on gates | `opencode.specimen.json` lists `instructions/cursor-escape-loop.md`; instruction states plan + implementation-review gates |
+| **C1** | Always-on gates | Specimen `instructions` = **`{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md`** (absolute — cwd-relative paths do not load from global config); `AGENTS.md` matches that body; instruction states plan + implementation-review gates |
 | **C2** | Eight skills incl. `roadmap` | Eight overlay `skills/*/SKILL.md` with matching `name`; host-adapter row 9 + Probe A updated |
 | **C3** | Reviewers deny-edit; loops cited | Seven overlay agents; reviewers `permission.edit: deny`; bodies cite `docs/workflow/iterative-*` and rubric |
-| **C4** | Host-relative Reads | Skill Read tables use `../../docs/workflow/...`; agents use `docs/workflow/...`; rewrite script dry-run + idempotency |
+| **C4** | Companion workflow Reads (Target locked; harness transitional) | Author-time hubs + smoke row **4** cite `{{COMPANION_ROOT}}/workflow/...`; harness bodies still use transitional host-root `docs/workflow/...` until pointer-first-2 — **zero** `../../docs/workflow/` in overlay harness |
 | **C5** | Companion FA reads | Specimen `external_directory` includes `{{COMPANION_ROOT}}/**` |
 | **C6** | Runtime smoke | N/A author-time — Phase 3 operator smoke |
 
@@ -159,7 +167,8 @@ Phase 3 smoke: leaf count must match this baseline unless this table is updated 
 
 - [Overlays index](../_index.md)
 - [Host adaptation fidelity](../../docs/featureArchitecture/host-adaptation-fidelity.md)
-- [OpenCode overlays SoT roadmap](../../docs/roadmaps/opencode-overlays-sot.md)
+- [OpenCode overlays SoT roadmap](../../docs/roadmaps/opencode-overlays-sot.md) (historical — load path superseded)
+- [Companion pointer-first](../../docs/roadmaps/pointer-first.md)
 - [OpenCode host adapter SOP](../../docs/SOPs/opencode-host-adapter.md)
 - [Authoring OpenCode adapter](../../docs/SOPs/opencode-authoring-adapter.md)
 - [Workflow index](../../workflow/_index.md)

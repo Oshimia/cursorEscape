@@ -3,6 +3,11 @@
   Archived one-shot seed for Phase 3 deploy — transform companion workflow/ links
   for OpenCode host docs/workflow/ mirror (sync method A).
 
+  **pointer-first-0 (2026-08-20):** NOT primary sync. Load path superseded by
+  companion {{COMPANION_ROOT}}/workflow/ absolute Reads from thin harness.
+  Retained for historical Phase 3 mirror only; mirror disposition pointer-first-4.
+  See overlays/opencode/_index.md and docs/roadmaps/pointer-first.md.
+
 .DESCRIPTION
   Reads markdown from companion workflow/ and writes transformed copies to
   OpenCode docs/workflow/. Default is dry-run (report only). Re-run with -Apply
@@ -62,9 +67,13 @@ function Convert-WorkflowContent {
     param([string]$Content, [string]$SourceFileName)
 
     $out = $Content
-  # Depth: companion workflow/ -> host docs/workflow/ (skills/agents at adapter root = ../../)
-    $out = $out -replace '\]\(\.\./skills/', '](../../skills/'
-    $out = $out -replace '\]\(\.\./agents/', '](../../agents/'
+  # Host-root paths (OPENCODE_HOME). Do NOT use ../../skills|agents — tools resolve from
+  # config root (Failure mode J class); ../../skills from OPENCODE_HOME → %USERPROFILE%\skills.
+  # Prefer skill tool by id when loading procedures; these links are for native read of adapter files.
+    $out = $out -replace '\]\(\.\./\.\./skills/', '](skills/'
+    $out = $out -replace '\]\(\.\./\.\./agents/', '](agents/'
+    $out = $out -replace '\]\(\.\./skills/', '](skills/'
+    $out = $out -replace '\]\(\.\./agents/', '](agents/'
     $out = $out -replace '\]\(\.\./overlays/cursor/review-subagent-models\.md\)', '](review-subagent-models.md)'
     $out = $out -replace '\]\(_index\.md\)', '](README.md)'
   # OpenCode has no rules/ tree — strip portable rule links (grep-clean contract)
@@ -92,8 +101,8 @@ function Convert-RubricContent {
     param([string]$Content)
 
     $out = $Content
-  # Depth: companion docs/featureArchitecture/ -> host docs/workflow/ (agents at adapter root = ../../)
-    $out = $out -replace '\]\(\.\./\.\./agents/', '](../../agents/'
+  # Host-root agent paths (same Failure mode J class — not ../../ from docs/workflow/)
+    $out = $out -replace '\]\(\.\./\.\./agents/', '](agents/'
   # research/ and analysis/ are companion-resident (pointer class) — not mirrored under host docs/
     $out = $out -replace '\[([^\]]+)\]\(\.\./\.\./research/[^)]+\)', '$1 (companion-resident — read via {{COMPANION_ROOT}}/research/...)'
     $out = $out -replace '\[([^\]]+)\]\(\.\./\.\./analysis/[^)]+\)', '$1 (companion-resident — read via {{COMPANION_ROOT}}/analysis/...)'

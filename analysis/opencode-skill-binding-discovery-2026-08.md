@@ -1,6 +1,6 @@
 # OpenCode skill-binding discovery (2026-08)
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-20
 
 ## Context
 
@@ -9,6 +9,45 @@ Discovery for R0 babysitting from **bash substituted for workflow skills** (fail
 **Host pin:** OpenCode Desktop study evidence = **1.18.18**. CLI on this machine reports **1.4.6** — treat CLI vs Desktop as version-skew (**Unknown** whether behavior matches).
 
 Claim labels: **Observed**, **Inferred**, **Unknown**.
+
+---
+
+## C1 smoke (row 1) — always-on gates from session (no tools)
+
+**Purpose:** Prove injected `instructions/cursor-escape-loop.md` is visible without workspace hunt or Shell-list of the adapter. Hunting FA docs / `Get-ChildItem ~/.config/opencode` = **fail** (C1 / C6).
+
+### Frozen prompt (row 1)
+
+```text
+Do not use tools (no read, glob, grep, bash/shell, skill). Do not open files or list ~/.config/opencode.
+
+From your session / always-on instructions only, quote:
+(1) that the plan-review loop is default on (unless skip applies);
+(2) the when-in-doubt line for the plan loop;
+(3) that eval / harness / multi-step operational work is not exempt.
+
+If those lines are not in your session instructions, say so explicitly and stop.
+```
+
+**Pass:** Exact substance of (1)–(3) from injected always-on; **zero** tool calls.  
+**Fail:** Any search/read/Shell-list, or inventing gates while admitting they are not in session.
+
+**Observed fail (2026-08-20):** Operator freeze → model quoted default-on from **skill** descriptions only; stated when-in-doubt + eval/harness **not** in session. Root cause: global `opencode.json` used relative `instructions/cursor-escape-loop.md`, which OpenCode resolves against **project cwd** (file missing → not injected). File on disk under `~/.config/opencode/instructions/` was correct but unused.
+
+**Remediation (applied live + overlay):** (1) specimen/live `instructions` = absolute `{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md`; (2) dual-write same body to `AGENTS.md` (global rules surface). Re-probe after **full quit + restart**.
+
+### Failure mode I — cwd-relative global `instructions` (C1)
+
+Same incident as the Observed fail above. Canonical authoring write-up: [opencode-authoring-adapter](../docs/SOPs/opencode-authoring-adapter.md) § Failure mode I. Fidelity anti-pattern: [host-adaptation-fidelity](../docs/featureArchitecture/host-adaptation-fidelity.md) § Observed failure: cwd-relative global `instructions`.
+
+| Field | Value |
+| ----- | ----- |
+| Mode id | **I** (instructions path / injection) |
+| Related | Skill-binding modes C/E (catalog) are separate; this is always-on **injection**, not skill advertisement |
+| Pass bar | Smoke row 1: when-in-doubt + eval/harness quoted from session; zero tools |
+| Regression | Specimen relative `instructions/…` without `{{OPENCODE_HOME}}`; missing `AGENTS.md` dual-write; C1 pass claimed from disk presence |
+
+**Host-adapter:** smoke checklist row **1**. After editing `instructions/` or `AGENTS.md`, full quit + restart OpenCode Desktop before re-probe.
 
 ---
 
@@ -323,10 +362,19 @@ Do not implement.
 
 1. **Catalog root cause (settled):** Missing frontmatter `name` (and/or lack of explicit `skills.paths`) prevented global skills from appearing in the skill tool. `permission.skill` allow alone was **not** enough. Contamination ruled out.
 2. Adapter hygiene: follow [opencode-authoring-adapter](../docs/SOPs/opencode-authoring-adapter.md) — every OpenCode `SKILL.md` must include `name` matching folder id + `description`; keep `permission.skill: { "*": "allow" }` and `skills.paths` in live `opencode.json`.
-3. **Short native file tools (B0′/B0″/C):** pass on Flash. **Failure mode F** mitigated — smoke **12** pass (2026-08-19): `.ignore` + `external_directory` + narrow listing allow + guidance.
-4. Probe B1 remains optional; not required after B0″ + C pass.
-5. Durable Always-run DB was empty at audit; re-check after further live trials.
-6. **Thin-plan (row 13):** **pass** (2026-08-19 Flash) — CHANGES REQUESTED for missing Assumptions + Unknowns/Discovery; no soft-approve. Portable Cursor self-check also pass earlier same day.
+3. **Failure mode I (C1, 2026-08-20):** Relative `instructions` in global config → silent non-injection. Fix = absolute `{{OPENCODE_HOME}}/…` + `AGENTS.md` dual-write. Do not treat skill “default on” text as always-on evidence.
+4. **Failure mode J (C4, 2026-08-20):** Skill Read hops `../../docs/workflow/...` and (audit same day) workflow-mirror `../../skills|agents/...` resolve from config root to `%USERPROFILE%\…`. Fix = host-root `docs/workflow|skills|agents/...` only; rewrite script + live re-Apply. Same [wrong-base class](../docs/featureArchitecture/host-adaptation-fidelity.md#wrong-path-resolution-base-failure-class--i--j) as Failure mode I.
+5. **Short native file tools (B0′/B0″/C):** pass on Flash. **Failure mode F** mitigated — smoke **12** pass (2026-08-19): `.ignore` + `external_directory` + narrow listing allow + guidance.
+6. Probe B1 remains optional; not required after B0″ + C pass.
+7. Durable Always-run DB was empty at audit; re-check after further live trials.
+8. **Thin-plan (row 13):** **pass** (2026-08-19 Flash) — CHANGES REQUESTED for missing Assumptions + Unknowns/Discovery; no soft-approve. Portable Cursor self-check also pass earlier same day.
+9. **Smoke 4 re-probe:** **pass** (2026-08-20) — first heading of iterative-code-review under `OPENCODE_HOME` quoted after J fix.
+
+### pointer-first-0 — rubric + review-subagent-models (Discovery 3)
+
+**Rubric (Target SoT):** Companion FA only — `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md` via absolute Read from `bug_reviewer` harness. Do **not** treat host `docs/workflow/bug-reviewer-finding-rubric.md` mirror as a second authored SoT ([pointer-first](../docs/roadmaps/pointer-first.md) pointer-first-0).
+
+**review-subagent-models:** Thin overlay leaf at `overlays/opencode/review-subagent-models.md` — not companion `workflow/`; workflow Related links use host-root `docs/workflow/...` from `OPENCODE_HOME` until pointer-first-2 companion stub rewrite.
 
 ---
 

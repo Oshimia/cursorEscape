@@ -33,8 +33,8 @@ User assigns Composer for multi-phase roadmap execution after an accepted plan.
 
 | Doc | When |
 |-----|------|
-| [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md) | Handoff shape |
-| [iterative-code-review.md](../../docs/workflow/iterative-code-review.md) | Review loop the subagent must run |
+| [phased-multi-agent.md](docs/workflow/phased-multi-agent.md) | Handoff shape |
+| [iterative-code-review.md](docs/workflow/iterative-code-review.md) | Review loop the subagent must run |
 
 ## Must not
 

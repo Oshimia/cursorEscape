@@ -6,20 +6,20 @@
 
 This folder holds **host-native** skill, agent, rule, and deep-workflow files recorded from a live stack. It is **not** the portable Target contract tree (repo-root bases: [`skills/`](../skills/_index.md), [`agents/`](../agents/_index.md), [`rules/`](../rules/)) and **not** the Phase 3 research import ([cursor-global-workflow](../research/imported/cursor-global-workflow/)).
 
-Architecture: [skill source and host overlays](../docs/featureArchitecture/skill-source-and-host-overlays.md) (Approach A). **OpenCode** host-plugged copy-out is **authorized and applied** from [overlays/opencode/](./opencode/_index.md) (Phase 3 live sync 2026-08-20). **Cursor** copy-out to `~/.cursor` remains manual / not repo-authorized.
+Architecture: [skill source and host overlays](../docs/featureArchitecture/skill-source-and-host-overlays.md) (Approach A). **OpenCode** host-plugged copy-out is **authorized and applied** from [overlays/opencode/](./opencode/_index.md) (Phase 3 live sync 2026-08-20). **Target load path** ([pointer-first](../docs/roadmaps/pointer-first.md)): thin harness on host; deep procedure via absolute `{{COMPANION_ROOT}}` Reads — **not** host `docs/workflow/` mirror as SoT. **Cursor** copy-out to `~/.cursor` remains manual / not repo-authorized.
 
 ## Substance
 
 | Host | Contents | Status |
 | ---- | -------- | ------ |
 | [cursor/](./cursor/_index.md) | Skills, rules, agents from live `~/.cursor`; deep procedure at repo-root [`workflow/`](../workflow/_index.md) | **Thin wrappers** — spawn + Read tables; bases at repo root |
-| [opencode/](./opencode/_index.md) | OpenCode harness: instructions, 8 skills, 7 agents, specimen config, workflow mirror recipe | **Phase 3 live sync complete** (2026-08-20); Desktop runtime smoke deferred operator |
+| [opencode/](./opencode/_index.md) | OpenCode harness: instructions, thin skill stubs, agent harness, specimen config | **Phase 3 live sync complete** (2026-08-20); **pointer-first** supersedes mirror-as-SoT — harness-only sync Target |
 
-Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlays/opencode/](./opencode/_index.md) Phase 3 (backup first). Operator: restart + deferred smoke rows 1–4, 9–10, 13.
+Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlays/opencode/](./opencode/_index.md) Phase 3 (backup first). Runtime smoke rows **1–4**, **9–10**, **13** **pass** (2026-08-20) per [host-adapter smoke](../docs/SOPs/opencode-host-adapter.md); row **6** deferred operator habit.
 
 ## Implications / open questions
 
-1. Portable procedure edits: **Target** → repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`, FA). Overlay refresh: re-copy from live when authorized — not a second authored procedure tree.
+1. Portable procedure edits: **Target** → repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`, FA). Overlay refresh: re-copy **harness only** when authorized — not a second authored procedure tree. Mirrored `docs/workflow/` on host is transitional ([pointer-first](../docs/roadmaps/pointer-first.md)).
 2. Do not invent `adapters/` at repo root for copy-out until that phase is authorized.
 
 ## Related
@@ -32,3 +32,4 @@ Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlay
 - [Rules index](../rules/_index.md)
 - [Documenting this repo](../docs/SOPs/documenting-this-repo.md)
 - [Shared workflow docs roadmap](../docs/roadmaps/shared-workflow-docs.md)
+- [Companion pointer-first](../docs/roadmaps/pointer-first.md)

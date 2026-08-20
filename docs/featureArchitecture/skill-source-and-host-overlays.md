@@ -10,13 +10,26 @@ Identity: this companion repo is the owner's **skill and workflow manager** ([de
 
 Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 
+**Program:** [Companion pointer-first](../roadmaps/pointer-first.md) (`pointer-first-0` … `pointer-first-4`) locks this page’s Target stance below. Do not confuse with [opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md) phases 0–3.
+
 ---
 
 ## Substance
 
+### Pointer-first architecture (Required)
+
+**Locked (pointer-first-0):**
+
+- cursorEscape is the **sole SoT** for skills, rules, agents, workflows, and report schemas.
+- Host folders (`~/.config/opencode`, `~/.cursor`) hold **thin harness only** — advertisement, permissions, spawn, absolute `{{COMPANION_ROOT}}` / `{{OPENCODE_HOME}}` wiring, thin always-on gates.
+- Deep procedure loads via **companion Reads** to `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — **not** host `docs/workflow/` mirror as SoT.
+- Bulk copy-out of procedure ([opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md) Phase 3 Strategy A mirror) is **transitional**; **load path superseded** by [pointer-first](../roadmaps/pointer-first.md). Harness lessons retained: Failure mode I/J, absolute `instructions`, C1–C6 behavior bar.
+
+**Harness-only sync (Target):** `instructions/*`, `AGENTS.md`, thin `skills/*/SKILL.md` stubs, thin `agents/*.md` harness, `review-subagent-models.md` (thin overlay leaf), harness keys in `opencode.json`. **Not sync SoT:** mirrored `docs/workflow/*` (legacy transitional; disposition [pointer-first-4](../roadmaps/pointer-first.md)).
+
 ### Job (Required)
 
-This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`) are **copy-out / install targets**, not a second authored procedure tree. **OpenCode** host-plugged copy-out from [overlays/opencode](../../overlays/opencode/_index.md) is **authorized** and **applied** (Phase 3 live sync 2026-08-20 of [opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md)); Desktop runtime smoke deferred operator. **Cursor** copy-out to `~/.cursor` remains manual / not repo-authorized. Cursor overlay: [overlays/cursor](../../overlays/cursor/_index.md) (**thin wrappers**). Do not create repo-root `adapters/` directories.
+This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`) are **copy-out / install targets**, not a second authored procedure tree. **OpenCode** host-plugged copy-out from [overlays/opencode](../../overlays/opencode/_index.md) is **authorized** and **applied** (Phase 3 live sync 2026-08-20 of [opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md)); runtime smoke rows **1–4**, **9–10**, **13** **pass** (2026-08-20 per [host-adapter](../SOPs/opencode-host-adapter.md)). **Cursor** copy-out to `~/.cursor` remains manual / not repo-authorized. Cursor overlay: [overlays/cursor](../../overlays/cursor/_index.md) (**thin wrappers**). Do not create repo-root `adapters/` directories.
 
 ### Target taxonomy — Approach A (Required)
 
@@ -111,7 +124,7 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 
 **Unknown:** Copy-out calendar; whether Phase 3+ refresh is fully scripted vs operator-merge for `opencode.json` provider/model keys.
 
-**Resolved (Phase 3 — OpenCode overlays SoT):** OpenCode overlay path = [`overlays/opencode/`](../../overlays/opencode/_index.md); workflow mirror transform = archived [`Rewrite-OpenCodeWorkflowLinks.ps1`](../../overlays/opencode/scripts/Rewrite-OpenCodeWorkflowLinks.ps1) (sync method A); host-plugged copy-out **authorized and applied** (live sync 2026-08-20; backup `opencode-backup-20260820-153803`; Desktop runtime smoke deferred operator).
+**Resolved (Phase 3 — OpenCode overlays SoT; load path superseded):** OpenCode overlay path = [`overlays/opencode/`](../../overlays/opencode/_index.md); workflow mirror transform = archived [`Rewrite-OpenCodeWorkflowLinks.ps1`](../../overlays/opencode/scripts/Rewrite-OpenCodeWorkflowLinks.ps1) (**not** primary sync — transitional mirror only; [pointer-first](../roadmaps/pointer-first.md)); host-plugged harness copy-out **authorized and applied** (live sync 2026-08-20; backup `opencode-backup-20260820-153803`). **Target load path:** companion `{{COMPANION_ROOT}}/workflow/` via absolute Reads from thin harness — not mirror-as-SoT.
 
 ### Other rejected patterns (detail)
 
@@ -124,7 +137,7 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 
 1. U3 is **partial**: skill/adapter inventory SoT = this companion repo (**Target:** repo-root bases at `workflow/`, `skills/`, `agents/`, `rules/`; overlay = thin wrappers); host dirs = copy-out targets; per-target `.cursorEscape/` remains **Unknown** ([unresolved questions](../../review/unresolved-architectural-questions.md), [workspace model](./workspace-model.md)).
 2. Remaining incidental “canonical” phrasing in untouched leaves is **not** a second identity project — fix when that leaf is edited, or in a dedicated sweep, not by expanding review scope.
-3. R0 live trial runs on the Phase 3–synced global OpenCode adapter from [overlays/opencode](../../overlays/opencode/_index.md). Operator must restart Desktop and run deferred smoke rows before claiming C1–C4 runtime bars closed.
+3. R0 live trial runs on the Phase 3–synced global OpenCode adapter from [overlays/opencode](../../overlays/opencode/_index.md). Runtime smoke rows **1–4**, **9–10**, **13** **pass** (2026-08-20); row **4** companion-path re-probe deferred to pointer-first-2 stub rewrite.
 4. Overlay bodies are **thin wrappers** pointing at repo-root bases — not a second `implementation-review` procedure in this tree.
 
 ---
@@ -142,3 +155,4 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 - [Shared workflow docs roadmap](../roadmaps/shared-workflow-docs.md)
 - [Cursor overlay](../../overlays/cursor/_index.md)
 - [Theo fleet skill management (Observed)](../../research/theo-fleet-skill-management.md)
+- [Companion pointer-first](../roadmaps/pointer-first.md)
