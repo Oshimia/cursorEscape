@@ -1,7 +1,7 @@
 # Roadmap: Host harness sync build (modular Cursor + OpenCode)
 
 **Last updated:** 2026-08-21  
-**Status:** **Complete** — Phase 3 QC pending (`2cebed3` + Phase 3 docs); operator surface shipped.  
+**Status:** **Complete** — Phase 3 QC ACCEPT (`5c60e32`); operator surface shipped.  
 **Plan source:** accepted plan `host_harness_sync_build_a0d9438d` (Host harness sync build), **amended** by operator 2026-08-21 (no per-sync backups; no per-Apply re-prompt).  
 **Program id:** `host-harness-sync` (phases **0 … 3**).  
 **Companion HEAD at roadmap create:** `fbd4724`.
