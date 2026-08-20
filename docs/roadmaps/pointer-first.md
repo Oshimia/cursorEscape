@@ -1,7 +1,7 @@
 # Roadmap: Companion pointer-first architecture
 
 **Last updated:** 2026-08-20  
-**Status:** **In progress** — pointer-first-1 complete pending Composer QC. pointer-first-0 committed `0078420` (Composer ACCEPT + waiver 2026-08-20).  
+**Status:** **In progress** — pointer-first-3 next. pointer-first-2 dual APPROVED (Reviewer-a d5679765 + Bugbot 94775b70); Probe A deferred. pointer-first-1 `6cdb1c5`; pointer-first-0 `0078420`.  
 **Plan source:** accepted plan `plan_reviewer_report_sot_e3211634` (Companion pointer-first architecture).  
 **Program id:** `pointer-first` (phases **pointer-first-0 … pointer-first-4**). Do not confuse with [opencode-overlays-sot](./opencode-overlays-sot.md) phases 0–3.
 
@@ -23,7 +23,7 @@
 
 - [x] **pointer-first-0** — FA lock + C4/SOP/C6 cascade + this roadmap + opencode-overlays-sot supersession note (Composer ACCEPT + waiver 2026-08-20)
 - [x] **pointer-first-1** — `workflow/plan-reviewer-report.md`; thin portable plan_reviewer; skills Read when
-- [ ] **pointer-first-2** — OpenCode stubs + COMPANION_ROOT; skills.paths discovery; live stub sync (backup first)
+- [x] **pointer-first-2** — OpenCode stubs + COMPANION_ROOT; skills.paths discovery; live stub sync (backup first) — Probe A deferred (operator restart)
 - [ ] **pointer-first-3** — Cursor overlay/live companion reachability audit
 - [ ] **pointer-first-4** — Smoke C6 set 1,2,3,4,8,9–10,13,14; companion-edit proof; mirror disposition; closeout
 
@@ -62,6 +62,21 @@
 - **Full CI:** Doc-link integrity for `workflow/plan-reviewer-report.md` + `_index` + skill Read rows.
 - **Deliverables:** [x] plan_reviewer report SoT [x] dual-review deferred ticket named on roadmap [x] skills point at deep doc
 - **Risks:** Over-thin agent — keep purpose/inputs/must-not.
+
+## Agent context — pointer-first-2 (OpenCode stubs)
+
+- **Goal:** OpenCode overlay+live = thin harness + COMPANION_ROOT Reads; mirror not load path.
+- **Depends on / entry gate:** pointer-first-1 commit `6cdb1c5`.
+- **Do not touch:** Cursor overlay except shared FA cites; plan file; deleting live `docs/workflow/` yet; Cline.
+- **In scope:** Stub rewrite all 8 overlay skills + 7 agents (priority: plan-review, implementation-plan, plan_reviewer — then remaining same phase); always-on absolute COMPANION_ROOT for workflow cites; specimen external_directory + skills.paths discovery; remove mirror from copy-out map; **live backup → stub sync → restart**; record skills.paths probe in analysis note.
+- **Out of scope:** Mirror delete (pointer-first-4); Cursor audit (pointer-first-3).
+- **Files expected:** overlays/opencode/** stubs; specimen; _index; live stubs under `~/.config/opencode`; analysis note for skills.paths probe.
+- **Where to read context:** Failure mode I/J; skill-binding discovery; pointer-first-0 FA; this roadmap.
+- **Fast CI:** Short bodies; zero wrong-base hops; COMPANION_ROOT absolute/token Reads.
+- **Full CI:** Probe A 8 skills after restart (or document blocked if restart/operator gate).
+- **Deliverables:** [ ] Stubs [ ] Map without mirror SoT [ ] Live stub sync [ ] skills.paths discovery recorded [ ] Backup path attested
+- **Risks:** Empty skill catalog — keep host stubs with `name` until companion skills.paths Observed.
+- **Migration:** Backup live `C:/Users/admin/.config/opencode` before any write. Sync stubs only (not procedure mirror). Do not delete live `docs/workflow/`.
 
 ## Related
 

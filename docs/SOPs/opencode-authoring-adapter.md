@@ -27,7 +27,7 @@ Official OpenCode documentation (read before inventing local conventions):
 
 ### Must / Must-not (host adaptation fidelity)
 
-**Must:** Author to [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) — OpenCode load surfaces (`instructions` with **absolute** `OPENCODE_HOME` path, matching global `AGENTS.md`, `skills` with `name`+`description`, `agents`, `skills.paths`); thin always-on; harness Read paths **Target** = absolute `{{COMPANION_ROOT}}/workflow/...` (transitional host-root `docs/workflow/...` until pointer-first-2); full restart after config edits.
+**Must:** Author to [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) — OpenCode load surfaces (`instructions` with **absolute** `OPENCODE_HOME` path, matching global `AGENTS.md`, `skills` with `name`+`description`, `agents`, `skills.paths`); thin always-on; harness Read paths **Target** = absolute `{{COMPANION_ROOT}}/workflow|skills|agents|rules/...` (pointer-first-2); full restart after config edits.
 
 **Must-not:** Put relative `instructions/…` paths in **global** `opencode.json` (cwd-resolved — silent non-injection); ship gates only under `instructions/` without `AGENTS.md` dual-write; use `../../docs|skills|agents/` hops in overlay skills, agents, workflow mirror, or review-subagent-models (Wrong path resolution base class); treat host `docs/workflow/` mirror as procedure SoT ([pointer-first](../roadmaps/pointer-first.md) — companion `{{COMPANION_ROOT}}/workflow/` is Target); invent gate semantics only on the host; use Cursor `rules/` layout on OpenCode; treat on-disk folders as Done without smoke rows in the host-adapter table; mark C1 pass from skill-description “default on” quotes alone.
 
@@ -177,7 +177,7 @@ skill({ name: "implementation-plan" })
 | In cursorEscape | On OpenCode adapter |
 | --------------- | ------------------- |
 | `skills/<id>/SKILL.md` (portable contract at repo root) | `skills/<id>/SKILL.md` (host entry + frontmatter) |
-| Deep procedure in FA / companion `workflow/` | **Target:** absolute `{{COMPANION_ROOT}}/workflow/...` Read from thin harness. **Transitional:** host-root `docs/workflow/...` until pointer-first-2 stub rewrite ([pointer-first](../roadmaps/pointer-first.md)) |
+| Deep procedure in FA / companion `workflow/` | **Target:** absolute `{{COMPANION_ROOT}}/workflow|skills|agents|rules/...` Read from thin harness (pointer-first-2). Legacy host `docs/workflow/...` mirror on disk until pointer-first-4 — not procedure SoT ([pointer-first](../roadmaps/pointer-first.md)) |
 
 Do not paste full iterative-plan / dual-review essays into always-on instructions.
 

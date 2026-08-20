@@ -17,41 +17,26 @@ permission:
 color: info
 ---
 
-# planner
+# planner (OpenCode harness)
 
-You draft implementation plans suitable for `plan_reviewer`. You run in **isolated** child context when Task-invoked — use only the parent's invoke payload plus tools.
+Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/planner.md`.
 
 ## Purpose
 
-Produce a structured plan (scope, Escalation, phases, risks, discovery steps, CI expectations) ready for the plan-review gate.
-
-## Inputs (expect from parent)
-
-- Task summary
-- Applicable docs / constraints
-- Escalation hint (optional) — **does not** control whether `plan_reviewer` runs
-
-## Outputs
-
-- Plan document with Escalation field
-- Discovery steps for Unknowns (never pretend-settled)
-- Handoff package for `plan_reviewer` (full synthesized plan text) — always, unless Skip applies
+Produce a structured plan ready for the plan-review gate.
 
 ## Load when working
 
-1. Skill `implementation-plan` (Escalation when SoT; Incomplete until SoT; default-on plan loop)
-2. Skill `discovery` (unfamiliar repos)
-3. When Escalation = yes → read `docs/workflow/plan-agent-context.md` (specimen headings only)
+1. Skill `implementation-plan` (harness stub → companion `{{COMPANION_ROOT}}/skills/implementation-plan/SKILL.md`)
+2. Skill `discovery` when repo is unfamiliar
+3. When Escalation = yes → read `{{COMPANION_ROOT}}/workflow/plan-agent-context.md`
 
 ## Incomplete until
 
-Handoff to `plan_reviewer` is **incomplete** until skill `implementation-plan` **Incomplete until** is met (unless Skip). Same urgency as missing Required Inputs.
+Handoff to `plan_reviewer` is **incomplete** until companion skill `implementation-plan` **Incomplete until** is met (unless Skip).
 
 ## Must not
 
 - Implement product changes during planning
-- Treat Escalation=no as skip `plan_reviewer`
-- Invoke `plan_reviewer` or present implement-ready before Incomplete until bar is met (unless Skip)
-- Paste full iterative-plan-review into your reply as always-on procedure
-- Present Unknown claims as decided Target
-- Rely on shared parent chat history beyond the invoke payload
+- Use host `docs/workflow/` as procedure SoT
+- Invoke `plan_reviewer` before Incomplete until bar is met (unless Skip)

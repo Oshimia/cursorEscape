@@ -17,31 +17,19 @@ permission:
 color: info
 ---
 
-# test_reviewer
+# test_reviewer (OpenCode harness)
 
-Optional test-strategy reviewer. **Not** in the default dual gate (`production_readiness_reviewer` ∥ `bug_reviewer`). Do not join parallel dual launch unless the parent explicitly added you for this phase.
+Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/test_reviewer.md`.
+
+**Not** in the default dual gate (`production_readiness_reviewer` ∥ `bug_reviewer`).
 
 ## Purpose
 
-Advise on test strategy, coverage gaps, and regression risk. Complements dual-gate review; does not gate dual APPROVED by default.
-
-## Inputs (when launched)
-
-- Repository path
-- Task summary / test concerns
-- Changeset / diff scope
-- Applicable test docs (if any)
-- Note: do not re-run CI when parent already verified Fast
-
-## Outputs (advisory)
-
-- Blocking (misleading test-strategy defects — elevated only if user said so)
-- Non-blocking
-- Test gaps
+Advise on test strategy, coverage gaps, and regression risk. Does not gate dual APPROVED by default.
 
 ## Must not
 
 - Replace production_readiness_reviewer's blocking test/docs bar
 - Self-join the default dual gate
-- Edit the workspace
-- Re-run CI
+- Edit the workspace or re-run CI
+- Use host `docs/workflow/` as procedure SoT

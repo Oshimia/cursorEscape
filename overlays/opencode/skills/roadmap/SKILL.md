@@ -7,7 +7,9 @@ description: >-
   handoffs, or when restructuring an approved plan into per-phase Agent context.
 ---
 
-# Roadmap (repo multi-phase handoff)
+# Roadmap (OpenCode harness)
+
+Thin harness. Full procedure: Read `{{COMPANION_ROOT}}/skills/roadmap/SKILL.md`.
 
 Roadmaps are **repo documentation**. Never write them under the OpenCode adapter tree.
 
@@ -19,25 +21,25 @@ Roadmaps are **repo documentation**. Never write them under the OpenCode adapter
 
 ## Steps
 
-1. Resolve path per deep doc (local convention → `docs/roadmaps/<feature>.md`).
-2. Copy vs restructure per accepted plan Escalation (see deep doc).
-3. Include Inter-phase contracts + per-phase Agent context headings.
-4. Update status after each phase QC accept.
+1. Read companion skill for path resolution and copy vs restructure rules.
+2. Include Inter-phase contracts + per-phase Agent context headings.
+3. Update status after each phase QC accept.
 
 ## Read when
 
 | Doc | When |
 |-----|------|
-| [plan-agent-context.md](docs/workflow/plan-agent-context.md) | Escalation dual path + Agent context headings |
-| [phased-multi-agent.md](docs/workflow/phased-multi-agent.md) | When to use, Composer handoff |
-| [discovery.md](docs/workflow/discovery.md) | Find existing docs / roadmap conventions |
-| [documentation-architecture.md](docs/workflow/documentation-architecture.md) | Default `docs/roadmaps/` layout when bootstrapping |
-| [README.md](docs/workflow/README.md) | Workflow doc index |
+| [SKILL.md]({{COMPANION_ROOT}}/skills/roadmap/SKILL.md) | Full procedure |
+| [plan-agent-context.md]({{COMPANION_ROOT}}/workflow/plan-agent-context.md) | Escalation dual path + Agent context headings |
+| [phased-multi-agent.md]({{COMPANION_ROOT}}/workflow/phased-multi-agent.md) | When to use, Composer handoff |
+| [discovery.md]({{COMPANION_ROOT}}/workflow/discovery.md) | Find existing docs / roadmap conventions |
+| [documentation-architecture.md]({{COMPANION_ROOT}}/workflow/documentation-architecture.md) | Default `docs/roadmaps/` layout |
+| [_index.md]({{COMPANION_ROOT}}/workflow/_index.md) | Workflow doc index |
 
 ## Must not
 
 - Store roadmaps under `~/.config/opencode` or the adapter skills tree
-- Invent scope not in the accepted plan when Escalation was **yes**
+- Use host `docs/workflow/` as procedure SoT
 
 ## Related
 
