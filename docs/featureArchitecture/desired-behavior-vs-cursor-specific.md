@@ -40,7 +40,8 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 | First host: OpenCode + T3 control plane | **Desired** | [design decisions](../../review/design-decisions.md) |
 | ClinePass (or equivalent) as OpenCode provider | **Desired** | Later; U13 unproven |
 | Role + model assignment via config | **Desired** | Not hardcoded in prompts ([agent roles](./agent-roles-and-model-assignment.md)) |
-| Iteration narrowing after many launches | **Nice-to-have** | Live guidance at count ≥ 9 |
+| 4-iteration pressure release for normal/review parents (Renew / Focus-narrow / Terminate+user with anti-abuse) | **Required** | [intended-workflow](./intended-workflow.md); [implementation-review](../../skills/implementation-review/SKILL.md). Supersedes historical count ≥ 9 / “no hard stop” narrowing. |
+| Composer Nb cap-exhausted handoff + Waive (process/out-of-spec) | **Cursor-specific** / Desired when using Composer | [composer](../../skills/composer/SKILL.md); Waive = Composer-only |
 
 ### Cursor-specific (map, do not hard-require)
 

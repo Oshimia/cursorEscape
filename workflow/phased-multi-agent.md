@@ -29,7 +29,7 @@ Same schema as escalated plans — see [plan-agent-context.md](plan-agent-contex
 
 ## Composer
 
-When the user assigns [composer](../skills/composer/SKILL.md), follow that skill’s phase lifecycle. Composer multi-phase **requires** a repo roadmap file. Composer verifies subagent process via transcripts (Nb, nested reviewers, and its own Na/migration work) before advancing each phase.
+When the user assigns [composer](../skills/composer/SKILL.md), follow that skill’s phase lifecycle (including **4-iteration pressure release**: closeout after dual APPROVED, or cap-exhausted handoff → Composer triage). Composer multi-phase **requires** a repo roadmap file. Composer verifies subagent process via transcripts (Nb, nested reviewers, and its own Na/migration work) before advancing each phase.
 
 If the user asks Composer to **plan**, stay in Plan mode / [implementation-plan](../skills/implementation-plan/SKILL.md) with Escalation **yes** — Composer does not draft plans while conducting.
 

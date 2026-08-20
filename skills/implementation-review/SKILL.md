@@ -33,8 +33,9 @@ When the user assigns [`composer`](../composer/SKILL.md) for phased execution:
 
 - The **phase subagent** is the implementing agent and **review-loop parent** for Nb
 - The Composer does not implement Nb, run reviewers for phase work, or fix product findings
-- Composer QC's the closeout report **and audits transcripts** (Nb, nested reviewers, and Composer's own Na/migration work for the phase), then runs **Full CI** again and an **automatic local commit** (never `git push`)
+- After dual `APPROVED` + Full CI, Composer QC's the closeout report **and audits transcripts** (Nb, nested reviewers, and Composer's own Na/migration work for the phase), then runs **Full CI** again and an **automatic local commit** (never `git push`)
 - If Full = `n/a`, dual APPROVED + explicit user ack before commit
+- **Pressure release:** after a 4-iteration block without dual APPROVED, the phase subagent does **not** self-renew and does **not** run Full CI — return a **cap-exhausted handoff** per [`composer`](../composer/SKILL.md). Schemas and triage live there. **Waive = Composer-only.**
 
 ---
 
@@ -76,20 +77,54 @@ Do **not** implement multiple plan phases and run one review at the end.
 ## Workflow
 
 ```text
-Implement phase → [Fast CI Observed (no fail/skip/claimed-only) → Reviewer A + Bugbot → fix must-fix]* → dual APPROVED (split bars) → Full CI (closeout, no reviewers) → changeset check → phase complete
+Implement phase
+  → for each ≤4-iteration block:
+      [Fast CI Observed → Reviewer A + Bugbot → fix must-fix] (max 4)
+      → dual APPROVED? → Full CI → complete
+      → else pressure-release reassessment (normal) or cap-exhausted handoff (Composer Nb)
 ```
 
 1. **Implement** the current phase (or full scope if single-phase) using discovery + this repo’s documented conventions.
-2. **Review loop (repeat while must-fix findings remain):** Run **Fast CI Observed** once, then launch **Reviewer A + Bugbot in parallel** with `Completion gate: review-loop` only. Cursor Task spawn: [implementation-review overlay](../../overlays/cursor/skills/implementation-review/SKILL.md). **Do not launch reviewers if Fast CI fails, is skipped (when Fast is not `n/a`), or is claimed-only** (prose “Fast CI passed” / `ci: pass` with no per-command rows).
-3. If **either** reviewer returns `CHANGES REQUESTED`, or Bugbot has any finding list ≠ `"None"`, or Reviewer-a has Blocking / Non-blocking (code/process) / **blocking** test/docs ≠ `"None"`: fix **every must-fix** finding → return to step 2 (increment review iteration). Do **not** treat Reviewer-a **Batchable (deferred)** as loop-blocking.
-4. When **both** return `APPROVED` on Fast CI Observed under the **split bars** below → **review loop is done**. Do **not** launch reviewers again unless you changed code after that approval.
-5. **Closeout (no reviewers):** Run **Full** CI (the repo’s commit-grade suite). If Full fails, fix and re-run Full only — **do not** re-run reviewers unless code changes invalidate the prior approval.
-6. Confirm complete changeset and doc updates for **this phase**. Report closeout with dual-APPROVED iteration, per-leg launch counts this phase, Full CI pass, any **Batchable (deferred)** punch list copied from Reviewer-a, and the caveat that dual APPROVED is the loop bar — not proven ship-class catch or proven no-escape.
-7. **Stop.** Proceed to next phase, Composer QC, or declare task complete.
+2. **Review loop (within a 4-iteration block):** Run **Fast CI Observed** once, then launch **Reviewer A + Bugbot in parallel** with `Completion gate: review-loop` only. Cursor Task spawn: [implementation-review overlay](../../overlays/cursor/skills/implementation-review/SKILL.md). **Do not launch reviewers if Fast CI fails, is skipped (when Fast is not `n/a`), or is claimed-only** (prose “Fast CI passed” / `ci: pass` with no per-command rows).
+3. If **either** reviewer returns `CHANGES REQUESTED`, or Bugbot has any finding list ≠ `"None"`, or Reviewer-a has Blocking / Non-blocking (code/process) / **blocking** test/docs ≠ `"None"`: fix **every must-fix** finding → return to step 2 (increment review iteration within the block). Do **not** treat Reviewer-a **Batchable (deferred)** as loop-blocking. **Do not launch a 5th pair** in the current block.
+4. **Exit the block:**
+   - If **both** return `APPROVED` → go to step 5 (closeout). Do **not** launch reviewers again unless you subsequently changed code.
+   - If iteration **4** ends without dual APPROVED → **stop** here; follow [Pressure release](#pressure-release-4-iteration-blocks) (normal reassessment or Composer cap-exhausted handoff). Do **not** run Full CI, do **not** report `task-phase-complete`, do **not** continue to steps 5–7.
+5. **Closeout (no reviewers) after dual APPROVED only:** Run **Full** CI (the repo’s commit-grade suite). If Full fails, fix and re-run Full only — **do not** re-run reviewers unless code changes invalidate the prior approval.
+6. Confirm complete changeset and doc updates for **this phase**. Report closeout with dual-APPROVED iteration, **pressure-release block number**, **cumulative** per-leg launch counts this phase, Full CI pass, any **Batchable (deferred)** punch list copied from Reviewer-a, and the caveat that dual APPROVED is the loop bar — not proven ship-class catch or proven no-escape.
+7. **Stop.** Proceed to next phase, Composer QC, or declare task complete — **only** after dual APPROVED + Full (or documented `n/a` path).
 
-**No hard stop while must-fix findings remain.** Re-launch **both** reviewers after every **must-fix** batch with `review-loop` and Fast CI. **Never** pair Full CI with a reviewer launch. Open Reviewer-a **Batchable (deferred)** alone does not keep the loop open.
 
-**Re-scope after 8 launches / leg (no hard stop):** Keep a per-leg `completed` count this phase (start at 0). Before each invoke: compute `count = completed + 1` (the value that will appear in the prompt as “including this launch”). If `count >= 9`, **narrow scope before invoke**: Bugbot → Custom Instructions = current-fix only; Reviewer-a → narrower **task summary** + **applicable docs** only (do **not** add a Custom Instructions field to Reviewer-a). Put `count` in the invoke prompt, launch, then set `completed = count`. When launching in parallel, compute both legs’ counts the same way before either invoke. Still launch both legs; do not hard-stop reviews. Optionally split the phase instead of narrowing.
+**Never** pair Full CI with a reviewer launch. Open Reviewer-a **Batchable (deferred)** alone does not keep the loop open.
+
+### Pressure release (4-iteration blocks)
+
+**One iteration** = Fast CI Observed → Reviewer A ∥ Bugbot → fix must-fix. **Max 4 iterations per block.** Reset review **iteration** to 1 at phase start and after each Renew / Focus-narrow block. Keep a per-leg `completed` launch count for the **whole phase** (do **not** reset at block boundaries). Before each invoke: `count = completed + 1`; put `count` in the invoke prompt; after launch set `completed = count`. Closeout / reassessment reports both `block N` and cumulative launches.
+
+After iteration 4 without dual APPROVED:
+
+| Parent | Action |
+|--------|--------|
+| **Normal (non-Composer)** | Stop editing for the loop → punch list → **written reassessment** → choose exactly one: **Renew** (≤4 same must-fix) \| **Focus-narrow** (≤4 with reduced task summary / applicable docs / Bugbot Custom Instructions = current-fix only — **no** Custom Instructions field on Reviewer-a) \| **Terminate** + escalate to user |
+| **Composer phase subagent** | Do **not** self-renew; do **not** run Full CI; return **cap-exhausted handoff** per [`composer`](../composer/SKILL.md) |
+
+**Focus-narrow** is an explicit reassessment choice for the **next** block — not a mid-block “when count ≥ 9” parallel valve.
+
+#### Anti-abuse (normal agents) — must / must-not
+
+Pressure release is a **stuckness / thrash brake**, not an opt-out from dual APPROVED or must-fix work.
+
+**Default:** if any **in-spec must-fix** findings remain → **Renew** or **Focus-narrow**. Dual APPROVED remains the success path unless the user ends the task.
+
+**Terminate allowed only when** stated in the reassessment: (1) blocked on a product/scope decision the agent cannot resolve; (2) contradictory requirements need user arbitration; (3) only true out-of-scope leftovers remain (escalate — do not silently drop); (4) no meaningful progress across the last full Focus-narrow block (same must-fix recurring with no new evidence).
+
+**Terminate forbidden when:** actionable in-spec must-fix remain; convenience / “ship anyway”; Fast CI fail/skip/claimed-only; skipping required fixes/tests/docs; implying dual APPROVED, phase complete, or task complete without the bar.
+
+**Focus-narrow is not a drop-list** — do not reclassify in-spec must-fix as Batchable/out-of-spec to clear the bar. **Renew is not idle spinning** — each block must attempt concrete fixes or Terminate+escalate with the blocker.
+
+**Required reassessment record** (before choosing): block number; cumulative per-leg launches; in-spec vs out-of-spec lists; choice; rationale; attestation `not using pressure release to skip in-spec must-fix work: yes`.
+
+**Normal agents never Waive.** Waive (process/out-of-spec with attestation) is **Composer-only**.
 
 **Autonomy:** Run the loop without asking the user to approve each review round. Fix findings autonomously unless blocked on a product decision — then ask once, document the decision, and continue.
 
@@ -110,26 +145,27 @@ Reviewers are **only** invoked with `Completion gate: review-loop` and **Fast** 
 
 | Situation | CI tier | Reviewers? | Completion gate (reviewers) | Next step |
 |-----------|---------|------------|----------------------------|-----------|
-| Mid-loop / still fixing | **Fast** | Yes — Reviewer A + Bugbot | `review-loop` | Fix must-fix findings → new review iteration |
+| Mid-loop / still fixing (iterations 1–3 of block, or 4 with dual APPROVED pending after this launch) | **Fast** | Yes — Reviewer A + Bugbot | `review-loop` | Fix must-fix findings → new review iteration **within the block** (max 4) |
 | Dual `APPROVED` (split bars; Reviewer-a batchable may remain) | — | **No** | — | Run **Full** CI only (closeout) |
 | Full CI pass after dual `APPROVED` | **Full** | **No** | — | Report `task-phase-complete`; stop |
+| Iteration 4 without dual `APPROVED` | — | **No** further launches | — | Pressure release: normal reassessment or Composer cap-exhausted handoff — **no Full**, **no** `task-phase-complete` |
 
-**Hard stop (no duplicate loops):**
+**Closeout prohibitions (no duplicate loops):**
 
 1. **Never** launch Reviewer A or Bugbot with Full CI — reviewers always follow Fast CI only.
 2. **Never** launch reviewers again after dual `APPROVED` (split bars) unless you subsequently changed code. Open Reviewer-a **Batchable (deferred)** alone does **not** invalidate approval.
-3. **Closeout = Full CI only** after dual `APPROVED`.
+3. **Closeout = Full CI only** after dual `APPROVED`. After a **4-iteration pressure-release block** without dual APPROVED, Composer Nb returns a cap-exhausted handoff instead — **no Full**.
 4. If Full CI fails after dual `APPROVED`, fix and re-run **Full** only. Re-run reviewers only if fixes invalidate the prior approval.
 
 ---
 
 ## Subagent models
 
-Track the review iteration within the current phase or single-phase task. Reset to iteration 1 at the start of each phase. Recommended default: `composer-2.5` on both subagents every iteration.
+Track the review **iteration within the current pressure-release block** (1–4). Reset to iteration 1 at the start of each phase and after each Renew / Focus-narrow. Recommended default: `composer-2.5` on both subagents every iteration.
 
-| Review iteration | Reviewer A model | Bugbot model |
-|------------------|------------------|--------------|
-| 1, 2, 3, … | `composer-2.5` | `composer-2.5` |
+| Review iteration (within block) | Reviewer A model | Bugbot model |
+|---------------------------------|------------------|--------------|
+| 1, 2, 3, 4 | `composer-2.5` | `composer-2.5` |
 
 Use a different model only when the user explicitly requests it.
 
@@ -164,12 +200,15 @@ If Full is `n/a` (no automated suite), still require dual APPROVED; commit only 
 
 After dual `APPROVED` + Full CI, report at least:
 
-- Dual-APPROVED review iteration
-- `Reviewer-a launches this phase: <N>`
-- `Bugbot launches this phase: <N>`
+- Dual-APPROVED review iteration (within final block)
+- Pressure-release **block** number
+- `Reviewer-a launches this phase: <N>` (cumulative)
+- `Bugbot launches this phase: <N>` (cumulative)
 - Full CI result
 - **Batchable (deferred):** copy from Reviewer-a final output, or `"None"`
 - **Caveat:** dual APPROVED is the loop completion bar — not proven ship-class catch or proven no-escape. Do not run a post-clean audit unless the user asks.
+
+Cap-exhausted handoff (Composer Nb, no dual APPROVED): do **not** use this closeout schema — use the handoff schema in [`composer`](../composer/SKILL.md).
 
 ---
 

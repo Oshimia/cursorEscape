@@ -6,23 +6,27 @@
 
 Same bar as plan review — multi-file, large single-file, cross-layer, behavioral, new modules, migrations, each plan phase. **When in doubt, run it.**
 
-**Composer exception:** When the user assigns [composer](../skills/composer/SKILL.md), the **phase subagent** is the review-loop parent for Nb. Composer does QC (closeout report + transcript audit) + Full CI + local commit only.
+**Composer exception:** When the user assigns [composer](../skills/composer/SKILL.md), the **phase subagent** is the review-loop parent for Nb. After dual APPROVED, Composer does QC (closeout report + transcript audit) + Full CI + local commit only. After a 4-iteration block without dual APPROVED, the subagent returns a **cap-exhausted handoff** (no Full) for Composer triage (Renew | Focus-narrow | Terminate | Waive) — see composer skill.
 
 ## Per-phase rule
 
-Do not batch phases. Finish dual `APPROVED` + Full closeout for phase N before phase N+1. Reset review iteration to 1 each phase.
+Do not batch phases. Finish dual `APPROVED` + Full closeout for phase N before phase N+1. Reset review iteration to 1 each phase and after each pressure-release Renew / Focus-narrow.
 
 ## Workflow
 
 ```text
-Implement → [Fast CI Observed → Reviewer A + Bugbot → fix must-fix]* → dual APPROVED (split bars) → Full CI (no reviewers) → done
+Implement
+  → ≤4× (Fast CI Observed → Reviewer A + Bugbot → fix must-fix)
+  → dual APPROVED → Full CI → done
+  → else: normal reassessment (Renew | Focus-narrow | Terminate+user)
+       or Composer Nb cap-exhausted handoff
 ```
 
 1. Implement using [discovery.md](discovery.md)
 2. Fast CI Observed (see [ci-ladder.md](ci-ladder.md)); do not launch on fail, skipped (when Fast ≠ n/a), or claimed-only; then launch both reviewers with `Completion gate: review-loop` and the locked Reviewer-a opener
-3. Fix must-fix findings; repeat until dual `APPROVED`: Bugbot all lists `"None"`; Reviewer-a Blocking / Non-blocking (code/process) / blocking test/docs `"None"` — **Batchable (deferred)** may remain. Per leg: `count = completed+1`; if `count >= 9`, narrow before invoke (Bugbot Custom Instructions = current-fix; Reviewer-a = narrower task summary + applicable docs) — no hard stop; do not add Custom Instructions to Reviewer-a
-4. Full CI only — do **not** re-launch reviewers after dual APPROVED unless code changed. Closeout attests per-leg launch counts and **Batchable (deferred)** punch list; dual APPROVED ≠ proven ship-class catch or proven no-escape
-5. Report `task-phase-complete`
+3. Fix must-fix findings; at most **4** dual-review iterations per block. Do **not** launch a 5th pair. Dual `APPROVED` requires Bugbot all lists `"None"`; Reviewer-a Blocking / Non-blocking (code/process) / blocking test/docs `"None"` — **Batchable (deferred)** may remain. Track cumulative per-leg launch counts for the phase; reset **iteration** (not launch totals) after Renew / Focus-narrow. Full policy + **anti-abuse** (normal agents must not use the valve to skip in-spec must-fix): [implementation-review](../skills/implementation-review/SKILL.md)
+4. After dual APPROVED: Full CI only — do **not** re-launch reviewers unless code changed. Closeout attests block number, cumulative launch counts, and **Batchable (deferred)** punch list; dual APPROVED ≠ proven ship-class catch or proven no-escape. Report `task-phase-complete` **only** after dual APPROVED + Full.
+5. After iteration 4 **without** dual APPROVED: do **not** report `task-phase-complete`. Normal parent: written reassessment (Renew | Focus-narrow | Terminate+user with anti-abuse). Composer Nb: **cap-exhausted handoff** (no Full). See [implementation-review](../skills/implementation-review/SKILL.md) / [composer](../skills/composer/SKILL.md).
 
 Recommended model: see [review-subagent-models.md](../overlays/cursor/review-subagent-models.md).
 

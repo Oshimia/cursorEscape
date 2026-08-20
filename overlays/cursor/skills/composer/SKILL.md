@@ -28,7 +28,7 @@ Thin harness. Full conductor procedure: Read `{{COMPANION_ROOT}}/skills/composer
 
 **Companion reachability:** `{{COMPANION_ROOT}}` resolves to the cursorEscape SoT checkout — required when workspace ≠ cursorEscape. Copy-out fallback (transitional mirror only): `C:/Users/admin/.cursor/docs/workflow/`.
 
-**Cursor conductor notes:** Phase subagent is the implementer and review-loop parent. Composer does not implement Nb, run reviewers for phase work, or fix product findings. Composer QC's closeout + transcript audit, then Full CI + automatic local commit (never `git push`).
+**Cursor conductor notes:** Phase subagent is the implementer and review-loop parent (≤4 dual-review iterations per pressure-release block). Composer does not implement Nb, run reviewers for phase work, or fix product findings. On dual APPROVED closeout: Composer QC's closeout + transcript audit, then Full CI + automatic local commit (never `git push`). On cap-exhausted handoff: audit → triage per companion composer skill (schemas live there).
 
 ---
 
@@ -41,11 +41,12 @@ Launch Task:
 - run_in_background: false
 
 Rule overrides:
-- You are implementing agent + review-loop parent. Follow implementation-review completely.
+- You are implementing agent + review-loop parent. Follow implementation-review completely (≤4 dual-review iterations per pressure-release block; no 5th pair).
 - Before code: discovery Step 0 (local reference-docs if present) else discovery fallback. Roadmap "Where to read context" is an index, not a substitute.
-- Do NOT git commit or git push. Return closeout report; Composer commits after QC.
-- Complete only after dual APPROVED (Fast + review-loop) then Full CI. Never launch reviewers with Full.
-- After dual APPROVED (Bugbot all None; Reviewer-a blocking lists None — Batchable (deferred) may remain): Full CI only — do not re-launch reviewers.
+- Do NOT git commit or git push. Composer commits after QC ACCEPT.
+- Prefer dual APPROVED (Fast + review-loop) then Full CI. Never launch reviewers with Full.
+- After dual APPROVED (Bugbot all None; Reviewer-a blocking lists None — Batchable (deferred) may remain): Full CI only — do not re-launch reviewers; return closeout report.
+- After iteration 4 without dual APPROVED: do NOT self-renew; do NOT run Full CI; return Phase cap-exhausted handoff (schema in companion composer SKILL).
 
 Prompt (mandatory):
   0. Docs mandate (above)
@@ -53,5 +54,5 @@ Prompt (mandatory):
   2. Locked product decisions
   3. Inter-phase contracts (full)
   4. Agent context — Phase N (full)
-  5. Closeout report schema (include docs consulted + subagent/reviewer Task ids)
+  5. Return either closeout report schema OR cap-exhausted handoff schema (companion composer SKILL) — include docs consulted + subagent/reviewer Task ids
 ```

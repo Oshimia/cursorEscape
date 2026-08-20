@@ -42,15 +42,15 @@ Launch the reviewer-a subagent with:
 Use the reviewer-a subagent to review this implementation.
 
 Repository path: <absolute path>
-Task summary: <one paragraph — what this phase or change set is supposed to accomplish; when count = completed+1 is >= 9 for Reviewer-a, narrow task summary + applicable docs to the current fix — never override Completion gate, CI Observed, or verdict bar>
+Task summary: <one paragraph — what this phase or change set is supposed to accomplish; when parent declares Focus-narrow for this pressure-release block, narrow task summary + applicable docs to the current fix — never override Completion gate, CI Observed, or verdict bar>
 Plan phase: <N of M | single-phase — omit line if ad-hoc with no plan>
-Review iteration: <N — reset to 1 at the start of each phase>
-Reviewer-a launches this phase: <count = completed+1 including this launch>
+Review iteration: <N — 1–4 within current pressure-release block; reset to 1 at phase start and after Renew/Focus-narrow>
+Reviewer-a launches this phase: <count = completed+1 including this launch — cumulative for the phase>
 Bugbot launches this phase: <count = completed+1 including this launch — compute both before parallel invoke>
 Completion gate: review-loop
 Review model: <model slug used for this reviewer-a launch>
 Prior approved phases: <list or "none" — multi-phase only>
-Applicable docs: <docs for touched areas, if known; when Reviewer-a count = completed+1 is >= 9, narrow to docs/files for the current fix>
+Applicable docs: <docs for touched areas, if known; when parent declares Focus-narrow for this block, narrow to docs/files for the current fix>
 
 CI gate (parent-verified, do not re-run):
 - ci mode: Fast
@@ -81,7 +81,7 @@ Launch the Bugbot subagent with:
 
 Full Repository Path: <absolute repo path>
 Diff: branch changes | uncommitted changes
-Custom Instructions: <task-specific — regressions, security surfaces, incomplete changeset, scope boundaries; when Bugbot count = completed+1 is >= 9, narrow to current-fix only>
+Custom Instructions: <task-specific — regressions, security surfaces, incomplete changeset, scope boundaries; when parent declares Focus-narrow for this pressure-release block, narrow to current-fix only>
 ```
 
 **Custom Instructions** must name:

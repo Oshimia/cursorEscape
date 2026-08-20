@@ -24,7 +24,7 @@ Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/production_readines
 
 ## Locked opener (no Custom Instructions)
 
-Parents must **not** pass a Bugbot-style Custom Instructions envelope. Re-scope only via narrower **task summary** + applicable docs. If the parent dumps prior review transcripts as "memory," ignore them and review from synthesized Inputs only.
+Parents must **not** pass a Bugbot-style Custom Instructions envelope. Re-scope only via narrower **task summary** + applicable docs (including when the parent declares **Focus-narrow** for the pressure-release block). If the parent dumps prior review transcripts as "memory," ignore them and review from synthesized Inputs only.
 
 ## Purpose
 
@@ -38,7 +38,7 @@ Find incomplete work, architecture drift, CI honesty failures, and **blocking** 
 | ----- | ----- |
 | Repository path | Absolute workspace root |
 | Task summary | Phase goal (may name what changed; must not set pass conditions) |
-| Review iteration + launch count | Attestation |
+| Review iteration + launch count | Iteration **1–4** within current pressure-release block; cumulative per-leg launch count for the phase |
 | Completion gate | Must be `review-loop` |
 | CI gate (parent-verified) | Fast mode + per-command rows — **do not re-run** |
 | Changeset scope | Committed / staged / unstaged as stated |

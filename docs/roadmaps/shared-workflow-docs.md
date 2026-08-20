@@ -10,7 +10,7 @@
 - **B** and **C** rejected (lean contracts as SoT; hybrid bulk still in overlay).
 - Live `~/.cursor` is not overwritten. Cursor copy-out unauthorized. **OpenCode** host-plugged copy-out authorized via [opencode-overlays-sot](./opencode-overlays-sot.md) Phase 2 (`overlays/opencode/`). No `adapters/`.
 - Promote mechanic: **copy** overlay extract to bases; overlay stays fat until Phase 5.
-- This-program review-loop cap: phase agents ≤4 dual-review iterations, then Composer triage (renew ≤4 / waive process nits / change approach). Fast/Full failures are not waivable.
+- This-program review-loop cap (historical): phase agents ≤4 dual-review iterations, then Composer triage (renew ≤4 / waive process nits / change approach). Fast/Full failures are not waivable. **Going forward:** global 4-iteration pressure release in companion SoT ([implementation-review](../../skills/implementation-review/SKILL.md), [composer](../../skills/composer/SKILL.md)) — Renew | Focus-narrow | Terminate | Waive; “change approach” maps to Terminate / Focus-narrow.
 
 ## Target layout (end state)
 
@@ -35,7 +35,7 @@ cursorEscape/
 - **`pre-commit-ci-gate` destination:** Target contract + overlay `.mdc` body → `rules/pre-commit-ci-gate.md`. Overlay keeps thin `.mdc`. Not a sixth SKILL.md.
 - **Leaf map:** see Phase 4 Named leaf map. No extra `docs/skills` or `docs/agents` markdown leaves beyond that table.
 - **Phase 2 cite contract:** After `git mv`, same-phase inbound cite repair from remaining `docs/**` and `README.md`. Do not leave hubs broken until Phase 6. Imported banners unchanged.
-- **Review-loop cap (this program):** Phase subagents at most **4** dual-review iterations (Fast CI Observed → reviewer-a ∥ Bugbot → fix). Reset to 1 at phase start and after Composer renew. Spec launches to this phase’s Agent context only. Do not launch a 5th pair. If iteration 4 lacks dual APPROVED: stop, return punch list to Composer. Composer: (1) Renew ≤4 with narrowed spec; (2) Waive out-of-spec/process nits with attestation — **do not waive** Fast/Full CI failures; (3) Change approach. Dual APPROVED preferred.
+- **Review-loop cap (this program — historical):** Phase subagents at most **4** dual-review iterations (Fast CI Observed → reviewer-a ∥ Bugbot → fix). Reset to 1 at phase start and after Composer renew. Spec launches to this phase’s Agent context only. Do not launch a 5th pair. If iteration 4 lacks dual APPROVED: stop, return punch list to Composer. Composer: (1) Renew ≤4 with narrowed spec; (2) Waive out-of-spec/process nits with attestation — **do not waive** Fast/Full CI failures; (3) Change approach. Dual APPROVED preferred. **Superseded going forward** by companion SoT 4-iteration pressure release ([implementation-review](../../skills/implementation-review/SKILL.md), [composer](../../skills/composer/SKILL.md)) — Renew | Focus-narrow | Terminate | Waive; “change approach” maps to Terminate / Focus-narrow.
 
 ## Migration / external apply order
 

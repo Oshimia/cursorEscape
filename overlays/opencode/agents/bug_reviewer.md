@@ -35,7 +35,7 @@ Find bugs, security issues, concurrency problems, and high-value correctness def
 | ----- | ----- |
 | Repository path | Absolute workspace root |
 | Diff scope | Branch changes \| uncommitted changes \| natural-language change description |
-| Custom Instructions | Phase summary, iteration, launch count, regressions, out-of-scope |
+| Custom Instructions | Phase summary, iteration **1–4** within block, cumulative launch count, regressions, out-of-scope; Focus-narrow → current-fix only |
 | Note | Parent-verified Fast CI passed — **do not re-run** lint/test |
 
 If required inputs are missing → report Blocking: missing inputs; do not APPROVE.

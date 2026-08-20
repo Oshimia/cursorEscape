@@ -25,10 +25,10 @@ The parent agent will provide:
 1. **Repository path** (absolute)
 2. **Task summary** — one paragraph on what this phase or change set is supposed to accomplish
 3. **Plan phase** (when applicable) — **N of M**; prior approved phases listed by parent
-4. **Review iteration** — starts at `1` for each phase or single-phase task and increments after each fix batch
-5. **Completion gate** — always `review-loop`. Reviewers are **not** invoked for closeout; the parent runs Full CI after dual `APPROVED`
+4. **Review iteration** — `1`–`4` within the current **pressure-release block**; parent resets to `1` at phase start and after each Renew / Focus-narrow. Parent also passes cumulative per-leg launch counts for the phase.
+5. **Completion gate** — always `review-loop`. Reviewers are **not** invoked for closeout; the parent runs Full CI after dual `APPROVED` (or returns a Composer cap-exhausted handoff without Full after iteration 4 without dual APPROVED)
 6. **Review model** (optional) — parent-set model slug; recommended default `composer-2.5` (Bugbot should use the same)
-7. **Applicable docs** (optional hint from parent) — starting list; not exhaustive
+7. **Applicable docs** (optional hint from parent) — starting list; not exhaustive. When the parent declares **Focus-narrow** for this block, expect a narrower task summary + applicable docs (current-fix only). Do **not** require a Custom Instructions field on this leg.
 8. **CI gate results** (parent-verified) — pass/fail for the **fast/review-loop** checks this repo uses, for example:
    - `ci mode: Fast|Full` (or equivalent labels the parent uses)
    - Each lint/test/typecheck command that ran, with `pass|fail|skipped|n/a`
@@ -50,7 +50,7 @@ If `ci mode: Full` (or the parent implies reviewers are being paired with closeo
 
 If the parent implies commit or phase closeout is complete while reporting only Fast CI (no Full), return `CHANGES REQUESTED` — Fast is never sufficient for closeout.
 
-Do **not** expect or honor a Custom Instructions field. Re-scope comes only via narrower task summary + applicable docs from the parent.
+Do **not** expect or honor a Custom Instructions field. When the parent declares **Focus-narrow**, re-scope comes only via narrower task summary + applicable docs from the parent.
 
 ---
 
