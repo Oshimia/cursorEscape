@@ -33,7 +33,7 @@ pointer-first-3 confirms Cursor thin wrappers + **companion reachability when wo
 | Item | Status | Disposition |
 | ---- | ------ | ----------- |
 | 5 fat skills (pre-Phase 5 extract) | Present | **Deferred** — non-blocking; live sync to thin `{{COMPANION_ROOT}}` stubs operator-gated |
-| `docs/workflow/` mirror (8 leaves) | Present | **Deferred** to pointer-first-4 mirror disposition |
+| `docs/workflow/` mirror (8 leaves) | Present on Cursor live | **OpenCode deleted pf4**; Cursor live sync operator-gated ([closeout](./pointer-first-4-closeout-2026-08.md)) |
 | Missing skill ads: discovery, plan-review | Absent | **Deferred** — intentional Cursor harness shape per [skills/_index.md](../skills/_index.md) |
 | Rules fat bodies | Present | **C1 pass** at runtime — keep until harness-only sync |
 | Token merge procedure | Documented | [cursor-host-adapter.md](../docs/SOPs/cursor-host-adapter.md) |
@@ -52,7 +52,7 @@ pointer-first-3 confirms Cursor thin wrappers + **companion reachability when wo
 
 - **Workspace ≠ cursorEscape:** After live sync with token merge, harness Reads resolve to companion absolute paths — not workspace-relative overlay hops.
 - **C1 live:** Fat `.mdc` gate bodies remain acceptable until operator chooses harness-only sync; overlay documents merge requirement.
-- **pointer-first-4:** Runtime smoke rows for Cursor companion-edit + mirror disposition.
+- **pointer-first-4:** OpenCode mirror deleted; C6 minimum smoke pass (2026-08-20 operator). Cursor live fat-skill sync remains operator-gated.
 
 ## Related
 

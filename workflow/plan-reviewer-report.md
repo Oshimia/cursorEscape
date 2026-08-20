@@ -1,6 +1,7 @@
 # Plan reviewer report schema
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-20  
+**Companion-edit probe (pointer-first-4):** `pf4-visibility-marker-20260820` — author-time marker in companion SoT; optional runtime row **13** spot-check may quote this line from `{{COMPANION_ROOT}}/workflow/plan-reviewer-report.md` (not host mirror copy-out).
 
 **Skills:** [plan-review](../skills/plan-review/SKILL.md), [implementation-plan](../skills/implementation-plan/SKILL.md). **Agent:** [plan_reviewer](../agents/plan_reviewer.md).
 

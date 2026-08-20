@@ -1,7 +1,7 @@
 # cursorEscape Roadmap
 
 **Last updated:** 2026-08-20  
-**Status:** shared-workflow-docs **Phase 6 complete**; OpenCode overlays SoT **Phase 3 live sync complete** (2026-08-20; runtime smoke rows **1–4**, **9–10**, **13** pass per [host-adapter](./SOPs/opencode-host-adapter.md)); [pointer-first](./roadmaps/pointer-first.md) **in progress** (pointer-first-0). Runtime not started. First recreation: **T3 Code + OpenCode** (external). Identity: **skill/workflow manager across stacks** (not machines).
+**Status:** shared-workflow-docs **Phase 6 complete**; OpenCode overlays SoT **Phase 3 live sync complete** (2026-08-20); [pointer-first](./roadmaps/pointer-first.md) **complete** (pointer-first-4, 2026-08-20). OpenCode procedure mirror deleted; C6 minimum smoke **pass** (2026-08-20 operator) per [closeout](../analysis/pointer-first-4-closeout-2026-08.md). Runtime not started. First recreation: **T3 Code + OpenCode** (external). Identity: **skill/workflow manager across stacks** (not machines).
 
 This repository is the owner's **skill and workflow manager**: preserve and evolve personal agentic skills and the plan → implement → dual review loop, and apply them across stacks without inseparable dependence on Cursor, a single IDE, or a single model provider. Analog: Theo `fleet` ([Observed](../research/theo-fleet-skill-management.md)). Non-goal: multi-machine sync.
 

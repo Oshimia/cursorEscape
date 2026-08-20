@@ -1,7 +1,7 @@
 # Roadmap: Companion pointer-first architecture
 
 **Last updated:** 2026-08-20  
-**Status:** **In progress** — pointer-first-4 next. pointer-first-3 dual APPROVED iter 3; pf2 `fec0c75`; pf1 `6cdb1c5`; pf0 `0078420`.
+**Status:** **Complete** — pointer-first-4 closeout (2026-08-20). pf3 `cdda0fd`; pf2 `fec0c75`; pf1 `6cdb1c5`; pf0 `0078420`. C6 minimum smoke **pass** (2026-08-20 operator post-mirror) per [closeout note](../../analysis/pointer-first-4-closeout-2026-08.md).
 **Plan source:** accepted plan `plan_reviewer_report_sot_e3211634` (Companion pointer-first architecture).  
 **Program id:** `pointer-first` (phases **pointer-first-0 … pointer-first-4**). Do not confuse with [opencode-overlays-sot](./opencode-overlays-sot.md) phases 0–3.
 
@@ -25,7 +25,7 @@
 - [x] **pointer-first-1** — `workflow/plan-reviewer-report.md`; thin portable plan_reviewer; skills Read when
 - [x] **pointer-first-2** — OpenCode stubs + COMPANION_ROOT; skills.paths discovery; live stub sync (backup first) — Probe A deferred (operator restart)
 - [x] **pointer-first-3** — Cursor overlay/live companion reachability audit
-- [ ] **pointer-first-4** — Smoke C6 set 1,2,3,4,8,9–10,13,14; companion-edit proof; mirror disposition; closeout
+- [x] **pointer-first-4** — Smoke C6 minimum 1,2,3,4,8,9–10,13 + install-time 14; companion-edit proof; mirror disposition; closeout ([closeout note](../../analysis/pointer-first-4-closeout-2026-08.md))
 
 ## Follow-on tickets
 
@@ -91,6 +91,16 @@
 - **Full CI:** Doc link integrity for new SOP + audit + overlay index.
 - **Deliverables:** [ ] Audit table [ ] Blocking gaps fixed (COMPANION_ROOT hops) [ ] Live gaps deferred with reason [ ] cursor-host-adapter SOP
 - **Risks:** Historical fat `~/.cursor` — document, don't require full rewrite unless C1/C2 fail.
+
+## Agent context — pointer-first-4 (smoke closeout)
+
+- **Goal:** Prove companion-edit visibility without copy-out; dispose procedure mirror; close program.
+- **Depends on / entry gate:** pointer-first-3 commit `cdda0fd`.
+- **In scope:** Smoke C6 minimum **1, 2, 3, 4, 8, 9–10, 13** + install-time row **14**; companion-edit marker in `workflow/plan-reviewer-report.md`; author-time harness grep; live `OPENCODE_HOME/docs/workflow/` mirror delete; overlay `_index` + host-adapter updates; [closeout note](../../analysis/pointer-first-4-closeout-2026-08.md).
+- **Out of scope:** Re-authoring stubs; plan file; Cursor live fat-skill sync.
+- **Deliverables:** [x] Author-time harness SoT greps [x] Companion-edit marker [x] Mirror deleted (OpenCode) [x] Closeout note + operator runbook [x] Runtime post-mirror smoke (C6 minimum pass 2026-08-20)
+- **Fast CI:** Zero positive harness Target cites to host `docs/workflow/`; zero `../../` hops in `overlays/opencode` + `overlays/cursor`; companion `COMPANION_ROOT` Reads in harness.
+- **Full CI:** Doc link integrity for closeout note + updated SOPs/indexes.
 
 ## Related
 

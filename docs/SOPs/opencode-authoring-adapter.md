@@ -177,7 +177,7 @@ skill({ name: "implementation-plan" })
 | In cursorEscape | On OpenCode adapter |
 | --------------- | ------------------- |
 | `skills/<id>/SKILL.md` (portable contract at repo root) | `skills/<id>/SKILL.md` (host entry + frontmatter) |
-| Deep procedure in FA / companion `workflow/` | **Target:** absolute `{{COMPANION_ROOT}}/workflow|skills|agents|rules/...` Read from thin harness (pointer-first-2). Legacy host `docs/workflow/...` mirror on disk until pointer-first-4 — not procedure SoT ([pointer-first](../roadmaps/pointer-first.md)) |
+| Deep procedure in FA / companion `workflow/` | **Target:** absolute `{{COMPANION_ROOT}}/workflow|skills|agents|rules/...` Read from thin harness (pointer-first-2). OpenCode host `docs/workflow/...` mirror **deleted** pointer-first-4 — not procedure SoT ([closeout](../../analysis/pointer-first-4-closeout-2026-08.md)) |
 
 Do not paste full iterative-plan / dual-review essays into always-on instructions.
 

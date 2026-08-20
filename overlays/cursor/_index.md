@@ -15,7 +15,7 @@ Live `~/.cursor` is **not** overwritten from this repo. Copy-out is **not author
 | -------- | ------------------------ |
 | **Companion SoT** | `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/`, `rules/` |
 | **Overlay harness (author-time)** | Read tables cite `{{COMPANION_ROOT}}/…` — **not** repo-relative hops |
-| **Live Cursor (transitional)** | Fat skills + `~/.cursor/docs/workflow/` mirror may still exist — not SoT; disposition [pointer-first-4](../../docs/roadmaps/pointer-first.md) |
+| **Live Cursor (transitional)** | Fat skills + `~/.cursor/docs/workflow/` mirror may still exist — not SoT; see [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md) (OpenCode mirror deleted; Cursor live sync operator-gated) |
 
 On copy-out: merge `{{COMPANION_ROOT}}` → absolute path to this repo (e.g. `C:/Users/admin/source/repos/general-projects/cursorEscape`). Required when **workspace ≠ cursorEscape**.
 

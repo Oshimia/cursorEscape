@@ -38,7 +38,7 @@
 - [ ] R0 evidence: parallel Tasks, deny-edit reviewers, Fast CI honesty
 - [ ] Document ClinePass (or chosen) provider wiring when ready (U13)
 - [x] Repo discovery approach written ([initialization report Q7](../../review/initialization-report.md#q7--proposed-repository-discovery-and-context-acquisition))
-- [x] OpenCode overlay in git + copy-out authorized and applied — [overlays/opencode](../../overlays/opencode/_index.md) (Phase 3 live sync 2026-08-20; smoke rows **1–4**, **9–10**, **13** pass; load path superseded by [pointer-first](../roadmaps/pointer-first.md))
+- [x] OpenCode overlay in git + copy-out authorized and applied — [overlays/opencode](../../overlays/opencode/_index.md) (Phase 3 live sync 2026-08-20; C6 minimum smoke **pass** 2026-08-20 operator; load path superseded by [pointer-first](../roadmaps/pointer-first.md))
 
 ### Explicit non-starters
 

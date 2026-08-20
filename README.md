@@ -1,6 +1,6 @@
 # cursorEscape
 
-**Status:** shared-workflow-docs **Phase 6 complete**; OpenCode overlays SoT **Phase 3 live sync complete** (2026-08-20; runtime smoke rows **1–4**, **9–10**, **13** pass per [host-adapter](docs/SOPs/opencode-host-adapter.md)); [pointer-first](docs/roadmaps/pointer-first.md) **in progress** (pointer-first-0). Runtime not started. First recreation: **T3 Code + OpenCode**.
+**Status:** shared-workflow-docs **Phase 6 complete**; OpenCode overlays SoT **Phase 3 live sync complete** (2026-08-20); [pointer-first](docs/roadmaps/pointer-first.md) **complete** (pointer-first-4, 2026-08-20). OpenCode procedure mirror deleted; C6 minimum smoke **pass** (2026-08-20 operator) per [closeout](analysis/pointer-first-4-closeout-2026-08.md). Runtime not started. First recreation: **T3 Code + OpenCode**.
 
 ## What and why
 

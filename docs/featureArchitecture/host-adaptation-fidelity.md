@@ -37,7 +37,7 @@ Host chrome (Task UI, tray restart, permission prompts) may differ. **Loop seman
 | Every workflow skill advertised with matching frontmatter `name` + `description` (OpenCode); on-demand invocation (Cursor: `disable-model-invocation`) | Skills on disk with **description only** — empty skill-tool catalog ([skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)) |
 | `skills.paths` or equivalent discovery roots registered (OpenCode) | Relying on default scan when catalog is empty |
 | Reviewer agents `permission.edit: deny`; dual Task launch in one parent turn | Unwired stub agents; sequential-only “dual” review |
-| Deep workflow docs reachable via **absolute companion** Read paths (`{{COMPANION_ROOT}}/workflow/...`, `{{COMPANION_ROOT}}/skills/...`, `{{COMPANION_ROOT}}/agents/...`, `{{COMPANION_ROOT}}/rules/...`) from thin harness (pointer-first-2); legacy host `docs/workflow/...` mirror remains on disk until pointer-first-4 disposition — **not** procedure SoT | Any `../../docs|skills|agents` hop authored as if relative to the markdown file (tools resolve from **config root** / cwd — see [Wrong path resolution base](#wrong-path-resolution-base-failure-class--i--j)); treating host `docs/workflow/` mirror as procedure SoT after pointer-first-0 |
+| Deep workflow docs reachable via **absolute companion** Read paths (`{{COMPANION_ROOT}}/workflow/...`, `{{COMPANION_ROOT}}/skills/...`, `{{COMPANION_ROOT}}/agents/...`, `{{COMPANION_ROOT}}/rules/...`) from thin harness (pointer-first-2); OpenCode host `docs/workflow/...` mirror **deleted** pointer-first-4 — **not** procedure SoT | Any `../../docs|skills|agents` hop authored as if relative to the markdown file (tools resolve from **config root** / cwd — see [Wrong path resolution base](#wrong-path-resolution-base-failure-class--i--j)); treating host `docs/workflow/` mirror as procedure SoT after pointer-first-0 |
 | Rules → OpenCode **`instructions`** / skill deferral — **never** a Cursor-style host `rules/` tree on OpenCode | Copying `~/.cursor/rules/` shape onto OpenCode |
 | Smoke + matrix attestation prove **behavior** (gates visible, catalog lists ids, reviewers denied edit) | **Done** because folders exist without load/smoke |
 | One authored procedure per skill/workflow leaf; overlay = thin harness | Pasting full review loop into always-on or agent bodies |
@@ -61,9 +61,13 @@ Host chrome (Task UI, tray restart, permission prompts) may differ. **Loop seman
 rg -n '"instructions"' overlays/opencode/opencode.specimen.json
 # Expect: {{OPENCODE_HOME}}/instructions/cursor-escape-loop.md
 
-# Zero file-relative ../../ hops in host-plugged harness leaves
+# Zero file-relative ../../ hops in host-plugged harness leaves (overlay author-time)
 rg -n '\.\./\.\./(docs|skills|agents)/' overlays/opencode/skills overlays/opencode/agents overlays/opencode/review-subagent-models.md
-# Expect: zero (workflow mirror is generated — check live OPENCODE_HOME/docs/workflow after sync)
+# Expect: zero
+
+# Zero positive docs/workflow/ Target cites in live harness (post-sync / pf4)
+rg -n '\]\([^)]*docs/workflow/' ~/.config/opencode/skills ~/.config/opencode/agents
+# Expect: zero (mirror deleted pf4)
 ```
 
 **Instances:** [Failure mode I](#observed-failure-cwd-relative-global-instructions-c1--2026-08-20) · [Failure mode J](#observed-failure-skill-docsworkflow-hops-c4--2026-08-20) · authoring [I](../SOPs/opencode-authoring-adapter.md#failure-mode-i--cwd-relative-global-instructions-c1) / [J](../SOPs/opencode-authoring-adapter.md#failure-mode-j--skill-docsworkflow-hops-c4).
@@ -92,7 +96,7 @@ rg -n '\.\./\.\./(docs|skills|agents)/' overlays/opencode/skills overlays/openco
 **Required fix (do not regress):**
 
 1. All overlay + live skill Read links / prose paths: **Target** = absolute `{{COMPANION_ROOT}}/workflow/<leaf>.md` (pointer-first-2 complete) — **zero** `../../docs/workflow/` in `overlays/opencode/skills/**`.
-2. Prefer absolute `read` under `{{COMPANION_ROOT}}` when the workspace is the companion repo; under `OPENCODE_HOME` only while legacy mirror remains transitional.
+2. Prefer absolute `read` under `{{COMPANION_ROOT}}` when the workspace is the companion repo; host procedure mirror **deleted** on OpenCode (pointer-first-4).
 3. Smoke row **4** How cites companion `{{COMPANION_ROOT}}/workflow/...` — locked in [host-adapter](../SOPs/opencode-host-adapter.md); never `../../docs/workflow/...` as the expected resolve path.
 4. Fast CI: `rg` zero for `../../docs/workflow` under overlay skills.
 5. **Same class — workflow mirror (2026-08-20 audit; legacy transitional):** `Rewrite-OpenCodeWorkflowLinks.ps1` emitted host-root `skills/...` and `agents/...` — **archived** after pointer-first-0; not primary sync. Overlay `review-subagent-models.md` uses absolute `{{COMPANION_ROOT}}/...` companion paths after pointer-first-2.
@@ -111,7 +115,7 @@ OpenCode loads workflow material through these surfaces only — **not** Cursor 
 | `agents/*.md` | Role agents; reviewers deny-edit | [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) § Agents |
 | `opencode.json` → `skills.paths` | Explicit skill scan roots | [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) |
 | `opencode.json` → `permission.skill` | Advertise/load allow | Same |
-| `docs/workflow/*` (mirrored — **transitional**) | Legacy deep-procedure mirror on host; **not** SoT after pointer-first-0 | [instruction-layering](./instruction-layering.md) Layer 3; [pointer-first](../roadmaps/pointer-first.md) — Target Reads = `{{COMPANION_ROOT}}/workflow/` |
+| `docs/workflow/*` (mirrored — **deleted OpenCode pf4**) | Former legacy deep-procedure mirror on OpenCode host — **removed** 2026-08-20; Cursor `~/.cursor/docs/workflow/` may remain transitional | [instruction-layering](./instruction-layering.md) Layer 3; [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md) — Target Reads = `{{COMPANION_ROOT}}/workflow/` |
 
 After any config-time edit: **full quit and restart** OpenCode (no hot-reload). Parent owns Observed Fast CI; empty Task ≪1s = routing/auth failure, not “no bugs.”
 
@@ -124,9 +128,9 @@ Phase 2 reviewers use **Author-time** columns; Phase 3 use **Runtime** + smoke. 
 | **C1** | Always-on gates inject (plan + dual-review default-on; when-in-doubt; eval/harness not exempt; Incomplete-until pointer) | Specimen `instructions` uses **absolute** `{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md` (not cwd-relative); matching `AGENTS.md` dual-write; instruction file states **both** plan and implementation-review gates | New session after restart; model quotes default-on plan loop + when-in-doubt + eval/harness not exempt from always-on | **1** — [host-adapter](../SOPs/opencode-host-adapter.md) smoke § row 1 |
 | **C2** | Skill catalog complete (incl. `roadmap` when in inventory) | Eight workflow skills each with frontmatter `name` matching folder id + `description`; overlay `_index` inventory lists all eight; **Phase 2 must update** [host-adapter](../SOPs/opencode-host-adapter.md) Skills inventory, row **9** How/expected catalog, and frozen Probe A in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) to **eight ids including `roadmap`** before C2 author-time can pass | Skill tool lists all eight: `implementation-plan`, `plan-review`, `implementation-review`, `composer`, `discovery`, `documentation-architecture`, `pre-commit-ci-gate`, **`roadmap`**; load `implementation-plan` with zero bash for SoT | **9**, **10** — **Phase 2 gate:** row 9 How + Probe A expected catalog must list **8 workflow skills including `roadmap`** (author in Phase 2; How frozen then). **Prior R0 row-9 pass (7 skills, no `roadmap`) does not satisfy C2** — re-run rows 9–10 after Phase 2 catalog update. Row 10 unchanged: load + quote Escalation row |
 | **C3** | Plan→`plan_reviewer`; implement→dual review→Full / pre-commit | Overlay agents: `plan_reviewer`, `production_readiness_reviewer`, `bug_reviewer` with `permission.edit: deny`; bodies cite companion `{{COMPANION_ROOT}}/workflow/iterative-*` and FA rubric | Dual Task in one turn (two children); reviewers cannot edit; thin plan → **CHANGES REQUESTED**; rubric file exists | **13**, **3**, **2**, **8**, **14** — thin-plan smoke; dual shape; deny-edit; rubric path; row **14** copy-out map / specimen vs live `agent.*` keys ([host-adapter](../SOPs/opencode-host-adapter.md) row 14 — How frozen Phase 2) |
-| **C4** | Deep workflow Reads resolve on host | Hubs + smoke row **4** How cite absolute `{{COMPANION_ROOT}}/workflow/...`. Harness skill/agent **Read when** bodies use absolute `{{COMPANION_ROOT}}/workflow|skills|agents|rules/...` after **pointer-first-2** — **zero** `../../docs/workflow/` in overlay harness. Legacy mirror on disk until pointer-first-4 | `implementation-review` skill load; confirm Read resolves `{{COMPANION_ROOT}}/workflow/iterative-code-review.md` (Target How). Legacy `OPENCODE_HOME/docs/workflow/...` not procedure SoT | **4** — companion path resolve (locked How in [host-adapter](../SOPs/opencode-host-adapter.md)); plus harness `rg` on overlay tree (author-time Fast CI) |
+| **C4** | Deep workflow Reads resolve on host | Hubs + smoke row **4** How cite absolute `{{COMPANION_ROOT}}/workflow/...`. Harness skill/agent **Read when** bodies use absolute `{{COMPANION_ROOT}}/workflow|skills|agents|rules/...` after **pointer-first-2** — **zero** `../../docs/workflow/` in overlay harness. OpenCode host mirror **deleted** pointer-first-4 | `implementation-review` skill load; confirm Read resolves `{{COMPANION_ROOT}}/workflow/iterative-code-review.md` (Target How). **pass** (2026-08-20 operator post-mirror) | **4** — **pass** (2026-08-20 operator — companion path; [closeout](../../analysis/pointer-first-4-closeout-2026-08.md)) |
 | **C5** | Companion FA/SOP reads without repeated asks | Specimen `external_directory` tokens for companion repo paths (e.g. `docs/featureArchitecture/**`); deny-edit under adapter tree if configured | Sample read of FA leaf (e.g. this doc) via native `read` without serial Shell listing | Optional **11**, **12** — native tools / glob-blind probes in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) |
-| **C6** | Smoke proves **behavior**, not presence | N/A (runtime-only bar) | Host-adapter smoke table attests C1–C5 with `pass` / `fail` / `deferred: <reason>` — no row marked pass for “folder exists” alone. Deep-doc probes cite **companion** `{{COMPANION_ROOT}}/workflow/` paths where applicable (row **4** locked How) | Minimum Phase 3 smoke set: **1, 2, 3, 4, 8, 9, 10, 13, 14** — attest in [opencode-host-adapter](../SOPs/opencode-host-adapter.md) table |
+| **C6** | Smoke proves **behavior**, not presence | N/A (runtime-only bar) | Host-adapter smoke table attests C1–C5 with `pass` / `fail` / `deferred: <reason>` — no row marked pass for “folder exists” alone. Deep-doc probes cite **companion** `{{COMPANION_ROOT}}/workflow/` paths where applicable (row **4** locked How) | **C6 minimum:** **1, 2, 3, 4, 8, 9, 10, 13** — attest in [opencode-host-adapter](../SOPs/opencode-host-adapter.md) table. Row **14** install-time (separate) |
 
 ### Doc boundary (Must)
 
@@ -154,7 +158,7 @@ Future refresh of [overlays/cursor](../../overlays/cursor/_index.md) or live `~/
 
 ### Host-plugged vs companion-resident (cite)
 
-**Host-plugged (must meet C1–C6 at runtime):** `opencode.json` harness (absolute `instructions`), `AGENTS.md` + `instructions/*` (identical gate body), thin `skills/*/SKILL.md` stubs, overlay `agents/*.md` harness. Legacy mirrored `docs/workflow/*` (+ rubric + review-subagent-models) on host is **transitional** — Target deep procedure = companion `{{COMPANION_ROOT}}/workflow/` ([pointer-first](../roadmaps/pointer-first.md)).
+**Host-plugged (must meet C1–C6 at runtime):** `opencode.json` harness (absolute `instructions`), `AGENTS.md` + `instructions/*` (identical gate body), thin `skills/*/SKILL.md` stubs, overlay `agents/*.md` harness. OpenCode host procedure mirror **deleted** pointer-first-4 — Target deep procedure = companion `{{COMPANION_ROOT}}/workflow/` ([pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md)). Cursor `~/.cursor/docs/workflow/` may remain transitional.
 
 **Companion-resident (read via `external_directory` / workspace):** FA leaves, SOPs (except short excerpts in instructions), research/analysis (except required host Read targets), maintainer indexes.
 
@@ -165,7 +169,7 @@ Future refresh of [overlays/cursor](../../overlays/cursor/_index.md) or live `~/
 1. Phase 0 authors this matrix; Phase 2/3 **execute** it — reviewers must not invent new smoke methods outside this table and [opencode-host-adapter](../SOPs/opencode-host-adapter.md).
 2. Empty skill-tool catalog after correct authoring = **failed adaptation**, not model preference ([skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)).
 3. Relative `instructions` paths in **global** config = **failed C1** even when the file exists under `~/.config/opencode/instructions/` ([Observed failure](#observed-failure-cwd-relative-global-instructions-c1--2026-08-20)). Same class as skill/workflow `../../` hops ([Wrong path resolution base](#wrong-path-resolution-base-failure-class--i--j)).
-4. Copy-out into `~/.config/opencode` is **authorized and applied** from [overlays/opencode](../../overlays/opencode/_index.md) (Phase 3 live sync 2026-08-20; pointer-first-2 harness rewrite 2026-08-20). Runtime smoke rows **1–4**, **9–10**, **13** **pass** (2026-08-20 author-time / historical); row **4** runtime re-probe after OpenCode full quit/restart (operator gate). Cursor copy-out remains manual.
+4. Copy-out into `~/.config/opencode` is **authorized and applied** from [overlays/opencode](../../overlays/opencode/_index.md) (Phase 3 live sync 2026-08-20; pointer-first-2 harness rewrite; pointer-first-4 mirror delete). C6 minimum smoke rows **1–4**, **8**, **9–10**, **13**: **pass** (2026-08-20 operator post-mirror). Cursor copy-out remains manual.
 
 ---
 

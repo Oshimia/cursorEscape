@@ -74,7 +74,7 @@ When syncing from [overlays/cursor](../../overlays/cursor/_index.md) to live `~/
 
 **Deep docs mirror (transitional)**
 
-- `~/.cursor/docs/workflow/` — 8 leaves; legacy copy-out from Phase 3–5 — **not SoT**; disposition [pointer-first-4](../roadmaps/pointer-first.md)
+- `~/.cursor/docs/workflow/` — 8 leaves; legacy copy-out — **not SoT**; **deferred** live sync to thin stubs ([pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md))
 
 ### C1–C2 attestation (Cursor, pointer-first-3)
 
@@ -84,9 +84,11 @@ When syncing from [overlays/cursor](../../overlays/cursor/_index.md) to live `~/
 | **C2** harness reaches companion when workspace ≠ cursorEscape | Overlay stubs use `{{COMPANION_ROOT}}/…` — zero `../../../../` hops | Live fat skills use host mirror paths — works only while mirror exists | **pass** (author-time after pf3 fix); live sync **deferred** |
 | Wrong-base hops | `rg` clean on `overlays/cursor` | N/A until live sync | **pass** |
 
-### Smoke (deferred to pointer-first-4)
+### Smoke (Cursor — operator-gated)
 
-Minimum behavior smoke for Cursor companion-edit + workspace ≠ cursorEscape: [pointer-first-4](../roadmaps/pointer-first.md). This phase is **audit + author-time fix only**.
+**OpenCode C6 minimum smoke (rows 1–4, 8, 9–10, 13):** **pass** (2026-08-20 operator post-mirror) — attested in [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md) and [OpenCode host adapter](./opencode-host-adapter.md).
+
+**Cursor live companion-edit + workspace ≠ cursorEscape:** **deferred** — overlay harness is pointer-first (pf3 author-time); live fat skills + `~/.cursor/docs/workflow/` mirror may still exist. Live sync to thin `{{COMPANION_ROOT}}` stubs remains operator-gated per copy-out map ([overlays/cursor/_index.md](../../overlays/cursor/_index.md)). No Cursor runtime smoke attestation in pf4 closeout.
 
 ---
 

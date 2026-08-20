@@ -313,7 +313,7 @@ When the child returns, relay: (1) exists or missing; (2) the exact #9 Check and
 
 **Harness (docs):** OpenCode `glob`/`grep` use ripgrep and respect `.gitignore`; use repo [`.ignore`](https://opencode.ai/docs/tools/) to un-ignore (`!eval/runs/`). `external_directory` defaults to ask for paths outside the workspace ([permissions](https://opencode.ai/docs/permissions/)).
 
-**Mitigation package (Applied 2026-08-19; smoke 12 pass):** openBuggy `.ignore`; live `external_directory` allow for `~/.config/opencode/**`; always-on empty-glob ≠ missing + absolute `read`; narrow bash allow `Get-ChildItem*` / `Test-Path*`. Not `bash: allow *`.
+**Mitigation package (Applied 2026-08-19; smoke **12** historical pass on host mirror — **12b/12c companion re-probe not run** post-pf4):** openBuggy `.ignore`; live `external_directory` allow for `~/.config/opencode/**`; always-on empty-glob ≠ missing + absolute `read`; narrow bash allow `Get-ChildItem*` / `Test-Path*`. Not `bash: allow *`.
 
 ### Always-run whitelist audit (Phase 1b)
 
@@ -325,11 +325,11 @@ When the child returns, relay: (1) exists or missing; (2) the exact #9 Check and
 
 **12a — glob runs** — **pass** (2026-08-19 operator): non-empty (`summary.json`, case artifacts under `bb-05-…`, etc.).
 
-**12b — adapter read** — **pass** (2026-08-19): quoted `**Skill:** implementation-plan. **Agent:** plan_reviewer.` via absolute `read` (no Shell list).
+**12b — companion workflow read (pf4 update)** — **historical pass** (2026-08-19 on host mirror path). **Target post-pf4:** absolute `read` `{{COMPANION_ROOT}}/workflow/iterative-plan-review.md` — host `docs/workflow/` mirror **deleted**.
 
-**12c — listing allow** — **pass** (2026-08-19): `Test-Path -LiteralPath "…\iterative-plan-review.md"` → `True` (allowlist / no serial Shell ask reported).
+**12c — listing allow** — **historical pass** (2026-08-19 on host mirror `Test-Path` for `…/docs/workflow/iterative-plan-review.md`). **Target post-pf4:** companion `…/cursorEscape/workflow/iterative-plan-review.md` — **not re-run**.
 
-Expect: 12a non-empty after `.ignore`; 12b no Shell list; 12c **no** permission prompt after narrow allowlist + restart. **All met.**
+Expect: 12a non-empty after `.ignore`; 12b no Shell list; 12c **no** permission prompt after narrow allowlist + restart. **Historical pass** (2026-08-19 host mirror for 12b/12c); pf4 How retargeted to companion — **12b/12c re-probe not run** post-mirror.
 
 ---
 
@@ -356,6 +356,8 @@ Do not implement.
 
 **OpenCode Flash result (2026-08-19 operator):** **pass.** Thin plan (“Refactor” README one-line comment; Escalation no; no Assumptions/Unknowns) → `plan_reviewer` **CHANGES REQUESTED** with blocking findings for missing Assumptions and missing Unknowns/Discovery; explicit “cannot be soft-approved.” Non-blocking notes (Escalation `n/a` label, pretend-vs-scope contradiction, Skip-list awareness) are bonus — gate criterion met by the two always-required section blockers.
 
+**OpenCode Flash result (2026-08-20 operator, post-mirror):** **pass.** Same thin-plan gate — `plan_reviewer` **CHANGES REQUESTED** (blocking: Assumptions missing + Alternative approaches / External dependencies must exist with N/A). Marker spot-check **not reported** (optional). C6 minimum attestation: [pointer-first-4 closeout](./pointer-first-4-closeout-2026-08.md).
+
 ---
 
 ## Implications / open questions
@@ -364,17 +366,17 @@ Do not implement.
 2. Adapter hygiene: follow [opencode-authoring-adapter](../docs/SOPs/opencode-authoring-adapter.md) — every OpenCode `SKILL.md` must include `name` matching folder id + `description`; keep `permission.skill: { "*": "allow" }` and `skills.paths` in live `opencode.json`.
 3. **Failure mode I (C1, 2026-08-20):** Relative `instructions` in global config → silent non-injection. Fix = absolute `{{OPENCODE_HOME}}/…` + `AGENTS.md` dual-write. Do not treat skill “default on” text as always-on evidence.
 4. **Failure mode J (C4, 2026-08-20):** Skill Read hops `../../docs/workflow/...` and (audit same day) workflow-mirror `../../skills|agents/...` resolve from config root to `%USERPROFILE%\…`. Fix = host-root `docs/workflow|skills|agents/...` only; rewrite script + live re-Apply. Same [wrong-base class](../docs/featureArchitecture/host-adaptation-fidelity.md#wrong-path-resolution-base-failure-class--i--j) as Failure mode I.
-5. **Short native file tools (B0′/B0″/C):** pass on Flash. **Failure mode F** mitigated — smoke **12** pass (2026-08-19): `.ignore` + `external_directory` + narrow listing allow + guidance.
+5. **Short native file tools (B0′/B0″/C):** pass on Flash. **Failure mode F** mitigated — smoke **12** **historical pass** (2026-08-19 host mirror; **12b/12c companion re-probe not run** post-pf4): `.ignore` + `external_directory` + narrow listing allow + guidance.
 6. Probe B1 remains optional; not required after B0″ + C pass.
 7. Durable Always-run DB was empty at audit; re-check after further live trials.
-8. **Thin-plan (row 13):** **pass** (2026-08-19 Flash) — CHANGES REQUESTED for missing Assumptions + Unknowns/Discovery; no soft-approve. Portable Cursor self-check also pass earlier same day.
-9. **Smoke 4 re-probe:** **pass** (2026-08-20) — first heading of iterative-code-review under `OPENCODE_HOME` quoted after J fix.
+8. **Thin-plan (row 13):** **pass** (2026-08-20 operator post-mirror — CHANGES REQUESTED: Assumptions missing + Alternative approaches / External dependencies must exist with N/A; 2026-08-19 Flash historical — Assumptions + Unknowns/Discovery); no soft-approve. Portable Cursor self-check also pass earlier same day.
+9. **Smoke 4 re-probe:** **pass** (2026-08-20 operator — companion `{{COMPANION_ROOT}}/workflow/iterative-code-review.md`; mirror **deleted** pf4).
 
 ### pointer-first-0 — rubric + review-subagent-models (Discovery 3)
 
 **Rubric (Target SoT):** Companion FA only — `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md` via absolute Read from `bug_reviewer` harness. Do **not** treat host `docs/workflow/bug-reviewer-finding-rubric.md` mirror as a second authored SoT ([pointer-first](../docs/roadmaps/pointer-first.md) pointer-first-0).
 
-**review-subagent-models:** Thin overlay leaf at `overlays/opencode/review-subagent-models.md` — not companion `workflow/`; workflow Related links use host-root `docs/workflow/...` from `OPENCODE_HOME` until pointer-first-2 companion stub rewrite.
+**review-subagent-models:** Thin overlay leaf at `overlays/opencode/review-subagent-models.md` — **companion overlay-Read only** (pf4); harness cites `{{COMPANION_ROOT}}/overlays/opencode/review-subagent-models.md` — not host `docs/workflow/` copy.
 
 ---
 

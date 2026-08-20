@@ -29,6 +29,7 @@ Operator studies of **local workflows** (not proposed engine design, not eval sc
 * [OpenCode skill-binding discovery (2026-08)](./opencode-skill-binding-discovery-2026-08.md) — harness vs model vs config triage for C/E; Probe A–C; catalog fixed via skill `name` + `skills.paths`
 * [OpenCode pointer-first-2 skills.paths probe (2026-08)](./opencode-pointer-first-2-skills-paths-probe-2026-08.md) — pointer-first-2 harness stub rewrite; `external_directory` + `skills.paths` author-time attestation; live backup path
 * [Cursor pointer-first-3 audit (2026-08)](./cursor-pointer-first-3-audit-2026-08.md) — overlay vs portable audit; `{{COMPANION_ROOT}}` harness fix; live `~/.cursor` gap disposition
+* [Pointer-first-4 closeout (2026-08)](./pointer-first-4-closeout-2026-08.md) — C6 smoke attestation; companion-edit proof; OpenCode mirror delete; operator runbook
 
 ### Documents (imported openBuggy)
 
