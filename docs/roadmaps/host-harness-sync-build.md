@@ -133,8 +133,7 @@
 
 - Na: **n/a** (no visual sign-off surface for this program).
 - Phase 0 external gate: operator authorized read/copy 2026-08-21 — **complete**.
-- Phases 1–2 `-Apply` to live hosts require separate operator authorization after dry-run evidence.
-- User owns quit/restart Cursor and/or OpenCode after any authorized `-Apply`.
+- **Amended 2026-08-21 (operator):** Do **not** re-prompt for every `-Apply` / live-host write during this program. Phase 0 baselines + companion git are the safety net. Composer/Nb may run dry-run and authorized-program `-Apply` as needed for phase verification; still report what was Applied. User owns quit/restart after Apply for smoke.
 - Composer commits locally after QC ACCEPT; never `git push`.
 - **2026-08-21 amendment:** no per-sync backup in Core; Phase 0 baselines remain restore SoT for Apply testing only.
 

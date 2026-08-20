@@ -35,6 +35,164 @@ function Merge-CompanionTokens {
     return $Content.Replace('{{COMPANION_ROOT}}', $CompanionRoot)
 }
 
+function Get-OpenCodeHomePath {
+    param([string]$LiveRoot = '')
+    if ($LiveRoot) {
+        return (Resolve-CompanionRootPath -Path $LiveRoot)
+    }
+    return (Resolve-CompanionRootPath -Path (Join-Path $env:USERPROFILE '.config/opencode'))
+}
+
+function Merge-OpenCodeTokens {
+    param(
+        [Parameter(Mandatory)]
+        [string] $Content,
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot,
+        [Parameter(Mandatory)]
+        [string] $OpenCodeHome
+    )
+    $merged = Merge-CompanionTokens -Content $Content -CompanionRoot $CompanionRoot
+    return $merged.Replace('{{OPENCODE_HOME}}', $OpenCodeHome)
+}
+
+function Test-ContentHasUnmergedTokens {
+    param([string]$Content)
+    return ($Content -match '\{\{COMPANION_ROOT\}\}|\{\{OPENCODE_HOME\}\}')
+}
+
+function ConvertTo-NestedHashtable {
+    param($Node)
+
+    if ($null -eq $Node) { return $null }
+    if ($Node -is [hashtable]) {
+        $ht = @{}
+        foreach ($key in $Node.Keys) {
+            $ht[$key] = ConvertTo-NestedHashtable -Node $Node[$key]
+        }
+        return $ht
+    }
+    if ($Node -is [System.Collections.IList] -and $Node -isnot [string]) {
+        $items = New-Object object[] $Node.Count
+        for ($i = 0; $i -lt $Node.Count; $i++) {
+            $items[$i] = ConvertTo-NestedHashtable -Node $Node[$i]
+        }
+        return ,$items
+    }
+    if ($Node -is [pscustomobject]) {
+        $ht = @{}
+        foreach ($prop in $Node.PSObject.Properties) {
+            $ht[$prop.Name] = ConvertTo-NestedHashtable -Node $prop.Value
+        }
+        return $ht
+    }
+    return $Node
+}
+
+function Merge-HashtablePreserve {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable] $Specimen,
+        [Parameter(Mandatory)]
+        [hashtable] $Live,
+        [string[]] $PreserveTopLevelKeys = @()
+    )
+
+    $result = @{}
+
+    foreach ($key in $PreserveTopLevelKeys) {
+        if ($Live.ContainsKey($key)) {
+            $result[$key] = $Live[$key]
+        }
+    }
+
+    foreach ($key in $Specimen.Keys) {
+        if ($PreserveTopLevelKeys -contains $key) { continue }
+
+        $specVal = $Specimen[$key]
+        $liveVal = if ($Live.ContainsKey($key)) { $Live[$key] } else { $null }
+
+        if ($specVal -is [hashtable] -and $liveVal -is [hashtable]) {
+            $result[$key] = Merge-HashtablePreserve -Specimen $specVal -Live $liveVal
+            continue
+        }
+
+        if ($specVal -is [System.Collections.IList] -and $specVal -isnot [string]) {
+            $result[$key] = $specVal
+            continue
+        }
+
+        $result[$key] = $specVal
+    }
+
+    foreach ($key in $Live.Keys) {
+        if ($result.ContainsKey($key)) { continue }
+        if ($PreserveTopLevelKeys -contains $key) { continue }
+        $result[$key] = $Live[$key]
+    }
+
+    return $result
+}
+
+function Resolve-OpenCodeSpecimenJson {
+    param(
+        [Parameter(Mandatory)]
+        [string] $SpecimenPath,
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot,
+        [Parameter(Mandatory)]
+        [string] $OpenCodeHome
+    )
+
+    if (-not (Test-Path -LiteralPath $SpecimenPath)) {
+        throw "OpenCode specimen missing: $SpecimenPath"
+    }
+
+    $raw = Merge-OpenCodeTokens -Content ([IO.File]::ReadAllText($SpecimenPath)) `
+        -CompanionRoot $CompanionRoot -OpenCodeHome $OpenCodeHome
+    if (Test-ContentHasUnmergedTokens -Content $raw) {
+        throw "Unmerged tokens remain in specimen JSON: $SpecimenPath"
+    }
+
+    return (ConvertTo-NestedHashtable -Node ($raw | ConvertFrom-Json))
+}
+
+function Get-OpenCodeInstructionsPath {
+    param([hashtable]$Config)
+    if (-not $Config.ContainsKey('instructions')) { return $null }
+    $value = $Config['instructions']
+    if ($value -is [System.Collections.IList] -and $value -isnot [string]) {
+        if ($value.Count -lt 1) { return $null }
+        return [string]$value[0]
+    }
+    return [string]$value
+}
+
+function Merge-OpenCodeHarnessJson {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable] $Specimen,
+        [Parameter(Mandatory)]
+        [string] $LiveJsonPath,
+        [string[]] $PreserveTopLevelKeys = @('model', 'provider')
+    )
+
+    $liveHt = @{}
+    if (Test-Path -LiteralPath $LiveJsonPath) {
+        $liveRaw = [IO.File]::ReadAllText($LiveJsonPath)
+        $liveHt = ConvertTo-NestedHashtable -Node ($liveRaw | ConvertFrom-Json)
+    }
+
+    return (Merge-HashtablePreserve -Specimen $Specimen -Live $liveHt -PreserveTopLevelKeys $PreserveTopLevelKeys)
+}
+
+function Get-FileSha256Hex {
+    param([Parameter(Mandatory)][string]$Path)
+    $bytes = [IO.File]::ReadAllBytes($Path)
+    $hash = [System.Security.Cryptography.SHA256]::HashData($bytes)
+    return ([BitConverter]::ToString($hash) -replace '-', '').ToLowerInvariant()
+}
+
 function New-HostSyncReport {
     param(
         [Parameter(Mandatory)]
@@ -105,11 +263,6 @@ function Assert-BaselineBackupsPresent {
             Write-Warning "Phase 0 baseline gate: could not compare companionSha to HEAD — $($_.Exception.Message)"
         }
     }
-}
-
-function Test-ContentHasUnmergedTokens {
-    param([string]$Content)
-    return ($Content -match '\{\{COMPANION_ROOT\}\}')
 }
 
 function Assert-NoPerApplyBackupArtifacts {
