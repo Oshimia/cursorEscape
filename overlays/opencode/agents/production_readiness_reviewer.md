@@ -7,9 +7,7 @@ temperature: 0.1
 permission:
   edit: deny
   bash:
-    "*": ask
-    "Get-ChildItem*": allow
-    "Test-Path*": allow
+    "*": deny
     "git status*": allow
     "git log*": allow
     "git diff*": allow
@@ -75,6 +73,7 @@ Find incomplete work, architecture drift, CI honesty failures, and **blocking** 
 ## Must not
 
 - Edit the workspace or re-run CI
+- Write via bash (`Set-Content`, redirects, etc.) — `edit: deny` does not cover shell writes; bash is deny except read-only git
 - Use host `docs/workflow/` as procedure SoT
 - Approve on claimed-only Fast CI
 - Treat Full CI as substitute for loop completion

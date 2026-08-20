@@ -80,9 +80,23 @@ Manifest `NeverTouch` paths (e.g. `docs/workflow`) are left in place on the live
 
 Do **not** add stack-specific logic to Core unless it is genuinely shared (prefer adapter + manifest).
 
+## OpenCode JSON merge — permission key order (required)
+
+OpenCode permission pattern maps use **last matching rule wins**. After specimen↔live merge, Core runs `Optimize-OpenCodePermissionKeyOrder` so every allow/ask/deny map emits `"*"` **first**, then named overrides.
+
+| Failure if skipped | Correct write |
+| ------------------ | ------------- |
+| `"plan_reviewer": "allow"` then `"*": "deny"` → Task spawn denied | `"*": "deny"` first, then named allows |
+| `"Get-ChildItem*": "allow"` then `"*": "ask"` → listing still asks | `"*": "ask"` first, then listing allows |
+
+**Do not** drop that optimizer when editing `Merge-OpenCodeHarnessJson`. Fast CI: `Invoke-Phase2FastCI.ps1` asserts `*` is first on merged `build.task` and global `bash`.
+
+Full write-ups: [opencode-authoring-adapter Failure modes K–M](../../docs/SOPs/opencode-authoring-adapter.md#failure-mode-k--permission-pattern--not-first-last-match-wins).
+
 ## Related
 
 - [Host harness sync build roadmap](../../docs/roadmaps/host-harness-sync-build.md)
 - [Cursor host adapter SOP](../../docs/SOPs/cursor-host-adapter.md)
 - [OpenCode host adapter SOP](../../docs/SOPs/opencode-host-adapter.md)
+- [OpenCode authoring adapter](../../docs/SOPs/opencode-authoring-adapter.md) — Failure modes I–M (permissions / bash / sync order)
 - [Editing companion workflow](../../docs/SOPs/editing-companion-workflow.md)

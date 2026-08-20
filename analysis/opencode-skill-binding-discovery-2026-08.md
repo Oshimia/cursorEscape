@@ -1,10 +1,12 @@
 # OpenCode skill-binding discovery (2026-08)
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 
 ## Context
 
 Discovery for R0 babysitting from **bash substituted for workflow skills** (failure modes **C** + **E** in [opencode-dsv4f-session-extension-2026-08](./opencode-dsv4f-session-extension-2026-08.md)). Process SoT: [opencode-host-adapter](../docs/SOPs/opencode-host-adapter.md).
+
+**Operator copy-paste smoke prompts (C6 order):** [opencode-smoke-prompts](../docs/SOPs/opencode-smoke-prompts.md) — do not hunt frozen prompts through this discovery file for day-to-day smoke.
 
 **Host pin:** OpenCode Desktop study evidence = **1.18.18**. CLI on this machine reports **1.4.6** — treat CLI vs Desktop as version-skew (**Unknown** whether behavior matches).
 

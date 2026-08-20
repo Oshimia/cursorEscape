@@ -4,7 +4,7 @@
 
 ## Context
 
-This SOP documents the **global OpenCode adapter** installed on the operator machine for R0 live trial of the cursorEscape loop. **Target SoT** is this companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md), [agents](../../agents/_index.md), [skills](../../skills/_index.md)). Files under `~/.config/opencode/` are the **host adapter / copy-out target**, not a second procedure tree. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) from [overlays/opencode](../../overlays/opencode/_index.md). **Procedure mirror deleted** pointer-first-4 (2026-08-20). **C6 minimum smoke rows 1–4, 8, 9–10, 13: pass** (2026-08-20 operator post-mirror). Row **14**: install-time pass (live re-diff optional/skipped). See [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).
+This SOP documents the **global OpenCode adapter** installed on the operator machine for R0 live trial of the cursorEscape loop. **Target SoT** is this companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md), [agents](../../agents/_index.md), [skills](../../skills/_index.md)). Files under `~/.config/opencode/` are the **host adapter / copy-out target**, not a second procedure tree. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) from [overlays/opencode](../../overlays/opencode/_index.md). **Procedure mirror deleted** pointer-first-4 (2026-08-20). **C6 minimum smoke rows 1–4, 8, 9–10, 13: pass** (2026-08-21 post–`Sync-HostHarness`). Row **14**: **pass** (2026-08-21). Paste runbook: [opencode-smoke-prompts](./opencode-smoke-prompts.md). See also [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).
 
 **Install root (this machine):** `C:\Users\admin\.config\opencode\`
 
@@ -103,26 +103,28 @@ After Apply: fully quit and restart OpenCode before smoke.
 
 Record results when running live checks. Expected: `pass` \| `fail` \| `deferred: <reason>`.
 
+**Copy-paste prompts (C6 order):** [opencode-smoke-prompts.md](./opencode-smoke-prompts.md) — use that file as the runbook; this table is the scorecard.
+
 | # | Check | How | Result |
 | - | ----- | --- | ------ |
-| 1 | Always-on gates visible | New session after full quit/restart. **Frozen prompt** (no tools): see [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § C1 smoke (row 1). Pass = quotes default-on plan loop + when-in-doubt + eval/harness not exempt **from session instructions** with **zero** read/glob/grep/bash. Fail if it hunts docs or Shell-lists the adapter. | **pass** (2026-08-20 operator post-mirror) |
-| 2 | Reviewers cannot edit | `@production_readiness_reviewer` or Task: attempt a write → denied / ask-blocked / **no write tool exposed** | **pass** (2026-08-20 operator — no write tool; no mutation) |
-| 3 | Dual Task shape | Instruct parent to launch both reviewers in one turn → two child sessions (or document sequential fallback). Operator may use a minimal “return done” task if the host refuses empty review without a changeset. | **pass** (2026-08-20 operator — 2 parallel DONE sessions) |
-| 4 | Skill paths resolve | **LOCKED (pointer-first-0):** Load skill `implementation-review`; confirm Read resolves companion `{{COMPANION_ROOT}}/workflow/iterative-code-review.md` (absolute e.g. `C:/Users/admin/source/repos/general-projects/cursorEscape/workflow/iterative-code-review.md`). **Not** host `docs/workflow/...` (mirror **deleted** pf4). | **pass** (2026-08-20 operator — companion workflow path) |
+| 1 | Always-on gates visible | New session after full quit/restart. **Frozen prompt:** [opencode-smoke-prompts § Row 1](./opencode-smoke-prompts.md#row-1--always-on-gates-c1). Pass = quotes default-on plan loop + when-in-doubt + eval/harness not exempt **from session instructions** with **zero** read/glob/grep/bash. Fail if it hunts docs or Shell-lists the adapter. | **pass** (2026-08-21 post–`Sync-HostHarness`; injected always-on quotes) |
+| 2 | Reviewers cannot edit | [opencode-smoke-prompts § Row 2](./opencode-smoke-prompts.md#row-2--reviewers-cannot-edit) — `@production_readiness_reviewer` or Task: attempt a write → denied / ask-blocked / **no write tool exposed** | **pass** (2026-08-21 — no Write/Edit tools; bash writes denied; no file created) |
+| 3 | Dual Task shape | [opencode-smoke-prompts § Row 3](./opencode-smoke-prompts.md#row-3--dual-task-shape) — two child sessions (or document sequential fallback). | **pass** (2026-08-21 — 2 parallel DONE sessions) |
+| 4 | Skill paths resolve | [opencode-smoke-prompts § Row 4](./opencode-smoke-prompts.md#row-4--companion-workflow-read-c4). Confirm Read resolves companion `…/cursorEscape/workflow/iterative-code-review.md`. **Not** host `docs/workflow/...`. | **pass** (2026-08-21 — companion workflow path) |
 | 5 | Config parses | `opencode` starts with current `opencode.json` (no schema crash) | **pass** (2026-08-17: `opencode.json` JSON-parses; live TUI start still operator-confirm) |
 | 6 | Empty-Task fail-loud | Reviewer Task completing in ≪1s with empty result treated as routing/auth failure until log shows model stream | deferred: operator habit / future probe |
 | 7 | Escalation when single owner | Grep adapter: no competing “≤3 phases usually no” when-table in `plan-agent-context.md`; table lives in `implementation-plan` skill | **pass** (2026-08-18 Phase 3 adapt) |
-| 8 | bug_reviewer rubric path | **LOCKED (pointer-first-0):** confirm Read resolves companion `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md` (Target SoT). Host mirror **deleted** pf4. | **pass** (2026-08-20 operator — companion FA rubric) |
-| 9 | Skill-tool lists workflow skills | Clean chat (plan mode; Flash): skill tool names include `implementation-plan`, `plan-review`, `implementation-review`, `composer`, `discovery`, `documentation-architecture`, `pre-commit-ci-gate`, **`roadmap`** — not only `customize-opencode`. Prompt in [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md) (pointer-first Probe A). **C2:** **8** workflow skills including `roadmap` | **pass** (2026-08-20 operator — 8 + `customize-opencode`) |
-| 10 | SoT load without bash approvals | Same Probe A (pointer-first): load `implementation-plan` via skill tool; thin harness may omit when-table — **pass** if Escalation first row is quoted from companion `{{COMPANION_ROOT}}/skills/implementation-plan/SKILL.md` via native Read with **zero** bash approvals for adapter discovery | **pass** (2026-08-20 operator — thin harness → companion Read) |
-| 11 | Native file tools without bash approvals | Clean chat Probe **B0′/B0″** + **C** (`repository_explorer`): frozen prompts in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) | **pass** (2026-08-19); short lookups closed; see row **12** for glob-blind residual |
-| 12 | Glob-blind paths without serial Shell asks | openBuggy workspace; frozen prompts in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Failure mode F — (a) glob `eval/runs/2026-08-17T143458Z-dsv4flash/**`; (b) absolute `read` **companion** workflow doc `{{COMPANION_ROOT}}/workflow/iterative-plan-review.md`; (c) `Test-Path` on companion path once → **0** listing approvals | **historical pass** (2026-08-19 host mirror for 12b/c; pf4 How retargeted to companion — **12b/12c re-probe not run** post-mirror) |
-| 13 | Thin-plan template rejection | Clean chat; Flash; frozen prompt in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Thin-plan smoke (row 13) — omit Assumptions/Unknowns → invoke `plan_reviewer` → **CHANGES REQUESTED** citing those gaps | **pass** (2026-08-20 operator — CHANGES REQUESTED for Assumptions; marker spot-check not reported) |
-| 14 | Copy-out map / specimen vs live `agent.*` keys | Diff [overlays/opencode/opencode.specimen.json](../../overlays/opencode/opencode.specimen.json) vs live `~/.config/opencode/opencode.json` for all `agent.*` keys; confirm [overlay copy-out map](../../overlays/opencode/_index.md) matches host-plugged paths before live sync. Record on overlay `_index` § Specimen vs live. **How frozen Phase 2.** | **pass** (install-time, Phase 3 2026-08-20): specimen vs live `agent.*` JSON diff — all six overlay keys match; `agent.implementer.permission.task.implementer` = `allow` verified on live; harness inventory **8 skills / 7 agents** (procedure mirror deleted pf4) |
+| 8 | bug_reviewer rubric path | [opencode-smoke-prompts § Row 8](./opencode-smoke-prompts.md#row-8--bug_reviewer-rubric-companion-fa). Companion FA rubric SoT. | **pass** (2026-08-21 — companion FA rubric) |
+| 9 | Skill-tool lists workflow skills | [opencode-smoke-prompts § Rows 9+10](./opencode-smoke-prompts.md#rows-9--10--skill-catalog--sot-load) (same prompt). **C2:** **8** workflow skills including `roadmap` | **pass** (2026-08-21 — thin harness → companion skill catalog) |
+| 10 | SoT load without bash approvals | Same prompt as row **9**. Thin harness → companion Read Escalation first row; **zero** bash for adapter discovery | **pass** (2026-08-21 — companion `implementation-plan` Escalation first row) |
+| 11 | Native file tools without bash approvals | Optional — frozen prompts in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Probe B | **pass** (2026-08-19); short lookups closed; see row **12** for glob-blind residual |
+| 12 | Glob-blind paths without serial Shell asks | Optional — [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Failure mode F | **historical pass** (2026-08-19; **12b/12c companion re-probe not run** post-mirror) |
+| 13 | Thin-plan template rejection | [opencode-smoke-prompts § Row 13](./opencode-smoke-prompts.md#row-13--thin-plan-rejection) — omit Assumptions/Unknowns → `plan_reviewer` → **CHANGES REQUESTED** | **pass** (2026-08-21 — CHANGES REQUESTED incl. missing Assumptions; marker spot-check **pass**) |
+| 14 | Copy-out map / specimen vs live `agent.*` keys | [opencode-smoke-prompts § Row 14](./opencode-smoke-prompts.md#row-14--specimen-vs-live-optional-powershell) (PowerShell). | **pass** (2026-08-21 — specimen≡live `plan`/`build`/`implementer`; 8 skills / 7 agents; mirror absent) |
 
 **Frozen probe paths (row 12):** run id `2026-08-17T143458Z-dsv4flash` (exists on disk; gitignored). **12b Target (pf4):** `C:/Users/admin/source/repos/general-projects/cursorEscape/workflow/iterative-plan-review.md` — **not** host `docs/workflow/` (deleted).
 
-**Frozen probe (row 13):** see [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Thin-plan smoke (row 13). **pass** (2026-08-20 operator post-mirror).
+**C6 minimum paste order:** [opencode-smoke-prompts](./opencode-smoke-prompts.md) — **1 → 9+10 → 4 → 8 → 13 → 2 → 3**.
 
 ### C1–C6 runtime attestation (Phase 3 baseline — updated pf4)
 
@@ -130,14 +132,14 @@ Backup: `C:\Users\admin\.config\opencode-backup-20260820-153803` (3475 files). P
 
 | # | Item | Runtime evidence | Smoke |
 | - | ---- | ---------------- | ----- |
-| **C1** | Always-on gates inject | Absolute `instructions` + `AGENTS.md` dual-write (2026-08-20 remediation) | Row **1** **pass** (2026-08-20 operator post-mirror) |
-| **C2** | Eight skills incl. `roadmap` | 8 `skills/*/SKILL.md` with matching `name` frontmatter on live host | Rows **9–10** **pass** (2026-08-20 operator) |
-| **C3** | Plan→plan_reviewer; impl→dual→Full | 7 overlay agents on disk; reviewers `permission.edit: deny`; loops cite `{{COMPANION_ROOT}}/workflow/iterative-*` and companion FA rubric | Rows **2**, **3**, **13** **pass** (2026-08-20 operator); row **8** **pass**; row **14** install-time pass |
-| **C4** | Deep workflow Reads on host | Hubs + smoke row **4** How cite absolute `{{COMPANION_ROOT}}/workflow/...`; harness bodies use absolute `{{COMPANION_ROOT}}/...` Reads after pointer-first-2; host procedure mirror **deleted** pf4 | Row **4** **pass** (2026-08-20 operator — companion path) |
-| **C5** | Companion FA/SOP reads | `external_directory` includes `COMPANION_ROOT/**`; sample FA `read` OK; rubric = `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md` | Optional **11** prior pass; row **12** historical (12b/c not re-run post-pf4); companion read verified Phase 3 Fast CI |
-| **C6** | Smoke proves behavior | This table + smoke rows — no pass on folder/skill-path presence alone. **C6 minimum set:** **1, 2, 3, 4, 8, 9–10, 13** (row **14** install-time — separate) | **pass** (2026-08-20 operator C6 minimum rows **1–4**, **8**, **9–10**, **13**). Row **14**: install-time pass (live re-diff skipped) |
+| **C1** | Always-on gates inject | Absolute `instructions` + `AGENTS.md` dual-write | Row **1** **pass** (2026-08-21 post–`Sync-HostHarness`) |
+| **C2** | Eight skills incl. `roadmap` | 8 `skills/*/SKILL.md` with matching `name` frontmatter on live host | Rows **9–10** **pass** (2026-08-21) |
+| **C3** | Plan→plan_reviewer; impl→dual→Full | 7 overlay agents on disk; reviewers `edit: deny` + bash deny except read-only git | Rows **2**, **3**, **13** **pass** (2026-08-21); row **8** **pass**; row **14** **pass** |
+| **C4** | Deep workflow Reads on host | Absolute companion `workflow/` Reads; host procedure mirror **deleted** | Row **4** **pass** (2026-08-21) |
+| **C5** | Companion FA/SOP reads | `external_directory` includes `COMPANION_ROOT/**`; rubric companion FA | Row **8** **pass** (2026-08-21); optional **11**/**12** historical |
+| **C6** | Smoke proves behavior | This table + smoke rows — no pass on folder presence alone. **C6 minimum:** **1, 2, 3, 4, 8, 9–10, 13** | **pass** (2026-08-21 operator post–`Sync-HostHarness`). Row **14** **pass** (same day) |
 
-**Operator next step:** Row **6** (empty-Task fail-loud) remains deferred operator habit. C6 minimum attested in [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).
+**Operator next step:** Row **6** (empty-Task fail-loud) remains deferred. C6 minimum re-attested 2026-08-21 after host-harness sync + reviewer bash harden.
 
 **Fast verification (install-time — harness-only; pointer-first-2):**
 
@@ -161,7 +163,7 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 3. T3 Code control plane is separate — this SOP covers the OpenCode harness adapter only.
 4. **Restart OpenCode Desktop** after adapter edits for always-on / agent / skill / permission changes to load.
 5. **Skill-binding (C/E/F):** Smoke **9–10** **pass** (2026-08-20 operator); **11** **pass** (2026-08-19); row **12** historical pass on host mirror — **12b/12c companion re-probe not run** post-pf4. Row **14** install-time pass Phase 3.
-6. When adding OpenCode skills/agents/rules: follow [opencode-authoring-adapter](./opencode-authoring-adapter.md) (official docs + Observed checklist). Periodically audit durable Always-run rows in `opencode.db` `permission` table (see authoring SOP).
+6. When adding OpenCode skills/agents/rules: follow [opencode-authoring-adapter](./opencode-authoring-adapter.md) (official docs + Observed checklist). Permission / bash traps from 2026-08-21 smoke: Failure modes **K–M** (and sync `Optimize-OpenCodePermissionKeyOrder` in [host-sync README](../../scripts/host-sync/README.md)). Periodically audit durable Always-run rows in `opencode.db` `permission` table (see authoring SOP).
 7. Smoke **13** gate **pass** (2026-08-20 operator — Incomplete until / Assumptions). Marker spot-check not reported. **Format (pointer-first-2):** overlay [`plan_reviewer`](../../overlays/opencode/agents/plan_reviewer.md) harness cites `{{COMPANION_ROOT}}/workflow/plan-reviewer-report.md` before emit.
 8. **Restore precedence:** Phase 0 `pre-host-sync-build` baseline → legacy archaeology only. Sync/Apply does not create backup trees.
 

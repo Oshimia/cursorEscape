@@ -275,7 +275,7 @@ Test-Path C:/Users/admin/.config/opencode/docs/workflow   # expect False
 | 3 | **pass** | Two parallel DONE sessions |
 | 14 | pass (install); re-check **skipped** | |
 
-Canonical frozen sources (if wording drifts): [skill-binding discovery](./opencode-skill-binding-discovery-2026-08.md) (rows 1, 9–10, 13); [host-adapter smoke table](../docs/SOPs/opencode-host-adapter.md) (rows 2–3, 4, 8, 14).
+Canonical frozen prompts for operators: [opencode-smoke-prompts](../docs/SOPs/opencode-smoke-prompts.md). This closeout keeps the 2026-08-20 attestation log; do not treat § Operator smoke runbook below as the primary paste surface if the SOP exists.
 
 ## Implications
 

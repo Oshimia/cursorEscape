@@ -88,4 +88,13 @@ $instr = Get-OpenCodeInstructionsPath -Config $specimenHt
 Assert-Pass 'specimen instructions absolute after merge' ($instr -like "$openCodeHome*")
 Assert-Pass 'specimen has no unreplaced tokens' (-not (Test-ContentHasUnmergedTokens -Content ($specimenHt | ConvertTo-Json -Depth 20 -Compress)))
 
+# Permission pattern maps: "*" must be first (OpenCode last-match-wins)
+$liveJsonPath = Join-Path $openCodeHome 'opencode.json'
+$mergedHt = Merge-OpenCodeHarnessJson -Specimen $specimenHt -LiveJsonPath $liveJsonPath -PreserveTopLevelKeys @('model', 'provider')
+$taskKeys = @($mergedHt.agent.build.permission.task.Keys)
+$bashKeys = @($mergedHt.permission.bash.Keys)
+Assert-Pass 'merged build.task permission puts * first' ($taskKeys.Count -ge 1 -and $taskKeys[0] -eq '*')
+Assert-Pass 'merged global bash permission puts * first' ($bashKeys.Count -ge 1 -and $bashKeys[0] -eq '*')
+Assert-Pass 'Optimize-OpenCodePermissionKeyOrder in core' ((Get-Content (Join-Path $hostSyncRoot 'HostSync.Core.ps1') -Raw) -match 'Optimize-OpenCodePermissionKeyOrder')
+
 exit $(if ($fail) { 1 } else { 0 })

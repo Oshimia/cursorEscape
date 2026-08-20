@@ -183,7 +183,66 @@ function Merge-OpenCodeHarnessJson {
         $liveHt = ConvertTo-NestedHashtable -Node ($liveRaw | ConvertFrom-Json)
     }
 
-    return (Merge-HashtablePreserve -Specimen $Specimen -Live $liveHt -PreserveTopLevelKeys $PreserveTopLevelKeys)
+    $merged = Merge-HashtablePreserve -Specimen $Specimen -Live $liveHt -PreserveTopLevelKeys $PreserveTopLevelKeys
+    return (Optimize-OpenCodePermissionKeyOrder -Node $merged)
+}
+
+function Test-IsOpenCodePermissionPatternMap {
+    param($Node)
+
+    if ($null -eq $Node) { return $false }
+    $isMap = ($Node -is [hashtable]) -or ($Node -is [System.Collections.Specialized.OrderedDictionary])
+    if (-not $isMap) { return $false }
+    if ($Node.Count -lt 1) { return $false }
+
+    $actions = @('allow', 'ask', 'deny')
+    foreach ($value in $Node.Values) {
+        if ($value -isnot [string]) { return $false }
+        if ($actions -notcontains $value.ToLowerInvariant()) { return $false }
+    }
+    return $true
+}
+
+function Order-OpenCodePermissionPatternMap {
+    param($Map)
+
+    $ordered = [ordered]@{}
+    $keys = @($Map.Keys)
+    if ($keys -contains '*') {
+        $ordered['*'] = $Map['*']
+    }
+    foreach ($key in ($keys | Where-Object { $_ -ne '*' } | Sort-Object)) {
+        $ordered[$key] = $Map[$key]
+    }
+    return $ordered
+}
+
+function Optimize-OpenCodePermissionKeyOrder {
+    param($Node)
+
+    if ($null -eq $Node) { return $null }
+
+    if (Test-IsOpenCodePermissionPatternMap -Node $Node) {
+        return (Order-OpenCodePermissionPatternMap -Map $Node)
+    }
+
+    if (($Node -is [hashtable]) -or ($Node -is [System.Collections.Specialized.OrderedDictionary])) {
+        $out = [ordered]@{}
+        foreach ($key in @($Node.Keys)) {
+            $out[$key] = Optimize-OpenCodePermissionKeyOrder -Node $Node[$key]
+        }
+        return $out
+    }
+
+    if ($Node -is [System.Collections.IList] -and $Node -isnot [string]) {
+        $items = New-Object object[] $Node.Count
+        for ($i = 0; $i -lt $Node.Count; $i++) {
+            $items[$i] = Optimize-OpenCodePermissionKeyOrder -Node $Node[$i]
+        }
+        return ,$items
+    }
+
+    return $Node
 }
 
 function Get-FileSha256Hex {

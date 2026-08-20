@@ -7,9 +7,7 @@ temperature: 0.1
 permission:
   edit: deny
   bash:
-    "*": ask
-    "Get-ChildItem*": allow
-    "Test-Path*": allow
+    "*": deny
     "git status*": allow
     "git log*": allow
     "git diff*": allow

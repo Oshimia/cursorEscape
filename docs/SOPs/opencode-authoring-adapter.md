@@ -1,6 +1,6 @@
 # Authoring OpenCode adapter files (skills, agents, rules, config)
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 
 ## Context
 
@@ -224,7 +224,7 @@ Required / important frontmatter ([docs](https://opencode.ai/docs/agents/#option
 
 **cursorEscape adapter rules:**
 
-- Reviewers / plan_reviewer: `permission.edit: deny`; bash mostly `ask` with narrow git allowlists  
+- Reviewers / `plan_reviewer`: `permission.edit: deny`; **bash deny** except read-only `git status*|log*|diff*|show*|rev-parse*` on dual-gate reviewers; `plan_reviewer` bash fully **deny** (score pasted plan text + native **read** of companion docs only). See [Failure modes K–M](#failure-mode-k--permission-pattern--not-first-last-match-wins).
 - Do **not** pin provider-specific `model:` on reviewers — inherit session default ([host adapter](./opencode-host-adapter.md))  
 - Do **not** use Cursor type names (`bugbot`, `reviewer-a`) as runtime agent ids  
 - Body = role + I/O + must-not + “load skill X / read doc Y” — not full loop essays  
@@ -302,13 +302,13 @@ Minimum skill-related hooks for this adapter:
 
 (Extend `task` allowlists to match [host adapter inventory](./opencode-host-adapter.md).)
 
-Permission keys include `read`, `edit`, `bash`, `task`, `skill`, `external_directory`, etc. ([Agents → Permissions](https://opencode.ai/docs/agents/#permissions); [Permissions](https://opencode.ai/docs/permissions/)). Prefer pattern objects with `"*"` first, then specific overrides (last matching rule wins).
+Permission keys include `read`, `edit`, `bash`, `task`, `skill`, `external_directory`, etc. ([Agents → Permissions](https://opencode.ai/docs/agents/#permissions); [Permissions](https://opencode.ai/docs/permissions/)). Prefer pattern objects with `"*"` **first**, then specific overrides (**last matching rule wins**). Sync merges must preserve that order — [Failure mode K](#failure-mode-k--permission-pattern--not-first-last-match-wins).
 
 **Glob / gitignore:** `glob`/`grep` use ripgrep and respect `.gitignore`. To let agents see gitignored trees (e.g. openBuggy `eval/runs/`), add a repo-root [`.ignore`](https://opencode.ai/docs/tools/) with un-ignore lines such as `!eval/runs/`. Do not track those trees in git solely for agent convenience.
 
 **Out-of-workspace adapter paths:** `external_directory` defaults to **ask**. For this host, allow `~/.config/opencode/**` (and absolute Windows form if needed) so native `read`/`glob` can reach global workflow docs without Shell listing. Prefer `edit: deny` under that tree if configuring edit rules.
 
-**Narrow listing bash allow (safety net only):** when models still fall back after empty glob, allow only `Get-ChildItem*` and `Test-Path*` (keep `bash: "*": ask`). Do **not** set `bash: allow *`. Skip `dir`/`ls` unless probes prove `Get-ChildItem*` alone fails. Do not allowlist `python -c *` by default.
+**Narrow listing bash allow (safety net only — parents / explorers):** when models still fall back after empty glob, allow only `Get-ChildItem*` and `Test-Path*` **after** `"*": "ask"` (never put `"*"` after the allows). Do **not** set `bash: allow *`. Skip `dir`/`ls` unless probes prove `Get-ChildItem*` alone fails. Do not allowlist `python -c *` by default. **Do not** put listing allows on `plan_reviewer` / dual-gate reviewers — [Failure modes L–M](#failure-mode-l--edit-deny-does-not-block-bash-writes).
 
 **Do not** “fix” skill babysitting by setting parent bash to `allow *` as the primary mitigation.
 
@@ -363,6 +363,53 @@ rg -n '\.\./\.\./(docs|skills|agents)/' "$env:OPENCODE_HOME/docs/workflow" "$env
 # Expect: zero
 ```
 
+#### Failure mode K — permission pattern `"*"` not first (last-match-wins)
+
+**Date Observed:** 2026-08-21 (Desktop smoke row 13 — `Task plan_reviewer` blocked after `Sync-HostHarness -Apply`).  
+**Evidence:** Live `opencode.json` had `agent.build.permission.task` / `agent.implementer.permission.task` with `"plan_reviewer": "allow"` **before** `"*": "deny"`; UI listed allow rules but effective action was deny. Same class for bash maps with `"*": "ask"` between allow entries.
+
+| | |
+| - | - |
+| **Symptom** | Task to an allow-listed subagent fails: “blocked by permission rules” / “none matches `plan_reviewer`” while the allow pattern is visibly present; or bash allow patterns never auto-run because `"*": "ask"` wins |
+| **Trap** | Reading the allow line and assuming it wins; blaming agent frontmatter (`bash: deny`) when the parent `task` map is wrong |
+| **Cause** | OpenCode evaluates permission pattern objects with **last matching rule wins**. Hashtable / JSON merge can emit `"*"` in the middle or after specifics. Catch-all after `plan_reviewer` → deny spawn |
+| **Fix (overlay / specimen)** | Always author `"*": "deny"` or `"*": "ask"` **first**, then named allows (`plan_reviewer`, `git status*`, …) |
+| **Fix (sync)** | After specimen↔live merge, run `Optimize-OpenCodePermissionKeyOrder` (in [`HostSync.Core.ps1`](../../scripts/host-sync/HostSync.Core.ps1)) so every allow/ask/deny pattern map serializes `"*"` first. Phase 2 Fast CI asserts merged `build.task` and global `bash` put `*` first |
+| **Do not** | Rely on PowerShell hashtable iteration order; hand-edit live JSON without re-checking key order; put `"*"` after named allows |
+
+**Regression check:**
+
+```powershell
+$j = Get-Content $env:USERPROFILE\.config\opencode\opencode.json -Raw | ConvertFrom-Json
+@($j.agent.build.permission.task.PSObject.Properties.Name)[0]   # expect *
+@($j.permission.bash.PSObject.Properties.Name)[0]               # expect *
+pwsh ./scripts/host-sync/Invoke-Phase2FastCI.ps1                # includes * -first asserts
+```
+
+#### Failure mode L — `edit: deny` does not block bash writes
+
+**Date Observed:** 2026-08-21 (Desktop smoke row 2 — `production_readiness_reviewer` attempted `Set-Content` → permission popup).
+
+| | |
+| - | - |
+| **Symptom** | Reviewer has no Write/Edit tools, but still prompts to run `Set-Content` / redirects via **bash**; file may be ask-blocked or written if approved |
+| **Trap** | Assuming `permission.edit: deny` makes the agent unable to mutate the workspace |
+| **Cause** | `edit` covers edit/write/patch tools only. Shell (`Set-Content`, `Out-File`, `>`) is governed by **`bash`** patterns |
+| **Fix** | Dual-gate reviewers + `test_reviewer`: `bash: { "*": deny, "git status*|log*|diff*|show*|rev-parse*": allow }` (read-only git). Must-not: write via bash. Smoke 2 pass = deny / ask-block / no write tool + **no successful write** |
+| **Do not** | Leave reviewer bash as `"*": ask` with listing allows if the bar is “cannot edit”; mark row 2 pass solely because Edit is absent while bash writes remain ask |
+
+#### Failure mode M — compound / non-matching bash vs narrow allow-list
+
+**Date Observed:** 2026-08-21 (smoke row 13 — `plan_reviewer` browse; operator popup despite `Get-ChildItem*` / `Test-Path*` allow).
+
+| | |
+| - | - |
+| **Symptom** | Operator sees permission popup for a shell that “should” be allowed; or plan_reviewer shell-explores the repo when full plan text was already pasted |
+| **Trap** | Believing any command containing `Get-ChildItem` auto-allows; treating popup as config broken rather than pattern miss |
+| **Cause** | Bash permissions match **parsed command strings**. Compound scripts (`Write-Output`, `Get-Item`, pipes, multi-statement) often **do not** match `Get-ChildItem*` / `Test-Path*`. Unmatched → `"*": ask`. Separately: listing allows on `plan_reviewer` invite workspace browse that the gate does not need |
+| **Fix** | (1) `plan_reviewer`: `bash: deny` (or `{ "*": deny }`); Must-not: shell-explore when full plan text is in the prompt — use native **read** for companion contract docs only. (2) Parents that keep listing allows: expect popups for compound scripts; do not broaden to `bash: allow *` |
+| **Do not** | Allow-list `Get-ChildItem*` on gate agents to “make smoke quieter”; expand allows to cover every compound variant |
+
 #### Always-run / durable permission audit
 
 UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%USERPROFILE%\.local\share\opencode\opencode.db` table `permission` (`project_id`, `action`, `resource`). Session-only Always clears on Desktop restart.
@@ -395,11 +442,14 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 
 ## Implications / open questions
 
-1. Skill-tool catalog emptiness is usually **authoring/discovery** (`name`, paths, restart, permissions) — not native tool failure and not session contamination.  
-2. Missing always-on gates with the file on disk is usually **cwd-relative `instructions`** (Failure mode I) — not “model can’t see rules.”  
-3. Deep-doc path resolving to `%USERPROFILE%\docs\…` is usually **skill `../../docs/workflow` hops** (Failure mode J) — not a missing mirror.  
-4. Bash-for-`read`/`glob`/`grep` on short prompts was OK in Probe B/C; residual babysitting is often **glob-blind** (gitignore / external_directory) — see Failure mode F in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).  
-5. Re-check this SOP when OpenCode Desktop major versions change schema (nested `permission` vs v2 `permissions[]`). Periodically audit durable Always-run rows (`opencode.db` `permission`).
+1. Skill-tool catalog emptiness is usually **authoring/discovery** (`name`, paths, restart, permissions) — not native tool failure and not session contamination.
+2. Missing always-on gates with the file on disk is usually **cwd-relative `instructions`** (Failure mode I) — not “model can’t see rules.”
+3. Deep-doc path resolving to `%USERPROFILE%\docs\…` is usually **skill `../../docs/workflow` hops** (Failure mode J) — not a missing mirror.
+4. Bash-for-`read`/`glob`/`grep` on short prompts was OK in Probe B/C; residual babysitting is often **glob-blind** (gitignore / external_directory) — see Failure mode F in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
+5. Task allow-listed but blocked after sync: usually **`"*"` not first** in `permission.task` (Failure mode K) — not “agent missing from disk.”
+6. Reviewer write attempt via `Set-Content` despite `edit: deny`: Failure mode L — harden **bash**, not only edit.
+7. Popup on “allowed” `Get-ChildItem` compound script / plan_reviewer browse: Failure mode M.
+8. Re-check this SOP when OpenCode Desktop major versions change schema (nested `permission` vs v2 `permissions[]`). Periodically audit durable Always-run rows (`opencode.db` `permission`).
 
 ---
 

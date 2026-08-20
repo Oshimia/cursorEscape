@@ -111,13 +111,13 @@ When syncing outside the script (not recommended):
 
 | # | Check | How | Result |
 | - | ----- | --- | ------ |
-| 1 | C1 gates | New chat; **no tools**. Quote plan default-on, when-in-doubt; dual-review ≤4 / pressure-release from injected rules | **pass** (2026-08-21 operator; fresh chat) |
-| 2 | Skill → companion | Load `implementation-review`; confirm Read hits `…/cursorEscape/skills/` or `workflow/` — not only `~/.cursor/docs/workflow/` | **pass** (2026-08-21) |
+| 1 | C1 gates | New chat; **no tools**. Quote plan default-on, when-in-doubt; dual-review ≤4 / pressure-release from injected rules | **pass** (2026-08-21 post–`Sync-HostHarness` Apply; hybrid `.mdc` injects when-in-doubt + pressure-release ≤4) |
+| 2 | Skill → companion | Load `implementation-review`; confirm Read hits `…/cursorEscape/skills/` or `workflow/` — not only `~/.cursor/docs/workflow/` | **pass** (2026-08-21; live thin skill points absolute companion `skills/implementation-review/SKILL.md`) |
 | 3 | Workspace ≠ companion (optional) | Other folder open; skill Read still absolute companion | **operator optional** |
-| 4 | User Rules | Paste snippets from `~/.cursor/skills/*/user-rules-snippet.md` into Customize → Rules | **deferred** (operator skipped second-layer reinforcement) |
-| 5 | Restore drill | Confirm Phase 0 baseline folder + `BACKUP_MANIFEST.md` restore commands | **pass** (Phase 0 baseline `…-pre-host-sync-build-20260821-012600`) |
+| 4 | User Rules | Paste snippets from `~/.cursor/skills/*/user-rules-snippet.md` into Customize → Rules | **deferred** |
+| 5 | Restore drill | Confirm Phase 0 baseline folder + `BACKUP_MANIFEST.md` restore commands | **pass** (Phase 0 baseline `…-pre-host-sync-build-20260821-012600`; Kind Baseline) |
 
-**Smoke notes (2026-08-21):** Skill→companion **pass**. Restore drill **pass**. Fresh-chat C1 **pass** (default-on + when-in-doubt + pressure-release ≤4; not `count≥9`). User Rules paste **deferred**. Hybrid script fixed doubled `ci-ladder` URL. Phrase **eval/harness not exempt** remains OpenCode-style C1 wording — not required in Cursor hybrid gate bodies for this sync.
+**Smoke notes (2026-08-21 post–host-harness sync):** Filesystem inventory **pass** (5 skills token-merged, 2 agents, 3 hybrid rules, 0 unresolved `{{COMPANION_ROOT}}`, 0 `../../../../` hops). Dry-run `Sync-HostHarness.ps1 -Target Cursor` exit 0. C1/C2/restore **pass**. User Rules paste **deferred**. Row 3 optional.
 
 **OpenCode C6 minimum:** **pass** (2026-08-20) — [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).
 

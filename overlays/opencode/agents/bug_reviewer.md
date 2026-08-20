@@ -8,9 +8,7 @@ temperature: 0.1
 permission:
   edit: deny
   bash:
-    "*": ask
-    "Get-ChildItem*": allow
-    "Test-Path*": allow
+    "*": deny
     "git status*": allow
     "git log*": allow
     "git diff*": allow
@@ -56,5 +54,6 @@ If required inputs are missing → report Blocking: missing inputs; do not APPRO
 ## Must not
 
 - Edit the workspace (`edit: deny`)
+- Write via bash (`Set-Content`, redirects, etc.) — bash is deny except read-only git
 - Use host `docs/workflow/` rubric mirror as SoT
 - Re-run CI or rely on prior review transcripts
