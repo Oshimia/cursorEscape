@@ -1,6 +1,6 @@
 # Feature Architecture Documentation
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-08-22
 
 ## Context
 
@@ -44,6 +44,7 @@ Imported Observed harness and workflow snapshots live under [research/imported/]
 | [agent-roles-and-model-assignment.md](./agent-roles-and-model-assignment.md) | Role catalog + config |
 | [evaluation-methodology.md](./evaluation-methodology.md) | How workflow quality is measured |
 | [bug-reviewer-finding-rubric.md](./bug-reviewer-finding-rubric.md) | bug_reviewer report vs ignore (nits / out-of-scope / pre-existing) |
+| [permission-and-native-tool-policy.md](./permission-and-native-tool-policy.md) | Shell permission policy: read-only allowlist SoT, git red line, accepted risks, measurement |
 
 First host attempt: [host recreation study](../../analysis/host-recreation-2026-08.md). Claim taxonomy: **Desired / Required / Nice-to-have / Cursor-specific / Unknown**.
 

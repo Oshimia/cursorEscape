@@ -6,14 +6,6 @@ mode: subagent
 temperature: 0.2
 permission:
   edit: deny
-  bash:
-    "*": ask
-    "Get-ChildItem*": allow
-    "Test-Path*": allow
-    "git status*": allow
-    "git log*": allow
-    "git diff*": allow
-    "git show*": allow
 color: info
 ---
 

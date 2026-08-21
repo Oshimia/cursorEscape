@@ -49,3 +49,9 @@ Reviewer Tasks that complete in well under ~1s with empty results are **fail-lou
 **How to load:** Use the OpenCode **`skill` tool** with the exact skill id above. Do **not** use bash/shell to list or discover adapter SoT under the OpenCode config root. Prefer native `read` / `glob` / `grep` for repo files; reserve bash for real commands (tests, builds, git when needed).
 
 Empty `glob`/`grep` on gitignored or out-of-workspace paths is often **tool blindness**, not proof of absence. Prefer absolute `read` of companion procedure paths (e.g. `{{COMPANION_ROOT}}/workflow/iterative-plan-review.md`). Do not treat host `docs/workflow/` mirror as procedure SoT. Do not Shell-list the adapter tree to discover SoT. Prefer `glob` for `eval/runs` when the repo provides a `.ignore` un-ignore. Prefer approving shell **once** unless the pattern is promoted into reviewed config.
+
+## Shell & native tools (all repos)
+
+Prefer native tools over shell equivalents: `read` not `Get-Content`/`cat`; `grep` not `rg`/`Select-String`; `glob` not `ls`/`dir`/`Get-ChildItem` listings. Use the bash `workdir` parameter — never `git -C`, never `cd` chaining.
+
+Git red line: read/discovery git (status, log, diff, show, rev-parse, ls-files, blame, branch listings, remote -v) is pre-allowed. Mutating stash/tag operations and all other mutating git verbs (add, commit, push, pull, merge, rebase, reset, checkout, switch, restore, revert, cherry-pick, clean) always prompt — do not chain mutating verbs onto allowed reads to dodge the gate; compound commands are checked per segment and each mutating segment still asks.

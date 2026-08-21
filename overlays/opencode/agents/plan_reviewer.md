@@ -8,8 +8,6 @@ mode: subagent
 temperature: 0.1
 permission:
   edit: deny
-  bash:
-    "*": deny
 color: warning
 ---
 # plan_reviewer (OpenCode harness)

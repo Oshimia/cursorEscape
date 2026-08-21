@@ -7,14 +7,6 @@ mode: primary
 temperature: 0.3
 permission:
   edit: allow
-  bash:
-    "*": ask
-    "Get-ChildItem*": allow
-    "Test-Path*": allow
-    "git status*": allow
-    "git log*": allow
-    "git diff*": allow
-    "git show*": allow
   task:
     "*": deny
     "planner": allow

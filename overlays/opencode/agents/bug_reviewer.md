@@ -7,13 +7,6 @@ mode: subagent
 temperature: 0.1
 permission:
   edit: deny
-  bash:
-    "*": deny
-    "git status*": allow
-    "git log*": allow
-    "git diff*": allow
-    "git show*": allow
-    "git rev-parse*": allow
 color: error
 ---
 

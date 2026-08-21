@@ -9,15 +9,84 @@
     },
     "external_directory": {
       "{{OPENCODE_HOME}}/**": "allow",
-      "{{COMPANION_ROOT}}/**": "allow"
+      "{{COMPANION_ROOT}}/**": "allow",
+      "C:/Users/admin/AppData/Local/Temp/opencode/**": "allow"
     },
     "edit": {
       "{{OPENCODE_HOME}}/**": "deny"
     },
     "bash": {
       "*": "ask",
+      "git status*": "allow",
+      "git log*": "allow",
+      "git diff*": "allow",
+      "git show*": "allow",
+      "git rev-parse*": "allow",
+      "git ls-files*": "allow",
+      "git ls-tree*": "allow",
+      "git blame*": "allow",
+      "git shortlog*": "allow",
+      "git describe*": "allow",
+      "git rev-list*": "allow",
+      "git cat-file*": "allow",
+      "git diff-tree*": "allow",
+      "git for-each-ref*": "allow",
+      "git check-ignore*": "allow",
+      "git grep*": "allow",
+      "git merge-base*": "allow",
+      "git count-objects*": "allow",
+      "git remote": "allow",
+      "git remote -v": "allow",
+      "git remote get-url*": "allow",
+      "git remote show*": "allow",
+      "git branch": "allow",
+      "git branch -a": "allow",
+      "git branch -r": "allow",
+      "git branch -v": "allow",
+      "git branch -vv": "allow",
+      "git branch --list": "allow",
+      "git branch --show-current": "allow",
+      "git tag": "allow",
+      "git tag -l": "allow",
+      "git tag --list": "allow",
+      "git stash list*": "allow",
+      "git stash show*": "allow",
+      "git worktree list*": "allow",
+      "git config --get*": "allow",
+      "git config --list*": "allow",
+      "git reflog": "allow",
+      "git reflog show*": "allow",
       "Get-ChildItem*": "allow",
-      "Test-Path*": "allow"
+      "Test-Path*": "allow",
+      "Get-Content*": "allow",
+      "Get-Item*": "allow",
+      "Get-Command*": "allow",
+      "Get-FileHash*": "allow",
+      "Get-Date*": "allow",
+      "Get-Location*": "allow",
+      "Select-String*": "allow",
+      "Select-Object*": "allow",
+      "Sort-Object*": "allow",
+      "Group-Object*": "allow",
+      "Measure-Object*": "allow",
+      "Compare-Object*": "allow",
+      "Format-Table*": "allow",
+      "Format-List*": "allow",
+      "Format-Wide*": "allow",
+      "Out-String*": "allow",
+      "Out-Null*": "allow",
+      "ConvertFrom-Json*": "allow",
+      "ConvertTo-Json*": "allow",
+      "ConvertFrom-Csv*": "allow",
+      "ConvertTo-Csv*": "allow",
+      "Join-Path*": "allow",
+      "Split-Path*": "allow",
+      "Resolve-Path*": "allow",
+      "Write-Output*": "allow",
+      "Write-Host*": "allow",
+      "echo*": "allow",
+      "rg*": "allow",
+      "python*": "allow"
     }
   },
   "skills": {
@@ -26,32 +95,10 @@
     ]
   },
   "agent": {
-    "plan": {
-      "permission": {
-        "bash": {
-          "*": "ask",
-          "Get-ChildItem*": "allow",
-          "Test-Path*": "allow",
-          "git status*": "allow",
-          "git log*": "allow",
-          "git diff*": "allow",
-          "git show*": "allow"
-        }
-      }
-    },
     "build": {
       "permission": {
         "skill": {
           "*": "allow"
-        },
-        "bash": {
-          "*": "ask",
-          "Get-ChildItem*": "allow",
-          "Test-Path*": "allow",
-          "git status*": "allow",
-          "git log*": "allow",
-          "git diff*": "allow",
-          "git show*": "allow"
         },
         "task": {
           "*": "deny",
@@ -73,15 +120,6 @@
       "permission": {
         "skill": {
           "*": "allow"
-        },
-        "bash": {
-          "*": "ask",
-          "Get-ChildItem*": "allow",
-          "Test-Path*": "allow",
-          "git status*": "allow",
-          "git log*": "allow",
-          "git diff*": "allow",
-          "git show*": "allow"
         },
         "task": {
           "*": "deny",
