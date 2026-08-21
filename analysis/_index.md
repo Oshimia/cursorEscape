@@ -1,12 +1,12 @@
 # Analysis documentation
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-22
 
 ## Context
 
 Operator studies of **local workflows** (not proposed engine design, not eval scoring, not market research). Each study has its own subdirectory with a hub `_index.md` when imported or authored.
 
-**Status:** Phase 2 openBuggy operator studies imported under `research/imported/openBuggy/analysis/`. Phase 3–4 complete — Target FA and workflow contracts live in [featureArchitecture](../docs/featureArchitecture/_index.md), [agents](../agents/_index.md), and [skills](../skills/_index.md). Local host-recreation study authored 2026-08-17; OpenCode DSV4F session study authored 2026-08-18; session extension study (skill binding / babysat plan loop) authored 2026-08-19; skill-binding discovery authored 2026-08-19.
+**Status:** Phase 2 openBuggy operator studies imported under `research/imported/openBuggy/analysis/`. Phase 3–4 complete — Target FA and workflow contracts live in [featureArchitecture](../docs/featureArchitecture/_index.md), [agents](../agents/_index.md), and [skills](../skills/_index.md). Local host-recreation study authored 2026-08-17; OpenCode DSV4F session study authored 2026-08-18; session extension study (skill binding / babysat plan loop) authored 2026-08-19; skill-binding discovery authored 2026-08-19; sub-agent nesting & model-control study authored 2026-08-22.
 
 ---
 
@@ -28,6 +28,7 @@ Operator studies of **local workflows** (not proposed engine design, not eval sc
 * [OpenCode DSV4F session extension (2026-08)](./opencode-dsv4f-session-extension-2026-08.md) — same session continued; skill-tool catalog binding → bash substitution; shell-approval babysitting (~2–3 min); iterative plan loop still operator-prompted; desktop model-selection pin detail
 * [OpenCode skill-binding discovery (2026-08)](./opencode-skill-binding-discovery-2026-08.md) — harness vs model vs config triage for C/E; Probe A–C; catalog fixed via skill `name` + `skills.paths`
 * [OpenCode pointer-first-2 skills.paths probe (2026-08)](./opencode-pointer-first-2-skills-paths-probe-2026-08.md) — pointer-first-2 harness stub rewrite; `external_directory` + `skills.paths` author-time attestation; live backup path
+* [OpenCode sub-agent nesting & model control (2026-08)](./opencode-subagent-nesting-model-control-2026-08.md) — recursion blocked by default, works via `permission.task`; no Task-tool model param — pin via agent `model:` frontmatter; unpinned children inherit invoker model; blockers: config snapshot-at-start, headless subagent bash hang
 * [Cursor pointer-first-3 audit (2026-08)](./cursor-pointer-first-3-audit-2026-08.md) — overlay vs portable audit; `{{COMPANION_ROOT}}` harness fix; live `~/.cursor` gap disposition
 * [Pointer-first-4 closeout (2026-08)](./pointer-first-4-closeout-2026-08.md) — C6 smoke attestation; companion-edit proof; OpenCode mirror delete; operator runbook
 
