@@ -32,6 +32,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [composer](../skills/composer/SKILL.md) | Phased execution conductor |
 | [roadmap](../skills/roadmap/SKILL.md) | Repo multi-phase handoff files |
 | [documentation-architecture](../skills/documentation-architecture/SKILL.md) | Bootstrap/extend repo docs layout |
+| [codebase-design](../skills/codebase-design/SKILL.md) | Portable deep-module design reference |
 
 ## Agents
 

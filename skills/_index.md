@@ -1,6 +1,6 @@
 # Skills
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 
 ## Context
 
@@ -18,6 +18,12 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 | implementation-review | [implementation-review/SKILL.md](./implementation-review/SKILL.md) | [SKILL.md](../overlays/cursor/skills/implementation-review/SKILL.md) | [SKILL.md](../overlays/opencode/skills/implementation-review/SKILL.md) |
 | discovery | [discovery/SKILL.md](./discovery/SKILL.md) | — | [SKILL.md](../overlays/opencode/skills/discovery/SKILL.md) |
 | plan-review | [plan-review/SKILL.md](./plan-review/SKILL.md) | — | [SKILL.md](../overlays/opencode/skills/plan-review/SKILL.md) |
+
+### Reference skills
+
+| Skill | Reference | Host overlays |
+| ----- | --------- | ------------- |
+| codebase-design | [SKILL.md](./codebase-design/SKILL.md) | — (portable reference) |
 
 ### Optional orchestration (Nice-to-have / Cursor-specific)
 
