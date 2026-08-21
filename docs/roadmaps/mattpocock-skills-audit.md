@@ -1,7 +1,7 @@
 # Roadmap: mattpocock/skills audit and merge
 
 **Last updated:** 2026-08-21  
-**Status:** Phase 0 **complete** — audit map + this roadmap authored. Next: **P1 assessment sweep** (deeper reasoning model; Composer-conducted or prompt-level, host-agnostic).  
+**Status:** Phase 1 **complete** — full assessment sweep and owner discussion recorded. Next: **P2 merge triage**.
 **Plan source:** accepted plan `mattpocock-skills-audit-map` (Escalation `no` / `n/a`; roadmap may restructure thin phases into Agent context without new scope).
 
 ## Product decisions (locked)
@@ -40,7 +40,7 @@ None. Docs and repo-git only. No live host apply, no `~/.cursor`/`~/.config/open
 ## Checklist
 
 - [x] Phase 0 — Audit map + handoff roadmap authored (this file, 2026-08-21)
-- [ ] Phase 1 — Assessment sweep (Tier 1 → 2 → 3, then infra block) per assessment-spec, then **owner discussion of findings/verdicts**
+- [x] Phase 1 — Assessment sweep (Tier 1 → 2 → 3, then infra block) per assessment-spec, then **owner discussion of findings/verdicts** (2026-08-21)
 - [ ] Phase 2 — Merge triage: rank owner-accepted proposals, decision log, define adapt phases
 - [ ] Phase 3+ — Adaptation implementation, one phase per accepted proposal through the repo's own gates
 
