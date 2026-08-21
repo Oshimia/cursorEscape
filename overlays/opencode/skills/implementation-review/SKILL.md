@@ -32,7 +32,7 @@ Implement
    - **production_readiness_reviewer:** locked opener — **no** Custom Instructions field. Focus-narrow = narrower task summary + applicable docs only.
    - **bug_reviewer:** **Custom Instructions** envelope (phase, iteration 1–4 within block, cumulative launch count, regressions, out-of-scope). Focus-narrow = current-fix only.
 3. Fix must-fix; re-run Observed Fast CI (when Fast ≠ n/a); at most **4** dual-review iterations per block — **do not launch a 5th pair**.
-4. **Exit:** dual APPROVED → Full CI only (never with reviewers). Iteration 4 without dual APPROVED → normal reassessment or Composer cap-exhausted handoff — **no Full**, **no** `task-phase-complete`. Never self-Waive (Waive = Composer-only).
+4. **Exit:** dual APPROVED → Full CI only (never with reviewers). Iteration 4 without dual APPROVED → normal reassessment or Composer cap-exhausted handoff — **no Full**, **no** `task-phase-complete`. Never self-Waive (Waive = Composer-only). Then disposition deferred batchables (before Full, per companion rubric).
 
 ## Read when
 

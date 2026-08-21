@@ -94,12 +94,35 @@ Implement phase
 4. **Exit the block:**
    - If **both** return `APPROVED` → go to step 5 (closeout). Do **not** launch reviewers again unless you subsequently changed code.
    - If iteration **4** ends without dual APPROVED → **stop** here; follow [Pressure release](#pressure-release-4-iteration-blocks) (normal reassessment or Composer cap-exhausted handoff). Do **not** run Full CI, do **not** report `task-phase-complete`, do **not** continue to steps 5–7.
-5. **Closeout (no reviewers) after dual APPROVED only:** Run **Full** CI (the repo’s commit-grade suite). If Full fails, fix and re-run Full only — **do not** re-run reviewers unless code changes invalidate the prior approval.
+5. **Closeout (no reviewers) after dual APPROVED only:** Run the [deferred-item disposition pass](#deferred-item-disposition-batchables) first, then run **Full** CI (the repo's commit-grade suite) so any fixed-now edits are validated. If Full fails, fix and re-run Full only — **do not** re-run reviewers unless code changes invalidate the prior approval.
 6. Confirm complete changeset and doc updates for **this phase**. Report closeout with dual-APPROVED iteration, **pressure-release block number**, **cumulative** per-leg launch counts this phase, Full CI pass, any **Batchable (deferred)** punch list copied from Reviewer-a, and the caveat that dual APPROVED is the loop bar — not proven ship-class catch or proven no-escape.
 7. **Stop.** Proceed to next phase, Composer QC, or declare task complete — **only** after dual APPROVED + Full (or documented `n/a` path).
 
 
 **Never** pair Full CI with a reviewer launch. Open Reviewer-a **Batchable (deferred)** alone does not keep the loop open.
+
+### Deferred item disposition (batchables)
+
+After dual `APPROVED`, alongside Full CI prep and BEFORE the Full CI run, the parent walks the Reviewer-a `Batchable (deferred)` punch list once and rules on every item. The pass never blocks commit, never relaunches reviewers for wording/index closures (see step 4: no relaunch unless code changed), and never silently drops an item.
+
+**Fix now when ALL hold:**
+
+- Effort is trivial: single file, a few lines.
+- Value is concrete: prevents a likely agent or operator misread, closes an inconsistency or incompleteness this same changeset introduced or touched, or completes a table/index the changeset affects.
+- Zero semantics risk: wording or index completeness only.
+- The surface was already touched by this phase or its immediate registration echo.
+
+**Defer with a one-line reason when ANY hold:**
+
+- It needs new files, scripts, tooling, or cross-phase coordination.
+- Value is speculative: no identifiable future reader or operator.
+- It would rewrite dated or historical records.
+- It belongs to another accepted-but-unstarted phase; move the note into that phase's context instead.
+- Effort rivals the phase's own review cost.
+
+Ambiguous items become a one-line question to the owner, never a silent drop.
+
+**Reporting:** annotate the existing closeout `Batchable (deferred):` line rather than adding a parallel list; each punch item gains a suffix, `-> fixed now` or `-> deferred: <reason>`. If closing an item would require semantic or code changes, stop and escalate to the owner instead.
 
 ### Pressure release (4-iteration blocks)
 
