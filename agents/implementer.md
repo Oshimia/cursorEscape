@@ -1,6 +1,6 @@
 # implementer
 
-**Last updated:** 2026-08-19
+**Last updated:** 2026-08-21
 
 ## Context
 
@@ -13,6 +13,15 @@
 ### Purpose
 
 Deliver the phase changeset; run discovery; invoke review loop at phase end per [implementation-review](../skills/implementation-review/SKILL.md).
+
+### Execution discipline
+
+- Work one ticket as one vertical slice: one behavior end to end per pass, rather than horizontal batches.
+- Run targeted checks during each slice instead of batching every check to the end.
+- When test design applies at a pre-agreed seam, you may consult [tdd](../skills/tdd/SKILL.md) and its companions; this is advisory guidance, not a gate.
+- Do not reopen the approved plan mid-slice; scope changes go back through planning.
+- Refactoring belongs to review work, not to the build slice.
+- All existing completion, commit-authority, and escalation rules below remain authoritative and unchanged.
 
 ### Inputs (Required)
 
@@ -68,3 +77,4 @@ Operator preference — config override.
 - [production_readiness_reviewer](./production_readiness_reviewer.md)
 - [bug_reviewer](./bug_reviewer.md)
 - [implementer phase parent duties](../docs/featureArchitecture/intended-workflow.md)
+- [TDD test quality](../workflow/tdd-tests.md)

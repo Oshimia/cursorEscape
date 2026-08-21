@@ -67,6 +67,7 @@ When Composer conducts: return closeout **or** cap-exhausted handoff only — **
 | [SKILL.md]({{COMPANION_ROOT}}/skills/implementation-review/SKILL.md) | Review loop + pressure release |
 | [composer/SKILL.md]({{COMPANION_ROOT}}/skills/composer/SKILL.md) | Cap-exhausted handoff schema |
 | [discovery.md]({{COMPANION_ROOT}}/workflow/discovery.md) | Repo doc discovery |
+| [implementer contract]({{COMPANION_ROOT}}/agents/implementer.md) | Execution discipline: one-ticket vertical slices |
 
 ## Must not
 
