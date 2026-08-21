@@ -20,7 +20,7 @@ OpenCode-native **host overlay** at `overlays/opencode/`. Portable procedure sta
 | ---------------------------- | -------------- | ----- |
 | `instructions/cursor-escape-loop.md` | [instructions/cursor-escape-loop.md](./instructions/cursor-escape-loop.md) | Always-on gates body (C1) |
 | `AGENTS.md` | [AGENTS.md](./AGENTS.md) | **Same gates** — OpenCode global rules surface (must match `instructions/cursor-escape-loop.md`) |
-| `skills/<id>/SKILL.md` (×8) | [skills/](./skills/) | Thin harness stubs → absolute `{{COMPANION_ROOT}}` Reads (C2; pointer-first-2 rewrites bodies) |
+| `skills/<id>/SKILL.md` (×9) | [skills/](./skills/) | Thin harness stubs → absolute `{{COMPANION_ROOT}}` Reads (C2; pointer-first-2 rewrites bodies) |
 | `agents/<role>.md` (×7) | [agents/](./agents/) | Thin harness bodies (C3) |
 | `opencode.json` (harness merge) | [opencode.specimen.json](./opencode.specimen.json) | Merge tokens; **preserve** operator `model` / `provider` (not in specimen sole form) |
 
@@ -130,7 +130,7 @@ Companion `workflow/` leaves formerly mirrored to host `docs/workflow/` (**10** 
 
 **ARCHIVED — do not enforce leaf count on live host post-pf4.**
 
-## Skills inventory (8 — C2)
+## Skills inventory (9 — C2)
 
 | Skill id | Overlay |
 | -------- | ------- |
@@ -142,6 +142,7 @@ Companion `workflow/` leaves formerly mirrored to host `docs/workflow/` (**10** 
 | composer | [skills/composer/SKILL.md](./skills/composer/SKILL.md) |
 | documentation-architecture | [skills/documentation-architecture/SKILL.md](./skills/documentation-architecture/SKILL.md) |
 | roadmap | [skills/roadmap/SKILL.md](./skills/roadmap/SKILL.md) |
+| diagnosing-bugs | [skills/diagnosing-bugs/SKILL.md](./skills/diagnosing-bugs/SKILL.md) |
 
 ## Agents inventory (7)
 
@@ -160,7 +161,7 @@ Companion `workflow/` leaves formerly mirrored to host `docs/workflow/` (**10** 
 | # | Item | Phase 2 evidence |
 | - | ---- | ---------------- |
 | **C1** | Always-on gates | Specimen `instructions` = **`{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md`** (absolute — cwd-relative paths do not load from global config); `AGENTS.md` matches that body; instruction states plan + implementation-review gates |
-| **C2** | Eight skills incl. `roadmap` | Eight overlay `skills/*/SKILL.md` with matching `name`; host-adapter row 9 + Probe A updated |
+| **C2** | Eight skills incl. `roadmap` *(Phase 2 scope; catalog expanded to nine in 2026-08-21 B1)* | Eight overlay `skills/*/SKILL.md` with matching `name`; host-adapter row 9 + Probe A updated |
 | **C3** | Reviewers deny-edit; loops cited | Seven overlay agents; reviewers `permission.edit: deny`; bodies cite `{{COMPANION_ROOT}}/workflow/iterative-*` and companion FA rubric |
 | **C4** | Companion workflow Reads (pointer-first-2) | Harness stubs use absolute `{{COMPANION_ROOT}}/workflow/...` Reads — **zero** host `docs/workflow/` as procedure SoT in harness; **zero** `../../` hops |
 | **C5** | Companion FA reads | Specimen `external_directory` includes `{{COMPANION_ROOT}}/**` |

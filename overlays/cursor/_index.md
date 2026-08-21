@@ -53,6 +53,10 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 | `discovery` | — | Loaded via `{{COMPANION_ROOT}}/workflow/discovery.md` from other harness stubs |
 | `plan-review` | — | Plan loop via `implementation-plan` harness |
 | `pre-commit-ci-gate` | [pre-commit-ci-gate.mdc](./rules/pre-commit-ci-gate.mdc) only | Rule surface, not skill advertisement |
+| `diagnosing-bugs` | — | Owner-invoked shipped-code diagnosis; companion Read only (`skills/diagnosing-bugs/SKILL.md`) |
+| `grilling` | — | Owner-triggered interview primitive; companion Read only (`skills/grilling/SKILL.md`) |
+| `tdd` | — | Advisory test-design reference; companion Read only (`skills/tdd/SKILL.md`) |
+| `codebase-design` | — | Deep-module vocabulary reference; companion Read only (`skills/codebase-design/SKILL.md`) |
 
 ## Skills
 

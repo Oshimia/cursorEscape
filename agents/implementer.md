@@ -17,7 +17,7 @@ Deliver the phase changeset; run discovery; invoke review loop at phase end per 
 ### Execution discipline
 
 - Work one ticket as one vertical slice: one behavior end to end per pass, rather than horizontal batches.
-- Run targeted checks during each slice instead of batching every check to the end.
+- Run targeted checks during each slice, drawn from the phase CI mapping, instead of batching every check to the end; these never substitute for phase-end Observed Fast CI.
 - When test design applies at a pre-agreed seam, you may consult [tdd](../skills/tdd/SKILL.md) and its companions; this is advisory guidance, not a gate.
 - Do not reopen the approved plan mid-slice; scope changes go back through planning.
 - Refactoring belongs to review work, not to the build slice.

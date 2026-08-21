@@ -1,7 +1,7 @@
 # Roadmap: mattpocock/skills audit and merge
 
 **Last updated:** 2026-08-21  
-**Status:** Phase 3 F6 **complete** — optional Standards/Spec evidence frame wired into the dual gate through dual review (parallel legs). Next: Phase 3 B1 `diagnosing-bugs` workflow.
+**Status:** Phase 3 B1 **complete** — user-invoked `diagnosing-bugs` workflow fully advertised and dual-reviewed (renewed block). Next: Phase 3 B2 bug-review evidence leg.
 **Plan source:** accepted plan `mattpocock-skills-audit-map` (Escalation `no` / `n/a`; roadmap may restructure thin phases into Agent context without new scope).
 
 ## Product decisions (locked)
@@ -48,6 +48,7 @@ None. Docs and repo-git only. No live host apply, no `~/.cursor`/`~/.config/open
 - [x] Phase 3 F4 — documented alignment in implementation-plan; Reviewer A approved, Bugbot waived by owner (2026-08-21)
 - [x] Phase 3 F5 — implementer execution discipline implemented and dual-reviewed (2026-08-21)
 - [x] Phase 3 F6 — code-review evidence frame implemented and dual-reviewed in parallel (2026-08-21)
+- [x] Phase 3 B1 — diagnosing-bugs workflow implemented, advertised end-to-end, dual-reviewed after Renew (2026-08-21)
 - [ ] Phase 3+ — Adaptation implementation, one phase per accepted proposal through the repo's own gates
 
 ---

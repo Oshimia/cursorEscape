@@ -39,7 +39,7 @@ This SOP documents the **global OpenCode adapter** installed on the operator mac
 
 **Skills**
 
-- `discovery`, `implementation-plan` (Escalation *when* SoT), `plan-review`, `implementation-review`, `pre-commit-ci-gate`, `composer`, `documentation-architecture`, **`roadmap`**
+- `discovery`, `implementation-plan` (Escalation *when* SoT), `plan-review`, `implementation-review`, `pre-commit-ci-gate`, `composer`, `documentation-architecture`, **`roadmap`**, `diagnosing-bugs`
 
 **Agents**
 
@@ -115,7 +115,7 @@ Record results when running live checks. Expected: `pass` \| `fail` \| `deferred
 | 6 | Empty-Task fail-loud | Reviewer Task completing in ≪1s with empty result treated as routing/auth failure until log shows model stream | deferred: operator habit / future probe |
 | 7 | Escalation when single owner | Grep adapter: no competing “≤3 phases usually no” when-table in `plan-agent-context.md`; table lives in `implementation-plan` skill | **pass** (2026-08-18 Phase 3 adapt) |
 | 8 | bug_reviewer rubric path | [opencode-smoke-prompts § Row 8](./opencode-smoke-prompts.md#row-8--bug_reviewer-rubric-companion-fa). Companion FA rubric SoT. | **pass** (2026-08-21 — companion FA rubric) |
-| 9 | Skill-tool lists workflow skills | [opencode-smoke-prompts § Rows 9+10](./opencode-smoke-prompts.md#rows-9--10--skill-catalog--sot-load) (same prompt). **C2:** **8** workflow skills including `roadmap` | **pass** (2026-08-21 — thin harness → companion skill catalog) |
+| 9 | Skill-tool lists workflow skills | [opencode-smoke-prompts § Rows 9+10](./opencode-smoke-prompts.md#rows-9--10--skill-catalog--sot-load) (same prompt). **C2:** **9** workflow skills including `roadmap` and `diagnosing-bugs` | **pass** (2026-08-21 — thin harness → companion skill catalog) |
 | 10 | SoT load without bash approvals | Same prompt as row **9**. Thin harness → companion Read Escalation first row; **zero** bash for adapter discovery | **pass** (2026-08-21 — companion `implementation-plan` Escalation first row) |
 | 11 | Native file tools without bash approvals | Optional — frozen prompts in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Probe B | **pass** (2026-08-19); short lookups closed; see row **12** for glob-blind residual |
 | 12 | Glob-blind paths without serial Shell asks | Optional — [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Failure mode F | **historical pass** (2026-08-19; **12b/12c companion re-probe not run** post-mirror) |
@@ -128,12 +128,12 @@ Record results when running live checks. Expected: `pass` \| `fail` \| `deferred
 
 ### C1–C6 runtime attestation (Phase 3 baseline — updated pf4)
 
-Backup: `C:\Users\admin\.config\opencode-backup-20260820-153803` (3475 files). Phase 3 live sync: overlay copy-out + workflow transform + `opencode.json` token merge. **pointer-first-4 delta:** procedure mirror (`docs/workflow/*`, 10 leaves) **deleted** from live OpenCode; harness inventory now **8 skills / 7 agents** only.
+Backup: `C:\Users\admin\.config\opencode-backup-20260820-153803` (3475 files). Phase 3 live sync: overlay copy-out + workflow transform + `opencode.json` token merge. **pointer-first-4 delta:** procedure mirror (`docs/workflow/*`, 10 leaves) **deleted** from live OpenCode; harness inventory 8 skills / 7 agents at the pointer-first-4 sync; nine skills since `diagnosing-bugs` joined the catalog.
 
 | # | Item | Runtime evidence | Smoke |
 | - | ---- | ---------------- | ----- |
 | **C1** | Always-on gates inject | Absolute `instructions` + `AGENTS.md` dual-write | Row **1** **pass** (2026-08-21 post–`Sync-HostHarness`) |
-| **C2** | Eight skills incl. `roadmap` | 8 `skills/*/SKILL.md` with matching `name` frontmatter on live host | Rows **9–10** **pass** (2026-08-21) |
+| **C2** | Nine skills incl. `roadmap` and `diagnosing-bugs` *(author-time catalog 2026-08-21; live re-sync + rows 9-10/14 re-probe pending)* | Live host observed at 8 `skills/*/SKILL.md` (2026-08-21 sync); ninth stub staged in overlay + manifest, dry-run verified | Rows **9–10** **pass** (2026-08-21) |
 | **C3** | Plan→plan_reviewer; impl→dual→Full | 7 overlay agents on disk; reviewers `edit: deny` + bash deny except read-only git | Rows **2**, **3**, **13** **pass** (2026-08-21); row **8** **pass**; row **14** **pass** |
 | **C4** | Deep workflow Reads on host | Absolute companion `workflow/` Reads; host procedure mirror **deleted** | Row **4** **pass** (2026-08-21) |
 | **C5** | Companion FA/SOP reads | `external_directory` includes `COMPANION_ROOT/**`; rubric companion FA | Row **8** **pass** (2026-08-21); optional **11**/**12** historical |
@@ -145,7 +145,7 @@ Backup: `C:\Users\admin\.config\opencode-backup-20260820-153803` (3475 files). P
 
 ```text
 agents/: planner, plan_reviewer, implementer, production_readiness_reviewer, bug_reviewer, repository_explorer, test_reviewer
-skills/: discovery, implementation-plan, plan-review, implementation-review, pre-commit-ci-gate, composer, documentation-architecture, roadmap
+skills/: discovery, implementation-plan, plan-review, implementation-review, pre-commit-ci-gate, composer, documentation-architecture, roadmap, diagnosing-bugs
 instructions/cursor-escape-loop.md: present (absolute OPENCODE_HOME path in opencode.json)
 AGENTS.md: present (byte-identical to instructions/cursor-escape-loop.md — C1 dual-write)
 Harness stubs: Read targets use {{COMPANION_ROOT}}/workflow|skills|agents|rules/... (not host docs/workflow/ as procedure SoT)

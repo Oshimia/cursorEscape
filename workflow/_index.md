@@ -22,6 +22,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [tdd-mocking.md](tdd-mocking.md) | Mocking guidance: boundary-only doubles, fakes and in-memory adapters |
 | [code-review-frame.md](code-review-frame.md) | Optional Standards/Spec evidence frame for the dual review gate |
 | [grilling.md](grilling.md) | Pre-plan alignment interview: design tree, frontier rounds, confirmation gate |
+| [diagnosing-bugs.md](diagnosing-bugs.md) | Shipped-code diagnosis loop: red gate, minimise, ranked hypotheses, redaction, cleanup |
 
 Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; overlay-only).
 
@@ -39,6 +40,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [codebase-design](../skills/codebase-design/SKILL.md) | Portable deep-module design reference |
 | [tdd](../skills/tdd/SKILL.md) | Test-first reference discipline at agreed seams |
 | [grilling](../skills/grilling/SKILL.md) | Pre-plan alignment interview primitive |
+| [diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | User-invoked shipped-code diagnosis loop |
 
 ## Agents
 
@@ -69,8 +71,9 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `phased-multi-agent.md` | `composer`, `roadmap` | planner / implementer as conductor | `composer/SKILL.md` | — |
 | `documentation-architecture.md` | `documentation-architecture` | — | that SKILL.md | — |
 | `tdd-tests.md` | `skills/tdd/SKILL.md` | implementer guidance cites directly (advisory) | — | — |
-| `tdd-mocking.md` | `skills/tdd/SKILL.md` | implementer guidance cites directly (advisory) | — | — |
+| `tdd-mocking.md` | `skills/tdd/SKILL.md` | via tdd skill companions (advisory) | — | — |
 | `grilling.md` | `skills/grilling/SKILL.md` | planner / implementer / implementation-plan may consult (advisory) | — | — |
 | `code-review-frame.md` | `skills/implementation-review/SKILL.md` | `production_readiness_reviewer`, `bug_reviewer` (opt-in framing) | review SKILL Read | — |
+| `diagnosing-bugs.md` | `skills/diagnosing-bugs/SKILL.md` | planner / implementer may consult (advisory) | — | — |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.

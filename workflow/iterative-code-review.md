@@ -40,3 +40,4 @@ Recommended model: see [review-subagent-models.md](../overlays/cursor/review-sub
 - [implementation-review](../skills/implementation-review/SKILL.md)
 - [composer](../skills/composer/SKILL.md)
 - [_index.md](_index.md)
+- [Code-review evidence frame](code-review-frame.md) (optional Standards/Spec framing)

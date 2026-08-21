@@ -74,7 +74,7 @@ if (Test-Path -LiteralPath $liveJsonPath) {
 
 # C6-relevant static harness checks (automatable subset)
 $skillDirs = Get-ChildItem -LiteralPath (Join-Path $liveOpenCode 'skills') -Directory -ErrorAction SilentlyContinue
-Assert-Pass 'C6 harness: 8 skills on disk' ($skillDirs.Count -eq 8)
+Assert-Pass 'C6 harness: 9 skills on disk' ($skillDirs.Count -eq 9)
 
 $agentFiles = Get-ChildItem -LiteralPath (Join-Path $liveOpenCode 'agents') -Filter '*.md' -File -ErrorAction SilentlyContinue
 Assert-Pass 'C6 harness: 7 agents on disk' ($agentFiles.Count -eq 7)

@@ -32,6 +32,12 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 | ----- | --------- | ------------- |
 | grilling | [grilling/SKILL.md](./grilling/SKILL.md) | — (portable, on-demand) |
 
+### Diagnostic / investigation skills
+
+| Skill | Procedure | Host overlays |
+| ----- | --------- | ------------- |
+| diagnosing-bugs | [diagnosing-bugs/SKILL.md](./diagnosing-bugs/SKILL.md) | [OpenCode](../overlays/opencode/skills/diagnosing-bugs/SKILL.md) |
+
 ### Optional orchestration (Nice-to-have / Cursor-specific)
 
 | Skill | Procedure | Cursor overlay | OpenCode overlay |
@@ -48,7 +54,7 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 
 ### Skill contract fields (Required)
 
-Each SKILL states: **When to use**, **Workflow steps**, **Outputs**, **Must not**, **Related roles** (where applicable).
+Each SKILL states: **When to use**, **Workflow steps**, **Outputs**, **Must not**, **Related roles** (where applicable), with Boundary/Must not and Workflow/Workflow steps accepted as equivalent variants for reference and alignment skills
 
 ---
 

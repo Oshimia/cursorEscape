@@ -64,7 +64,7 @@ Without using bash/shell:
 If you cannot see a skill in the skill tool, say so explicitly — do not list ~/.config/opencode with shell.
 ```
 
-**Pass (9):** Names include all **8** workflow skills: `composer`, `discovery`, `documentation-architecture`, `implementation-plan`, `implementation-review`, `plan-review`, `pre-commit-ci-gate`, `roadmap` (`customize-opencode` may also appear).  
+**Pass (9):** Names include all **9** workflow skills: `composer`, `diagnosing-bugs`, `discovery`, `documentation-architecture`, `implementation-plan`, `implementation-review`, `plan-review`, `pre-commit-ci-gate`, `roadmap` (`customize-opencode` may also appear).
 **Pass (10):** Escalation first row from **companion** skill SoT; path under `cursorEscape/skills/…`; **zero** bash used to discover/list the adapter.  
 **Fail:** Only `customize-opencode`; Shell-lists `~/.config/opencode`; quotes from deleted host `docs/workflow/` mirror.
 
@@ -179,11 +179,11 @@ $live = Get-Content C:/Users/admin/.config/opencode/opencode.json -Raw | Convert
 $specimen.agent.PSObject.Properties.Name | Sort-Object
 $live.agent.PSObject.Properties.Name | Sort-Object
 Test-Path C:/Users/admin/.config/opencode/docs/workflow   # expect False
-@(Get-ChildItem C:/Users/admin/.config/opencode/skills -Directory).Count  # expect 8
+@(Get-ChildItem C:/Users/admin/.config/opencode/skills -Directory).Count  # expect 9
 @(Get-ChildItem C:/Users/admin/.config/opencode/agents -Filter *.md).Count  # expect 7
 ```
 
-**Pass:** Live `agent.*` keys match specimen harness set; 8 skills / 7 agents; mirror path absent.
+**Pass:** Live `agent.*` keys match specimen harness set; 9 skills / 7 agents; mirror path absent.
 
 ---
 

@@ -186,7 +186,7 @@ PASS/FAIL/UNTESTED with evidence for each behavior at risk from this change set
 - Do not treat Fast CI as closeout or commit gate
 - Do not require a specific repo doc layout or CI script tree
 - Do not honor Custom Instructions or parent-authored pass conditions
-- Invoke the review skill, spawn further reviewers or subagents, or re-launch reviews of your own output
+- Do not invoke the review skill, spawn further reviewers or subagents, or re-launch reviews of your own output
 
 ---
 
