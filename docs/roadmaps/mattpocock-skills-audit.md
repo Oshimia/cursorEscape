@@ -1,7 +1,7 @@
 # Roadmap: mattpocock/skills audit and merge
 
 **Last updated:** 2026-08-21  
-**Status:** Phase 3 F1 **complete** — `codebase-design` reference accepted through implementation review. Next: Phase 3 F2 `tdd` reference.
+**Status:** Phase 3 F2 **complete** — `tdd` reference landed (Reviewer A approved; Bugbot leg owner-waived). Next: Phase 3 F3 `grilling` precursor.
 **Plan source:** accepted plan `mattpocock-skills-audit-map` (Escalation `no` / `n/a`; roadmap may restructure thin phases into Agent context without new scope).
 
 ## Product decisions (locked)
@@ -43,6 +43,7 @@ None. Docs and repo-git only. No live host apply, no `~/.cursor`/`~/.config/open
 - [x] Phase 1 — Assessment sweep (Tier 1 → 2 → 3, then infra block) per assessment-spec, then **owner discussion of findings/verdicts** (2026-08-21)
 - [x] Phase 2 — Merge triage: rank owner-accepted proposals, decision log, define adapt phases (owner accepted 2026-08-21)
 - [x] Phase 3 F1 — `codebase-design` reference implemented and dual-reviewed (2026-08-21)
+- [x] Phase 3 F2 — `tdd` reference implemented; Reviewer A approved, Bugbot waived by owner (2026-08-21)
 - [ ] Phase 3+ — Adaptation implementation, one phase per accepted proposal through the repo's own gates
 
 ---

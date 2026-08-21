@@ -1,6 +1,6 @@
 # Workflow docs (shared deep procedure)
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 
 **Ownership:** Process changes land here first. Repo SOPs may extend with local paths; they must not contradict this core.
 
@@ -18,6 +18,8 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [iterative-plan-review.md](iterative-plan-review.md) | Plan → plan-reviewer loop |
 | [iterative-code-review.md](iterative-code-review.md) | Per-phase Reviewer A + Bugbot loop |
 | [ci-ladder.md](ci-ladder.md) | Fast/Full CI discovery for any repo |
+| [tdd-tests.md](tdd-tests.md) | Test-first guidance: agreed seams, red-green slices, independent oracles |
+| [tdd-mocking.md](tdd-mocking.md) | Mocking guidance: boundary-only doubles, fakes and in-memory adapters |
 
 Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; overlay-only).
 
@@ -33,6 +35,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [roadmap](../skills/roadmap/SKILL.md) | Repo multi-phase handoff files |
 | [documentation-architecture](../skills/documentation-architecture/SKILL.md) | Bootstrap/extend repo docs layout |
 | [codebase-design](../skills/codebase-design/SKILL.md) | Portable deep-module design reference |
+| [tdd](../skills/tdd/SKILL.md) | Test-first reference discipline at agreed seams |
 
 ## Agents
 
@@ -62,5 +65,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `plan-agent-context.md` | `implementation-plan` | `plan_reviewer` | plan skill Read | — |
 | `phased-multi-agent.md` | `composer`, `roadmap` | planner / implementer as conductor | `composer/SKILL.md` | — |
 | `documentation-architecture.md` | `documentation-architecture` | — | that SKILL.md | — |
+| `tdd-tests.md` | `skills/tdd/SKILL.md` | implementer may consult (advisory) | — | — |
+| `tdd-mocking.md` | `skills/tdd/SKILL.md` | implementer may consult (advisory) | — | — |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.

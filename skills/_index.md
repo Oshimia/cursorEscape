@@ -24,6 +24,7 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 | Skill | Reference | Host overlays |
 | ----- | --------- | ------------- |
 | codebase-design | [SKILL.md](./codebase-design/SKILL.md) | — (portable reference) |
+| tdd | [SKILL.md](./tdd/SKILL.md) | — (portable reference) |
 
 ### Optional orchestration (Nice-to-have / Cursor-specific)
 
