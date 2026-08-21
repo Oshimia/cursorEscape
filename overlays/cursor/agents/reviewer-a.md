@@ -37,6 +37,8 @@ Completion gate: review-loop
 Review model: <model slug used for this reviewer-a launch>
 Prior approved phases: <list or "none" — multi-phase only>
 Applicable docs: <docs for touched areas, if known; when parent declares Focus-narrow for this block, narrow to docs/files for the current fix>
+Fixed point (optional): <commit/tag/branch; enables Standards/Spec axis framing only when Spec path is also supplied>
+Spec path (optional): <path to approved spec/plan; required together with Fixed point to activate framing>
 
 CI gate (parent-verified, do not re-run):
 - ci mode: Fast

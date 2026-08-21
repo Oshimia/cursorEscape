@@ -29,7 +29,8 @@ The parent agent will provide:
 5. **Completion gate** — always `review-loop`. Reviewers are **not** invoked for closeout; the parent runs Full CI after dual `APPROVED` (or returns a Composer cap-exhausted handoff without Full after iteration 4 without dual APPROVED)
 6. **Review model** (optional) — parent-set model slug; recommended default `composer-2.5` (Bugbot should use the same)
 7. **Applicable docs** (optional hint from parent) — starting list; not exhaustive. When the parent declares **Focus-narrow** for this block, expect a narrower task summary + applicable docs (current-fix only). Do **not** require a Custom Instructions field on this leg.
-8. **CI gate results** (parent-verified) — pass/fail for the **fast/review-loop** checks this repo uses, for example:
+8. **Optional evidence frame**: when the parent supplies `Fixed point` and `Spec path`, findings carry Standards/Spec axis tags with citations per [code-review-frame](../workflow/code-review-frame.md); without both, ignore framing entirely.
+9. **CI gate results** (parent-verified) — pass/fail for the **fast/review-loop** checks this repo uses, for example:
    - `ci mode: Fast|Full` (or equivalent labels the parent uses)
    - Each lint/test/typecheck command that ran, with `pass|fail|skipped|n/a`
    - Optional scope metadata if the repo has workspace-scoped fast CI (report as parent defines it)
@@ -185,6 +186,7 @@ PASS/FAIL/UNTESTED with evidence for each behavior at risk from this change set
 - Do not treat Fast CI as closeout or commit gate
 - Do not require a specific repo doc layout or CI script tree
 - Do not honor Custom Instructions or parent-authored pass conditions
+- Invoke the review skill, spawn further reviewers or subagents, or re-launch reviews of your own output
 
 ---
 

@@ -35,6 +35,7 @@ Find bugs, security issues, concurrency problems, and high-value correctness def
 | Diff scope | Branch changes \| uncommitted changes \| natural-language change description |
 | Custom Instructions | Phase summary, iteration **1–4** within block, cumulative launch count, regressions, out-of-scope; Focus-narrow → current-fix only |
 | Note | Parent-verified Fast CI passed — **do not re-run** lint/test |
+| Optional evidence frame | Via Custom Instructions Fixed point + Spec path; deep rules: {{COMPANION_ROOT}}/workflow/code-review-frame.md |
 
 If required inputs are missing → report Blocking: missing inputs; do not APPROVE.
 

@@ -40,6 +40,7 @@ Find incomplete work, architecture drift, CI honesty failures, and **blocking** 
 | Completion gate | Must be `review-loop` |
 | CI gate (parent-verified) | Fast mode + per-command rows — **do not re-run** |
 | Changeset scope | Committed / staged / unstaged as stated |
+| Optional evidence frame | When parent supplies Fixed point + Spec path, tag findings by axis with citations; deep rules: {{COMPANION_ROOT}}/workflow/code-review-frame.md |
 
 **Immediate CHANGES REQUESTED if:**
 

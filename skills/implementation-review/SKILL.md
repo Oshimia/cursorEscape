@@ -22,6 +22,7 @@ This skill is **repo-agnostic**. Do not assume a fixed script tree.
 | [discovery.md](../../workflow/discovery.md) | Find repo docs before judging architecture |
 | [iterative-code-review.md](../../workflow/iterative-code-review.md) | Loop rules, per-phase boundaries, Composer carve-out |
 | [ci-ladder.md](../../workflow/ci-ladder.md) | Fast/Full CI mapping |
+| [code-review-frame.md](../../workflow/code-review-frame.md) | Optional Standards/Spec evidence frame |
 | [review-subagent-models.md](../../overlays/cursor/review-subagent-models.md) | Recommended reviewer models |
 | [_index.md](../../workflow/_index.md) | Index of all workflow docs |
 
@@ -86,6 +87,9 @@ Implement phase
 
 1. **Implement** the current phase (or full scope if single-phase) using discovery + this repo’s documented conventions.
 2. **Review loop (within a 4-iteration block):** Run **Fast CI Observed** once, then launch **Reviewer A + Bugbot in parallel** with `Completion gate: review-loop` only. Cursor Task spawn: [implementation-review overlay](../../overlays/cursor/skills/implementation-review/SKILL.md). **Do not launch reviewers if Fast CI fails, is skipped (when Fast is not `n/a`), or is claimed-only** (prose “Fast CI passed” / `ci: pass` with no per-command rows).
+
+   Optional evidence frame: when a fixed point and an originating spec both exist, the parent may add `Fixed point:` and `Spec path:` lines to the reviewer invoke payload to enable Standards/Spec axis framing with per-finding citations per [code-review-frame.md](../../workflow/code-review-frame.md). Absent those inputs, reviews are unchanged.
+
 3. If **either** reviewer returns `CHANGES REQUESTED`, or Bugbot has any finding list ≠ `"None"`, or Reviewer-a has Blocking / Non-blocking (code/process) / **blocking** test/docs ≠ `"None"`: fix **every must-fix** finding → return to step 2 (increment review iteration within the block). Do **not** treat Reviewer-a **Batchable (deferred)** as loop-blocking. **Do not launch a 5th pair** in the current block.
 4. **Exit the block:**
    - If **both** return `APPROVED` → go to step 5 (closeout). Do **not** launch reviewers again unless you subsequently changed code.

@@ -22,6 +22,7 @@ Thin harness. Full procedure: Read `{{COMPANION_ROOT}}/skills/implementation-rev
 | [iterative-code-review.md]({{COMPANION_ROOT}}/workflow/iterative-code-review.md) | Loop rules, per-phase boundaries, Composer carve-out |
 | [ci-ladder.md]({{COMPANION_ROOT}}/workflow/ci-ladder.md) | Fast/Full CI mapping |
 | [review-subagent-models.md](../../review-subagent-models.md) | Recommended reviewer models (overlay leaf) |
+| [code-review-frame.md]({{COMPANION_ROOT}}/workflow/code-review-frame.md) | Optional Standards/Spec evidence frame |
 | [_index.md]({{COMPANION_ROOT}}/workflow/_index.md) | Index of all workflow docs |
 
 **Companion reachability:** `{{COMPANION_ROOT}}` resolves to the cursorEscape SoT checkout — required when workspace ≠ cursorEscape. Copy-out fallback (transitional mirror only): `C:/Users/admin/.cursor/docs/workflow/`.
@@ -51,6 +52,8 @@ Completion gate: review-loop
 Review model: <model slug used for this reviewer-a launch>
 Prior approved phases: <list or "none" — multi-phase only>
 Applicable docs: <docs for touched areas, if known; when parent declares Focus-narrow for this block, narrow to docs/files for the current fix>
+Fixed point (optional): <commit/tag/branch; enables Standards/Spec axis framing only when Spec path is also supplied>
+Spec path (optional): <path to approved spec/plan; required together with Fixed point to activate framing>
 
 CI gate (parent-verified, do not re-run):
 - ci mode: Fast
@@ -92,5 +95,6 @@ Custom Instructions: <task-specific — regressions, security surfaces, incomple
 - Out-of-scope items reviewers must not block on (if any)
 - Requirement for complete changeset for **this phase** (no imports to missing/untracked files)
 - Note that CI already passed (parent-verified); do not re-run lint/test
+- Optionally, Fixed point and Spec path when axis framing is requested (both required together; omit entirely otherwise)
 
 Bugbot must use its own verdict bar: `APPROVED` only when Blocking, Non-blocking, and Test gaps are all `"None"`. Reviewer-a uses the **split** bar (blocking test/docs must be `"None"`; **Batchable (deferred)** may remain). Do **not** treat the two reviewers as sharing one unified all-lists-`"None"` bar.

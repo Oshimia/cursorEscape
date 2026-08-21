@@ -25,6 +25,7 @@ Process/docs completeness belongs on [production_readiness_reviewer](./productio
 | Repository path | Absolute workspace root |
 | Diff scope | Branch changes \| uncommitted changes \| natural-language change description |
 | Custom Instructions | Phase summary, iteration, launch count, regressions to flag, out-of-scope, clean-case signals |
+| Optional evidence frame | When parent supplies `Fixed point` + `Spec path` in Custom Instructions, tag findings by Standards/Spec axis with citations per [code-review-frame](../workflow/code-review-frame.md); without both, ignore framing |
 | Note | Parent-verified Fast CI passed — do not re-run lint/test |
 
 ### Outputs
@@ -43,6 +44,7 @@ Process/docs completeness belongs on [production_readiness_reviewer](./productio
 - Report style/nits, out-of-scope items, pre-existing conditions, speculative env claims, or harness/doc nits — see [finding rubric](../docs/featureArchitecture/bug-reviewer-finding-rubric.md)
 - Block on out-of-scope items named in Custom Instructions
 - Re-run CI
+- Invoke the review skill, spawn further reviewers or subagents, or re-launch reviews of your own output
 
 ### Model
 

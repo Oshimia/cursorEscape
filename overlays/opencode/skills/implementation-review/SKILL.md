@@ -41,6 +41,7 @@ Implement
 | [SKILL.md]({{COMPANION_ROOT}}/skills/implementation-review/SKILL.md) | Full loop + pressure-release / anti-abuse |
 | [iterative-code-review.md]({{COMPANION_ROOT}}/workflow/iterative-code-review.md) | Loop rules, per-phase boundaries |
 | [ci-ladder.md]({{COMPANION_ROOT}}/workflow/ci-ladder.md) | Fast/Full mapping |
+| [code-review-frame.md]({{COMPANION_ROOT}}/workflow/code-review-frame.md) | Optional Standards/Spec evidence frame |
 | [composer/SKILL.md]({{COMPANION_ROOT}}/skills/composer/SKILL.md) | Cap-exhausted handoff schema (Composer Nb) |
 | [review-subagent-models.md]({{COMPANION_ROOT}}/overlays/opencode/review-subagent-models.md) | Model hints (overlay leaf) |
 | [discovery.md]({{COMPANION_ROOT}}/workflow/discovery.md) | Before judging architecture |

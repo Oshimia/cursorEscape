@@ -20,6 +20,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [ci-ladder.md](ci-ladder.md) | Fast/Full CI discovery for any repo |
 | [tdd-tests.md](tdd-tests.md) | Test-first guidance: agreed seams, red-green slices, independent oracles |
 | [tdd-mocking.md](tdd-mocking.md) | Mocking guidance: boundary-only doubles, fakes and in-memory adapters |
+| [code-review-frame.md](code-review-frame.md) | Optional Standards/Spec evidence frame for the dual review gate |
 | [grilling.md](grilling.md) | Pre-plan alignment interview: design tree, frontier rounds, confirmation gate |
 
 Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; overlay-only).
@@ -70,5 +71,6 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `tdd-tests.md` | `skills/tdd/SKILL.md` | implementer guidance cites directly (advisory) | — | — |
 | `tdd-mocking.md` | `skills/tdd/SKILL.md` | implementer guidance cites directly (advisory) | — | — |
 | `grilling.md` | `skills/grilling/SKILL.md` | planner / implementer / implementation-plan may consult (advisory) | — | — |
+| `code-review-frame.md` | `skills/implementation-review/SKILL.md` | `production_readiness_reviewer`, `bug_reviewer` (opt-in framing) | review SKILL Read | — |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.
