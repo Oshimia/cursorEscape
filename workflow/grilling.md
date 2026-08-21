@@ -34,6 +34,10 @@ Trivial work bypasses this loop entirely. If a request has no meaningful open qu
 
 This loop is subordinate to the standard pipeline. Its output feeds a future plan; it never replaces implementation-plan drafting or plan review.
 
+## Documented alignment
+
+When the interview resolves terminology or decisions, check existing repository documents first via discovery: a suitable existing glossary or design-decision document wins over creating anything new. Resolutions that no existing document covers stay in the active conversation or plan; they do not become durable artifacts on their own. Creating or updating a durable document (glossary, decision record, ADR-style file) happens only with explicit owner approval and through the normal gates. If the owner declines a durable write, capture the resolution in the active plan and move on; never proceed silently or treat silence as consent.
+
 ## Related
 
 - [Grilling skill](../skills/grilling/SKILL.md)

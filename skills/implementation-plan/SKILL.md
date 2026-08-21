@@ -20,6 +20,7 @@ This skill is **repo-agnostic**. Do not assume a fixed doc tree or scripts.
 |-----|------|
 | [discovery.md](../../workflow/discovery.md) | Find repo docs (Step 0 + fallback) |
 | [discovery](../discovery/SKILL.md) | Thin skill entry (on-demand load) |
+| [grilling](../grilling/SKILL.md) | Optional pre-plan alignment interview |
 | [iterative-plan-review.md](../../workflow/iterative-plan-review.md) | Plan → plan-reviewer loop |
 | [plan-review](../plan-review/SKILL.md) | Thin plan-review loop gate |
 | [plan-reviewer-report.md](../../workflow/plan-reviewer-report.md) | Plan-reviewer output schema when synthesizing review output |
@@ -65,11 +66,12 @@ Research docs → draft plan → review (max 3) → synthesize between passes �
 ```
 
 1. **Research** — [discovery.md](../../workflow/discovery.md) Step 0 / fallback. Skip missing paths; do not invent a required layout.
-2. **Draft** using the [plan template](#plan-template) below. Fill every section.
-3. **Invoke plan-reviewer** with **clean context** — repository path, task summary, review pass number, and **synthesized plan text only**. Do **not** attach prior review transcripts. Cursor Task spawn: [implementation-plan overlay](../../overlays/cursor/skills/implementation-plan/SKILL.md#invoke-plan-reviewer-cursor-task).
+2. **Optional pre-plan alignment**: when the owner wants structured alignment before drafting, run the [grilling](../grilling/SKILL.md) interview (design tree, frontier rounds, confirmation gate); skip it when thoughts are already settled or work is trivial. During the interview follow its Documented alignment rules: existing suitable glossary/design-decision documents win via discovery; unresolved terminology stays in the active plan; durable artifact writes require explicit owner approval.
+3. **Draft** using the [plan template](#plan-template) below. Fill every section.
+4. **Invoke plan-reviewer** with **clean context** — repository path, task summary, review pass number, and **synthesized plan text only**. Do **not** attach prior review transcripts. Cursor Task spawn: [implementation-plan overlay](../../overlays/cursor/skills/implementation-plan/SKILL.md#invoke-plan-reviewer-cursor-task).
 
-4. **Synthesize** between passes (see [Synthesis between passes](#synthesis-between-passes)).
-5. Repeat until `APPROVED` **or** 3 passes complete — then [present to user](#final-presentation).
+5. **Synthesize** between passes (see [Synthesis between passes](#synthesis-between-passes)).
+6. Repeat until `APPROVED` **or** 3 passes complete — then [present to user](#final-presentation).
 
 **Hard cap:** max **3** plan-reviewer invocations per autonomous loop. After pass 3, always stop and present — even if verdict is `CHANGES REQUESTED`.
 

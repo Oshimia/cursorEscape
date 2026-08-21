@@ -24,10 +24,11 @@ Place Escalation after Scope on every non-trivial plan. Specimen headings: `{{CO
 ## Steps
 
 1. Load companion skill `discovery` or follow `{{COMPANION_ROOT}}/workflow/discovery.md` Step 0 / fallback.
-2. Draft plan per companion skill template (Goal, Scope, Escalation, Assumptions, Unknowns, Discovery steps, Incremental execution, Verification).
-3. When Escalation = yes, read `{{COMPANION_ROOT}}/workflow/plan-agent-context.md`.
-4. Invoke OpenCode agent `plan_reviewer` via Task — clean context, **full synthesized plan only**, max 3 passes.
-5. Present to user after APPROVED or pass 3; wait if CHANGES REQUESTED.
+2. Optional: pre-plan alignment via skill `grilling`; skip when settled or trivial; deep rules in companion.
+3. Draft plan per companion skill template (Goal, Scope, Escalation, Assumptions, Unknowns, Discovery steps, Incremental execution, Verification).
+4. When Escalation = yes, read `{{COMPANION_ROOT}}/workflow/plan-agent-context.md`.
+5. Invoke OpenCode agent `plan_reviewer` via Task — clean context, **full synthesized plan only**, max 3 passes.
+6. Present to user after APPROVED or pass 3; wait if CHANGES REQUESTED.
 
 ### Incomplete until (section SoT)
 

@@ -69,6 +69,6 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `documentation-architecture.md` | `documentation-architecture` | — | that SKILL.md | — |
 | `tdd-tests.md` | `skills/tdd/SKILL.md` | implementer may consult (advisory) | — | — |
 | `tdd-mocking.md` | `skills/tdd/SKILL.md` | implementer may consult (advisory) | — | — |
-| `grilling.md` | `skills/grilling/SKILL.md` | planner / implementer may consult (advisory) | — | — |
+| `grilling.md` | `skills/grilling/SKILL.md` | planner / implementer / implementation-plan may consult (advisory) | — | — |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.

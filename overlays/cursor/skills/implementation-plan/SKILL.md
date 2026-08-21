@@ -18,6 +18,7 @@ Thin harness. Full procedure: Read `{{COMPANION_ROOT}}/skills/implementation-pla
 |-----|------|
 | [SKILL.md]({{COMPANION_ROOT}}/skills/implementation-plan/SKILL.md) | Full plan procedure |
 | [discovery.md]({{COMPANION_ROOT}}/workflow/discovery.md) | Find repo docs (Step 0 + fallback) |
+| [grilling]({{COMPANION_ROOT}}/skills/grilling/SKILL.md) | Optional pre-plan alignment interview |
 | [iterative-plan-review.md]({{COMPANION_ROOT}}/workflow/iterative-plan-review.md) | Plan → plan-reviewer loop |
 | [plan-agent-context.md]({{COMPANION_ROOT}}/workflow/plan-agent-context.md) | Escalation field + Agent context when escalated |
 | [phased-multi-agent.md]({{COMPANION_ROOT}}/workflow/phased-multi-agent.md) | Multi-phase / Composer handoffs |
