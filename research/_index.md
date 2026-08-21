@@ -1,6 +1,6 @@
 # Research Documentation
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 
 ## Context
 
@@ -31,6 +31,7 @@ This section holds **sourced** market and product research plus **imported** sib
 | Document | Purpose |
 | -------- | ------- |
 | [theo-fleet-skill-management.md](./theo-fleet-skill-management.md) | Observed: Theo `fleet` repo; stacks analog / machines delta |
+| [mattpocock-skill-audit/](./mattpocock-skill-audit/_index.md) | Observed: mattpocock/skills full-sweep catalog + comparison index + assessment spec (handoff for deeper-model assessment; see [roadmap](../docs/roadmaps/mattpocock-skills-audit.md)) |
 
 Operator study: [host recreation](../analysis/host-recreation-2026-08.md).
 

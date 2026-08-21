@@ -16,6 +16,7 @@ Multi-phase handoff roadmaps for cursorEscape. Each roadmap file carries **Agent
 | [OpenCode overlays SoT](./opencode-overlays-sot.md) | **Complete** (historical) — Phase 3 live sync 2026-08-20; **load path superseded** by [pointer-first](./pointer-first.md) | First OpenCode overlay + bulk copy-out (transitional) |
 | [Companion pointer-first](./pointer-first.md) | **Complete** — pointer-first-4 closeout 2026-08-20 | Companion SoT; thin harness; procedure mirror deleted (OpenCode) |
 | [Host harness sync build](./host-harness-sync-build.md) | **Complete** — Phase 3 docs + `Sync-HostHarness.ps1` operator surface | Modular sync core + Cursor/OpenCode adapters; Phase 0 baselines restore-only |
+| [mattpocock skills audit](./mattpocock-skills-audit.md) | **Phase 0 complete** — map authored 2026-08-21; next: P1 assessment sweep | Full-sweep audit of mattpocock/skills + merge of relevant skills; map under [research/mattpocock-skill-audit](../research/mattpocock-skill-audit/_index.md) |
 
 ## Implications / open questions
 
