@@ -26,6 +26,12 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 | codebase-design | [SKILL.md](./codebase-design/SKILL.md) | — (portable reference) |
 | tdd | [SKILL.md](./tdd/SKILL.md) | — (portable reference) |
 
+### Alignment / interview skills
+
+| Skill | Procedure | Host overlays |
+| ----- | --------- | ------------- |
+| grilling | [grilling/SKILL.md](./grilling/SKILL.md) | — (portable, on-demand) |
+
 ### Optional orchestration (Nice-to-have / Cursor-specific)
 
 | Skill | Procedure | Cursor overlay | OpenCode overlay |

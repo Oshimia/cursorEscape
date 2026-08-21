@@ -20,6 +20,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [ci-ladder.md](ci-ladder.md) | Fast/Full CI discovery for any repo |
 | [tdd-tests.md](tdd-tests.md) | Test-first guidance: agreed seams, red-green slices, independent oracles |
 | [tdd-mocking.md](tdd-mocking.md) | Mocking guidance: boundary-only doubles, fakes and in-memory adapters |
+| [grilling.md](grilling.md) | Pre-plan alignment interview: design tree, frontier rounds, confirmation gate |
 
 Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; overlay-only).
 
@@ -36,6 +37,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [documentation-architecture](../skills/documentation-architecture/SKILL.md) | Bootstrap/extend repo docs layout |
 | [codebase-design](../skills/codebase-design/SKILL.md) | Portable deep-module design reference |
 | [tdd](../skills/tdd/SKILL.md) | Test-first reference discipline at agreed seams |
+| [grilling](../skills/grilling/SKILL.md) | Pre-plan alignment interview primitive |
 
 ## Agents
 
@@ -67,5 +69,6 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `documentation-architecture.md` | `documentation-architecture` | — | that SKILL.md | — |
 | `tdd-tests.md` | `skills/tdd/SKILL.md` | implementer may consult (advisory) | — | — |
 | `tdd-mocking.md` | `skills/tdd/SKILL.md` | implementer may consult (advisory) | — | — |
+| `grilling.md` | `skills/grilling/SKILL.md` | planner / implementer may consult (advisory) | — | — |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.
