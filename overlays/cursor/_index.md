@@ -59,6 +59,7 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 | `codebase-design` | — | Deep-module vocabulary reference; companion Read only (`skills/codebase-design/SKILL.md`) |
 | `research` | — | Caller-loaded cited external-research loop; companion Read only (`skills/research/SKILL.md`) |
 | `domain-modeling` | — | Owner-triggered shared-language discipline; companion Read only (`skills/domain-modeling/SKILL.md`) |
+| `architecture-survey` | — | Caller-loaded guided architecture decision survey; companion Read only (`skills/architecture-survey/SKILL.md`) |
 
 ## Skills
 

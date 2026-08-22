@@ -25,6 +25,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [diagnosing-bugs.md](diagnosing-bugs.md) | Shipped-code diagnosis loop: red gate, minimise, ranked hypotheses, redaction, cleanup |
 | [research.md](research.md) | Bounded primary-source research: one question, one packed read-only child, cited artifact |
 | [domain-modeling.md](domain-modeling.md) | Shared-language discipline: term challenges, scenarios, code cross-checks, three-part decision test |
+| [architecture-survey.md](architecture-survey.md) | Guided read-only improvement survey: candidate cards with options and inaction costs, owner selection |
 
 Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; overlay-only).
 
@@ -44,6 +45,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [grilling](../skills/grilling/SKILL.md) | Pre-plan alignment interview primitive |
 | [research](../skills/research/SKILL.md) | Bounded cited external-research loop |
 | [domain-modeling](../skills/domain-modeling/SKILL.md) | Opt-in shared-language discipline |
+| [architecture-survey](../skills/architecture-survey/SKILL.md) | Guided architecture decision survey |
 | [diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | User-invoked shipped-code diagnosis loop |
 
 ## Agents
@@ -81,5 +83,6 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `diagnosing-bugs.md` | `skills/diagnosing-bugs/SKILL.md` | planner / implementer may consult (advisory) | — | — |
 | `research.md` | `skills/research/SKILL.md` | packed read-only child (clean-context isolation) | — | — |
 | `domain-modeling.md` | `skills/domain-modeling/SKILL.md` | planner / implementer may consult (advisory) | — | — |
+| `architecture-survey.md` | `skills/architecture-survey/SKILL.md` | `repository_explorer` may support exploration (advisory) | — | — |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.

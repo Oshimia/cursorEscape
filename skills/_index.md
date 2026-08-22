@@ -45,6 +45,12 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 | ----- | --------- | ------------- |
 | research | [research/SKILL.md](./research/SKILL.md) | — (portable, caller-loaded) |
 
+### Survey skills
+
+| Skill | Procedure | Host overlays |
+| ----- | --------- | ------------- |
+| architecture-survey | [architecture-survey/SKILL.md](./architecture-survey/SKILL.md) | — (portable, caller-loaded) |
+
 ### Optional orchestration (Nice-to-have / Cursor-specific)
 
 | Skill | Procedure | Cursor overlay | OpenCode overlay |
