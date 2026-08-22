@@ -60,6 +60,7 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 | `research` | — | Caller-loaded cited external-research loop; companion Read only (`skills/research/SKILL.md`) |
 | `domain-modeling` | — | Owner-triggered shared-language discipline; companion Read only (`skills/domain-modeling/SKILL.md`) |
 | `architecture-survey` | — | Caller-loaded guided architecture decision survey; companion Read only (`skills/architecture-survey/SKILL.md`) |
+| `prototype` | — | Caller-loaded question-first throwaway pattern; companion Read only (`skills/prototype/SKILL.md`) |
 
 ## Skills
 

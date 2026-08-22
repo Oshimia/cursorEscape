@@ -1,7 +1,7 @@
 # Roadmap: mattpocock/skills audit and merge
 
 **Last updated:** 2026-08-22
-**Status:** Phase 3 F9 **complete** — guided architecture decision survey landed through dual review in parallel. Next: Phase 3 F10 repository-agnostic prototype pattern.
+**Status:** Phase 3 F10 **complete** — question-first disposable prototype pattern landed through dual review in parallel. Next: Phase 3 F11 human-only wizard procedure.
 **Plan source:** accepted plan `mattpocock-skills-audit-map` (Escalation `no` / `n/a`; roadmap may restructure thin phases into Agent context without new scope).
 
 ## Product decisions (locked)
@@ -53,6 +53,7 @@ None. Docs and repo-git only. No live host apply, no `~/.cursor`/`~/.config/open
 - [x] Phase 3 F7 — bounded research capability implemented and dual-reviewed in parallel (2026-08-22)
 - [x] Phase 3 F8 — domain-modeling discipline implemented and dual-reviewed in parallel (2026-08-22)
 - [x] Phase 3 F9 — architecture-survey guided decision process implemented and dual-reviewed in parallel (2026-08-22)
+- [x] Phase 3 F10 — prototype pattern implemented and dual-reviewed in parallel (2026-08-22)
 - [ ] Phase 3+ — Adaptation implementation, one phase per accepted proposal through the repo's own gates
 
 ---
