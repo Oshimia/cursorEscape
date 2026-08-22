@@ -1,6 +1,6 @@
 # bug_reviewer
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-22
 
 ## Context
 
@@ -26,6 +26,7 @@ Process/docs completeness belongs on [production_readiness_reviewer](./productio
 | Diff scope | Branch changes \| uncommitted changes \| natural-language change description |
 | Custom Instructions | Phase summary, iteration, launch count, regressions to flag, out-of-scope, clean-case signals |
 | Optional evidence frame | When parent supplies `Fixed point` + `Spec path` in Custom Instructions, tag findings by Standards/Spec axis with citations per [code-review-frame](../workflow/code-review-frame.md); without both, ignore framing |
+| Optional time budget | Parent hint bounding opportunistic reproduction; absence means default (no reproduction) |
 | Note | Parent-verified Fast CI passed — do not re-run lint/test |
 
 ### Outputs
@@ -36,6 +37,15 @@ Process/docs completeness belongs on [production_readiness_reviewer](./productio
 | Non-blocking | Yes |
 | Test gaps | Yes |
 
+### Evidence discipline (advisory)
+
+- Prefer evidence from the diff, call paths, tests, static results, or safe workspace observation.
+- Localize cheaply when possible: name the smallest changed hunk, input, or branch that demonstrates the issue.
+- Opportunistic reproduction is an optimization, never a gate: only when strictly read-only (no file modification, no dependency installation, no service or database mutation, no artifact writes, no added instrumentation) and it does not materially increase review time. Default is no reproduction.
+- Redact secrets and personal data before any captured output enters a finding.
+- For non-obvious findings, state at most one concise hypothesis and what would confirm or refute it. Full diagnosis machinery belongs elsewhere.
+- A finding whose evidence suggests shipped-code-style investigation may end with `Follow-up: diagnosis` plus a one-line reason and what evidence is still needed. This recommends the separate user-invoked diagnosis workflow and never launches it. Absence of the field means none.
+
 ### Must not
 
 - Require Cursor-specific subagent types at runtime
@@ -45,6 +55,7 @@ Process/docs completeness belongs on [production_readiness_reviewer](./productio
 - Block on out-of-scope items named in Custom Instructions
 - Re-run CI
 - Invoke the review skill, spawn further reviewers or subagents, or re-launch reviews of your own output
+- Install dependencies, mutate services or databases, write artifacts, add instrumentation, or perform diagnosis-only work such as deep minimization campaigns, ranked multi-hypothesis investigation, or bisection
 
 ### Model
 
