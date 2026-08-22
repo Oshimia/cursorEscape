@@ -21,6 +21,7 @@ New docs areas; user asks for SOPs / featureArchitecture; under-documented repo.
 1. Load skill `discovery`.
 2. Read companion skill for bootstrap vs extend rules.
 3. Update indexes in the same changeset.
+4. Authoring new agent-facing docs? Run the rubric pass per the companion.
 
 ## Read when
 

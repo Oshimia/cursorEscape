@@ -26,6 +26,7 @@ Absolute fallback: `C:/Users/admin/.cursor/` workflow mirror — see [documentat
 
 4. New or changed patterns: update docs + indexes in the **same changeset** as code.
 5. Do not force `SOPs` / `featureArchitecture` names onto a repo that already chose differently.
+6. When authoring new skills, companions, contracts, or agent-facing docs, run the [agent-documentation rubric](../../workflow/documentation-architecture.md#agent-documentation-rubric-writing-for-agents) pass.
 
 ---
 

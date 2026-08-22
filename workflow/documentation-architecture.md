@@ -46,6 +46,19 @@ When code introduces or changes a pattern:
 2. Link from the relevant index
 3. Do not ship undocumented architecture when the repo expects docs
 
+## Agent-documentation rubric (writing for agents)
+
+When authoring or revising any artifact an agent reads (skills, companions, agent contracts, SOPs, FA leaves), apply these heuristics. Adapted from the pinned mattpocock/skills writing-for-agents snapshot at commit 0ab1b63; upstream publishing, router, and model-metadata mechanics are intentionally omitted. Forward-looking guidance for new authoring; no retroactive sweep of existing docs.
+
+- **Context load:** every document costs context each time it loads; write the thinnest artifact that lets the reader succeed. Example: a skill entry states its trigger and links one companion instead of embedding the procedure.
+- **Pointer disclosure:** keep branch-common material in-file; put branch-specific material behind pointers whose wording says exactly who should follow them and when. The pointer's wording decides whether readers reach the material, not just its target. Example: prefer `Read only when the review loop cannot launch` over a bare link labeled `more`.
+- **Information hierarchy:** order content by reading priority: what every reader needs first, branch-specific detail later.
+- **Completion criteria:** tasks state observable done-conditions so readers stop when criteria are met instead of guessing. Example: `registered in both indexes with resolving links` beats `update indexes`.
+- **Leading words:** front-load the operative term of each sentence and heading so scanners catch meaning on the first words.
+- **No-op pruning:** strike sentences with no behavioral effect, duplication, or sediment; if deleting a sentence changes nothing, it was already gone.
+
+These are authoring heuristics, not gates; reviewers may cite them, but nothing here blocks a change by itself.
+
 ## Related
 
 - [discovery.md](discovery.md)
