@@ -24,6 +24,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [grilling.md](grilling.md) | Pre-plan alignment interview: design tree, frontier rounds, confirmation gate |
 | [diagnosing-bugs.md](diagnosing-bugs.md) | Shipped-code diagnosis loop: red gate, minimise, ranked hypotheses, redaction, cleanup |
 | [research.md](research.md) | Bounded primary-source research: one question, one packed read-only child, cited artifact |
+| [domain-modeling.md](domain-modeling.md) | Shared-language discipline: term challenges, scenarios, code cross-checks, three-part decision test |
 
 Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; overlay-only).
 
@@ -42,6 +43,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [tdd](../skills/tdd/SKILL.md) | Test-first reference discipline at agreed seams |
 | [grilling](../skills/grilling/SKILL.md) | Pre-plan alignment interview primitive |
 | [research](../skills/research/SKILL.md) | Bounded cited external-research loop |
+| [domain-modeling](../skills/domain-modeling/SKILL.md) | Opt-in shared-language discipline |
 | [diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | User-invoked shipped-code diagnosis loop |
 
 ## Agents
@@ -78,5 +80,6 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `code-review-frame.md` | `skills/implementation-review/SKILL.md` | `production_readiness_reviewer`, `bug_reviewer` (opt-in framing) | review SKILL Read | — |
 | `diagnosing-bugs.md` | `skills/diagnosing-bugs/SKILL.md` | planner / implementer may consult (advisory) | — | — |
 | `research.md` | `skills/research/SKILL.md` | packed read-only child (clean-context isolation) | — | — |
+| `domain-modeling.md` | `skills/domain-modeling/SKILL.md` | planner / implementer may consult (advisory) | — | — |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.

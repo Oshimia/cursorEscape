@@ -31,6 +31,7 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 | Skill | Procedure | Host overlays |
 | ----- | --------- | ------------- |
 | grilling | [grilling/SKILL.md](./grilling/SKILL.md) | — (portable, on-demand) |
+| domain-modeling | [domain-modeling/SKILL.md](./domain-modeling/SKILL.md) | — (portable, caller-loaded) |
 
 ### Diagnostic / investigation skills
 
