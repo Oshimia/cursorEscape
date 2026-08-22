@@ -1,7 +1,7 @@
 # Roadmap: mattpocock/skills audit and merge
 
 **Last updated:** 2026-08-22
-**Status:** Phase 3 F10 **complete** — question-first disposable prototype pattern landed through dual review in parallel. Next: Phase 3 F11 human-only wizard procedure.
+**Status:** Phase 3 F11 **complete** — human-only wizard generation landed through dual review in parallel. Next: Phase 3 F12 writing-for-agents rubric.
 **Plan source:** accepted plan `mattpocock-skills-audit-map` (Escalation `no` / `n/a`; roadmap may restructure thin phases into Agent context without new scope).
 
 ## Product decisions (locked)
@@ -54,6 +54,7 @@ None. Docs and repo-git only. No live host apply, no `~/.cursor`/`~/.config/open
 - [x] Phase 3 F8 — domain-modeling discipline implemented and dual-reviewed in parallel (2026-08-22)
 - [x] Phase 3 F9 — architecture-survey guided decision process implemented and dual-reviewed in parallel (2026-08-22)
 - [x] Phase 3 F10 — prototype pattern implemented and dual-reviewed in parallel (2026-08-22)
+- [x] Phase 3 F11 — wizard generation skill implemented and dual-reviewed in parallel (2026-08-22)
 - [ ] Phase 3+ — Adaptation implementation, one phase per accepted proposal through the repo's own gates
 
 ---

@@ -27,6 +27,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [domain-modeling.md](domain-modeling.md) | Shared-language discipline: term challenges, scenarios, code cross-checks, three-part decision test |
 | [architecture-survey.md](architecture-survey.md) | Guided read-only improvement survey: candidate cards with options and inaction costs, owner selection |
 | [prototype.md](prototype.md) | Question-first throwaway prototypes: logic modules or UI variants on disposable paths with explicit disposition |
+| [wizard.md](wizard.md) | Human-only procedure generation: value matrix by source/destination/sensitivity/stage, static validation only |
 
 Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; overlay-only).
 
@@ -48,6 +49,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [domain-modeling](../skills/domain-modeling/SKILL.md) | Opt-in shared-language discipline |
 | [architecture-survey](../skills/architecture-survey/SKILL.md) | Guided architecture decision survey |
 | [prototype](../skills/prototype/SKILL.md) | Question-first disposable prototype pattern |
+| [wizard](../skills/wizard/SKILL.md) | Human-only interactive-script generation |
 | [diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | User-invoked shipped-code diagnosis loop |
 
 ## Agents
@@ -87,5 +89,6 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `domain-modeling.md` | `skills/domain-modeling/SKILL.md` | planner / implementer may consult (advisory) | — | — |
 | `architecture-survey.md` | `skills/architecture-survey/SKILL.md` | `repository_explorer` may support exploration (advisory) | — | — |
 | `prototype.md` | `skills/prototype/SKILL.md` | none (caller-owned build and disposition) | — | — |
+| `wizard.md` | `skills/wizard/SKILL.md` | none (owner runs generated scripts) | — | — |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.
