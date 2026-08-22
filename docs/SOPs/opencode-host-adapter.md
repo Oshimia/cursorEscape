@@ -133,7 +133,7 @@ Backup: `C:\Users\admin\.config\opencode-backup-20260820-153803` (3475 files). P
 | # | Item | Runtime evidence | Smoke |
 | - | ---- | ---------------- | ----- |
 | **C1** | Always-on gates inject | Absolute `instructions` + `AGENTS.md` dual-write | Row **1** **pass** (2026-08-21 post–`Sync-HostHarness`) |
-| **C2** | Nine skills incl. `roadmap` and `diagnosing-bugs` *(author-time catalog 2026-08-21; live re-sync + rows 9-10/14 re-probe pending)* | Live host observed at 8 `skills/*/SKILL.md` (2026-08-21 sync); ninth stub staged in overlay + manifest, dry-run verified | Rows **9–10** **pass** (2026-08-21) |
+| **C2** | Nine skills incl. `roadmap` and `diagnosing-bugs` *(author-time catalog 2026-08-21; live re-sync + re-probe completed 2026-08-22)* | Live host observed at 9 `skills/*/SKILL.md` incl. `diagnosing-bugs`; 7 agents; mirror absent (2026-08-22 sync) | Rows **9–10** **pass** (2026-08-21) |
 | **C3** | Plan→plan_reviewer; impl→dual→Full | 7 overlay agents on disk; reviewers `edit: deny` + bash deny except read-only git | Rows **2**, **3**, **13** **pass** (2026-08-21); row **8** **pass**; row **14** **pass** |
 | **C4** | Deep workflow Reads on host | Absolute companion `workflow/` Reads; host procedure mirror **deleted** | Row **4** **pass** (2026-08-21) |
 | **C5** | Companion FA/SOP reads | `external_directory` includes `COMPANION_ROOT/**`; rubric companion FA | Row **8** **pass** (2026-08-21); optional **11**/**12** historical |

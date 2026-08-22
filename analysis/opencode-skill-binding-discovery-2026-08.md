@@ -144,7 +144,7 @@ If you cannot see a skill in the skill tool, say so explicitly — do not list ~
 | **A** | New empty-context session; skill probe prompt | **done** (pre-fix) | Only `customize-opencode` | discovery/config; not contamination |
 | **A-post1** | After `permission.skill` allow only | **fail** | Still only `customize-opencode` | permission alone insufficient |
 | **A-post2** | After `name` frontmatter + `skills.paths` + full restart | **pass** | Listed all 7 workflow skills + `customize-opencode`; loaded `implementation-plan`; quoted Escalation first row (`user-labeled-composer`) | **discovery/frontmatter** (+ paths); skill allow may still be needed for load |
-| **A-post2b** | Phase 2 overlay adds `roadmap` skill (author-time C2) | **pending** | Expected: 9 workflow skills incl. `roadmap` and `diagnosing-bugs` on live host after Phase 3 sync | catalog expansion |
+| **A-post2b** | Phase 2 overlay adds `roadmap` skill (author-time C2) | **pass** (2026-08-22) | Expected: 9 workflow skills incl. `roadmap` and `diagnosing-bugs` on live host after Phase 3 sync | catalog expansion |
 | **A′** | build/implementer if needed | n/a (A-post2 passed on plan) | | |
 | **B0 / B1** | Native file tools (Flash vs stronger) | **card frozen** — awaiting operator | see [Probe card — native file tools](#probe-card--native-file-tools-bash-vs-readglobgrep) |
 | **C** | `repository_explorer` child | deferred until B classifies | run only if B0/B1 mixed or inconclusive |
