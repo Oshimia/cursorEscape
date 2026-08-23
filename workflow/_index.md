@@ -28,6 +28,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [architecture-survey.md](architecture-survey.md) | Guided read-only improvement survey: candidate cards with options and inaction costs, owner selection |
 | [prototype.md](prototype.md) | Question-first throwaway prototypes: logic modules or UI variants on disposable paths with explicit disposition |
 | [wizard.md](wizard.md) | Human-only procedure generation: value matrix by source/destination/sensitivity/stage, static validation only |
+| [handoff.md](handoff.md) | Portable user-invoked conversation handoff: redacted artifact, references over duplication, recipient revalidation |
 
 Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; overlay-only).
 
@@ -90,5 +91,6 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `architecture-survey.md` | `skills/architecture-survey/SKILL.md` | `repository_explorer` may support exploration (advisory) | — | — |
 | `prototype.md` | `skills/prototype/SKILL.md` | none (caller-owned build and disposition) | — | — |
 | `wizard.md` | `skills/wizard/SKILL.md` | none (owner runs generated scripts) | — | — |
+| `handoff.md` | none (caller-owned artifact) | composer consumes via cross-pointer | — | — |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.

@@ -201,7 +201,7 @@ Never commit migration-only before Nb dual APPROVED.
 
 ## Cap-exhausted handoff schema
 
-When iteration 4 ends without dual APPROVED, Nb returns this instead of a closeout report. **No Full CI.**
+When iteration 4 ends without dual APPROVED, Nb returns this instead of a closeout report. **No Full CI.** This QC cap path is distinct from the user-invoked portable handoff defined in [handoff.md](../../workflow/handoff.md), which it does not replace or duplicate.
 
 ```markdown
 ## Phase cap-exhausted handoff — Phase N of M
@@ -383,3 +383,4 @@ Against attestation paths vs **this phase’s Agent context** — do not assume 
 - [ci-ladder.md](../../workflow/ci-ladder.md)
 - [review-subagent-models.md](../../overlays/cursor/review-subagent-models.md)
 - [_index.md](../../workflow/_index.md) — index of all workflow docs
+- [handoff.md](../../workflow/handoff.md) — user-invoked portable handoff contract
