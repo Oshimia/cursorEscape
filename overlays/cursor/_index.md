@@ -64,6 +64,7 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 | `wizard` | — | Caller-loaded human-only script generation; companion Read only (`skills/wizard/SKILL.md`) |
 | `teach` | — | Owner-invoked isolated learning workspace; companion Read only (`skills/teach/SKILL.md`) |
 | `resolving-merge-conflicts` | — | Owner-invoked active-conflict resolution; companion Read only (`skills/resolving-merge-conflicts/SKILL.md`) |
+| `wait-what` | — | Owner-invoked communication-repair trigger; companion Read only (`skills/wait-what/SKILL.md`) |
 
 ## Skills
 

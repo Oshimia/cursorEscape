@@ -31,6 +31,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [handoff.md](handoff.md) | Portable user-invoked conversation handoff: redacted artifact, references over duplication, recipient revalidation |
 | [teach.md](teach.md) | Dedicated opt-in Markdown learning workspace: mission, cited resources, small lessons, retrieval records |
 | [resolving-merge-conflicts.md](resolving-merge-conflicts.md) | Active merge/rebase conflict resolution: state safety, hunk-by-hunk intent tracing, verification, owner-owned finish |
+| [wait-what.md](wait-what.md) | User-invoked communication repair: name what did not land, add the missing premise, simplified register, local vocabulary with no-glossary fallback |
 
 Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; overlay-only).
 
@@ -56,6 +57,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | User-invoked shipped-code diagnosis loop |
 | [teach](../skills/teach/SKILL.md) | Owner-invoked isolated learning workspace |
 | [resolving-merge-conflicts](../skills/resolving-merge-conflicts/SKILL.md) | User-invoked conflict resolution with intent-traced hunks |
+| [wait-what](../skills/wait-what/SKILL.md) | Owner-invoked communication-repair re-pitch loop |
 
 ## Agents
 
@@ -98,5 +100,6 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `handoff.md` | none (caller-owned artifact) | composer consumes via cross-pointer | — | — |
 | `teach.md` | `skills/teach/SKILL.md` | none (owner-invoked learning workspace) | — | — |
 | `resolving-merge-conflicts.md` | `skills/resolving-merge-conflicts/SKILL.md` | implementer may consult during active conflict work (owner-invoked) | — | — |
+| `wait-what.md` | `skills/wait-what/SKILL.md` | none (owner-invoked communication repair) | — | — |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.

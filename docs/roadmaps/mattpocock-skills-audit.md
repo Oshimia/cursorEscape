@@ -1,7 +1,7 @@
 # Roadmap: mattpocock/skills audit and merge
 
 **Last updated:** 2026-08-23
-**Status:** Phase 3 F15 **complete** - merge-conflict resolution procedure landed through dual review in parallel. Next: Phase 3 F16 wait-what trigger.
+**Status:** Phase 3 **complete** - F16 wait-what communication-repair trigger landed through dual review in parallel; all 18 triage-ranked adaptations (B1-B2, F1-F16) are implemented. Next: owner decision on closing Phase 3+ (no further ranked proposals).
 **Plan source:** accepted plan `mattpocock-skills-audit-map` (Escalation `no` / `n/a`; roadmap may restructure thin phases into Agent context without new scope).
 
 ## Product decisions (locked)
@@ -59,6 +59,7 @@ None. Docs and repo-git only. No live host apply, no `~/.cursor`/`~/.config/open
 - [x] Phase 3 F13 - portable handoff contract implemented and dual-reviewed in parallel (2026-08-22)
 - [x] Phase 3 F14 - teach dedicated workspace implemented and dual-reviewed in parallel (2026-08-22)
 - [x] Phase 3 F15 - merge-conflict resolution procedure implemented and dual-reviewed in parallel (2026-08-23)
+- [x] Phase 3 F16 - wait-what communication trigger implemented and dual-reviewed in parallel (2026-08-23)
 - [ ] Phase 3+ — Adaptation implementation, one phase per accepted proposal through the repo's own gates
 
 ---

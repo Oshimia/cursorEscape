@@ -69,6 +69,12 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 | ----- | --------- | ------------- |
 | teach | [teach/SKILL.md](./teach/SKILL.md) | — (portable, caller-loaded) |
 
+### Communication skills
+
+| Skill | Procedure | Host overlays |
+| ----- | --------- | ------------- |
+| wait-what | [wait-what/SKILL.md](./wait-what/SKILL.md) | — (portable, caller-loaded) |
+
 ### Git workflow skills
 
 | Skill | Procedure | Host overlays |
