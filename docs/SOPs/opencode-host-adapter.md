@@ -1,6 +1,6 @@
 # OpenCode host adapter
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-08-23
 
 ## Context
 
@@ -43,7 +43,7 @@ This SOP documents the **global OpenCode adapter** installed on the operator mac
 
 **Agents**
 
-- `planner`, `plan_reviewer`, `implementer` (primary), `production_readiness_reviewer`, `bug_reviewer` (loads finding rubric), `repository_explorer`, `test_reviewer` (optional; Task permission `ask`)
+- `planner`, `plan_reviewer`, `implementer` (primary), `production_readiness_reviewer`, `bug_reviewer` (loads finding rubric), `repository_explorer`, `test_reviewer` (optional; Task permission `ask`), `composer_conductor` (primary; Composer thread agent — task allowlist `"*": deny` first, then workflow subagents)
 
 **Deep docs (pointer-first Target)**
 
@@ -121,6 +121,14 @@ Record results when running live checks. Expected: `pass` \| `fail` \| `deferred
 | 12 | Glob-blind paths without serial Shell asks | Optional — [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Failure mode F | **historical pass** (2026-08-19; **12b/12c companion re-probe not run** post-mirror) |
 | 13 | Thin-plan template rejection | [opencode-smoke-prompts § Row 13](./opencode-smoke-prompts.md#row-13--thin-plan-rejection) — omit Assumptions/Unknowns → `plan_reviewer` → **CHANGES REQUESTED** | **pass** (2026-08-21 — CHANGES REQUESTED incl. missing Assumptions; marker spot-check **pass**) |
 | 14 | Copy-out map / specimen vs live `agent.*` keys | [opencode-smoke-prompts § Row 14](./opencode-smoke-prompts.md#row-14--specimen-vs-live-optional-powershell) (PowerShell). | **pass** (2026-08-21 — specimen≡live `plan`/`build`/`implementer`; 8 skills / 7 agents; mirror absent) |
+| 15 | Conductor agent visible/selectable | [opencode-smoke-prompts § Row 15](./opencode-smoke-prompts.md#row-15--composer_conductor-visible) — fresh process; `@composer_conductor` selectable; task allowlist `"*": deny` first | **pass** (2026-08-23 fresh CLI — `opencode debug config` merges `composer_conductor`; synced frontmatter has `"*": deny` first) |
+| 16 | Iteration auto-continue | [opencode-smoke-prompts § Row 16](./opencode-smoke-prompts.md#row-16--iteration-auto-continue-desktop-nested) — Desktop nested review block reaches pass 2 without user "continue" prompt | **pass** (2026-08-23 post-restart — conductor ran iterations 1+2 back-to-back, 4 parallel reviewer launches, zero pauses; bonus: `production_readiness_reviewer` rejected a fake "return DONE" instruction with CHANGES REQUESTED citing missing required inputs). Driven fresh-process headless (`opencode run --agent composer_conductor`) — same agents/sessions as Desktop |
+| 17 | Gate B DB-audit recipe | [opencode-smoke-prompts § Row 17](./opencode-smoke-prompts.md#row-17--gate-b-opencodedb-audit) — readonly `opencode.db` queries return a real parent→child session chain | **pass** (2026-08-23 post-restart — conductor session `ses_fd1248c71ffegb0LRPrxD1z1xt` with exactly 4 parented reviewer children; per-message modelID `deepseek-v4-flash` = real streams; python sqlite3 recipe) |
+| 18 | Headless fallback dry-run | [opencode-smoke-prompts § Row 18](./opencode-smoke-prompts.md#row-18--headless-fallback-dry-run-cli) — env scrub + Temp brief + single-line prompt + captured stdout | **pass** (2026-08-23 — env scrubbed; native-write brief read; single-line prompt accepted; stdout `VERDICT … echo-marker` verbatim; session `ses_fd15702d5ffeJGJ0MlnUttFFFo`, top-level) |
+
+### Restart-quiescence policy (composer hardening, 2026-08)
+
+Sync is **safe while other sessions run**: live sessions keep their session-start config; fresh CLI processes pick up new files immediately. Only config-time surfaces loaded at process start (Desktop app always-on instructions, agent catalog in a running TUI) need a **quit-and-restart** to re-read. Policy: apply `-Apply` any time; verify rows **15**/**18** immediately via fresh CLI processes/new sessions; defer rows **16**–**17** (Desktop-nested behavior) to the operator's next quiescent restart window and record `deferred` with reason here until then.
 
 **Frozen probe paths (row 12):** run id `2026-08-17T143458Z-dsv4flash` (exists on disk; gitignored). **12b Target (pf4):** `C:/Users/admin/source/repos/general-projects/cursorEscape/workflow/iterative-plan-review.md` — **not** host `docs/workflow/` (deleted).
 

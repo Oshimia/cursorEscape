@@ -235,6 +235,15 @@ JSON agents under `opencode.json` → `agent` are also valid ([docs](https://ope
 
 `permission.task` with globs controls which subagents a parent may spawn ([docs](https://opencode.ai/docs/agents/#task-permissions)). Denied agents are removed from the Task tool description.
 
+#### Composer port (conductor) + payload/Gate B evidence
+
+Composer port recipe (2026-08 overlay hardening): conductor = **primary** thread agent (`agents/composer_conductor.md`) — never spawned via Task; `permission.task` map with `"*": "deny"` **first** (Failure mode K) then the workflow subagent allows; no `model:` pin; thin body citing companion `skills/composer/SKILL.md`. Two host-specific evidence rules live in the [composer skill stub](../../overlays/opencode/skills/composer/SKILL.md):
+
+- **Payload attestation marker:** every Task payload carries a marker line the child must echo back verbatim — detects prompt mangling (B6). Missing/unequal echo = treat the child return as unverified.
+- **Gate B DB audit:** nested-run transcript evidence via readonly `opencode.db` queries (`session.parent_id` chain, tool-part states, per-message `model_id`); Task UI summaries are secondary. Missing parent→child chain = REJECT closeout claims. Smoke rows **15–18**: [opencode-host-adapter § Smoke checklist](./opencode-host-adapter.md#smoke-checklist-r0); paste prompts in [opencode-smoke-prompts](./opencode-smoke-prompts.md).
+
+Headless fallback note: `opencode run` sessions may only be spawned **top-level** — never instruct a subagent to spawn sessions (B2 bash hang); scrub `OPENCODE_*` env before launch (B4); keep CLI prompts single-line (B3 argv truncation).
+
 ---
 
 ### Rules and always-on instructions

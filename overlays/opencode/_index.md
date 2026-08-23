@@ -1,6 +1,6 @@
 # OpenCode overlay — harness copy-out map
 
-**Last updated:** 2026-08-21  
+**Last updated:** 2026-08-23  
 **Status:** **pointer-first-4 complete** (2026-08-20) — harness stubs use absolute `{{COMPANION_ROOT}}` Reads; live procedure mirror **deleted** from `{{OPENCODE_HOME}}/docs/workflow/`; `review-subagent-models` overlay-Read only. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1). Phase 0 baseline (restore-only): `C:/Users/admin/.config/opencode-backup-pre-host-sync-build-20260821-012600`. Sync does **not** create backups. See [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).  
 **Fidelity bar:** [host-adaptation-fidelity](../../docs/featureArchitecture/host-adaptation-fidelity.md) (C1–C6).
 
@@ -21,7 +21,7 @@ OpenCode-native **host overlay** at `overlays/opencode/`. Portable procedure sta
 | `instructions/cursor-escape-loop.md` | [instructions/cursor-escape-loop.md](./instructions/cursor-escape-loop.md) | Always-on gates body (C1) |
 | `AGENTS.md` | [AGENTS.md](./AGENTS.md) | **Same gates** — OpenCode global rules surface (must match `instructions/cursor-escape-loop.md`) |
 | `skills/<id>/SKILL.md` (×9) | [skills/](./skills/) | Thin harness stubs → absolute `{{COMPANION_ROOT}}` Reads (C2; pointer-first-2 rewrites bodies) |
-| `agents/<role>.md` (×7) | [agents/](./agents/) | Thin harness bodies (C3) |
+| `agents/<role>.md` (×8) | [agents/](./agents/) | Thin harness bodies (C3); `composer_conductor` = primary conductor (task `"*": deny` first) |
 | `opencode.json` (harness merge) | [opencode.specimen.json](./opencode.specimen.json) | Merge tokens; **preserve** operator `model` / `provider` (not in specimen sole form) |
 
 **Pointer only (not host copy-out):** [review-subagent-models.md](./review-subagent-models.md) — thin overlay leaf; harness cites `{{COMPANION_ROOT}}/overlays/opencode/review-subagent-models.md`.
@@ -144,7 +144,7 @@ Companion `workflow/` leaves formerly mirrored to host `docs/workflow/` (**10** 
 | roadmap | [skills/roadmap/SKILL.md](./skills/roadmap/SKILL.md) |
 | diagnosing-bugs | [skills/diagnosing-bugs/SKILL.md](./skills/diagnosing-bugs/SKILL.md) |
 
-## Agents inventory (7)
+## Agents inventory (8)
 
 | Agent | Overlay | Portable contract (diff only) |
 | ----- | ------- | ----------------------------- |
@@ -155,6 +155,7 @@ Companion `workflow/` leaves formerly mirrored to host `docs/workflow/` (**10** 
 | bug_reviewer | [agents/bug_reviewer.md](./agents/bug_reviewer.md) | [agents/bug_reviewer.md](../../agents/bug_reviewer.md) |
 | repository_explorer | [agents/repository_explorer.md](./agents/repository_explorer.md) | [agents/repository_explorer.md](../../agents/repository_explorer.md) |
 | test_reviewer | [agents/test_reviewer.md](./agents/test_reviewer.md) | [agents/test_reviewer.md](../../agents/test_reviewer.md) |
+| composer_conductor | [agents/composer_conductor.md](./agents/composer_conductor.md) | *(host-native — Composer primary thread agent; no portable contract; task `"*": deny` first, then workflow subagent allows; `edit: ask`)* |
 
 ## Author-time C1–C5 attestation (Phase 2)
 
@@ -162,7 +163,7 @@ Companion `workflow/` leaves formerly mirrored to host `docs/workflow/` (**10** 
 | - | ---- | ---------------- |
 | **C1** | Always-on gates | Specimen `instructions` = **`{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md`** (absolute — cwd-relative paths do not load from global config); `AGENTS.md` matches that body; instruction states plan + implementation-review gates |
 | **C2** | Eight skills incl. `roadmap` *(Phase 2 scope; catalog expanded to nine in 2026-08-21 B1)* | Eight overlay `skills/*/SKILL.md` with matching `name`; host-adapter row 9 + Probe A updated |
-| **C3** | Reviewers deny-edit; loops cited | Seven overlay agents; reviewers `permission.edit: deny`; bodies cite `{{COMPANION_ROOT}}/workflow/iterative-*` and companion FA rubric |
+| **C3** | Reviewers deny-edit; loops cited | Seven overlay agents + `composer_conductor` (8 total, 2026-08 composer hardening — task `"*": deny` first per failure mode K); reviewers `permission.edit: deny`; bodies cite `{{COMPANION_ROOT}}/workflow/iterative-*` and companion FA rubric |
 | **C4** | Companion workflow Reads (pointer-first-2) | Harness stubs use absolute `{{COMPANION_ROOT}}/workflow/...` Reads — **zero** host `docs/workflow/` as procedure SoT in harness; **zero** `../../` hops |
 | **C5** | Companion FA reads | Specimen `external_directory` includes `{{COMPANION_ROOT}}/**` |
 | **C6** | Runtime smoke | C6 minimum **pass** (2026-08-20 operator post-mirror); row **14** install-time / re-diff skipped ([closeout](../../analysis/pointer-first-4-closeout-2026-08.md)) |

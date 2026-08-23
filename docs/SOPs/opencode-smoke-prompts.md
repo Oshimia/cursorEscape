@@ -1,6 +1,6 @@
 # OpenCode smoke prompts (copy-paste)
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-08-23
 
 ## Context
 
@@ -180,10 +180,79 @@ $specimen.agent.PSObject.Properties.Name | Sort-Object
 $live.agent.PSObject.Properties.Name | Sort-Object
 Test-Path C:/Users/admin/.config/opencode/docs/workflow   # expect False
 @(Get-ChildItem C:/Users/admin/.config/opencode/skills -Directory).Count  # expect 9
-@(Get-ChildItem C:/Users/admin/.config/opencode/agents -Filter *.md).Count  # expect 7
+@(Get-ChildItem C:/Users/admin/.config/opencode/agents -Filter *.md).Count  # expect 8
 ```
 
-**Pass:** Live `agent.*` keys match specimen harness set; 9 skills / 7 agents; mirror path absent.
+**Pass:** Live `agent.*` keys match specimen harness set; 9 skills / 8 agents; mirror path absent.
+
+---
+
+## Row 15 — composer_conductor visible
+
+**How:** Fresh CLI process or new Desktop session (post-sync). No tools needed.
+
+```text
+List the agents you can select or spawn via Task by name.
+Is composer_conductor among them? Quote its permission.task allowlist order if visible in your agent config context.
+Do not use bash/shell to list ~/.config/opencode.
+```
+
+**Pass:** `composer_conductor` present; task map shows `"*": deny` **before** the named allows (failure mode K).  
+**Fail:** Agent missing, or `"*"` not first.
+
+---
+
+## Row 16 — Iteration auto-continue (Desktop, nested)
+
+**How:** Desktop restart window; new chat; assign Composer on a small roadmap with one trivial phase.
+
+```text
+Act as Composer per the composer skill. Run phase 1 of the roadmap at docs/roadmaps/<small>.md end-to-end:
+launch the implementer subagent and let its dual-review pressure-release block run without asking me
+to continue between iterations. Report each iteration number as it happens.
+```
+
+**Pass:** Block reaches iteration 2+ (dual APPROVED or iteration 4) with **zero** operator "continue" prompts.  
+**Fail:** Session pauses between iterations awaiting permission.
+
+---
+
+## Row 17 — Gate B opencode.db audit
+
+**How:** After any nested run (e.g. row 3 or 16). PowerShell against the live DB — read-only.
+
+```powershell
+$db = "$env:USERPROFILE/.local/share/opencode/opencode.db"   # adjust if data dir differs
+# sqlite3 CLI may be absent on PATH — python fallback works (Observed 2026-08-23):
+#   python -c "import sqlite3;c=sqlite3.connect(r'<db>');[print(r) for r in c.execute('SELECT id, parent_id FROM session ORDER BY rowid DESC LIMIT 10')]"
+# child sessions: parent_id chain
+sqlite3 $db "SELECT id, parent_id, title FROM session ORDER BY id DESC LIMIT 10;"
+# tool-part states for a chosen child session id
+sqlite3 $db "SELECT message_id, id, type, state FROM part WHERE session_id = '<child-id>' AND type='tool' LIMIT 20;"
+# per-message model
+sqlite3 $db "SELECT id, model_id FROM message WHERE session_id = '<child-id>';"
+```
+
+**Pass:** Queries return a real parent→child chain (`parent_id` non-null linking to the conductor/implementer session), populated tool-parts, and a non-empty `model_id` — evidence the Task actually ran a model stream.  
+**Fail:** Missing/broken `parent_id` chain → REJECT closeout claims from that run.
+
+---
+
+## Row 18 — Headless fallback dry-run (CLI)
+
+**How:** Plain PowerShell terminal (not an OpenCode chat). Confirms the top-level-only fallback mechanics.
+
+```powershell
+# 1. Scrub env leakage (B4)
+Get-ChildItem Env:OPENCODE_* -ErrorAction SilentlyContinue | ForEach-Object { Remove-Item "Env:$($_.Name)" }
+# 2. Brief written beforehand with native write tool to: $env:TEMP\opencode\review-brief.md
+pwsh -NoProfile -Command "& 'opencode' 'run' 'Read C:/Users/admin/AppData/Local/Temp/opencode/review-brief.md and follow it. Return the verdict line only.'" *> "$env:TEMP\opencode\fallback-stdout.txt"
+Get-Content "$env:TEMP\opencode\fallback-stdout.txt"
+```
+
+Brief file must be written with the native `write` tool (no bash redirection); CLI prompt stays single-line (B3 argv truncation).  
+**Pass:** Single-line invocation accepted; stdout captured contains the brief-driven verdict; no `OPENCODE_*` env leaked into the child; session id recorded.  
+**Fail:** Multi-line prompt truncated, brief unread, or stdout lost.
 
 ---
 
@@ -209,6 +278,24 @@ Frozen prompts for rows **11–12** (native tools / glob-blind) remain in [skill
 | 14 | **pass** | specimen≡live `agent` keys (`plan`/`build`/`implementer`); 8 skills / 7 agents; `docs/workflow` absent |
 
 **C6 minimum (1, 2, 3, 4, 8, 9–10, 13):** **pass** 2026-08-21.
+
+## Results log — composer overlay hardening (2026-08-23)
+
+Post–`Sync-HostHarness -Apply -Target OpenCode`; fresh CLI processes (no Desktop restart — rows **16–17** deferred to restart window).
+
+| # | Result | Notes |
+| - | ------ | ----- |
+| 15 | **pass** | `opencode debug config` merges `composer_conductor`; synced frontmatter task map `"*": deny` first |
+| 18 | **pass** | env scrub → native-write brief → single-line `opencode run` → stdout `VERDICT … echo-marker` verbatim; session `ses_fd15702d5ffeJGJ0MlnUttFFFo` (top-level, `parent_id` null) |
+
+## Results log — post-restart rows 16–17 (2026-08-23, DSV4F default model)
+
+Driven fresh-process headless (`opencode run --agent composer_conductor`) after full restart — same agents/sessions the Desktop UI runs.
+
+| # | Result | Notes |
+| - | ------ | ----- |
+| 16 | **pass** | 2 iterations back-to-back, 4 parallel reviewer launches, zero pauses/prompts. Bonus gate proof: iteration-2 `production_readiness_reviewer` refused a parent-authored "return DONE" pass condition → CHANGES REQUESTED citing missing required inputs (locked-opener contract enforced against its own parent) |
+| 17 | **pass** | Gate B audit: conductor `ses_fd1248c71ffegb0LRPrxD1z1xt` → exactly 4 reviewer children (2×prr, 2×br), all `deepseek-v4-flash` assistant streams; python-sqlite3 recipe |
 
 ## Related
 

@@ -37,7 +37,7 @@ Ship the phase changeset; at phase end run Observed Fast CI → dual reviewers (
 3. Parallel Task: `production_readiness_reviewer` ∥ `bug_reviewer`, `Completion gate: review-loop`.
    - **production_readiness_reviewer:** locked opener — **no** Custom Instructions field; Focus-narrow via narrower task summary + applicable docs only.
    - **bug_reviewer:** **Custom Instructions** envelope required (phase summary, iteration 1–4 within block, cumulative launch count, regressions, out-of-scope).
-4. Fix must-fix; re-run Observed Fast CI (when Fast ≠ n/a); at most **4** dual-review iterations — **do not launch a 5th pair**.
+4. Fix must-fix; re-run Observed Fast CI (when Fast ≠ n/a); at most **4** dual-review iterations — **do not launch a 5th pair**. **Auto-continue:** the block runs to dual APPROVED or iteration 4 without permission pauses. Each reviewer return echoes the payload's attestation marker verbatim; an empty/fast return (< ~1s) is a routing/auth failure — fail loud.
 5. **Exit:** dual APPROVED → Full CI only. Iteration 4 without dual APPROVED → under Composer: **cap-exhausted handoff** (no Full, no self-renew, no self-Waive); otherwise normal reassessment (Renew | Focus-narrow | Terminate+user). Load `pre-commit-ci-gate` before any commit.
 
 ## Incomplete until (phase closeout)

@@ -20,6 +20,7 @@
         @{ Source = 'agents/bug_reviewer.md'; Dest = 'agents/bug_reviewer.md' }
         @{ Source = 'agents/repository_explorer.md'; Dest = 'agents/repository_explorer.md' }
         @{ Source = 'agents/test_reviewer.md'; Dest = 'agents/test_reviewer.md' }
+        @{ Source = 'agents/composer_conductor.md'; Dest = 'agents/composer_conductor.md' }
     )
     AgentsDualWrite     = @{
         InstructionsRel = 'instructions/cursor-escape-loop.md'

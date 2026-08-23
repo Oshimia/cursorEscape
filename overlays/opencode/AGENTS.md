@@ -34,6 +34,15 @@ Eval / harness / multi-step operational work is **not** exempt.
 
 **Skip only if:** truly trivial cases listed under plan review, or explicit user opt-out (`skip review`, `no dual review`).
 
+## Composer conduct (when assigned)
+
+When the user assigns **composer / conductor**: load skill `composer`, then conduct per its OpenCode protocol (pre-flight, payload integrity, iteration discipline, Gate B evidence, headless fallback). Gate pointers:
+
+- **Auto-continue:** never pause between iterations to ask permission — a pressure-release block runs to dual APPROVED or iteration 4 without operator "continue" prompts.
+- **Fail-loud legs:** reviewer Tasks that complete in well under ~1s with empty results are routing/auth failures, not "no bugs found."
+- **Config currency:** agent/config files edited mid-session stay invisible until a fresh process or full restart — verify before blaming agents.
+- **Isolation:** reviewers run in isolated child sessions; parent synthesizes the invoke payload each pass; never attach prior child transcripts.
+
 ## Isolation (required)
 
 Reviewers and plan_reviewer run in **isolated** child sessions. Parent synthesizes invoke payload each pass. Never attach prior child transcripts. Never pair Full CI with reviewers.

@@ -17,7 +17,7 @@ function Assert-Pass {
     param([string]$Name, [bool]$Ok)
     $status = if ($Ok) { 'pass' } else { 'fail' }
     Write-Output "${Name}: $status"
-    if (-not $Ok) { script:fail = $true }
+    if (-not $Ok) { $script:fail = $true }
 }
 
 $cursorLive = Join-Path $env:USERPROFILE '.cursor'
@@ -38,8 +38,9 @@ Assert-Pass 'opencode backup sibling not inside live' (-not (Test-PathIsChildOf 
 Assert-Pass 'cursor manifest Kind Baseline' ((Get-Content -LiteralPath (Join-Path $json.cursor 'BACKUP_MANIFEST.md') -Raw) -match '\*\*Kind:\*\* Baseline')
 Assert-Pass 'opencode manifest Kind Baseline' ((Get-Content -LiteralPath (Join-Path $json.opencode 'BACKUP_MANIFEST.md') -Raw) -match '\*\*Kind:\*\* Baseline')
 
-$headSha = (git -C $companionRoot rev-parse --short HEAD).Trim()
-Assert-Pass 'companionSha matches HEAD' ($json.companionSha -eq $headSha)
+# companionSha is provenance for the 2026-08-20 baseline (restore-only artifact) —
+# it records HEAD at creation time and is NOT expected to track moving HEAD.
+Assert-Pass 'companionSha provenance well-formed' ($json.companionSha -match '^[0-9a-f]{7,40}$')
 
 Assert-Pass 'cursor backup excludes skills-cursor' (-not (Test-Path -LiteralPath (Join-Path $json.cursor 'skills-cursor')))
 Assert-Pass 'cursor backup excludes settings.json' (-not (Test-Path -LiteralPath (Join-Path $json.cursor 'settings.json')))
