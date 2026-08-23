@@ -1,6 +1,6 @@
 # Workflow docs (shared deep procedure)
 
-**Last updated:** 2026-08-22
+**Last updated:** 2026-08-23
 
 **Ownership:** Process changes land here first. Repo SOPs may extend with local paths; they must not contradict this core.
 
@@ -30,6 +30,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [wizard.md](wizard.md) | Human-only procedure generation: value matrix by source/destination/sensitivity/stage, static validation only |
 | [handoff.md](handoff.md) | Portable user-invoked conversation handoff: redacted artifact, references over duplication, recipient revalidation |
 | [teach.md](teach.md) | Dedicated opt-in Markdown learning workspace: mission, cited resources, small lessons, retrieval records |
+| [resolving-merge-conflicts.md](resolving-merge-conflicts.md) | Active merge/rebase conflict resolution: state safety, hunk-by-hunk intent tracing, verification, owner-owned finish |
 
 Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-models.md) (recommended reviewer models; overlay-only).
 
@@ -54,6 +55,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [wizard](../skills/wizard/SKILL.md) | Human-only interactive-script generation |
 | [diagnosing-bugs](../skills/diagnosing-bugs/SKILL.md) | User-invoked shipped-code diagnosis loop |
 | [teach](../skills/teach/SKILL.md) | Owner-invoked isolated learning workspace |
+| [resolving-merge-conflicts](../skills/resolving-merge-conflicts/SKILL.md) | User-invoked conflict resolution with intent-traced hunks |
 
 ## Agents
 
@@ -95,5 +97,6 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `wizard.md` | `skills/wizard/SKILL.md` | none (owner runs generated scripts) | — | — |
 | `handoff.md` | none (caller-owned artifact) | composer consumes via cross-pointer | — | — |
 | `teach.md` | `skills/teach/SKILL.md` | none (owner-invoked learning workspace) | — | — |
+| `resolving-merge-conflicts.md` | `skills/resolving-merge-conflicts/SKILL.md` | implementer may consult during active conflict work (owner-invoked) | — | — |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.

@@ -1,6 +1,6 @@
 # Skills
 
-**Last updated:** 2026-08-22
+**Last updated:** 2026-08-23
 
 ## Context
 
@@ -69,6 +69,12 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 | ----- | --------- | ------------- |
 | teach | [teach/SKILL.md](./teach/SKILL.md) | — (portable, caller-loaded) |
 
+### Git workflow skills
+
+| Skill | Procedure | Host overlays |
+| ----- | --------- | ------------- |
+| resolving-merge-conflicts | [resolving-merge-conflicts/SKILL.md](./resolving-merge-conflicts/SKILL.md) | — (portable, caller-loaded) |
+
 ### Optional orchestration (Nice-to-have / Cursor-specific)
 
 | Skill | Procedure | Cursor overlay | OpenCode overlay |
@@ -85,7 +91,7 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 
 ### Skill contract fields (Required)
 
-Each SKILL states: **When to use**, **Workflow steps**, **Outputs**, **Must not**, **Related roles** (where applicable), with Boundary/Must not and Workflow/Workflow steps accepted as equivalent variants for reference and alignment skills
+Each SKILL states: **When to use**, **Workflow steps**, **Outputs**, **Must not**, **Related roles** (where applicable), with Boundary/Must not and Workflow/Workflow steps accepted as equivalent variants for all skills
 
 ---
 
