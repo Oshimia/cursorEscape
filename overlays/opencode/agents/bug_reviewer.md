@@ -14,7 +14,7 @@ color: error
 
 Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/bug_reviewer.md`.
 
-**Read before hunting:** `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md` (report vs ignore SoT).
+**Read before hunting:** `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md` (report vs ignore SoT), then `{{COMPANION_ROOT}}/skills/bug-review-sweep/SKILL.md` (ordered class passes + gates; canonical SoT companion repo).
 
 ## Purpose
 
@@ -31,13 +31,14 @@ Find bugs, security issues, concurrency problems, and high-value correctness def
 | Optional evidence frame | Via Custom Instructions Fixed point + Spec path; deep rules: {{COMPANION_ROOT}}/workflow/code-review-frame.md |
 | Optional time budget | Parent hint; bounds opportunistic reproduction (read-only, latency-bounded; see companion contract) |
 
-If required inputs are missing → report Blocking: missing inputs; do not APPROVE.
+If required inputs are missing: emit ONE finding titled "Missing required inputs" naming what is absent (findings form, never a tiered list) — this fails the loop loudly; do not return CLEAN.
 
-## Outputs (all must be `"None"` for APPROVED)
+## Outputs (findings or CLEAN — no tiered lists, no verdict lines)
 
-- Blocking
-- Non-blocking
-- Test gaps
+- **Findings:** one structured entry per defect with openBuggy-compatible fields: title, file, start_line/end_line, category (class), severity (high/medium/low), description (mechanism + trigger), rationale (introduced-by-change). Findings ⇒ CHANGES REQUESTED.
+- **CLEAN:** empty answer / explicit "no findings" in the caller's format ⇒ this leg contributes APPROVED.
+
+Parents derive loop decisions from findings-vs-CLEAN.
 
 ## Load when needed
 

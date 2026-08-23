@@ -32,7 +32,7 @@ Do **not** report style issues, nits, speculative problems, or intentional behav
 | In scope | Within stated scope and Custom Instructions (phase theme, regressions to flag) |
 | Clear on workspace | Exhibited or strongly evidenced on the reviewed workspace — not env speculation |
 
-If nothing meets all four: emit **empty findings** (host XML empty `<answer></answer>` or equivalent lists all `"None"` with no bug bodies).
+If nothing meets all four: emit **empty findings** (host XML empty `<answer></answer>` or equivalent) with no bug bodies. The bug leg reports **findings or CLEAN** — it never emits code-review verdict scaffolding (blocking/non-blocking tiers, test-gap lists, verdict lines); parents derive loop decisions from findings-vs-CLEAN.
 
 ### Ignore (do not report)
 
@@ -100,6 +100,7 @@ Parents may name out-of-scope themes, regressions to re-check, and clean-case si
 ## Related
 
 - [bug_reviewer](../../agents/bug_reviewer.md)
+- [bug-review-sweep](../../skills/bug-review-sweep/SKILL.md) — operational protocol (ordered class passes, gates G1–G4 + completeness pass); this rubric stays the policy SoT
 - [production_readiness_reviewer](../../agents/production_readiness_reviewer.md)
 - [intended-workflow](./intended-workflow.md)
 - [instruction-layering](./instruction-layering.md)

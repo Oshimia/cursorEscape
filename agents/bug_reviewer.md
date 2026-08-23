@@ -1,12 +1,12 @@
 # bug_reviewer
 
-**Last updated:** 2026-08-22
+**Last updated:** 2026-08-23
 
 ## Context
 
 **Target** role contract. Bug-finder leg of the dual gate. Recreate Bugbot-shaped utility with an OpenCode (or host-equivalent) subagent + skills/rules — the same pattern as [production_readiness_reviewer](./production_readiness_reviewer.md) / live reviewer-a. **Not** Cursor proprietary `bugbot`. **openBuggy is not required** for v0 ([design decisions](../review/design-decisions.md)).
 
-**Read when reviewing:** [bug-reviewer-finding-rubric.md](../docs/featureArchitecture/bug-reviewer-finding-rubric.md) — report vs ignore SoT.
+**Read when reviewing:** [bug-reviewer-finding-rubric.md](../docs/featureArchitecture/bug-reviewer-finding-rubric.md) — report vs ignore SoT. Then follow [bug-review-sweep](../skills/bug-review-sweep/SKILL.md) — ordered class passes + gates that operationalize the rubric (canonical SoT this repo).
 
 ---
 
@@ -31,11 +31,16 @@ Process/docs completeness belongs on [production_readiness_reviewer](./productio
 
 ### Outputs
 
-| List | All must be `"None"` for APPROVED |
-| ---- | ----------------------------------- |
-| Blocking | Yes |
-| Non-blocking | Yes |
-| Test gaps | Yes |
+Bug-native findings or CLEAN — never code-review scaffolding (no Blocking/Non-blocking/Test-gaps tiers, no verdict lines):
+
+| Outcome | Form | Loop meaning |
+| ------- | ---- | ------------ |
+| Findings | Each reported defect as one structured entry with openBuggy-compatible fields: **title, file, start_line/end_line, category (class), severity (high/medium/low), description (mechanism + trigger), rationale (introduced-by-change)** — per [bug-review-sweep](../skills/bug-review-sweep/SKILL.md) §Output | CHANGES REQUESTED — parent fixes and re-launches |
+| CLEAN | Empty answer / explicit "no findings" in the caller's format | This leg contributes APPROVED |
+
+Parents derive loop decisions from findings-vs-CLEAN; they must not ask this leg for tiered lists.
+
+If required inputs are missing: emit ONE finding titled "Missing required inputs" naming what is absent (findings form, never a tiered list) — this fails the loop loudly; do not return CLEAN.
 
 ### Evidence discipline (advisory)
 

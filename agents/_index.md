@@ -38,7 +38,7 @@ Every role page defines:
 | ---- | ------------- |
 | plan_reviewer | No blocking plan issues (CHANGES REQUESTED otherwise) |
 | production_readiness_reviewer | Blocking, Non-blocking (code/process), blocking test/docs = `"None"`; Batchable deferred may remain |
-| bug_reviewer | Blocking, Non-blocking, Test gaps = `"None"` |
+| bug_reviewer | Findings → CHANGES REQUESTED; CLEAN (empty answer) → contributes APPROVED |
 | test_reviewer | Advisory findings — not required for dual APPROVED unless user elevates ([test_reviewer](./test_reviewer.md)) |
 
 ---
