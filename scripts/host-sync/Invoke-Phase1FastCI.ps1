@@ -88,13 +88,23 @@ Assert-Pass 'no host-sync-apply backup paths in sync sources' ($combined -notmat
 Assert-Pass 'Assert-BaselineBackupsPresent present (read-only gate)' ($combined -match 'Assert-BaselineBackupsPresent')
 Assert-Pass 'Assert-NoPerApplyBackupArtifacts present' ($combined -match 'Assert-NoPerApplyBackupArtifacts')
 
-# 4) Apply gate passes read-only check when paths restored
+# 4) Apply gate behavior vs restored paths file (state-independent across antigravity baseline rollout)
+$gateThrewRestored = $false
 try {
-    Assert-BaselineBackupsPresent -PathsFile $pathsFile -CompanionRoot $companionRoot
-    Assert-Pass 'baseline gate read-only assert' $true
+    Assert-BaselineBackupsPresent -PathsFile $pathsFile -CompanionRoot $companionRoot | Out-Null
+} catch {
+    $gateThrewRestored = $true
 }
-catch {
-    Assert-Pass 'baseline gate read-only assert' $false
+$agyPending = $true
+if (Test-Path -LiteralPath $pathsFile) {
+    $restoredPathsJson = Get-Content -LiteralPath $pathsFile -Raw | ConvertFrom-Json
+    $agyPending = [string]::IsNullOrWhiteSpace([string]$restoredPathsJson.antigravity)
+}
+if ($agyPending) {
+    Assert-Pass 'baseline gate fails closed while antigravity baseline pending' $gateThrewRestored
+}
+else {
+    Assert-Pass 'baseline gate read-only assert (all baselines present)' (-not $gateThrewRestored)
 }
 
 # 5) No host-sync-apply dirs currently on machine (forbidden artifact)

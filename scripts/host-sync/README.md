@@ -1,6 +1,6 @@
 # Host harness sync (modular layout)
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-08-24
 
 Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require `-Apply` and a valid Phase 0 baseline gate artifact.
 
@@ -19,9 +19,11 @@ scripts/
     manifests/
       cursor.manifest.psd1      # allowlist, excludes, hybrid rule ids
       opencode.manifest.psd1
+      antigravity.manifest.psd1 # allowlist, excludes (GEMINI.md replace + skills/workflows)
     adapters/
       Cursor.Adapter.ps1          # Invoke-StackHarnessSync for Cursor
       OpenCode.Adapter.ps1        # Invoke-StackHarnessSync for OpenCode
+      Antigravity.Adapter.ps1     # Invoke-StackHarnessSync for Antigravity
 ```
 
 Each stack owns its **manifest** (what to copy, hard excludes, never-touch paths) and **adapter** (stack-specific merge: hybrid Cursor rules, OpenCode JSON + AGENTS dual-write). Shared primitives live in Core; Core does **not** branch on stack id except through the registry.
@@ -32,6 +34,7 @@ Each stack owns its **manifest** (what to copy, hard excludes, never-touch paths
 # Dry-run one stack (default)
 pwsh ./scripts/Sync-HostHarness.ps1 -Target Cursor
 pwsh ./scripts/Sync-HostHarness.ps1 -Target OpenCode
+pwsh ./scripts/Sync-HostHarness.ps1 -Target Antigravity
 
 # Dry-run all registered stacks (continue-with-report)
 pwsh ./scripts/Sync-HostHarness.ps1 -Target All
@@ -39,6 +42,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Target All
 # Live write (requires Phase 0 baseline gate; does NOT create backups)
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target OpenCode
+pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Antigravity
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target All
 
 # Stop after first stack failure when syncing All
@@ -55,6 +59,9 @@ One-time baselines taken before building this tool. Used for **restore if Apply 
 | ----- | ---------------------------- |
 | Cursor | `C:\Users\admin\.cursor-backup-pre-host-sync-build-20260821-012600` |
 | OpenCode | `C:\Users\admin\.config\opencode-backup-pre-host-sync-build-20260821-012600` |
+| Antigravity | **Pending** — operator to take a restore-only baseline of `~/.gemini` and set the `antigravity` property in [`baseline-backups.paths.json`](./baseline-backups.paths.json) |
+
+**Apply coupling (all three baselines required):** `-Apply` for ANY stack fails closed until all three Phase 0 baselines exist. Until the Antigravity baseline is taken, `-Apply -Target Cursor/OpenCode` also fails — deliberate conservatism because Antigravity Apply wholesale-replaces `~/.gemini/GEMINI.md`. Dry-runs are unaffected.
 
 Gate artifact: [`baseline-backups.paths.json`](./baseline-backups.paths.json)
 
@@ -66,8 +73,9 @@ Gate artifact: [`baseline-backups.paths.json`](./baseline-backups.paths.json)
 | ----- | ---------- |
 | Cursor | `skills-cursor/`; `settings.json`; delete/refresh `docs/workflow/`; thin-pointer-only `.mdc` without hybrid write |
 | OpenCode | Procedure mirror re-copy; host copy-out of `review-subagent-models`; overwrite live `model` / `provider` in `opencode.json` |
+| Antigravity | Credential/app-state files (`settings.json`, `config/mcp_config.json`, `oauth_creds.json`, `google_accounts.json`, `state.json`, `trustedFolders.json`, `installation_id`); never touch `antigravity/global_workflows/caveman.md` or `config/projects` |
 
-Manifest `NeverTouch` paths (e.g. `docs/workflow`) are left in place on the live host.
+Manifest `NeverTouch` paths (e.g. `docs/workflow`, Antigravity `caveman.md`) are left in place on the live host.
 
 ## Expansion recipe (add a third stack)
 

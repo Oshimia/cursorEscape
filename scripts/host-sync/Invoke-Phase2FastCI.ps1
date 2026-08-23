@@ -97,4 +97,104 @@ Assert-Pass 'merged build.task permission puts * first' ($taskKeys.Count -ge 1 -
 Assert-Pass 'merged global bash permission puts * first' ($bashKeys.Count -ge 1 -and $bashKeys[0] -eq '*')
 Assert-Pass 'Optimize-OpenCodePermissionKeyOrder in core' ((Get-Content (Join-Path $hostSyncRoot 'HostSync.Core.ps1') -Raw) -match 'Optimize-OpenCodePermissionKeyOrder')
 
+# --- Antigravity stack (Phase 1 structural blocks; behavioral dry-run/snapshot/inventory blocks activate in Phase 2) ---
+$agyManifestPath = Join-Path $hostSyncRoot 'manifests\antigravity.manifest.psd1'
+Assert-Pass 'antigravity manifest exists' (Test-Path -LiteralPath $agyManifestPath)
+if (Test-Path -LiteralPath $agyManifestPath) {
+    $agyManifest = Import-PowerShellDataFile -LiteralPath $agyManifestPath
+    Assert-Pass 'antigravity StackId' ($agyManifest.StackId -eq 'Antigravity')
+    Assert-Pass 'antigravity overlay root declared' ($agyManifest.OverlayRelativeRoot -eq 'overlays/antigravity')
+    Assert-Pass 'antigravity live root declared' ($agyManifest.LiveRelativeRoot -eq '.gemini')
+    Assert-Pass 'antigravity manifest has >=13 copy entries' ($agyManifest.CopyEntries.Count -ge 13)
+    Assert-Pass 'antigravity excludes use no backslashes' (@($agyManifest.HardExcludes + $agyManifest.NeverTouch | Where-Object { $_ -match '\\' }).Count -eq 0)
+    Assert-Pass 'antigravity hard-excludes caveman.md' ($agyManifest.HardExcludes -contains 'antigravity/global_workflows/caveman.md')
+    Assert-Pass 'antigravity never-touch caveman.md' ($agyManifest.NeverTouch -contains 'antigravity/global_workflows/caveman.md')
+    foreach ($agySecret in @('settings.json', 'oauth_creds.json', 'google_accounts.json')) {
+        Assert-Pass "antigravity hard-excludes $agySecret" ($agyManifest.HardExcludes -contains $agySecret)
+    }
+    Assert-Pass 'antigravity manifest has no JsonMerge' (-not ($agyManifest.Keys -contains 'JsonMerge'))
+    Assert-Pass 'antigravity manifest has no AgentsDualWrite' (-not ($agyManifest.Keys -contains 'AgentsDualWrite'))
+    Assert-Pass 'antigravity manifest has no HybridRuleIds' (-not ($agyManifest.Keys -contains 'HybridRuleIds'))
+    $geminiEntries = @($agyManifest.CopyEntries | Where-Object { $_.Dest -eq 'GEMINI.md' })
+    Assert-Pass 'antigravity replaces GEMINI.md via exactly one entry' ($geminiEntries.Count -eq 1)
+    $skillDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'config/skills/*' })
+    Assert-Pass 'antigravity skill dests under config/skills' ($skillDests.Count -eq 9)
+    $wfDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'antigravity/global_workflows/*' })
+    Assert-Pass 'antigravity workflow dests under global_workflows' ($wfDests.Count -eq 3)
+    $agentDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'config/agents/*' })
+    Assert-Pass 'antigravity reviewer defs under config/agents' ($agentDests.Count -eq 3)
+}
+
+$agyAdapterPath = Join-Path $hostSyncRoot 'adapters\Antigravity.Adapter.ps1'
+Assert-Pass 'antigravity adapter exists (not stub)' (Test-Path -LiteralPath $agyAdapterPath)
+if (Test-Path -LiteralPath $agyAdapterPath) {
+    $agyAdapterText = Get-Content -LiteralPath $agyAdapterPath -Raw
+    Assert-Pass 'antigravity adapter exports Invoke-StackHarnessSync' ($agyAdapterText -match 'function Invoke-StackHarnessSync')
+    Assert-Pass 'antigravity adapter is not a stub' ($agyAdapterText -notmatch 'Phase 2 stub')
+    Assert-Pass 'antigravity adapter reuses shared Copy-ManifestEntry' ($agyAdapterText -match 'Copy-ManifestEntry')
+}
+
+# Fail-closed baseline gate: antigravity property/dir required before ANY Apply (isolated temp fixtures only)
+$agiFixtureDir = Join-Path ([IO.Path]::GetTempPath()) ("hostsync-gate-" + [Guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $agiFixtureDir -Force | Out-Null
+try {
+    $agiFixtureNoProp = Join-Path $agiFixtureDir 'no-prop.json'
+    '{"cursor":"C:\\does\\not\\exist","opencode":"C:\\does\\not\\exist","companionSha":"x","created":"y"}' | Set-Content -LiteralPath $agiFixtureNoProp
+    $agiThrewNoProp = $false
+    try { Assert-BaselineBackupsPresent -PathsFile $agiFixtureNoProp -AllowCompanionShaMismatch | Out-Null } catch { $agiThrewNoProp = ($_.Exception.Message -match 'antigravity') }
+    Assert-Pass 'baseline gate fails closed without antigravity property' $agiThrewNoProp
+
+    $agiFixtureEmpty = Join-Path $agiFixtureDir 'empty-prop.json'
+    '{"cursor":"C:\\does\\not\\exist","opencode":"C:\\does\\not\\exist","antigravity":"","companionSha":"x","created":"y"}' | Set-Content -LiteralPath $agiFixtureEmpty
+    $agiThrewEmpty = $false
+    try { Assert-BaselineBackupsPresent -PathsFile $agiFixtureEmpty -AllowCompanionShaMismatch | Out-Null } catch { $agiThrewEmpty = ($_.Exception.Message -match 'antigravity') }
+    Assert-Pass 'baseline gate fails closed on empty antigravity path' $agiThrewEmpty
+
+    $repoBaselineJson = Get-Content -LiteralPath (Get-BaselinePathsFile -HostSyncRoot $hostSyncRoot) -Raw | ConvertFrom-Json
+    Assert-Pass 'baseline-backups.paths.json parses with antigravity property' ($null -ne $repoBaselineJson.antigravity)
+}
+finally {
+    Remove-Item -LiteralPath $agiFixtureDir -Recurse -Force -ErrorAction SilentlyContinue
+}
+
+# --- Antigravity behavioral blocks (overlay leaves present) ---
+$agyLive = Join-Path $env:USERPROFILE '.gemini'
+$beforeAgy = Get-LiveOpenCodeSnapshot -LiveRoot $agyLive
+
+& pwsh -NoProfile -File $syncScript -Target Antigravity
+Assert-Pass 'dry-run Antigravity exit 0' ($LASTEXITCODE -eq 0)
+
+$afterAgy = Get-LiveOpenCodeSnapshot -LiveRoot $agyLive
+Assert-Pass 'dry-run Antigravity made no live writes' (Test-LiveOpenCodeUnchanged -Before $beforeAgy -After $afterAgy)
+
+# Inventory-drift guard: overlay ids equal the canonical nine AND each exists in companion skills/
+$expectedNine = @('composer', 'diagnosing-bugs', 'discovery', 'documentation-architecture', 'implementation-plan', 'implementation-review', 'plan-review', 'pre-commit-ci-gate', 'roadmap')
+$agyOverlaySkillsRoot = Join-Path $companionRoot 'overlays\antigravity\skills'
+$actualAgyIds = @(Get-ChildItem -LiteralPath $agyOverlaySkillsRoot -Directory | ForEach-Object { $_.Name })
+$agyIdDelta = @(Compare-Object -ReferenceObject ($expectedNine | Sort-Object) -DifferenceObject ($actualAgyIds | Sort-Object))
+Assert-Pass 'antigravity overlay skill ids equal canonical nine' ($agyIdDelta.Count -eq 0)
+foreach ($agiId in $expectedNine) {
+    Assert-Pass "opencode overlay parity skill exists: $agiId" (Test-Path -LiteralPath (Join-Path $companionRoot "overlays\opencode\skills\$agiId\SKILL.md"))
+    if (Test-Path -LiteralPath (Join-Path $companionRoot "skills\$agiId")) {
+        Assert-Pass "companion base exists for mirrored id: $agiId" (Test-Path -LiteralPath (Join-Path $companionRoot "skills\$agiId\SKILL.md"))
+    }
+}
+
+# Author-time harness hygiene: zero ../../ hops; every stub carries description:; thin files under 12k
+$agyHarnessFiles = @(Get-ChildItem -LiteralPath (Join-Path $companionRoot 'overlays\antigravity') -Recurse -File -Include '*.md' |
+    Where-Object { $_.Name -ne '_index.md' })
+$agyHopViolations = @($agyHarnessFiles | Where-Object { (Get-Content -LiteralPath $_.FullName -Raw) -match '\.\./\.\./(docs|skills|agents)/' })
+Assert-Pass 'zero ../../ docs|skills|agents hops in antigravity harness' ($agyHopViolations.Count -eq 0)
+$agyMissingDescription = @($agyHarnessFiles | Where-Object {
+    $agiRaw = Get-Content -LiteralPath $_.FullName -Raw
+    ($_.Name -eq 'SKILL.md') -and ($agiRaw -notmatch '(?m)^description:')
+})
+Assert-Pass 'all SKILL.md stubs carry description frontmatter' ($agyMissingDescription.Count -eq 0)
+$agyOver12k = @($agyHarnessFiles | Where-Object { (Get-Content -LiteralPath $_.FullName -Raw).Length -ge 12000 })
+Assert-Pass 'antigravity gate/skills/workflows under 12k chars' ($agyOver12k.Count -eq 0)
+
+# Hardcoded machine paths forbidden in harness leaves — token merge cannot catch them, so CI must
+$agyHardcodedPaths = @($agyHarnessFiles | Where-Object { (Get-Content -LiteralPath $_.FullName -Raw) -match 'C:[/\\]Users[/\\]admin' })
+Assert-Pass 'no hardcoded machine paths in antigravity harness' ($agyHardcodedPaths.Count -eq 0)
+
 exit $(if ($fail) { 1 } else { 0 })

@@ -16,7 +16,7 @@ function Get-StackManifest {
 }
 
 function Get-RegisteredStackIds {
-    return @('Cursor', 'OpenCode')
+    return @('Cursor', 'OpenCode', 'Antigravity')
 }
 
 function Get-StackAdapterScript {

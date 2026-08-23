@@ -1,14 +1,14 @@
 # Host adaptation fidelity
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-24
 
 ## Context
 
-This document is **Target** design for **complete host adaptation** — the binding bar that Cursor and OpenCode (and future stacks) must meet before an overlay or live adapter is considered **Done**. It is not implied polish: operator workflow **loops** (plan review, implementation review with Fast → dual → Full, skill ids, clean-context isolation, Incomplete-until / dual-APPROVED bars) must behave the same on every host.
+This document is **Target** design for **complete host adaptation** — the binding bar that every registered stack (currently Cursor, OpenCode, Antigravity) must meet before an overlay or live adapter is considered **Done**. It is not implied polish: operator workflow **loops** (plan review, implementation review with Fast → dual → Full, skill ids, clean-context isolation, Incomplete-until / dual-APPROVED bars) must behave the same on every host.
 
 **Scope:** Wiring bar, anti-patterns, checklist→verification matrix (C1–C6), doc boundaries, and phase-number disambiguation for the [OpenCode overlays SoT program](../roadmaps/opencode-overlays-sot.md) (program phases **0–3**) and [Companion pointer-first](../roadmaps/pointer-first.md) (`pointer-first-0` … `pointer-first-4`). **Out of scope here:** re-pasting Observed behavior tables ([cursor-behavior-to-reproduce](./cursor-behavior-to-reproduce.md)); always-on vs skill budget ([instruction-layering](./instruction-layering.md)); SoT vs overlay taxonomy ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)).
 
-**Applies to:** OpenCode overlay + live adapter (Phases 2–3 of this program) **and** future **Cursor overlay refresh** — any stack that claims to run the cursorEscape loop must meet this bar, not only folder shape.
+**Applies to:** OpenCode overlay + live adapter (Phases 2–3 of this program), future **Cursor overlay refresh**, and the **Antigravity overlay** ([antigravity-host-adapter](../SOPs/antigravity-host-adapter.md)) — any stack that claims to run the cursorEscape loop must meet this bar, not only folder shape.
 
 ---
 
@@ -16,7 +16,7 @@ This document is **Target** design for **complete host adaptation** — the bind
 
 ### Success criterion (Required)
 
-**Done** means the operator can run the **same loops** on Cursor and OpenCode:
+**Done** means the operator can run the **same loops** on every registered stack (Cursor, OpenCode, Antigravity):
 
 | Loop element | Required parity |
 | ------------ | --------------- |

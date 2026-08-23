@@ -299,13 +299,13 @@ function Assert-BaselineBackupsPresent {
     }
 
     $json = Get-Content -LiteralPath $PathsFile -Raw | ConvertFrom-Json
-    foreach ($prop in @('cursor', 'opencode', 'companionSha', 'created')) {
+    foreach ($prop in @('cursor', 'opencode', 'antigravity', 'companionSha', 'created')) {
         if ($null -eq $json.$prop -or [string]::IsNullOrWhiteSpace([string]$json.$prop)) {
             throw "Phase 0 baseline gate: paths file missing required property '$prop'"
         }
     }
 
-    foreach ($stackPath in @($json.cursor, $json.opencode)) {
+    foreach ($stackPath in @($json.cursor, $json.opencode, $json.antigravity)) {
         if (-not (Test-Path -LiteralPath $stackPath -PathType Container)) {
             throw "Phase 0 baseline gate: backup directory missing: $stackPath"
         }
@@ -338,18 +338,6 @@ function Assert-NoPerApplyBackupArtifacts {
         if ($hits) {
             throw "Per-Apply backup artifact detected (forbidden): $($hits.FullName -join ', ')"
         }
-    }
-}
-
-function Get-LiveHarnessRoot {
-    param(
-        [Parameter(Mandatory)]
-        [string] $StackId
-    )
-    switch ($StackId) {
-        'Cursor' { return (Join-Path $env:USERPROFILE '.cursor') }
-        'OpenCode' { return (Join-Path $env:USERPROFILE '.config\opencode') }
-        default { throw "Unknown stack id: $StackId" }
     }
 }
 

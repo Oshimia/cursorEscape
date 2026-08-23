@@ -4,7 +4,7 @@
   Distribute companion overlay harness to live host stacks (dry-run default).
 .DESCRIPTION
   Modular sync under scripts/host-sync/: shared core + per-stack manifest + adapter.
-  Registry stacks: Cursor, OpenCode (see Register-StackAdapters.ps1 / manifests/).
+  Registry stacks: Cursor, OpenCode, Antigravity (see Register-StackAdapters.ps1 / manifests/).
   Dry-run by default; use -Apply for live writes (requires Phase 0 baseline gate).
   Sync does NOT create backups on Apply — companion repo is ongoing SoT.
   Phase 0 baselines (restore-only): see scripts/host-sync/baseline-backups.paths.json.
@@ -21,6 +21,7 @@
   Hard excludes (manifest-owned):
   - Cursor: skills-cursor/, settings.json; never delete/refresh docs/workflow/; hybrid rules only
   - OpenCode: no procedure mirror re-copy; review-subagent-models not host copy-out; preserve model/provider
+  - Antigravity: full-replace GEMINI.md via single entry; never touch caveman.md or credential/app-state files
 .EXAMPLE
   pwsh ./scripts/Sync-HostHarness.ps1 -Target Cursor
 .EXAMPLE

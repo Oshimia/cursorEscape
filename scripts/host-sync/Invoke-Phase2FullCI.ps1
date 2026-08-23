@@ -35,40 +35,53 @@ Assert-Pass 'pre-Apply dry-run OpenCode exit 0' ($LASTEXITCODE -eq 0)
 Assert-Pass 'dry-run plans json-merge' ($dryRunOutput -match 'json-merge\(opencode\.specimen\.json\)')
 Assert-Pass 'dry-run plans AGENTS dual-write' ($dryRunOutput -match 'dual-write\(instructions/cursor-escape-loop\.md\)')
 
-$applyOutput = & pwsh -NoProfile -File $syncScript -Target OpenCode -Apply 2>&1 | Out-String
-Assert-Pass 'Apply OpenCode exit 0' ($LASTEXITCODE -eq 0)
-Assert-Pass 'Apply reports AGENTS hash verify' ($applyOutput -match 'AGENTS hash identical|post-apply AGENTS')
-Assert-Pass 'Apply reports model preserved' ($applyOutput -match 'model preserved')
-Assert-Pass 'Apply reports provider preserved' ($applyOutput -match 'provider preserved')
-Assert-Pass 'Apply reports no backup artifacts' ($applyOutput -match 'no host-sync-apply backup dirs detected')
+# Apply leg is state-independent across the Antigravity baseline rollout:
+# while the antigravity baseline is pending, ANY Apply fails closed by design (see Core gate);
+# once filled, the historical live-Apply verification runs unchanged.
+$repoPathsJson = Get-Content -LiteralPath (Join-Path $hostSyncRoot 'baseline-backups.paths.json') -Raw | ConvertFrom-Json
+$agyPending = [string]::IsNullOrWhiteSpace([string]$repoPathsJson.antigravity)
+$applyLabel = if ($agyPending) { 'live' } else { 'post-Apply' }
+
+if ($agyPending) {
+    $applyOutput = & pwsh -NoProfile -File $syncScript -Target OpenCode -Apply 2>&1 | Out-String
+    Assert-Pass 'Apply OpenCode fails closed while antigravity baseline pending' ($LASTEXITCODE -ne 0 -and $applyOutput -match 'antigravity')
+}
+else {
+    $applyOutput = & pwsh -NoProfile -File $syncScript -Target OpenCode -Apply 2>&1 | Out-String
+    Assert-Pass 'Apply OpenCode exit 0' ($LASTEXITCODE -eq 0)
+    Assert-Pass 'Apply reports AGENTS hash verify' ($applyOutput -match 'AGENTS hash identical|post-apply AGENTS')
+    Assert-Pass 'Apply reports model preserved' ($applyOutput -match 'model preserved')
+    Assert-Pass 'Apply reports provider preserved' ($applyOutput -match 'provider preserved')
+    Assert-Pass 'Apply reports no backup artifacts' ($applyOutput -match 'no host-sync-apply backup dirs detected')
+}
 
 $instructionsPath = Join-Path $liveOpenCode 'instructions\cursor-escape-loop.md'
 $agentsPath = Join-Path $liveOpenCode 'AGENTS.md'
 if ((Test-Path -LiteralPath $instructionsPath) -and (Test-Path -LiteralPath $agentsPath)) {
     $iHash = Get-FileSha256Hex -Path $instructionsPath
     $aHash = Get-FileSha256Hex -Path $agentsPath
-    Assert-Pass 'post-Apply AGENTS hash identical to instructions' ($iHash -eq $aHash)
+    Assert-Pass "$applyLabel AGENTS hash identical to instructions" ($iHash -eq $aHash)
 }
 else {
-    Assert-Pass 'post-Apply AGENTS and instructions exist' $false
+    Assert-Pass "$applyLabel AGENTS and instructions exist" $false
 }
 
 if (Test-Path -LiteralPath $liveJsonPath) {
     $afterLive = Get-Content -LiteralPath $liveJsonPath -Raw | ConvertFrom-Json
-    Assert-Pass 'post-Apply instructions path absolute' ($afterLive.instructions[0] -match '^[A-Za-z]:/')
+    Assert-Pass "$applyLabel instructions path absolute" ($afterLive.instructions[0] -match '^[A-Za-z]:/')
     if ($null -ne $beforeLive -and $beforeLive.model) {
-        Assert-Pass 'post-Apply model unchanged' ($afterLive.model -eq $beforeLive.model)
+        Assert-Pass "$applyLabel model unchanged" ($afterLive.model -eq $beforeLive.model)
     }
     if ($null -ne $beforeLive -and $beforeLive.provider) {
         $providerOk = ($null -ne $afterLive.provider) -and
             ($afterLive.provider.ollama.options.baseURL -eq $beforeLive.provider.ollama.options.baseURL) -and
             ($afterLive.provider.ollama.name -eq $beforeLive.provider.ollama.name)
-        Assert-Pass 'post-Apply provider unchanged' $providerOk
+        Assert-Pass "$applyLabel provider unchanged" $providerOk
     }
     $agentKeys = @('plan', 'build', 'implementer')
     foreach ($k in $agentKeys) {
         $hasKey = $null -ne $afterLive.agent.$k
-        Assert-Pass "post-Apply agent.$k present" $hasKey
+        Assert-Pass "$applyLabel agent.$k present" $hasKey
     }
 }
 
@@ -77,7 +90,7 @@ $skillDirs = Get-ChildItem -LiteralPath (Join-Path $liveOpenCode 'skills') -Dire
 Assert-Pass 'C6 harness: 9 skills on disk' ($skillDirs.Count -eq 9)
 
 $agentFiles = Get-ChildItem -LiteralPath (Join-Path $liveOpenCode 'agents') -Filter '*.md' -File -ErrorAction SilentlyContinue
-Assert-Pass 'C6 harness: 7 agents on disk' ($agentFiles.Count -eq 7)
+Assert-Pass 'C6 harness: 8 agents on disk' ($agentFiles.Count -eq 8)
 
 $procMirror = Join-Path $liveOpenCode 'docs\workflow'
 Assert-Pass 'C6: no procedure mirror re-synced' (-not (Test-Path -LiteralPath $procMirror))

@@ -1,6 +1,6 @@
 # Editing companion workflow (agent edit map)
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-08-24
 
 ## Context
 
@@ -14,13 +14,14 @@ Design essays stay in FA ([skill-source-and-host-overlays](../featureArchitectur
 
 ### Architecture (one paragraph)
 
-cursorEscape is the **sole SoT** for skills, rules, agents, workflows, and report schemas. Host folders (`~/.cursor`, `~/.config/opencode`) hold **thin harness only** (advertisement, permissions, spawn, absolute `{{COMPANION_ROOT}}` / `{{OPENCODE_HOME}}` wiring, thin always-on gates). Deep procedure loads via **companion Reads** to `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — **not** a host `docs/workflow/` mirror as SoT ([pointer-first](../roadmaps/pointer-first.md)). Overlays under `overlays/cursor/` and `overlays/opencode/` are thin wrappers / harness — they **echo** gate shape and point at companion; they must not become a second authored procedure tree.
+cursorEscape is the **sole SoT** for skills, rules, agents, workflows, and report schemas. Host folders (`~/.cursor`, `~/.config/opencode`, `~/.gemini`) hold **thin harness only** (advertisement, permissions, spawn, absolute `{{COMPANION_ROOT}}` / `{{OPENCODE_HOME}}` wiring, thin always-on gates). Deep procedure loads via **companion Reads** to `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — **not** a host `docs/workflow/` mirror as SoT ([pointer-first](../roadmaps/pointer-first.md)). Overlays under `overlays/cursor/`, `overlays/opencode/`, and `overlays/antigravity/` are thin wrappers / harness — they **echo** gate shape and point at companion; they must not become a second authored procedure tree.
 
 ```text
 Change portable loop/gate
   → edit companion SoT (workflow/ skills/ agents/ rules/)
   → same changeset: Cursor thin overlay echo
   → same changeset: OpenCode thin harness echo (AGENTS ≡ instructions)
+  → same changeset: Antigravity harness echo (GEMINI.md gate + stubs/workflows/subagent defs)
   → FA claim docs if Required/Desired wording moved
   → live sync only when operator authorizes (overlay ≠ live)
 ```
@@ -29,11 +30,11 @@ Change portable loop/gate
 
 | Change | Primary SoT | Same changeset (must also touch) |
 | ------ | ----------- | -------------------------------- |
-| Dual-review / pressure-release loop | [`workflow/iterative-code-review.md`](../../workflow/iterative-code-review.md) + [`skills/implementation-review/SKILL.md`](../../skills/implementation-review/SKILL.md) | [`rules/iterative-code-review.md`](../../rules/iterative-code-review.md); Cursor [`overlays/cursor/skills/implementation-review/`](../../overlays/cursor/skills/implementation-review/) (SKILL + user-rules-snippet) + spawn notes in [`reviewer-a`](../../overlays/cursor/agents/reviewer-a.md) if Inputs change; OpenCode [`overlays/opencode/skills/implementation-review/SKILL.md`](../../overlays/opencode/skills/implementation-review/SKILL.md) + **C1** [`AGENTS.md`](../../overlays/opencode/AGENTS.md) ≡ [`instructions/cursor-escape-loop.md`](../../overlays/opencode/instructions/cursor-escape-loop.md); OpenCode [`implementer`](../../overlays/opencode/agents/implementer.md) / [`production_readiness_reviewer`](../../overlays/opencode/agents/production_readiness_reviewer.md) / [`bug_reviewer`](../../overlays/opencode/agents/bug_reviewer.md) as needed; portable [`agents/production_readiness_reviewer.md`](../../agents/production_readiness_reviewer.md) if Inputs change; FA [`intended-workflow`](../featureArchitecture/intended-workflow.md) / [`desired-behavior-vs-cursor-specific`](../featureArchitecture/desired-behavior-vs-cursor-specific.md) if Required claims move |
-| Composer conductor | [`skills/composer/SKILL.md`](../../skills/composer/SKILL.md) | Cursor + OpenCode composer stubs/snippets; [`workflow/phased-multi-agent.md`](../../workflow/phased-multi-agent.md) |
-| Always-on gate text | [`rules/*.md`](../../rules/_index.md) | OpenCode `AGENTS.md` ≡ `instructions/cursor-escape-loop.md` (byte-identical gate body); Cursor thin `.mdc` pointer + matching user-rules-snippet |
+| Dual-review / pressure-release loop | [`workflow/iterative-code-review.md`](../../workflow/iterative-code-review.md) + [`skills/implementation-review/SKILL.md`](../../skills/implementation-review/SKILL.md) | [`rules/iterative-code-review.md`](../../rules/iterative-code-review.md); Cursor [`overlays/cursor/skills/implementation-review/`](../../overlays/cursor/skills/implementation-review/) (SKILL + user-rules-snippet) + spawn notes in [`reviewer-a`](../../overlays/cursor/agents/reviewer-a.md) if Inputs change; OpenCode [`overlays/opencode/skills/implementation-review/SKILL.md`](../../overlays/opencode/skills/implementation-review/SKILL.md) + **C1** [`AGENTS.md`](../../overlays/opencode/AGENTS.md) ≡ [`instructions/cursor-escape-loop.md`](../../overlays/opencode/instructions/cursor-escape-loop.md); OpenCode [`implementer`](../../overlays/opencode/agents/implementer.md) / [`production_readiness_reviewer`](../../overlays/opencode/agents/production_readiness_reviewer.md) / [`bug_reviewer`](../../overlays/opencode/agents/bug_reviewer.md) as needed; Antigravity [`overlays/antigravity/skills/implementation-review/SKILL.md`](../../overlays/antigravity/skills/implementation-review/SKILL.md), `/escape-*` workflows, and reviewer subagent defs ([agents](../../overlays/antigravity/agents/)) as needed; portable [`agents/production_readiness_reviewer.md`](../../agents/production_readiness_reviewer.md) if Inputs change; FA [`intended-workflow`](../featureArchitecture/intended-workflow.md) / [`desired-behavior-vs-cursor-specific`](../featureArchitecture/desired-behavior-vs-cursor-specific.md) if Required claims move |
+| Composer conductor | [`skills/composer/SKILL.md`](../../skills/composer/SKILL.md) | Cursor + OpenCode composer stubs/snippets; Antigravity `composer` stub + `/escape-*` workflow wording; [`workflow/phased-multi-agent.md`](../../workflow/phased-multi-agent.md) |
+| Always-on gate text | [`rules/*.md`](../../rules/_index.md) | OpenCode `AGENTS.md` ≡ `instructions/cursor-escape-loop.md` (byte-identical gate body); Cursor thin `.mdc` pointer + matching user-rules-snippet; **Antigravity [`GEMINI.md`](../../overlays/antigravity/GEMINI.md)** (full-replace global rules surface — must echo the same gate shape) |
 | Report / deep schema | [`workflow/<leaf>.md`](../../workflow/_index.md) (e.g. `plan-reviewer-report.md`) | Thin agent/skill **Read when** only — do **not** paste full schema into `agents/` or overlay stubs |
-| Plan-review loop | [`workflow/iterative-plan-review.md`](../../workflow/iterative-plan-review.md) + [`skills/plan-review`](../../skills/plan-review/SKILL.md) / [`implementation-plan`](../../skills/implementation-plan/SKILL.md) | Matching Cursor/OpenCode stubs; always-on plan section in OpenCode C1 dual-write if gate text changes |
+| Plan-review loop | [`workflow/iterative-plan-review.md`](../../workflow/iterative-plan-review.md) + [`skills/plan-review`](../../skills/plan-review/SKILL.md) / [`implementation-plan`](../../skills/implementation-plan/SKILL.md) | Matching Cursor/OpenCode stubs **and** [Antigravity stubs](../../overlays/antigravity/skills/) (`implementation-plan`, `plan-review`) — gate-text changes also echo the Antigravity `GEMINI.md` always-on; always-on plan section in OpenCode C1 dual-write if gate text changes |
 
 ### Anti-patterns
 
@@ -41,10 +42,11 @@ Change portable loop/gate
 | ------ | --- |
 | Edit only `skills/` or `workflow/` and skip overlays | Hosts load thin harness first; stale Steps / always-on fight companion SoT |
 | Treat Path rules as “never edit overlay bodies” | Thin **echo** of a changed gate (Steps, always-on summary) **must** update; pasting full procedure into overlays remains forbidden |
+| Hardcode machine paths in overlay harness leaves | Token merge cannot catch them; use `{{COMPANION_ROOT}}` (Fast CI guards the Antigravity tree) |
 | Treat `research/imported/**` as Target SoT | Archaeology / Observed only |
 | Reintroduce host `docs/workflow/` as procedure SoT | Superseded by pointer-first |
 | Leave OpenCode always-on saying “until dual APPROVED” after SoT moved to ≤4 pressure-release blocks | C1 drift; agents follow injected text |
-| Claim live `~/.cursor` / `~/.config/opencode` updated because overlay changed | Overlay edit ≠ live sync |
+| Claim live `~/.cursor` / `~/.config/opencode` / `~/.gemini` updated because overlay changed | Overlay edit ≠ live sync |
 
 ### Live installs (operator-gated)
 
@@ -52,6 +54,7 @@ Change portable loop/gate
 | ---- | ------------ | --------- |
 | OpenCode | [`overlays/opencode/`](../../overlays/opencode/_index.md) | `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target OpenCode` — see [opencode-host-adapter](./opencode-host-adapter.md) |
 | Cursor | [`overlays/cursor/`](../../overlays/cursor/_index.md) | `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor` — see [cursor-host-adapter](./cursor-host-adapter.md) |
+| Antigravity | [`overlays/antigravity/`](../../overlays/antigravity/_index.md) | `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Antigravity` — see [antigravity-host-adapter](./antigravity-host-adapter.md); Apply gated on all three stacks' Phase 0 baselines |
 
 Dry-run default (no live writes): omit `-Apply`. Sync **does not create backups**; Phase 0 baselines are restore-only ([`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json)). Modular layout: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
 

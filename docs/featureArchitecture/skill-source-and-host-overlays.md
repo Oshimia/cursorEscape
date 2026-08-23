@@ -1,10 +1,10 @@
 # Skill source and host overlays
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-08-24
 
 ## Context
 
-This document is **Target** design for how cursorEscape **authors one workflow** and applies it across **stacks** (Cursor, OpenCode) without two documentation trees. T3 Code is a control plane (threads, diffs) and **does not** get a third skill tree ([backend abstraction](./backend-and-provider-abstraction.md)).
+This document is **Target** design for how cursorEscape **authors one workflow** and applies it across **stacks** (Cursor, OpenCode, Antigravity) without two documentation trees. T3 Code is a control plane (threads, diffs) and **does not** get a third skill tree ([backend abstraction](./backend-and-provider-abstraction.md)).
 
 Identity: this companion repo is the owner's **skill and workflow manager** ([design decisions](../../review/design-decisions.md)). Analog: Theo `fleet` ([Observed](../../research/theo-fleet-skill-management.md)) — **stacks**, not machines. Multi-machine sync is a **non-goal**.
 
@@ -29,7 +29,7 @@ Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 
 ### Job (Required)
 
-This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`) are **copy-out / install targets**, not a second authored procedure tree. **Live sync:** [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` operator-gated) from [overlays/opencode](../../overlays/opencode/_index.md) and [overlays/cursor](../../overlays/cursor/_index.md) — modular layout in [host-sync README](../../scripts/host-sync/README.md). Sync **does not create backups**; Phase 0 baselines are restore-only. **pointer-first-4** deleted OpenCode procedure mirror (2026-08-20). C6 minimum runtime smoke **pass** (2026-08-20 operator post-mirror) per [host-adapter](../SOPs/opencode-host-adapter.md) and [closeout](../../analysis/pointer-first-4-closeout-2026-08.md). Do not create repo-root `adapters/` directories.
+This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`, `~/.gemini`) are **copy-out / install targets**, not a second authored procedure tree. **Live sync:** [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` operator-gated) from [overlays/opencode](../../overlays/opencode/_index.md), [overlays/cursor](../../overlays/cursor/_index.md), and [overlays/antigravity](../../overlays/antigravity/_index.md) — modular layout in [host-sync README](../../scripts/host-sync/README.md). Sync **does not create backups**; Phase 0 baselines are restore-only. **pointer-first-4** deleted OpenCode procedure mirror (2026-08-20). C6 minimum runtime smoke **pass** (2026-08-20 operator post-mirror) per [host-adapter](../SOPs/opencode-host-adapter.md) and [closeout](../../analysis/pointer-first-4-closeout-2026-08.md). Do not create repo-root `adapters/` directories.
 
 ### Target taxonomy — Approach A (Required)
 
@@ -49,12 +49,12 @@ This repo is the **canonical manager** of portable skills, agent roles, always-o
 | Shared skill contracts | `skills/*/SKILL.md` | **No** host IDs in shared bodies |
 | Shared agent contracts | `agents/*.md` | **No** |
 | Shared always-on gates | `rules/*.md` | **No** |
-| Host overlay | `overlays/cursor/` (thin wrappers); `overlays/opencode/` (OpenCode harness) | **Yes** — harness mechanics, spawn IDs, additive safety |
-| Copy-out install | `~/.cursor`, `~/.config/opencode` | Install target only |
+| Host overlay | `overlays/cursor/` (thin wrappers); `overlays/opencode/` (OpenCode harness); `overlays/antigravity/` (Antigravity harness — GEMINI.md full-replace gate, skills/workflows/subagent defs) | **Yes** — harness mechanics, spawn IDs, additive safety |
+| Copy-out install | `~/.cursor`, `~/.config/opencode`, `~/.gemini` | Install target only |
 
 ### Authored layers vs copy-out (Required)
 
-**Target (Approach A):** Shared loop, shared deep docs, and shared skill/agent contracts are **three authored SoTs** for procedure at repo-root bases (`workflow/`, `skills/`, `agents/`). **Host overlay** is the fourth layer: **thin wrappers** at `overlays/cursor/` and the **OpenCode harness** at `overlays/opencode/` (instructions, skills, agents, specimen config, workflow mirror recipe). **Copy-out** is install, not a fifth SoT.
+**Target (Approach A):** Shared loop, shared deep docs, and shared skill/agent contracts are **three authored SoTs** for procedure at repo-root bases (`workflow/`, `skills/`, `agents/`). **Host overlay** is the fourth layer: **thin wrappers** at `overlays/cursor/`, the **OpenCode harness** at `overlays/opencode/` (instructions, skills, agents, specimen config, workflow mirror recipe), and the **Antigravity harness** at `overlays/antigravity/` (GEMINI.md gate, skills, workflows, subagent defs). **Copy-out** is install, not a fifth SoT.
 
 ```text
 Target (after Phases 3–5):
@@ -63,6 +63,7 @@ Shared deep docs (full steps, specimens, CI ladder)       → workflow/
 Shared skill/agent contracts (triggers, outline, must-not) → skills/, agents/
 Host overlay (Cursor: thin wrappers)                      → overlays/cursor/
 Host overlay (OpenCode: harness + specimen)               → overlays/opencode/  (copy-out authorized and applied Phase 3)
+Host overlay (Antigravity: harness — GEMINI.md full-replace) → overlays/antigravity/
 Copy-out to host config dirs                              → install; not SoT
 
 Interim (Phases 3–4, historical): workflow/, docs/skills/, docs/agents/, overlays/cursor/ (fat extract) — folded into repo-root bases Phase 4–6.
@@ -124,7 +125,7 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 
 **Unknown:** Whether future refresh needs operator-merge for `opencode.json` provider/model keys beyond what the sync script preserves.
 
-**Resolved (host-harness-sync):** Modular sync entry [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) + [`scripts/host-sync/`](../../scripts/host-sync/README.md) (Cursor + OpenCode adapters). OpenCode overlay path = [`overlays/opencode/`](../../overlays/opencode/_index.md); archived [`Rewrite-OpenCodeWorkflowLinks.ps1`](../../overlays/opencode/scripts/Rewrite-OpenCodeWorkflowLinks.ps1) (**not** primary sync). **Target load path:** companion `{{COMPANION_ROOT}}/workflow/` via absolute Reads from thin harness — not mirror-as-SoT.
+**Resolved (host-harness-sync):** Modular sync entry [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) + [`scripts/host-sync/`](../../scripts/host-sync/README.md) (Cursor, OpenCode, and Antigravity adapters). OpenCode overlay path = [`overlays/opencode/`](../../overlays/opencode/_index.md); archived [`Rewrite-OpenCodeWorkflowLinks.ps1`](../../overlays/opencode/scripts/Rewrite-OpenCodeWorkflowLinks.ps1) (**not** primary sync). **Target load path:** companion `{{COMPANION_ROOT}}/workflow/` via absolute Reads from thin harness — not mirror-as-SoT.
 
 ### Other rejected patterns (detail)
 

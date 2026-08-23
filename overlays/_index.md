@@ -1,6 +1,6 @@
 # Host overlays (recorded files)
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-08-24
 
 ## Context
 
@@ -14,6 +14,7 @@ Architecture: [skill source and host overlays](../docs/featureArchitecture/skill
 | ---- | -------- | ------ |
 | [cursor/](./cursor/_index.md) | Skills, rules, agents from live `~/.cursor`; deep procedure at repo-root [`workflow/`](../workflow/_index.md) | **Thin wrappers** — [`Sync-HostHarness.ps1 -Target Cursor`](../scripts/Sync-HostHarness.ps1) |
 | [opencode/](./opencode/_index.md) | OpenCode harness: instructions, thin skill stubs, agent harness, specimen config | **pointer-first-4 complete** — [`Sync-HostHarness.ps1 -Target OpenCode`](../scripts/Sync-HostHarness.ps1); procedure mirror deleted |
+| [antigravity/](./antigravity/_index.md) | Antigravity harness: GEMINI.md gate (full-replace), 9 skill stubs, 3 escape-* workflows, 3 reviewer subagent defs | **Dry-run verified; live sync deferred** — [`Sync-HostHarness.ps1 -Target Antigravity`](../scripts/Sync-HostHarness.ps1); SOP: [antigravity-host-adapter](../docs/SOPs/antigravity-host-adapter.md) |
 
 Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlays/opencode/](./opencode/_index.md). C6 minimum smoke rows **1–4**, **8**, **9–10**, **13**: **pass** (2026-08-20 operator post-mirror); row **14** install-time pass. See [pointer-first-4 closeout](../analysis/pointer-first-4-closeout-2026-08.md).
 
@@ -26,6 +27,7 @@ Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlay
 
 - [OpenCode overlay](./opencode/_index.md)
 - [Cursor overlay](./cursor/_index.md)
+- [Antigravity overlay](./antigravity/_index.md)
 - [Host adaptation fidelity](../docs/featureArchitecture/host-adaptation-fidelity.md)
 - [Skill contracts](../skills/_index.md)
 - [Agent contracts](../agents/_index.md)

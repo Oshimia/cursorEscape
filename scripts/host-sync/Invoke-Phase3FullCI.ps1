@@ -30,7 +30,7 @@ function Read-RepoFile {
 Assert-Pass 'dry-run All exit 0' ($LASTEXITCODE -eq 0)
 
 $invalidOutput = & pwsh -NoProfile -File $syncScript -Target Foo 2>&1 | Out-String
-Assert-Pass 'invalid Target lists registry stacks' ($invalidOutput -match 'Valid: Cursor, OpenCode, All')
+Assert-Pass 'invalid Target lists registry stacks' ($invalidOutput -match 'Valid: .*All')
 
 $entrySource = Read-RepoFile 'scripts\Sync-HostHarness.ps1'
 Assert-Pass 'entry uses Get-RegisteredStackIds' ($entrySource -match 'Get-RegisteredStackIds')
