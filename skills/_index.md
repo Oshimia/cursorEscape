@@ -63,6 +63,12 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 | ----- | --------- | ------------- |
 | wizard | [wizard/SKILL.md](./wizard/SKILL.md) | — (portable, caller-loaded) |
 
+### Learning / teaching skills
+
+| Skill | Procedure | Host overlays |
+| ----- | --------- | ------------- |
+| teach | [teach/SKILL.md](./teach/SKILL.md) | — (portable, caller-loaded) |
+
 ### Optional orchestration (Nice-to-have / Cursor-specific)
 
 | Skill | Procedure | Cursor overlay | OpenCode overlay |
