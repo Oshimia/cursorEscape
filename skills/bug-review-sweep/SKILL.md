@@ -74,6 +74,17 @@ This safe variant has no execution capability: where the tool-capable line would
 
 Evidence bar: name the promised property, show the mechanism (assertion, mock, shared state) that defeats it, cite file:line. Boundary: this procedure never reports runner-configuration nits (G2 still suppresses those); it reports defects in what the changed tests actually verify.
 
+## Persistence-parity review (state-lifecycle procedure)
+
+When the changed code mutates persisted state - settings stores, config files, databases, cookies/localStorage, saved documents - enumerate every mutated field and audit both directions of its lifecycle:
+
+1. Write-path tracing: trace every written field to every read path that consumes it, including reads under modified conditions (a different mode, view, or selected entity than the one active at write time).
+2. Clear/revert parity: every mutation that sets state must have a reachable counterpart that clears, resets, or overwrites it when the user reverses the action (uncheck, clear, cancel, delete, switch entity); a set with no reachable clear persists stale values indefinitely.
+3. Default-drift check: a stored value that can diverge from current defaults (renamed key, moved location, changed schema) needs a migration or tolerant read; otherwise old persisted values silently override new defaults.
+4. Trigger scoping: a write fired by merely opening a dialog or view - not by an explicit save/confirm action - persists state without user intent; trace each write to its triggering event and flag any write not downstream of an explicit confirm.
+
+Report violations under logic_correctness. Evidence bar: name the field, cite the writer file:line and the missing/divergent clear-or-read path file:line. Boundary: never report mere absence of persistence features nobody claims (G2 capability-absence still applies); report divergence between what the changed code persists and what its own reversal/consumption paths require.
+
 ## Gates (apply to EVERY candidate before reporting)
 
 - **G1 Scope discipline.** Report ONLY defects BOTH (a) clearly wrong on the reviewed workspace AND (b) inside the envelope's stated change scope. Real-but-out-of-scope issues are not findings — note nothing. Empty answer if none qualify.
@@ -133,3 +144,4 @@ Doubt rule placement: doubt about whether an in-scope production defect exists �
 
 Adaptation inputs: openBuggy DSV4F M1–M5 census (bb-01..bb-05 pilot), BugBot finding-personality observation, mattpocock/skills code-review audit (pinned https://github.com/mattpocock/skills/blob/0ab1b63/skills/engineering/code-review/SKILL.md). v3-candidate additions: dead-control check, self-labeling marker check, data-integrity chains, schema-assumption rule, anti-bundling output rule. v3.3-candidate addition: mandatory coverage-verdict elements binding the completeness pass into the output contract. v3.5-candidate addition: scheduling-frontier evidence procedure for class 3 (enumerate frontiers, cross-frontier work, and post-resumption validity). v3.6-candidate addition: interaction-matrix element for interactive surfaces (user-action sequences written and verified before CLEAN).
 v3.8.1-candidate addition: static port of the v4.1 tests-as-claims annex - claim/assertion parity, mock audit, shared-state scan; empirical suite probe replaced by explicit hypothesis-grade marking since the safe ruleset denies execution. Motivated by the band-5 bb-53 FN pair under v4 and the open question whether static obligations alone recover it on the safe line.
+v3.8.2-candidate addition: persistence-parity annex ported from v4.2 under governance rule 7 (pure read-only procedure; no execution-dependent component) AFTER tool-line probe PASS per the 2026-08-26 sequencing amendment.
