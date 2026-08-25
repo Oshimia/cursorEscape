@@ -1,13 +1,3 @@
----
-name: bug-review-sweep
-description: >-
-  Structured sweep protocol for bug hunts: ordered passes over eight
-  bug-pattern classes with per-class checks and evidence bars, plus scope,
-  nit-suppression, pre-existing, and clean-case gates applied before any
-  finding is reported. Load before hunting.
-disable-model-invocation: true
----
-
 # Bug review sweep
 
 
@@ -33,17 +23,18 @@ Run the passes in this exact order (order = observed yield/severity; do not reor
 | # | Class | Checks | Evidence bar (all required) |
 |---|-------|--------|------------------------------|
 | 1 | security_authz | Authz gate removed/weakened by the change; sensitive action reachable without entitlement/role; ownership/tenant check dropped; gate tests the wrong principal (e.g. authenticates a resource's owner while the acting user is unchecked) | Name the reachable action, then the protected effect code path with its missing/weakened gate; cite the changed line that caused it (file:line) |
-| 2 | logic_correctness | Inverted conditions; wrong defaults/reset values; stale state not cleared; ordering errors; wrong variable/data mapping; off-by-one introduced by the diff; dead interactive control: rendered input/toggle/button with no state, prop, or handler binding anywhere in the reviewed tree — if the tree is a reduced stub, state the assumed wiring context instead of reporting unless the control is inert even under that assumption; data-integrity chains in migrations and merge/account flows: trace parent-child row dependencies (e.g. users vs role/permission tables), confirm every touched table serves the stated purpose, and check constraint implications (FK/UNIQUE/NOT NULL) | Concrete input/state sequence producing wrong observable behavior on the reviewed workspace |
+| 2 | logic_correctness | Inverted conditions; wrong defaults/reset values; stale state not cleared; ordering errors; wrong variable/data mapping; off-by-one introduced by the diff; data-integrity chains in migrations and merge/account flows: trace parent-child row dependencies (e.g. users vs role/permission tables), confirm every touched table serves the stated purpose, and check constraint implications (FK/UNIQUE/NOT NULL) | Concrete input/state sequence producing wrong observable behavior on the reviewed workspace |
 | 3 | concurrency_races | Async fetch/callback clobbering optimistic state set earlier in the same flow; stale closure over pre-change data; missing invalidation/cancel on unmount/logout/close; PLUS apply the scheduling-frontier procedure below to every async flow the changed code introduces or modifies | Interleaving of two operations demonstrable in changed code (cite both sides), including which scheduling frontier each side crosses |
-| 4 | resource_lifecycle | Subscription/timer/file/connection opened without release path after the change; cleanup dropped or reordered | Lifecycle event plus the missed release path |
-| 5 | api_contract | Call to undeclared/undefined function or prop; signature/schema mismatch; wrong status code/shape/middleware order vs reviewed-tree definitions | Violation provable from source present in the reviewed workspace |
+| 4 | claims_retirements | Every claim-bearing artifact the change touches must have BOTH an observer and a reachable retirement: resources (subscription/timer/file/connection acquired -> release path exists); persisted fields (set -> reachable clear/reset/overwrite; defaults not silently overridden by stale values; writes fire only downstream of explicit confirm); test claims (assertion actually observes the promised property; mocks do not substitute away the property surface; shared state does not order-determine outcomes) | Lifecycle event plus the missed release/clear path; for test claims see the claims-and-retirements procedure below |
+| 5 | reference_integrity | Call to undeclared/undefined function or prop; signature/schema mismatch; wrong status code/shape/middleware order vs reviewed-tree definitions; dead interactive control: rendered input/toggle/button with no state, prop, or handler binding anywhere in the reviewed tree — if the tree is a reduced stub, state the assumed wiring context instead of reporting unless the control is inert even under that assumption; every referenced symbol/path must resolve on the workspace or its absence be explicitly assumed and stated (schema-assumption fallback below) | Violation provable from source present in the reviewed workspace |
 | 6 | error_handling_resilience | Error path INTRODUCED by the change that swallows/rejects incorrectly and corrupts state machine or crashes | The introduced path plus the resulting wrong state. Explicitly NOT this class: generic robustness wishing on unchanged code (see G2) |
 | 7 | performance_efficiency | Unbounded accumulation/pileup; O(n^2) growth; hot-path recomputation introduced by the diff | Growth tied to an introduced loop/allocation with reasoning about realistic input sizes |
 | 8 | documentation_drift | Changed docs/UI strings/help text contradicting the behavior the diff introduces, or omitting a qualifier the new behavior requires | Quote the changed string AND cite the contradicted behavior, both evidenced on the workspace |
 
-Every pass ends the same way: candidates must survive Gates G1–G3 before entering the report list.
+Every pass ends the same way: candidates must survive Gates G1–G2 before entering the report list.
 
-### Scheduling frontiers (class 3 evidence procedure)
+
+### Class 3 procedure — scheduling frontiers
 
 Every `await`/`.then` continuation, `queueMicrotask` callback, timer, and deferred effect/render flush is a frontier where other queued work may execute before resumption. For each asynchronous flow the changed code introduces or modifies:
 
@@ -52,6 +43,9 @@ Every `await`/`.then` continuation, `queueMicrotask` callback, timer, and deferr
 3. At every resumption point, re-validate pre-suspension assumptions: version/generation guards still current, target resource/surface still the intended one, state not cleared, superseded, or invalidated while suspended.
 
 A write that resumes across a frontier onto state whose validity has since been invalidated is a concurrency_races finding even when every individual statement looks correct. A guard evaluated when a request STARTS protects nothing against writers resuming after a LATER invalidation - guard position relative to frontiers is part of the mechanism.
+
+This protocol runs under a read-only ruleset with no execution capability: where the tool-capable line would verify an interleaving hypothesis by execution before reporting, reason statically instead and mark the mechanism explicitly as hypothesis-grade in the description when the ordering conclusion cannot be fully confirmed without execution.
+
 ### Interaction matrix (mandatory when the diff touches interactive surfaces)
 
 When the changed code renders or handles interactive surfaces - dialogs, forms, buttons, tabs, settings panels - enumerate the distinct user-action sequences that surface supports and emit one `<interaction>` element per sequence inside `<answer>`:
@@ -62,21 +56,14 @@ When the changed code renders or handles interactive surfaces - dialogs, forms, 
 ```
 
 Rules: cover at minimum open, cancel/close, each editable field cleared, each field edited-then-saved, and each context switch (tab/level/mode) the surface supports; `ok` verdicts must cite a locus; `broken` without a corresponding `<bug>` entry is a contract violation. Omit the block entirely only when the diff contains no interactive-surface handling at all. Keep verdict bodies to these minimal forms - no prose.
-## Tests-as-claims review (test-quality procedure, static)
+## Claims-and-retirements procedure (class 4)
 
-When the change surface includes test files, treat every changed test as a claim about the code under test and audit its evidentiary value by reading alone. A test that cannot fail under any implementation violating its promised property is itself a defect in the change (tests are part of the reviewed product); report it under logic_correctness:
+One criterion governs class 4: every artifact the change endows with a claim must have both an observer that can detect the claim failing and a reachable path that retires it when superseded. Apply it to the three artifact kinds below.
 
-1. Claim/assertion parity: for each changed test, state what its name/docstring promises and list what its assertions actually observe. If no assertion can distinguish a correct implementation from one violating the promised property, the promise is unverified.
-2. Mock audit: whenever a mock/stub/patch substitutes part of the unit-under-test own internals (private accounting, storage, collaborators), determine what observable evidence remains after the substitution. If the substituted-away surface is exactly where the promised property lives, the test verifies nothing.
-3. Shared-state scan: module-level instances, session-scoped fixtures, caches, or mutable globals shared across tests: check whether any assertion outcome depends on execution order or residue left by an earlier test. Order-dependence is a defect even when the current order passes.
+**Resources:** Subscription/timer/file/connection opened without release path after the change; cleanup dropped or reordered
+Evidence bar: lifecycle event plus the missed release path.
 
-This safe variant has no execution capability: where the tool-capable line would run an empirical suite probe (reorder or remove-one-mock), reason statically instead and mark the mechanism explicitly as hypothesis-grade in the description when the order-dependence or mock-away conclusion cannot be fully confirmed without execution.
-
-Evidence bar: name the promised property, show the mechanism (assertion, mock, shared state) that defeats it, cite file:line. Boundary: this procedure never reports runner-configuration nits (G2 still suppresses those); it reports defects in what the changed tests actually verify.
-
-## Persistence-parity review (state-lifecycle procedure)
-
-When the changed code mutates persisted state - settings stores, config files, databases, cookies/localStorage, saved documents - enumerate every mutated field and audit both directions of its lifecycle:
+**Persisted state** (settings stores, config files, databases, cookies/localStorage, saved documents) — enumerate every mutated field:
 
 1. Write-path tracing: trace every written field to every read path that consumes it, including reads under modified conditions (a different mode, view, or selected entity than the one active at write time).
 2. Clear/revert parity: every mutation that sets state must have a reachable counterpart that clears, resets, or overwrites it when the user reverses the action (uncheck, clear, cancel, delete, switch entity); a set with no reachable clear persists stale values indefinitely.
@@ -85,24 +72,32 @@ When the changed code mutates persisted state - settings stores, config files, d
 
 Report violations under logic_correctness. Evidence bar: name the field, cite the writer file:line and the missing/divergent clear-or-read path file:line. Boundary: never report mere absence of persistence features nobody claims (G2 capability-absence still applies); report divergence between what the changed code persists and what its own reversal/consumption paths require.
 
+**Test claims** (when the change surface includes test files; report under claims_retirements):
+
+1. Claim/assertion parity: for each changed test, state what its name/docstring promises and list what its assertions actually observe. If no assertion can distinguish a correct implementation from one violating the promised property, the promise is unverified.
+2. Mock audit: whenever a mock/stub/patch substitutes part of the unit-under-test own internals (private accounting, storage, collaborators), determine what observable evidence remains after the substitution. If the substituted-away surface is exactly where the promised property lives, the test verifies nothing.
+3. Shared-state scan: module-level instances, session-scoped fixtures, caches, or mutable globals shared across tests: check whether any assertion outcome depends on execution order or residue left by an earlier test. Order-dependence is a defect even when the current order passes.
+
+Where the tool-capable line would probe a suspect suite empirically (reorder or remove-one-mock), reason statically instead and mark the conclusion hypothesis-grade when it cannot be confirmed without execution.
+
+Evidence bar: name the promised property, show the mechanism (assertion, mock, shared state) that defeats it, cite file:line. Boundary: this procedure never reports runner-configuration nits (G2 still suppresses those); it reports defects in what the changed tests actually verify.
+
+Reference-integrity fallback (constrained inference): When a candidate's mechanism depends on schema/constraint definitions absent from the workspace (e.g. FK/UNIQUE enforcement on a column), do NOT suppress it: state the assumed constraint explicitly inside the description, mark the finding lower confidence, and report it.
+
 ## Gates (apply to EVERY candidate before reporting)
 
-- **G1 Scope discipline.** Report ONLY defects BOTH (a) clearly wrong on the reviewed workspace AND (b) inside the envelope's stated change scope. Real-but-out-of-scope issues are not findings — note nothing. Empty answer if none qualify.
+- **G1 Provenance discipline (scope + pre-existing).** (a) Scope: Report ONLY defects BOTH (a) clearly wrong on the reviewed workspace AND (b) inside the envelope's stated change scope. Real-but-out-of-scope issues are not findings — note nothing. Empty answer if none qualify. (b) Pre-existing: branch_diff/uncommitted modes: verify each suspect condition against the base revision (e.g. `git show <base>:<file>`); do not report conditions already present there. Natural-language mode: restrict to files/hunks named in the change description. When age cannot be verified, decide by mechanism ownership: if the defective behavior lives inside code this change introduces or rewrites — including an added guard/check that fails to cover one of its own trigger paths, or a stated purpose it does not achieve — treat it as introduced; only untouched legacy code outside the changed mechanism counts as pre-existing.
 - **G2 Nit suppression — do not report:** dead parameters; unused props/locals; dead-code consequences of the intended change; robustness speculation (missing `response.ok`-style guards, hypothetical null/network/env cases) unless the change itself seeds a concrete failure of that kind; test-harness coupling nits (CWD-dependent tests, runner config); malformed README tables/formatting/naming/import-order; capability-absence claims: asserting that some output, mode, or capability is missing entirely when neither the envelope nor any changed-code statement claims to provide it. Boundary: G2 never suppresses (a) an identifier referenced by changed code but declared nowhere in the reviewed workspace — that is an api_contract finding (class 5), even if the workspace looks like a reduced stub; (b) an added mechanism that fails to cover one of its own trigger paths — that is a defect in the introduced mechanism, not a nit. (c) an absence the envelope or changed code explicitly claims to provide - a helper named in the change description that exists nowhere, or an imported module absent from the workspace - is an api_contract/logic finding, not incompleteness. All conditional: if the envelope scope explicitly puts such a class in scope, G2 yields.
-- **G3 Pre-existing gate.** branch_diff/uncommitted modes: verify each suspect condition against the base revision (e.g. `git show <base>:<file>`); do not report conditions already present there. Natural-language mode: restrict to files/hunks named in the change description. When age cannot be verified, decide by mechanism ownership: if the defective behavior lives inside code this change introduces or rewrites — including an added guard/check that fails to cover one of its own trigger paths, or a stated purpose it does not achieve — treat it as introduced; only untouched legacy code outside the changed mechanism counts as pre-existing.
+- *(Former standalone G3 Pre-existing gate is folded into G1(b) above; letter G3 is retired.)*
 - **G4 Clean conservatism.** When Pass 0 detected clean/validated-fix signals, high conservatism applies: empty answer unless a defect is unambiguously wrong on the fixture. G4 overrides any doubt-rule "report" tendency. When the envelope says 're-check <fixes>', that raises scrutiny OF THE NAMED FIXES themselves: report any defect found in or adjacent to the fixed surface; conservatism applies to unrelated candidates only.
 
 ## Completeness pass (before concluding CLEAN)
 
 Confirm every changed line was examined including strings/UI copy/help text; walk each bullet of the change description against actual observed behavior across ALL its trigger paths (every state transition, mode, or lifecycle event the bullet implies) — partial achievement of a stated bullet is a logic_correctness finding; only then may an empty answer be emitted. A miss here is how real defects get missed. Record the outcome of this walk as the coverage verdicts required by the Output section.
 
-## Schema-assumption rule (constrained inference)
-
-When a candidate's mechanism depends on schema/constraint definitions absent from the workspace (e.g. FK/UNIQUE enforcement on a column), do NOT suppress it: state the assumed constraint explicitly inside the description, mark the finding lower confidence, and report it. Suppression is reserved for candidates whose failure cannot be articulated even with stated assumptions.
-
 ## Evidence and citation discipline
 
-Every reported finding cites: file:line (or quoted hunk) on the reviewed workspace + one-sentence failure mechanism + trigger condition + why it is introduced-by-this-change (not pre-existing). At most one concise hypothesis per non-obvious finding. No reproduction beyond strictly read-only inspection; redact secrets/personal data from captured output. Never spawn further agents/reviews (recursion guard).
+Every reported finding cites: file:line (or quoted hunk) on the reviewed workspace + one-sentence failure mechanism + trigger condition + why it is introduced-by-this-change (not pre-existing). At most one concise hypothesis per non-obvious finding. Redact secrets/personal data from captured evidence. Never spawn further agents/reviews (recursion guard).
 
 ## Output
 
@@ -140,8 +135,4 @@ A reportable finding simultaneously satisfies: production impact (incorrect, uns
 
 Doubt rule placement: doubt about whether an in-scope production defect exists → report (unless G4 armed); doubt whether something is a nit/out-of-scope/pre-existing/speculative → do not report.
 
-## Provenance
-
-Adaptation inputs: openBuggy DSV4F M1–M5 census (bb-01..bb-05 pilot), BugBot finding-personality observation, mattpocock/skills code-review audit (pinned https://github.com/mattpocock/skills/blob/0ab1b63/skills/engineering/code-review/SKILL.md). v3-candidate additions: dead-control check, self-labeling marker check, data-integrity chains, schema-assumption rule, anti-bundling output rule. v3.3-candidate addition: mandatory coverage-verdict elements binding the completeness pass into the output contract. v3.5-candidate addition: scheduling-frontier evidence procedure for class 3 (enumerate frontiers, cross-frontier work, and post-resumption validity). v3.6-candidate addition: interaction-matrix element for interactive surfaces (user-action sequences written and verified before CLEAN).
-v3.8.1-candidate addition: static port of the v4.1 tests-as-claims annex - claim/assertion parity, mock audit, shared-state scan; empirical suite probe replaced by explicit hypothesis-grade marking since the safe ruleset denies execution. Motivated by the band-5 bb-53 FN pair under v4 and the open question whether static obligations alone recover it on the safe line.
-v3.8.2-candidate addition: persistence-parity annex ported from v4.2 under governance rule 7 (pure read-only procedure; no execution-dependent component) AFTER tool-line probe PASS per the 2026-08-26 sequencing amendment.
+safe-1.0 consolidation: structural merge set identical to tool-1.0 (claims-and-retirements class 4 absorbing resource_lifecycle + tests-as-claims + persistence-parity; reference_integrity class 5 absorbing api_contract + dead-control + schema-assumption fallback; gates G1+G3 provenance merge; provenance pointer), ported under governance rule 7 - execution-dependent mechanics replaced by standing hypothesis-grade marking per this line read-only ruleset.
