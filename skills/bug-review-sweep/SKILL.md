@@ -10,6 +10,7 @@ disable-model-invocation: true
 
 # Bug review sweep
 
+
 **Canonical SoT:** `cursorEscape` repo, `skills/bug-review-sweep/SKILL.md`.
 **Mirror:** `openBuggy` repo, `skills/bug-review-sweep/SKILL.md`, byte-identical by design — regenerate from canonical; never edit the mirror in place. Edit only in cursorEscape.
 **Product north star:** a low-cost, quick, single-pass bug finder that matches or exceeds Cursor BugBot's capability. Findings are discrete, precise, and evidenced in ONE pass — never multi-pass/ensemble/retry crutches; cheap-model parity is pursued through instruction quality.
@@ -61,6 +62,18 @@ When the changed code renders or handles interactive surfaces - dialogs, forms, 
 ```
 
 Rules: cover at minimum open, cancel/close, each editable field cleared, each field edited-then-saved, and each context switch (tab/level/mode) the surface supports; `ok` verdicts must cite a locus; `broken` without a corresponding `<bug>` entry is a contract violation. Omit the block entirely only when the diff contains no interactive-surface handling at all. Keep verdict bodies to these minimal forms - no prose.
+## Tests-as-claims review (test-quality procedure, static)
+
+When the change surface includes test files, treat every changed test as a claim about the code under test and audit its evidentiary value by reading alone. A test that cannot fail under any implementation violating its promised property is itself a defect in the change (tests are part of the reviewed product); report it under logic_correctness:
+
+1. Claim/assertion parity: for each changed test, state what its name/docstring promises and list what its assertions actually observe. If no assertion can distinguish a correct implementation from one violating the promised property, the promise is unverified.
+2. Mock audit: whenever a mock/stub/patch substitutes part of the unit-under-test own internals (private accounting, storage, collaborators), determine what observable evidence remains after the substitution. If the substituted-away surface is exactly where the promised property lives, the test verifies nothing.
+3. Shared-state scan: module-level instances, session-scoped fixtures, caches, or mutable globals shared across tests: check whether any assertion outcome depends on execution order or residue left by an earlier test. Order-dependence is a defect even when the current order passes.
+
+This safe variant has no execution capability: where the tool-capable line would run an empirical suite probe (reorder or remove-one-mock), reason statically instead and mark the mechanism explicitly as hypothesis-grade in the description when the order-dependence or mock-away conclusion cannot be fully confirmed without execution.
+
+Evidence bar: name the promised property, show the mechanism (assertion, mock, shared state) that defeats it, cite file:line. Boundary: this procedure never reports runner-configuration nits (G2 still suppresses those); it reports defects in what the changed tests actually verify.
+
 ## Gates (apply to EVERY candidate before reporting)
 
 - **G1 Scope discipline.** Report ONLY defects BOTH (a) clearly wrong on the reviewed workspace AND (b) inside the envelope's stated change scope. Real-but-out-of-scope issues are not findings — note nothing. Empty answer if none qualify.
@@ -119,8 +132,4 @@ Doubt rule placement: doubt about whether an in-scope production defect exists �
 ## Provenance
 
 Adaptation inputs: openBuggy DSV4F M1–M5 census (bb-01..bb-05 pilot), BugBot finding-personality observation, mattpocock/skills code-review audit (pinned https://github.com/mattpocock/skills/blob/0ab1b63/skills/engineering/code-review/SKILL.md). v3-candidate additions: dead-control check, self-labeling marker check, data-integrity chains, schema-assumption rule, anti-bundling output rule. v3.3-candidate addition: mandatory coverage-verdict elements binding the completeness pass into the output contract. v3.5-candidate addition: scheduling-frontier evidence procedure for class 3 (enumerate frontiers, cross-frontier work, and post-resumption validity). v3.6-candidate addition: interaction-matrix element for interactive surfaces (user-action sequences written and verified before CLEAN).
-
-
-
-
-
+v3.8.1-candidate addition: static port of the v4.1 tests-as-claims annex - claim/assertion parity, mock audit, shared-state scan; empirical suite probe replaced by explicit hypothesis-grade marking since the safe ruleset denies execution. Motivated by the band-5 bb-53 FN pair under v4 and the open question whether static obligations alone recover it on the safe line.
