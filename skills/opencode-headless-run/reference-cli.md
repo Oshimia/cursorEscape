@@ -28,7 +28,7 @@ Global: `--print-logs`, `--log-level DEBUG|INFO|WARN|ERROR`, `--pure` (no extern
 
 | Command | Notes |
 |---------|-------|
-| `serve` (+ `run --attach`) | One server, many runs: avoids per-run cold boot |
+| `serve` (+ `run --attach`) | One server, many runs: avoids per-run cold boot. Wait for the port to accept connections before attaching; a failed/killed serve can leave an orphan holding the port (attach to it or kill via Get-NetTCPConnection) |
 | `session list --format json -n <N>` | Recent sessions as JSON (`-n` limit) |
 | `session delete <sessionID>` | Remove a session |
 | `export <sessionID> [--sanitize]` | Full transcript JSON; sanitize redacts file data |

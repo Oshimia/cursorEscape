@@ -90,27 +90,59 @@ Check the captured log for all of these before trusting a run:
 3. If your prompt defines a terminal delimited block or marker, confirm it
    appears intact.
 
+4. Model responsiveness varies by route: some free-tier models answer in
+   seconds from the chat client but stall for minutes through `run`. If a
+   specific model probes slow headlessly, switch models; do not assume the
+   harness is broken.
+
+Before any long-running call, validate the pipeline with a short probe:
+a trivial prompt ("Reply OK") under a hard cap (about 60 to 90 seconds). A probe
+that times out means fix the path first; do not launch real work unvalidated.
+
 On validation failure, retry with backoff (about 20 seconds times attempt,
 budget of 3). Retry only the failure classes above; do not retry to average out
 quality.
 
-## Repeated runs: serve once, attach many
+## Cold boot and warm servers (read before long runs)
 
-Each `run` boots its own server instance. For batches, start one server and
-attach:
+Every bare `opencode run` boots its own server instance first. That cold boot is
+invisible but expensive: on free tiers a trivial prompt can take minutes per
+call, which reads like a hang. Two rules prevent it:
+
+1. **Probe before committing**: run the short validation probe above.
+2. **For anything beyond one-off calls, use a warm server**:
 
 ```powershell
-Start-Process opencode -ArgumentList 'serve', '--port', '4096'
-opencode run --attach http://localhost:4096 --dir <ws> "first task"
-opencode run --attach http://localhost:4096 --dir <ws> "second task"
+# start once (reuse if the port is already serving)
+$port = 4096
+$busy = Test-NetConnection 127.0.0.1 -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue
+if (-not $busy) {
+    Start-Process opencode -ArgumentList 'serve', '--port', "$port" -WindowStyle Hidden
+    $deadline = (Get-Date).AddSeconds(20)
+    do {
+        Start-Sleep -Milliseconds 500
+        $busy = Test-NetConnection 127.0.0.1 -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue
+    } until ($busy -or (Get-Date) -gt $deadline)
+}
+if (-not $busy) { throw "opencode serve did not become ready on port $port" }
+
+opencode run --attach http://localhost:$port --dir <ws> --title <name> "<task>"
 ```
 
 ```bash
-opencode serve &
-opencode run --attach http://localhost:4096 --dir <ws> "first task"
+opencode serve --port 4096 &          # skip if already running
+until (exec 3<>/dev/tcp/127.0.0.1/4096) 2>/dev/null; do sleep 0.5; done
+opencode run --attach http://localhost:4096 --dir <ws> --title <name> "<task>"
 ```
 
-Set `OPENCODE_SERVER_PASSWORD` before `serve` if other local users exist.
+Gotchas learned the hard way:
+
+- A failed or killed `serve` can leave an orphaned server holding the port. A
+  later `serve` then fails while the orphan still works: check who owns the port
+  (`Get-NetTCPConnection -LocalPort 4096`) and attach to it instead of spawning.
+- Always wait for readiness before the first attach; attaching to a not-yet-
+  listening server fails instantly.
+- Set `OPENCODE_SERVER_PASSWORD` before `serve` if other local users exist.
 
 ## Finding the session afterwards
 
@@ -132,6 +164,9 @@ skill.
 | Empty or truncated answer | Model/service issue | Retry with backoff; try `--variant` or another model |
 | Response echoes your prompt back | Degenerate generation | Retry; tighten prompt |
 | Unknown flag error | Version drift vs docs | Check `opencode --version`; consult `--help` |
+| Trivial prompt takes minutes per call | Per-run server cold boot | Use serve + attach (warm server section) |
+| `serve` fails to start, or dies silently | Port already held by an orphaned server | Attach to the existing server, or kill its process (`Get-NetTCPConnection -LocalPort <port>`) |
+| One model stalls while others answer fast | Provider-side routing/queueing for that model over the CLI route | Probe with a cheap timed call; pick a responsive model |
 
 ## Reference
 
