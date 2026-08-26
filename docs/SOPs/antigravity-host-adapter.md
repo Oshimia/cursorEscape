@@ -4,13 +4,13 @@
 
 ## Context
 
-This SOP documents the **Antigravity adapter** for the owner's agentic stack. **Target SoT** is the companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md)). Files under `~/.gemini/` are the **host copy-out target**, not a second procedure tree. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) from [overlays/antigravity](../../overlays/antigravity/_index.md). **Live sync status: deferred** — capability shipped, dry-run verified; `-Apply` awaits operator Phase 0 baseline.
+This SOP documents the **Antigravity adapter** for the owner's agentic stack. **Target SoT** is the companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md)). Files under `~/.gemini/` are the **host copy-out target**, not a second procedure tree. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) from [overlays/antigravity](../../overlays/antigravity/_index.md). Owner ruling (2026-08-26): **live sync not deferred** — `-Apply -Target Antigravity` is authorized whenever a distribution warrants it.
 
 Owner decisions (2026-08-23): cursorEscape is **sole SoT**; live global rules (`~/.gemini/GEMINI.md`) are **wholesale-replaced** by the overlay gate; v1 surfaces = global skills + global workflows + reviewer subagent defs + GEMINI.md.
 
 **Install root (this machine):** `C:\Users\admin\.gemini\`
 
-**Phase 0 baseline (restore-only):** **pending operator action** — take a restore-only copy of `~/.gemini` (e.g. `%USERPROFILE%\.gemini-backup-pre-host-sync-build-<timestamp>`), then set its path in [`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json) under `antigravity`. Until then `-Apply` fails closed for **all** stacks (deliberate coupling — see [host-sync README](../../scripts/host-sync/README.md)); dry-runs are unaffected.
+**Phase 0 baseline (restore-only):** present at `%USERPROFILE%\.gemini-backup-pre-host-sync-build-20260824-064125`; path registered in [`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json) under `antigravity`.
 
 ## Substance
 
@@ -32,7 +32,7 @@ Owner decisions (2026-08-23): cursorEscape is **sole SoT**; live global rules (`
 ### Inventory
 
 - **Always-on:** `GEMINI.md` — default-on plan + dual review; when-in-doubt; eval/harness not exempt; Incomplete-until pointer.
-- **Skills (9):** `discovery`, `implementation-plan`, `plan-review`, `implementation-review`, `pre-commit-ci-gate`, `composer`, `documentation-architecture`, `roadmap`, `diagnosing-bugs` (parity bar = OpenCode overlay inventory; `pre-commit-ci-gate` has no companion skill base — SoT is [`rules/pre-commit-ci-gate.md`](../../rules/pre-commit-ci-gate.md)).
+- **Skills (11):** `discovery`, `implementation-plan`, `plan-review`, `implementation-review`, `pre-commit-ci-gate`, `composer`, `documentation-architecture`, `roadmap`, `diagnosing-bugs`, plus the global `opencode-headless-run`, `opencode-history-search` (2026-08-26 owner ruling: opencode-* pair mirrors on every stack; parity bar otherwise = OpenCode overlay inventory; `pre-commit-ci-gate` has no companion skill base — SoT is [`rules/pre-commit-ci-gate.md`](../../rules/pre-commit-ci-gate.md)).
 - **Workflows (3):** `/escape-plan`, `/escape-review`, `/escape-closeout`.
 - **Subagents (3):** reviewer legs with read-only tool lists (`view_file`, `grep_search`, `run_command`); exact tool names only — misspellings hang subagents (known upstream issue).
 - **Never synced / never touched:** `antigravity/global_workflows/caveman.md`; credential/app-state files (`settings.json`, `config/mcp_config.json`, `oauth_creds.json`, `google_accounts.json`, `state.json`, `trustedFolders.json`, `installation_id`); `config/projects`.
@@ -52,7 +52,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Antigravity
 1. **Gemini CLI shares `~/.gemini/GEMINI.md`.** Full replacement propagates the cursorEscape gate to Gemini CLI sessions too — owner-accepted consequence of sole-SoT (2026-08-23).
 2. **All-three-baseline Apply coupling:** until the `~/.gemini` baseline exists and its path fills the `antigravity` property, `-Apply -Target Cursor/OpenCode` also fails closed. Deliberate conservatism.
 3. **Gemini CLI tolerance of additive subtrees** (`config/skills/**`, `config/agents/**`) — accepted risk; post-Apply smoke catches anomalies.
-4. **Deliberate skill-set exclusion:** only nine ids mirrored; extend deliberately per parity bar, not by default.
+4. **Deliberate skill-set exclusion:** only eleven ids mirrored; extend deliberately per parity bar, not by default.
 5. **Commit ordering:** this stack's `bug_reviewer.md` harness cites `{{COMPANION_ROOT}}/skills/bug-review-sweep/SKILL.md` — currently untracked owner work; land or co-commit it before/with this overlay's commit ([overlay _index implication #4](../../overlays/antigravity/_index.md)).
 
 ### Smoke table (C1–C6 mapped)

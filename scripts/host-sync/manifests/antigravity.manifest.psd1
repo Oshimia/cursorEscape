@@ -17,6 +17,8 @@
         @{ Source = 'skills/documentation-architecture/SKILL.md'; Dest = 'config/skills/documentation-architecture/SKILL.md' }
         @{ Source = 'skills/roadmap/SKILL.md'; Dest = 'config/skills/roadmap/SKILL.md' }
         @{ Source = 'skills/diagnosing-bugs/SKILL.md'; Dest = 'config/skills/diagnosing-bugs/SKILL.md' }
+        @{ Source = 'skills/opencode-headless-run/SKILL.md'; Dest = 'config/skills/opencode-headless-run/SKILL.md' }
+        @{ Source = 'skills/opencode-history-search/SKILL.md'; Dest = 'config/skills/opencode-history-search/SKILL.md' }
         @{ Source = 'workflows/escape-plan.md'; Dest = 'antigravity/global_workflows/escape-plan.md' }
         @{ Source = 'workflows/escape-review.md'; Dest = 'antigravity/global_workflows/escape-review.md' }
         @{ Source = 'workflows/escape-closeout.md'; Dest = 'antigravity/global_workflows/escape-closeout.md' }
