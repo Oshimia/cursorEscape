@@ -43,11 +43,15 @@ This SOP documents the **global Cursor adapter** on the operator machine. **Targ
 Operator entry: [`scripts/Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1). Modular layout: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
 
 ```powershell
-# Dry-run (default) — no live writes
-pwsh ./scripts/Sync-HostHarness.ps1 -Target Cursor
+# Dry-run — ALL stacks by default (normative: pushes are global, never per-stack)
+pwsh ./scripts/Sync-HostHarness.ps1
 
-# Live write — requires Phase 0 baseline gate; does NOT create backup trees
-pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor
+# Live write to ALL stacks — requires Phase 0 baseline gate; does NOT create backup trees
+pwsh ./scripts/Sync-HostHarness.ps1 -Apply
+
+# Single-stack variants are exceptions only:
+#   -Target Cursor        dry-run manifest inspection (read-only)
+#   -Apply -Target Cursor -AllowSkew    deliberate scoped repair; siblings go stale
 ```
 
 On `-Apply`, the script:

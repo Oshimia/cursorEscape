@@ -43,11 +43,11 @@ $agyPending = [string]::IsNullOrWhiteSpace([string]$repoPathsJson.antigravity)
 $applyLabel = if ($agyPending) { 'live' } else { 'post-Apply' }
 
 if ($agyPending) {
-    $applyOutput = & pwsh -NoProfile -File $syncScript -Target OpenCode -Apply 2>&1 | Out-String
+    $applyOutput = & pwsh -NoProfile -File $syncScript -Target OpenCode -Apply -AllowSkew 2>&1 | Out-String
     Assert-Pass 'Apply OpenCode fails closed while antigravity baseline pending' ($LASTEXITCODE -ne 0 -and $applyOutput -match 'antigravity')
 }
 else {
-    $applyOutput = & pwsh -NoProfile -File $syncScript -Target OpenCode -Apply 2>&1 | Out-String
+    $applyOutput = & pwsh -NoProfile -File $syncScript -Target OpenCode -Apply -AllowSkew 2>&1 | Out-String
     Assert-Pass 'Apply OpenCode exit 0' ($LASTEXITCODE -eq 0)
     Assert-Pass 'Apply reports AGENTS hash verify' ($applyOutput -match 'AGENTS hash identical|post-apply AGENTS')
     Assert-Pass 'Apply reports model preserved' ($applyOutput -match 'model preserved')

@@ -30,26 +30,36 @@ Each stack owns its **manifest** (what to copy, hard excludes, never-touch paths
 
 ## Operator commands
 
+**Normative rule: live pushes are global.** This is a global skill set — a push to one stack alone strands every sibling stack carrying the same sources. The script therefore defaults to `-Target All` and **fails closed** on single-stack `-Apply` whenever the target shares manifest sources with another stack; single-stack Apply exists only as a deliberate exception via `-AllowSkew`.
+
 ```powershell
-# Dry-run one stack (default)
-pwsh ./scripts/Sync-HostHarness.ps1 -Target Cursor
-pwsh ./scripts/Sync-HostHarness.ps1 -Target OpenCode
-pwsh ./scripts/Sync-HostHarness.ps1 -Target Antigravity
+# Dry-run, all registered stacks (DEFAULT — no -Target needed)
+pwsh ./scripts/Sync-HostHarness.ps1
 
-# Dry-run all registered stacks (continue-with-report)
-pwsh ./scripts/Sync-HostHarness.ps1 -Target All
+# Live write to ALL stacks (requires Phase 0 baseline gate; does NOT create backups)
+pwsh ./scripts/Sync-HostHarness.ps1 -Apply
 
-# Live write (requires Phase 0 baseline gate; does NOT create backups)
-pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor
-pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target OpenCode
-pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Antigravity
-pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target All
-
-# Stop after first stack failure when syncing All
+# Stop after first stack failure
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target All -FailFast
+
+# Dry-run inspection of ONE manifest (read-only, always allowed)
+pwsh ./scripts/Sync-HostHarness.ps1 -Target OpenCode
+
+# EXCEPTION ONLY: single-stack live write (deliberate bring-up / scoped repair)
+pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor -AllowSkew
 ```
 
-After `-Apply`: fully quit and restart the host before smoke. Companion repo is ongoing SoT — **sync does not create backup trees**.
+After `-Apply`: fully quit and restart the host before relying on new harness behavior. Companion repo is ongoing SoT — **sync does not create backup trees**.
+
+### Post-apply verification policy
+
+The sync script's built-in checks (token merge completeness, byte-exact writes, JSON key-order optimizer) are **authoritative for routine content syncs**. Neither operator nor agent re-verifies file hashes or runs smoke attestation after a routine `-Apply`. Smoke attestation (adapter SOP C-tables) applies only when:
+
+- a surface is synced for the **first time** on a stack,
+- the **sync machinery itself** changed (adapters, Core, manifests structure),
+- an **always-on gate text** changed and runtime injection must be re-proven.
+
+Per-skill / per-workflow content updates land silently; if something is wrong it surfaces at use time and is fixed as normal procedure drift.
 
 ## Phase 0 baselines (restore-only)
 
@@ -59,9 +69,9 @@ One-time baselines taken before building this tool. Used for **restore if Apply 
 | ----- | ---------------------------- |
 | Cursor | `C:\Users\admin\.cursor-backup-pre-host-sync-build-20260821-012600` |
 | OpenCode | `C:\Users\admin\.config\opencode-backup-pre-host-sync-build-20260821-012600` |
-| Antigravity | **Pending** — operator to take a restore-only baseline of `~/.gemini` and set the `antigravity` property in [`baseline-backups.paths.json`](./baseline-backups.paths.json) |
+| Antigravity | `C:\Users\admin\.gemini-backup-pre-host-sync-build-20260824-064125` (registered) |
 
-**Apply coupling (all three baselines required):** `-Apply` for ANY stack fails closed until all three Phase 0 baselines exist. Until the Antigravity baseline is taken, `-Apply -Target Cursor/OpenCode` also fails — deliberate conservatism because Antigravity Apply wholesale-replaces `~/.gemini/GEMINI.md`. Dry-runs are unaffected.
+**Apply coupling (all three baselines required):** `-Apply` for ANY stack fails closed until all three Phase 0 baselines exist — deliberate conservatism because Antigravity Apply wholesale-replaces `~/.gemini/GEMINI.md`. Dry-runs are unaffected. All three baselines are present and registered as of 2026-08-26.
 
 Gate artifact: [`baseline-backups.paths.json`](./baseline-backups.paths.json)
 
@@ -84,7 +94,7 @@ Manifest `NeverTouch` paths (e.g. `docs/workflow`, Antigravity `caveman.md`) are
 3. **Adapter:** create `adapters/<StackId>.Adapter.ps1` exporting `Invoke-StackHarnessSync` with signature `(Mode, CompanionRoot, Manifest)` — see [`HostSync.Contract.ps1`](./HostSync.Contract.ps1).
 4. **Registry:** add the stack id to `Get-RegisteredStackIds` in [`Register-StackAdapters.ps1`](./Register-StackAdapters.ps1).
 5. **Docs:** add or extend a host-adapter SOP; update [`editing-companion-workflow.md`](../../docs/SOPs/editing-companion-workflow.md) live-sync row; update overlay `_index`.
-6. **Verify:** dry-run `-Target <StackId>` then `-Target All`; authorized `-Apply` + host restart + smoke per that stack's SOP.
+6. **Verify:** dry-run `-Target <StackId>` (manifest inspection), then default all-stacks dry-run; authorized global `-Apply`; host restart. Smoke attestation per the post-apply verification policy above (first-time surface only).
 
 Do **not** add stack-specific logic to Core unless it is genuinely shared (prefer adapter + manifest).
 

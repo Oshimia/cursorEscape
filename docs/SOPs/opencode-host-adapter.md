@@ -62,15 +62,15 @@ This SOP documents the **global OpenCode adapter** installed on the operator mac
 Operator entry: [`scripts/Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1). Modular layout + expansion recipe: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
 
 ```powershell
-# Dry-run (default) — no live writes
-pwsh ./scripts/Sync-HostHarness.ps1 -Target OpenCode
+# Dry-run — ALL stacks by default (normative: pushes are global, never per-stack)
+pwsh ./scripts/Sync-HostHarness.ps1
 
-# Live write — requires Phase 0 baseline gate; does NOT create backup trees
-pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target OpenCode
+# Live write to ALL stacks — requires Phase 0 baseline gate; does NOT create backup trees
+pwsh ./scripts/Sync-HostHarness.ps1 -Apply
 
-# All registered stacks (Cursor then OpenCode; continue-with-report)
-pwsh ./scripts/Sync-HostHarness.ps1 -Target All
-pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target All
+# Single-stack variants are exceptions only:
+#   -Target OpenCode        dry-run manifest inspection (read-only)
+#   -Apply -Target OpenCode -AllowSkew    deliberate scoped repair; siblings go stale
 ```
 
 On `-Apply`, the script:
@@ -87,7 +87,7 @@ After Apply: fully quit and restart OpenCode before smoke.
 
 1. Update **cursorEscape** contracts first (Target FA / agents / skills / overlay rules).
 2. Re-adapt OpenCode files second — do not invent gate semantics only in `~/.config/opencode`.
-3. When updating always-on gates: edit overlay `instructions/cursor-escape-loop.md`, then deploy with `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target OpenCode` (adapter dual-writes byte-identical `instructions/` and `AGENTS.md` — C1). Manual copy to live paths is **not recommended** (bypasses token merge and JSON specimen merge).
+3. When updating always-on gates: edit overlay `instructions/cursor-escape-loop.md`, then deploy with `pwsh ./scripts/Sync-HostHarness.ps1 -Apply` (global push; the adapter dual-writes byte-identical `instructions/` and `AGENTS.md` — C1). Manual copy to live paths is **not recommended** (bypasses token merge and JSON specimen merge).
 4. Do **not** commit `~/.config/opencode` into this git repo (secrets, machine paths, provider plugins). Copy-out later still excludes secrets.
 5. After saving changes to `opencode.json`, an agent file, a skill, `instructions`, `AGENTS.md`, or other config-time file: **quit and restart OpenCode** (no hot-reload — DSV4F Observed).
 

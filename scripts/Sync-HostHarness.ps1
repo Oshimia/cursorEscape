@@ -11,8 +11,13 @@
   Layout + expansion recipe: scripts/host-sync/README.md.
 .PARAMETER Target
   Stack target: a registered stack id, or All (continue-with-report; optional -FailFast).
+  DEFAULT AND NORMATIVE VALUE IS All: the harness is a global skill set; live pushes go to every registered stack in one operation.
+  Single-stack Apply is an exceptional, deliberate act (new-stack bring-up, scoped repair) and is refused unless -AllowSkew is passed.
 .PARAMETER Apply
   Live write mode. Runs Assert-BaselineBackupsPresent (read-only gate) first.
+.PARAMETER AllowSkew
+  Required switch to permit single-stack -Apply when that target shares source files with other registered stacks (the guard fails closed otherwise).
+  Using it intentionally leaves sibling stacks stale until the next full sync.
 .PARAMETER FailFast
   With -Target All, stop after first stack failure.
 .PARAMETER CompanionRoot
@@ -22,12 +27,19 @@
   - Cursor: skills-cursor/, settings.json; never delete/refresh docs/workflow/; hybrid rules only
   - OpenCode: no procedure mirror re-copy; review-subagent-models not host copy-out; preserve model/provider
   - Antigravity: full-replace GEMINI.md via single entry; never touch caveman.md or credential/app-state files
+  Post-apply verification policy: the script's built-in byte-level merge checks are authoritative for routine
+  content syncs. Operator/agent smoke attestation belongs to first-time surfaces and harness-machinery changes
+  only — not per-skill updates.
 .EXAMPLE
-  pwsh ./scripts/Sync-HostHarness.ps1 -Target Cursor
+  pwsh ./scripts/Sync-HostHarness.ps1                 # dry-run, all stacks (default)
 .EXAMPLE
-  pwsh ./scripts/Sync-HostHarness.ps1 -Target All
+  pwsh ./scripts/Sync-HostHarness.ps1 -Apply          # live write, ALL stacks
 .EXAMPLE
-  pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor
+  pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target All -FailFast
+.EXAMPLE
+  pwsh ./scripts/Sync-HostHarness.ps1 -Target OpenCode                 # dry-run inspection of one manifest
+.EXAMPLE
+  pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor -AllowSkew # EXCEPTION path only
 .LINK
   scripts/host-sync/README.md
 .LINK
@@ -36,9 +48,11 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string] $Target = 'Cursor',
+    [string] $Target = 'All',
 
     [switch] $Apply,
+
+    [switch] $AllowSkew,
 
     [switch] $FailFast,
 
@@ -87,7 +101,33 @@ if ($mode -eq [HostSyncMode]::Apply) {
     }
 }
 
-$stackIds = Get-TargetStackIds -TargetName $Target
+$stackIds = @(Get-TargetStackIds -TargetName $Target)
+
+if ($stackIds.Count -eq 1) {
+    # Global-distribution guard: this skill set is global; a live push to one
+    # stack alone silently strands every sibling stack carrying the same sources.
+    $overlap = Get-CrossStackSourceOverlap -StackId $Target -HostSyncRoot $hostSyncRoot
+    if ($overlap.Count -gt 0) {
+        if ($mode -eq [HostSyncMode]::Apply) {
+            if (-not $AllowSkew) {
+                Write-Output "FATAL (skew guard): '-Apply -Target $Target' updates $($overlap.Count) source file(s) also distributed to other stacks; siblings would go stale."
+                foreach ($o in $overlap) {
+                    Write-Output ("  {0} -> also in: {1}" -f $o.Source, ($o.Sibling -join ', '))
+                }
+                Write-Output "Normative path: run without -Target (or with -Target All). Single-stack Apply is a deliberate exception; re-run with -AllowSkew to proceed anyway."
+                exit 1
+            }
+            Write-Output "SKEW WARNING (-AllowSkew): shared sources stale on sibling stacks until next full sync:"
+            foreach ($o in $overlap) {
+                Write-Output ("  {0} -> also in: {1}" -f $o.Source, ($o.Sibling -join ', '))
+            }
+        }
+        else {
+            Write-Output "NOTE (dry-run): target shares $($overlap.Count) source file(s) with sibling stacks; live writes here will require -Target All or -AllowSkew."
+        }
+    }
+}
+
 $reports = [System.Collections.Generic.List[hashtable]]::new()
 $anyFailed = $false
 

@@ -67,7 +67,7 @@ if (Test-Path -LiteralPath $pathsFile) {
     Remove-Item -LiteralPath $pathsFile -Force
 }
 try {
-    & pwsh -NoProfile -File $syncScript -Target Cursor -Apply
+    & pwsh -NoProfile -File $syncScript -Target Cursor -Apply -AllowSkew
     $gateExit = $LASTEXITCODE
     Assert-Pass 'Apply without paths file non-zero' ($gateExit -ne 0)
 }

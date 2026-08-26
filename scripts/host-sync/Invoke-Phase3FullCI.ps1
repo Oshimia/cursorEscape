@@ -55,9 +55,15 @@ Assert-Pass 'opencode-host-adapter cites Sync-HostHarness' ($opencodeSop -match 
 Assert-Pass 'opencode-host-adapter Phase 0 baseline path' ($opencodeSop -match 'pre-host-sync-build-20260821-012600')
 Assert-Pass 'opencode-host-adapter sync does not backup' ($opencodeSop -match 'does not create backups')
 
-Assert-Pass 'editing-companion-workflow Cursor Apply row' ($editWorkflow -match 'Sync-HostHarness\.ps1 -Apply -Target Cursor')
-Assert-Pass 'editing-companion-workflow OpenCode Apply row' ($editWorkflow -match 'Sync-HostHarness\.ps1 -Apply -Target OpenCode')
+Assert-Pass 'editing-companion-workflow global Apply row' ($editWorkflow -match 'Sync-HostHarness\.ps1 -Apply\s*#? ?live write ALL stacks')
+Assert-Pass 'editing-companion-workflow states global-by-default rule' ($editWorkflow -match 'live pushes are global')
+Assert-Pass 'editing-companion-workflow AllowSkew exception only' ($editWorkflow -match 'AllowSkew')
+Assert-Pass 'editing-companion-workflow post-push verification not a step' ($editWorkflow -match 'Post-push verification is not a step')
 Assert-Pass 'editing-companion-workflow no backup first' ($editWorkflow -notmatch 'backup first')
+
+Assert-Pass 'entry defaults Target to All' ($entrySource -match "\`$Target = 'All'")
+Assert-Pass 'entry defines AllowSkew switch' ($entrySource -match '\[switch\] \$AllowSkew')
+Assert-Pass 'entry skew guard fails closed' ($entrySource -match 'FATAL \(skew guard\)')
 
 $roadmap = Read-RepoFile 'docs\roadmaps\host-harness-sync-build.md'
 Assert-Pass 'roadmap Phase 3 checklist complete' ($roadmap -match '\[x\] \*\*Phase 3\*\*')

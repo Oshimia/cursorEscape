@@ -50,15 +50,24 @@ Change portable loop/gate
 
 ### Live installs (operator-gated)
 
-| Host | Overlay home | Live sync |
-| ---- | ------------ | --------- |
-| OpenCode | [`overlays/opencode/`](../../overlays/opencode/_index.md) | `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target OpenCode` — see [opencode-host-adapter](./opencode-host-adapter.md) |
-| Cursor | [`overlays/cursor/`](../../overlays/cursor/_index.md) | `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor` — see [cursor-host-adapter](./cursor-host-adapter.md) |
-| Antigravity | [`overlays/antigravity/`](../../overlays/antigravity/_index.md) | `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Antigravity` — see [antigravity-host-adapter](./antigravity-host-adapter.md); Apply gated on all three stacks' Phase 0 baselines |
+**Normative rule (owner, 2026-08-26): live pushes are global — never per-stack by default.** The harness is one global skill set; the sync tool defaults to all stacks and fails closed on single-stack `-Apply` where sources are shared (`-AllowSkew` exists for deliberate exceptions only). There is no per-host sync decision to make when distributing a change.
+
+| Host | Overlay home | Role in a global push |
+| ---- | ------------ | --------------------- |
+| OpenCode | [`overlays/opencode/`](../../overlays/opencode/_index.md) | included automatically — see [opencode-host-adapter](./opencode-host-adapter.md) |
+| Cursor | [`overlays/cursor/`](../../overlays/cursor/_index.md) | included automatically — see [cursor-host-adapter](./cursor-host-adapter.md) |
+| Antigravity | [`overlays/antigravity/`](../../overlays/antigravity/_index.md) | included automatically; Apply gated on Phase 0 baselines (all present, registered) |
+
+```powershell
+pwsh ./scripts/Sync-HostHarness.ps1          # dry-run all stacks
+pwsh ./scripts/Sync-HostHarness.ps1 -Apply   # live write ALL stacks
+```
 
 Dry-run default (no live writes): omit `-Apply`. Sync **does not create backups**; Phase 0 baselines are restore-only ([`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json)). Modular layout: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
 
 Do **not** write live installs unless the user explicitly asks. After overlay edits, note “live sync deferred” in the closeout if applicable.
+
+**Post-push verification is not a step.** The sync script's built-in checks are authoritative ([post-apply verification policy](../../scripts/host-sync/README.md#post-apply-verification-policy)); do not re-check hashes or run smoke after routine pushes — smoke belongs to first-time surfaces and machinery changes only.
 
 ### Author-time verification (after a loop/gate change)
 

@@ -40,11 +40,15 @@ Owner decisions (2026-08-23): cursorEscape is **sole SoT**; live global rules (`
 ### Live sync (Sync-HostHarness)
 
 ```powershell
-# Dry-run (default) — no live writes
-pwsh ./scripts/Sync-HostHarness.ps1 -Target Antigravity
+# Dry-run — ALL stacks by default (normative: pushes are global, never per-stack)
+pwsh ./scripts/Sync-HostHarness.ps1
 
-# Live write — requires Phase 0 baseline gate (ALL stacks' baselines present)
-pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Antigravity
+# Live write to ALL stacks (requires Phase 0 baseline gate — all present, registered)
+pwsh ./scripts/Sync-HostHarness.ps1 -Apply
+
+# Single-stack variants are exceptions only:
+#   -Target Antigravity        dry-run manifest inspection (read-only)
+#   -Apply -Target Antigravity -AllowSkew    deliberate scoped repair; siblings go stale
 ```
 
 ### Risks / notes

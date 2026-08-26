@@ -12,9 +12,9 @@ Architecture: [skill source and host overlays](../docs/featureArchitecture/skill
 
 | Host | Contents | Status |
 | ---- | -------- | ------ |
-| [cursor/](./cursor/_index.md) | Skills, rules, agents from live `~/.cursor`; deep procedure at repo-root [`workflow/`](../workflow/_index.md) | **Thin wrappers** — [`Sync-HostHarness.ps1 -Target Cursor`](../scripts/Sync-HostHarness.ps1) |
-| [opencode/](./opencode/_index.md) | OpenCode harness: instructions, thin skill stubs, agent harness, specimen config | **pointer-first-4 complete** — [`Sync-HostHarness.ps1 -Target OpenCode`](../scripts/Sync-HostHarness.ps1); procedure mirror deleted |
-| [antigravity/](./antigravity/_index.md) | Antigravity harness: GEMINI.md gate (full-replace), 9 skill stubs, 3 escape-* workflows, 3 reviewer subagent defs | **Live sync authorized** (owner ruling 2026-08-26; Phase 0 baseline present) — [`Sync-HostHarness.ps1 -Target Antigravity`](../scripts/Sync-HostHarness.ps1); SOP: [antigravity-host-adapter](../docs/SOPs/antigravity-host-adapter.md) |
+| [cursor/](./cursor/_index.md) | Skills, rules, agents from live `~/.cursor`; deep procedure at repo-root [`workflow/`](../workflow/_index.md) | **Thin wrappers** — included in global pushes (`-Apply`) |
+| [opencode/](./opencode/_index.md) | OpenCode harness: instructions, thin skill stubs, agent harness, specimen config | **pointer-first-4 complete** — included in global pushes; procedure mirror deleted |
+| [antigravity/](./antigravity/_index.md) | Antigravity harness: GEMINI.md gate (full-replace), 11 skill stubs, 3 escape-* workflows, 3 reviewer subagent defs | **Live sync authorized** (owner ruling 2026-08-26) — included in global pushes; SOP: [antigravity-host-adapter](../docs/SOPs/antigravity-host-adapter.md) |
 
 Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlays/opencode/](./opencode/_index.md). C6 minimum smoke rows **1–4**, **8**, **9–10**, **13**: **pass** (2026-08-20 operator post-mirror); row **14** install-time pass. See [pointer-first-4 closeout](../analysis/pointer-first-4-closeout-2026-08.md).
 
@@ -22,6 +22,7 @@ Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlay
 
 1. Portable procedure edits: **Target** → repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`, FA). Overlay refresh: run [`Sync-HostHarness.ps1`](../scripts/Sync-HostHarness.ps1) when authorized — harness only, not a second authored procedure tree. OpenCode host procedure mirror **deleted** pf4; Cursor `~/.cursor/docs/workflow/` may remain transitional ([closeout](../analysis/pointer-first-4-closeout-2026-08.md)).
 2. Do not invent `adapters/` at repo root for copy-out — use `scripts/host-sync/` modular adapters ([expansion recipe](../scripts/host-sync/README.md#expansion-recipe-add-a-third-stack)).
+3. **Live pushes are global by default** (owner ruling 2026-08-26): `Sync-HostHarness.ps1 -Apply` targets all stacks; single-stack Apply only via the `-AllowSkew` exception path. Post-apply verification is script-authoritative for routine syncs ([policy](../scripts/host-sync/README.md#post-apply-verification-policy)) — smoke attestation belongs to first-time surfaces and machinery changes, not per-skill updates.
 
 ## Related
 
