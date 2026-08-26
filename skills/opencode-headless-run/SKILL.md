@@ -91,9 +91,11 @@ Check the captured log for all of these before trusting a run:
    appears intact.
 
 4. Model responsiveness varies by route: some free-tier models answer in
-   seconds from the chat client but stall for minutes through `run`. If a
-   specific model probes slow headlessly, switch models; do not assume the
-   harness is broken.
+   seconds from the chat client but stall for minutes through `run`, and some
+   providers throttle mid-session (persistent 502 "service overloaded" after
+   tool use). Probe first; if slow or 502-ing, switch models rather than
+   debugging the harness — and budget wall-clock accordingly before launching
+   batches.
 
 Before any long-running call, validate the pipeline with a short probe:
 a trivial prompt ("Reply OK") under a hard cap (about 60 to 90 seconds). A probe
@@ -135,13 +137,21 @@ until (exec 3<>/dev/tcp/127.0.0.1/4096) 2>/dev/null; do sleep 0.5; done
 opencode run --attach http://localhost:4096 --dir <ws> --title <name> "<task>"
 ```
 
-Gotchas learned the hard way:
+Attach-mode rules (each of these bit in real use):
 
+- **`--dir` is mandatory when attaching.** The server uses its own working
+  directory; your shell's `cd`/`Set-Location` is silently ignored. Omitting
+  `--dir` makes the run execute in the wrong tree.
+- **Use absolute paths inside prompts when attaching.** Relative paths in task
+  instructions resolve against the server's cwd, which can trigger
+  `external_directory` denials for reads that would succeed from the shell.
 - A failed or killed `serve` can leave an orphaned server holding the port. A
   later `serve` then fails while the orphan still works: check who owns the port
   (`Get-NetTCPConnection -LocalPort 4096`) and attach to it instead of spawning.
-- Always wait for readiness before the first attach; attaching to a not-yet-
-  listening server fails instantly.
+- Do not launch `serve` with `-RedirectStandardError`/`-RedirectStandardOutput`
+  on Start-Process: it can die with an opaque `ChildProcess.kill` error. Prefer
+  `Start-Job { opencode serve --port <port> *> log }` or plain detached start,
+  then wait for port readiness as shown above.
 - Set `OPENCODE_SERVER_PASSWORD` before `serve` if other local users exist.
 
 ## Finding the session afterwards
