@@ -55,6 +55,8 @@ Reviewer Tasks that complete in well under ~1s with empty results are **fail-lou
 
 `discovery` · `implementation-plan` · `plan-review` · `implementation-review` · `pre-commit-ci-gate` · `composer` (phased conductor) · `documentation-architecture` (new docs trees) · `roadmap` (repo multi-phase handoffs) · `diagnosing-bugs` (shipped-code diagnosis)
 
+`opencode-headless-run` · `opencode-history-search` — the `opencode-` prefix marks the OpenCode-infrastructure skill group; when a task involves driving or inspecting OpenCode itself, load from that group before improvising.
+
 **How to load:** Use the OpenCode **`skill` tool** with the exact skill id above. Do **not** use bash/shell to list or discover adapter SoT under the OpenCode config root. Prefer native `read` / `glob` / `grep` for repo files; reserve bash for real commands (tests, builds, git when needed).
 
 Empty `glob`/`grep` on gitignored or out-of-workspace paths is often **tool blindness**, not proof of absence. Prefer absolute `read` of companion procedure paths (e.g. `{{COMPANION_ROOT}}/workflow/iterative-plan-review.md`). Do not treat host `docs/workflow/` mirror as procedure SoT. Do not Shell-list the adapter tree to discover SoT. Prefer `glob` for `eval/runs` when the repo provides a `.ignore` un-ignore. Prefer approving shell **once** unless the pattern is promoted into reviewed config.

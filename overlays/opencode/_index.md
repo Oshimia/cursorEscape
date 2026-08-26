@@ -130,7 +130,7 @@ Companion `workflow/` leaves formerly mirrored to host `docs/workflow/` (**10** 
 
 **ARCHIVED — do not enforce leaf count on live host post-pf4.**
 
-## Skills inventory (9 — C2)
+## Skills inventory (11 — C2)
 
 | Skill id | Overlay |
 | -------- | ------- |
@@ -143,6 +143,8 @@ Companion `workflow/` leaves formerly mirrored to host `docs/workflow/` (**10** 
 | documentation-architecture | [skills/documentation-architecture/SKILL.md](./skills/documentation-architecture/SKILL.md) |
 | roadmap | [skills/roadmap/SKILL.md](./skills/roadmap/SKILL.md) |
 | diagnosing-bugs | [skills/diagnosing-bugs/SKILL.md](./skills/diagnosing-bugs/SKILL.md) |
+| opencode-headless-run | [skills/opencode-headless-run/SKILL.md](./skills/opencode-headless-run/SKILL.md) |
+| opencode-history-search | [skills/opencode-history-search/SKILL.md](./skills/opencode-history-search/SKILL.md) |
 
 ## Agents inventory (8)
 

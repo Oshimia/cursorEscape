@@ -13,6 +13,8 @@
         @{ Source = 'skills/documentation-architecture/SKILL.md'; Dest = 'skills/documentation-architecture/SKILL.md' }
         @{ Source = 'skills/roadmap/SKILL.md'; Dest = 'skills/roadmap/SKILL.md' }
         @{ Source = 'skills/diagnosing-bugs/SKILL.md'; Dest = 'skills/diagnosing-bugs/SKILL.md' }
+        @{ Source = 'skills/opencode-headless-run/SKILL.md'; Dest = 'skills/opencode-headless-run/SKILL.md' }
+        @{ Source = 'skills/opencode-history-search/SKILL.md'; Dest = 'skills/opencode-history-search/SKILL.md' }
         @{ Source = 'agents/planner.md'; Dest = 'agents/planner.md' }
         @{ Source = 'agents/plan_reviewer.md'; Dest = 'agents/plan_reviewer.md' }
         @{ Source = 'agents/implementer.md'; Dest = 'agents/implementer.md' }

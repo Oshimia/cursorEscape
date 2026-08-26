@@ -40,6 +40,13 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 | diagnosing-bugs | [diagnosing-bugs/SKILL.md](./diagnosing-bugs/SKILL.md) | [OpenCode](../overlays/opencode/skills/diagnosing-bugs/SKILL.md) |
 | bug-review-sweep | [bug-review-sweep/SKILL.md](./bug-review-sweep/SKILL.md) — reviewer-loaded sweep protocol (canonical SoT; openBuggy carries a byte-identical mirror) | — (loaded via Read by bug_reviewer) |
 
+### OpenCode tooling
+
+| Skill | Procedure | Host overlays |
+| ----- | --------- | ------------- |
+| opencode-headless-run | [SKILL.md](./opencode-headless-run/SKILL.md) | [OpenCode](../overlays/opencode/skills/opencode-headless-run/SKILL.md) |
+| opencode-history-search | [SKILL.md](./opencode-history-search/SKILL.md) | [OpenCode](../overlays/opencode/skills/opencode-history-search/SKILL.md) |
+
 ### Research skills
 
 | Skill | Procedure | Host overlays |
