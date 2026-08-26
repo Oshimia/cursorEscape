@@ -20,7 +20,7 @@ headless failures (empty answers, permission denials, `Session not found`).
 
 | Doc | When |
 |-----|------|
-| [SKILL.md]({{COMPANION_ROOT}}/skills/opencode-headless-run/SKILL.md) | Invocation flags, environment hygiene, permission rulesets, validation, retry policy |
+| [SKILL.md]({{COMPANION_ROOT}}/skills/opencode-headless-run/SKILL.md) | Invocation flags, environment hygiene (per-invocation for agent callers), debugging discipline, validation, retry policy |
 | [reference-cli.md]({{COMPANION_ROOT}}/skills/opencode-headless-run/reference-cli.md) | Full flag/command tables, permission-model summary, batch + retry examples |
 
 ## Must not
