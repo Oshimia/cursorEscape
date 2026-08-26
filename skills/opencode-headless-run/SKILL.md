@@ -30,6 +30,28 @@ Get-ChildItem env: | Where-Object { $_.Name -like 'OPENCODE*' } |
 env | grep ^OPENCODE_ | cut -d= -f1 | xargs -r -n1 -I{} env -u {}
 ```
 
+**Agent / automation callers — hygiene is per-invocation, not per-session.**
+When every command runs in a fresh shell (agent loops, CI steps, subprocess
+wrappers), the parent environment re-supplies these variables between calls;
+cleanup performed in an earlier command does NOT persist. Chain the cleanup and
+the run together as one command:
+
+```powershell
+Get-ChildItem env: | Where-Object { $_.Name -like 'OPENCODE*' } |
+    ForEach-Object { Remove-Item "env:$($_.Name)" }
+opencode run --dir <workspace> --agent <agent> -m <provider/model> `
+    --title <findable-name> "<prompt>" *> <log-file>
+```
+
+```bash
+env | grep ^OPENCODE_ | cut -d= -f1 | xargs -r -n1 -I{} env -u {} \
+    opencode run --dir <workspace> -m <provider/model> "<prompt>" > <log> 2>&1
+```
+
+To confirm contamination as the cause of `Session not found`, list the
+variables inside the *same* invocation that fails — if they reappear there,
+the previous cleanup ran in a different process.
+
 ## Basic invocation
 
 ```powershell
@@ -169,7 +191,7 @@ skill.
 
 | Symptom | Cause | Fix |
 |---------|-------|-----|
-| `Error: Session not found` on a fresh run | Inherited `OPENCODE_*` env (desktop app) | Clear all `OPENCODE_*` vars |
+| `Error: Session not found` on a fresh run | Inherited `OPENCODE_*` env (desktop app) re-injected into every fresh shell | Clear all `OPENCODE_*` vars **in the same invocation as the run** (see Agent callers note above); verify by listing them inside the failing command |
 | Task "completes" but the key action never ran | A permission `ask` was silently denied | Explicit allow in agent file; validate output substance |
 | Empty or truncated answer | Model/service issue | Retry with backoff; try `--variant` or another model |
 | Response echoes your prompt back | Degenerate generation | Retry; tighten prompt |
@@ -177,6 +199,29 @@ skill.
 | Trivial prompt takes minutes per call | Per-run server cold boot | Use serve + attach (warm server section) |
 | `serve` fails to start, or dies silently | Port already held by an orphaned server | Attach to the existing server, or kill its process (`Get-NetTCPConnection -LocalPort <port>`) |
 | One model stalls while others answer fast | Provider-side routing/queueing for that model over the CLI route | Probe with a cheap timed call; pick a responsive model |
+
+## Debugging discipline (for agent callers)
+
+Agent loops lose context between commands and re-inherit parent environment.
+When a documented failure mode hits, debug **mechanically** — do not vary
+multiple things per attempt:
+
+1. **Match the symptom to this table first.** Work through candidate causes in
+   table order; each row names its own one-command verification.
+2. **One variable per attempt.** Change only the suspected cause; keep model,
+   flags, binary, and working directory fixed until that hypothesis is proven
+   or disproven.
+3. **Observe state inside the failing invocation**, not in a prior or separate
+   command (agent shells are fresh processes — earlier observations describe a
+   different environment).
+4. **Reproduce minimal first:** bare `opencode run -m <model> "Reply OK"` with
+   no other flags establishes whether the failure is invocation-shaped at all.
+5. **Cap improvised attempts at 3.** If the failure persists past three
+   single-variable tests drawn from this table, stop and report findings +
+   remaining hypotheses to the caller rather than continuing to vary
+   binaries, models, or attach modes blind.
+6. **Log every probe's exact command + output** to files under one temp dir;
+   the transcript is the evidence chain if escalation is needed.
 
 ## Reference
 
