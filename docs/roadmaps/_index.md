@@ -1,6 +1,6 @@
 # Roadmaps
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-08-28
 
 ## Context
 
@@ -17,6 +17,7 @@ Multi-phase handoff roadmaps for cursorEscape. Each roadmap file carries **Agent
 | [Companion pointer-first](./pointer-first.md) | **Complete** — pointer-first-4 closeout 2026-08-20 | Companion SoT; thin harness; procedure mirror deleted (OpenCode) |
 | [Host harness sync build](./host-harness-sync-build.md) | **Complete** — Phase 3 docs + `Sync-HostHarness.ps1` operator surface | Modular sync core + Cursor/OpenCode adapters; Phase 0 baselines restore-only |
 | [mattpocock skills audit](./mattpocock-skills-audit.md) | **Phase 0 complete** — map authored 2026-08-21; next: P1 assessment sweep | Full-sweep audit of mattpocock/skills + merge of relevant skills; map under [research/mattpocock-skill-audit](../research/mattpocock-skill-audit/_index.md) |
+| [Overlay architecture remediation](./overlay-remediation.md) | **Phase 0 ready** — conductor-assigned 2026-08-28; approved plan in hand | Fix overlay architecture: overlays carry only host differences (per-entry v2 sourcing, promote-into-twin gate composition, golden-render regression surface, CI drift fixes) |
 
 ## Implications / open questions
 
