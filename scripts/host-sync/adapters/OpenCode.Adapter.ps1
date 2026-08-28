@@ -2,6 +2,14 @@
 Set-StrictMode -Version Latest
 
 function Invoke-OpenCodeAgentsDualWrite {
+    # D7 render-path redesign (remediation program, 2026-08-28). TRANSITION STATE:
+    # instructions/cursor-escape-loop.md is NOT (yet) a CopyEntries row — that entry
+    # is a composed-leaf landing in Phase 2. Until then this function remains the
+    # single writer of BOTH dests, rendered from the overlay source through the
+    # shared Core helper (pre-D7 byte-parity preserved). When the Phase 2 manifest
+    # adds the composed instructions entry, the loop becomes the writer of the
+    # instructions dest and the Apply leg degrades to read-back + mirror (the
+    # read-back branch remains here and will be exercised by that calling order).
     param(
         [Parameter(Mandatory)]
         [hashtable] $Report,
@@ -14,41 +22,65 @@ function Invoke-OpenCodeAgentsDualWrite {
         [Parameter(Mandatory)]
         [string] $CompanionRoot,
         [Parameter(Mandatory)]
-        [hashtable] $DualWriteConfig
+        [hashtable] $DualWriteConfig,
+        [string] $SharedRoot = 'overlays/opencode'
     )
 
     $instructionsRel = $DualWriteConfig.InstructionsRel
     $agentsRel = $DualWriteConfig.AgentsRel
-    $sourcePath = Join-Path $OverlayRoot ($instructionsRel -replace '/', [IO.Path]::DirectorySeparatorChar)
+    $resolved = Resolve-HostSyncSourcePath -SourceRel ([string]$instructionsRel) `
+        -CompanionRoot $CompanionRoot -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
     $instructionsDest = Join-Path $LiveRoot ($instructionsRel -replace '/', [IO.Path]::DirectorySeparatorChar)
     $agentsDest = Join-Path $LiveRoot ($agentsRel -replace '/', [IO.Path]::DirectorySeparatorChar)
 
-    if (-not (Test-Path -LiteralPath $sourcePath)) {
+    if (-not (Test-Path -LiteralPath $resolved.Path)) {
         Add-SyncError -Report $Report -Message "Dual-write source missing: $instructionsRel"
         return
     }
 
-    $merged = Merge-CompanionTokens -Content ([IO.File]::ReadAllText($sourcePath)) -CompanionRoot $CompanionRoot
-    if (Test-ContentHasUnmergedTokens -Content $merged) {
-        Add-SyncError -Report $Report -Message "Unmerged tokens in dual-write source: $instructionsRel"
-        return
-    }
-
     if ($Mode -eq [HostSyncMode]::DryRun) {
+        $raw = [IO.File]::ReadAllText($resolved.Path)
+        try {
+            $merged = Invoke-HostSyncRender -Raw $raw -CompanionRoot $CompanionRoot `
+                -ResolvedSourcePath $resolved.Path -Entry $null -DestRel ([string]$instructionsRel)
+        }
+        catch {
+            Add-SyncError -Report $Report -Message $_.Exception.Message
+            return
+        }
+        if (-not $Report.PlannedContent.ContainsKey([string]$instructionsRel)) {
+            $Report.PlannedContent[[string]$instructionsRel] = $merged
+        }
         [void]$Report.PlannedFiles.Add("$instructionsDest <= $instructionsRel (token-merged)")
         [void]$Report.PlannedFiles.Add("$agentsDest <= dual-write($instructionsRel)")
         [void]$Report.Verifications.Add('dry-run AGENTS dual-write planned (byte-identical to instructions)')
         return
     }
 
-    foreach ($destPath in @($instructionsDest, $agentsDest)) {
-        $destParent = Split-Path -Parent $destPath
-        if ($destParent -and -not (Test-Path -LiteralPath $destParent)) {
-            New-Item -ItemType Directory -Path $destParent -Force | Out-Null
-        }
-        [IO.File]::WriteAllText($destPath, $merged)
-        [void]$Report.AppliedFiles.Add($destPath)
+    # Render the instructions dest from source and write BOTH dests from those exact
+    # bytes (transition: compatible whether or not the composed manifest entry exists).
+    try {
+        $raw = [IO.File]::ReadAllText($resolved.Path)
+        $instructionsBytes = [Text.Encoding]::UTF8.GetBytes(
+            (Invoke-HostSyncRender -Raw $raw -CompanionRoot $CompanionRoot `
+                -ResolvedSourcePath $resolved.Path -Entry $null -DestRel ([string]$instructionsRel)))
     }
+    catch {
+        Add-SyncError -Report $Report -Message $_.Exception.Message
+        return
+    }
+    $instructionsParent = Split-Path -Parent $instructionsDest
+    if ($instructionsParent -and -not (Test-Path -LiteralPath $instructionsParent)) {
+        New-Item -ItemType Directory -Path $instructionsParent -Force | Out-Null
+    }
+    [IO.File]::WriteAllBytes($instructionsDest, $instructionsBytes)
+    [void]$Report.AppliedFiles.Add($instructionsDest)
+    $agentsParent = Split-Path -Parent $agentsDest
+    if ($agentsParent -and -not (Test-Path -LiteralPath $agentsParent)) {
+        New-Item -ItemType Directory -Path $agentsParent -Force | Out-Null
+    }
+    [IO.File]::WriteAllBytes($agentsDest, $instructionsBytes)
+    [void]$Report.AppliedFiles.Add($agentsDest)
 
     $instructionsHash = Get-FileSha256Hex -Path $instructionsDest
     $agentsHash = Get-FileSha256Hex -Path $agentsDest
@@ -177,26 +209,26 @@ function Invoke-StackHarnessSync {
     $liveRoot = Join-Path $env:USERPROFILE ($Manifest.LiveRelativeRoot -replace '/', [IO.Path]::DirectorySeparatorChar)
     $openCodeHome = Get-OpenCodeHomePath -LiveRoot $liveRoot
 
+    $sharedRoot = 'overlays/opencode'
+    if ($Manifest.ContainsKey('SharedRoot') -and -not [string]::IsNullOrWhiteSpace([string]$Manifest.SharedRoot)) {
+        $sharedRoot = [string]$Manifest.SharedRoot
+    }
+
     if (-not (Test-Path -LiteralPath $overlayRoot -PathType Container)) {
         Add-SyncError -Report $report -Message "Overlay root missing: $overlayRoot"
         return $report
     }
 
-    $dualWriteRel = $null
-    if ($Manifest.AgentsDualWrite) {
-        $dualWriteRel = $Manifest.AgentsDualWrite.InstructionsRel
-    }
-
     foreach ($entry in $Manifest.CopyEntries) {
         if (-not $report.Success) { break }
-        if ($dualWriteRel -and $entry.Source -eq $dualWriteRel) { continue }
         Copy-ManifestEntry -Report $report -Mode $Mode -CompanionRoot $CompanionRoot `
-            -OverlayRoot $overlayRoot -LiveRoot $liveRoot -Entry $entry
+            -OverlayRoot $overlayRoot -LiveRoot $liveRoot -Entry $entry -SharedRoot $sharedRoot
     }
 
     if ($report.Success -and $Manifest.AgentsDualWrite) {
         Invoke-OpenCodeAgentsDualWrite -Report $report -Mode $Mode -OverlayRoot $overlayRoot `
-            -LiveRoot $liveRoot -CompanionRoot $CompanionRoot -DualWriteConfig $Manifest.AgentsDualWrite
+            -LiveRoot $liveRoot -CompanionRoot $CompanionRoot -DualWriteConfig $Manifest.AgentsDualWrite `
+            -SharedRoot $sharedRoot
     }
 
     if ($report.Success -and $Manifest.JsonMerge) {
@@ -256,10 +288,10 @@ function Invoke-StackHarnessSync {
     }
     else {
         foreach ($entry in $Manifest.CopyEntries) {
-            if ($dualWriteRel -and $entry.Source -eq $dualWriteRel) { continue }
-            $sourcePath = Join-Path $overlayRoot $entry.Source
-            if (-not (Test-Path -LiteralPath $sourcePath)) { continue }
-            $merged = Merge-CompanionTokens -Content ([IO.File]::ReadAllText($sourcePath)) -CompanionRoot $CompanionRoot
+            $resolvedEntry = Resolve-HostSyncSourcePath -SourceRel ([string]$entry.Source) `
+                -CompanionRoot $CompanionRoot -OverlayRoot $overlayRoot -SharedRoot $sharedRoot
+            if (-not (Test-Path -LiteralPath $resolvedEntry.Path)) { continue }
+            $merged = Merge-CompanionTokens -Content ([IO.File]::ReadAllText($resolvedEntry.Path)) -CompanionRoot $CompanionRoot
             if (Test-ContentHasUnmergedTokens -Content $merged) {
                 Add-SyncError -Report $report -Message "Unmerged tokens in dry-run copy plan: $($entry.Source)"
             }

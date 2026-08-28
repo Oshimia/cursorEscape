@@ -106,20 +106,26 @@ $stackIds = @(Get-TargetStackIds -TargetName $Target)
 if ($stackIds.Count -eq 1) {
     # Global-distribution guard: this skill set is global; a live push to one
     # stack alone silently strands every sibling stack carrying the same sources.
-    $overlap = Get-CrossStackSourceOverlap -StackId $Target -HostSyncRoot $hostSyncRoot
+    # Unroll defensively: the helper may return a single array object (comma return)
+    # or a stream of @{Identity;Siblings} rows — @(…) would re-wrap a lone array as
+    # one element and fake Count=1. Flatten rows, then count rows.
+    $overlapRaw = Get-CrossStackSourceOverlap -StackId $Target -HostSyncRoot $hostSyncRoot
+    $overlap = @(
+        foreach ($o in $overlapRaw) { $o }
+    )
     if ($overlap.Count -gt 0) {
         if ($mode -eq [HostSyncMode]::Apply) {
             if (-not $AllowSkew) {
-                Write-Output "FATAL (skew guard): '-Apply -Target $Target' updates $($overlap.Count) source file(s) also distributed to other stacks; siblings would go stale."
+                Write-Output "FATAL (skew guard): '-Apply -Target $Target' updates $($overlap.Count) source identity(ies) also distributed to other stacks; siblings would go stale."
                 foreach ($o in $overlap) {
-                    Write-Output ("  {0} -> also in: {1}" -f $o.Source, ($o.Sibling -join ', '))
+                    Write-Output ("  {0} -> also in: {1}" -f $o.Identity, ($o.Siblings -join ', '))
                 }
                 Write-Output "Normative path: run without -Target (or with -Target All). Single-stack Apply is a deliberate exception; re-run with -AllowSkew to proceed anyway."
                 exit 1
             }
             Write-Output "SKEW WARNING (-AllowSkew): shared sources stale on sibling stacks until next full sync:"
             foreach ($o in $overlap) {
-                Write-Output ("  {0} -> also in: {1}" -f $o.Source, ($o.Sibling -join ', '))
+                Write-Output ("  {0} -> also in: {1}" -f $o.Identity, ($o.Siblings -join ', '))
             }
         }
         else {

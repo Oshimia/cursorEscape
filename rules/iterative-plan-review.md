@@ -1,14 +1,23 @@
 # Plan review before implementation
 
-**Note:** `alwaysApply` is true after EZPZ cutover. Prefer User Rules snippets for reliable enforcement across Cursor versions.
+**Default on** unless truly trivial or the user **explicitly** opts out.
 
-Unless the change is **truly trivial** (typo/copy in one place, comment-only, pure formatting, cosmetic-only UI, docs-only with no behavior change, or user explicitly skips):
+**When in doubt, run the plan loop.**
 
-**Composer exception:** When assigned as Composer for execution, do not draft plans or invoke plan-reviewer. Planning is already complete. Defer phase subagent launches until the user has accepted the plan or roadmap. If asked to **plan** as Composer, use `implementation-plan` with Escalation **yes** instead.
+Eval / harness / multi-step operational work is **not** exempt.
 
-1. **Draft** using the `implementation-plan` skill plan template (include **Escalation**; when **yes**, Agent context per `plan-agent-context.md`)
-2. **Invoke** `plan-reviewer` with clean context (max 3 passes); full synthesized plan each time — no prior review transcripts. Recommended model: `composer-2.5` (chat override OK)
-3. **Synthesize** between passes — fix blockers; capture uncertainties as **discovery steps**
-4. **Present** to user after pass 3 or early `APPROVED`; if `CHANGES REQUESTED`, surface **outstanding requested changes** and **wait for user**
+1. Load skill `implementation-plan` (Escalation *when* SoT is that skill; when Escalation=yes, read `{{COMPANION_ROOT}}/workflow/plan-agent-context.md` for specimen headings only). Plan is incomplete until that skill's **Incomplete until** section bar is met — load `implementation-plan` for the list; do not invent always-on line budgets.
+2. Invoke the host's `plan_reviewer` (max 3 passes), **clean context**, full synthesized plan only — no prior review transcripts. Runs for every drafted plan regardless of Escalation yes/no. APPROVED requires Incomplete until compliance (missing-Inputs urgency).
+3. Present after APPROVED or pass 3; wait for user if CHANGES REQUESTED.
 
-**When in doubt, run the loop.** During implementation, each plan phase ends with the `implementation-review` loop before the next phase. Large/complex work: `roadmap` skill + optional `composer`.
+**Skip only if:** truly trivial one-place typo/copy, comment-only, formatting, cosmetic-only UI, docs-only with no behavior change, **or** explicit user opt-out (`skip plan review`, `skip planning`, `implement now`, `no plan gate`) — not inferred urgency.
+
+**When in doubt, run the loop.**
+
+---
+
+## Related
+
+- [Iterative code review](./iterative-code-review.md)
+- [CI ladder](../workflow/ci-ladder.md)
+- [Instruction layering (FA)](../docs/featureArchitecture/instruction-layering.md)

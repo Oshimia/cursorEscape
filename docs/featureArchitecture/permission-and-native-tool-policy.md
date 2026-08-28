@@ -4,7 +4,7 @@
 
 ## Context
 
-Target design for how cursorEscape governs shell permissions and native-tool preference across hosts. Contract SoT: [shell-native-tool-policy](../../rules/shell-native-tool-policy.md) (rules/). This leaf records **why** the policy is shaped this way and how it survives the host-sync machinery. Claim taxonomy: labels below are **Required** (red line, invariants) or **Desired** (relief metrics).
+Target design for how cursorEscape governs shell permissions and native-tool preference across hosts. Contract SoT: [shell-native-tool-policy](../../rules/shell-native-tool-policy.md) (rules/) — now split: the read-only allowlist invariants live there; the mutating-git / shell-fs **red line SoT is [red-line.md](../../rules/red-line.md)** (D9 mechanical move 2026-08-28). This leaf records **why** the policy is shaped this way and how it survives the host-sync machinery. Claim taxonomy: labels below are **Required** (red line, invariants) or **Desired** (relief metrics).
 
 ---
 

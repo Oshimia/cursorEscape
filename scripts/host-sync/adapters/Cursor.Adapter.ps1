@@ -20,10 +20,15 @@ function Invoke-StackHarnessSync {
         return $report
     }
 
+    $sharedRoot = 'overlays/opencode'
+    if ($Manifest.ContainsKey('SharedRoot') -and -not [string]::IsNullOrWhiteSpace([string]$Manifest.SharedRoot)) {
+        $sharedRoot = [string]$Manifest.SharedRoot
+    }
+
     foreach ($entry in $Manifest.CopyEntries) {
         if (-not $report.Success) { break }
         Copy-ManifestEntry -Report $report -Mode $Mode -CompanionRoot $CompanionRoot `
-            -OverlayRoot $overlayRoot -LiveRoot $liveRoot -Entry $entry
+            -OverlayRoot $overlayRoot -LiveRoot $liveRoot -Entry $entry -SharedRoot $sharedRoot
     }
 
     if ($Manifest.HybridRuleIds -and $Manifest.HybridRuleIds.Count -gt 0) {

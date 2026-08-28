@@ -264,6 +264,8 @@ function New-HostSyncReport {
         Success       = $true
         PlannedFiles  = [System.Collections.Generic.List[string]]::new()
         AppliedFiles  = [System.Collections.Generic.List[string]]::new()
+        PlannedContent  = @{}
+        PlannedClasses  = @{}
         Errors        = [System.Collections.Generic.List[string]]::new()
         Warnings      = [System.Collections.Generic.List[string]]::new()
         Verifications = [System.Collections.Generic.List[string]]::new()
@@ -341,6 +343,122 @@ function Assert-NoPerApplyBackupArtifacts {
     }
 }
 
+function Resolve-HostSyncSourcePath {
+    # Per-entry v2 source-class resolution (remediation program, 2026-08-28).
+    # 'base:'   → repo-root SoT (relative to CompanionRoot)
+    # 'shared:' → shared overlay tree (SharedRoot knob, relative to CompanionRoot)
+    # plain     → overlay-relative (backward-compatible v1 behavior)
+    param(
+        [Parameter(Mandatory)]
+        [string] $SourceRel,
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot,
+        [Parameter(Mandatory)]
+        [string] $OverlayRoot,
+        [string] $SharedRoot = 'overlays/opencode'
+    )
+
+    $sep = [IO.Path]::DirectorySeparatorChar
+
+    if ($SourceRel -match '^\s*base:(?<rest>.+)$') {
+        $rel = $Matches['rest'].Trim().Replace('/', $sep)
+        return @{
+            SourceClass = 'base'
+            Path        = (Join-Path $CompanionRoot $rel)
+        }
+    }
+
+    if ($SourceRel -match '^\s*shared:(?<rest>.+)$') {
+        $sharedAbs = Join-Path $CompanionRoot (($SharedRoot -replace '/', $sep))
+        $rel = $Matches['rest'].Trim().Replace('/', $sep)
+        return @{
+            SourceClass = 'shared'
+            Path        = (Join-Path $sharedAbs $rel)
+        }
+    }
+
+    $rel = $SourceRel.Replace('/', $sep)
+    return @{
+        SourceClass = 'overlay'
+        Path        = (Join-Path $OverlayRoot $rel)
+    }
+}
+
+function Invoke-HostSyncReadFileRef {
+    # Resolves a Parts/Footer file reference relative to the directory of the
+    # already-resolved source file. File references are exactly that — never inline text.
+    param(
+        [Parameter(Mandatory)]
+        [string] $FileRef,
+        [Parameter(Mandatory)]
+        [string] $ResolvedSourcePath
+    )
+
+    if ([string]::IsNullOrWhiteSpace($FileRef)) {
+        throw 'Empty Footer/Parts file reference'
+    }
+
+    $sep = [IO.Path]::DirectorySeparatorChar
+    $baseDir = Split-Path -Parent $ResolvedSourcePath
+    $refPath = Join-Path $baseDir ($FileRef.Replace('/', $sep))
+
+    if (-not (Test-Path -LiteralPath $refPath)) {
+        throw "Footer/Parts file reference missing: $refPath"
+    }
+
+    return [IO.File]::ReadAllText($refPath)
+}
+
+function Invoke-HostSyncRender {
+    # Shared v2 render: Parts + body + Footer, fail-closed Substitutions,
+    # then companion-token merge. Positional closure: Parts join BEFORE body,
+    # Footer joins AFTER.
+    param(
+        [Parameter(Mandatory)]
+        [string] $Raw,
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot,
+        [Parameter(Mandatory)]
+        [string] $ResolvedSourcePath,
+        [hashtable] $Entry,
+        [Parameter(Mandatory)]
+        [string] $DestRel
+    )
+
+    $entry = $Entry
+    $segments = [System.Collections.Generic.List[string]]::new()
+
+    if ($entry -and $entry.ContainsKey('Parts') -and $null -ne $entry.Parts) {
+        foreach ($partRef in @($entry.Parts)) {
+            [void]$segments.Add((Invoke-HostSyncReadFileRef -FileRef ([string]$partRef) -ResolvedSourcePath $ResolvedSourcePath))
+        }
+    }
+
+    [void]$segments.Add($Raw)
+
+    if ($entry -and $entry.ContainsKey('Footer') -and $null -ne $entry.Footer) {
+        foreach ($footRef in @($entry.Footer)) {
+            [void]$segments.Add((Invoke-HostSyncReadFileRef -FileRef ([string]$footRef) -ResolvedSourcePath $ResolvedSourcePath))
+        }
+    }
+
+    $composed = ($segments -join "`r`n`r`n")
+
+    if ($entry -and $entry.ContainsKey('Substitutions') -and $null -ne $entry.Substitutions) {
+        foreach ($sub in @($entry.Substitutions)) {
+            $find = [string]$sub.Find
+            $replace = [string]$sub.Replace
+            $count = ([regex]::Matches($composed, [regex]::Escape($find))).Count
+            if ($count -ne 1) {
+                throw "Substitution no-match (or multi-match) at render time: '$find' (matched $count times) for dest '$DestRel'"
+            }
+            $composed = $composed.Replace($find, $replace)
+        }
+    }
+
+    return (Merge-CompanionTokens -Content $composed -CompanionRoot $CompanionRoot)
+}
+
 function Copy-ManifestEntry {
     param(
         [Parameter(Mandatory)]
@@ -354,12 +472,17 @@ function Copy-ManifestEntry {
         [Parameter(Mandatory)]
         [string] $LiveRoot,
         [Parameter(Mandatory)]
-        [hashtable] $Entry
+        [hashtable] $Entry,
+        [string] $SharedRoot = 'overlays/opencode'
     )
 
     $sourceRel = $Entry.Source
-    $destRel = if ($Entry.Dest) { $Entry.Dest } else { $Entry.Source }
-    $sourcePath = Join-Path $OverlayRoot $sourceRel
+    # Strict-mode-safe optional keys: hashtable members (.Dest) throw under
+    # Set-StrictMode when absent — manifest entries may omit Dest (defaults to Source).
+    $destRel = if ($Entry.ContainsKey('Dest') -and $Entry.Dest) { $Entry.Dest } else { $Entry.Source }
+    $resolved = Resolve-HostSyncSourcePath -SourceRel ([string]$sourceRel) `
+        -CompanionRoot $CompanionRoot -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
+    $sourcePath = $resolved.Path
     $destPath = Join-Path $LiveRoot $destRel
 
     if (-not (Test-Path -LiteralPath $sourcePath)) {
@@ -368,7 +491,14 @@ function Copy-ManifestEntry {
     }
 
     $raw = [IO.File]::ReadAllText($sourcePath)
-    $merged = Merge-CompanionTokens -Content $raw -CompanionRoot $CompanionRoot
+    try {
+        $merged = Invoke-HostSyncRender -Raw $raw -CompanionRoot $CompanionRoot `
+            -ResolvedSourcePath $sourcePath -Entry $Entry -DestRel ([string]$destRel)
+    }
+    catch {
+        Add-SyncError -Report $Report -Message $_.Exception.Message
+        return
+    }
 
     if (Test-ContentHasUnmergedTokens -Content $merged) {
         Add-SyncError -Report $Report -Message "Unmerged tokens remain in planned output: $destRel"
@@ -377,6 +507,13 @@ function Copy-ManifestEntry {
 
     if ($Mode -eq [HostSyncMode]::DryRun) {
         [void]$Report.PlannedFiles.Add("$destPath <= $sourceRel (token-merged)")
+        $destKey = [string]$destRel
+        if (-not $Report.PlannedClasses.ContainsKey($destKey)) {
+            $Report.PlannedClasses[$destKey] = $resolved.SourceClass
+        }
+        if (-not $Report.PlannedContent.ContainsKey($destKey)) {
+            $Report.PlannedContent[$destKey] = $merged
+        }
         return
     }
 
@@ -388,7 +525,7 @@ function Copy-ManifestEntry {
     [void]$Report.AppliedFiles.Add($destPath)
 }
 
-function Get-PlannedHybridRuleContent {
+function Get-PlannedHybridRuleContentCore {
     param(
         [Parameter(Mandatory)]
         [string] $CompanionRoot,
@@ -454,6 +591,23 @@ $spawnBlock
 "@
 
     return ($fm + $body + "`r`n" + $footer + "`r`n")
+}
+
+function Get-PlannedHybridRuleContent {
+    # Wrapper (remediation program, 2026-08-28): guarantees trailing CRLF so the
+    # composed surface is deterministic for promotion callers, and merges
+    # companion tokens — the promoted neutral twins are shared leaves that carry
+    # {{COMPANION_ROOT}} (same token contract as every composed dest).
+    param(
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot,
+        [Parameter(Mandatory)]
+        [string] $RuleId
+    )
+
+    $content = Get-PlannedHybridRuleContentCore -CompanionRoot $CompanionRoot -RuleId $RuleId
+    $merged = Merge-CompanionTokens -Content $content -CompanionRoot $CompanionRoot
+    return $merged.TrimEnd() + "`r`n"
 }
 
 function Invoke-HybridCursorRules {
