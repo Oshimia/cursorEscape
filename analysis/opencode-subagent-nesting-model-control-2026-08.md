@@ -89,6 +89,7 @@ Model identity and lineage were verified against `~/.local/share/opencode/openco
 
 ## Related
 
+- [VS Code sub-agent recursion](./vscode-subagent-recursion-2026-08.md) — same question against the VS Code native harness (also depth-capped at 1)
 - [OpenCode DSV4F session extension](./opencode-dsv4f-session-extension-2026-08.md)
 - [OpenCode skill-binding discovery](./opencode-skill-binding-discovery-2026-08.md)
 - [OpenCode host adapter SOP](../docs/SOPs/opencode-host-adapter.md)
