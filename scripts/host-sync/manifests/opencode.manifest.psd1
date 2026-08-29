@@ -1,14 +1,19 @@
 @{
+    # OpenCode host harness manifest (per-entry v2, Phase 2 migration 2026-08-28).
     StackId             = 'OpenCode'
     DisplayName         = 'OpenCode'
     OverlayRelativeRoot = 'overlays/opencode'
     LiveRelativeRoot    = '.config/opencode'
+    SharedRoot          = 'overlays/opencode'
     CopyEntries         = @(
+        # --- composed pre-commit stub: shared frontmatter + base SoT rule + host footer leaf ---
+        @{ Source = 'base:rules/pre-commit-ci-gate.md'; Dest = 'skills/pre-commit-ci-gate/SKILL.md'
+           Parts = @('shared:pre-commit-frontmatter.md')
+           Footer = @('footers/pre-commit-opencode.md') }
         @{ Source = 'skills/discovery/SKILL.md'; Dest = 'skills/discovery/SKILL.md' }
         @{ Source = 'skills/implementation-plan/SKILL.md'; Dest = 'skills/implementation-plan/SKILL.md' }
         @{ Source = 'skills/plan-review/SKILL.md'; Dest = 'skills/plan-review/SKILL.md' }
         @{ Source = 'skills/implementation-review/SKILL.md'; Dest = 'skills/implementation-review/SKILL.md' }
-        @{ Source = 'skills/pre-commit-ci-gate/SKILL.md'; Dest = 'skills/pre-commit-ci-gate/SKILL.md' }
         @{ Source = 'skills/composer/SKILL.md'; Dest = 'skills/composer/SKILL.md' }
         @{ Source = 'skills/documentation-architecture/SKILL.md'; Dest = 'skills/documentation-architecture/SKILL.md' }
         @{ Source = 'skills/roadmap/SKILL.md'; Dest = 'skills/roadmap/SKILL.md' }
@@ -24,9 +29,17 @@
         @{ Source = 'agents/test_reviewer.md'; Dest = 'agents/test_reviewer.md' }
         @{ Source = 'agents/composer_conductor.md'; Dest = 'agents/composer_conductor.md' }
     )
+    # Composed always-on gate (Phase 2): header leaf (overlay) + promoted-twin bodies (base: SoT)
+    # + host wiring footer (overlay). Rendered by Invoke-OpenCodeAgentsDualWrite; AGENTS.md mirrors.
     AgentsDualWrite     = @{
         InstructionsRel = 'instructions/cursor-escape-loop.md'
         AgentsRel       = 'AGENTS.md'
+        Parts           = @(
+            'instructions/__header__.md',
+            'base:rules/iterative-plan-review.md',
+            'base:rules/iterative-code-review.md'
+        )
+        Footer          = @('footers/instructions-wiring.md')
     }
     JsonMerge           = @{
         SpecimenRel            = 'opencode.specimen.json'

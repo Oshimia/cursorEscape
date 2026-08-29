@@ -45,7 +45,7 @@ Stewardship and non-goals: [design decisions](../review/design-decisions.md).
 | Agent & skill contracts | **Complete** (Phase 4–5) — [agents](../agents/_index.md) · [skills](../skills/_index.md) · [rules](../rules/_index.md) |
 | Implementation roadmap | [implementation-roadmap.md](./roadmaps/implementation-roadmap.md) — R0 live trial |
 | Skill-manager identity | **Phases 1–6 complete** — bases at repo root; **thin Cursor overlay** — [overlays/cursor](../overlays/cursor/_index.md); **OpenCode overlay** — [overlays/opencode](../overlays/opencode/_index.md) (copy-out authorized and applied 2026-08-20); **Antigravity overlay** — [overlays/antigravity](../overlays/antigravity/_index.md) (third stack; dry-run verified 2026-08-23, live sync deferred pending operator baseline); shared deep procedure — [workflow/](../workflow/_index.md). |
-| Overlay architecture remediation | **Phase 0 ready** — [overlay-remediation.md](./roadmaps/overlay-remediation.md) — overlays carry only host differences (per-entry v2 sourcing; promote-into-twin gates; golden renders; conductor-assigned 2026-08-28) |
+| Overlay architecture remediation | **Phase 2 complete** (commit pending Reviewer A) — [overlay-remediation.md](./roadmaps/overlay-remediation.md) — overlays carry only host differences (per-entry v2 sourcing; promote-into-twin gates; golden renders; conductor-assigned 2026-08-28) |
 
 ---
 

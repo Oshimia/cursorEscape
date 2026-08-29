@@ -1,6 +1,6 @@
 # Roadmap: Overlay architecture remediation (overlays carry only host differences)
 
-**Status:** Phase 1 complete (Reviewer A APPROVED iter 2; awaiting Phase 2) · Last updated: 2026-08-28 · Conductor: Composer (assigned this thread)
+**Status:** Phase 2 complete (worktree; Reviewer A loop pending before commit) · Last updated: 2026-08-29 · Conductor: Composer (assigned this thread)
 **Source plan:** approved 2026-08-28 (plan-review APPROVED, fresh-loop pass 3; 6 total review passes). Copied fail-closed per roadmap skill (Escalation was **yes**).
 
 ## Product decisions (locked by owner)
@@ -52,7 +52,7 @@ The repo conforms to its own locked Promotion Rule (skill-source-and-host-overla
 
 - [x] **Phase 0 — ground truth + gates (read-only):** 7-script CI matrix (known-red baseline: Phase2FastCI expectedNine, Count-9); D9 severability audit (WRITTEN verdict); D2 schema mini-fixture PROOF (all field classes + extraction cases + golden mechanics); D5 feasibility VERDICT (promotion reproducible, atoms incl. host-wiring tails, <12k); D1 live-tree inventory ×3 stacks (feeds Phase 4 Apply-vs-collapse); D3 snippet disposition; D4 full CI enumeration (current line numbers, vacuous class, deletion/relocation→rework map, single-owner-per-assert); D6 unit-check home; D7 dual-write render-path design; D8 persistent-12k assert design. No repo edits (scratch only).
 - [x] **Phase 1 — machinery + SoT promotion:** per-entry v2 render helper + content capture; skew-guard v2; adapters ×3 (Cursor/Antigravity pass-through; OpenCode + D7 dual-write); PROMOTED rule twins; red-line disposition per D9 (move or footer-leaf fallback); echo-block disposal; golden renders recorded (cursor .mdc post-promotion, composed gates); conditional fallback primitives only if D9/D5 reject; rules/_index.md + permission-and-native-tool-policy.md pointers. Backward compat: unmigrated entries byte-identical planned output.
-- [ ] **Phase 2 — migration vs golden surfaces:** manifests ×3 (+SharedRoot, per-entry classes); antigravity differences-only; agents ×3; GEMINI composed; opencode instructions composed (dual-write flows); pre-commit stubs ×2; escape-* shrink; snippets (D3); SAME-CHANGESET assert rework per D4 map; NEW Invoke-Phase2-RemediationChecks.ps1; golden-render artifacts committed; roadmap leaf + _index row + Roadmap.md row. Apply-legs never run.
+- [ ] **Phase 2 — migration vs golden surfaces** (work complete, commit pending Reviewer A): manifests ×3 (+SharedRoot, per-entry classes); antigravity differences-only; agents ×3; GEMINI composed; opencode instructions composed (dual-write flows); pre-commit stubs ×2; escape-* shrink; snippets (D3); SAME-CHANGESET assert rework per D4 map; NEW Invoke-Phase2-RemediationChecks.ps1; golden-render artifacts committed; roadmap leaf + _index row + Roadmap.md row. Apply-legs never run.
 - [ ] **Phase 3 — retirements + docs cascade:** remaining D4 rows (expectedNine→11, Count-9, regex decouple — the D4 single-owner assignments); full non-Apply CI green; docs cascade per Scope; analysis note.
 - [ ] **Phase 4 — live verification + Apply-legs:** fresh live-vs-planned incl. golden renders; per-stack Apply for drifted surfaces only (owner-gated; OpenCode re-baseline first); collapse to dry-run+smoke if no drift; smoke rows recorded.
 

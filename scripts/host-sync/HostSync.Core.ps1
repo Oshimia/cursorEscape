@@ -369,7 +369,14 @@ function Resolve-HostSyncSourcePath {
     }
 
     if ($SourceRel -match '^\s*shared:(?<rest>.+)$') {
-        $sharedAbs = Join-Path $CompanionRoot (($SharedRoot -replace '/', $sep))
+        # SharedRoot is normally manifest-relative (e.g. 'overlays/opencode'); a rooted
+        # knob is used verbatim so scratch/test fixtures and absolute overrides work.
+        if ([IO.Path]::IsPathRooted($SharedRoot)) {
+            $sharedAbs = $SharedRoot
+        }
+        else {
+            $sharedAbs = Join-Path $CompanionRoot (($SharedRoot -replace '/', $sep))
+        }
         $rel = $Matches['rest'].Trim().Replace('/', $sep)
         return @{
             SourceClass = 'shared'
@@ -385,13 +392,18 @@ function Resolve-HostSyncSourcePath {
 }
 
 function Invoke-HostSyncReadFileRef {
-    # Resolves a Parts/Footer file reference relative to the directory of the
-    # already-resolved source file. File references are exactly that — never inline text.
+    # Resolves a Parts/Footer file reference. References are exactly that — never
+    # inline text. Resolution: FIRST relative to the directory of the already-resolved
+    # source file; if absent there AND the source is a base:/shared: leaf, fall back
+    # to the overlay root (footer/parts leaves are overlay artifacts; e.g. a composed
+    # gate sourced from base:rules/... wears its host wiring from overlays/<stack>/footers/).
     param(
         [Parameter(Mandatory)]
         [string] $FileRef,
         [Parameter(Mandatory)]
-        [string] $ResolvedSourcePath
+        [string] $ResolvedSourcePath,
+        [string] $OverlayRoot = '',
+        [string] $SourceClass = ''
     )
 
     if ([string]::IsNullOrWhiteSpace($FileRef)) {
@@ -399,14 +411,80 @@ function Invoke-HostSyncReadFileRef {
     }
 
     $sep = [IO.Path]::DirectorySeparatorChar
+    # Pre-resolved absolute reference (from Resolve-HostSyncEntryRefs 'ref:<path>')
+    # or any rooted path: use verbatim.
+    if ([IO.Path]::IsPathRooted($FileRef)) {
+        $refPath = $FileRef
+        if (-not (Test-Path -LiteralPath $refPath)) {
+            throw "Footer/Parts file reference missing: $refPath"
+        }
+        return [IO.File]::ReadAllText($refPath)
+    }
+    # Classed reference surfaced here means the caller skipped pre-resolution.
+    if ($FileRef -match '^\s*(base|shared):') {
+        throw ("Footer/Parts classed reference requires pre-resolution " +
+               "(Resolve-HostSyncEntryRefs): $FileRef")
+    }
     $baseDir = Split-Path -Parent $ResolvedSourcePath
     $refPath = Join-Path $baseDir ($FileRef.Replace('/', $sep))
 
     if (-not (Test-Path -LiteralPath $refPath)) {
+        # Classed-reference error surfaced here means the caller skipped pre-resolution.
+        if ($FileRef -match '^\s*(base|shared):') {
+            throw ("Footer/Parts classed reference requires pre-resolution " +
+                   "(Resolve-HostSyncEntryRefs): $FileRef")
+        }
+        # Overlay fallback: Parts/Footer leaves are overlay artifacts; resolve the
+        # reference against the overlay root when the primary (source-relative) miss.
+        if (-not [string]::IsNullOrEmpty($OverlayRoot)) {
+            $fallback = Join-Path $OverlayRoot ($FileRef.Replace('/', $sep))
+            if (Test-Path -LiteralPath $fallback) {
+                return [IO.File]::ReadAllText($fallback)
+            }
+        }
         throw "Footer/Parts file reference missing: $refPath"
     }
 
     return [IO.File]::ReadAllText($refPath)
+}
+
+function Resolve-HostSyncEntryRefs {
+    # Pre-resolves Parts/Footer classed references (base:/shared:) to concrete paths.
+    # Returns a copy of the entry with classed refs replaced by 'ref:<abs-path>' so
+    # Invoke-HostSyncReadFileRef treats them as absolute anchor paths.
+    param(
+        [Parameter(Mandatory)]
+        [hashtable] $Entry,
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot,
+        [Parameter(Mandatory)]
+        [string] $OverlayRoot,
+        [string] $SharedRoot = 'overlays/opencode'
+    )
+
+    $out = $null
+    foreach ($key in @('Parts', 'Footer')) {
+        if (-not ($Entry.ContainsKey($key)) -or $null -eq $Entry[$key]) { continue }
+        if ($null -eq $out) {
+            $out = @{}
+            foreach ($k in $Entry.Keys) { $out[$k] = $Entry[$k] }
+        }
+        $resolvedList = @()
+        foreach ($ref in @($Entry[$key])) {
+            $refStr = [string]$ref
+            if ($refStr -match '^\s*(base|shared):(?<rest>.+)$') {
+                $r = Resolve-HostSyncSourcePath -SourceRel $refStr `
+                    -CompanionRoot $CompanionRoot -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
+                $resolvedList += $r.Path
+            }
+            else {
+                $resolvedList += $refStr
+            }
+        }
+        $out[$key] = $resolvedList
+    }
+    if ($null -eq $out) { return $Entry }
+    return $out
 }
 
 function Invoke-HostSyncRender {
@@ -422,7 +500,9 @@ function Invoke-HostSyncRender {
         [string] $ResolvedSourcePath,
         [hashtable] $Entry,
         [Parameter(Mandatory)]
-        [string] $DestRel
+        [string] $DestRel,
+        [string] $OverlayRoot = '',
+        [string] $SourceClass = ''
     )
 
     $entry = $Entry
@@ -430,7 +510,8 @@ function Invoke-HostSyncRender {
 
     if ($entry -and $entry.ContainsKey('Parts') -and $null -ne $entry.Parts) {
         foreach ($partRef in @($entry.Parts)) {
-            [void]$segments.Add((Invoke-HostSyncReadFileRef -FileRef ([string]$partRef) -ResolvedSourcePath $ResolvedSourcePath))
+            [void]$segments.Add((Invoke-HostSyncReadFileRef -FileRef ([string]$partRef) -ResolvedSourcePath $ResolvedSourcePath `
+                -OverlayRoot $OverlayRoot -SourceClass $SourceClass))
         }
     }
 
@@ -438,7 +519,8 @@ function Invoke-HostSyncRender {
 
     if ($entry -and $entry.ContainsKey('Footer') -and $null -ne $entry.Footer) {
         foreach ($footRef in @($entry.Footer)) {
-            [void]$segments.Add((Invoke-HostSyncReadFileRef -FileRef ([string]$footRef) -ResolvedSourcePath $ResolvedSourcePath))
+            [void]$segments.Add((Invoke-HostSyncReadFileRef -FileRef ([string]$footRef) -ResolvedSourcePath $ResolvedSourcePath `
+                -OverlayRoot $OverlayRoot -SourceClass $SourceClass))
         }
     }
 
@@ -480,6 +562,9 @@ function Copy-ManifestEntry {
     # Strict-mode-safe optional keys: hashtable members (.Dest) throw under
     # Set-StrictMode when absent — manifest entries may omit Dest (defaults to Source).
     $destRel = if ($Entry.ContainsKey('Dest') -and $Entry.Dest) { $Entry.Dest } else { $Entry.Source }
+    # Pre-resolve classed Parts/Footer references (base:/shared:) to absolute paths.
+    $Entry = Resolve-HostSyncEntryRefs -Entry $Entry -CompanionRoot $CompanionRoot `
+        -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
     $resolved = Resolve-HostSyncSourcePath -SourceRel ([string]$sourceRel) `
         -CompanionRoot $CompanionRoot -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
     $sourcePath = $resolved.Path
@@ -493,7 +578,8 @@ function Copy-ManifestEntry {
     $raw = [IO.File]::ReadAllText($sourcePath)
     try {
         $merged = Invoke-HostSyncRender -Raw $raw -CompanionRoot $CompanionRoot `
-            -ResolvedSourcePath $sourcePath -Entry $Entry -DestRel ([string]$destRel)
+            -ResolvedSourcePath $sourcePath -Entry $Entry -DestRel ([string]$destRel) `
+            -OverlayRoot $OverlayRoot -SourceClass $resolved.SourceClass
     }
     catch {
         Add-SyncError -Report $Report -Message $_.Exception.Message

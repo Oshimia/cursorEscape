@@ -28,21 +28,62 @@ function Invoke-OpenCodeAgentsDualWrite {
 
     $instructionsRel = $DualWriteConfig.InstructionsRel
     $agentsRel = $DualWriteConfig.AgentsRel
-    $resolved = Resolve-HostSyncSourcePath -SourceRel ([string]$instructionsRel) `
-        -CompanionRoot $CompanionRoot -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
     $instructionsDest = Join-Path $LiveRoot ($instructionsRel -replace '/', [IO.Path]::DirectorySeparatorChar)
     $agentsDest = Join-Path $LiveRoot ($agentsRel -replace '/', [IO.Path]::DirectorySeparatorChar)
 
-    if (-not (Test-Path -LiteralPath $resolved.Path)) {
-        Add-SyncError -Report $Report -Message "Dual-write source missing: $instructionsRel"
+    # Build the render entry from the composition config (Phase 2 composed gate).
+    # Parts/Footer refs may be overlay-relative ('instructions/__header__.md',
+    # 'footers/instructions-wiring.md') or base:/shared: classes resolved via the
+    # shared Core path resolver. The body source is the FIRST Part when Parts are
+    # declared; otherwise the plain overlay instructions file (pre-composition path).
+    $dualEntry = @{ }
+    $hasParts = $DualWriteConfig.ContainsKey('Parts') -and $null -ne $DualWriteConfig.Parts -and @($DualWriteConfig.Parts).Count -gt 0
+    $hasFooter = $DualWriteConfig.ContainsKey('Footer') -and $null -ne $DualWriteConfig.Footer -and @($DualWriteConfig.Footer).Count -gt 0
+    if ($hasParts) { $dualEntry['Parts'] = @($DualWriteConfig.Parts) }
+    if ($hasFooter) { $dualEntry['Footer'] = @($DualWriteConfig.Footer) }
+
+    # Resolve every declared reference (fail closed on missing/class-invalid refs).
+    $resolvedRefs = @()
+    foreach ($ref in (@($dualEntry['Parts']) + @($dualEntry['Footer']))) {
+        if ([string]::IsNullOrWhiteSpace([string]$ref)) { continue }
+        $resolvedRefs += Resolve-HostSyncSourcePath -SourceRel ([string]$ref) `
+            -CompanionRoot $CompanionRoot -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
+    }
+    $missing = @($resolvedRefs | Where-Object { -not (Test-Path -LiteralPath $_.Path) })
+    if ($missing.Count -gt 0) {
+        Add-SyncError -Report $Report -Message ("Dual-write composition refs missing: " + (($missing | ForEach-Object { $_.Path }) -join ', '))
         return
     }
 
     if ($Mode -eq [HostSyncMode]::DryRun) {
-        $raw = [IO.File]::ReadAllText($resolved.Path)
         try {
-            $merged = Invoke-HostSyncRender -Raw $raw -CompanionRoot $CompanionRoot `
-                -ResolvedSourcePath $resolved.Path -Entry $null -DestRel ([string]$instructionsRel)
+            if ($hasParts) {
+                # Composition: each Part is a source-class reference (overlay leaf or
+                # base: SoT) rendered individually with token merge, joined; Footer
+                # refs resolve overlay-relative via SourceClass='' (overlay artifact).
+                $segments = @()
+                foreach ($part in @($DualWriteConfig.Parts)) {
+                    $pr = Resolve-HostSyncSourcePath -SourceRel ([string]$part) `
+                        -CompanionRoot $CompanionRoot -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
+                    $segments += (Invoke-HostSyncRender -Raw ([IO.File]::ReadAllText($pr.Path)) `
+                        -CompanionRoot $CompanionRoot -ResolvedSourcePath $pr.Path -Entry $null `
+                        -DestRel ([string]$instructionsRel) -OverlayRoot $OverlayRoot -SourceClass $pr.SourceClass)
+                }
+                $bodyRaw = ($segments -join "`r`n`r`n")
+                # Footer refs are overlay leaves; pass SourceClass='' so they resolve overlay-relative.
+                $composeEntry = @{ }
+                if ($hasFooter) { $composeEntry['Footer'] = @($DualWriteConfig.Footer) }
+                # (anchor for footer resolution: overlay root passed via -OverlayRoot; SourceClass empty = overlay-relative)
+                $merged = Invoke-HostSyncRender -Raw $bodyRaw -CompanionRoot $CompanionRoot `
+                    -ResolvedSourcePath $OverlayRoot -Entry $composeEntry `
+                    -DestRel ([string]$instructionsRel) -OverlayRoot $OverlayRoot -SourceClass ''
+            }
+            else {
+                $raw = [IO.File]::ReadAllText($resolvedRefs[0].Path)
+                $merged = Invoke-HostSyncRender -Raw $raw -CompanionRoot $CompanionRoot `
+                    -ResolvedSourcePath $resolvedRefs[0].Path -Entry $null -DestRel ([string]$instructionsRel) `
+                    -OverlayRoot $OverlayRoot -SourceClass $resolvedRefs[0].SourceClass
+            }
         }
         catch {
             Add-SyncError -Report $Report -Message $_.Exception.Message
@@ -51,19 +92,41 @@ function Invoke-OpenCodeAgentsDualWrite {
         if (-not $Report.PlannedContent.ContainsKey([string]$instructionsRel)) {
             $Report.PlannedContent[[string]$instructionsRel] = $merged
         }
-        [void]$Report.PlannedFiles.Add("$instructionsDest <= $instructionsRel (token-merged)")
+        # AGENTS.md mirrors the exact instructions bytes (dry-run capture only; Apply writes both).
+        if (-not $Report.PlannedContent.ContainsKey('AGENTS.md')) {
+            $Report.PlannedContent['AGENTS.md'] = $merged
+        }
+        [void]$Report.PlannedFiles.Add("$instructionsDest <= $instructionsRel (composed token-merged)")
         [void]$Report.PlannedFiles.Add("$agentsDest <= dual-write($instructionsRel)")
         [void]$Report.Verifications.Add('dry-run AGENTS dual-write planned (byte-identical to instructions)')
         return
     }
 
-    # Render the instructions dest from source and write BOTH dests from those exact
-    # bytes (transition: compatible whether or not the composed manifest entry exists).
+    # Apply: render the composed instructions and write BOTH dests from those exact bytes.
     try {
-        $raw = [IO.File]::ReadAllText($resolved.Path)
-        $instructionsBytes = [Text.Encoding]::UTF8.GetBytes(
-            (Invoke-HostSyncRender -Raw $raw -CompanionRoot $CompanionRoot `
-                -ResolvedSourcePath $resolved.Path -Entry $null -DestRel ([string]$instructionsRel)))
+        if ($hasParts) {
+            $segments = @()
+            foreach ($part in @($DualWriteConfig.Parts)) {
+                $r = Resolve-HostSyncSourcePath -SourceRel ([string]$part) `
+                    -CompanionRoot $CompanionRoot -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
+                $segments += (Invoke-HostSyncRender -Raw ([IO.File]::ReadAllText($r.Path)) `
+                    -CompanionRoot $CompanionRoot -ResolvedSourcePath $r.Path -Entry $null `
+                    -DestRel ([string]$instructionsRel) -OverlayRoot $OverlayRoot -SourceClass $r.SourceClass)
+            }
+            $bodyRaw = ($segments -join "`r`n`r`n")
+            $composeEntry = @{ }
+            if ($hasFooter) { $composeEntry['Footer'] = @($DualWriteConfig.Footer) }
+            $mergedText = Invoke-HostSyncRender -Raw $bodyRaw -CompanionRoot $CompanionRoot `
+                -ResolvedSourcePath $OverlayRoot -Entry $composeEntry `
+                -DestRel ([string]$instructionsRel) -OverlayRoot $OverlayRoot -SourceClass ''
+        }
+        else {
+            $raw = [IO.File]::ReadAllText($resolvedRefs[0].Path)
+            $mergedText = Invoke-HostSyncRender -Raw $raw -CompanionRoot $CompanionRoot `
+                -ResolvedSourcePath $resolvedRefs[0].Path -Entry $null -DestRel ([string]$instructionsRel) `
+                -OverlayRoot $OverlayRoot -SourceClass $resolvedRefs[0].SourceClass
+        }
+        $instructionsBytes = [Text.Encoding]::UTF8.GetBytes($mergedText)
     }
     catch {
         Add-SyncError -Report $Report -Message $_.Exception.Message

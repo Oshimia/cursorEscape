@@ -156,6 +156,56 @@ try {
         -SharedRoot 'overlays/opencode'
     $errMatch = @($report2.Errors | Where-Object { $_ -eq 'Overlay source missing: missing.md' })
     Assert-True 'U16 missing overlay source errors (message unchanged)' ($errMatch.Count -eq 1)
+
+    # ---------- Invoke-HostSyncReadFileRef: reference resolution order (v2) ----------
+    # U17: rooted/absolute references are used verbatim (never re-joined onto source dir).
+    $absRef = Join-Path $overlayScratch 'abs-foot.md'
+    [IO.File]::WriteAllText($absRef, 'ABS-FOOT-TEXT')
+    $absOut = Invoke-HostSyncReadFileRef -FileRef $absRef -ResolvedSourcePath $srcFile `
+        -OverlayRoot $overlayScratch
+    Assert-True 'U17 rooted reference used verbatim (no re-join)' ($absOut -eq 'ABS-FOOT-TEXT')
+
+    # U18: classed reference reaching the resolver without pre-resolution fails with the clear error
+    $threw = $false; $msg = ''
+    try {
+        $null = Invoke-HostSyncReadFileRef -FileRef 'base:rules/red-line.md' -ResolvedSourcePath $srcFile `
+            -OverlayRoot $overlayScratch
+    } catch { $threw = $true; $msg = $_.Exception.Message }
+    Assert-True 'U18 un-pre-resolved classed reference fails with clear error' `
+        ($threw -and $msg -like '*requires pre-resolution*')
+
+    # U19: overlay-relative footer resolves source-dir first, then falls back to OverlayRoot
+    # (composed gate sourced from base: rules wears a footer leaf from the overlay tree)
+    $overlayFoot = Join-Path $overlayScratch 'footers' 'relay.md'
+    New-Item -ItemType Directory -Path (Split-Path -Parent $overlayFoot) -Force | Out-Null
+    [IO.File]::WriteAllText($overlayFoot, 'RELAY-FOOT-TEXT')
+    $baseSrc = Join-Path $companionRoot 'rules' 'red-line.md'
+    $relayOut = Invoke-HostSyncReadFileRef -FileRef 'footers/relay.md' -ResolvedSourcePath $baseSrc `
+        -OverlayRoot $overlayScratch
+    Assert-True 'U19 overlay footer falls back to OverlayRoot when source-relative misses' ($relayOut -eq 'RELAY-FOOT-TEXT')
+
+    # U20: end-to-end — composed pre-commit entry renders shared frontmatter Part ahead of body
+    $sharedFM = @(
+        '---'
+        'name: pre-commit-ci-gate'
+        'description: test shim'
+        '---'
+    ) -join "`n"
+    $sharedDir = Join-Path $overlayScratch 'shared-root'
+    New-Item -ItemType Directory -Path $sharedDir -Force | Out-Null
+    [IO.File]::WriteAllText((Join-Path $sharedDir 'fm.md'), $sharedFM)
+    # End-to-end: Copy-ManifestEntry pre-resolves classed Parts (shared:fm.md), so body sourced
+    # from the overlay renders with the shared frontmatter ahead of it. Direct render calls
+    # throw on classed refs by design (U18) — pre-resolution is Copy-ManifestEntry's job.
+    [IO.File]::WriteAllText((Join-Path $overlayScratch 'pc-body.md'), 'PC-BODY')
+    $entrySharedPart = @{ Source = 'pc-body.md'; Dest = 'x.md'; Parts = @('shared:fm.md') }
+    $report3 = New-HostSyncReport -StackId 'UnitTest' -Mode ([HostSyncMode]::DryRun)
+    Copy-ManifestEntry -Report $report3 -Mode ([HostSyncMode]::DryRun) -CompanionRoot $companionRoot `
+        -OverlayRoot $overlayScratch -LiveRoot $liveScratch -Entry $entrySharedPart `
+        -SharedRoot $sharedDir
+    Assert-True 'U20 shared: Part pre-resolves and renders before body' `
+        ($report3.Success -and $report3.PlannedContent['x.md'].Contains('name: pre-commit-ci-gate') -and
+         $report3.PlannedContent['x.md'].Contains('PC-BODY'))
 }
 catch {
     $failures++

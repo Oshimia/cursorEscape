@@ -1,13 +1,13 @@
 ---
-description: cursorEscape dual review gate — Observed Fast CI, then parallel production_readiness_reviewer + bug_reviewer subagents (≤4 iterations per block), Full CI closeout.
+description: cursorEscape dual review gate - invoke the production_readiness_reviewer subagent directly via invoke_subagent per companion SoT (no restated gate text here).
 ---
 
 # escape-review
 
-Run the cursorEscape **implementation-review loop** on the current changeset. Deep procedure is companion-resident; load it via file reads — do not improvise.
+Run the cursorEscape **implementation-review loop** on the current changeset: Read `{{COMPANION_ROOT}}/workflow/iterative-code-review.md` (companion SoT for pressure-release blocks, cap-exhausted handoff, and verdict bars), then:
 
 1. Load skill `implementation-review` and follow `{{COMPANION_ROOT}}/skills/implementation-review/SKILL.md`.
-2. Run **Fast CI Observed** — per-command pass|fail|skipped|n/a rows. Do not launch reviewers on fail, skipped (when Fast ≠ n/a), or claimed-only results.
-3. Launch **both** subagents in parallel via `invoke_subagent`: `production_readiness_reviewer` (locked opener — no Custom Instructions envelope) and `bug_reviewer` (Custom Instructions allowed; must follow `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md`). Pack all Inputs; isolated clean-context children; never attach prior transcripts.
-4. Fix must-fix within a 4-iteration pressure-release block; re-run Observed Fast CI; re-launch both. Never launch a 5th pair. Auto-continue to dual APPROVED or iteration 4.
-5. Dual APPROVED → Full CI only (no reviewers). Empty/fast reviewer returns (< ~1s) are routing failures — fail loud, never "no bugs found."
+2. Invoke subagent `production_readiness_reviewer` (single clean reviewer for this program; no Bugbot leg per owner program ruling) with the review-loop completion gate.
+3. Iterate per the companion rule; fix must-fix findings before re-invoking the reviewer.
+
+Never run a 5th review iteration in one block; the companion rule owns all loop-phase sequencing and cap-exhausted handoff.
