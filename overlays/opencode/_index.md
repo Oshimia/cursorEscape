@@ -1,6 +1,6 @@
 # OpenCode overlay — harness copy-out map
 
-**Last updated:** 2026-08-23  
+**Last updated:** 2026-08-29  
 **Status:** **pointer-first-4 complete** (2026-08-20) — harness stubs use absolute `{{COMPANION_ROOT}}` Reads; live procedure mirror **deleted** from `{{OPENCODE_HOME}}/docs/workflow/`; `review-subagent-models` overlay-Read only. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1). Phase 0 baseline (restore-only): `C:/Users/admin/.config/opencode-backup-pre-host-sync-build-20260821-012600`. Sync does **not** create backups. See [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).  
 **Fidelity bar:** [host-adaptation-fidelity](../../docs/featureArchitecture/host-adaptation-fidelity.md) (C1–C6).
 
@@ -20,7 +20,7 @@ OpenCode-native **host overlay** at `overlays/opencode/`. Portable procedure sta
 | ---------------------------- | -------------- | ----- |
 | `instructions/cursor-escape-loop.md` | [instructions/cursor-escape-loop.md](./instructions/cursor-escape-loop.md) | Always-on gates body (C1) |
 | `AGENTS.md` | [AGENTS.md](./AGENTS.md) | **Same gates** — OpenCode global rules surface (must match `instructions/cursor-escape-loop.md`) |
-| `skills/<id>/SKILL.md` (×9) | [skills/](./skills/) | Thin harness stubs → absolute `{{COMPANION_ROOT}}` Reads (C2; pointer-first-2 rewrites bodies) |
+| `skills/<id>/SKILL.md` (×11) | [skills/](./skills/) | Thin harness stubs → absolute `{{COMPANION_ROOT}}` Reads (C2; pointer-first-2 rewrites bodies); `opencode-*` pair global (2026-08-26 ruling); `pre-commit-ci-gate` composed from `base:rules/pre-commit-ci-gate.md` (Phase 2) |
 | `agents/<role>.md` (×8) | [agents/](./agents/) | Thin harness bodies (C3); `composer_conductor` = primary conductor (task `"*": deny` first) |
 | `opencode.json` (harness merge) | [opencode.specimen.json](./opencode.specimen.json) | Merge tokens; **preserve** operator `model` / `provider` (not in specimen sole form) |
 
@@ -164,7 +164,7 @@ Companion `workflow/` leaves formerly mirrored to host `docs/workflow/` (**10** 
 | # | Item | Phase 2 evidence |
 | - | ---- | ---------------- |
 | **C1** | Always-on gates | Specimen `instructions` = **`{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md`** (absolute — cwd-relative paths do not load from global config); `AGENTS.md` matches that body; instruction states plan + implementation-review gates |
-| **C2** | Eight skills incl. `roadmap` *(Phase 2 scope; catalog expanded to nine in 2026-08-21 B1)* | Eight overlay `skills/*/SKILL.md` with matching `name`; host-adapter row 9 + Probe A updated |
+| **C2** | Eleven skills incl. `roadmap`, `diagnosing-bugs`, and the `opencode-*` pair *(author-time catalog 2026-08-21; nine 2026-08-21 B1; eleven per 2026-08-26 global-pair ruling + Phase 2 composition)* | Eleven overlay `skills/*/SKILL.md` with matching `name`; host-adapter row 9 + Probe A updated; `pre-commit-ci-gate` composed from `base:rules/pre-commit-ci-gate.md` (Phase 2 remediation checks 63/63) |
 | **C3** | Reviewers deny-edit; loops cited | Seven overlay agents + `composer_conductor` (8 total, 2026-08 composer hardening — task `"*": deny` first per failure mode K); reviewers `permission.edit: deny`; bodies cite `{{COMPANION_ROOT}}/workflow/iterative-*` and companion FA rubric |
 | **C4** | Companion workflow Reads (pointer-first-2) | Harness stubs use absolute `{{COMPANION_ROOT}}/workflow/...` Reads — **zero** host `docs/workflow/` as procedure SoT in harness; **zero** `../../` hops |
 | **C5** | Companion FA reads | Specimen `external_directory` includes `{{COMPANION_ROOT}}/**` |

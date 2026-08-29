@@ -29,15 +29,40 @@ Assert-Pass 'dry-run Cursor exit 0' ($LASTEXITCODE -eq 0)
 $companionNorm = Resolve-CompanionRootPath -Path $companionRoot
 $ruleIds = @('iterative-plan-review', 'iterative-code-review', 'pre-commit-ci-gate')
 $tokenOk = $true
-$pressureOk = $true
 foreach ($ruleId in $ruleIds) {
     $planned = Get-PlannedHybridRuleContent -CompanionRoot $companionNorm -RuleId $ruleId
     if ($planned -match '\{\{COMPANION_ROOT\}\}') { $tokenOk = $false }
 }
 $codeReviewPlanned = Get-PlannedHybridRuleContent -CompanionRoot $companionNorm -RuleId 'iterative-code-review'
-if ($codeReviewPlanned -notmatch '4-iteration|pressure-release|≤4') { $pressureOk = $false }
+# 2026-08-29 (Phase 3, D4 regex-decouple row): wording regex -> single-source-per-Dest structural
+# assert. The promoted twin is shared SoT (rules/iterative-code-review.md); asserting its atoms
+# here duplicates the Phase 2 remediation-checks gate-atom asserts. What Phase1FullCI owns:
+# the hybrid DEST is the twin's render (planned content identical to the SoT body modulo the
+# deterministic harness footer), i.e. single-source integrity, not any particular wording.
+$rulesRoot = Join-Path $companionNorm 'rules'
+$twinsEq = $true
+foreach ($rid in @('iterative-plan-review', 'iterative-code-review')) {
+    $twinBody = Merge-CompanionTokens -Content ([IO.File]::ReadAllText((Join-Path $rulesRoot "$rid.md"))) -CompanionRoot $companionNorm
+    $plannedRid = Get-PlannedHybridRuleContent -CompanionRoot $companionNorm -RuleId $rid
+    # Planned render must contain the twin body. The twin reaches the render with the exact
+    # deterministic rewrite set applied by Get-PlannedHybridRuleContentCore (HostSync.Core.ps1):
+    # ci-ladder link-text normalization, ../workflow + ../skills URL absolutization, and the
+    # {{COMPANION_ROOT}} token merge — mirrored here in the same order, EOL-normalized, so the
+    # containment compare is line-ordered against an identically-rewritten twin.
+    $twinNorm = ($twinBody -replace "`r`n", "`n")
+    $twinNorm = $twinNorm.Replace('[`../workflow/ci-ladder.md`](../workflow/ci-ladder.md)', "[ci-ladder.md]($companionNorm/workflow/ci-ladder.md)")
+    $twinNorm = $twinNorm.Replace('[../workflow/ci-ladder.md](../workflow/ci-ladder.md)', "[ci-ladder.md]($companionNorm/workflow/ci-ladder.md)")
+    $twinNorm = $twinNorm.Replace('](../skills/', "]($companionNorm/skills/")
+    $twinNorm = $twinNorm.Replace('](../workflow/', "]($companionNorm/workflow/")
+    $twinNorm = $twinNorm.Replace('{{COMPANION_ROOT}}', $companionNorm)
+    $plannedNorm = ($plannedRid -replace "`r`n", "`n")
+    $twinLines = @(($twinNorm.Trim()) -split "`n" | Where-Object { $_.Trim() -ne '' })
+    $missing = @($twinLines | Where-Object { -not $plannedNorm.Contains($_) })
+    if ($missing.Count -gt 0) { $twinsEq = $false }
+}
+$twinsOk = $twinsEq
 Assert-Pass 'dry-run hybrid token merge (0 unreplaced tokens)' $tokenOk
-Assert-Pass 'dry-run hybrid pressure-release wording (iterative-code-review)' $pressureOk
+Assert-Pass 'dry-run hybrid planned render contains twin body (iterative-plan-review + iterative-code-review)' $twinsOk
 
 # Overlay copy sources: no unreplaced tokens after merge simulation
 $manifest = Import-PowerShellDataFile -LiteralPath (Join-Path $hostSyncRoot 'manifests\cursor.manifest.psd1')

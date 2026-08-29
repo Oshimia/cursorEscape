@@ -1,6 +1,6 @@
 # Editing companion workflow (agent edit map)
 
-**Last updated:** 2026-08-24
+**Last updated:** 2026-08-29
 
 ## Context
 
@@ -32,9 +32,10 @@ Change portable loop/gate
 | ------ | ----------- | -------------------------------- |
 | Dual-review / pressure-release loop | [`workflow/iterative-code-review.md`](../../workflow/iterative-code-review.md) + [`skills/implementation-review/SKILL.md`](../../skills/implementation-review/SKILL.md) | [`rules/iterative-code-review.md`](../../rules/iterative-code-review.md); Cursor [`overlays/cursor/skills/implementation-review/`](../../overlays/cursor/skills/implementation-review/) (SKILL + user-rules-snippet) + spawn notes in [`reviewer-a`](../../overlays/cursor/agents/reviewer-a.md) if Inputs change; OpenCode [`overlays/opencode/skills/implementation-review/SKILL.md`](../../overlays/opencode/skills/implementation-review/SKILL.md) + **C1** [`AGENTS.md`](../../overlays/opencode/AGENTS.md) ≡ [`instructions/cursor-escape-loop.md`](../../overlays/opencode/instructions/cursor-escape-loop.md); OpenCode [`implementer`](../../overlays/opencode/agents/implementer.md) / [`production_readiness_reviewer`](../../overlays/opencode/agents/production_readiness_reviewer.md) / [`bug_reviewer`](../../overlays/opencode/agents/bug_reviewer.md) as needed; Antigravity [`overlays/antigravity/skills/implementation-review/SKILL.md`](../../overlays/antigravity/skills/implementation-review/SKILL.md), `/escape-*` workflows, and reviewer subagent defs ([agents](../../overlays/antigravity/agents/)) as needed; portable [`agents/production_readiness_reviewer.md`](../../agents/production_readiness_reviewer.md) if Inputs change; FA [`intended-workflow`](../featureArchitecture/intended-workflow.md) / [`desired-behavior-vs-cursor-specific`](../featureArchitecture/desired-behavior-vs-cursor-specific.md) if Required claims move |
 | Composer conductor | [`skills/composer/SKILL.md`](../../skills/composer/SKILL.md) | Cursor + OpenCode composer stubs/snippets; Antigravity `composer` stub + `/escape-*` workflow wording; [`workflow/phased-multi-agent.md`](../../workflow/phased-multi-agent.md) |
-| Always-on gate text | [`rules/*.md`](../../rules/_index.md) | OpenCode `AGENTS.md` ≡ `instructions/cursor-escape-loop.md` (byte-identical gate body); Cursor thin `.mdc` pointer + matching user-rules-snippet; **Antigravity [`GEMINI.md`](../../overlays/antigravity/GEMINI.md)** (full-replace global rules surface — must echo the same gate shape) |
+| Always-on gate text | [`rules/*.md`](../../rules/_index.md) | Gate-body edits land in the **repo-root rule twin** (SoT) and flow to hosts by composition — OpenCode `instructions/cursor-escape-loop.md` is **composed** (host `__header__.md` part + authored base body + [`footers/instructions-wiring.md`](../../overlays/opencode/footers/instructions-wiring.md)) with `AGENTS.md` dual-written from the render; Cursor thin `.mdc` hybrid render + matching user-rules-snippet; **Antigravity [`GEMINI.md`](../../overlays/antigravity/GEMINI.md)** is **composed** (header + promoted-twin bodies + [`footers/gemini-wiring.md`](../../overlays/antigravity/footers/gemini-wiring.md)) — full-replace global rules surface |
 | Report / deep schema | [`workflow/<leaf>.md`](../../workflow/_index.md) (e.g. `plan-reviewer-report.md`) | Thin agent/skill **Read when** only — do **not** paste full schema into `agents/` or overlay stubs |
 | Plan-review loop | [`workflow/iterative-plan-review.md`](../../workflow/iterative-plan-review.md) + [`skills/plan-review`](../../skills/plan-review/SKILL.md) / [`implementation-plan`](../../skills/implementation-plan/SKILL.md) | Matching Cursor/OpenCode stubs **and** [Antigravity stubs](../../overlays/antigravity/skills/) (`implementation-plan`, `plan-review`) — gate-text changes also echo the Antigravity `GEMINI.md` always-on; always-on plan section in OpenCode C1 dual-write if gate text changes |
+| Composed-gate wiring (manifest `Parts`/`Footer`/`base:`/`shared:` classes) | [`scripts/host-sync/manifests/*.psd1`](../../scripts/host-sync/) + the referenced part/footer leaves | FA recording ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md#per-entry-v2-sourcing-overlay-remediation-phase-12--required)); [host-sync README](../../scripts/host-sync/README.md) v2 surface; render-goldens under [`scripts/host-sync/goldens/`](../../scripts/host-sync/goldens/phase2/) re-captured in the same changeset; unit/remediation checks extended if a new field class appears |
 
 ### Anti-patterns
 
@@ -80,9 +81,13 @@ rg "until dual APPROVED|count >= 9|no hard stop" overlays/opencode/AGENTS.md ove
 
 # Companion SoT still states the new policy (example: pressure release)
 rg "pressure-release|4-iteration|cap-exhausted" workflow/iterative-code-review.md skills/implementation-review/SKILL.md skills/composer/SKILL.md
+
+# Composed surfaces (Phase 2+): gate atoms flow via composition — verify by render, not by prose grep
+pwsh scripts/host-sync/Invoke-RemediationUnitChecks.ps1      # 22/22 incl. U17-U20 ref-resolution contract
+pwsh scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1   # 63/63: composed renders, goldens, atoms, single-source-per-Dest
 ```
 
-Expect: zero matches on the first `rg` after migrating off unbounded loops; C1 hashes equal; companion Still documents the current policy.
+Expect: zero matches on the first `rg` after migrating off unbounded loops; C1 hashes equal; companion SoT still documents the current policy; unit + remediation suites exit 0.
 
 ---
 

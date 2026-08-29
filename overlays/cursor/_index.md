@@ -1,6 +1,6 @@
 # Cursor overlay — copy-out map
 
-**Last updated:** 2026-08-23
+**Last updated:** 2026-08-29
 **Status:** pointer-first live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) — thin skills/agents + hybrid rules on `~/.cursor`. Phase 0 baseline (restore-only): `C:/Users/admin/.cursor-backup-pre-host-sync-build-20260821-012600`. Sync does **not** create backups.
 
 ## Context
@@ -75,6 +75,8 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 | composer | [SKILL.md](./skills/composer/SKILL.md), [user-rules-snippet.md](./skills/composer/user-rules-snippet.md) |
 | documentation-architecture | [SKILL.md](./skills/documentation-architecture/SKILL.md) |
 | roadmap | [SKILL.md](./skills/roadmap/SKILL.md) |
+| opencode-headless-run | [SKILL.md](./skills/opencode-headless-run/SKILL.md) — `opencode-*` pair global on every stack (2026-08-26 ruling) |
+| opencode-history-search | [SKILL.md](./skills/opencode-history-search/SKILL.md) — `opencode-*` pair global on every stack (2026-08-26 ruling) |
 
 ## Rules
 

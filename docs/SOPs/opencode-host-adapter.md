@@ -136,12 +136,12 @@ Sync is **safe while other sessions run**: live sessions keep their session-star
 
 ### C1–C6 runtime attestation (Phase 3 baseline — updated pf4)
 
-Backup: `C:\Users\admin\.config\opencode-backup-20260820-153803` (3475 files). Phase 3 live sync: overlay copy-out + workflow transform + `opencode.json` token merge. **pointer-first-4 delta:** procedure mirror (`docs/workflow/*`, 10 leaves) **deleted** from live OpenCode; harness inventory 8 skills / 7 agents at the pointer-first-4 sync; nine skills since `diagnosing-bugs` joined the catalog.
+Backup: `C:\Users\admin\.config\opencode-backup-20260820-153803` (3475 files). Phase 3 live sync: overlay copy-out + workflow transform + `opencode.json` token merge. **pointer-first-4 delta:** procedure mirror (`docs/workflow/*`, 10 leaves) **deleted** from live OpenCode; harness inventory 8 skills / 7 agents at the pointer-first-4 sync; eleven skills since `diagnosing-bugs` joined the catalog (2026-08-21 B1) and the `opencode-*` pair went global (2026-08-26 ruling).
 
 | # | Item | Runtime evidence | Smoke |
 | - | ---- | ---------------- | ----- |
 | **C1** | Always-on gates inject | Absolute `instructions` + `AGENTS.md` dual-write | Row **1** **pass** (2026-08-21 post–`Sync-HostHarness`) |
-| **C2** | Nine skills incl. `roadmap` and `diagnosing-bugs` *(author-time catalog 2026-08-21; live re-sync + re-probe completed 2026-08-22)* | Live host observed at 9 `skills/*/SKILL.md` incl. `diagnosing-bugs`; 7 agents; mirror absent (2026-08-22 sync) | Rows **9–10** **pass** (2026-08-21) |
+| **C2** | Eleven skills incl. `roadmap`, `diagnosing-bugs`, and the `opencode-*` pair *(author-time catalog 2026-08-21; nine 2026-08-21 B1; eleven per 2026-08-26 global-pair ruling; live re-sync + re-probe completed 2026-08-22 at the nine-era)* | Live host observed at 9 `skills/*/SKILL.md` incl. `diagnosing-bugs` (2026-08-22 sync); 7 agents; mirror absent. **Rows 9–10 re-run due at Phase 4 Apply** after the eleven-id catalog syncs | Rows **9–10** **pass** (2026-08-21) |
 | **C3** | Plan→plan_reviewer; impl→dual→Full | 7 overlay agents on disk; reviewers `edit: deny` + bash deny except read-only git | Rows **2**, **3**, **13** **pass** (2026-08-21); row **8** **pass**; row **14** **pass** |
 | **C4** | Deep workflow Reads on host | Absolute companion `workflow/` Reads; host procedure mirror **deleted** | Row **4** **pass** (2026-08-21) |
 | **C5** | Companion FA/SOP reads | `external_directory` includes `COMPANION_ROOT/**`; rubric companion FA | Row **8** **pass** (2026-08-21); optional **11**/**12** historical |

@@ -28,6 +28,26 @@ scripts/
 
 Each stack owns its **manifest** (what to copy, hard excludes, never-touch paths) and **adapter** (stack-specific merge: hybrid Cursor rules, OpenCode JSON + AGENTS dual-write). Shared primitives live in Core; Core does **not** branch on stack id except through the registry.
 
+### Per-entry v2 manifest surface (overlay-remediation Phase 1–2)
+
+CopyEntries are **v2**: each entry names its source with a class prefix, resolved by `Copy-ManifestEntry` in `HostSync.Core.ps1`.
+
+| Class | Meaning |
+| ----- | ------- |
+| *(plain)* | Overlay-relative file (backward-compat for unmigrated rows) |
+| `base:` | Repo-root SoT body rendered into this dest (promote-into-twin) |
+| `shared:` | `SharedRoot` knob — rooted directory shared across stacks; rooted values accepted verbatim |
+
+Entry keys beyond `Source`/`Dest`:
+
+- **`Parts` / `Footer`** — compose the dest from ordered file references (e.g. host `__header__.md` part + `base:` body + wiring footer). Composed dests leave no second authored procedure.
+- **`Substitutions`** — fail-closed: each must match **exactly once**; no-match / double-match = hard render error.
+- **`PlannedContent`** — dry-run captures would-be written content (incl. dual-written mirrors) for CI asserts.
+- **Goldens** — committed expected-renders under [`goldens/`](./goldens/phase2/) are the byte-exact regression anchor for composed dests.
+- **Ref resolution contract** (unit checks U17–U20): rooted/absolute refs verbatim; un-pre-resolved classed refs throw; overlay-relative refs resolve source-dir first, then `OverlayRoot` fallback.
+
+FA recording: [skill-source-and-host-overlays](../../docs/featureArchitecture/skill-source-and-host-overlays.md#per-entry-v2-sourcing-overlay-remediation-phase-12--required).
+
 ## Operator commands
 
 **Normative rule: live pushes are global.** This is a global skill set — a push to one stack alone strands every sibling stack carrying the same sources. The script therefore defaults to `-Target All` and **fails closed** on single-stack `-Apply` whenever the target shares manifest sources with another stack; single-stack Apply exists only as a deliberate exception via `-AllowSkew`.

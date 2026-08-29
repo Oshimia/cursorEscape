@@ -1,6 +1,6 @@
 # Antigravity overlay — harness copy-out map
 
-**Last updated:** 2026-08-24
+**Last updated:** 2026-08-29
 
 ## Context
 
@@ -21,11 +21,11 @@ Owner decisions (2026-08-23): cursorEscape is the **sole SoT** — live global r
 | Live target (`~/.gemini/…`) | Overlay source | Notes |
 | --------------------------- | -------------- | ----- |
 | `GEMINI.md` | [GEMINI.md](./GEMINI.md) | Thin always-on gate — **full replacement** of live global rules (sole SoT) |
-| `config/skills/<9 ids>/SKILL.md` | [skills/*/SKILL.md](./skills/) | Thin stubs mirroring the OpenCode overlay set; absolute `{{COMPANION_ROOT}}` Reads |
+| `config/skills/<11 ids>/SKILL.md` | [skills/*/SKILL.md](./skills/) | Thin stubs mirroring the OpenCode overlay set; absolute `{{COMPANION_ROOT}}` Reads; `pre-commit-ci-gate` composed from `base:rules/pre-commit-ci-gate.md` + host footer (Phase 2) |
 | `antigravity/global_workflows/escape-{plan,review,closeout}.md` | [workflows/](./workflows/) | Trajectory-level wrappers invoking companion procedures |
 | `config/agents/{plan_reviewer,production_readiness_reviewer,bug_reviewer}.md` | [agents/](./agents/) | Reviewer legs; read-only tools; parallel via `invoke_subagent` |
 
-**Deliberate exclusion:** companion `skills/` holds more ids than mirrored here (e.g. `grilling`, `tdd-*`, `wizard`, `teach`) — parity bar is the **OpenCode overlay inventory** ([opencode-host-adapter](../../docs/SOPs/opencode-host-adapter.md)); extend deliberately, not by default. 2026-08-26 owner ruling: the `opencode-*` infrastructure pair (`opencode-headless-run`, `opencode-history-search`) is **global** and must mirror on every stack. Note: `pre-commit-ci-gate` has no companion skill base — its portable SoT is [`rules/pre-commit-ci-gate.md`](../../rules/pre-commit-ci-gate.md); the stub is host-authored in both overlays.
+**Deliberate exclusion:** companion `skills/` holds more ids than mirrored here (e.g. `grilling`, `tdd-*`, `wizard`, `teach`) — parity bar is the **OpenCode overlay inventory** ([opencode-host-adapter](../../docs/SOPs/opencode-host-adapter.md)); extend deliberately, not by default. 2026-08-26 owner ruling: the `opencode-*` infrastructure pair (`opencode-headless-run`, `opencode-history-search`) is **global** and must mirror on every stack. Note: `pre-commit-ci-gate` has no companion skill base — its portable SoT is [`rules/pre-commit-ci-gate.md`](../../rules/pre-commit-ci-gate.md); since Phase 2 the stub is **composed at sync time** from that rule (base: sourcing) plus the host footer, not hand-restated.
 
 **Hard excludes / never touch:** `antigravity/global_workflows/caveman.md` (user-authored workflow — listed in both lists by design), secrets/app-state files at the `~/.gemini` root and `config/mcp_config.json`.
 

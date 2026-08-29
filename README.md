@@ -1,6 +1,6 @@
 # cursorEscape
 
-**Status:** shared-workflow-docs **Phase 6 complete**; [pointer-first](docs/roadmaps/pointer-first.md) **complete** (pointer-first-4, 2026-08-20). **Host harness sync** modular entry [`scripts/Sync-HostHarness.ps1`](scripts/Sync-HostHarness.ps1) — dry-run default; `-Apply` distributes overlay harness to live Cursor/OpenCode/Antigravity ([layout](scripts/host-sync/README.md)). Sync does **not** create backups; Phase 0 baselines restore-only. Runtime not started. First recreation: **T3 Code + OpenCode**.
+**Status:** shared-workflow-docs **Phase 6 complete**; [pointer-first](docs/roadmaps/pointer-first.md) **complete** (pointer-first-4, 2026-08-20). **Overlay-remediation program:** Phase 2 **committed** (7f6452c, 2026-08-29, Reviewer A waiver); **Phase 3 complete** — known-reds retired, full non-Apply CI green, docs cascade ([roadmap](docs/roadmaps/overlay-remediation.md), [migration record](analysis/overlay-remediation-2026-08.md)); Phase 4 Apply-legs operator-gated. **Host harness sync** modular entry [`scripts/Sync-HostHarness.ps1`](scripts/Sync-HostHarness.ps1) — dry-run default; `-Apply` distributes overlay harness to live Cursor/OpenCode/Antigravity ([layout](scripts/host-sync/README.md)). Sync does **not** create backups; Phase 0 baselines restore-only. Runtime not started. First recreation: **T3 Code + OpenCode**.
 
 ## What and why
 

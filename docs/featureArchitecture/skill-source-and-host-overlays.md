@@ -1,6 +1,6 @@
 # Skill source and host overlays
 
-**Last updated:** 2026-08-24
+**Last updated:** 2026-08-29
 
 ## Context
 
@@ -51,6 +51,27 @@ This repo is the **canonical manager** of portable skills, agent roles, always-o
 | Shared always-on gates | `rules/*.md` | **No** |
 | Host overlay | `overlays/cursor/` (thin wrappers); `overlays/opencode/` (OpenCode harness); `overlays/antigravity/` (Antigravity harness — GEMINI.md full-replace gate, skills/workflows/subagent defs) | **Yes** — harness mechanics, spawn IDs, additive safety |
 | Copy-out install | `~/.cursor`, `~/.config/opencode`, `~/.gemini` | Install target only |
+
+### Per-entry v2 sourcing (overlay-remediation Phase 1–2 — Required)
+
+Manifest entries are **v2**: each `CopyEntry` names its source with a **class prefix**, resolved by `Copy-ManifestEntry` in `HostSync.Core.ps1` — overlays carry **only host differences**, and shared bodies are sourced from repo-root SoT at sync time.
+
+| Class | Meaning | Example |
+| ----- | ------- | ------- |
+| *(plain)* | Overlay-relative file — backward-compat for not-yet-migrated rows | `skills/composer/SKILL.md` |
+| `base:` | Repo-root SoT body rendered into this dest (promote-into-twin) | `base:rules/pre-commit-ci-gate.md` |
+| `shared:` | `SharedRoot` knob — a rooted directory shared by several stacks; rooted values accepted verbatim | `shared:skills/discovery/SKILL.md` |
+
+Composition and safety semantics (all **Required**):
+
+- **Parts / Footer** — a dest may compose from multiple file references (a host `__header__.md` part + the `base:`/twin body + a host wiring footer), concatenated in declared order at sync time. Composed dests leave **no second authored procedure** — each part is either host-mechanics or shared SoT.
+- **Substitutions are fail-closed** — declared per entry, must match **exactly once**; a no-match or double-match is a hard render error, never a silent skip.
+- **PlannedContent capture** — dry-run captures the would-be written content (including dual-written mirrors like `AGENTS.md`) so CI can assert on renders without touching live trees.
+- **Golden substrate** — committed expected-renders under `scripts/host-sync/goldens/` are the regression anchor for composed dests; renders must equal goldens byte-for-byte.
+- **Skew degeneration** — the cross-stack skew guard keys on **source identity + sibling stacks** at whole-leaf (Dest) granularity; when sources degenerate to overlay-only, single-stack Apply stops failing closed for that leaf (documented, not silent).
+- **Ref resolution contract** (pinned by unit checks U17–U20): rooted/absolute refs are used **verbatim**; un-pre-resolved classed refs throw a clear error; overlay-relative refs resolve source-dir first, then fall back to `OverlayRoot`.
+
+Enforcement lives in [`Invoke-Phase2-RemediationChecks.ps1`](../../scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1) (63 checks) + unit checks ([Invoke-RemediationUnitChecks.ps1](../../scripts/host-sync/Invoke-RemediationUnitChecks.ps1), 22 checks). Manifest surface reference: [host-sync README](../../scripts/host-sync/README.md).
 
 ### Authored layers vs copy-out (Required)
 

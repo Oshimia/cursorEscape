@@ -118,7 +118,10 @@ if (Test-Path -LiteralPath $agyManifestPath) {
     $geminiEntries = @($agyManifest.CopyEntries | Where-Object { $_.Dest -eq 'GEMINI.md' })
     Assert-Pass 'antigravity replaces GEMINI.md via exactly one entry' ($geminiEntries.Count -eq 1)
     $skillDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'config/skills/*' })
-    Assert-Pass 'antigravity skill dests under config/skills' ($skillDests.Count -eq 9)
+    # 2026-08-29 (Phase 3 retirement, D4 map): 9 -> 11. The canonical skill inventory is
+    # now eleven ids (opencode-* pair global on every stack per the 2026-08-26 ruling;
+    # pre-commit-ci-gate composed from base: SoT in Phase 2).
+    Assert-Pass 'antigravity skill dests under config/skills' ($skillDests.Count -eq 11)
     $wfDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'antigravity/global_workflows/*' })
     Assert-Pass 'antigravity workflow dests under global_workflows' ($wfDests.Count -eq 3)
     $agentDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'config/agents/*' })
@@ -167,13 +170,15 @@ Assert-Pass 'dry-run Antigravity exit 0' ($LASTEXITCODE -eq 0)
 $afterAgy = Get-LiveOpenCodeSnapshot -LiveRoot $agyLive
 Assert-Pass 'dry-run Antigravity made no live writes' (Test-LiveOpenCodeUnchanged -Before $beforeAgy -After $afterAgy)
 
-# Inventory-drift guard: overlay ids equal the canonical nine AND each exists in companion skills/
-$expectedNine = @('composer', 'diagnosing-bugs', 'discovery', 'documentation-architecture', 'implementation-plan', 'implementation-review', 'plan-review', 'pre-commit-ci-gate', 'roadmap')
+# Inventory-drift guard: overlay ids equal the canonical eleven AND each exists in companion skills/
+# 2026-08-29 (Phase 3 retirement, D4 map): expectedNine -> eleven. opencode-headless-run and
+# opencode-history-search are global on every stack (opencode-overlay inventory = the parity bar).
+$expectedSkillIds = @('composer', 'diagnosing-bugs', 'discovery', 'documentation-architecture', 'implementation-plan', 'implementation-review', 'opencode-headless-run', 'opencode-history-search', 'plan-review', 'pre-commit-ci-gate', 'roadmap')
 $agyOverlaySkillsRoot = Join-Path $companionRoot 'overlays\antigravity\skills'
 $actualAgyIds = @(Get-ChildItem -LiteralPath $agyOverlaySkillsRoot -Directory | ForEach-Object { $_.Name })
-$agyIdDelta = @(Compare-Object -ReferenceObject ($expectedNine | Sort-Object) -DifferenceObject ($actualAgyIds | Sort-Object))
-Assert-Pass 'antigravity overlay skill ids equal canonical nine' ($agyIdDelta.Count -eq 0)
-foreach ($agiId in $expectedNine) {
+$agyIdDelta = @(Compare-Object -ReferenceObject ($expectedSkillIds | Sort-Object) -DifferenceObject ($actualAgyIds | Sort-Object))
+Assert-Pass 'antigravity overlay skill ids equal canonical eleven' ($agyIdDelta.Count -eq 0)
+foreach ($agiId in $expectedSkillIds) {
     Assert-Pass "opencode overlay parity skill exists: $agiId" (Test-Path -LiteralPath (Join-Path $companionRoot "overlays\opencode\skills\$agiId\SKILL.md"))
     if (Test-Path -LiteralPath (Join-Path $companionRoot "skills\$agiId")) {
         Assert-Pass "companion base exists for mirrored id: $agiId" (Test-Path -LiteralPath (Join-Path $companionRoot "skills\$agiId\SKILL.md"))

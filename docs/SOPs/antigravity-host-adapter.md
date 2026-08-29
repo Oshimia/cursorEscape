@@ -66,7 +66,7 @@ Rows run **after authorized `-Apply` + full quit/restart** (restart assumed requ
 | # | Checklist item | Method (post-Apply) | Status |
 | - | -------------- | ------------------- | ------ |
 | C1 | Always-on gates inject | Clean chat, zero tools: model quotes default-on plan loop + when-in-doubt + eval/harness not exempt from session text | deferred: awaiting operator Apply |
-| C2 | Skill catalog complete | Skill listing shows all nine ids; load `implementation-plan` without shell browsing | deferred: awaiting operator Apply |
+| C2 | Skill catalog complete | Skill listing shows all eleven ids; load `implementation-plan` without shell browsing | deferred: awaiting operator Apply |
 | C3 | Dual review honors isolation + deny-edit | Parent launches both reviewer subagents in one turn via `invoke_subagent`; reviewers cannot edit (read-only tools). Expected value: parity attestation if concurrent spawn confirmed; otherwise `deviation: sequential fresh-context fallback per owner decision 2026-08-23; parallel-leg parity not met` | deferred: awaiting operator Apply |
 | C4 | Deep workflow Reads resolve | Load `implementation-review`; confirm Read resolves `{{COMPANION_ROOT}}/workflow/iterative-code-review.md` | deferred: awaiting operator Apply |
 | C5 | Companion docs readable without repeated asks | Sample FA leaf read via native file-read without serial shell listing | deferred: awaiting operator Apply |

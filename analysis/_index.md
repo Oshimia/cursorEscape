@@ -33,6 +33,7 @@ Operator studies of **local workflows** (not proposed engine design, not eval sc
 * [Cline CLI as orchestrator sub-agents (2026-08)](./cline-cli-subagent-orchestration-2026-08.md) — external orchestration via headless `cline` CLI processes; single/parallel/nested all work; NDJSON `run_result` as auditable contract; `^C` blocker on backgrounded children
 * [Cursor pointer-first-3 audit (2026-08)](./cursor-pointer-first-3-audit-2026-08.md) — overlay vs portable audit; `{{COMPANION_ROOT}}` harness fix; live `~/.cursor` gap disposition
 * [Pointer-first-4 closeout (2026-08)](./pointer-first-4-closeout-2026-08.md) — C6 smoke attestation; companion-edit proof; OpenCode mirror delete; operator runbook
+* [Overlay-remediation migration record (2026-08)](./overlay-remediation-2026-08.md) — Phases 0–3 migration record; golden-render index; Reviewer A doom-loop incident + owner waiver; recovered duplicate-section finding
 
 ### Documents (imported openBuggy)
 
