@@ -710,6 +710,7 @@ function Invoke-HybridCursorRules {
         [string] $LiveRulesRoot
     )
 
+    $plans = @{ }
     foreach ($ruleId in $RuleIds) {
         $planned = Get-PlannedHybridRuleContent -CompanionRoot $CompanionRoot -RuleId $ruleId
         $destPath = Join-Path $LiveRulesRoot "$ruleId.mdc"
@@ -718,10 +719,10 @@ function Invoke-HybridCursorRules {
             Add-SyncError -Report $Report -Message "Unmerged tokens in hybrid rule plan: $ruleId"
             continue
         }
+        $plans[$ruleId] = @{ Dest = $destPath; Content = $planned }
 
         if ($Mode -eq [HostSyncMode]::DryRun) {
             [void]$Report.PlannedFiles.Add("$destPath <= hybrid($ruleId) via Write-HybridCursorRules logic")
-            continue
         }
     }
 
@@ -729,21 +730,20 @@ function Invoke-HybridCursorRules {
         if (-not $Report.Success) {
             return
         }
-        $scriptPath = Join-Path $CompanionRoot 'overlays/cursor/scripts/Write-HybridCursorRules.ps1'
-        if (-not (Test-Path -LiteralPath $scriptPath)) {
-            Add-SyncError -Report $Report -Message "Write-HybridCursorRules.ps1 missing: $scriptPath"
-            return
-        }
-        & $scriptPath -CompanionRoot $CompanionRoot -LiveRules $LiveRulesRoot | Out-Null
+        # Phase 4 parity fix (2026-08-29): Apply writes THE SAME render the dry-run
+        # planned (Get-PlannedHybridRuleContent), replacing the legacy
+        # Write-HybridCursorRules.ps1 invocation whose narrower rewrite set left
+        # {{COMPANION_ROOT}}/docs/... tokens unmerged in applied .mdc files.
         foreach ($ruleId in $RuleIds) {
-            $destPath = Join-Path $LiveRulesRoot "$ruleId.mdc"
-            if (-not (Test-Path -LiteralPath $destPath)) {
-                Add-SyncError -Report $Report -Message "Hybrid rule not written after script invoke: $destPath"
+            if (-not $plans.ContainsKey($ruleId)) { continue }
+            $destPath = $plans[$ruleId].Dest
+            $destParent = Split-Path -Parent $destPath
+            if ($destParent -and -not (Test-Path -LiteralPath $destParent)) {
+                New-Item -ItemType Directory -Path $destParent -Force | Out-Null
             }
-            else {
-                [void]$Report.AppliedFiles.Add($destPath)
-                [void]$Report.Verifications.Add("hybrid rule present: $destPath")
-            }
+            [IO.File]::WriteAllText($destPath, $plans[$ruleId].Content)
+            [void]$Report.AppliedFiles.Add($destPath)
+            [void]$Report.Verifications.Add("hybrid rule written (planned-render parity): $destPath")
         }
     }
 }

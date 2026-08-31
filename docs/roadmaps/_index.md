@@ -17,7 +17,7 @@ Multi-phase handoff roadmaps for cursorEscape. Each roadmap file carries **Agent
 | [Companion pointer-first](./pointer-first.md) | **Complete** — pointer-first-4 closeout 2026-08-20 | Companion SoT; thin harness; procedure mirror deleted (OpenCode) |
 | [Host harness sync build](./host-harness-sync-build.md) | **Complete** — Phase 3 docs + `Sync-HostHarness.ps1` operator surface | Modular sync core + Cursor/OpenCode adapters; Phase 0 baselines restore-only |
 | [mattpocock skills audit](./mattpocock-skills-audit.md) | **Phase 0 complete** — map authored 2026-08-21; next: P1 assessment sweep | Full-sweep audit of mattpocock/skills + merge of relevant skills; map under [research/mattpocock-skill-audit](../research/mattpocock-skill-audit/_index.md) |
-| [Overlay architecture remediation](./overlay-remediation.md) | **Phase 2 committed** (7f6452c; Reviewer A waiver per owner ruling); **Phase 3 complete (worktree)** — known-reds retired + docs cascade; next Phase 4 Apply-legs (operator-gated) | Fix overlay architecture: overlays carry only host differences (per-entry v2 sourcing, promote-into-twin gate composition, golden-render regression surface, CI drift fixes) |
+| [Overlay architecture remediation](./overlay-remediation.md) | **COMPLETE** (Phases 0–4; Phase 4 executed 2026-08-31 owner-delegated: drift survey → global Apply → live==planned verified, Apply-leg parity defect fixed) | Fix overlay architecture: overlays carry only host differences (per-entry v2 sourcing, promote-into-twin gate composition, golden-render regression surface, CI drift fixes) |
 
 ## Implications / open questions
 

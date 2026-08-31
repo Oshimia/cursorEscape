@@ -30,10 +30,18 @@ Record of the [overlay-remediation](../docs/roadmaps/overlay-remediation.md) pro
 
 Composed opencode instructions / pre-commit stubs are asserted by the 63 remediation checks (atoms + single-source-per-Dest + render equality against PlannedContent) rather than file goldens.
 
+### Phase 4 (2026-08-31, owner-delegated)
+
+- **Owner rulings:** live-tree management delegated ("you should be able to manage this yourself"); per-host physical smoke + host-restart checks waived ("I don't care that much"); file-state verification declared sufficient.
+- **Drift survey (read-only):** in-process dry-run per stack; byte-compared every planned render (`PlannedContent` + recovered hybrid/dual-write renders) against live files — **12 drifted dests**, all explained by Phase 2 composition outputs, shrunken `escape-*` workflows, promoted-twin hybrid rules, and the duplicate-section fix.
+- **Apply-leg defect (Observed, fail-loud caught):** first global `-Apply` — OpenCode + Antigravity succeeded; Cursor's two review-rule `.mdc` hybrids were written with unmerged `{{COMPANION_ROOT}}/docs/...` tokens. Root cause: `Invoke-HybridCursorRules` computed the CI-verified render in dry-run but invoked the legacy `overlays/cursor/scripts/Write-HybridCursorRules.ps1` in Apply — mode divergence (D7-class). **Fix:** Apply writes the planned render directly (parity by construction); legacy script no longer invoked. CI 7/7 green post-fix.
+- **Verification:** re-Apply `Success: True` all stacks; drift survey **0 drift** (live == planned on all stacks); modified-files audit — 56 files modified, AppliedFiles union = 56, nothing else touched across ~41k files in the three live roots; never-touch `caveman.md` intact. `opencode.json` merge verified structurally (model/provider preserved by the adapter's own post-apply asserts; AGENTS ≡ instructions hash match recorded by Apply).
+- **Status:** hosts hold snapshot-at-start config; new harness content takes effect on the owner's next full host restart (waived, not blocking).
+
 ## Implications / open questions
 
 1. The doom-loop failure class (reviewer pointed at a doc its contract forbids judging) is recorded in Copilot memory (`opencode-headless-pitfalls.md`) — keep `Invoke-Phase2FullCI.ps1` out of reviewer applicable-docs lists.
-2. Phase 4 Apply requires: live-vs-planned incl. golden renders, per-stack Apply only for drifted surfaces, OpenCode re-baseline first, operator restarts + smoke.
+2. **Apply-leg CI gap:** mode divergence survived all 7 non-Apply suites because the Apply leg is quarantined. Candidate CI addition: a fixture-based Apply-mode render-parity check (render via dry-run path, write via Apply path into a temp live root, byte-compare) so mode divergence is caught without touching live trees.
 
 ## Related
 
