@@ -20,10 +20,14 @@ scripts/
       cursor.manifest.psd1      # allowlist, excludes, hybrid rule ids
       opencode.manifest.psd1
       antigravity.manifest.psd1 # allowlist, excludes (GEMINI.md replace + skills/workflows)
+      vscode.manifest.psd1      # allowlist, excludes (~/.copilot instructions/skills/agents)
+      cline.manifest.psd1       # allowlist, excludes (~/.cline rules/workflows)
+      kilocode.manifest.psd1    # allowlist, excludes (~/.kilocode rules/workflows)
     adapters/
       Cursor.Adapter.ps1          # Invoke-StackHarnessSync for Cursor
       OpenCode.Adapter.ps1        # Invoke-StackHarnessSync for OpenCode
-      Antigravity.Adapter.ps1     # Invoke-StackHarnessSync for Antigravity
+      Antigravity.Adapter.ps1     # REMOVED 2026-09-01 — dispatches to Generic.Adapter.ps1 (byte-identical engine)
+      Generic.Adapter.ps1         # SHARED manifest-driven copy-out engine (kilo-cline bring-up); dispatch fallback for stacks without specialized adapters (currently: Antigravity, Vscode, Cline, Kilocode)
 ```
 
 Each stack owns its **manifest** (what to copy, hard excludes, never-touch paths) and **adapter** (stack-specific merge: hybrid Cursor rules, OpenCode JSON + AGENTS dual-write). Shared primitives live in Core; Core does **not** branch on stack id except through the registry.
@@ -90,8 +94,11 @@ One-time baselines taken before building this tool. Used for **restore if Apply 
 | Cursor | `C:\Users\admin\.cursor-backup-pre-host-sync-build-20260821-012600` |
 | OpenCode | `C:\Users\admin\.config\opencode-backup-pre-host-sync-build-20260821-012600` |
 | Antigravity | `C:\Users\admin\.gemini-backup-pre-host-sync-build-20260824-064125` (registered) |
+| VS Code | `C:\Users\admin\.copilot-backup-pre-vscode-bringup-20260901-120000` (registered 2026-09-01) |
+| Cline | `C:\Users\admin\.cline-backup-pre-kilobringup-20260901-180000` (registered 2026-09-01) |
+| Kilo Code | `C:\Users\admin\.kilocode-backup-pre-kilobringup-20260901-180000` (registered 2026-09-01) |
 
-**Apply coupling (all three baselines required):** `-Apply` for ANY stack fails closed until all three Phase 0 baselines exist — deliberate conservatism because Antigravity Apply wholesale-replaces `~/.gemini/GEMINI.md`. Dry-runs are unaffected. All three baselines are present and registered as of 2026-08-26.
+**Apply coupling (all six baselines required):** `-Apply` for ANY stack fails closed until all six Phase 0 baselines exist — deliberate conservatism because Antigravity Apply wholesale-replaces `~/.gemini/GEMINI.md`, VS Code Apply writes into the shared user-level `~/.copilot`, and the 5th/6th stacks write into `~/.cline` and `~/.kilocode`. Dry-runs are unaffected. VS Code/Cline/Kilocode baselines registered 2026-09-01 (six-stack gate, owner-approved).
 
 Gate artifact: [`baseline-backups.paths.json`](./baseline-backups.paths.json)
 
@@ -104,6 +111,7 @@ Gate artifact: [`baseline-backups.paths.json`](./baseline-backups.paths.json)
 | Cursor | `skills-cursor/`; `settings.json`; delete/refresh `docs/workflow/`; thin-pointer-only `.mdc` without hybrid write |
 | OpenCode | Procedure mirror re-copy; host copy-out of `review-subagent-models`; overwrite live `model` / `provider` in `opencode.json` |
 | Antigravity | Credential/app-state files (`settings.json`, `config/mcp_config.json`, `oauth_creds.json`, `google_accounts.json`, `state.json`, `trustedFolders.json`, `installation_id`); never touch `antigravity/global_workflows/caveman.md` or `config/projects` |
+| VS Code | Never touch VS Code-managed state: `config.json`, `ide/`, `logs/` — only `instructions/`, `skills/`, `agents/` are harness-owned |
 
 Manifest `NeverTouch` paths (e.g. `docs/workflow`, Antigravity `caveman.md`) are left in place on the live host.
 

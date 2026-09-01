@@ -29,10 +29,13 @@ $manifests = @{
     Cursor      = Get-StackManifest -StackId 'Cursor'      -HostSyncRoot $hostSyncRoot
     OpenCode    = Get-StackManifest -StackId 'OpenCode'    -HostSyncRoot $hostSyncRoot
     Antigravity = Get-StackManifest -StackId 'Antigravity' -HostSyncRoot $hostSyncRoot
+    Vscode      = Get-StackManifest -StackId 'Vscode'      -HostSyncRoot $hostSyncRoot
+    Cline       = Get-StackManifest -StackId 'Cline'       -HostSyncRoot $hostSyncRoot
+    Kilocode    = Get-StackManifest -StackId 'Kilocode'    -HostSyncRoot $hostSyncRoot
 }
 
 # ---------- 1. Single-source-per-Dest invariant (within each manifest) ----------
-foreach ($sid in @('Cursor', 'OpenCode', 'Antigravity')) {
+foreach ($sid in @('Cursor', 'OpenCode', 'Antigravity', 'Vscode', 'Cline', 'Kilocode')) {
     $manifest = $manifests[$sid]
     $byDest = @{}
     $dupes = 0
@@ -47,7 +50,7 @@ foreach ($sid in @('Cursor', 'OpenCode', 'Antigravity')) {
 # ---------- 2. In-process dry-run render (content capture; no live writes) ----------
 $companionNorm = Resolve-CompanionRootPath -Path $companionRoot
 $planned = @{}
-foreach ($sid in @('Antigravity', 'OpenCode', 'Cursor')) {
+foreach ($sid in @('Antigravity', 'OpenCode', 'Cursor', 'Vscode', 'Cline', 'Kilocode')) {
     $adapterPath = Get-StackAdapterScript -StackId $sid -HostSyncRoot $hostSyncRoot
     . $adapterPath
     $report = Invoke-StackHarnessSync -Mode ([HostSyncMode]::DryRun) -CompanionRoot $companionNorm -Manifest $manifests[$sid]

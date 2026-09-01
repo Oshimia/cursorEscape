@@ -58,6 +58,9 @@ Change portable loop/gate
 | OpenCode | [`overlays/opencode/`](../../overlays/opencode/_index.md) | included automatically — see [opencode-host-adapter](./opencode-host-adapter.md) |
 | Cursor | [`overlays/cursor/`](../../overlays/cursor/_index.md) | included automatically — see [cursor-host-adapter](./cursor-host-adapter.md) |
 | Antigravity | [`overlays/antigravity/`](../../overlays/antigravity/_index.md) | included automatically; Apply gated on Phase 0 baselines (all present, registered) |
+| VS Code | [`overlays/vscode/`](../../overlays/vscode/_index.md) | included automatically (`~/.copilot`); Apply gated on Phase 0 baselines (all 4 present, registered); see [vscode-host-adapter](./vscode-host-adapter.md) |
+| Cline | [`overlays/cline/`](../../overlays/cline/_index.md) | included automatically (`~/.cline`); Apply gated on all-six baselines; see [cline-host-adapter](./cline-host-adapter.md) |
+| Kilo Code | [`overlays/kilocode/`](../../overlays/kilocode/_index.md) | included automatically (`~/.kilocode`); Apply gated on all-six baselines; see [kilocode-host-adapter](./kilocode-host-adapter.md) |
 
 ```powershell
 pwsh ./scripts/Sync-HostHarness.ps1          # dry-run all stacks

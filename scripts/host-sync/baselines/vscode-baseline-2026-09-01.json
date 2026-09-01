@@ -1,0 +1,12 @@
+{
+  "LiveRelativeRoot": ".copilot",
+  "SnapshotAt": "2026-09-01T09:13:33.0402367Z",
+  "Note": "restore-only baseline; logs and lock files excluded (transient, held open by running processes at snapshot time)",
+  "Files": [
+    {
+      "RelativePath": "config.json",
+      "Length": 131,
+      "Sha256": "DEDE8E7FA5FC0BA48DAD9B10F73B1D8FA4598149E889FCC532AF393D39A8EB26"
+    }
+  ]
+}

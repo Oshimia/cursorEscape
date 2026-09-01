@@ -28,3 +28,6 @@ build/
 .pytest_cache/
 .venv/
 venv/
+
+# Scratch / throwaway output (git-ignored temp folder)
+temp/

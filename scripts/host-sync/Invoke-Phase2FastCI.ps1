@@ -128,16 +128,18 @@ if (Test-Path -LiteralPath $agyManifestPath) {
     Assert-Pass 'antigravity reviewer defs under config/agents' ($agentDests.Count -eq 3)
 }
 
-$agyAdapterPath = Join-Path $hostSyncRoot 'adapters\Antigravity.Adapter.ps1'
-Assert-Pass 'antigravity adapter exists (not stub)' (Test-Path -LiteralPath $agyAdapterPath)
+$agyAdapterPath = Join-Path $hostSyncRoot 'adapters\Generic.Adapter.ps1'
+Assert-Pass 'generic adapter exists (not stub)' (Test-Path -LiteralPath $agyAdapterPath)
+Assert-Pass 'antigravity clone adapter deleted (dispatches to Generic)' (-not (Test-Path -LiteralPath (Join-Path $hostSyncRoot 'adapters\Antigravity.Adapter.ps1')))
 if (Test-Path -LiteralPath $agyAdapterPath) {
     $agyAdapterText = Get-Content -LiteralPath $agyAdapterPath -Raw
-    Assert-Pass 'antigravity adapter exports Invoke-StackHarnessSync' ($agyAdapterText -match 'function Invoke-StackHarnessSync')
-    Assert-Pass 'antigravity adapter is not a stub' ($agyAdapterText -notmatch 'Phase 2 stub')
-    Assert-Pass 'antigravity adapter reuses shared Copy-ManifestEntry' ($agyAdapterText -match 'Copy-ManifestEntry')
+    Assert-Pass 'generic adapter exports Invoke-StackHarnessSync' ($agyAdapterText -match 'function Invoke-StackHarnessSync')
+    Assert-Pass 'generic adapter is not a stub' ($agyAdapterText -notmatch 'Phase 2 stub')
+    Assert-Pass 'generic adapter reuses shared Copy-ManifestEntry' ($agyAdapterText -match 'Copy-ManifestEntry')
 }
 
 # Fail-closed baseline gate: antigravity property/dir required before ANY Apply (isolated temp fixtures only)
+# vscode bring-up 2026-09-01: vscode property added to the same fail-closed set (owner-approved Core gate edit).
 $agiFixtureDir = Join-Path ([IO.Path]::GetTempPath()) ("hostsync-gate-" + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $agiFixtureDir -Force | Out-Null
 try {
@@ -155,9 +157,58 @@ try {
 
     $repoBaselineJson = Get-Content -LiteralPath (Get-BaselinePathsFile -HostSyncRoot $hostSyncRoot) -Raw | ConvertFrom-Json
     Assert-Pass 'baseline-backups.paths.json parses with antigravity property' ($null -ne $repoBaselineJson.antigravity)
+
+    # vscode fail-closed negative tests (4th stack, 2026-09-01)
+    $vscFixtureNoProp = Join-Path $agiFixtureDir 'no-prop-vsc.json'
+    '{"cursor":"C:\\does\\not\\exist","opencode":"C:\\does\\not\\exist","antigravity":"C:\\does\\not\\exist","companionSha":"x","created":"y"}' | Set-Content -LiteralPath $vscFixtureNoProp
+    $vscThrewNoProp = $false
+    try { Assert-BaselineBackupsPresent -PathsFile $vscFixtureNoProp -AllowCompanionShaMismatch | Out-Null } catch { $vscThrewNoProp = ($_.Exception.Message -match 'vscode') }
+    Assert-Pass 'baseline gate fails closed without vscode property' $vscThrewNoProp
+
+    $vscFixtureEmpty = Join-Path $agiFixtureDir 'empty-prop-vsc.json'
+    '{"cursor":"C:\\does\\not\\exist","opencode":"C:\\does\\not\\exist","antigravity":"C:\\does\\not\\exist","vscode":"","companionSha":"x","created":"y"}' | Set-Content -LiteralPath $vscFixtureEmpty
+    $vscThrewEmpty = $false
+    try { Assert-BaselineBackupsPresent -PathsFile $vscFixtureEmpty -AllowCompanionShaMismatch | Out-Null } catch { $vscThrewEmpty = ($_.Exception.Message -match 'vscode') }
+    Assert-Pass 'baseline gate fails closed on empty vscode path' $vscThrewEmpty
+
+    Assert-Pass 'baseline-backups.paths.json parses with vscode property' ($null -ne $repoBaselineJson.vscode)
 }
 finally {
     Remove-Item -LiteralPath $agiFixtureDir -Recurse -Force -ErrorAction SilentlyContinue
+}
+
+# --- VS Code stack structural blocks (vscode bring-up 2026-09-01) ---
+$vscManifestPath = Join-Path $hostSyncRoot 'manifests\vscode.manifest.psd1'
+Assert-Pass 'vscode manifest exists' (Test-Path -LiteralPath $vscManifestPath)
+if (Test-Path -LiteralPath $vscManifestPath) {
+    $vscManifest = Import-PowerShellDataFile -LiteralPath $vscManifestPath
+    Assert-Pass 'vscode StackId' ($vscManifest.StackId -eq 'Vscode')
+    Assert-Pass 'vscode overlay root declared' ($vscManifest.OverlayRelativeRoot -eq 'overlays/vscode')
+    Assert-Pass 'vscode live root declared' ($vscManifest.LiveRelativeRoot -eq '.copilot')
+    Assert-Pass 'vscode manifest has 21 copy entries' ($vscManifest.CopyEntries.Count -eq 21)
+    Assert-Pass 'vscode excludes use no backslashes' (@($vscManifest.HardExcludes + $vscManifest.NeverTouch | Where-Object { $_ -match '\\' }).Count -eq 0)
+    Assert-Pass 'vscode never-touch config.json' ($vscManifest.NeverTouch -contains 'config.json')
+    Assert-Pass 'vscode manifest has no JsonMerge' (-not ($vscManifest.Keys -contains 'JsonMerge'))
+    Assert-Pass 'vscode manifest has no AgentsDualWrite' (-not ($vscManifest.Keys -contains 'AgentsDualWrite'))
+    Assert-Pass 'vscode manifest has no HybridRuleIds' (-not ($vscManifest.Keys -contains 'HybridRuleIds'))
+    $vscAgentDests = @($vscManifest.CopyEntries | Where-Object { $_.Dest -like 'agents/*' })
+    Assert-Pass 'vscode agent defs under agents/ (8 roles)' ($vscAgentDests.Count -eq 8)
+    $vscSkillDests = @($vscManifest.CopyEntries | Where-Object { $_.Dest -like 'skills/*' })
+    Assert-Pass 'vscode skill dests under skills/ (11)' ($vscSkillDests.Count -eq 11)
+    $vscAdapterPath = Join-Path $hostSyncRoot 'adapters\Generic.Adapter.ps1'
+    Assert-Pass 'vscode clone adapter deleted (dispatches to Generic)' (-not (Test-Path -LiteralPath (Join-Path $hostSyncRoot 'adapters\Vscode.Adapter.ps1')))
+    Assert-Pass 'vscode dispatches to Generic adapter' (Test-Path -LiteralPath $vscAdapterPath)
+    if (Test-Path -LiteralPath $vscAdapterPath) {
+        $vscAdapterText = Get-Content -LiteralPath $vscAdapterPath -Raw
+        Assert-Pass 'generic adapter exports Invoke-StackHarnessSync (vscode-leg)' ($vscAdapterText -match 'function Invoke-StackHarnessSync')
+        Assert-Pass 'generic adapter is not a stub (vscode-leg)' ($vscAdapterText -notmatch 'Phase 2 stub')
+    }
+    $vscLive = Join-Path $env:USERPROFILE '.copilot'
+    $beforeVsc = Get-LiveOpenCodeSnapshot -LiveRoot $vscLive
+    & pwsh -NoProfile -File $syncScript -Target Vscode
+    Assert-Pass 'dry-run Vscode exit 0' ($LASTEXITCODE -eq 0)
+    $afterVsc = Get-LiveOpenCodeSnapshot -LiveRoot $vscLive
+    Assert-Pass 'dry-run Vscode made no live writes' (Test-LiveOpenCodeUnchanged -Before $beforeVsc -After $afterVsc)
 }
 
 # --- Antigravity behavioral blocks (overlay leaves present) ---

@@ -16,7 +16,8 @@ function Get-StackManifest {
 }
 
 function Get-RegisteredStackIds {
-    return @('Cursor', 'OpenCode', 'Antigravity')
+    # kilo-cline bring-up 2026-09-01: 5th/6th stacks registered (owner-approved).
+    return @('Cursor', 'OpenCode', 'Antigravity', 'Vscode', 'Cline', 'Kilocode')
 }
 
 function ConvertTo-SkewIdentitySource {
@@ -120,11 +121,20 @@ function Get-StackAdapterScript {
         [string]$HostSyncRoot = $PSScriptRoot
     )
 
+    # Dispatch convention (kilo-cline bring-up 2026-09-01, owner-approved):
+    # prefer a specialized per-stack adapter; otherwise fall back to the shared
+    # manifest-driven Generic adapter (copy-out copy engine, no custom legs).
+    # Cursor/OpenCode keep specialized adapters (real legs); Antigravity/Vscode
+    # clone files were deleted — they dispatch to Generic byte-identically.
     $adapterPath = Join-Path $HostSyncRoot "adapters/$StackId.Adapter.ps1"
-    if (-not (Test-Path -LiteralPath $adapterPath)) {
-        throw "Adapter not found for stack '$StackId': $adapterPath"
+    if (Test-Path -LiteralPath $adapterPath) {
+        return $adapterPath
     }
-    return $adapterPath
+    $genericPath = Join-Path $HostSyncRoot 'adapters/Generic.Adapter.ps1'
+    if (Test-Path -LiteralPath $genericPath) {
+        return $genericPath
+    }
+    throw "Adapter not found for stack '$StackId': $adapterPath (and no Generic.Adapter.ps1 at $genericPath)"
 }
 
 function Import-StackAdapter {

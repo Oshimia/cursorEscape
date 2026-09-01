@@ -21,6 +21,9 @@ This index lists repeatable procedures for maintaining cursorEscape documentatio
 * [OpenCode smoke prompts](./opencode-smoke-prompts.md) — **copy-paste runbook** (C6 order); scorecard stays on host-adapter
 * [Cursor host adapter](./cursor-host-adapter.md) — global `~/.cursor` inventory; [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1); hybrid rules
 * [Antigravity host adapter](./antigravity-host-adapter.md) — global `~/.gemini` inventory; GEMINI.md full-replace; skills/workflows/subagent defs; C1–C6 smoke rows deferred pre-Apply
+* [VS Code host adapter](./vscode-host-adapter.md) — user-level `~/.copilot` (instructions/agents/skills); `.agent.md` stack; C1–C6 deferred to roadmap Phase 4
+* [Cline host adapter](./cline-host-adapter.md) — global `~/.cline` (rules/workflows); serial-review deviation; dispatches to Generic adapter
+* [Kilo Code host adapter](./kilocode-host-adapter.md) — global `~/.kilocode` (rules auto-include; workflows auto-migrate to slash); subagent-depth unproven; dispatches to Generic adapter
 * [Host harness sync README](../../scripts/host-sync/README.md) — modular layout, Phase 0 restore-only baselines, expansion recipe
 * [Authoring OpenCode adapter files](./opencode-authoring-adapter.md) — how to write skills, agents, rules/instructions, and config (cites OpenCode docs; includes skill `name`/`description` requirements)
 

@@ -301,13 +301,15 @@ function Assert-BaselineBackupsPresent {
     }
 
     $json = Get-Content -LiteralPath $PathsFile -Raw | ConvertFrom-Json
-    foreach ($prop in @('cursor', 'opencode', 'antigravity', 'companionSha', 'created')) {
+    # kilo-cline bring-up 2026-09-01: 'cline' + 'kilocode' added (owner-approved six-stack gate coverage).
+    foreach ($prop in @('cursor', 'opencode', 'antigravity', 'vscode', 'cline', 'kilocode', 'companionSha', 'created')) {
+
         if ($null -eq $json.$prop -or [string]::IsNullOrWhiteSpace([string]$json.$prop)) {
             throw "Phase 0 baseline gate: paths file missing required property '$prop'"
         }
     }
 
-    foreach ($stackPath in @($json.cursor, $json.opencode, $json.antigravity)) {
+    foreach ($stackPath in @($json.cursor, $json.opencode, $json.antigravity, $json.vscode, $json.cline, $json.kilocode)) {
         if (-not (Test-Path -LiteralPath $stackPath -PathType Container)) {
             throw "Phase 0 baseline gate: backup directory missing: $stackPath"
         }

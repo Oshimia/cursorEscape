@@ -1,6 +1,16 @@
 #Requires -Version 7.0
 Set-StrictMode -Version Latest
 
+# Generic stack adapter — kilo-cline bring-up 2026-09-01 (owner-approved design edit).
+# One shared manifest-driven copy-out engine. Extracted verbatim from the
+# Antigravity.Adapter.ps1 body (0 custom legs, byte-identical engine that the
+# duplicated Vscode.Adapter.ps1 also cloned). Registry dispatch:
+#   adapters/<StackId>.Adapter.ps1 if present, else THIS file.
+# Stacks currently dispatching here: Antigravity, Vscode, Cline, Kilocode.
+# Specialized (keep their own adapters): Cursor (hybrid rules leg), OpenCode
+# (AgentsDualWrite + JsonMerge legs).
+# Live root: Join-Path $env:USERPROFILE $Manifest.LiveRelativeRoot.
+
 function Invoke-StackHarnessSync {
     param(
         [Parameter(Mandatory)]
