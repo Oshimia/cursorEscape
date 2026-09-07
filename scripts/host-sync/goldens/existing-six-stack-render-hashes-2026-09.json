@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "kind": "existing-six-stack-normalized-render-hash-ledger",
+  "normalization": "UTF-8 SHA-256 after CRLF-to-LF and exactly one terminal LF; rendering uses an explicit temporary root, never user-home state",
+  "stacks": [
+    "Cursor",
+    "OpenCode",
+    "Antigravity",
+    "Vscode",
+    "Cline",
+    "Kilocode"
+  ],
+  "entries": [
+    {
+      "stack": "Cursor",
+      "destinationCount": 16,
+      "sha256": "c75ae2603fc95217a8049af2b65b502db1ec028a02d76666d7a8a75c23547077"
+    },
+    {
+      "stack": "OpenCode",
+      "destinationCount": 21,
+      "sha256": "65c4f401a903c6f6d731c1bedc1acd8a4b236bb8215a643ee7107021dff312d6"
+    },
+    {
+      "stack": "Antigravity",
+      "destinationCount": 18,
+      "sha256": "da6ede5a0ea681ae8d5e0fb25dedfc0fc2c0825d87526a315c7340334dc5a899"
+    },
+    {
+      "stack": "Vscode",
+      "destinationCount": 21,
+      "sha256": "974ff37f6e58d48c2ad69f6d9af96b225a0246de346cd876a95f73baef01a5e1"
+    },
+    {
+      "stack": "Cline",
+      "destinationCount": 4,
+      "sha256": "6bb8898a543759794bd8368d885bf82e46b2ea58fbf53ddaf87bd7bf7821010f"
+    },
+    {
+      "stack": "Kilocode",
+      "destinationCount": 4,
+      "sha256": "e09ad5e5ecbb508dfb74a299fddff33218040c999879224d03abc7b7324790eb"
+    }
+  ]
+}

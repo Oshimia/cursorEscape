@@ -1,6 +1,6 @@
 # Analysis documentation
 
-**Last updated:** 2026-08-29
+**Last updated:** 2026-09-08
 
 ## Context
 
@@ -34,6 +34,7 @@ Operator studies of **local workflows** (not proposed engine design, not eval sc
 * [Cursor pointer-first-3 audit (2026-08)](./cursor-pointer-first-3-audit-2026-08.md) — overlay vs portable audit; `{{COMPANION_ROOT}}` harness fix; live `~/.cursor` gap disposition
 * [Pointer-first-4 closeout (2026-08)](./pointer-first-4-closeout-2026-08.md) — C6 smoke attestation; companion-edit proof; OpenCode mirror delete; operator runbook
 * [Overlay-remediation migration record (2026-08)](./overlay-remediation-2026-08.md) — Phases 0–3 migration record; golden-render index; Reviewer A doom-loop incident + owner waiver; recovered duplicate-section finding
+* [Codex load surface (2026-09)](./codex-load-surface-2026-09.md) — Phase 0 two-root seam, safe baseline recipe, six-stack render-hash ledger, and C1–C6 mapping
 
 ### Documents (imported openBuggy)
 
