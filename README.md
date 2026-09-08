@@ -8,7 +8,7 @@
 
 **Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. repo-root contracts (Approach A: [`workflow/`](workflow/_index.md), [`skills/`](skills/_index.md), [`agents/`](agents/_index.md), [`rules/`](rules/_index.md)) are **Target** SoT. Host overlays: [overlays/cursor](overlays/cursor/_index.md), [overlays/opencode](overlays/opencode/_index.md), and [overlays/antigravity](overlays/antigravity/_index.md) (thin harness). Live install: [`Sync-HostHarness.ps1`](scripts/Sync-HostHarness.ps1) (`-Apply` operator-gated). Load path: [pointer-first](docs/roadmaps/pointer-first.md). Stack variation: [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
 
-**First host attempt:** [T3 Code](https://t3.codes/) (control plane) + [OpenCode](https://opencode.ai/) (harness); ClinePass **Desired** later; skill-based `bug_reviewer`. Study: [host recreation](analysis/host-recreation-2026-08.md).
+
 
 **Start here:** **[docs/Roadmap.md](docs/Roadmap.md)** — vision, principles, status, and directory map. Initialization archaeology: [initialization report](review/initialization-report.md).
 
