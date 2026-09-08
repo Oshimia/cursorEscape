@@ -24,6 +24,9 @@
   Using it intentionally leaves sibling stacks stale until the next full sync.
 .PARAMETER FailFast
   After all-stack preflight succeeds, stop the write pass after first stack failure. It does not shorten the all-stack preflight.
+.PARAMETER BringUpException
+  One-time, owner-authorized exception that permits -Apply -Target Codex while Codex is force-held ApplyState=BringUp (initial install only).
+  Refused for every other target or any multi-stack selection. Without this switch the BringUp lifecycle gate fails closed.
 .PARAMETER CodexRoot
   Optional explicit Codex home override for dry-run/test seams. Defaults to effective CODEX_HOME (~/.codex). The Codex adapter never infers roots itself.
 .PARAMETER SkillRoot
@@ -55,6 +58,8 @@
   pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor -AllowSkew # EXCEPTION path only
 .EXAMPLE
   pwsh ./scripts/Sync-HostHarness.ps1 -Target Codex -CodexRoot C:/temp/codex -SkillRoot C:/temp/skills
+.EXAMPLE
+  pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Codex -AllowSkew -BringUpException # Phase 4 initial install only
 .LINK
   scripts/host-sync/README.md
 .LINK
@@ -70,6 +75,8 @@ param(
     [switch] $AllowSkew,
 
     [switch] $FailFast,
+
+    [switch] $BringUpException,
 
     [string] $CodexRoot = '',
 
@@ -163,7 +170,7 @@ if ($stackIds.Count -eq 1) {
 
 $plan = Invoke-HostHarnessSyncPlan -Mode $mode -StackIds $stackIds `
     -CompanionRoot $CompanionRoot -HostSyncRoot $hostSyncRoot `
-    -CodexRoot $CodexRoot -SkillRoot $SkillRoot -FailFast:$FailFast
+    -CodexRoot $CodexRoot -SkillRoot $SkillRoot -FailFast:$FailFast -BringUpException:$BringUpException
 $anyFailed = -not $plan.Success
 
 Write-Output "=== Summary: mode=$($mode.ToString()) target=$Target stacks=$($stackIds -join ',') success=$(-not $anyFailed) ==="

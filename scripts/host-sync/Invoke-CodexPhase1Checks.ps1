@@ -436,6 +436,10 @@ try {
     if (Test-Path -LiteralPath $goldenPath) {
         $expectedGolden = Get-Content -LiteralPath $goldenPath -Raw | ConvertFrom-Json
         Assert-Pass 'normalized render golden matches all 31 destinations' (Test-CodexGoldenEqual $expectedGolden $actualGolden)
+        $tomlEscapeLeaks = @($fixturePlan | Where-Object {
+            $_.Destination -like '*.toml' -and ($_.Content -match '\\(?!\\)')
+        })
+        Assert-Pass 'rendered TOML backslashes are escaped' ($tomlEscapeLeaks.Count -eq 0)
         $fixtureMisses = [System.Collections.Generic.List[string]]::new()
         $fixtureTextRoot = Join-Path $goldenRoot 'fixtures'
         foreach ($metadata in $manifest.OverlayOnlySkillMetadata) {

@@ -1,6 +1,6 @@
 # Codex adapter bring-up roadmap (7th sync stack)
 
-**Status:** Accepted for Composer execution 2026-09-07. Phase 0 complete 2026-09-08 (dual APPROVED: production-readiness + bug review, 3 iterations; Observed Fast CI, subagent Full CI, Composer QC, Composer Full CI). Phase 1 complete 2026-09-08 under the owner's iterative-review waiver (implementation-only closeout; Observed Fast CI 72/72, six-stack ledger parity, Composer QC on attestation + transcripts; deferred risks recorded in the closeout). Phase 2 complete 2026-09-08 under the same waiver (specialized fail-closed two-root adapter + 43-check scratch CI; unit 22/22, remediation 69/69, ledger parity). Phase 3 complete 2026-09-08 under the same waiver (implementation-only closeout: seven-stack registration, forced BringUp, global preflight, 19-check temp-root Fast CI, docs cascade). Codex remains unapplied; `ApplyState = BringUp` until three-client smoke passes.
+**Status:** Accepted for Composer execution 2026-09-07. Phase 0 complete 2026-09-08 (dual APPROVED: production-readiness + bug review, 3 iterations; Observed Fast CI, subagent Full CI, Composer QC, Composer Full CI). Phase 1 complete 2026-09-08 under the owner's iterative-review waiver (implementation-only closeout; Observed Fast CI 72/72, six-stack ledger parity, Composer QC on attestation + transcripts; deferred risks recorded in the closeout). Phase 2 complete 2026-09-08 under the same waiver (specialized fail-closed two-root adapter + 43-check scratch CI; unit 22/22, remediation 69/69, ledger parity). Phase 3 complete 2026-09-08 under the same waiver (implementation-only closeout: seven-stack registration, forced BringUp, global preflight, 19-check temp-root Fast CI, docs cascade). Phase 4 in progress 2026-09-08: owner authorized; initial baseline captured (32 leaves, zero drift); one-time BringUp exception seam landed; Codex-only live Apply completed and idempotent; runtime TOML escape defect found by smoke and fixed (render + CI guard); CLI smoke C1-C5, S1, S3, S6 green. Pending: owner IDE + desktop fresh-session smoke, then ApplyState activation. Codex remains `ApplyState = BringUp` until three-client smoke passes.
 
 ## Context
 
@@ -55,7 +55,7 @@ The implementation follows the reviewed plan after its three-pass cap. The final
 - [x] **Phase 1 — Codex overlay and manifest** (2026-09-08, owner review waiver)
 - [x] **Phase 2 — Specialized adapter and safety mechanics** (2026-09-08, owner review waiver)
 - [x] **Phase 3 — Registration, orchestration-wide preflight, CI, and docs** (2026-09-08, owner review waiver)
-- [ ] **Phase 4 — Authorized Apply, three-client smoke, and activation**
+- [ ] **Phase 4 — Authorized Apply, three-client smoke, and activation** (in progress: install + CLI smoke green; IDE/desktop smoke pending owner)
 
 ## Agent context — Phase 0
 

@@ -870,6 +870,7 @@ function Invoke-HostHarnessSyncPlan {
         [string] $CodexRoot = '',
         [string] $SkillRoot = '',
         [switch] $FailFast,
+        [switch] $BringUpException,
         [scriptblock] $ApplyStateResolver
     )
 
@@ -900,7 +901,14 @@ function Invoke-HostHarnessSyncPlan {
 
     if ($Mode -eq [HostSyncMode]::Apply) {
         $bringUpStacks = @($selected | Where-Object State -eq 'BringUp' | ForEach-Object StackId)
-        if ($bringUpStacks.Count -gt 0) {
+        # Phase 4 bring-up exception: the ONLY sanctioned bypass is a single-stack
+        # Codex Apply explicitly requested with -BringUpException (one-time initial
+        # install, owner-authorized). Any other BringUp selection still fails closed.
+        $bringUpExceptionAllowed = $BringUpException -and
+            @($StackIds).Count -eq 1 -and
+            $bringUpStacks.Count -eq 1 -and
+            $bringUpStacks[0] -eq 'Codex'
+        if ($bringUpStacks.Count -gt 0 -and -not $bringUpExceptionAllowed) {
             Write-Host ("FATAL (BringUp gate): Target '{0}' includes ApplyState=BringUp stack(s): {1}. No selected stack was written." -f ($StackIds -join ','), ($bringUpStacks -join ', '))
             return @{
                 Success          = $false
@@ -908,6 +916,9 @@ function Invoke-HostHarnessSyncPlan {
                 Reports          = [System.Collections.Generic.List[hashtable]]::new()
                 PreflightReports = [System.Collections.Generic.List[hashtable]]::new()
             }
+        }
+        if ($bringUpExceptionAllowed) {
+            Write-Warning "BRING-UP EXCEPTION: one-time owner-authorized Codex initial install; BringUp lifecycle gate bypassed for this single-stack Apply only."
         }
     }
 

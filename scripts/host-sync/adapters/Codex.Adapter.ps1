@@ -242,6 +242,13 @@ function New-CodexInstallPlan {
             if (Test-ContentHasUnmergedTokens -Content $plannedContent) {
                 throw "Unmerged tokens in Codex planned output: $identity"
             }
+            if ($identity -like '*.toml') {
+                # TOML basic strings treat '\' as an escape; the substituted
+                # companion path uses Windows separators, so escape every
+                # backslash or the runtime TOML parser rejects the file
+                # (e.g. C:\Users parses as an invalid \U unicode escape).
+                $plannedContent = $plannedContent.Replace('\', '\\')
+            }
             $plannedBytes = [Text.UTF8Encoding]::new($false).GetBytes($plannedContent)
             $plannedHash = ([Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($plannedBytes))).ToLowerInvariant()
         }
