@@ -7,8 +7,9 @@
   Registry stacks: Cursor, OpenCode, Antigravity, Vscode, Cline, Kilocode, Codex
   (see Register-StackAdapters.ps1 / manifests/).
   Dry-run by default; use -Apply for live writes (requires Phase 0 baseline gate).
-  Apply is also lifecycle-gated: all selected stacks must be Active. Codex is force-held
-  BringUp until Phase 4 runtime smoke acceptance. Global Apply preflights every selected
+  Apply is also lifecycle-gated: all selected stacks must be Active. Codex was force-held
+  BringUp through Phase 3 and activated Active on 2026-09-08 after three-client smoke;
+  setting its manifest back to BringUp re-arms the gate. Global Apply preflights every selected
   stack before any write pass; any preflight failure causes zero Apply writes.
   Sync does NOT create backups on Apply — companion repo is ongoing SoT.
   Phase 0 baselines (restore-only): see scripts/host-sync/baseline-backups.paths.json.
@@ -25,7 +26,7 @@
 .PARAMETER FailFast
   After all-stack preflight succeeds, stop the write pass after first stack failure. It does not shorten the all-stack preflight.
 .PARAMETER BringUpException
-  One-time, owner-authorized exception that permits -Apply -Target Codex while Codex is force-held ApplyState=BringUp (initial install only).
+  One-time, owner-authorized exception that permits -Apply -Target Codex while the Codex manifest is ApplyState=BringUp (initial install only).
   Refused for every other target or any multi-stack selection. Without this switch the BringUp lifecycle gate fails closed.
 .PARAMETER CodexRoot
   Optional explicit Codex home override for dry-run/test seams. Defaults to effective CODEX_HOME (~/.codex). The Codex adapter never infers roots itself.

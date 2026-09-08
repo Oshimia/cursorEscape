@@ -26,20 +26,17 @@ function Get-StackApplyState {
         [hashtable] $Manifest
     )
 
-    # Absent ApplyState means Active for all established stacks. Codex is force-
-    # held in BringUp by the Phase 3 lifecycle gate: registry membership makes it
-    # visible to plans and CI, while three-client smoke acceptance (Phase 4) is
-    # required before any Apply. Changing the manifest value alone cannot bypass
-    # this gate.
+    # Absent ApplyState means Active for all established stacks. During Phases
+    # 0-3 Codex was force-held in BringUp here; Phase 4 activation (2026-09-08)
+    # removed the force-hold after the owner-authorized install and attested
+    # three-client smoke. The manifest now governs, and re-setting it to
+    # BringUp re-arms the lifecycle gate for any future bring-down/repair.
     $configuredState = 'Active'
     if ($Manifest.ContainsKey('ApplyState') -and -not [string]::IsNullOrWhiteSpace([string]$Manifest.ApplyState)) {
         $configuredState = [string]$Manifest.ApplyState
     }
     if ($configuredState -notin @('Active', 'BringUp')) {
         throw "Invalid ApplyState '$configuredState' for stack '$($Manifest.StackId)'. Valid: Active, BringUp"
-    }
-    if ($Manifest.StackId -eq 'Codex') {
-        return 'BringUp'
     }
     return $configuredState
 }

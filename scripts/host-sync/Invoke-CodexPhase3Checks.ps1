@@ -1,10 +1,10 @@
 #Requires -Version 7.0
 <#
   Codex bring-up Phase 3 Fast CI (temporary roots only).
-  Covers: explicit-root Codex dry-run, all-stack dry-run, BringUp All-Apply
-  refusal, Active-state Codex collision causing zero selected-stack writes, and
-  invalid-target registry output. The Active seam is an in-process test-only
-  ApplyState resolver; the operator entry retains the non-bypassable BringUp gate.
+  Covers: explicit-root Codex dry-run, all-stack dry-run, the BringUp lifecycle
+  gate (regression-covered via a test-only state resolver), real-state Codex
+  Apply in disposable fixtures, Active-state Codex collision causing zero
+  selected-stack writes, and invalid-target registry output.
 #>
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -141,6 +141,95 @@ $codex = @($plan.PreflightReports | Where-Object StackId -eq 'Codex')
     return ($lastJson | ConvertFrom-Json)
 }
 
+function Invoke-CodexPhase3BringUpGateProbe {
+    param(
+        [Parameter(Mandatory)][hashtable] $Roots,
+        [Parameter(Mandatory)][string] $LiveHome
+    )
+
+    $probePath = Join-Path $Roots.Scratch 'bringup-gate-probe.ps1'
+    @'
+param(
+    [string] $CompanionRoot,
+    [string] $HostSyncRoot,
+    [string] $CodexRoot,
+    [string] $SkillRoot
+)
+Set-StrictMode -Version Latest
+. (Join-Path $HostSyncRoot 'HostSync.Contract.ps1')
+. (Join-Path $HostSyncRoot 'HostSync.Core.ps1')
+. (Join-Path $HostSyncRoot 'Register-StackAdapters.ps1')
+$stackIds = Get-RegisteredStackIds
+$plan = Invoke-HostHarnessSyncPlan -Mode ([HostSyncMode]::Apply) -StackIds $stackIds `
+    -CompanionRoot $CompanionRoot -HostSyncRoot $HostSyncRoot `
+    -CodexRoot $CodexRoot -SkillRoot $SkillRoot `
+    -ApplyStateResolver { param([hashtable] $Manifest) if ($Manifest.StackId -eq 'Codex') { 'BringUp' } else { 'Active' } }
+if ($null -eq $plan) { throw 'BringUp gate probe did not return a plan.' }
+[pscustomobject]@{
+    Success = [bool]$plan.Success
+    ExitReason = [string]$plan.ExitReason
+    PreflightCount = @($plan.PreflightReports).Count
+    WriteReportCount = @($plan.Reports).Count
+} | ConvertTo-Json -Compress
+'@ | Set-Content -LiteralPath $probePath -Encoding UTF8
+
+    $previousHome = $env:USERPROFILE
+    try {
+        $env:USERPROFILE = $LiveHome
+        $output = & pwsh -NoProfile -File $probePath `
+            -CompanionRoot $companionRoot -HostSyncRoot $hostSyncRoot `
+            -CodexRoot $Roots.Codex -SkillRoot $Roots.Skills 2>&1 | Out-String
+    }
+    finally {
+        $env:USERPROFILE = $previousHome
+    }
+    $lastJson = @($output -split "`n" | Where-Object { $_.Trim() } | Select-Object -Last 1)[0]
+    return ($lastJson | ConvertFrom-Json)
+}
+
+function Invoke-CodexPhase3RealApplyProbe {
+    param(
+        [Parameter(Mandatory)][hashtable] $Roots,
+        [Parameter(Mandatory)][string] $LiveHome
+    )
+
+    $probePath = Join-Path $Roots.Scratch 'real-apply-probe.ps1'
+    @'
+param(
+    [string] $CompanionRoot,
+    [string] $HostSyncRoot,
+    [string] $CodexRoot,
+    [string] $SkillRoot
+)
+Set-StrictMode -Version Latest
+. (Join-Path $HostSyncRoot 'HostSync.Contract.ps1')
+. (Join-Path $HostSyncRoot 'HostSync.Core.ps1')
+. (Join-Path $HostSyncRoot 'Register-StackAdapters.ps1')
+$plan = Invoke-HostHarnessSyncPlan -Mode ([HostSyncMode]::Apply) -StackIds @('Codex') `
+    -CompanionRoot $CompanionRoot -HostSyncRoot $HostSyncRoot `
+    -CodexRoot $CodexRoot -SkillRoot $SkillRoot
+if ($null -eq $plan) { throw 'Real apply probe did not return a plan.' }
+[pscustomobject]@{
+    Success = [bool]$plan.Success
+    ExitReason = [string]$plan.ExitReason
+    WriteReportCount = @($plan.Reports).Count
+} | ConvertTo-Json -Compress
+'@ | Set-Content -LiteralPath $probePath -Encoding UTF8
+
+    $previousHome = $env:USERPROFILE
+    try {
+        $env:USERPROFILE = $LiveHome
+        $output = & pwsh -NoProfile -File $probePath `
+            -CompanionRoot $companionRoot -HostSyncRoot $hostSyncRoot `
+            -CodexRoot $Roots.Codex -SkillRoot $Roots.Skills 2>&1 | Out-String
+    }
+    finally {
+        $env:USERPROFILE = $previousHome
+    }
+    $lastJson = @($output -split "`n" | Where-Object { $_.Trim() } | Select-Object -Last 1)[0]
+    return ($lastJson | ConvertFrom-Json)
+}
+
 function Get-SelectedLiveSnapshots {
     param([Parameter(Mandatory)][string] $HomeRoot)
     $result = @{}
@@ -191,7 +280,7 @@ foreach ($stackId in $registeredStackIds) {
 Assert-Pass 'ApplyState defaults Active outside Codex' (
     (@($registeredStackIds | Where-Object { $_ -ne 'Codex' } | ForEach-Object { Get-StackApplyState -Manifest $manifests[$_] }) -join ',') -eq 'Active,Active,Active,Active,Active,Active'
 )
-Assert-Pass 'Codex forced BringUp' ((Get-StackApplyState -Manifest $manifests['Codex']) -eq 'BringUp')
+Assert-Pass 'Codex ApplyState governed by manifest (Active after Phase 4)' ((Get-StackApplyState -Manifest $manifests['Codex']) -eq 'Active')
 
 $scratch = Join-Path ([IO.Path]::GetTempPath()) ('codex-phase3-check-' + [Guid]::NewGuid().ToString('N'))
 $scratchFull = [IO.Path]::GetFullPath($scratch).TrimEnd([char]'\', [char]'/')
@@ -242,18 +331,27 @@ try {
     Assert-Pass 'All dry-run writes zero fixture bytes' (Test-FixtureRootsClean -Roots $roots)
     Assert-Pass 'All dry-run reports global preflight semantics' ($allDry.Output.Contains('--- Preflight: Codex ---'))
 
-    # 3. BringUp All-Apply refuses before any selected-stack write pass.
+    # 3. BringUp lifecycle gate still refuses All-Apply when Codex is BringUp.
+    # Post-activation the real registry state is Active, so the gate path is
+    # regression-covered via a test-only state resolver (operator entry remains
+    # governed by Get-StackApplyState; setting the manifest back to BringUp
+    # re-arms the gate for real).
     $beforeBringUp = Get-SelectedLiveSnapshots -HomeRoot $liveHome
-    $bringUpApply = Invoke-CodexPhase3Sync -Target 'All' -Roots $roots -Apply -LiveHome $liveHome -BaselinePathsFile $baselinePathsFile
+    $bringUpApply = Invoke-CodexPhase3BringUpGateProbe -Roots $roots -LiveHome $liveHome
     $afterBringUp = Get-SelectedLiveSnapshots -HomeRoot $liveHome
-    Assert-Pass 'BringUp All-Apply exits non-zero' ($bringUpApply.ExitCode -ne 0) $bringUpApply.Output
-    Assert-Pass 'BringUp refusal names Codex and global no-write behavior' (
-        $bringUpApply.Output.Contains('BringUp gate') -and
-        $bringUpApply.Output.Contains('Codex') -and
-        $bringUpApply.Output.Contains('No selected stack was written')
-    ) $bringUpApply.Output
+    Assert-Pass 'BringUp-forced All-Apply refuses with BringUpGate' (
+        (-not $bringUpApply.Success) -and $bringUpApply.ExitReason -eq 'BringUpGate'
+    ) $bringUpApply.ExitReason
     Assert-Pass 'BringUp All-Apply changes no selected live stack' (Test-SelectedLiveSnapshotsUnchanged -Before $beforeBringUp -After $afterBringUp)
     Assert-Pass 'BringUp All-Apply writes zero fixture bytes' (Test-FixtureRootsClean -Roots $roots)
+
+    # 3b. Real-state (Active) Codex-only Apply succeeds in disposable fixtures.
+    # In-process plan skips the operator-level baseline gate by design; fixture
+    # live roots are redirected and disposable.
+    $realApply = Invoke-CodexPhase3RealApplyProbe -Roots $roots -LiveHome $liveHome
+    Assert-Pass 'real-state Codex-only Apply succeeds in fixtures' (
+        $realApply.Success -and $realApply.ExitReason -eq 'Complete' -and $realApply.WriteReportCount -eq 1
+    ) $realApply.ExitReason
 
     # 4. Test-only Active-state seam proves the orchestration-wide collision gate.
     $collisionPath = Join-Path $roots.Codex 'agents/planner.toml'

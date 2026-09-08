@@ -1,7 +1,7 @@
 # Codex overlay — source-only bring-up map
 
 **Last updated:** 2026-09-08
-**Status:** Phase 3 registered source-only; `ApplyState = BringUp` is forced and nothing is installed.
+**Status:** Phase 3 registered source-only; activated 2026-09-08 after three-client smoke (`ApplyState = Active`).
 **SoT boundary:** canonical procedure remains at repository-root `skills/`, `agents/`, `workflow/`, and `rules/`. This overlay contains only Codex-native thin wrappers, invocation metadata, managed-block source, and agent wiring.
 **Tokens:** `{{COMPANION_ROOT}}` is replaced with the absolute companion checkout path at render time. No rendered leaf may use a relative hop across either Codex root.
 
@@ -24,4 +24,4 @@ The exact leaf set is pinned by `scripts/host-sync/baselines/codex-phase0-baseli
 
 ## Bring-up state
 
-Registration exposes Codex to invalid-target help and all-stack planning, while the registry force-holds `BringUp`. Any Apply selection containing Codex is refused before any selected stack writes. Even in an Active-state CI seam, a Codex preflight failure prevents every write pass. Runtime activation remains a Phase 4 decision after C1–C6 three-client smoke and separate owner authorization.
+Registration exposes Codex to invalid-target help and all-stack planning. The lifecycle gate still refuses any selection containing BringUp before any selected stack writes, and a Codex preflight failure prevents every write pass. Activated 2026-09-08 after C1–C6 three-client smoke and separate owner authorization.

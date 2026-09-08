@@ -5,7 +5,7 @@
     SchemaVersion                    = 1
     StackId                          = 'Codex'
     DisplayName                      = 'OpenAI Codex'
-    ApplyState                       = 'BringUp'
+    ApplyState                       = 'Active'
     OverlayRelativeRoot              = 'overlays/codex'
     LogicalRoots                     = @('codex-home', 'skill-root')
     OwnershipMarker                  = 'cursorEscape-managed:v1'

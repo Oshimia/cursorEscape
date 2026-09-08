@@ -40,8 +40,8 @@ $registered = Get-RegisteredStackIds
 Assert-Pass 'registry has seven stacks' ($registered.Count -eq 7) (($registered -join ','))
 Assert-Pass 'Codex is seventh registered stack' ($registered[-1] -eq 'Codex')
 $codexManifest = Get-StackManifest -StackId 'Codex' -HostSyncRoot $hostSyncRoot
-Assert-Pass 'Codex manifest declares BringUp' ($codexManifest.ApplyState -eq 'BringUp')
-Assert-Pass 'registry forces Codex BringUp' ((Get-StackApplyState -Manifest $codexManifest) -eq 'BringUp')
+Assert-Pass 'Codex manifest declares Active' ($codexManifest.ApplyState -eq 'Active')
+Assert-Pass 'registry defers to manifest for Codex ApplyState' ((Get-StackApplyState -Manifest $codexManifest) -eq 'Active')
 Assert-Pass 'established stacks default Active' (
     @($registered | Where-Object { $_ -ne 'Codex' } | ForEach-Object {
         Get-StackApplyState -Manifest (Get-StackManifest -StackId $_ -HostSyncRoot $hostSyncRoot)
@@ -59,15 +59,15 @@ Assert-Pass 'entry passes explicit effective Codex roots' (
 Assert-Pass 'entry invalid target uses registry' ($entrySource.Contains('$validTargets = @($registeredStackIds)'))
 
 $sop = Read-RepoFile 'docs/SOPs/codex-host-adapter.md'
-Assert-Pass 'Codex SOP documents forced BringUp' ($sop.Contains('`ApplyState = BringUp` is forced'))
+Assert-Pass 'Codex SOP documents activation' ($sop.Contains('`ApplyState = Active` (activated 2026-09-08'))
 Assert-Pass 'Codex SOP documents two explicit roots' ($sop.Contains('explicit absolute roots'))
-Assert-Pass 'Codex SOP documents no runtime smoke claim' ($sop.Contains('runtime smoke is deferred to Phase 4'))
+Assert-Pass 'Codex SOP documents smoke attestation' ($sop.Contains('three-client smoke attested 2026-09-08'))
 Assert-Pass 'Codex SOP cites Fast CI' ($sop.Contains('Invoke-CodexPhase3Checks.ps1'))
 
 $overlay = Read-RepoFile 'overlays/codex/_index.md'
 Assert-Pass 'Codex overlay index records registered BringUp' (
     $overlay.Contains('Phase 3 registered source-only') -and
-    $overlay.Contains('force-holds `BringUp`')
+    $overlay.Contains('activated 2026-09-08 after three-client smoke')
 )
 $overlayIndex = Read-RepoFile 'overlays/_index.md'
 Assert-Pass 'overlay index includes Codex' ($overlayIndex.Contains('[codex/](./codex/_index.md)'))
@@ -85,24 +85,24 @@ Assert-Pass 'skill-source FA records seven stacks and preflight' (
 )
 $layerFa = Read-RepoFile 'docs/featureArchitecture/instruction-layering.md'
 Assert-Pass 'instruction-layering FA records Codex mapping' (
-    $layerFa.Contains('Codex mapping (registered, BringUp only)') -and
+    $layerFa.Contains('Codex mapping (registered, Active)') -and
     $layerFa.Contains('marker-bounded managed block')
 )
 $fidelityFa = Read-RepoFile 'docs/featureArchitecture/host-adaptation-fidelity.md'
 Assert-Pass 'host-fidelity FA keeps Codex not-Done' (
-    $fidelityFa.Contains('Codex Phase 3 registration is **not** Done') -and
-    $fidelityFa.Contains('no C1–C6 runtime attestation')
+    $fidelityFa.Contains('Codex Phase 4 activated 2026-09-08') -and
+    $fidelityFa.Contains('C1–C6 runtime attestation')
 )
 
 $workflowSop = Read-RepoFile 'docs/SOPs/editing-companion-workflow.md'
 Assert-Pass 'editing workflow includes Codex host row' (
     $workflowSop.Contains('[codex-host-adapter](./codex-host-adapter.md)') -and
-    $workflowSop.Contains('BringUp` refusal prevents any Apply write pass')
+    $workflowSop.Contains('BringUp` lifecycle gate blocks any Apply write pass')
 )
 $readme = Read-RepoFile 'README.md'
 Assert-Pass 'repository README includes seventh-stack status' (
     $readme.Contains('seventh `Codex` stack') -and
-    $readme.Contains('force-held `BringUp`')
+    $readme.Contains('activated `Active`')
 )
 $hostReadme = Read-RepoFile 'scripts/host-sync/README.md'
 Assert-Pass 'host-sync README documents lifecycle/global preflight' (

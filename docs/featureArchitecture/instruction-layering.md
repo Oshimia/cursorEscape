@@ -37,7 +37,7 @@ This is a **context-budget** optimization. Loop gate semantics stay in [intended
 
 **Cursor-specific mapping:** Customize → Rules → User Rules; optional `alwaysApply` rules under `~/.cursor/rules/`.
 
-**Codex mapping (registered, BringUp only):** one marker-bounded managed block in `CODEX_HOME/AGENTS.md` is the thin always-on gate; wrappers under the independent skill root stay on-demand; seven TOML role agents point back at companion SoT. The two `opencode-*` tooling wrappers are explicit-only by overlay policy. Runtime injection is not attested in Phase 3.
+**Codex mapping (registered, Active):** one marker-bounded managed block in `CODEX_HOME/AGENTS.md` is the thin always-on gate; wrappers under the independent skill root stay on-demand; seven TOML role agents point back at companion SoT. The two `opencode-*` tooling wrappers are explicit-only by overlay policy. Runtime injection attested 2026-09-08 (C1–C6 three-client smoke).
 
 ### Escalation *when* ownership (Required)
 
@@ -124,7 +124,7 @@ Adapters cite this page and [agents/_index.md](../../agents/_index.md) / [skills
 - [Repository discovery and context](./repository-discovery-and-context.md) — repo evidence, not instruction layers
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md) — different “layering”
 - [Skill source and host overlays](./skill-source-and-host-overlays.md) — host axis of the instruction budget
-- [Codex overlay](../../overlays/codex/_index.md) — registered source-only BringUp mapping
+- [Codex overlay](../../overlays/codex/_index.md) — registered mapping, Active after Phase 4 smoke
 - [Agent role contracts](../../agents/_index.md)
 - [Skill contracts](../../skills/_index.md)
 - [pre-commit-ci-gate](../../rules/pre-commit-ci-gate.md)

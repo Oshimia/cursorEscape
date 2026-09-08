@@ -2,7 +2,7 @@
 
 **Stack:** `Codex` · **Logical roots:** effective `CODEX_HOME` (default `~/.codex`) + `~/.agents/skills` · **Surface:** managed `AGENTS.md` block, seven TOML agents, 23 skill wrappers
 
-**Status:** registered Phase 3 2026-09-08. `ApplyState = BringUp` is forced by the registry. Nothing is installed and runtime smoke is deferred to Phase 4.
+**Status:** registered Phase 3 2026-09-08; `ApplyState = Active` (activated 2026-09-08 after owner-authorized install; three-client smoke attested 2026-09-08: CLI, VS Code extension, ChatGPT desktop).
 
 ## Context
 
@@ -26,7 +26,7 @@ The specialized adapter requires two explicit absolute roots. The operator entry
 - Never install `agents/openai.yaml` metadata; explicit-only policy remains overlay-only until a separately reviewed seam.
 - Never infer or normalize a missing Codex/skill root inside the adapter.
 - Never write model, reasoning, MCP, or plugin configuration.
-- Never bypass `BringUp` with an internal test resolver outside disposable CI.
+- Never bypass the `BringUp` lifecycle gate with an internal test resolver outside disposable CI.
 
 ## Destination inventory
 
@@ -51,7 +51,7 @@ pwsh scripts/Sync-HostHarness.ps1 -Target All `
 # Owner entry with effective roots on the eventual host
 pwsh scripts/Sync-HostHarness.ps1 -Target Codex
 
-# Refused in Phase 3: BringUp gate performs zero selected-stack writes
+# BringUp gate: zero selected-stack writes (re-arm with `ApplyState = BringUp`)
 pwsh scripts/Sync-HostHarness.ps1 -Target All -Apply
 ```
 

@@ -1,6 +1,6 @@
 # Codex adapter bring-up roadmap (7th sync stack)
 
-**Status:** Accepted for Composer execution 2026-09-07. Phase 0 complete 2026-09-08 (dual APPROVED: production-readiness + bug review, 3 iterations; Observed Fast CI, subagent Full CI, Composer QC, Composer Full CI). Phase 1 complete 2026-09-08 under the owner's iterative-review waiver (implementation-only closeout; Observed Fast CI 72/72, six-stack ledger parity, Composer QC on attestation + transcripts; deferred risks recorded in the closeout). Phase 2 complete 2026-09-08 under the same waiver (specialized fail-closed two-root adapter + 43-check scratch CI; unit 22/22, remediation 69/69, ledger parity). Phase 3 complete 2026-09-08 under the same waiver (implementation-only closeout: seven-stack registration, forced BringUp, global preflight, 19-check temp-root Fast CI, docs cascade). Phase 4 in progress 2026-09-08: owner authorized; initial baseline captured (32 leaves, zero drift); one-time BringUp exception seam landed; Codex-only live Apply completed and idempotent; runtime TOML escape defect found by smoke and fixed (render + CI guard); CLI smoke C1-C5, S1, S3, S6 green. Pending: owner IDE + desktop fresh-session smoke, then ApplyState activation. Codex remains `ApplyState = BringUp` until three-client smoke passes.
+**Status:** Complete 2026-09-08. Phase 0 complete (dual APPROVED, 3 iterations). Phases 1-3 complete under the owner's iterative-review waiver (CI-verified, risks recorded). Phase 4 complete: owner-authorized initial install (31 leaves, idempotent, protected state untouched); runtime TOML escape defect caught by smoke and fixed with a CI guard; three-client smoke attested by the owner (CLI, VS Code extension, ChatGPT desktop: C1-C6, S1-S7); `ApplyState = Active` (registry force-hold removed, manifest governs); final all-stack dry-run success=True across all seven stacks; non-mutating Full CI green (unit 22/22, adapter 43/43, remediation 69/69, Phase2Fast green, Phase1 73 checks, Phase3 19/19 + Full, ledger parity). The bring-up is closed; later Applies use current-state ownership and preflight hashes; setting the Codex manifest back to `BringUp` re-arms the lifecycle gate.
 
 ## Context
 
@@ -55,7 +55,7 @@ The implementation follows the reviewed plan after its three-pass cap. The final
 - [x] **Phase 1 — Codex overlay and manifest** (2026-09-08, owner review waiver)
 - [x] **Phase 2 — Specialized adapter and safety mechanics** (2026-09-08, owner review waiver)
 - [x] **Phase 3 — Registration, orchestration-wide preflight, CI, and docs** (2026-09-08, owner review waiver)
-- [ ] **Phase 4 — Authorized Apply, three-client smoke, and activation** (in progress: install + CLI smoke green; IDE/desktop smoke pending owner)
+- [x] **Phase 4 — Authorized Apply, three-client smoke, and activation** (2026-09-08)
 
 ## Agent context — Phase 0
 

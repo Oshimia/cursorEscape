@@ -182,7 +182,7 @@ Future refresh of [overlays/cursor](../../overlays/cursor/_index.md) or live `~/
 - [Skill source and host overlays](./skill-source-and-host-overlays.md)
 - [Intended workflow](./intended-workflow.md)
 - [OpenCode host adapter](../SOPs/opencode-host-adapter.md)
-- [Codex host adapter](../SOPs/codex-host-adapter.md) — registered BringUp; C1–C6 deferred to Phase 4
+- [Codex host adapter](../SOPs/codex-host-adapter.md) — Codex Phase 4 activated 2026-09-08; C1–C6 runtime attestation recorded
 - [Authoring OpenCode adapter files](../SOPs/opencode-authoring-adapter.md)
 - [OpenCode skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)
 - [Feature architecture index](./_index.md)
