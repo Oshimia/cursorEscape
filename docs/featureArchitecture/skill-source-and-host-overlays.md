@@ -1,10 +1,10 @@
 # Skill source and host overlays
 
-**Last updated:** 2026-08-29
+**Last updated:** 2026-09-08
 
 ## Context
 
-This document is **Target** design for how cursorEscape **authors one workflow** and applies it across **stacks** (Cursor, OpenCode, Antigravity) without two documentation trees. T3 Code is a control plane (threads, diffs) and **does not** get a third skill tree ([backend abstraction](./backend-and-provider-abstraction.md)).
+This document is **Target** design for how cursorEscape **authors one workflow** and applies it across **stacks** (currently Cursor, OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex) without two documentation trees. T3 Code is a control plane (threads, diffs) and **does not** get a third skill tree ([backend abstraction](./backend-and-provider-abstraction.md)).
 
 Identity: this companion repo is the owner's **skill and workflow manager** ([design decisions](../../review/design-decisions.md)). Analog: Theo `fleet` ([Observed](../../research/theo-fleet-skill-management.md)) — **stacks**, not machines. Multi-machine sync is a **non-goal**.
 
@@ -29,7 +29,7 @@ Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 
 ### Job (Required)
 
-This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`, `~/.gemini`) are **copy-out / install targets**, not a second authored procedure tree. **Live sync:** [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` operator-gated) from [overlays/opencode](../../overlays/opencode/_index.md), [overlays/cursor](../../overlays/cursor/_index.md), and [overlays/antigravity](../../overlays/antigravity/_index.md) — modular layout in [host-sync README](../../scripts/host-sync/README.md). Sync **does not create backups**; Phase 0 baselines are restore-only. **pointer-first-4** deleted OpenCode procedure mirror (2026-08-20). C6 minimum runtime smoke **pass** (2026-08-20 operator post-mirror) per [host-adapter](../SOPs/opencode-host-adapter.md) and [closeout](../../analysis/pointer-first-4-closeout-2026-08.md). Do not create repo-root `adapters/` directories.
+This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`, `~/.gemini`, effective `CODEX_HOME`, and other registered homes) are **copy-out / install targets**, not a second authored procedure tree. **Live sync:** [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` operator-gated and global-preflighted) from the registered overlay trees, including [overlays/codex](../../overlays/codex/_index.md) — modular layout in [host-sync README](../../scripts/host-sync/README.md). Sync **does not create backups**; Phase 0 baselines are restore-only. Codex is registered source-only and forced `BringUp`; its C6 remains unattested. **pointer-first-4** deleted OpenCode procedure mirror (2026-08-20). C6 minimum runtime smoke **pass** (2026-08-20 operator post-mirror) per [host-adapter](../SOPs/opencode-host-adapter.md) and [closeout](../../analysis/pointer-first-4-closeout-2026-08.md). Do not create repo-root `adapters/` directories.
 
 ### Target taxonomy — Approach A (Required)
 
@@ -49,7 +49,7 @@ This repo is the **canonical manager** of portable skills, agent roles, always-o
 | Shared skill contracts | `skills/*/SKILL.md` | **No** host IDs in shared bodies |
 | Shared agent contracts | `agents/*.md` | **No** |
 | Shared always-on gates | `rules/*.md` | **No** |
-| Host overlay | `overlays/cursor/` (thin wrappers); `overlays/opencode/` (OpenCode harness); `overlays/antigravity/` (Antigravity harness — GEMINI.md full-replace gate, skills/workflows/subagent defs) | **Yes** — harness mechanics, spawn IDs, additive safety |
+| Host overlay | Registered overlay trees, including `overlays/codex/` (Codex managed block + TOML agents + skill wrappers) | **Yes** — harness mechanics, spawn IDs, additive safety |
 | Copy-out install | `~/.cursor`, `~/.config/opencode`, `~/.gemini` | Install target only |
 
 ### Per-entry v2 sourcing (overlay-remediation Phase 1–2 — Required)
@@ -146,7 +146,7 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 
 **Unknown:** Whether future refresh needs operator-merge for `opencode.json` provider/model keys beyond what the sync script preserves.
 
-**Resolved (host-harness-sync):** Modular sync entry [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) + [`scripts/host-sync/`](../../scripts/host-sync/README.md) (Cursor, OpenCode, and Antigravity adapters). OpenCode overlay path = [`overlays/opencode/`](../../overlays/opencode/_index.md); archived [`Rewrite-OpenCodeWorkflowLinks.ps1`](../../overlays/opencode/scripts/Rewrite-OpenCodeWorkflowLinks.ps1) (**not** primary sync). **Target load path:** companion `{{COMPANION_ROOT}}/workflow/` via absolute Reads from thin harness — not mirror-as-SoT.
+**Resolved (host-harness-sync + Codex Phase 3):** Modular sync entry [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) + [`scripts/host-sync/`](../../scripts/host-sync/README.md) registers seven stacks. Apply is lifecycle-gated and dry-run-preflights every selected stack before any write. OpenCode overlay path = [`overlays/opencode/`](../../overlays/opencode/_index.md); archived [`Rewrite-OpenCodeWorkflowLinks.ps1`](../../overlays/opencode/scripts/Rewrite-OpenCodeWorkflowLinks.ps1) (**not** primary sync). **Target load path:** companion `{{COMPANION_ROOT}}/workflow/` via absolute Reads from thin harness — not mirror-as-SoT.
 
 ### Other rejected patterns (detail)
 
@@ -176,5 +176,6 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 - [OpenCode host adapter](../SOPs/opencode-host-adapter.md)
 - [Shared workflow docs roadmap](../roadmaps/shared-workflow-docs.md)
 - [Cursor overlay](../../overlays/cursor/_index.md)
+- [Codex overlay](../../overlays/codex/_index.md) — registered source-only; forced BringUp
 - [Theo fleet skill management (Observed)](../../research/theo-fleet-skill-management.md)
 - [Companion pointer-first](../roadmaps/pointer-first.md)

@@ -1,6 +1,6 @@
 # Host overlays (recorded files)
 
-**Last updated:** 2026-09-01
+**Last updated:** 2026-09-08
 
 ## Context
 
@@ -18,6 +18,7 @@ Architecture: [skill source and host overlays](../docs/featureArchitecture/skill
 | [vscode/](./vscode/_index.md) | VS Code (Copilot) harness: 2 composed always-on instructions, 11 skill stubs, 8 `.agent.md` roles | **Brought up 2026-09-01** — Phase 4 (Apply + smoke) pending operator authorization; SOP: [vscode-host-adapter](../docs/SOPs/vscode-host-adapter.md) |
 | [cline/](./cline/_index.md) | Cline harness: composed always-on rule + escape trio workflows | **Brought up 2026-09-01** — dispatches to shared Generic adapter; SOP: [cline-host-adapter](../docs/SOPs/cline-host-adapter.md) |
 | [kilocode/](./kilocode/_index.md) | Kilo Code harness: composed always-on rule + escape trio (slash via auto-migration) | **Brought up 2026-09-01** — dispatches to shared Generic adapter; SOP: [kilocode-host-adapter](../docs/SOPs/kilocode-host-adapter.md) |
+| [codex/](./codex/_index.md) | OpenAI Codex harness: managed `AGENTS.md` block, seven TOML agents, 23 skill wrappers across `CODEX_HOME` + skill root | **Registered Phase 3; forced BringUp, unapplied** — SOP: [codex-host-adapter](../docs/SOPs/codex-host-adapter.md) |
 
 Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlays/opencode/](./opencode/_index.md). C6 minimum smoke rows **1–4**, **8**, **9–10**, **13**: **pass** (2026-08-20 operator post-mirror); row **14** install-time pass. See [pointer-first-4 closeout](../analysis/pointer-first-4-closeout-2026-08.md).
 
@@ -34,6 +35,7 @@ Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlay
 - [Antigravity overlay](./antigravity/_index.md)
 - [VS Code overlay](./vscode/_index.md)
 - [Host adaptation fidelity](../docs/featureArchitecture/host-adaptation-fidelity.md)
+- [Codex overlay](./codex/_index.md)
 - [Skill contracts](../skills/_index.md)
 - [Agent contracts](../agents/_index.md)
 - [Rules index](../rules/_index.md)

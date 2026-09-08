@@ -1,10 +1,12 @@
 # Agent Role Contracts
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-09-08
 
 ## Context
 
 Host-agnostic **portable** agent contracts at repo root. Portable contracts live in `agents/*.md`. Cursor overlay **thin wrappers** (spawn one-pagers + Read): [overlays/cursor/agents](../overlays/cursor/agents/). The 2026-08-17 bannered copy remains under [cursor-global-workflow/agents](../research/imported/cursor-global-workflow/agents/) (archaeology). These pages use host-agnostic role names, not Cursor Task IDs as the contract identity.
+
+Codex mirrors the seven portable roles as TOML wiring in [overlays/codex/agents](../overlays/codex/agents/). It is registered but forced BringUp; no runtime role behavior is attested yet.
 
 ---
 
@@ -53,4 +55,5 @@ Every role page defines:
 - [Instruction layering](../docs/featureArchitecture/instruction-layering.md)
 - [Clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md)
 - [Cursor overlay](../overlays/cursor/_index.md)
+- [Codex overlay agents](../overlays/codex/agents/)
 - [Host recreation study](../analysis/host-recreation-2026-08.md)

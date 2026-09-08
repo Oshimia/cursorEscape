@@ -1,10 +1,10 @@
 # Host adaptation fidelity
 
-**Last updated:** 2026-08-24
+**Last updated:** 2026-09-08
 
 ## Context
 
-This document is **Target** design for **complete host adaptation** — the binding bar that every registered stack (currently Cursor, OpenCode, Antigravity) must meet before an overlay or live adapter is considered **Done**. It is not implied polish: operator workflow **loops** (plan review, implementation review with Fast → dual → Full, skill ids, clean-context isolation, Incomplete-until / dual-APPROVED bars) must behave the same on every host.
+This document is **Target** design for **complete host adaptation** — the binding bar that every registered stack (now including Codex) must meet before an overlay or live adapter is considered **Done**. It is not implied polish: operator workflow **loops** (plan review, implementation review with Fast → dual → Full, skill ids, clean-context isolation, Incomplete-until / dual-APPROVED bars) must behave the same on every host. Codex Phase 3 registration is **not** Done: it is forced BringUp and has no C1–C6 runtime attestation.
 
 **Scope:** Wiring bar, anti-patterns, checklist→verification matrix (C1–C6), doc boundaries, and phase-number disambiguation for the [OpenCode overlays SoT program](../roadmaps/opencode-overlays-sot.md) (program phases **0–3**) and [Companion pointer-first](../roadmaps/pointer-first.md) (`pointer-first-0` … `pointer-first-4`). **Out of scope here:** re-pasting Observed behavior tables ([cursor-behavior-to-reproduce](./cursor-behavior-to-reproduce.md)); always-on vs skill budget ([instruction-layering](./instruction-layering.md)); SoT vs overlay taxonomy ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)).
 
@@ -33,7 +33,7 @@ Host chrome (Task UI, tray restart, permission prompts) may differ. **Loop seman
 
 | Required adaptation | Anti-pattern (reject) |
 | ------------------- | --------------------- |
-| Always-on gates wired to host **load surface** that actually injects (OpenCode: **absolute** `opencode.json` → `instructions` under `OPENCODE_HOME` **plus** matching global `AGENTS.md`; Cursor: User Rules / thin `.mdc`) | Relative `instructions/…` in **global** `opencode.json` (resolved vs **project cwd** — file on disk under `~/.config/opencode` but **not** injected); gates only in `instructions/` with no `AGENTS.md`; treating skill-description “default on” quotes as C1 pass |
+| Always-on gates wired to host **load surface** that actually injects (OpenCode: **absolute** `opencode.json` → `instructions` under `OPENCODE_HOME` **plus** matching global `AGENTS.md`; Cursor: User Rules / thin `.mdc`; Codex: managed `AGENTS.md` block plus independent skill-root catalog — runtime pending) | Relative `instructions/…` in **global** `opencode.json` (resolved vs **project cwd** — file on disk under `~/.config/opencode` but **not** injected); gates only in `instructions/` with no `AGENTS.md`; treating skill-description “default on” quotes as C1 pass; treating Codex registration or dry-run as C1 |
 | Every workflow skill advertised with matching frontmatter `name` + `description` (OpenCode); on-demand invocation (Cursor: `disable-model-invocation`) | Skills on disk with **description only** — empty skill-tool catalog ([skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)) |
 | `skills.paths` or equivalent discovery roots registered (OpenCode) | Relying on default scan when catalog is empty |
 | Reviewer agents `permission.edit: deny`; dual Task launch in one parent turn | Unwired stub agents; sequential-only “dual” review |
@@ -158,7 +158,7 @@ Future refresh of [overlays/cursor](../../overlays/cursor/_index.md) or live `~/
 
 ### Host-plugged vs companion-resident (cite)
 
-**Host-plugged (must meet C1–C6 at runtime):** `opencode.json` harness (absolute `instructions`), `AGENTS.md` + `instructions/*` (identical gate body), thin `skills/*/SKILL.md` stubs, overlay `agents/*.md` harness. OpenCode host procedure mirror **deleted** pointer-first-4 — Target deep procedure = companion `{{COMPANION_ROOT}}/workflow/` ([pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md)). Cursor `~/.cursor/docs/workflow/` may remain transitional.
+**Host-plugged (must meet C1–C6 at runtime):** `opencode.json` harness (absolute `instructions`), `AGENTS.md` + `instructions/*` (identical gate body), thin `skills/*/SKILL.md` stubs, overlay `agents/*.md` harness; Codex adds its managed `AGENTS.md` block, seven TOML agents, and 23 skill wrappers across its two explicit roots. OpenCode host procedure mirror **deleted** pointer-first-4 — Target deep procedure = companion `{{COMPANION_ROOT}}/workflow/` ([pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md)). Cursor `~/.cursor/docs/workflow/` may remain transitional.
 
 **Companion-resident (read via `external_directory` / workspace):** FA leaves, SOPs (except short excerpts in instructions), research/analysis (except required host Read targets), maintainer indexes.
 
@@ -182,6 +182,7 @@ Future refresh of [overlays/cursor](../../overlays/cursor/_index.md) or live `~/
 - [Skill source and host overlays](./skill-source-and-host-overlays.md)
 - [Intended workflow](./intended-workflow.md)
 - [OpenCode host adapter](../SOPs/opencode-host-adapter.md)
+- [Codex host adapter](../SOPs/codex-host-adapter.md) — registered BringUp; C1–C6 deferred to Phase 4
 - [Authoring OpenCode adapter files](../SOPs/opencode-authoring-adapter.md)
 - [OpenCode skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)
 - [Feature architecture index](./_index.md)

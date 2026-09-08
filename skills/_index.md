@@ -1,10 +1,10 @@
 # Skills
 
-**Last updated:** 2026-08-23
+**Last updated:** 2026-09-08
 
 ## Context
 
-Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overlays/cursor](../overlays/cursor/_index.md). OpenCode overlay: [overlays/opencode](../overlays/opencode/_index.md).
+Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overlays/cursor](../overlays/cursor/_index.md). OpenCode overlay: [overlays/opencode](../overlays/opencode/_index.md). Codex installs 22 canonical wrappers plus generated `pre-commit-ci-gate` from [overlays/codex](../overlays/codex/_index.md), currently source-only in BringUp.
 
 ---
 
@@ -118,4 +118,5 @@ Each SKILL states: **When to use**, **Workflow steps**, **Outputs**, **Must not*
 - [Instruction layering](../docs/featureArchitecture/instruction-layering.md)
 - [Cursor overlay](../overlays/cursor/_index.md)
 - [OpenCode overlay](../overlays/opencode/_index.md)
+- [Codex overlay](../overlays/codex/_index.md)
 - [Workflow source delta](../research/imported/workflow-source-delta.md)

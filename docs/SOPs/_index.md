@@ -1,6 +1,6 @@
 # Standard Operating Procedures (SOPs)
 
-**Last updated:** 2026-08-24
+**Last updated:** 2026-09-08
 
 ## Context
 
@@ -24,6 +24,7 @@ This index lists repeatable procedures for maintaining cursorEscape documentatio
 * [VS Code host adapter](./vscode-host-adapter.md) — user-level `~/.copilot` (instructions/agents/skills); `.agent.md` stack; C1–C6 deferred to roadmap Phase 4
 * [Cline host adapter](./cline-host-adapter.md) — global `~/.cline` (rules/workflows); serial-review deviation; dispatches to Generic adapter
 * [Kilo Code host adapter](./kilocode-host-adapter.md) — global `~/.kilocode` (rules auto-include; workflows auto-migrate to slash); subagent-depth unproven; dispatches to Generic adapter
+* [Codex host adapter](./codex-host-adapter.md) — seventh stack: explicit `CODEX_HOME` + skill root; managed `AGENTS.md` block, TOML agents, skill wrappers; forced BringUp pending runtime smoke
 * [Host harness sync README](../../scripts/host-sync/README.md) — modular layout, Phase 0 restore-only baselines, expansion recipe
 * [Authoring OpenCode adapter files](./opencode-authoring-adapter.md) — how to write skills, agents, rules/instructions, and config (cites OpenCode docs; includes skill `name`/`description` requirements)
 

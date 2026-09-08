@@ -783,29 +783,217 @@ function Test-HardExcludePathsUntouched {
     }
 }
 
+function Resolve-HostHarnessCodexRoots {
+    # Orchestration owns effective-root resolution. It passes the resulting
+    # absolute paths explicitly to the specialized Codex adapter; the adapter
+    # itself performs no environment or profile inference.
+    param(
+        [string] $CodexRoot = '',
+        [string] $SkillRoot = ''
+    )
+
+    $effectiveCodexRoot = if ([string]::IsNullOrWhiteSpace($CodexRoot)) {
+        if ([string]::IsNullOrWhiteSpace($env:CODEX_HOME)) {
+            Join-Path $env:USERPROFILE '.codex'
+        }
+        else {
+            $env:CODEX_HOME
+        }
+    }
+    else {
+        $CodexRoot
+    }
+
+    $effectiveSkillRoot = if ([string]::IsNullOrWhiteSpace($SkillRoot)) {
+        Join-Path $env:USERPROFILE '.agents/skills'
+    }
+    else {
+        $SkillRoot
+    }
+
+    return @{
+        CodexRoot = Resolve-CompanionRootPath -Path $effectiveCodexRoot
+        SkillRoot = Resolve-CompanionRootPath -Path $effectiveSkillRoot
+    }
+}
+
+function Invoke-RegisteredStackAdapterSync {
+    param(
+        [Parameter(Mandatory)]
+        [HostSyncMode] $Mode,
+        [Parameter(Mandatory)]
+        [string] $StackId,
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot,
+        [Parameter(Mandatory)]
+        [hashtable] $Manifest,
+        [Parameter(Mandatory)]
+        [string] $HostSyncRoot,
+        [hashtable] $CodexRoots = @{}
+    )
+
+    try {
+        $adapterPath = Get-StackAdapterScript -StackId $StackId -HostSyncRoot $HostSyncRoot
+        . $adapterPath
+        $invokeArgs = @{
+            Mode          = $Mode
+            CompanionRoot = $CompanionRoot
+            Manifest      = $Manifest
+        }
+        if ($Manifest.StackId -eq 'Codex') {
+            $invokeArgs.CodexRoot = [string]$CodexRoots.CodexRoot
+            $invokeArgs.SkillRoot = [string]$CodexRoots.SkillRoot
+        }
+        return Invoke-StackHarnessSync @invokeArgs
+    }
+    catch {
+        $report = New-HostSyncReport -StackId $StackId -Mode $Mode
+        Add-SyncError -Report $report -Message $_.Exception.Message
+        return $report
+    }
+}
+
+function Invoke-HostHarnessSyncPlan {
+    # Orchestration-wide fail-closed plan: lifecycle first, then preflight ALL
+    # selected stacks, then—and only then—any Apply write pass. Dry-run remains
+    # exactly the preflight pass and writes nothing.
+    param(
+        [Parameter(Mandatory)]
+        [HostSyncMode] $Mode,
+        [Parameter(Mandatory)]
+        [AllowEmptyCollection()]
+        [string[]] $StackIds,
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot,
+        [Parameter(Mandatory)]
+        [string] $HostSyncRoot,
+        [string] $CodexRoot = '',
+        [string] $SkillRoot = '',
+        [switch] $FailFast,
+        [scriptblock] $ApplyStateResolver
+    )
+
+    if (-not $ApplyStateResolver) {
+        $ApplyStateResolver = {
+            param([hashtable] $Manifest)
+            Get-StackApplyState -Manifest $Manifest
+        }
+    }
+
+    $selected = [System.Collections.Generic.List[hashtable]]::new()
+    foreach ($stackId in $StackIds) {
+        [void]$selected.Add(@{
+            StackId  = $stackId
+            Manifest = Get-StackManifest -StackId $stackId -HostSyncRoot $HostSyncRoot
+            State    = $null
+        })
+    }
+
+    foreach ($stack in $selected) {
+        $stack.State = & $ApplyStateResolver $stack.Manifest
+    }
+
+    $codexRoots = @{}
+    if (@($StackIds) -contains 'Codex') {
+        $codexRoots = Resolve-HostHarnessCodexRoots -CodexRoot $CodexRoot -SkillRoot $SkillRoot
+    }
+
+    if ($Mode -eq [HostSyncMode]::Apply) {
+        $bringUpStacks = @($selected | Where-Object State -eq 'BringUp' | ForEach-Object StackId)
+        if ($bringUpStacks.Count -gt 0) {
+            Write-Host ("FATAL (BringUp gate): Target '{0}' includes ApplyState=BringUp stack(s): {1}. No selected stack was written." -f ($StackIds -join ','), ($bringUpStacks -join ', '))
+            return @{
+                Success          = $false
+                ExitReason       = 'BringUpGate'
+                Reports          = [System.Collections.Generic.List[hashtable]]::new()
+                PreflightReports = [System.Collections.Generic.List[hashtable]]::new()
+            }
+        }
+    }
+
+    # Preflight every selected adapter before the first Apply write. This
+    # intentionally ignores -FailFast: caller-visible coverage of all selection
+    # failures is the point of the global gate.
+    $preflightReports = [System.Collections.Generic.List[hashtable]]::new()
+    $preflightFailed = $false
+    foreach ($stack in $selected) {
+        Write-Host "--- Preflight: $($stack.StackId) ---"
+        $report = Invoke-RegisteredStackAdapterSync -Mode ([HostSyncMode]::DryRun) `
+            -StackId $stack.StackId -CompanionRoot $CompanionRoot -Manifest $stack.Manifest `
+            -HostSyncRoot $HostSyncRoot -CodexRoots $codexRoots
+        Write-HostSyncReport -Report $report
+        [void]$preflightReports.Add($report)
+        if (-not $report.Success) { $preflightFailed = $true }
+    }
+
+    if ($preflightFailed) {
+        Write-Host "FATAL (global preflight): one or more selected stacks failed; zero Apply writes were performed."
+        return @{
+            Success          = $false
+            ExitReason       = 'GlobalPreflight'
+            Reports          = [System.Collections.Generic.List[hashtable]]::new()
+            PreflightReports = $preflightReports
+        }
+    }
+
+    if ($Mode -eq [HostSyncMode]::DryRun) {
+        return @{
+            Success          = $true
+            ExitReason       = 'DryRun'
+            Reports          = [System.Collections.Generic.List[hashtable]]::new()
+            PreflightReports = $preflightReports
+        }
+    }
+
+    $reports = [System.Collections.Generic.List[hashtable]]::new()
+    $anyFailed = $false
+    foreach ($stack in $selected) {
+        Write-Host "--- Apply: $($stack.StackId) ---"
+        $report = Invoke-RegisteredStackAdapterSync -Mode ([HostSyncMode]::Apply) `
+            -StackId $stack.StackId -CompanionRoot $CompanionRoot -Manifest $stack.Manifest `
+            -HostSyncRoot $HostSyncRoot -CodexRoots $codexRoots
+        if ($report.Success) {
+            [void]$report.Verifications.Add("global preflight passed for $($selected.Count) selected stack(s) before this write pass")
+        }
+        Write-HostSyncReport -Report $report
+        [void]$reports.Add($report)
+        if (-not $report.Success) {
+            $anyFailed = $true
+            if ($FailFast) { break }
+        }
+    }
+
+    return @{
+        Success          = -not $anyFailed
+        ExitReason       = if ($anyFailed) { 'ApplyFailure' } else { 'Complete' }
+        Reports          = $reports
+        PreflightReports = $preflightReports
+    }
+}
+
 function Write-HostSyncReport {
     param([hashtable]$Report)
 
-    Write-Output "=== Host sync: $($Report.StackId) ($($Report.Mode)) ==="
-    Write-Output "Success: $($Report.Success)"
+    Write-Host "=== Host sync: $($Report.StackId) ($($Report.Mode)) ==="
+    Write-Host "Success: $($Report.Success)"
     if ($Report.PlannedFiles.Count -gt 0) {
-        Write-Output 'PlannedFiles:'
-        $Report.PlannedFiles | ForEach-Object { Write-Output "  $_" }
+        Write-Host 'PlannedFiles:'
+        $Report.PlannedFiles | ForEach-Object { Write-Host "  $_" }
     }
     if ($Report.AppliedFiles.Count -gt 0) {
-        Write-Output 'AppliedFiles:'
-        $Report.AppliedFiles | ForEach-Object { Write-Output "  $_" }
+        Write-Host 'AppliedFiles:'
+        $Report.AppliedFiles | ForEach-Object { Write-Host "  $_" }
     }
     if ($Report.Verifications.Count -gt 0) {
-        Write-Output 'Verifications:'
-        $Report.Verifications | ForEach-Object { Write-Output "  $_" }
+        Write-Host 'Verifications:'
+        $Report.Verifications | ForEach-Object { Write-Host "  $_" }
     }
     if ($Report.Warnings.Count -gt 0) {
-        Write-Output 'Warnings:'
-        $Report.Warnings | ForEach-Object { Write-Output "  $_" }
+        Write-Host 'Warnings:'
+        $Report.Warnings | ForEach-Object { Write-Host "  $_" }
     }
     if ($Report.Errors.Count -gt 0) {
-        Write-Output 'Errors:'
-        $Report.Errors | ForEach-Object { Write-Output "  $_" }
+        Write-Host 'Errors:'
+        $Report.Errors | ForEach-Object { Write-Host "  $_" }
     }
 }

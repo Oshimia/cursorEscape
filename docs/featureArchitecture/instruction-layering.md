@@ -1,6 +1,6 @@
 # Instruction Layering
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-09-08
 
 ## Context
 
@@ -36,6 +36,8 @@ This is a **context-budget** optimization. Loop gate semantics stay in [intended
 **Observed (Cursor):** Three lean [User Rules snippets](../../overlays/cursor/skills/implementation-review/user-rules-snippet.md) (plan review, implementation review, optional composer) plus parallel `alwaysApply` `.mdc` rules that note preferring the snippets for enforcement across Cursor versions. That dual-channel state is an Observed Cursor detail, not a Target requirement. Target hosts should prefer **one** always-on surface when the host allows it.
 
 **Cursor-specific mapping:** Customize → Rules → User Rules; optional `alwaysApply` rules under `~/.cursor/rules/`.
+
+**Codex mapping (registered, BringUp only):** one marker-bounded managed block in `CODEX_HOME/AGENTS.md` is the thin always-on gate; wrappers under the independent skill root stay on-demand; seven TOML role agents point back at companion SoT. The two `opencode-*` tooling wrappers are explicit-only by overlay policy. Runtime injection is not attested in Phase 3.
 
 ### Escalation *when* ownership (Required)
 
@@ -85,11 +87,11 @@ Workflow index: [workflow/_index.md](../../workflow/_index.md). **Target** contr
 
 | Layer | Portable surface | Example host hooks |
 | ----- | ---------------- | ------------------ |
-| Always-on | Thin gate markdown | OpenCode `instructions` / root `AGENTS.md`; Cursor User Rules |
-| Skills | On-demand skill entries | OpenCode `skills/*/SKILL.md`; Cursor `~/.cursor/skills/` |
+| Always-on | Thin gate markdown | OpenCode `instructions` / root `AGENTS.md`; Cursor User Rules; Codex managed `AGENTS.md` block |
+| Skills | On-demand skill entries | OpenCode `skills/*/SKILL.md`; Cursor `~/.cursor/skills/`; Codex independent-root `SKILL.md` wrappers |
 | Host overlay | Additive harness constraints only | [skill-source-and-host-overlays](./skill-source-and-host-overlays.md) — not a second loop |
 | Deep docs | Companion workflow docs at `{{COMPANION_ROOT}}/workflow/` | Absolute Read from thin harness; legacy host `docs/workflow/` mirror transitional only ([pointer-first](../roadmaps/pointer-first.md)) |
-| Role agents | Named subagents; reviewers deny edit | OpenCode `agents/*.md` with `permission.edit: deny` |
+| Role agents | Named subagents; reviewers deny edit | OpenCode `agents/*.md` with `permission.edit: deny`; Codex read-only-sandbox TOML agents |
 
 Adapters cite this page and [agents/_index.md](../../agents/_index.md) / [skills/_index.md](../../skills/_index.md). Do not reverse the SoT (host overlay files are not Target contracts).
 
@@ -122,6 +124,7 @@ Adapters cite this page and [agents/_index.md](../../agents/_index.md) / [skills
 - [Repository discovery and context](./repository-discovery-and-context.md) — repo evidence, not instruction layers
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md) — different “layering”
 - [Skill source and host overlays](./skill-source-and-host-overlays.md) — host axis of the instruction budget
+- [Codex overlay](../../overlays/codex/_index.md) — registered source-only BringUp mapping
 - [Agent role contracts](../../agents/_index.md)
 - [Skill contracts](../../skills/_index.md)
 - [pre-commit-ci-gate](../../rules/pre-commit-ci-gate.md)

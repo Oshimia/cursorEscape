@@ -1,6 +1,6 @@
 # Editing companion workflow (agent edit map)
 
-**Last updated:** 2026-08-29
+**Last updated:** 2026-09-08
 
 ## Context
 
@@ -14,7 +14,7 @@ Design essays stay in FA ([skill-source-and-host-overlays](../featureArchitectur
 
 ### Architecture (one paragraph)
 
-cursorEscape is the **sole SoT** for skills, rules, agents, workflows, and report schemas. Host folders (`~/.cursor`, `~/.config/opencode`, `~/.gemini`) hold **thin harness only** (advertisement, permissions, spawn, absolute `{{COMPANION_ROOT}}` / `{{OPENCODE_HOME}}` wiring, thin always-on gates). Deep procedure loads via **companion Reads** to `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — **not** a host `docs/workflow/` mirror as SoT ([pointer-first](../roadmaps/pointer-first.md)). Overlays under `overlays/cursor/`, `overlays/opencode/`, and `overlays/antigravity/` are thin wrappers / harness — they **echo** gate shape and point at companion; they must not become a second authored procedure tree.
+cursorEscape is the **sole SoT** for skills, rules, agents, workflows, and report schemas. Registered host homes (including `~/.cursor`, `~/.config/opencode`, `~/.gemini`, and Codex's independent `CODEX_HOME` + skill root) hold **thin harness only** (advertisement, permissions, spawn, absolute wiring, thin always-on gates). Deep procedure loads via **companion Reads** to `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — **not** a host `docs/workflow/` mirror as SoT ([pointer-first](../roadmaps/pointer-first.md)). Registered overlays are thin wrappers / harness — they **echo** gate shape and point at companion; they must not become a second authored procedure tree.
 
 ```text
 Change portable loop/gate
@@ -61,13 +61,14 @@ Change portable loop/gate
 | VS Code | [`overlays/vscode/`](../../overlays/vscode/_index.md) | included automatically (`~/.copilot`); Apply gated on Phase 0 baselines (all 4 present, registered); see [vscode-host-adapter](./vscode-host-adapter.md) |
 | Cline | [`overlays/cline/`](../../overlays/cline/_index.md) | included automatically (`~/.cline`); Apply gated on all-six baselines; see [cline-host-adapter](./cline-host-adapter.md) |
 | Kilo Code | [`overlays/kilocode/`](../../overlays/kilocode/_index.md) | included automatically (`~/.kilocode`); Apply gated on all-six baselines; see [kilocode-host-adapter](./kilocode-host-adapter.md) |
+| Codex | [`overlays/codex/`](../../overlays/codex/_index.md) | registered and included in all-stack planning/CI; `BringUp` refusal prevents any Apply write pass; see [codex-host-adapter](./codex-host-adapter.md) |
 
 ```powershell
 pwsh ./scripts/Sync-HostHarness.ps1          # dry-run all stacks
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply   # live write ALL stacks
 ```
 
-Dry-run default (no live writes): omit `-Apply`. Sync **does not create backups**; Phase 0 baselines are restore-only ([`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json)). Modular layout: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
+Dry-run default (no live writes): omit `-Apply`. With Codex forced BringUp, `-Apply` for All is refused before any selected stack writes. Apply is globally preflighted: if any selected stack fails dry-run preflight, no selected stack is written. Sync **does not create backups**; Phase 0 baselines are restore-only ([`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json)). Modular layout: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
 
 Do **not** write live installs unless the user explicitly asks. After overlay edits, note “live sync deferred” in the closeout if applicable.
 
@@ -111,3 +112,4 @@ Expect: zero matches on the first `rg` after migrating off unbounded loops; C1 h
 - [OpenCode host adapter](./opencode-host-adapter.md)
 - [Cursor host adapter](./cursor-host-adapter.md)
 - [Host harness sync README](../../scripts/host-sync/README.md)
+- [Codex host adapter](./codex-host-adapter.md)

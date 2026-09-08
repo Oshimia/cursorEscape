@@ -16,8 +16,32 @@ function Get-StackManifest {
 }
 
 function Get-RegisteredStackIds {
-    # kilo-cline bring-up 2026-09-01: 5th/6th stacks registered (owner-approved).
-    return @('Cursor', 'OpenCode', 'Antigravity', 'Vscode', 'Cline', 'Kilocode')
+    # Codex bring-up Phase 3 2026-09-08: seventh stack registered source-only.
+    return @('Cursor', 'OpenCode', 'Antigravity', 'Vscode', 'Cline', 'Kilocode', 'Codex')
+}
+
+function Get-StackApplyState {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable] $Manifest
+    )
+
+    # Absent ApplyState means Active for all established stacks. Codex is force-
+    # held in BringUp by the Phase 3 lifecycle gate: registry membership makes it
+    # visible to plans and CI, while three-client smoke acceptance (Phase 4) is
+    # required before any Apply. Changing the manifest value alone cannot bypass
+    # this gate.
+    $configuredState = 'Active'
+    if ($Manifest.ContainsKey('ApplyState') -and -not [string]::IsNullOrWhiteSpace([string]$Manifest.ApplyState)) {
+        $configuredState = [string]$Manifest.ApplyState
+    }
+    if ($configuredState -notin @('Active', 'BringUp')) {
+        throw "Invalid ApplyState '$configuredState' for stack '$($Manifest.StackId)'. Valid: Active, BringUp"
+    }
+    if ($Manifest.StackId -eq 'Codex') {
+        return 'BringUp'
+    }
+    return $configuredState
 }
 
 function ConvertTo-SkewIdentitySource {
@@ -33,6 +57,11 @@ function ConvertTo-SkewIdentitySource {
         [string] $SharedRoot = 'overlays/opencode'
     )
 
+    if (-not $Entry.ContainsKey('Source')) {
+        # Guard-only destinations have no source and are intentionally distinct
+        # identities (Codex AGENTS.override.md is the first such destination).
+        return "guard-only:'$($Entry.Dest)'"
+    }
     $sourceRel = [string]$Entry.Source
     $class = 'plain'
     $canonical = $null
@@ -86,7 +115,8 @@ function Get-CrossStackSourceOverlap {
                 $sharedRoot = [string]$manifest[$key]
             }
         }
-        foreach ($entry in @($manifest.CopyEntries)) {
+        $entries = if ($manifest.ContainsKey('CopyEntries')) { @($manifest.CopyEntries) } else { @($manifest.DestinationEntries) }
+        foreach ($entry in $entries) {
             $entryHt = $entry
             $identity = ConvertTo-SkewIdentitySource -Entry $entryHt `
                 -OverlayRelativeRoot ([string]$manifest.OverlayRelativeRoot) -SharedRoot $sharedRoot

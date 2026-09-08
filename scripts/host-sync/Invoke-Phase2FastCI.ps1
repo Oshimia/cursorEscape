@@ -54,7 +54,17 @@ $beforeAll = Get-LiveOpenCodeSnapshot -LiveRoot $liveOpenCode
 $liveCursor = Join-Path $env:USERPROFILE '.cursor'
 $beforeCursor = Get-LiveOpenCodeSnapshot -LiveRoot $liveCursor
 
-& pwsh -NoProfile -File $syncScript -Target All
+$codexAllDryRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase2fastci-codex-" + [Guid]::NewGuid().ToString('N'))
+$skillsAllDryRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase2fastci-skills-" + [Guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $codexAllDryRoot -Force | Out-Null
+New-Item -ItemType Directory -Path $skillsAllDryRoot -Force | Out-Null
+try {
+    & pwsh -NoProfile -File $syncScript -Target All -CodexRoot $codexAllDryRoot -SkillRoot $skillsAllDryRoot
+}
+finally {
+    Remove-Item -LiteralPath $codexAllDryRoot -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $skillsAllDryRoot -Recurse -Force -ErrorAction SilentlyContinue
+}
 Assert-Pass 'dry-run All exit 0' ($LASTEXITCODE -eq 0)
 
 $afterAllOpenCode = Get-LiveOpenCodeSnapshot -LiveRoot $liveOpenCode

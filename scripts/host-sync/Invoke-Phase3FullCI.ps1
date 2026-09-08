@@ -1,75 +1,120 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-  Phase 3 Full CI — doc wiring, registry targets, entry help, nested Phase 1/2 closeout checks.
+  Codex bring-up Phase 3 Full CI — focused Fast CI, seven-stack lifecycle, and
+  non-mutating documentation-cascade checks.
 #>
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$companionRoot = 'C:\Users\admin\source\repos\general-projects\cursorEscape'
-$syncScript = Join-Path $companionRoot 'scripts\Sync-HostHarness.ps1'
-$hostSyncRoot = Join-Path $companionRoot 'scripts\host-sync'
-$hostSyncReadme = Join-Path $hostSyncRoot 'README.md'
+$companionRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+$hostSyncRoot = $PSScriptRoot
 
 $fail = $false
-
 function Assert-Pass {
-    param([string]$Name, [bool]$Ok)
-    $status = if ($Ok) { 'pass' } else { 'fail' }
-    Write-Output "${Name}: $status"
+    param(
+        [Parameter(Mandatory)][string] $Name,
+        [Parameter(Mandatory)][bool] $Ok,
+        [string] $Detail = ''
+    )
+    $status = if ($Ok) { 'pass' } else { 'FAIL' }
+    Write-Output "${Name}: $status $Detail".TrimEnd()
     if (-not $Ok) { $script:fail = $true }
 }
 
 function Read-RepoFile {
-    param([string]$RelPath)
-    return Get-Content -LiteralPath (Join-Path $companionRoot $RelPath) -Raw
+    param([Parameter(Mandatory)][string] $RelativePath)
+    return Get-Content -LiteralPath (Join-Path $companionRoot $RelativePath) -Raw
 }
 
-# Fast CI re-run
-& pwsh -NoProfile -File $syncScript -Target All 2>&1 | Out-Null
-Assert-Pass 'dry-run All exit 0' ($LASTEXITCODE -eq 0)
+# Focused temporary-root Fast CI: explicit Codex dry-run, all dry-run, BringUp
+# All-Apply refusal, Active collision zero-write gate, and invalid-target output.
+& pwsh -NoProfile -File (Join-Path $hostSyncRoot 'Invoke-CodexPhase3Checks.ps1')
+Assert-Pass 'Codex Phase 3 Fast CI' ($LASTEXITCODE -eq 0)
 
-$invalidOutput = & pwsh -NoProfile -File $syncScript -Target Foo 2>&1 | Out-String
-Assert-Pass 'invalid Target lists registry stacks' ($invalidOutput -match 'Valid: .*All')
+. (Join-Path $hostSyncRoot 'HostSync.Contract.ps1')
+. (Join-Path $hostSyncRoot 'HostSync.Core.ps1')
+. (Join-Path $hostSyncRoot 'Register-StackAdapters.ps1')
 
-$entrySource = Read-RepoFile 'scripts\Sync-HostHarness.ps1'
-Assert-Pass 'entry uses Get-RegisteredStackIds' ($entrySource -match 'Get-RegisteredStackIds')
-Assert-Pass 'entry documents registry stacks in comment help' ($entrySource -match 'Registry stacks: Cursor, OpenCode')
-Assert-Pass 'entry documents hard excludes in NOTES' ($entrySource -match 'Hard excludes \(manifest-owned\)')
-Assert-Pass 'entry states sync does not backup' ($entrySource -match 'does NOT create backups')
+$registered = Get-RegisteredStackIds
+Assert-Pass 'registry has seven stacks' ($registered.Count -eq 7) (($registered -join ','))
+Assert-Pass 'Codex is seventh registered stack' ($registered[-1] -eq 'Codex')
+$codexManifest = Get-StackManifest -StackId 'Codex' -HostSyncRoot $hostSyncRoot
+Assert-Pass 'Codex manifest declares BringUp' ($codexManifest.ApplyState -eq 'BringUp')
+Assert-Pass 'registry forces Codex BringUp' ((Get-StackApplyState -Manifest $codexManifest) -eq 'BringUp')
+Assert-Pass 'established stacks default Active' (
+    @($registered | Where-Object { $_ -ne 'Codex' } | ForEach-Object {
+        Get-StackApplyState -Manifest (Get-StackManifest -StackId $_ -HostSyncRoot $hostSyncRoot)
+    }) -notcontains 'BringUp'
+)
 
-Assert-Pass 'host-sync README exists' (Test-Path -LiteralPath $hostSyncReadme)
-$hostSyncReadmeText = Get-Content -LiteralPath $hostSyncReadme -Raw
-Assert-Pass 'expansion recipe present' ($hostSyncReadmeText -match 'Expansion recipe')
-Assert-Pass 'README states sync does not backup' ($hostSyncReadmeText -match 'sync does not create backup')
+$coreSource = Read-RepoFile 'scripts/host-sync/HostSync.Core.ps1'
+$entrySource = Read-RepoFile 'scripts/Sync-HostHarness.ps1'
+Assert-Pass 'orchestration has global preflight function' ($coreSource.Contains('function Invoke-HostHarnessSyncPlan'))
+Assert-Pass 'orchestration preflights before write pass' ($coreSource.Contains('Preflight every selected adapter before the first Apply write'))
+Assert-Pass 'entry passes explicit effective Codex roots' (
+    $entrySource.Contains('-CodexRoot $CodexRoot -SkillRoot $SkillRoot') -and
+    $entrySource.Contains('BaselinePathsFile')
+)
+Assert-Pass 'entry invalid target uses registry' ($entrySource.Contains('$validTargets = @($registeredStackIds)'))
 
-$cursorSop = Read-RepoFile 'docs\SOPs\cursor-host-adapter.md'
-$opencodeSop = Read-RepoFile 'docs\SOPs\opencode-host-adapter.md'
-$editWorkflow = Read-RepoFile 'docs\SOPs\editing-companion-workflow.md'
+$sop = Read-RepoFile 'docs/SOPs/codex-host-adapter.md'
+Assert-Pass 'Codex SOP documents forced BringUp' ($sop.Contains('`ApplyState = BringUp` is forced'))
+Assert-Pass 'Codex SOP documents two explicit roots' ($sop.Contains('explicit absolute roots'))
+Assert-Pass 'Codex SOP documents no runtime smoke claim' ($sop.Contains('runtime smoke is deferred to Phase 4'))
+Assert-Pass 'Codex SOP cites Fast CI' ($sop.Contains('Invoke-CodexPhase3Checks.ps1'))
 
-Assert-Pass 'cursor-host-adapter cites Sync-HostHarness' ($cursorSop -match 'Sync-HostHarness\.ps1')
-Assert-Pass 'cursor-host-adapter Phase 0 baseline path' ($cursorSop -match 'pre-host-sync-build-20260821-012600')
-Assert-Pass 'cursor-host-adapter sync does not backup' ($cursorSop -match 'does not create backups')
+$overlay = Read-RepoFile 'overlays/codex/_index.md'
+Assert-Pass 'Codex overlay index records registered BringUp' (
+    $overlay.Contains('Phase 3 registered source-only') -and
+    $overlay.Contains('force-holds `BringUp`')
+)
+$overlayIndex = Read-RepoFile 'overlays/_index.md'
+Assert-Pass 'overlay index includes Codex' ($overlayIndex.Contains('[codex/](./codex/_index.md)'))
+$sopIndex = Read-RepoFile 'docs/SOPs/_index.md'
+Assert-Pass 'SOP index includes Codex adapter' ($sopIndex.Contains('./codex-host-adapter.md'))
+$skillsIndex = Read-RepoFile 'skills/_index.md'
+Assert-Pass 'skills index includes Codex overlay' ($skillsIndex.Contains('../overlays/codex/_index.md'))
+$agentsIndex = Read-RepoFile 'agents/_index.md'
+Assert-Pass 'agents index includes Codex agents' ($agentsIndex.Contains('../overlays/codex/agents/'))
 
-Assert-Pass 'opencode-host-adapter cites Sync-HostHarness' ($opencodeSop -match 'Sync-HostHarness\.ps1')
-Assert-Pass 'opencode-host-adapter Phase 0 baseline path' ($opencodeSop -match 'pre-host-sync-build-20260821-012600')
-Assert-Pass 'opencode-host-adapter sync does not backup' ($opencodeSop -match 'does not create backups')
+$sourceFa = Read-RepoFile 'docs/featureArchitecture/skill-source-and-host-overlays.md'
+Assert-Pass 'skill-source FA records seven stacks and preflight' (
+    $sourceFa.Contains('currently Cursor, OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex') -and
+    $sourceFa.Contains('global-preflighted')
+)
+$layerFa = Read-RepoFile 'docs/featureArchitecture/instruction-layering.md'
+Assert-Pass 'instruction-layering FA records Codex mapping' (
+    $layerFa.Contains('Codex mapping (registered, BringUp only)') -and
+    $layerFa.Contains('marker-bounded managed block')
+)
+$fidelityFa = Read-RepoFile 'docs/featureArchitecture/host-adaptation-fidelity.md'
+Assert-Pass 'host-fidelity FA keeps Codex not-Done' (
+    $fidelityFa.Contains('Codex Phase 3 registration is **not** Done') -and
+    $fidelityFa.Contains('no C1–C6 runtime attestation')
+)
 
-Assert-Pass 'editing-companion-workflow global Apply row' ($editWorkflow -match 'Sync-HostHarness\.ps1 -Apply\s*#? ?live write ALL stacks')
-Assert-Pass 'editing-companion-workflow states global-by-default rule' ($editWorkflow -match 'live pushes are global')
-Assert-Pass 'editing-companion-workflow AllowSkew exception only' ($editWorkflow -match 'AllowSkew')
-Assert-Pass 'editing-companion-workflow post-push verification not a step' ($editWorkflow -match 'Post-push verification is not a step')
-Assert-Pass 'editing-companion-workflow no backup first' ($editWorkflow -notmatch 'backup first')
+$workflowSop = Read-RepoFile 'docs/SOPs/editing-companion-workflow.md'
+Assert-Pass 'editing workflow includes Codex host row' (
+    $workflowSop.Contains('[codex-host-adapter](./codex-host-adapter.md)') -and
+    $workflowSop.Contains('BringUp` refusal prevents any Apply write pass')
+)
+$readme = Read-RepoFile 'README.md'
+Assert-Pass 'repository README includes seventh-stack status' (
+    $readme.Contains('seventh `Codex` stack') -and
+    $readme.Contains('force-held `BringUp`')
+)
+$hostReadme = Read-RepoFile 'scripts/host-sync/README.md'
+Assert-Pass 'host-sync README documents lifecycle/global preflight' (
+    $hostReadme.Contains('## Apply lifecycle and global preflight') -and
+    $hostReadme.Contains('zero writes')
+)
+$roadmap = Read-RepoFile 'docs/roadmaps/codex-bring-up.md'
+Assert-Pass 'Codex roadmap Phase 3 complete' ($roadmap.Contains('[x] **Phase 3 — Registration, orchestration-wide preflight, CI, and docs**'))
 
-Assert-Pass 'entry defaults Target to All' ($entrySource -match "\`$Target = 'All'")
-Assert-Pass 'entry defines AllowSkew switch' ($entrySource -match '\[switch\] \$AllowSkew')
-Assert-Pass 'entry skew guard fails closed' ($entrySource -match 'FATAL \(skew guard\)')
-
-$roadmap = Read-RepoFile 'docs\roadmaps\host-harness-sync-build.md'
-Assert-Pass 'roadmap Phase 3 checklist complete' ($roadmap -match '\[x\] \*\*Phase 3\*\*')
-
-# Nested prior-phase closeout (entry help assertion updated in Phase 1 Full CI)
-& pwsh -NoProfile -File (Join-Path $hostSyncRoot 'Invoke-Phase1FullCI.ps1')
-Assert-Pass 'Phase1 Full CI nested pass' ($LASTEXITCODE -eq 0)
+# The legacy ledger intentionally remains a six-established-stack regression
+# artifact; Codex has no initial live install or ledger hash yet.
+$ledgerSource = Read-RepoFile 'scripts/host-sync/Get-ExistingSixStackRenderLedger.ps1'
+Assert-Pass 'existing-stack ledger remains explicitly six' ($ledgerSource.Contains("@('Cursor', 'OpenCode', 'Antigravity', 'Vscode', 'Cline', 'Kilocode')"))
 
 exit $(if ($fail) { 1 } else { 0 })

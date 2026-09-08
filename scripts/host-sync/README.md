@@ -1,6 +1,6 @@
 # Host harness sync (modular layout)
 
-**Last updated:** 2026-08-24
+**Last updated:** 2026-09-08
 
 Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require `-Apply` and a valid Phase 0 baseline gate artifact.
 
@@ -23,14 +23,16 @@ scripts/
       vscode.manifest.psd1      # allowlist, excludes (~/.copilot instructions/skills/agents)
       cline.manifest.psd1       # allowlist, excludes (~/.cline rules/workflows)
       kilocode.manifest.psd1    # allowlist, excludes (~/.kilocode rules/workflows)
+      codex.manifest.psd1       # two-root allowlist/guards (~/.codex + ~/.agents/skills)
     adapters/
       Cursor.Adapter.ps1          # Invoke-StackHarnessSync for Cursor
       OpenCode.Adapter.ps1        # Invoke-StackHarnessSync for OpenCode
       Antigravity.Adapter.ps1     # REMOVED 2026-09-01 — dispatches to Generic.Adapter.ps1 (byte-identical engine)
       Generic.Adapter.ps1         # SHARED manifest-driven copy-out engine (kilo-cline bring-up); dispatch fallback for stacks without specialized adapters (currently: Antigravity, Vscode, Cline, Kilocode)
+      Codex.Adapter.ps1           # specialized fail-closed two-root engine (explicit roots, ownership/hash preflight, staging, rollback)
 ```
 
-Each stack owns its **manifest** (what to copy, hard excludes, never-touch paths) and **adapter** (stack-specific merge: hybrid Cursor rules, OpenCode JSON + AGENTS dual-write). Shared primitives live in Core; Core does **not** branch on stack id except through the registry.
+Each stack owns its **manifest** (what to copy, hard excludes, never-touch paths) and **adapter** (stack-specific merge: hybrid Cursor rules, OpenCode JSON + AGENTS dual-write, Codex two-root install). Shared primitives live in Core; Core does **not** branch on stack id except through the registry.
 
 ### Per-entry v2 manifest surface (overlay-remediation Phase 1–2)
 
@@ -71,6 +73,9 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Target OpenCode
 
 # EXCEPTION ONLY: single-stack live write (deliberate bring-up / scoped repair)
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor -AllowSkew
+
+# Disposable Codex dry-run (explicit mandatory roots; no live Codex writes)
+pwsh ./scripts/Sync-HostHarness.ps1 -Target Codex -CodexRoot C:/temp/codex -SkillRoot C:/temp/skills
 ```
 
 After `-Apply`: fully quit and restart the host before relying on new harness behavior. Companion repo is ongoing SoT — **sync does not create backup trees**.
@@ -98,7 +103,7 @@ One-time baselines taken before building this tool. Used for **restore if Apply 
 | Cline | `C:\Users\admin\.cline-backup-pre-kilobringup-20260901-180000` (registered 2026-09-01) |
 | Kilo Code | `C:\Users\admin\.kilocode-backup-pre-kilobringup-20260901-180000` (registered 2026-09-01) |
 
-**Apply coupling (all six baselines required):** `-Apply` for ANY stack fails closed until all six Phase 0 baselines exist — deliberate conservatism because Antigravity Apply wholesale-replaces `~/.gemini/GEMINI.md`, VS Code Apply writes into the shared user-level `~/.copilot`, and the 5th/6th stacks write into `~/.cline` and `~/.kilocode`. Dry-runs are unaffected. VS Code/Cline/Kilocode baselines registered 2026-09-01 (six-stack gate, owner-approved).
+**Apply coupling (all six established-stack baselines required):** `-Apply` for any established stack fails closed until all six Phase 0 baselines exist — deliberate conservatism because Antigravity Apply wholesale-replaces `~/.gemini/GEMINI.md`, VS Code Apply writes into the shared user-level `~/.copilot`, and the 5th/6th stacks write into `~/.cline` and `~/.kilocode`. Dry-runs are unaffected. VS Code/Cline/Kilocode baselines registered 2026-09-01 (six-stack gate, owner-approved). Codex remains behind the separate BringUp gate and will receive its Phase 4 initial baseline only before an owner-authorized Codex-only Apply; this six-path artifact is not a Codex Apply authorization.
 
 Gate artifact: [`baseline-backups.paths.json`](./baseline-backups.paths.json)
 
@@ -112,14 +117,21 @@ Gate artifact: [`baseline-backups.paths.json`](./baseline-backups.paths.json)
 | OpenCode | Procedure mirror re-copy; host copy-out of `review-subagent-models`; overwrite live `model` / `provider` in `opencode.json` |
 | Antigravity | Credential/app-state files (`settings.json`, `config/mcp_config.json`, `oauth_creds.json`, `google_accounts.json`, `state.json`, `trustedFolders.json`, `installation_id`); never touch `antigravity/global_workflows/caveman.md` or `config/projects` |
 | VS Code | Never touch VS Code-managed state: `config.json`, `ide/`, `logs/` — only `instructions/`, `skills/`, `agents/` are harness-owned |
+| Codex | Never touch `config.toml`, `auth.json`, `history.jsonl`, `logs/`, `sessions/`, or `databases/`; non-empty `AGENTS.override.md` blocks Apply |
 
 Manifest `NeverTouch` paths (e.g. `docs/workflow`, Antigravity `caveman.md`) are left in place on the live host.
 
-## Expansion recipe (add a third stack)
+## Apply lifecycle and global preflight
+
+`ApplyState` defaults to `Active`. `Get-StackApplyState` applies that default to established stacks and force-holds `Codex` at `BringUp` even if its manifest value changes: three-client runtime smoke and separate owner authorization are required before activation.
+
+For Apply, the baseline gate runs first. Then the orchestration lifecycle refuses any selection containing BringUp before any write pass. For every Active selection, it dry-run-preflights **all** selected stacks before the first write; any failure reports the complete preflight set and performs zero writes. `-FailFast` continues to mean “stop the write pass after first failure” and never abbreviates this global preflight.
+
+## Expansion recipe (add a stack)
 
 1. **Overlay:** add `overlays/<stackId>/` thin harness + `_index.md` copy-out map.
 2. **Manifest:** create `manifests/<stackid>.manifest.psd1` with `StackId`, `OverlayRelativeRoot`, `LiveRelativeRoot`, `CopyEntries`, `HardExcludes`, `NeverTouch`, and stack-specific keys (e.g. `HybridRuleIds`, `JsonMerge`, `AgentsDualWrite`).
-3. **Adapter:** create `adapters/<StackId>.Adapter.ps1` exporting `Invoke-StackHarnessSync` with signature `(Mode, CompanionRoot, Manifest)` — see [`HostSync.Contract.ps1`](./HostSync.Contract.ps1).
+3. **Adapter:** create a specialized adapter only for real host legs; otherwise dispatch to Generic. The shared contract remains `Invoke-StackHarnessSync` (specialized roots may be mandatory when the host has multiple homes) — see [`HostSync.Contract.ps1`](./HostSync.Contract.ps1).
 4. **Registry:** add the stack id to `Get-RegisteredStackIds` in [`Register-StackAdapters.ps1`](./Register-StackAdapters.ps1).
 5. **Docs:** add or extend a host-adapter SOP; update [`editing-companion-workflow.md`](../../docs/SOPs/editing-companion-workflow.md) live-sync row; update overlay `_index`.
 6. **Verify:** dry-run `-Target <StackId>` (manifest inspection), then default all-stacks dry-run; authorized global `-Apply`; host restart. Smoke attestation per the post-apply verification policy above (first-time surface only).
@@ -145,4 +157,5 @@ Full write-ups: [opencode-authoring-adapter Failure modes K–M](../../docs/SOPs
 - [Cursor host adapter SOP](../../docs/SOPs/cursor-host-adapter.md)
 - [OpenCode host adapter SOP](../../docs/SOPs/opencode-host-adapter.md)
 - [OpenCode authoring adapter](../../docs/SOPs/opencode-authoring-adapter.md) — Failure modes I–M (permissions / bash / sync order)
+- [Codex host adapter SOP](../../docs/SOPs/codex-host-adapter.md)
 - [Editing companion workflow](../../docs/SOPs/editing-companion-workflow.md)

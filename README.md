@@ -1,10 +1,10 @@
 # cursorEscape
 
-**Status:** shared-workflow-docs **Phase 6 complete**; [pointer-first](docs/roadmaps/pointer-first.md) **complete** (pointer-first-4, 2026-08-20). **Overlay-remediation program COMPLETE** (Phases 0–4): live==planned verified on all three stacks 2026-08-31 (owner-delegated Apply; Apply-leg hybrid-writer parity defect found and fixed) — [roadmap](docs/roadmaps/overlay-remediation.md), [migration record](analysis/overlay-remediation-2026-08.md). **Host harness sync** modular entry [`scripts/Sync-HostHarness.ps1`](scripts/Sync-HostHarness.ps1) — dry-run default; `-Apply` distributes overlay harness to live Cursor/OpenCode/Antigravity ([layout](scripts/host-sync/README.md)). Sync does **not** create backups; Phase 0 baselines restore-only. Runtime not started. First recreation: **T3 Code + OpenCode**.
+**Status:** shared-workflow-docs **Phase 6 complete**; [pointer-first](docs/roadmaps/pointer-first.md) **complete** (pointer-first-4, 2026-08-20). **Host harness sync** modular entry [`scripts/Sync-HostHarness.ps1`](scripts/Sync-HostHarness.ps1) — dry-run default; global Apply preflights every selected stack, and the seventh `Codex` stack is registered but force-held `BringUp`/unapplied ([layout](scripts/host-sync/README.md), [Codex roadmap](docs/roadmaps/codex-bring-up.md)). Sync does **not** create backups; Phase 0 baselines restore-only. Runtime smoke attestation is per-stack.
 
 ## What and why
 
-**What:** cursorEscape is the owner's **skill and workflow manager** — a git home for personal agentic skills, agent roles, and gates (plan → implement → dual review → closeout), applied across **stacks** (Cursor, OpenCode, Antigravity; T3 as control plane). Analogous to Theo's T3 `fleet` repo ([Observed](research/theo-fleet-skill-management.md)), except this is **not** multi-machine sync.
+**What:** cursorEscape is the owner's **skill and workflow manager** — a git home for personal agentic skills, agent roles, and gates (plan → implement → dual review → closeout), applied across **stacks** (Cursor, OpenCode, Antigravity, VS Code, Cline, Kilo Code, Codex; T3 as control plane). Analogous to Theo's T3 `fleet` repo ([Observed](research/theo-fleet-skill-management.md)), except this is **not** multi-machine sync.
 
 **Why:** Keep workflows that work, evolve them in-repo, and escape Cursor lock-in without rewriting intent for each host. In-repo knowledge stays portable; behavior stays evaluable; backends stay **BYOK** and swappable. repo-root contracts (Approach A: [`workflow/`](workflow/_index.md), [`skills/`](skills/_index.md), [`agents/`](agents/_index.md), [`rules/`](rules/_index.md)) are **Target** SoT. Host overlays: [overlays/cursor](overlays/cursor/_index.md), [overlays/opencode](overlays/opencode/_index.md), and [overlays/antigravity](overlays/antigravity/_index.md) (thin harness). Live install: [`Sync-HostHarness.ps1`](scripts/Sync-HostHarness.ps1) (`-Apply` operator-gated). Load path: [pointer-first](docs/roadmaps/pointer-first.md). Stack variation: [skill source and host overlays](docs/featureArchitecture/skill-source-and-host-overlays.md).
 
@@ -41,9 +41,7 @@ cursorEscape/
   scripts/Sync-HostHarness.ps1    # distribute overlay harness (dry-run default)
   scripts/host-sync/              # modular sync core + adapters
   docs/                           # FA, SOPs, roadmaps, Roadmap.md
-  overlays/cursor/                # thin Cursor wrappers
-  overlays/opencode/              # OpenCode harness
-  overlays/antigravity/           # Antigravity harness (GEMINI.md gate + skills/workflows/subagents)
+  overlays/                       # registered host overlays, incl. codex/
   research/ review/ analysis/
 ```
 

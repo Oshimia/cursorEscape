@@ -1,9 +1,11 @@
 @{
-    # Codex Phase 1 source-only manifest. Not registered yet; the Phase 2
-    # specialized adapter owns two-root writes.
+    # Codex registered source-only manifest (Phase 3). The specialized adapter
+    # owns two-root writes; orchestration force-holds this stack BringUp until
+    # Phase 4 three-client smoke acceptance and explicit owner authorization.
     SchemaVersion                    = 1
     StackId                          = 'Codex'
     DisplayName                      = 'OpenAI Codex'
+    ApplyState                       = 'BringUp'
     OverlayRelativeRoot              = 'overlays/codex'
     LogicalRoots                     = @('codex-home', 'skill-root')
     OwnershipMarker                  = 'cursorEscape-managed:v1'
