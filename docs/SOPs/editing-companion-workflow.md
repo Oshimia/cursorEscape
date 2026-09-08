@@ -61,14 +61,14 @@ Change portable loop/gate
 | VS Code | [`overlays/vscode/`](../../overlays/vscode/_index.md) | included automatically (`~/.copilot`); Apply gated on Phase 0 baselines (all 4 present, registered); see [vscode-host-adapter](./vscode-host-adapter.md) |
 | Cline | [`overlays/cline/`](../../overlays/cline/_index.md) | included automatically (`~/.cline`); Apply gated on all-six baselines; see [cline-host-adapter](./cline-host-adapter.md) |
 | Kilo Code | [`overlays/kilocode/`](../../overlays/kilocode/_index.md) | included automatically (`~/.kilocode`); Apply gated on all-six baselines; see [kilocode-host-adapter](./kilocode-host-adapter.md) |
-| Codex | [`overlays/codex/`](../../overlays/codex/_index.md) | registered and included in all-stack planning/CI; `BringUp` refusal prevents any Apply write pass; see [codex-host-adapter](./codex-host-adapter.md) |
+| Codex | [`overlays/codex/`](../../overlays/codex/_index.md) | registered and included in all-stack planning/CI; `BringUp` lifecycle gate blocks any Apply write pass (Codex `Active` since 2026-09-08); see [codex-host-adapter](./codex-host-adapter.md) |
 
 ```powershell
 pwsh ./scripts/Sync-HostHarness.ps1          # dry-run all stacks
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply   # live write ALL stacks
 ```
 
-Dry-run default (no live writes): omit `-Apply`. With Codex forced BringUp, `-Apply` for All is refused before any selected stack writes. Apply is globally preflighted: if any selected stack fails dry-run preflight, no selected stack is written. Sync **does not create backups**; Phase 0 baselines are restore-only ([`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json)). Modular layout: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
+Dry-run default (no live writes): omit `-Apply`. If any selected stack is `BringUp`, `-Apply` for All is refused before any selected stack writes. Apply is globally preflighted: if any selected stack fails dry-run preflight, no selected stack is written. Sync **does not create backups**; Phase 0 baselines are restore-only ([`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json)). Modular layout: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
 
 Do **not** write live installs unless the user explicitly asks. After overlay edits, note “live sync deferred” in the closeout if applicable.
 

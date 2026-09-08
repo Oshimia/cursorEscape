@@ -1,6 +1,6 @@
 # cursorEscape
 
-**Status:** shared-workflow-docs **Phase 6 complete**; [pointer-first](docs/roadmaps/pointer-first.md) **complete** (pointer-first-4, 2026-08-20). **Host harness sync** modular entry [`scripts/Sync-HostHarness.ps1`](scripts/Sync-HostHarness.ps1) — dry-run default; global Apply preflights every selected stack, and the seventh `Codex` stack is registered but force-held `BringUp`/unapplied ([layout](scripts/host-sync/README.md), [Codex roadmap](docs/roadmaps/codex-bring-up.md)). Sync does **not** create backups; Phase 0 baselines restore-only. Runtime smoke attestation is per-stack.
+**Status:** shared-workflow-docs **Phase 6 complete**; [pointer-first](docs/roadmaps/pointer-first.md) **complete** (pointer-first-4, 2026-08-20). **Host harness sync** modular entry [`scripts/Sync-HostHarness.ps1`](scripts/Sync-HostHarness.ps1) — dry-run default; global Apply preflights every selected stack, and the seventh `Codex` stack is registered and activated `Active` (2026-09-08, three-client smoke attested; [layout](scripts/host-sync/README.md), [Codex roadmap](docs/roadmaps/codex-bring-up.md)). Sync does **not** create backups; Phase 0 baselines restore-only. Runtime smoke attestation is per-stack.
 
 ## What and why
 

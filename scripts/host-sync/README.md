@@ -123,7 +123,7 @@ Manifest `NeverTouch` paths (e.g. `docs/workflow`, Antigravity `caveman.md`) are
 
 ## Apply lifecycle and global preflight
 
-`ApplyState` defaults to `Active`. `Get-StackApplyState` applies that default to established stacks and force-holds `Codex` at `BringUp` even if its manifest value changes: three-client runtime smoke and separate owner authorization are required before activation.
+`ApplyState` defaults to `Active`; the manifest value governs. `Codex` was force-held at `BringUp` through Phases 0–3 and activated 2026-09-08 after three-client smoke; setting its manifest back to `BringUp` re-arms the lifecycle gate.
 
 For Apply, the baseline gate runs first. Then the orchestration lifecycle refuses any selection containing BringUp before any write pass. For every Active selection, it dry-run-preflights **all** selected stacks before the first write; any failure reports the complete preflight set and performs zero writes. `-FailFast` continues to mean “stop the write pass after first failure” and never abbreviates this global preflight.
 
