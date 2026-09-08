@@ -1,6 +1,6 @@
 # Codex adapter bring-up roadmap (7th sync stack)
 
-**Status:** Accepted for Composer execution 2026-09-07. Phase 0 complete 2026-09-08 (dual APPROVED: production-readiness + bug review, 3 iterations; Observed Fast CI, subagent Full CI, Composer QC, Composer Full CI). Phase 1 complete 2026-09-08 under the owner's iterative-review waiver (implementation-only closeout; Observed Fast CI 72/72, six-stack ledger parity, Composer QC on attestation + transcripts; deferred risks recorded in the closeout). Phase 2 next. Codex remains unapplied; `ApplyState = BringUp` until three-client smoke passes.
+**Status:** Accepted for Composer execution 2026-09-07. Phase 0 complete 2026-09-08 (dual APPROVED: production-readiness + bug review, 3 iterations; Observed Fast CI, subagent Full CI, Composer QC, Composer Full CI). Phase 1 complete 2026-09-08 under the owner's iterative-review waiver (implementation-only closeout; Observed Fast CI 72/72, six-stack ledger parity, Composer QC on attestation + transcripts; deferred risks recorded in the closeout). Phase 2 complete 2026-09-08 under the same waiver (specialized fail-closed two-root adapter + 43-check scratch CI; unit 22/22, remediation 69/69, ledger parity). Phase 3 next. Codex remains unapplied; `ApplyState = BringUp` until three-client smoke passes.
 
 ## Context
 
@@ -53,7 +53,7 @@ The implementation follows the reviewed plan after its three-pass cap. The final
 
 - [x] **Phase 0 — Discovery, seam decision, and recovery/regression baselines** (2026-09-08)
 - [x] **Phase 1 — Codex overlay and manifest** (2026-09-08, owner review waiver)
-- [ ] **Phase 2 — Specialized adapter and safety mechanics**
+- [x] **Phase 2 — Specialized adapter and safety mechanics** (2026-09-08, owner review waiver)
 - [ ] **Phase 3 — Registration, orchestration-wide preflight, CI, and docs**
 - [ ] **Phase 4 — Authorized Apply, three-client smoke, and activation**
 
