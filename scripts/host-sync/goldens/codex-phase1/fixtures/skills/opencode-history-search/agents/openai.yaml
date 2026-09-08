@@ -1,0 +1,3 @@
+# cursorEscape-managed:v1 source="overlays/codex/skills/opencode-history-search/agents/openai.yaml"; overlay metadata; no model or reasoning pin.
+policy:
+  allow_implicit_invocation: false

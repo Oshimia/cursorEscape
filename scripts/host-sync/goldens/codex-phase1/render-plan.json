@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "kind": "codex-phase1-normalized-render-hash-golden",
+  "normalization": "UTF-8 SHA-256 after CRLF-to-LF and exactly one terminal LF; explicit fixture roots; no live host state",
+  "fixtureCompanionRoot": "C:/codex-phase1-fixture/companion",
+  "entries": [
+    {
+      "destination": "codex-home/AGENTS.md",
+      "logicalRoot": "codex-home",
+      "role": "managed-block-target",
+      "sha256": "af9fe28773093ef8463dc04b770724807db4c5efffd7d54d0389d8e6517f3e68"
+    },
+    {
+      "destination": "codex-home/agents/bug_reviewer.toml",
+      "logicalRoot": "codex-home",
+      "role": "managed-agent-target",
+      "sha256": "ac85be67c9d8e6f95a8cdee8487c4cd8c4acecaf1a8c10e9e3b2b94dbda9b03c"
+    },
+    {
+      "destination": "codex-home/agents/implementer.toml",
+      "logicalRoot": "codex-home",
+      "role": "managed-agent-target",
+      "sha256": "1c4f143fb5d4cf70c66ca3b56e1d25e547b2d84d5b649700a1e520c26167f18a"
+    },
+    {
+      "destination": "codex-home/agents/plan_reviewer.toml",
+      "logicalRoot": "codex-home",
+      "role": "managed-agent-target",
+      "sha256": "086ec6f84362668a854c08e8b4a68c26833b0db3798e942890bdf6dda1bcb91f"
+    },
+    {
+      "destination": "codex-home/agents/planner.toml",
+      "logicalRoot": "codex-home",
+      "role": "managed-agent-target",
+      "sha256": "c9016387a7b6530095be26dec230cdb79444b8876d2a756f408c110fd5ba5def"
+    },
+    {
+      "destination": "codex-home/agents/production_readiness_reviewer.toml",
+      "logicalRoot": "codex-home",
+      "role": "managed-agent-target",
+      "sha256": "af6bfcdb1aae8ca328f5d62dca73bb20a3da5f165520a9e4147c4165a6c110fc"
+    },
+    {
+      "destination": "codex-home/agents/repository_explorer.toml",
+      "logicalRoot": "codex-home",
+      "role": "managed-agent-target",
+      "sha256": "b7830ab9a8ed874780457d6a241f5c52220f7de941e706a4c12fb3e6e411e618"
+    },
+    {
+      "destination": "codex-home/agents/test_reviewer.toml",
+      "logicalRoot": "codex-home",
+      "role": "managed-agent-target",
+      "sha256": "8530f88f4d824ad1dfcf06cf95a9ce4bb307ce95440bdae9be9c144d157f73eb"
+    },
+    {
+      "destination": "skill-root/architecture-survey/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "f35f113e1895b26e617f1cfbeffe07fef5e9a765c0b6319ccf446f68de78d167"
+    },
+    {
+      "destination": "skill-root/bug-review-sweep/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "6f37aa970a820f5608a42d1f0191337b84eb008fc1414a8b0d385f5ba252f415"
+    },
+    {
+      "destination": "skill-root/codebase-design/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "308825ed1211753750c9bd7cbcd1bcfe38a27a2742f279eb37a2b01cd0151e1f"
+    },
+    {
+      "destination": "skill-root/composer/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "ce3fe805b565db224ae7199456c24a13a35aa08103a87253d1807d4323ac27dc"
+    },
+    {
+      "destination": "skill-root/diagnosing-bugs/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "5a1ae28c21c9cd5e738bc1ba34ad4be4fad44900089026611b83d796689a8373"
+    },
+    {
+      "destination": "skill-root/discovery/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "fc7fc9b3289ae1dba7667c227df297bec4382d23f5494a4ed62706868c3a24c6"
+    },
+    {
+      "destination": "skill-root/documentation-architecture/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "2cc0560aa6e38036d1aaa52451c797048aa485394cf1f41b5a8a02c29952f14e"
+    },
+    {
+      "destination": "skill-root/domain-modeling/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "e7ddad922dcfe13e7421eb8676d237b222f785d22cff01f46a75758a2a209e05"
+    },
+    {
+      "destination": "skill-root/grilling/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "1be3b219bbc1ab9413bafb5fd3928ec13a5cdd84709d3878139bec4177635f32"
+    },
+    {
+      "destination": "skill-root/implementation-plan/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "62f08e61c2ee5f3d88e5fd8b59aa3ebee69f666a10cd0bce274e2a31f2f8879c"
+    },
+    {
+      "destination": "skill-root/implementation-review/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "ec708a606116e4d0662a753baaedcd324bf0d885b611c21e788c566fdf08c6a5"
+    },
+    {
+      "destination": "skill-root/opencode-headless-run/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper-explicit-only",
+      "sha256": "d862a9f38c1906df56834c4395d4ff59e8d8e2ebfb1d7e7dac36ee0102aac724"
+    },
+    {
+      "destination": "skill-root/opencode-history-search/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper-explicit-only",
+      "sha256": "9f6e633bccd4fa1b3d9a9e54fe00058b687a1c5d1b7e9bc3b62e8b905581929d"
+    },
+    {
+      "destination": "skill-root/plan-review/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "a0934093be39ebc046af89e251a1d7560c81fd044a351860d102673cabe2e5b8"
+    },
+    {
+      "destination": "skill-root/pre-commit-ci-gate/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-rule-wrapper",
+      "sha256": "c91290b01ed9df36aa06abef0c44e0369c28bbbe2042ead52a44e77f82729f0b"
+    },
+    {
+      "destination": "skill-root/prototype/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "7f027b5f3184f861432c8c800be2e63ff2f6347947d83305f18b0fec035519fc"
+    },
+    {
+      "destination": "skill-root/research/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "e4d277db952a36910677a37265592cb7538b48e8bf0c1ed3d785c6738a1e7825"
+    },
+    {
+      "destination": "skill-root/resolving-merge-conflicts/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "9f8a9527262c604aaa7ca5bb356724cee040b50c1228a18d5ac95811dc51adb5"
+    },
+    {
+      "destination": "skill-root/roadmap/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "ef6427701865f47adf274daf69b901d8cb1a51f40a05e66d01f1e124ea2eed87"
+    },
+    {
+      "destination": "skill-root/tdd/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "f58413efd6623eeb88d34e87a7a1e944aba4b50d723d2764671262273d2b6d0d"
+    },
+    {
+      "destination": "skill-root/teach/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "fa0f1e4d58aa6dc5756ae4b46a42d224da6d146c565c61c5236bdad540245651"
+    },
+    {
+      "destination": "skill-root/wait-what/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "997ae053ee8938fd848078ff0ae82d9a52f7bbb6589581ee7d3836a5e1fd0657"
+    },
+    {
+      "destination": "skill-root/wizard/SKILL.md",
+      "logicalRoot": "skill-root",
+      "role": "generated-skill-wrapper",
+      "sha256": "4a1cc27386d086c84803d5170ddb2d5926675bf9b013256ffdbd2e61c7faf42c"
+    }
+  ]
+}

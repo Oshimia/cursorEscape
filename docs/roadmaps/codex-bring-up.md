@@ -1,6 +1,6 @@
 # Codex adapter bring-up roadmap (7th sync stack)
 
-**Status:** Accepted for Composer execution 2026-09-07. Phase 0 complete 2026-09-08 (dual APPROVED: production-readiness + bug review, 3 iterations; Observed Fast CI, subagent Full CI, Composer QC, Composer Full CI). Phase 1 next. Codex remains unapplied; `ApplyState = BringUp` until three-client smoke passes.
+**Status:** Accepted for Composer execution 2026-09-07. Phase 0 complete 2026-09-08 (dual APPROVED: production-readiness + bug review, 3 iterations; Observed Fast CI, subagent Full CI, Composer QC, Composer Full CI). Phase 1 complete 2026-09-08 under the owner's iterative-review waiver (implementation-only closeout; Observed Fast CI 72/72, six-stack ledger parity, Composer QC on attestation + transcripts; deferred risks recorded in the closeout). Phase 2 next. Codex remains unapplied; `ApplyState = BringUp` until three-client smoke passes.
 
 ## Context
 
@@ -52,7 +52,7 @@ The implementation follows the reviewed plan after its three-pass cap. The final
 ## Phase checklist
 
 - [x] **Phase 0 — Discovery, seam decision, and recovery/regression baselines** (2026-09-08)
-- [ ] **Phase 1 — Codex overlay and manifest**
+- [x] **Phase 1 — Codex overlay and manifest** (2026-09-08, owner review waiver)
 - [ ] **Phase 2 — Specialized adapter and safety mechanics**
 - [ ] **Phase 3 — Registration, orchestration-wide preflight, CI, and docs**
 - [ ] **Phase 4 — Authorized Apply, three-client smoke, and activation**
@@ -150,4 +150,5 @@ The implementation follows the reviewed plan after its three-pass cap. The final
 - Na: **n/a** — no visual preview surface.
 - Phase 0 initial baseline and Phase 4 live Apply remain separate external gates.
 - Phase and nested reviewer subagents use GLM 5.3 Flash per owner instruction (2026-09-08 override; previously GPT Terra High).
+- Owner waived iterative dual review for Phases 1+ on 2026-09-08 (cost); CI gates remain mandatory. Deferred review risks: openai.yaml explicit-only metadata is overlay-only pending a Phase 2 schema decision; catalog budget measured conservatively.
 - Composer commits locally after QC ACCEPT and Double Full CI; never pushes.
