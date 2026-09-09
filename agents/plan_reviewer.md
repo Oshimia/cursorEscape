@@ -112,6 +112,8 @@ Assume implementation follows this plan exactly. List the **three most likely re
 
 Can steps ship independently? Rollback? Correct migration ordering? Partial-deploy risk? Backward compatibility?
 
+Audit the [phase sizing and split gate](../skills/implementation-plan/SKILL.md#phase-sizing-and-split-gate). A phase spanning more than one deployment/runtime seam, bundling a migration with dependent API/UI behavior, or exceeding the documented file/line split threshold is a **big-bang review unit**. Require splitting into independently reviewable phases unless the plan contains an explicit user-approved size waiver with rollback and expanded review design.
+
 Rate: **PASS**, **FAIL**, or **CONCERNS** — with sequencing risks and mitigations.
 
 ### 9. Architecture alignment

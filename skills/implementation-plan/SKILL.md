@@ -103,6 +103,7 @@ Treat missing required sections with the **same urgency as missing Required Inpu
 - Assumptions
 - Unknowns **or** Discovery steps
 - Incremental execution (phases)
+- Phase sizing/split assessment (inside Incremental execution)
 - Verification
 
 **When-required** (explicit **N/A** OK only when truly not applicable):
@@ -207,6 +208,22 @@ Third-party services, manual user steps (migrations, secrets, deploy), CI/infra,
 ### Incremental execution
 
 Ordered **phases** that can land safely. Name phases explicitly (Phase 1, Phase 2, …).
+
+#### Phase sizing and split gate
+
+Complete this gate **before** naming phases. A phase is a **review and deployment unit**, not merely an ordered list of tasks. Estimate the hand-authored review surface for each phase: production code, tests, migrations, public contracts, and behavior-changing docs. Generated/locked artifacts may be listed separately but do not justify bundling unrelated hand-authored work.
+
+| Dimension | Target | Split gate |
+|---|---|---|
+| Hand-authored changed lines | ≤500 per phase | >800 |
+| Files reviewed together | ≤8 | >15 |
+| Deployment/runtime seams | one primary seam | schema + backend + UI + infra together |
+| External apply gates | one coherent gate | independent migration/infra/config gates bundled |
+| Review focus | one behavioral contract | unrelated contracts or subsystems bundled |
+
+**Split when any split-gate condition is true.** Also split when a phase couples an additive schema/RPC migration with dependent API/UI behavior, introduces a new shared abstraction plus more than one consumer, or requires reviewers to understand more than one bounded context.
+
+Each split phase must still form a complete changeset: implementation, focused tests, applicable docs, Fast CI, dual implementation review, and (where applicable) user apply/deployment gates. Do **not** create pseudo-phases that share one review boundary. If a genuinely atomic change exceeds the hard gate, the plan must include a named **Size waiver** with the user's explicit approval, why smaller phases are impossible, rollback design, and an expanded review plan. A missing size waiver for an oversized phase is blocking.
 
 - What ships independently per phase
 - Migration ordering (schema before code, etc.)

@@ -7,12 +7,14 @@
 ## Workflow
 
 ```text
-Draft plan (Escalation yes → Agent context in plan; no → light Incremental execution)
+Draft plan; apply the phase sizing/split gate from implementation-plan (Escalation yes → Agent context in plan; no → light Incremental execution)
   → plan-reviewer → user accepts
   → roadmap: Escalation yes → copy from plan; Escalation no → may restructure bullets (no new scope)
   → Phase N (Composer or clean-context agent) → review → commit
   → Phase N+1 …
 ```
+
+Use this SOP whenever the sizing gate requires more than one review/deployment unit. Planning default: keep each reviewable phase to **≤8 reviewed files / ≤500 changed hand-authored lines**, with **>15 files / >800 lines** as a hard split signal. A migration plus dependent API behavior plus UI contracts plus tests normally must be split, not treated as one phase.
 
 ## Roadmap location
 

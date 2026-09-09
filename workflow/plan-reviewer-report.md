@@ -97,7 +97,7 @@ Omitted: +X blocking, +Y non-blocking (themes: ...)
 3. ...
 
 ## Incremental execution and safety
-(PASS/FAIL/CONCERNS — risks and mitigations)
+(PASS/FAIL/CONCERNS — risks and mitigations; FAIL when the phase-sizing split gate is violated without an approved size waiver)
 
 ## Blocking findings
 (up to 5, severity-ranked; write "None" if empty)
