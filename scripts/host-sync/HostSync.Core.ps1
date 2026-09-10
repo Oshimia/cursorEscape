@@ -61,6 +61,34 @@ function Test-ContentHasUnmergedTokens {
     return ($Content -match '\{\{COMPANION_ROOT\}\}|\{\{OPENCODE_HOME\}\}')
 }
 
+function Test-PortableCompanionTokenSource {
+    param(
+        [Parameter(Mandatory)]
+        [string] $Content,
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot
+    )
+
+    if (-not $Content.Contains('{{COMPANION_ROOT}}')) {
+        return $false
+    }
+
+    # Reject filesystem roots without coupling portability to a user, drive,
+    # OS, or repository location.
+    $absolutePathPattern = '(?i)(?:\b[A-Za-z]:[\\/]|\\\\[^\s/]|/(?:Users|home)/)'
+    if ($Content -match $absolutePathPattern) {
+        return $false
+    }
+
+    foreach ($root in @($CompanionRoot, ($CompanionRoot -replace '\\', '/'))) {
+        if (-not [string]::IsNullOrWhiteSpace($root) -and $Content.Contains($root)) {
+            return $false
+        }
+    }
+
+    return $true
+}
+
 function ConvertTo-NestedHashtable {
     param($Node)
 

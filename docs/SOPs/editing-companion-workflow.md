@@ -99,7 +99,7 @@ pwsh scripts/host-sync/Invoke-RemediationUnitChecks.ps1      # record exact emit
 pwsh scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1   # record exact emitted summary
 ```
 
-Expect: zero matches on the first `rg` after migrating off unbounded loops; committed C1 mirrors byte-match the planned render; companion SoT still documents the current policy; all suites exit 0. The drift audit exits 2 for live drift or missing leaves before an owner-authorized Apply; capture that snapshot rather than treating expected pre-Apply drift as a content-authoring failure. Attest the observed Phase 2 pass/fail summary rather than reusing a historical count.
+Expect: zero matches on the first `rg` after migrating off unbounded loops; committed C1 mirrors byte-match the planned render; companion SoT still documents the current policy; authoring suites exit 0. Treat the standalone live drift audit as an evidence snapshot, not an authoring suite: exit 2 is expected before owner-authorized Apply when live drift or missing leaves exist. Capture that snapshot, then attest the observed Phase 2 pass/fail summary rather than reusing a historical count.
 
 ---
 

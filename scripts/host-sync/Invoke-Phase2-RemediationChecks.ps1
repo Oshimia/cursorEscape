@@ -193,7 +193,7 @@ foreach ($mirror in @(
             [BitConverter]::ToString($actual) -eq [BitConverter]::ToString($expected)) `
             "expected=$expectedHash actual=$actualHash"
         Assert-Pass "C1 committed $($mirror.Name) is portable token source" (
-            $mirrorSource.Contains('{{COMPANION_ROOT}}') -and -not $mirrorSource.Contains('C:/Users/admin/'))
+            Test-PortableCompanionTokenSource -Content $mirrorSource -CompanionRoot $companionNorm)
     }
 }
 

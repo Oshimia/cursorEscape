@@ -262,12 +262,19 @@ try {
     [Environment]::SetEnvironmentVariable('CODEX_HOME', $codexAlt, 'Process')
     try {
         $result = Invoke-DriftJson -HomeRoot $homeRoot -SkillRoot $skills -Target Codex
+        Assert-Pass 'codex effective CODEX_HOME default clean fixture' (
+            $result.ExitCode -eq 0 -and $result.Report.summary.clean -eq $true)
+
+        [IO.File]::AppendAllText((Join-Path $codexAlt 'agents/planner.toml'), "`nchanged")
+        $result = Invoke-DriftJson -HomeRoot $homeRoot -SkillRoot $skills -Target Codex
+        $identities = @($result.Report.rows | ForEach-Object identity)
+        Assert-Pass 'codex effective CODEX_HOME default drift fixture' (
+            $result.ExitCode -eq 2 -and $identities -contains 'codex-home/agents/planner.toml') `
+            "exit=$($result.ExitCode); rows=$($identities -join ',')"
     }
     finally {
         [Environment]::SetEnvironmentVariable('CODEX_HOME', $previousCodexHome, 'Process')
     }
-    Assert-Pass 'codex effective CODEX_HOME default fixture' (
-        $result.ExitCode -eq 0 -and $result.Report.summary.clean -eq $true)
 }
 finally {
     foreach ($root in $tempRoots) {

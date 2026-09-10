@@ -136,7 +136,7 @@ foreach ($identity in $mirrorPaths.Keys) {
         Assert-Pass "C1 committed token render equals exact planned bytes: $identity" (
             [BitConverter]::ToString($expectedBytes) -eq [BitConverter]::ToString($actualBytes))
         Assert-Pass "C1 committed mirror is portable token source: $identity" (
-            $mirrorSource.Contains('{{COMPANION_ROOT}}') -and -not $mirrorSource.Contains('C:/Users/admin/'))
+            Test-PortableCompanionTokenSource -Content $mirrorSource -CompanionRoot $companionNorm)
     }
 }
 

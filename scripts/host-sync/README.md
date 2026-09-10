@@ -142,7 +142,9 @@ Do **not** add stack-specific logic to Core unless it is genuinely shared (prefe
 
 Use the drift audit to compare the exact UTF-8 bytes Apply would write with current live bytes. It renders through the registered adapters, reads host state only, emits hashes (never content), and orders rows deterministically.
 
-For existing Codex managed-block targets, “exact bytes” means Apply-equivalent output: the planned managed block plus owner-owned text outside that block. Committed OpenCode C1 mirrors are portable `{{COMPANION_ROOT}}` token sources; verification merges those tokens before byte-comparing the Apply plan. Fixture isolation uses a temporary `USERPROFILE` for adapters; `-HomeRoot` alone is the physical comparison root and does not override every adapter root seam.
+For existing Codex managed-block targets, “exact bytes” means Apply-equivalent output: the planned managed block plus owner-owned text outside that block. Committed OpenCode C1 mirrors are portable `{{COMPANION_ROOT}}` token sources; verification merges those tokens before byte-comparing the Apply plan.
+
+`Test-HostHarnessDrift.ps1` reads host state only: it never performs live Apply and never writes host state. By contrast, the disposable fixture suite intentionally invokes adapter Apply, but only under generated temporary roots; it never touches real host homes. Fixture isolation uses a temporary `USERPROFILE` for adapters; `-HomeRoot` alone is the physical comparison root and does not override every adapter root seam.
 
 ```powershell
 # Human-readable audit for all registered stacks
@@ -152,7 +154,7 @@ pwsh scripts/host-sync/Test-HostHarnessDrift.ps1
 pwsh scripts/host-sync/Test-HostHarnessDrift.ps1 -Json
 ```
 
-The disposable fixture suite exercises clean, drift, missing, path-error, Cursor hybrid, OpenCode JSON, and Codex two-root behavior without touching real host homes:
+The disposable fixture suite exercises clean, drift, missing, path-error, Cursor hybrid, OpenCode JSON, and Codex two-root behavior without touching real host homes. It uses temporary adapter Apply only to construct and mutate those disposable roots:
 
 ```powershell
 pwsh scripts/host-sync/Invoke-HostSyncDriftFixtureChecks.ps1
