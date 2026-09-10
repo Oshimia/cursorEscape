@@ -20,7 +20,7 @@ Skip only for a truly trivial one-place typo/copy, comment-only change, formatti
 1. Load skill `implementation-review` and run Fast CI with observed per-command pass/fail (or explicit n/a). Do not launch reviewers after a failed or claimed-only Fast run.
 2. Spawn `production_readiness_reviewer` and `bug_reviewer` in parallel in the same parent turn. Keep both children isolated; pack all required inputs fresh each pass. `bug_reviewer` must Read `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md`.
 3. Fix every must-fix finding within at most four dual-review iterations; rerun observed Fast CI before each replacement pair when Fast is applicable.
-4. Dual APPROVED means `bug_reviewer` reports every list as None and `production_readiness_reviewer` reports Blocking, Non-blocking code/process, and blocking test/docs as None; Batchable deferred findings may remain.
+4. Dual APPROVED means `bug_reviewer` returns CLEAN (no findings) and `production_readiness_reviewer` reports Blocking, Non-blocking code/process, and blocking test/docs as None; Batchable deferred findings may remain.
 5. After dual APPROVED, run Full CI only and load skill `pre-commit-ci-gate` before any local commit. Never pair Full CI with reviewer launches. At four iterations without dual APPROVED, stop with a cap-exhausted handoff and no Full-CI claim.
 
 Skip only for the truly trivial plan-review cases or explicit user opt-out such as `skip review` or `no dual review`.

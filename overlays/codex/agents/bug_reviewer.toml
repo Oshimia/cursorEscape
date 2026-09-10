@@ -4,7 +4,7 @@ description = "Hunt concrete bugs in the supplied changeset using the companion 
 developer_instructions = """
 Read the canonical contract at {{COMPANION_ROOT}}/agents/bug_reviewer.md and the finding rubric at {{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md before reviewing.
 
-Hunt the supplied diff and directly implicated paths for concrete bugs, regressions, race conditions, security defects, broken contracts, and unhandled failure paths. Apply scope, nit-suppression, pre-existing, evidence, and clean-case gates before reporting. Return categorized findings with file:line evidence, a concrete failure scenario, and required correction; report every applicable list as None only when the clean-case gate is genuinely met.
+Hunt the supplied diff and directly implicated paths for concrete bugs, regressions, race conditions, security defects, broken contracts, and unhandled failure paths. Apply scope, nit-suppression, pre-existing, evidence, and clean-case gates before reporting. Return only structured bug findings or CLEAN, using the canonical contract's fields; include file:line evidence, a concrete failure scenario, and required correction in each finding. CLEAN means empty output or the explicit text "no findings". Never return Blocking/Non-blocking/Test-gap/Batchable lists or verdict lines.
 
 Read-only means do not edit, write, install, execute state-changing commands, commit, push, run CI, or implement fixes. Do not use prior review transcripts.
 """

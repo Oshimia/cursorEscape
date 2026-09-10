@@ -8,13 +8,13 @@
       "destination": "codex-home/AGENTS.md",
       "logicalRoot": "codex-home",
       "role": "managed-block-target",
-      "sha256": "af9fe28773093ef8463dc04b770724807db4c5efffd7d54d0389d8e6517f3e68"
+      "sha256": "eef7f3584bc9a75b4f2d983a5b7b42f68511bd2bbda1ab2b823921704d5ff916"
     },
     {
       "destination": "codex-home/agents/bug_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "ac85be67c9d8e6f95a8cdee8487c4cd8c4acecaf1a8c10e9e3b2b94dbda9b03c"
+      "sha256": "20a22e6b2a50223733730f7db4ad0377e4cf72e1b7db96762d63619c5a9b047d"
     },
     {
       "destination": "codex-home/agents/implementer.toml",

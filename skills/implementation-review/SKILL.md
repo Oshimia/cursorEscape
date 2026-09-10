@@ -90,7 +90,7 @@ Implement phase
 
    Optional evidence frame: when a fixed point and an originating spec both exist, the parent may add `Fixed point:` and `Spec path:` lines to the reviewer invoke payload to enable Standards/Spec axis framing with per-finding citations per [code-review-frame.md](../../workflow/code-review-frame.md). Absent those inputs, reviews are unchanged.
 
-3. If **either** reviewer returns `CHANGES REQUESTED`, or Bugbot has any finding list ≠ `"None"`, or Reviewer-a has Blocking / Non-blocking (code/process) / **blocking** test/docs ≠ `"None"`: fix **every must-fix** finding → return to step 2 (increment review iteration within the block). Do **not** treat Reviewer-a **Batchable (deferred)** as loop-blocking. **Do not launch a 5th pair** in the current block.
+3. If **either** reviewer returns `CHANGES REQUESTED`, or Bugbot/`bug_reviewer` does not return CLEAN/no findings, or Reviewer-a has Blocking / Non-blocking (code/process) / **blocking** test/docs ≠ `"None"`: fix **every must-fix** finding → return to step 2 (increment review iteration within the block). Do **not** treat Reviewer-a **Batchable (deferred)** as loop-blocking. **Do not launch a 5th pair** in the current block.
 4. **Exit the block:**
    - If **both** return `APPROVED` → go to step 5 (closeout). Do **not** launch reviewers again unless you subsequently changed code.
    - If iteration **4** ends without dual APPROVED → **stop** here; follow [Pressure release](#pressure-release-4-iteration-blocks) (normal reassessment or Composer cap-exhausted handoff). Do **not** run Full CI, do **not** report `task-phase-complete`, do **not** continue to steps 5–7.
@@ -157,10 +157,10 @@ Pressure release is a **stuckness / thrash brake**, not an opt-out from dual APP
 
 **Completion bar (split):** Fast CI Observed + dual `APPROVED` **then** Full CI pass. On multi-phase plans, **every** phase must reach this bar.
 
-| Reviewer | Loop-blocking lists that must be `"None"` | May remain open |
-|----------|-------------------------------------------|-----------------|
-| **Bugbot** | Blocking, Non-blocking, Test gaps | — |
-| **Reviewer-a** | Blocking, Non-blocking (code/process), **blocking** test/docs | **Batchable (deferred)** |
+| Reviewer | Loop-blocking result | May remain open |
+|----------|---------------------|-----------------|
+| **Bugbot / `bug_reviewer`** | CLEAN/no findings; any finding fails this leg | — |
+| **Reviewer-a** | Blocking, Non-blocking (code/process), and **blocking** test/docs are `"None"` | **Batchable (deferred)** |
 
 **Example (Reviewer-a):** A missing unit test for a new auth branch is **blocking test/docs**. A wish-list for broader e2e coverage of an untouched flow is **Batchable (deferred)** and may remain on `APPROVED`.
 
@@ -245,7 +245,6 @@ Cap-exhausted handoff (Composer Nb, no dual APPROVED): do **not** use this close
 |--------------|--------|
 | Blocking (either reviewer) | Must fix before next review |
 | Non-blocking code/process (either reviewer) | Must fix — cannot dual-APPROVE with these open |
-| Bugbot Test gaps | Must add or extend tests — Bugbot cannot APPROVE with these open |
 | Reviewer-a **blocking** test/docs | Must fix — Reviewer-a cannot APPROVE with these open |
 | Reviewer-a **Batchable (deferred)** | Do **not** re-block the loop; list in closeout punch list |
 

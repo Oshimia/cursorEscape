@@ -389,6 +389,7 @@ try {
     Assert-Pass 'ownership marker constants match manifest declarations' ($manifest.OwnershipMarker -eq $marker -and $manifest.ManagedBlockMarker -eq $blockMarker)
 
     $agentsRender = ($functionalPlan | Where-Object Destination -eq 'codex-home/AGENTS.md').Content
+    $bugRender = ($functionalPlan | Where-Object Destination -eq 'codex-home/agents/bug_reviewer.toml').Content
     Assert-Pass 'AGENTS render retains always-on gates and explicit-only policy' (
         $agentsRender.Contains('**Default on**') -and
         $agentsRender.Contains('When in doubt, run the plan loop') -and
@@ -397,6 +398,14 @@ try {
         $agentsRender.Contains('opencode-history-search') -and
         $agentsRender.Contains('explicit-only') -and
         $agentsRender.Contains($blockMarker))
+    Assert-Pass 'AGENTS render preserves bug-reviewer findings-or-CLEAN split bar' (
+        $agentsRender.Contains('`bug_reviewer` returns CLEAN') -and
+        -not $agentsRender.Contains('`bug_reviewer` reports every list'))
+    Assert-Pass 'bug reviewer render forbids code-review scaffolding' (
+        $bugRender.Contains('Return only structured bug findings or CLEAN') -and
+        $bugRender.Contains('Never return Blocking/Non-blocking/Test-gap/Batchable lists or verdict lines') -and
+        -not $bugRender.Contains('Return categorized findings') -and
+        -not $bugRender.Contains('report every applicable list'))
 
     $fixturePlan = Get-CodexRenderPlan -Manifest $manifest -OverlayPath $overlayRoot -CompanionPath $fixtureCompanion
     $focusedDestinations = @(
