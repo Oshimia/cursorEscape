@@ -82,6 +82,11 @@ rg "until dual APPROVED|count >= 9|no hard stop" overlays/opencode/AGENTS.md ove
 
 # C1 dual-write still identical
 # (hashes of AGENTS.md and instructions/cursor-escape-loop.md must match)
+pwsh scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1
+
+# Exact-render fixture guard and current live drift snapshot
+pwsh scripts/host-sync/Invoke-HostSyncDriftFixtureChecks.ps1
+pwsh scripts/host-sync/Test-HostHarnessDrift.ps1
 
 # Companion SoT still states the new policy (example: pressure release)
 rg "pressure-release|4-iteration|cap-exhausted" workflow/iterative-code-review.md skills/implementation-review/SKILL.md skills/composer/SKILL.md
@@ -90,11 +95,11 @@ rg "pressure-release|4-iteration|cap-exhausted" workflow/iterative-code-review.m
 rg "\b[Nn][AaBb]\b" agents rules scripts/host-sync/render-baselines skills workflow docs/featureArchitecture docs/SOPs overlays --glob '!research/imported/**' --glob '!docs/roadmaps/**'
 
 # Composed surfaces (Phase 2+): gate atoms flow via composition — verify by render, not by prose grep
-pwsh scripts/host-sync/Invoke-RemediationUnitChecks.ps1      # 22 passed / 0 failed, incl. U17-U20 ref-resolution contract
-pwsh scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1   # read exact emitted summary; current run: 69 passed / 0 failed
+pwsh scripts/host-sync/Invoke-RemediationUnitChecks.ps1      # record exact emitted summary; includes U17-U20 and U21-U22 ordering checks
+pwsh scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1   # record exact emitted summary
 ```
 
-Expect: zero matches on the first `rg` after migrating off unbounded loops; C1 hashes equal; companion SoT still documents the current policy; both suites exit 0. Attest the observed Phase 2 pass/fail summary rather than reusing a historical count.
+Expect: zero matches on the first `rg` after migrating off unbounded loops; committed C1 mirrors byte-match the planned render; companion SoT still documents the current policy; all suites exit 0. The drift audit exits 2 for live drift or missing leaves before an owner-authorized Apply; capture that snapshot rather than treating expected pre-Apply drift as a content-authoring failure. Attest the observed Phase 2 pass/fail summary rather than reusing a historical count.
 
 ---
 

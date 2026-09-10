@@ -211,7 +211,9 @@ function Order-OpenCodePermissionPatternMap {
     if ($keys -contains '*') {
         $ordered['*'] = $Map['*']
     }
-    foreach ($key in ($keys | Where-Object { $_ -ne '*' } | Sort-Object)) {
+    $namedKeys = [string[]]@($keys | Where-Object { "$_" -ne '*' })
+    [System.Array]::Sort($namedKeys, [StringComparer]::Ordinal)
+    foreach ($key in $namedKeys) {
         $ordered[$key] = $Map[$key]
     }
     return $ordered
@@ -222,13 +224,19 @@ function Optimize-OpenCodePermissionKeyOrder {
 
     if ($null -eq $Node) { return $null }
 
+    # Permission maps are semantically order-sensitive: OpenCode applies
+    # last-match-wins, so "*" must be emitted first. Sort its named patterns
+    # ordinally to preserve deterministic output. Other mappings are fully
+    # deterministic and ordinal-sorted; arrays remain order-significant.
     if (Test-IsOpenCodePermissionPatternMap -Node $Node) {
         return (Order-OpenCodePermissionPatternMap -Map $Node)
     }
 
-    if (($Node -is [hashtable]) -or ($Node -is [System.Collections.Specialized.OrderedDictionary])) {
+    if ($Node -is [System.Collections.IDictionary]) {
         $out = [ordered]@{}
-        foreach ($key in @($Node.Keys)) {
+        $keyStrings = [string[]]@($Node.Keys | ForEach-Object { [string]$_ })
+        [System.Array]::Sort($keyStrings, [StringComparer]::Ordinal)
+        foreach ($key in $keyStrings) {
             $out[$key] = Optimize-OpenCodePermissionKeyOrder -Node $Node[$key]
         }
         return $out

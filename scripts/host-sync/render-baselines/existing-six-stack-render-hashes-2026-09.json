@@ -14,32 +14,32 @@
     {
       "stack": "Cursor",
       "destinationCount": 16,
-      "sha256": "1c77f2d5db285106ce75f2ed0daf137043035f36f17c541f6eb550475cb11d8a"
+      "sha256": "8b597122af50f456dc2af6bc93daf0d503bfa155f5e37fc346b50f9672b4d32e"
     },
     {
       "stack": "OpenCode",
       "destinationCount": 21,
-      "sha256": "fb1276e68786476ed6224ae6c0ba2e3f783319c23fbbe3bf87fbbb890359c02a"
+      "sha256": "f37ce720eed412434757a585d468c3f0710a63d6aa75401cf950506c27576a74"
     },
     {
       "stack": "Antigravity",
       "destinationCount": 18,
-      "sha256": "518e60c21daaf50dd40b3390a9df76e5441352add486f19fad8dcebdc28f78fb"
+      "sha256": "e6d3692082dac454a4182210704b29748cade31b48afe3fcc3d3469a83d773ca"
     },
     {
       "stack": "Vscode",
       "destinationCount": 21,
-      "sha256": "48e2fef7f19a92bd2d41275daca13024bdd37864f81600b955e811ac424dd0ea"
+      "sha256": "5ea0b2194f71bbdca79267a1d0aa866bcc95b25f3bb498e6fce16628a20e1668"
     },
     {
       "stack": "Cline",
       "destinationCount": 4,
-      "sha256": "8a2bc66418738594d354deb0741a81e3f6f9ec45602a833ba44d773ca9a17aa3"
+      "sha256": "77e81c0d405bce6dad19d55528478d56c1d2f1b11a64d8491e6cc6c98eaf1c03"
     },
     {
       "stack": "Kilocode",
       "destinationCount": 4,
-      "sha256": "dd4509630a039f0c22968f9f3e44b452484b860abd2656dbf3b8c051ae3a2175"
+      "sha256": "312cd6aa0aea4778b88f710a65085dadb0f61cf241698196a42620231217edc8"
     }
   ]
 }

@@ -369,6 +369,9 @@ function Add-CodexPlanReportRows {
 
     foreach ($plan in $Plans) {
         [void]$Report.Destinations.Add($plan.Identity)
+        if (-not $Report.ContainsKey('PlannedOutputContent')) {
+            $Report.PlannedOutputContent = @{}
+        }
         $Report.CurrentState[$plan.Identity] = @{
             Exists = $plan.Exists
             Hash = $plan.CurrentHash
@@ -384,6 +387,12 @@ function Add-CodexPlanReportRows {
         if (-not $Report.PlannedContent.ContainsKey($plan.Identity)) {
             $Report.PlannedContent[$plan.Identity] = $plan.PlannedContent
             $Report.PlannedClasses[$plan.Identity] = 'overlay'
+        }
+        if (-not $plan.GuardOnly) {
+            # Dry-run consumers must see final destination bytes. For an existing
+            # managed-block target this preserves owner-owned text outside the
+            # managed block exactly as Apply will.
+            $Report.PlannedOutputContent[$plan.Identity] = [string]$plan.OutputContent
         }
         $sourceText = if ($plan.Source) { $plan.Source } else { '<managed-block>' }
         [void]$Report.PlannedFiles.Add("$($plan.Identity) <= $sourceText (current-hash=$($plan.CurrentHash))")

@@ -167,5 +167,42 @@ Assert-Pass 'composed opencode pre-commit stub: never-push tail' ($null -ne $pcO
 # ---------- 10. AGENTS dual-write mirror planned for opencode ----------
 Assert-Pass 'AGENTS dual-write mirror planned' ($planned['OpenCode'].PlannedContent.ContainsKey('AGENTS.md'))
 
+# ---------- 11. Committed C1 mirrors equal the exact planned render ----------
+$utf8NoBom = [Text.UTF8Encoding]::new($false)
+$instrCommittedPath = Join-Path $companionRoot 'overlays/opencode/instructions/cursor-escape-loop.md'
+$agentsCommittedPath = Join-Path $companionRoot 'overlays/opencode/AGENTS.md'
+Assert-Pass 'C1 committed instructions exists' (Test-Path -LiteralPath $instrCommittedPath)
+Assert-Pass 'C1 committed AGENTS.md exists' (Test-Path -LiteralPath $agentsCommittedPath)
+
+foreach ($mirror in @(
+    @{ Name = 'instructions'; Path = $instrCommittedPath; Key = $instrKey },
+    @{ Name = 'AGENTS.md'; Path = $agentsCommittedPath; Key = 'AGENTS.md' }
+)) {
+    if ((Test-Path -LiteralPath $mirror.Path) -and $planned['OpenCode'].PlannedContent.ContainsKey($mirror.Key)) {
+        $mirrorBytes = [IO.File]::ReadAllBytes($mirror.Path)
+        $hasUtf8Bom = $mirrorBytes.Length -ge 3 -and
+            $mirrorBytes[0] -eq 239 -and $mirrorBytes[1] -eq 187 -and $mirrorBytes[2] -eq 191
+        Assert-Pass "C1 committed $($mirror.Name) has no UTF-8 BOM" (-not $hasUtf8Bom)
+        $mirrorSource = $utf8NoBom.GetString($mirrorBytes)
+        $mirrorRendered = Merge-CompanionTokens -Content $mirrorSource -CompanionRoot $companionNorm
+        $expected = $utf8NoBom.GetBytes([string]$planned['OpenCode'].PlannedContent[$mirror.Key])
+        $actual = $utf8NoBom.GetBytes($mirrorRendered)
+        $expectedHash = ([Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($expected))).ToLowerInvariant()
+        $actualHash = ([Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($actual))).ToLowerInvariant()
+        Assert-Pass "C1 committed $($mirror.Name) token render equals exact planned bytes" (
+            [BitConverter]::ToString($actual) -eq [BitConverter]::ToString($expected)) `
+            "expected=$expectedHash actual=$actualHash"
+        Assert-Pass "C1 committed $($mirror.Name) is portable token source" (
+            $mirrorSource.Contains('{{COMPANION_ROOT}}') -and -not $mirrorSource.Contains('C:/Users/admin/'))
+    }
+}
+
+if ((Test-Path -LiteralPath $instrCommittedPath) -and (Test-Path -LiteralPath $agentsCommittedPath)) {
+    $instrBytes = [IO.File]::ReadAllBytes($instrCommittedPath)
+    $agentsBytes = [IO.File]::ReadAllBytes($agentsCommittedPath)
+    Assert-Pass 'C1 committed mirrors byte-identical' (
+        [BitConverter]::ToString($instrBytes) -eq [BitConverter]::ToString($agentsBytes))
+}
+
 Write-Output ('phase2 remediation checks: {0} passed, {1} failed' -f $pass, $failures)
 exit $(if ($failures -gt 0) { 1 } else { 0 })

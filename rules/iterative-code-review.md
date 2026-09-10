@@ -12,4 +12,4 @@
 
 **Skip only if:** truly trivial cases listed under plan review, or explicit user opt-out (`skip review`, `no dual review`).
 
-**When in doubt, run the loop.** Detail: `implementation-review` skill and [`../workflow/ci-ladder.md`](../workflow/ci-ladder.md).
+**When in doubt, run the loop.** Detail: `implementation-review` skill and [`../workflow/ci-ladder.md`]({{COMPANION_ROOT}}/workflow/ci-ladder.md).

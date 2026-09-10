@@ -18,6 +18,6 @@ Eval / harness / multi-step operational work is **not** exempt.
 
 ## Related
 
-- [Iterative code review](./iterative-code-review.md)
-- [CI ladder](../workflow/ci-ladder.md)
-- [Instruction layering (FA)](../docs/featureArchitecture/instruction-layering.md)
+- [Iterative code review]({{COMPANION_ROOT}}/rules/iterative-code-review.md)
+- [CI ladder]({{COMPANION_ROOT}}/workflow/ci-ladder.md)
+- [Instruction layering (FA)]({{COMPANION_ROOT}}/docs/featureArchitecture/instruction-layering.md)

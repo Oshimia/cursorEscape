@@ -1,6 +1,6 @@
 # Host harness sync (modular layout)
 
-**Last updated:** 2026-09-08
+**Last updated:** 2026-09-10
 
 Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require `-Apply` and a valid Phase 0 baseline gate artifact.
 
@@ -138,16 +138,40 @@ For Apply, the baseline gate runs first. Then the orchestration lifecycle refuse
 
 Do **not** add stack-specific logic to Core unless it is genuinely shared (prefer adapter + manifest).
 
-## OpenCode JSON merge — permission key order (required)
+## Drift audit and non-mutating CI
+
+Use the drift audit to compare the exact UTF-8 bytes Apply would write with current live bytes. It renders through the registered adapters, reads host state only, emits hashes (never content), and orders rows deterministically.
+
+For existing Codex managed-block targets, “exact bytes” means Apply-equivalent output: the planned managed block plus owner-owned text outside that block. Committed OpenCode C1 mirrors are portable `{{COMPANION_ROOT}}` token sources; verification merges those tokens before byte-comparing the Apply plan. Fixture isolation uses a temporary `USERPROFILE` for adapters; `-HomeRoot` alone is the physical comparison root and does not override every adapter root seam.
+
+```powershell
+# Human-readable audit for all registered stacks
+pwsh scripts/host-sync/Test-HostHarnessDrift.ps1
+
+# Machine-readable audit; exit 0=clean, 2=drift/missing, 3=read/render error
+pwsh scripts/host-sync/Test-HostHarnessDrift.ps1 -Json
+```
+
+The disposable fixture suite exercises clean, drift, missing, path-error, Cursor hybrid, OpenCode JSON, and Codex two-root behavior without touching real host homes:
+
+```powershell
+pwsh scripts/host-sync/Invoke-HostSyncDriftFixtureChecks.ps1
+```
+
+`Invoke-Phase2FullCI.ps1` is non-mutating. It validates exact planned C1 bytes, deterministic OpenCode JSON, model/provider preservation, inventory, and zero managed-byte changes from dry-run; it must never invoke `-Apply`.
+
+## OpenCode JSON merge — canonical key order (required)
 
 OpenCode permission pattern maps use **last matching rule wins**. After specimen↔live merge, Core runs `Optimize-OpenCodePermissionKeyOrder` so every allow/ask/deny map emits `"*"` **first**, then named overrides.
+
+OpenCode JSON is byte-deterministic: ordinary mappings are sorted canonically (ordinal by key), recursively; arrays remain order-significant. Permission pattern maps are semantic exceptions: `"*"` is emitted first, then named patterns ordinally. This prevents PowerShell hashtable enumeration order from changing Apply bytes between runs.
 
 | Failure if skipped | Correct write |
 | ------------------ | ------------- |
 | `"plan_reviewer": "allow"` then `"*": "deny"` → Task spawn denied | `"*": "deny"` first, then named allows |
 | `"Get-ChildItem*": "allow"` then `"*": "ask"` → listing still asks | `"*": "ask"` first, then listing allows |
 
-**Do not** drop that optimizer when editing `Merge-OpenCodeHarnessJson`. Fast CI: `Invoke-Phase2FastCI.ps1` asserts `*` is first on merged `build.task` and global `bash`.
+**Do not** replace that canonical ordering with raw hashtable serialization when editing `Merge-OpenCodeHarnessJson`. Fast CI: `Invoke-Phase2FastCI.ps1` asserts `*` is first on merged `build.task` and global `bash`.
 
 Full write-ups: [opencode-authoring-adapter Failure modes K–M](../../docs/SOPs/opencode-authoring-adapter.md#failure-mode-k--permission-pattern--not-first-last-match-wins).
 

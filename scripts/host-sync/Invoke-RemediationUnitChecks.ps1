@@ -206,6 +206,35 @@ try {
     Assert-True 'U20 shared: Part pre-resolves and renders before body' `
         ($report3.Success -and $report3.PlannedContent['x.md'].Contains('name: pre-commit-ci-gate') -and
          $report3.PlannedContent['x.md'].Contains('PC-BODY'))
+
+    # U21: OpenCode permission maps are semantically order-sensitive. A named
+    # pattern lexically before "*" must not be emitted before the wildcard.
+    $permissionMap = @{ '7z*' = 'allow'; '*' = 'deny' }
+    $orderedPermission = Optimize-OpenCodePermissionKeyOrder -Node $permissionMap
+    $permissionJson = $orderedPermission | ConvertTo-Json -Depth 5 -Compress
+    $permissionRoundTrip = $permissionJson | ConvertFrom-Json
+    $permissionKeys = @($permissionRoundTrip.PSObject.Properties | ForEach-Object Name)
+    Assert-True 'U21 permission wildcard precedes lexical named pattern' (
+        $permissionKeys.Count -eq 2 -and $permissionKeys[0] -eq '*' -and $permissionKeys[1] -eq '7z*') `
+        $permissionJson
+
+    # U22: sorting named patterns must be culture-independent. Exercise the
+    # renderer under de-DE, where culture collation typically places ä before z.
+    $unicodePermissionMap = @{ 'ä*' = 'allow'; 'z*' = 'ask'; '*' = 'deny' }
+    $previousCulture = [Threading.Thread]::CurrentThread.CurrentCulture
+    [Threading.Thread]::CurrentThread.CurrentCulture = [Globalization.CultureInfo]::new('de-DE')
+    try {
+        $orderedUnicodePermission = Optimize-OpenCodePermissionKeyOrder -Node $unicodePermissionMap
+    }
+    finally {
+        [Threading.Thread]::CurrentThread.CurrentCulture = $previousCulture
+    }
+    $unicodePermissionKeys = @($orderedUnicodePermission.Keys | ForEach-Object { "$_" })
+    Assert-True 'U22 permission named patterns sort ordinally across cultures' (
+        $unicodePermissionKeys.Count -eq 3 -and
+        $unicodePermissionKeys[0] -eq '*' -and
+        $unicodePermissionKeys[1] -eq 'z*' -and
+        $unicodePermissionKeys[2] -eq 'ä*') ($unicodePermissionKeys -join ',')
 }
 catch {
     $failures++
