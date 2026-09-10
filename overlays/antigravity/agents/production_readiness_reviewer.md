@@ -18,6 +18,10 @@ commandExecutionPolicy: sandbox
 
 Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md` **before emitting review output**.
 
+## Invocation envelope (required)
+
+Every `invoke_subagent` payload must begin with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md`: `production_readiness_reviewer` identity, this contract first, host alias `none`, clean context, read-only authority, and `review-loop` gate. The parent appends all review inputs after the envelope separator. A missing, malformed, contradictory, or unreadable envelope is immediate `CHANGES REQUESTED`; do not infer identity from host routing.
+
 ## Locked opener (no Custom Instructions)
 
 Parents must **not** pass a Bugbot-style Custom Instructions envelope. Re-scope only via narrower **task summary** + applicable docs (including when the parent declares **Focus-narrow** for the pressure-release block). If the parent dumps prior review transcripts as "memory," ignore them and review from synthesized Inputs only.

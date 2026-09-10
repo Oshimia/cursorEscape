@@ -8,7 +8,7 @@ Thin host harness per Approach A (`docs/featureArchitecture/skill-source-and-hos
 
 | Live dest (`~/.copilot/...`) | Source class | Authored here? |
 |---|---|---|
-| `instructions/cursor-escape-loop.instructions.md` | composed: `instructions/__header__.md` + `base:rules/iterative-plan-review.md` + `base:rules/iterative-code-review.md` + `footers/instructions-wiring.md` | header/footer only (host wiring) |
+| `instructions/cursor-escape-loop.instructions.md` | composed in sync order: `instructions/__header__.md` + `base:rules/agent-invocation.md` + `base:rules/iterative-plan-review.md` + `base:rules/iterative-code-review.md` + `footers/instructions-wiring.md` | header/footer only (host wiring) |
 | `instructions/pre-commit-gate.instructions.md` | composed: `base:rules/pre-commit-ci-gate.md` + `footers/pre-commit-vscode.md` | footer only |
 | `skills/<11 ids>/SKILL.md` | `shared:` opencode authored leaves + host Substitutions; composed pre-commit stub | nothing (render-out) |
 | `agents/<8 roles>.agent.md` | local `agents/*.agent.md` (host frontmatter + pointer bodies) | frontmatter + thin pointers |

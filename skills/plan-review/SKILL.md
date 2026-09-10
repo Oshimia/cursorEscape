@@ -20,7 +20,7 @@ Gate drafted plans through [`plan_reviewer`](../../agents/plan_reviewer.md) befo
 ## Steps
 
 1. Parent produces **full synthesized plan** each pass — plan incomplete until skill `implementation-plan` **Incomplete until** SoT is met (load that skill; do **not** paste the enum here).
-2. Task → `plan_reviewer` with **clean context** (no prior review transcripts). APPROVED requires SoT compliance.
+2. Task → `plan_reviewer` with **clean context** (no prior review transcripts) and the mandatory [agent invocation](../../workflow/agent-invocation.md) envelope. APPROVED requires SoT compliance.
 3. Synthesize: fix blockers; Unknowns → discovery steps.
 4. Repeat up to **3** passes or early APPROVED.
 5. After pass 3 or early APPROVED: present to user; wait if still CHANGES REQUESTED (surface outstanding blockers after pass 3).

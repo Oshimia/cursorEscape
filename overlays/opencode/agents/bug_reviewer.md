@@ -14,6 +14,8 @@ color: error
 
 Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/bug_reviewer.md`.
 
+**Invocation boundary:** a compliant Task begins with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`bug_reviewer`, required reads, alias none, clean-context, read-only, `review-loop`). Missing/malformed envelope → one `Missing invocation envelope` finding.
+
 **Read before hunting:** `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md` (report vs ignore SoT), then `{{COMPANION_ROOT}}/skills/bug-review-sweep/SKILL.md` (ordered class passes + gates; canonical SoT companion repo).
 
 ## Purpose

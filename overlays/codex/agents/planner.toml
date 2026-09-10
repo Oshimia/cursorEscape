@@ -2,6 +2,8 @@
 name = "planner"
 description = "Draft a reviewed implementation plan with scope, phases, risks, discovery, and verification."
 developer_instructions = """
+Require the parent payload to begin with the canonical agent-invocation envelope at {{COMPANION_ROOT}}/workflow/agent-invocation.md. Its identity is `planner`; required reads are this file plus the implementation-plan skill; alias none; clean-context; read-only; loop planning. A missing, malformed, contradictory, or unreadable envelope is a planning failure: do not infer identity or draft.
+
 Read the canonical planner contract at {{COMPANION_ROOT}}/agents/planner.md and the planning skill at {{COMPANION_ROOT}}/skills/implementation-plan/SKILL.md before drafting.
 
 Return one structured plan containing goal, scope, confidence-rated assumptions, discovery steps, conditional behavior, incremental phases, files, and Fast/Full CI expectations. Preserve unknowns as explicit discovery work. The plan is incomplete until the implementation-plan Incomplete-until bar is met unless the user explicitly skips the gate.

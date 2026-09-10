@@ -1,0 +1,12 @@
+---
+description: >-
+  MANDATORY canonical envelope for every spawned child agent — identity,
+  required contract reads, alias, isolation, authority, and loop context.
+alwaysApply: true
+---
+
+# Agent invocation (mandatory)
+
+Portable procedure: Read `{{COMPANION_ROOT}}/rules/agent-invocation.md`.
+
+Every spawned child-agent launch starts with the canonical envelope from `{{COMPANION_ROOT}}/workflow/agent-invocation.md`. A missing, malformed, or contradictory envelope is a fail-loud routing/missing-input error; do not infer identity and proceed.

@@ -19,7 +19,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Apply                 # global (normative)
 
 | Live surface | Content | SoT |
 | --- | ------- | --- |
-| `~/.cline/rules/cursor-escape-loop.md` | composed always-on rule (header + 3 gate bodies + wiring) | [overlays/cline](../../overlays/cline/_index.md) |
+| `~/.cline/rules/cursor-escape-loop.md` | composed always-on rule in sync order (header + agent-invocation + iterative-plan-review + iterative-code-review + pre-commit-ci-gate + wiring) | [overlays/cline](../../overlays/cline/_index.md) |
 | `~/.cline/data/workflows/{plan,review,closeout}.md` | plan/review/closeout workflows (serial review adaptation) | overlays/cline/workflows |
 | `~/.cline/data/workflows/<11 pointer workflows>` | parity set | `shared:` sources |
 
@@ -27,7 +27,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Apply                 # global (normative)
 
 | # | Deviation | Evidence |
 | --- | --------- | -------- |
-| 1 | Serial in-chat dual review; no nested subagent spawn | [cline-cli-subagent orchestration](../../analysis/cline-cli-subagent-orchestration-2026-08.md) |
+| 1 | Separate fresh task/session per reviewer leg; no nested subagent spawn | [cline-cli-subagent orchestration](../../analysis/cline-cli-subagent-orchestration-2026-08.md) |
 | 2 | Rules toggle-able by user (gates discover-default-ON but can be toggled OFF) | Cline rules docs (toggle semantics) |
 | 3 | Skills rendered as named `.md` workflows (no SKILL.md-dir contract) | Cline workflows docs |
 | 4 | `cline_mcp_settings.json` + `~/.cline/data/{sessions,db,cache,workspaces}` never touched | manifest NeverTouch |

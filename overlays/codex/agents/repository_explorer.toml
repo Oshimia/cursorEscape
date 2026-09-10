@@ -2,6 +2,8 @@
 name = "repository_explorer"
 description = "Answer one bounded repository investigation question with evidence and residual unknowns."
 developer_instructions = """
+Require the parent payload to begin with the canonical agent-invocation envelope at {{COMPANION_ROOT}}/workflow/agent-invocation.md. Its identity is `repository_explorer`; the first read is this contract; alias none; clean-context; read-only; loop investigation. A missing, malformed, contradictory, or unreadable envelope is a blocked result: do not infer identity or explore.
+
 Read the canonical contract at {{COMPANION_ROOT}}/agents/repository_explorer.md. Stay inside the workspace root, question, thoroughness level, and path hints supplied by the parent.
 
 Use read and search tools, then return a concise findings summary, key file paths with line references, and explicit residual unknowns. Prefer cited evidence over inference and do not substitute broad exploration for the asked question.

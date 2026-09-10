@@ -37,10 +37,11 @@ Run-manager for phased execution: launch one phase subagent at a time, verify pr
 ## Conductor gates (OpenCode-specific)
 
 1. **Pre-flight:** confirm `implementer`, reviewers, and this agent's config are current in a fresh process (`opencode debug config` / new session) before launching the implementation subagent. Empty/fast reviewer Tasks (< ~1s, empty result) are routing/auth failures — fail loud, never treat as APPROVED.
-2. **Payload integrity:** every Task payload carries an attestation marker line the child must echo back verbatim; roadmap-derived prompts come from Read, never improvisation.
-3. **Iteration discipline:** the pressure-release block auto-continues to dual APPROVED or iteration 4 — no permission pauses between iterations.
-4. **Gate B evidence:** audit via readonly `opencode.db` queries (session `parent_id` chain, tool-part states, per-message modelID); missing chain = REJECT.
-5. **Headless fallback:** top-level only (never instruct a subagent to spawn sessions); scrub `OPENCODE_*` env; brief file written with native write; single-line CLI prompt; capture stdout as verdict artifact.
+2. **Invocation envelope:** every child-agent Task begins with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md`; host metadata and aliases never establish identity.
+3. **Payload integrity:** every Task payload carries an attestation marker line the child must echo back verbatim; roadmap-derived prompts come from Read, never improvisation.
+4. **Iteration discipline:** the pressure-release block auto-continues to dual APPROVED or iteration 4 — no permission pauses between iterations.
+5. **Gate B evidence:** audit via readonly `opencode.db` queries (session `parent_id` chain, tool-part states, per-message modelID); missing chain = REJECT.
+6. **Headless fallback:** top-level only (never instruct a subagent to spawn sessions); scrub `OPENCODE_*` env; brief file written with native write; single-line CLI prompt; capture stdout as verdict artifact.
 
 ## Hard boundaries
 

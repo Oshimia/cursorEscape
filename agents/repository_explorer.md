@@ -1,6 +1,6 @@
 # repository_explorer
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-09-11
 
 ## Context
 
@@ -9,6 +9,8 @@
 ---
 
 ## Substance
+
+**Invocation envelope:** begin with `You are the repository_explorer agent` and this contract first-read. See [agent invocation](../workflow/agent-invocation.md). Missing/malformed envelope → blocked result; do not explore.
 
 ### Purpose
 

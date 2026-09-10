@@ -36,6 +36,7 @@
         AgentsRel       = 'AGENTS.md'
         Parts           = @(
             'instructions/__header__.md',
+            'base:rules/agent-invocation.md',
             'base:rules/iterative-plan-review.md',
             'base:rules/iterative-code-review.md'
         )

@@ -9,9 +9,9 @@
     SharedRoot          = 'overlays/opencode'
     CopyEntries         = @(
         # --- composed always-on rule (toggle-default-ON by Cline scan semantics) ---
-        @{ Source = 'base:rules/iterative-plan-review.md'; Dest = 'rules/cursor-escape-loop.md'
+        @{ Source = 'base:rules/agent-invocation.md'; Dest = 'rules/cursor-escape-loop.md'
            Parts = @('instructions/__header__.md')
-           Footer = @('base:rules/iterative-code-review.md', 'base:rules/pre-commit-ci-gate.md', 'footers/cline-wiring.md') }
+           Footer = @('base:rules/iterative-plan-review.md', 'base:rules/iterative-code-review.md', 'base:rules/pre-commit-ci-gate.md', 'footers/cline-wiring.md') }
         # --- plan/review/closeout workflows (serial-dual-review adaptation authored in this overlay) ---
         @{ Source = 'workflows/plan.md'; Dest = 'data/workflows/plan.md' }
         @{ Source = 'workflows/review.md'; Dest = 'data/workflows/review.md' }

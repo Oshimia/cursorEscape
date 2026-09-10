@@ -16,7 +16,7 @@ A decision or plan needs external facts from primary sources: official documenta
 
 ## Workflow
 
-The companion procedure defines the bounded loop; the caller owns the question, the scope, and the interpretation. Exactly one packed read-only child runs per question; it never re-delegates.
+The companion procedure defines the bounded loop; the caller owns the question, the scope, and the interpretation. Exactly one packed read-only child runs per question; its invocation begins with the [agent invocation](../../workflow/agent-invocation.md) envelope as `ad_hoc_child`, and it never re-delegates.
 
 ## Outputs
 

@@ -9,9 +9,9 @@
     SharedRoot          = 'overlays/opencode'
     CopyEntries         = @(
         # --- composed gate: host header + promoted-twin bodies + host wiring footer ---
-        @{ Source = 'base:rules/iterative-plan-review.md'; Dest = 'GEMINI.md'
+        @{ Source = 'base:rules/agent-invocation.md'; Dest = 'GEMINI.md'
            Parts = @('instructions/__header__.md')
-           Footer = @('base:rules/iterative-code-review.md', 'footers/gemini-wiring.md') }
+           Footer = @('base:rules/iterative-plan-review.md', 'base:rules/iterative-code-review.md', 'footers/gemini-wiring.md') }
         # --- migrated skills (shared: opencode authored leaves + host substitutions; fail-closed exactly-once) ---
         @{ Source = 'shared:skills/discovery/SKILL.md'; Dest = 'config/skills/discovery/SKILL.md'
            Substitutions = @(@{ Find = '(OpenCode harness)'; Replace = '(Antigravity harness)' }) }

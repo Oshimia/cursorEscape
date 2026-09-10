@@ -6,7 +6,20 @@ Antigravity host adapter for the owner's agentic loop. Full procedures load via 
 
 Architecture background (only when the user asks how layers are authored — not for quoting gates): companion `{{COMPANION_ROOT}}/docs/featureArchitecture/instruction-layering.md`, `{{COMPANION_ROOT}}/docs/featureArchitecture/clean-context-isolation.md`, `{{COMPANION_ROOT}}/docs/featureArchitecture/intended-workflow.md`.
 
-## Plan review (all repos)
+
+# Agent invocation (mandatory)
+
+**Default on for every governed spawned child-agent invocation.**
+
+1. Begin each child-facing invocation with the canonical envelope in [`workflow/agent-invocation.md`]({{COMPANION_ROOT}}/workflow/agent-invocation.md): canonical role identity, first-read contract, required companion reading, host alias, isolation, authority, and loop/gate.
+2. Put all existing task-specific inputs after the envelope separator. Never rely on host metadata, nearby prose, or prior transcripts to establish identity.
+3. A host alias is routing metadata only. The canonical role contract and required reading remain authoritative.
+4. If the envelope is missing, malformed, internally contradictory, or unreadable, the child must stop and fail loudly in its role-native output shape. It must not infer identity and proceed.
+
+Detail and role map: [workflow/agent-invocation.md]({{COMPANION_ROOT}}/workflow/agent-invocation.md).
+
+
+# Plan review before implementation
 
 **Default on** unless truly trivial or the user **explicitly** opts out.
 
@@ -15,24 +28,38 @@ Architecture background (only when the user asks how layers are authored — not
 Eval / harness / multi-step operational work is **not** exempt.
 
 1. Load skill `implementation-plan` (Escalation *when* SoT is that skill; when Escalation=yes, read `{{COMPANION_ROOT}}/workflow/plan-agent-context.md` for specimen headings only). Plan is incomplete until that skill's **Incomplete until** section bar is met — load `implementation-plan` for the list; do not invent always-on line budgets.
-2. Invoke subagent `plan_reviewer` via `invoke_subagent` (max 3 passes), **clean context**, full synthesized plan only — no prior review transcripts. Runs for every drafted plan regardless of Escalation yes/no. APPROVED requires Incomplete until compliance (missing-Inputs urgency).
+2. Invoke the host's `plan_reviewer` (max 3 passes), **clean context**, full synthesized plan only — no prior review transcripts. Runs for every drafted plan regardless of Escalation yes/no. APPROVED requires Incomplete until compliance (missing-Inputs urgency).
 3. Present after APPROVED or pass 3; wait for user if CHANGES REQUESTED.
 
 **Skip only if:** truly trivial one-place typo/copy, comment-only, formatting, cosmetic-only UI, docs-only with no behavior change, **or** explicit user opt-out (`skip plan review`, `skip planning`, `implement now`, `no plan gate`) — not inferred urgency.
 
-## Implementation review (all repos)
+**When in doubt, run the loop.**
+
+---
+
+## Related
+
+- [Iterative code review]({{COMPANION_ROOT}}/rules/iterative-code-review.md)
+- [CI ladder]({{COMPANION_ROOT}}/workflow/ci-ladder.md)
+- [Instruction layering (FA)]({{COMPANION_ROOT}}/docs/featureArchitecture/instruction-layering.md)
+
+
+# Iterative code review (mandatory)
 
 **Default on** after implementation unless Skip applies.
 
 **When in doubt, run it.**
 
 1. Load skill `implementation-review`. Run **Fast CI Observed** (per-command pass|fail|skipped|n/a; do not launch on fail, skipped when Fast ≠ n/a, or claimed-only).
-2. Launch **both** `production_readiness_reviewer` and `bug_reviewer` in **parallel** via `invoke_subagent` in **one** session (`Completion gate: review-loop`). Isolated children — pack all Inputs; no shared review memory. `bug_reviewer` must follow `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md`.
-3. Fix must-fix within a **4-iteration pressure-release block**; re-run Observed Fast CI (when Fast ≠ n/a); re-launch **both** — **do not launch a 5th pair**. Dual APPROVED = bug_reviewer all lists None; production_readiness Blocking / Non-blocking / blocking test/docs None (Batchable deferred may remain).
+2. Launch **both** `production_readiness_reviewer` and `bug_reviewer` in **parallel** in **one** session (`Completion gate: review-loop`). Isolated children — pack all Inputs; no shared review memory. `bug_reviewer` must follow `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md`.
+3. Fix must-fix within a **4-iteration pressure-release block**; re-run Observed Fast CI (when Fast ≠ n/a); re-launch **both** — **do not launch a 5th pair**. Dual APPROVED = bug_reviewer CLEAN/no findings; production_readiness Blocking / Non-blocking / blocking test/docs None (**Batchable (deferred)** may remain).
 4. After dual APPROVED: closeout = **Full CI only** (no reviewers). Load `pre-commit-ci-gate` before commit. Dual APPROVED ≠ proven no-escape.
-5. After iteration 4 **without** dual APPROVED: normal reassessment (Renew | Focus-narrow | Terminate+user with anti-abuse) or Composer phase implementation subagent **cap-exhausted handoff** (no Full) — detail in companion `implementation-review` / `composer` skills. Waive = Composer-only.
+5. After iteration 4 **without** dual APPROVED: normal reassessment (Renew | Focus-narrow | Terminate+user with anti-abuse) or **cap-exhausted handoff** (no Full) — detail in companion `implementation-review` / `composer` skills. Waive = Composer-only.
 
 **Skip only if:** truly trivial cases listed under plan review, or explicit user opt-out (`skip review`, `no dual review`).
+
+**When in doubt, run the loop.** Detail: `implementation-review` skill and [`../workflow/ci-ladder.md`]({{COMPANION_ROOT}}/workflow/ci-ladder.md).
+
 
 ## Composer conduct (when assigned)
 
@@ -45,7 +72,7 @@ When the user assigns **composer / conductor**: load skill `composer`, then cond
 
 ## Isolation (required)
 
-Reviewers and plan_reviewer run in **isolated** child sessions. Parent synthesizes invoke payload each pass. Never attach prior child transcripts. Never pair Full CI with reviewers.
+Reviewers and plan_reviewer run in **isolated** child sessions. Parent synthesizes the invoke payload each pass. Never attach prior child transcripts. Never pair Full CI with reviewers.
 
 ## Empty subagent signature (operator)
 
@@ -57,7 +84,7 @@ Skills live at `~/.gemini/config/skills/` and are auto-discovered into the catal
 
 `discovery` · `implementation-plan` · `plan-review` · `implementation-review` · `pre-commit-ci-gate` · `composer` (phased conductor) · `documentation-architecture` (new docs trees) · `roadmap` (repo multi-phase handoffs) · `diagnosing-bugs` (shipped-code diagnosis)
 
-Load the matching id before non-trivial work. Do **not** use bash/shell to list or discover adapter SoT under `~/.gemini`.
+Load the matching id before non-trivial work. Do **not** use bash/shell to list or discover adapter SoT under `~/.gemini`. Empty `glob`/`grep` on gitignored or out-of-workspace paths is often **tool blindness**, not proof of absence; prefer absolute reads of companion procedure paths.
 
 ## Shell & native tools (all repos)
 

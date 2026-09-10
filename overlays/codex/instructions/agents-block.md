@@ -33,4 +33,6 @@ The installed catalog has 23 thin wrappers. Invoke the exact `$skill-id` when us
 
 Reviewers and `plan_reviewer` run as isolated custom agents. The parent synthesizes each invocation payload, owns implementation and recovery, and does not paste prior child transcripts. `config.toml`, authentication, history, logs, sessions, databases, and unrelated host state are never modified by this loop. Read-only reviewer agents return findings only; they do not edit, run writes, install, commit, push, or rerun CI.
 
+Every spawned child-agent launch begins with the canonical envelope defined by `{{COMPANION_ROOT}}/workflow/agent-invocation.md`: canonical role identity, first-read contract, required companion reads, host alias, isolation, authority, and loop/gate. If that envelope is missing, malformed, contradictory, or unreadable, the child stops and fails loudly in its role-native output shape.
+
 <!-- cursorEscape-managed-block:v1 id="codex-cursor-escape-loop"; end managed block -->

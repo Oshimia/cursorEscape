@@ -15,6 +15,8 @@ Use when the user **explicitly** assigns you as **composer** or **conductor**.
 
 Composer is the **run manager**: launch work, then **verify process and evidence** before advancing — not only that subagents returned a closeout report.
 
+Composer is a user-assigned thread role, not a spawned child role. Every child-agent launch made by Composer must begin with the mandatory [agent invocation](../../workflow/agent-invocation.md) envelope. Host aliases do not replace canonical identity.
+
 **Execution only** — planning stays with `implementation-plan` / Plan mode. Do not draft plans or invoke `plan-reviewer` while conducting.
 
 If assigned as Composer and the user asks you to **plan** (e.g. “plan with Composer”, “composer-level plan”): tell them to stay in Plan mode / [`implementation-plan`](../implementation-plan/SKILL.md) with Escalation **yes** / `user-labeled-composer`. Do not author the plan while conducting.

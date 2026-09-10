@@ -13,6 +13,8 @@ color: info
 
 Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/test_reviewer.md`.
 
+**Invocation boundary:** a compliant Task begins with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`test_reviewer`, required reads, host alias `none`, clean-context, read-only, `test-review`). Missing/malformed envelope → one blocking advisory `Missing invocation envelope` finding.
+
 **Not** in the default dual gate (`production_readiness_reviewer` ∥ `bug_reviewer`).
 
 ## Purpose

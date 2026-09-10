@@ -11,7 +11,7 @@ Thin host harness per Approach A. Pointer-first: rule/workflow bodies Read compa
 | Global rules | `~/.cline/rules/` | 1 always-on composed rule (this stack) |
 | Global workflows | `~/.cline/data/workflows/` | plan/review/closeout trio |
 | Rules toggles | new files default-ON; user can toggle OFF | deviation row: gate persistence depends on toggles |
-| Dual review | serial in-chat (no subagent spawn; per cline-cli-subagent orchestr analysis) | reviewers personified in wiring footer |
+| Dual review | separate fresh task/session per reviewer leg (no nested subagent spawn; per cline-cli-subagent orchestr analysis) | reviewers isolated by fresh task, with canonical envelopes |
 | MCP | `~/.cline/data/settings/cline_mcp_settings.json` | NeverTouch |
 | Compat dirs | `~/Documents/Cline/{Rules,Workflows}` read too | fallback table (composite dest) only if probe claims primary scan fails |
 
@@ -19,7 +19,7 @@ Thin host harness per Approach A. Pointer-first: rule/workflow bodies Read compa
 
 | Live dest | Source class | Authored here? |
 |---|---|---|
-| `rules/cursor-escape-loop.md` | composed: `instructions/__header__.md` + `base:rules/iterative-plan-review.md` + `base:rules/iterative-code-review.md` + `base:rules/pre-commit-ci-gate.md` + `footers/cline-wiring.md` | header/footer (host wiring; serial-review deviation inside footer) |
+| `rules/cursor-escape-loop.md` | composed in sync order: `instructions/__header__.md` + `base:rules/agent-invocation.md` + `base:rules/iterative-plan-review.md` + `base:rules/iterative-code-review.md` + `base:rules/pre-commit-ci-gate.md` + `footers/cline-wiring.md` | header/footer (host wiring; serial fresh-task isolation inside footer/workflows) |
 | `data/workflows/plan.md`, `data/workflows/review.md`, `data/workflows/closeout.md` | authored in this overlay (serial-review adaptation) | trio only (host-adapted) |
 | `data/workflows/<11 ids>.md` | `shared:skills/<id>/SKILL.md` + host Substitutions; composed pre-commit | nothing (render-out) |
 
@@ -33,4 +33,4 @@ Pointer-only (never copied): `_index.md`, this mapping, companion SoT trees.
 
 - `~/.cline/data/{sessions,db,cache,workspaces,settings/{providers,global-settings}}`, MCP settings — **NeverTouch** (live app state; secrets).
 - `~/Documents/Cline/**` — compat path; not written (read-only consideration).
-- No agent defs synced (serial in-chat reviewers per deviation).
+- No agent defs synced (separate fresh task/session reviewer legs per deviation).

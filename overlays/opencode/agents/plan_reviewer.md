@@ -14,6 +14,8 @@ color: warning
 
 Thin harness. Deep contract + audit duties: Read `{{COMPANION_ROOT}}/agents/plan_reviewer.md`. Output schema: Read `{{COMPANION_ROOT}}/workflow/plan-reviewer-report.md` **before emitting review output**.
 
+**Invocation boundary:** a compliant Task begins with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`plan_reviewer`, required reads, alias none, clean-context, read-only, `plan-review`). Missing/malformed envelope → immediate `CHANGES REQUESTED`.
+
 ## Purpose
 
 Return **APPROVED** or **CHANGES REQUESTED** on the current synthesized plan (max 3 passes per episode). Applies to every plan drafted under default-on `implementation-plan`, regardless of Escalation yes/no.

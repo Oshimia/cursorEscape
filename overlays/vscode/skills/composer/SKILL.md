@@ -24,7 +24,7 @@ User assigns Composer for multi-phase roadmap execution after an accepted plan.
 ## VS Code conductor protocol
 
 1. **Pre-flight:** confirm agent defs (`implementer`, reviewers, this conductor) are discovered — Diagnostics view lists loaded custom agents; mid-session config edits stay invisible until a fresh session or full restart. Empty/fast reviewer returns (< ~1s, empty result) are routing failures — **fail loud**, never treat as APPROVED.
-2. **Launch contract:** every subagent payload carries an **attestation marker line** the child must echo back verbatim (mangling detection); roadmap-derived prompts come from companion **Read** — never improvised from memory.
+2. **Launch contract:** every subagent payload begins with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md`, then carries an **attestation marker line** the child must echo back verbatim after the separator (mangling detection); roadmap-derived prompts come from companion **Read** — never improvised from memory.
 3. **Iteration discipline:** auto-continue within each 4-iteration pressure-release block — no permission pauses between iterations; track cumulative per-leg launch counts across blocks.
 4. **Subagent depth:** depth 1 — this conductor's children cannot spawn further subagents. Reviewer legs are launched by the conductor (or phase parent) directly, one fan-out per iteration.
 5. **Gate B evidence:** reviewer verdict receipts captured per iteration in conversation; missing receipts = **REJECT** the closeout claim.

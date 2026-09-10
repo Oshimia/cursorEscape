@@ -19,6 +19,10 @@ commandExecutionPolicy: sandbox
 
 Thin harness. Deep contract + audit duties: Read `{{COMPANION_ROOT}}/agents/plan_reviewer.md`. Output schema: Read `{{COMPANION_ROOT}}/workflow/plan-reviewer-report.md` **before emitting review output**.
 
+## Invocation envelope (required)
+
+Every `invoke_subagent` payload must begin with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md`: `plan_reviewer` identity, this contract and the report schema plus `implementation-plan` as required reading, host alias `none`, clean context, read-only authority, and `plan-review` loop. A missing, malformed, contradictory, or unreadable envelope is immediate `CHANGES REQUESTED`; do not infer identity from host routing.
+
 ## Purpose
 
 Return **APPROVED** or **CHANGES REQUESTED** on the current synthesized plan (max 3 passes per episode). Applies to every plan drafted under default-on `implementation-plan`, regardless of Escalation yes/no.

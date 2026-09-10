@@ -1,6 +1,6 @@
 # bug_reviewer
 
-**Last updated:** 2026-08-23
+**Last updated:** 2026-09-11
 
 ## Context
 
@@ -11,6 +11,8 @@
 ---
 
 ## Substance
+
+**Invocation envelope:** begin with `You are the bug_reviewer agent`, this contract first-read, the finding rubric, and the sweep skill—even when the host calls the child Bugbot. See [agent invocation](../workflow/agent-invocation.md). Missing/malformed envelope → one `Missing invocation envelope` finding; do not infer identity.
 
 ### Purpose
 

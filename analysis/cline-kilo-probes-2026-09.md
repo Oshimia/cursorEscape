@@ -34,6 +34,6 @@ Compat-path history rule (per pass-2/3 review): the Lazy `ensureRulesDirectoryEx
 
 ## Deviations (pre-attested, forwarded to SOPs)
 
-- **Cline:** serial in-chat dual review (no subagent spawn mechanism in VS Code ext; `cline-cli-subagent-orchestration-2026-08.md`); reviewers personified in wiring footer; user can toggle rules OFF (toggle semantics deviation).
+- **Cline:** dual review uses separate fresh task/session legs (no nested subagent spawn mechanism in VS Code ext; `cline-cli-subagent-orchestration-2026-08.md`); reviewers receive canonical envelopes; user can toggle rules OFF (toggle semantics deviation).
 - **Kilo:** subagents are first-class NEW — depth/behavior unproven; probe at Phase 4 smoke before any conductor reliance; reviewer read-only is instruction-level (mode-defs out of scope); rules always concatenate.
 - **Both:** skills-as-workflows (name = filename); parity = 11-pointer-or-equivalent set; `/escape-plan` slash verified at smoke.

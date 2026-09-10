@@ -31,16 +31,23 @@ Thin harness. Full procedure: Read `{{COMPANION_ROOT}}/skills/implementation-rev
 
 ## Invoke reviewer-a (Cursor Task)
 
-Launch `reviewer-a` (`subagent_type: "reviewer-a"`, recommended `model: composer-2.5`, `readonly: true`, `run_in_background: false`).
+Routing metadata (not part of the child payload): launch `reviewer-a` with `subagent_type: "reviewer-a"`, recommended `model: composer-2.5`, `readonly: true`, and `run_in_background: false`.
+
+Child prompt (paste exactly; begins here):
 
 ```text
-Launch the reviewer-a subagent with:
-- subagent_type: "reviewer-a"
-- model: composer-2.5
-- readonly: true
-- run_in_background: false
+You are the `production_readiness_reviewer` agent.
+Read `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md` before acting.
+Required reading:
+- `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md`
+- Applicable docs supplied below and references the contract requires
 
-Use the reviewer-a subagent to review this implementation.
+Host alias: reviewer-a
+Isolation: clean-context
+Authority: read-only
+Loop/gate: review-loop
+
+---
 
 Repository path: <absolute path>
 Task summary: <one paragraph — what this phase or change set is supposed to accomplish; when parent declares Focus-narrow for this pressure-release block, narrow task summary + applicable docs to the current fix — never override Completion gate, CI Observed, or verdict bar>
@@ -75,19 +82,36 @@ Do not use a Bugbot-style Full Repository Path / Custom Instructions envelope fo
 
 Launch exactly one Bugbot subagent (`subagent_type: "bugbot"`, recommended `model: composer-2.5`, `readonly: true`, `run_in_background: false`). **Do not ask Bugbot to run CI** — the parent runs the gate once per iteration before parallel launch.
 
+Routing metadata (not part of the child payload): launch Bugbot with `subagent_type: "bugbot"`, recommended `model: composer-2.5`, `readonly: true`, and `run_in_background: false`.
+
+Child prompt (paste exactly; begins here):
+
 ```text
-Launch the Bugbot subagent with:
-- subagent_type: "bugbot"
-- model: composer-2.5
-- readonly: true
-- run_in_background: false
+You are the `bug_reviewer` agent.
+Read `{{COMPANION_ROOT}}/agents/bug_reviewer.md` before acting.
+Required reading:
+- `{{COMPANION_ROOT}}/agents/bug_reviewer.md`
+- `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md`
+- `{{COMPANION_ROOT}}/skills/bug-review-sweep/SKILL.md`
+
+Host alias: bugbot
+Isolation: clean-context
+Authority: read-only
+Loop/gate: review-loop
+
+---
 
 Full Repository Path: <absolute repo path>
 Diff: branch changes | uncommitted changes
 Custom Instructions: <task-specific — regressions, security surfaces, incomplete changeset, scope boundaries; when parent declares Focus-narrow for this pressure-release block, narrow to current-fix only>
+Review iteration: <N — 1-4 within current pressure-release block>
+Bugbot launches this phase: <count including this launch>
+Attestation marker: <parent-generated marker>
+
+Echo the attestation marker verbatim.
 ```
 
-**Custom Instructions** must name:
+**Custom Instructions** must also specify:
 
 - What this **phase** (or change set) is supposed to do; plan phase **N of M** when applicable
 - Review iteration **N**; `Bugbot launches this phase: <count including this launch>`

@@ -13,6 +13,8 @@ color: info
 
 Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/planner.md`.
 
+**Invocation boundary:** a compliant Task begins with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`planner`, required reads, host alias `none`, clean-context, read-only, `planning`). Missing/malformed envelope → planning failure; do not infer identity.
+
 ## Purpose
 
 Produce a structured plan ready for the plan-review gate.

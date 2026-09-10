@@ -16,7 +16,7 @@ Discover commands from README, `package.json`, `Makefile`, `scripts/`, `.github/
 
 If a project `.cursor/rules/pre-commit-ci-gate.mdc` (or equivalent) exists, **follow it** for Full/commit — it overrides this ladder’s Full mapping for that repo.
 
-**Never** launch Reviewer A or Bugbot until Fast passes (when Fast is not `n/a`). **Never** launch on **skipped** Fast checks when Fast is not `n/a`, or on **claimed-only** evidence (prose “Fast CI passed” / `ci: pass` with no per-command rows). Parent CI blocks must list each command actually run: `pass|fail|skipped|n/a`. **Never** pair reviewers with Full CI.
+**Never** launch Reviewer A or Bugbot until Fast passes (when Fast is not `n/a`). **Never** launch on **skipped** Fast checks when Fast is not `n/a`, or on **claimed-only** evidence (prose “Fast CI passed” / `ci: pass` with no per-command rows). Parent CI blocks must list each command actually run: `pass|fail|skipped|n/a`. **Never** pair reviewers with Full CI. Every reviewer launch uses the canonical [agent invocation](agent-invocation.md) envelope.
 
 ## Related
 

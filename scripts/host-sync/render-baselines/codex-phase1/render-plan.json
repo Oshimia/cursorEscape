@@ -8,49 +8,49 @@
       "destination": "codex-home/AGENTS.md",
       "logicalRoot": "codex-home",
       "role": "managed-block-target",
-      "sha256": "b3a776d35d5a2910f5419bc54a810fd577069aa2d81a549f712bfbb38fca010e"
+      "sha256": "f97e67b88066417baa4d4a656c013082576d2fae019f301a5971f4d523f6cfd5"
     },
     {
       "destination": "codex-home/agents/bug_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "20a22e6b2a50223733730f7db4ad0377e4cf72e1b7db96762d63619c5a9b047d"
+      "sha256": "97eaac9a435d3b4c32c8d00ff81e120eb2a6c68957ab2ed200473926c35b1fc9"
     },
     {
       "destination": "codex-home/agents/implementer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "1c4f143fb5d4cf70c66ca3b56e1d25e547b2d84d5b649700a1e520c26167f18a"
+      "sha256": "2d733177f792e3dcbf4dd96bc225813eac5dc46cd30b22c55766217592d9104e"
     },
     {
       "destination": "codex-home/agents/plan_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "086ec6f84362668a854c08e8b4a68c26833b0db3798e942890bdf6dda1bcb91f"
+      "sha256": "6598b96ca569645a34f0e723e167bfbdef0717105c2fe61b3418bc7c18b3b413"
     },
     {
       "destination": "codex-home/agents/planner.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "c9016387a7b6530095be26dec230cdb79444b8876d2a756f408c110fd5ba5def"
+      "sha256": "cb28a2c2700903de2d8c756823e95d07e5c7bf6246c1bdc8377d4eae644db02b"
     },
     {
       "destination": "codex-home/agents/production_readiness_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "af6bfcdb1aae8ca328f5d62dca73bb20a3da5f165520a9e4147c4165a6c110fc"
+      "sha256": "7085546acf3646280e18f69a5fbbad82e1118320167e85bfc01f4027bc09789d"
     },
     {
       "destination": "codex-home/agents/repository_explorer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "b7830ab9a8ed874780457d6a241f5c52220f7de941e706a4c12fb3e6e411e618"
+      "sha256": "2cc23a45dfc115cbb796022542fd64971461e9e01535b00753480d1273f172dd"
     },
     {
       "destination": "codex-home/agents/test_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "8530f88f4d824ad1dfcf06cf95a9ce4bb307ce95440bdae9be9c144d157f73eb"
+      "sha256": "df9c55719a4437ae72f59a156fbb4082cf4f3ace91b27461b1d423c9a4159519"
     },
     {
       "destination": "skill-root/architecture-survey/SKILL.md",

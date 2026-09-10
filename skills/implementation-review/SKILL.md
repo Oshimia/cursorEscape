@@ -87,6 +87,7 @@ Implement phase
 
 1. **Implement** the current phase (or full scope if single-phase) using discovery + this repo’s documented conventions.
 2. **Review loop (within a 4-iteration block):** Run **Fast CI Observed** once, then launch **Reviewer A + Bugbot in parallel** with `Completion gate: review-loop` only. Cursor Task spawn: [implementation-review overlay](../../overlays/cursor/skills/implementation-review/SKILL.md). **Do not launch reviewers if Fast CI fails, is skipped (when Fast is not `n/a`), or is claimed-only** (prose “Fast CI passed” / `ci: pass` with no per-command rows).
+   Both launches must begin with the mandatory [agent invocation](../../workflow/agent-invocation.md) envelope; aliases never replace canonical reviewer identity.
 
    Optional evidence frame: when a fixed point and an originating spec both exist, the parent may add `Fixed point:` and `Spec path:` lines to the reviewer invoke payload to enable Standards/Spec axis framing with per-finding citations per [code-review-frame.md](../../workflow/code-review-frame.md). Absent those inputs, reviews are unchanged.
 

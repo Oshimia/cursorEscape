@@ -11,7 +11,7 @@ Thin host harness per Approach A. Pointer-first via absolute `{{COMPANION_ROOT}}
 | Global rules | `.kilocode/rules/` **auto-included** (backward compat; new model = `kilo.jsonc instructions`) | 1 always-on composed rule |
 | Global workflows | **auto-migrated from `.kilocode/workflows/` to command format on startup**; slash = `/filename` | trio (`/plan`, `/review`, `/closeout`) |
 | Frontmatter | `description`, `agent`, `model`, `variant`, `subtask` | `subtask: true` potential for review legs (probe at smoke before reliance) |
-| Subagents | first-class NEW feature; depth/behavior unproven | deviation row reworded (probe at Phase 4 smoke) |
+| Subagents | first-class NEW feature; depth/behavior unproven | until attested, use separate fresh task/session isolation per reviewer leg |
 | Rules toggles | none (all discovered rules concatenate always-on; global-first) | no toggle deviation; thin budget mandatory |
 | MCP | `<globalStorage>/settings/mcp_settings.json` + `.kilo/mcp.json` | NeverTouch |
 
@@ -19,7 +19,7 @@ Thin host harness per Approach A. Pointer-first via absolute `{{COMPANION_ROOT}}
 
 | Live dest | Source class | Authored here? |
 |---|---|---|
-| `rules/cursor-escape-loop.md` | composed: `instructions/__header__.md` + `base:rules/iterative-plan-review.md` + `base:rules/iterative-code-review.md` + `base:rules/pre-commit-ci-gate.md` + `footers/kilocode-wiring.md` | header/footer |
+| `rules/cursor-escape-loop.md` | composed in sync order: `instructions/__header__.md` + `base:rules/agent-invocation.md` + `base:rules/iterative-plan-review.md` + `base:rules/iterative-code-review.md` + `base:rules/pre-commit-ci-gate.md` + `footers/kilocode-wiring.md` | header/footer |
 | `workflows/plan.md`, `workflows/review.md`, `workflows/closeout.md` | authored in this overlay (interactive dual-review adaptation) | trio only (host-adapted) |
 
 Pointer-only: `_index.md`, companion SoT trees.

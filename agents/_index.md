@@ -1,6 +1,6 @@
 # Agent Role Contracts
 
-**Last updated:** 2026-09-08
+**Last updated:** 2026-09-11
 
 ## Context
 
@@ -33,6 +33,7 @@ Every role page defines:
 3. **Outputs** — artifacts and verdict shape
 4. **Must not** — scope boundaries
 5. **Model** — config override; default suggestion only
+6. **Invocation envelope** — canonical identity and required first reads; see [agent invocation](../workflow/agent-invocation.md)
 
 ### Verdict bars
 

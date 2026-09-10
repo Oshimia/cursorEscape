@@ -69,6 +69,7 @@ Research docs → draft plan → review (max 3) → synthesize between passes �
 2. **Optional pre-plan alignment**: when the owner wants structured alignment before drafting, run the [grilling](../grilling/SKILL.md) interview (design tree, frontier rounds, confirmation gate); skip it when thoughts are already settled or work is trivial. During the interview follow its Documented alignment rules: existing suitable glossary/design-decision documents win via discovery; unresolved terminology stays in the active plan; durable artifact writes require explicit owner approval.
 3. **Draft** using the [plan template](#plan-template) below. Fill every section.
 4. **Invoke plan-reviewer** with **clean context** — repository path, task summary, review pass number, and **synthesized plan text only**. Do **not** attach prior review transcripts. Cursor Task spawn: [implementation-plan overlay](../../overlays/cursor/skills/implementation-plan/SKILL.md#invoke-plan-reviewer-cursor-task).
+   Every launch must begin with the mandatory [agent invocation](../../workflow/agent-invocation.md) envelope.
 
 5. **Synthesize** between passes (see [Synthesis between passes](#synthesis-between-passes)).
 6. Repeat until `APPROVED` **or** 3 passes complete — then [present to user](#final-presentation).

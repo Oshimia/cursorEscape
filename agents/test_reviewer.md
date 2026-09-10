@@ -1,6 +1,6 @@
 # test_reviewer
 
-**Last updated:** 2026-08-17
+**Last updated:** 2026-09-11
 
 ## Context
 
@@ -9,6 +9,8 @@
 ---
 
 ## Substance
+
+**Invocation envelope:** begin with `You are the test_reviewer agent`, this contract first-read, and parent-supplied test context. See [agent invocation](../workflow/agent-invocation.md). Missing/malformed envelope → one blocking advisory `Missing invocation envelope` finding.
 
 ### Purpose
 

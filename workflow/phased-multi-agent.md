@@ -31,7 +31,7 @@ Same schema as escalated plans — see [plan-agent-context.md](plan-agent-contex
 
 ## Composer
 
-When the user assigns [composer](../skills/composer/SKILL.md), follow that skill’s phase lifecycle, including an owner approval preview when visual sign-off is documented or explicitly requested by the owner, **4-iteration pressure release**, closeout after dual APPROVED, or cap-exhausted handoff → Composer triage. Composer multi-phase **requires** a repo roadmap file. Composer verifies subagent process via transcripts (implementation subagent, nested reviewers, and its own approval-preview/migration work) before advancing each phase.
+When the user assigns [composer](../skills/composer/SKILL.md), follow that skill’s phase lifecycle, including an owner approval preview when visual sign-off is documented or explicitly requested by the owner, **4-iteration pressure release**, closeout after dual APPROVED, or cap-exhausted handoff → Composer triage. Composer multi-phase **requires** a repo roadmap file. Composer begins every child-agent launch with the canonical [agent invocation](agent-invocation.md) envelope, and verifies subagent process via transcripts (implementation subagent, nested reviewers, and its own approval-preview/migration work) before advancing each phase.
 
 If the user asks Composer to **plan**, stay in Plan mode / [implementation-plan](../skills/implementation-plan/SKILL.md) with Escalation **yes** — Composer does not draft plans while conducting.
 
@@ -39,6 +39,6 @@ Without Composer, one clean-context agent per phase still ends with the [impleme
 
 ## Related
 
-**Workflow docs:** [plan-agent-context.md](plan-agent-context.md), [iterative-plan-review.md](iterative-plan-review.md), [iterative-code-review.md](iterative-code-review.md), [discovery.md](discovery.md), [ci-ladder.md](ci-ladder.md), [documentation-architecture.md](documentation-architecture.md), [_index.md](_index.md)
+**Workflow docs:** [plan-agent-context.md](plan-agent-context.md), [agent-invocation.md](agent-invocation.md), [iterative-plan-review.md](iterative-plan-review.md), [iterative-code-review.md](iterative-code-review.md), [discovery.md](discovery.md), [ci-ladder.md](ci-ladder.md), [documentation-architecture.md](documentation-architecture.md), [_index.md](_index.md)
 
 **Skills / agents:** [implementation-plan](../skills/implementation-plan/SKILL.md), [roadmap](../skills/roadmap/SKILL.md), [composer](../skills/composer/SKILL.md), [implementation-review](../skills/implementation-review/SKILL.md), [plan_reviewer](../agents/plan_reviewer.md), [production_readiness_reviewer](../agents/production_readiness_reviewer.md)

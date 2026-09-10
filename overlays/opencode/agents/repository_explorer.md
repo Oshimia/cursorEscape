@@ -13,6 +13,8 @@ color: secondary
 
 Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/repository_explorer.md`.
 
+**Invocation boundary:** a compliant Task begins with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`repository_explorer`, required reads, host alias `none`, clean-context, read-only, `investigation`). Missing/malformed envelope → blocked result; do not explore.
+
 ## Purpose
 
 Return a concise findings summary with key file paths and residual unknowns — no implementation.

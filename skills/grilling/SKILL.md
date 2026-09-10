@@ -30,7 +30,7 @@ Never act, edit files, replace implementation-plan or plan_reviewer, or proceed 
 
 ## Related roles
 
-The owner answers decisions. The agent may gather repository facts via read-only discovery or isolated read-only children per clean-context isolation.
+The owner answers decisions. The agent may gather repository facts via read-only discovery or isolated read-only children per clean-context isolation; every isolated child launch begins with the [agent invocation](../workflow/agent-invocation.md) envelope.
 
 ## Provenance
 

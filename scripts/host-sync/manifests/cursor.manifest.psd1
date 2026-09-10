@@ -18,7 +18,7 @@
         @{ Source = 'agents/reviewer-a.md'; Dest = 'agents/reviewer-a.md' }
         @{ Source = 'review-subagent-models.md'; Dest = 'review-subagent-models.md' }
     )
-    HybridRuleIds       = @('iterative-plan-review', 'iterative-code-review', 'pre-commit-ci-gate')
+    HybridRuleIds       = @('agent-invocation', 'iterative-plan-review', 'iterative-code-review', 'pre-commit-ci-gate')
     HardExcludes        = @('skills-cursor', 'settings.json')
     NeverTouch          = @('docs/workflow')
 }

@@ -1,6 +1,6 @@
 # Skill source and host overlays
 
-**Last updated:** 2026-09-08
+**Last updated:** 2026-09-11
 
 ## Context
 

@@ -18,14 +18,30 @@ Bugbot (`subagent_type: "bugbot"`) spawn lives in [implementation-review overlay
 
 Launch `reviewer-a` (`subagent_type: "reviewer-a"`, recommended `model: composer-2.5`, `readonly: true`, `run_in_background: false`).
 
+Routing metadata (not part of the child payload):
+
 ```text
-Launch the reviewer-a subagent with:
 - subagent_type: "reviewer-a"
 - model: composer-2.5
 - readonly: true
 - run_in_background: false
+```
 
-Use the reviewer-a subagent to review this implementation.
+Child prompt (paste exactly; begins here):
+
+```text
+You are the `production_readiness_reviewer` agent.
+Read `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md` before acting.
+Required reading:
+- `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md`
+- Applicable docs supplied below and references the contract requires
+
+Host alias: reviewer-a
+Isolation: clean-context
+Authority: read-only
+Loop/gate: review-loop
+
+---
 
 Repository path: <absolute path>
 Task summary: <one paragraph — what this phase or change set is supposed to accomplish; when parent declares Focus-narrow for this pressure-release block, narrow task summary + applicable docs to the current fix — never override Completion gate, CI Observed, or verdict bar>

@@ -1,6 +1,6 @@
 # planner
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-09-11
 
 ## Context
 
@@ -9,6 +9,8 @@
 ---
 
 ## Substance
+
+**Invocation envelope:** begin with `You are the planner agent`, this contract first-read, and the implementation-plan skill. See [agent invocation](../workflow/agent-invocation.md). Missing/malformed envelope → planning failure; do not draft.
 
 ### Purpose
 

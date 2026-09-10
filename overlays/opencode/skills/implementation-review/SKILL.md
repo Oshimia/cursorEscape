@@ -28,7 +28,7 @@ Implement
 ```
 
 1. **Fast CI Observed** — per-command rows. Do **not** launch reviewers on fail, skipped (when Fast ≠ n/a), or claimed-only.
-2. **Parallel Task** — `production_readiness_reviewer` and `bug_reviewer`, `Completion gate: review-loop`.
+2. **Parallel Task** — `production_readiness_reviewer` and `bug_reviewer`, each beginning with the canonical `{{COMPANION_ROOT}}/workflow/agent-invocation.md` envelope and using `Completion gate: review-loop`.
    - **production_readiness_reviewer:** locked opener — **no** Custom Instructions field. Focus-narrow = narrower task summary + applicable docs only.
    - **bug_reviewer:** **Custom Instructions** envelope (phase, iteration 1–4 within block, cumulative launch count, regressions, out-of-scope). Focus-narrow = current-fix only.
 3. Fix must-fix; re-run Observed Fast CI (when Fast ≠ n/a); at most **4** dual-review iterations per block — **do not launch a 5th pair**. **Auto-continue:** the block runs to dual APPROVED or iteration 4 without permission pauses. Each reviewer return echoes the payload's attestation marker verbatim; an empty/fast return (< ~1s) is a routing/auth failure — fail loud, never read as "no bugs found".
@@ -39,6 +39,7 @@ Implement
 | Doc | When |
 |-----|------|
 | [SKILL.md]({{COMPANION_ROOT}}/skills/implementation-review/SKILL.md) | Full loop + pressure-release / anti-abuse |
+| [agent-invocation.md]({{COMPANION_ROOT}}/workflow/agent-invocation.md) | Mandatory child launch envelope |
 | [iterative-code-review.md]({{COMPANION_ROOT}}/workflow/iterative-code-review.md) | Loop rules, per-phase boundaries |
 | [ci-ladder.md]({{COMPANION_ROOT}}/workflow/ci-ladder.md) | Fast/Full mapping |
 | [code-review-frame.md]({{COMPANION_ROOT}}/workflow/code-review-frame.md) | Optional Standards/Spec evidence frame |

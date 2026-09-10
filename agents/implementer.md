@@ -1,6 +1,6 @@
 # implementer
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-09-11
 
 ## Context
 
@@ -9,6 +9,8 @@
 ---
 
 ## Substance
+
+**Invocation envelope:** begin with `You are the implementer agent`, this contract first-read, and the parent-approved plan/phase context. See [agent invocation](../workflow/agent-invocation.md). Missing/malformed envelope → blocked handoff; make no edits.
 
 ### Purpose
 

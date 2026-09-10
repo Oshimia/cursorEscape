@@ -1,6 +1,6 @@
 # Editing companion workflow (agent edit map)
 
-**Last updated:** 2026-09-10
+**Last updated:** 2026-09-11
 
 ## Context
 
@@ -14,14 +14,16 @@ Design essays stay in FA ([skill-source-and-host-overlays](../featureArchitectur
 
 ### Architecture (one paragraph)
 
-cursorEscape is the **sole SoT** for skills, rules, agents, workflows, and report schemas. Registered host homes (including `~/.cursor`, `~/.config/opencode`, `~/.gemini`, and Codex's independent `CODEX_HOME` + skill root) hold **thin harness only** (advertisement, permissions, spawn, absolute wiring, thin always-on gates). Deep procedure loads via **companion Reads** to `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — **not** a host `docs/workflow/` mirror as SoT ([pointer-first](../roadmaps/pointer-first.md)). Registered overlays are thin wrappers / harness — they **echo** gate shape and point at companion; they must not become a second authored procedure tree.
+cursorEscape is the **sole SoT** for skills, rules, agents, workflows, and report schemas. Registered host homes (including `~/.cursor`, `~/.config/opencode`, `~/.gemini`, `~/.copilot`, `~/.cline`, `~/.kilocode`, and Codex's independent `CODEX_HOME` + skill root) hold **thin harness only** (advertisement, permissions, spawn, absolute wiring, thin always-on gates). Deep procedure loads via **companion Reads** to `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — **not** a host `docs/workflow/` mirror as SoT ([pointer-first](../roadmaps/pointer-first.md)). Registered overlays are thin wrappers / harness — they **echo** gate shape and point at companion; they must not become a second authored procedure tree.
 
 ```text
 Change portable loop/gate
+  → begin every child-agent launch with the canonical agent-invocation envelope
   → edit companion SoT (workflow/ skills/ agents/ rules/)
   → same changeset: Cursor thin overlay echo
   → same changeset: OpenCode thin harness echo (AGENTS ≡ instructions)
   → same changeset: Antigravity harness echo (GEMINI.md gate + stubs/workflows/subagent defs)
+  → same changeset: VS Code / Cline / Kilo Code / Codex harness echoes
   → FA claim docs if Required/Desired wording moved
   → live sync only when operator authorizes (overlay ≠ live)
 ```
@@ -30,9 +32,10 @@ Change portable loop/gate
 
 | Change | Primary SoT | Same changeset (must also touch) |
 | ------ | ----------- | -------------------------------- |
+| Agent invocation contract | [`workflow/agent-invocation.md`](../../workflow/agent-invocation.md) + [`rules/agent-invocation.md`](../../rules/agent-invocation.md) | Every governed launch-site skill/workflow; portable agent contracts when fail-loud behavior changes; Cursor [`agent-invocation.mdc`](../../overlays/cursor/rules/agent-invocation.mdc); OpenCode composed C1; Antigravity `GEMINI.md` composition, launch workflows, skills, and reviewer defs; VS Code agent handoffs and composer/review stubs; Cline/Kilo Code workflows and wiring; Codex TOMLs and managed AGENTS block; render baselines/ledger in the same changeset |
 | Dual-review / pressure-release loop | [`workflow/iterative-code-review.md`](../../workflow/iterative-code-review.md) + [`skills/implementation-review/SKILL.md`](../../skills/implementation-review/SKILL.md) | [`rules/iterative-code-review.md`](../../rules/iterative-code-review.md); Cursor [`overlays/cursor/skills/implementation-review/`](../../overlays/cursor/skills/implementation-review/) (SKILL + user-rules-snippet) + spawn notes in [`reviewer-a`](../../overlays/cursor/agents/reviewer-a.md) if Inputs change; OpenCode [`overlays/opencode/skills/implementation-review/SKILL.md`](../../overlays/opencode/skills/implementation-review/SKILL.md) + **C1** [`AGENTS.md`](../../overlays/opencode/AGENTS.md) ≡ [`instructions/cursor-escape-loop.md`](../../overlays/opencode/instructions/cursor-escape-loop.md); OpenCode [`implementer`](../../overlays/opencode/agents/implementer.md) / [`production_readiness_reviewer`](../../overlays/opencode/agents/production_readiness_reviewer.md) / [`bug_reviewer`](../../overlays/opencode/agents/bug_reviewer.md) as needed; Antigravity [`overlays/antigravity/skills/implementation-review/SKILL.md`](../../overlays/antigravity/skills/implementation-review/SKILL.md), `/escape-*` workflows, and reviewer subagent defs ([agents](../../overlays/antigravity/agents/)) as needed; portable [`agents/production_readiness_reviewer.md`](../../agents/production_readiness_reviewer.md) if Inputs change; FA [`intended-workflow`](../featureArchitecture/intended-workflow.md) / [`desired-behavior-vs-cursor-specific`](../featureArchitecture/desired-behavior-vs-cursor-specific.md) if Required claims move |
 | Composer conductor | [`skills/composer/SKILL.md`](../../skills/composer/SKILL.md) | Cursor + OpenCode composer stubs/snippets; Antigravity `composer` stub + `/escape-*` workflow wording; Codex Composer wrapper / always-on failsafe when needed; [`workflow/phased-multi-agent.md`](../../workflow/phased-multi-agent.md). Use “approval preview” and “implementation subagent”, never the retired paired phase abbreviations. |
-| Always-on gate text | [`rules/*.md`](../../rules/_index.md) | Gate-body edits land in the **repo-root rule twin** (SoT) and flow to hosts by composition — OpenCode `instructions/cursor-escape-loop.md` is **composed** (host `__header__.md` part + authored base body + [`footers/instructions-wiring.md`](../../overlays/opencode/footers/instructions-wiring.md)) with `AGENTS.md` dual-written from the render; Cursor thin `.mdc` hybrid render + matching user-rules-snippet; **Antigravity [`GEMINI.md` expected render](../../scripts/host-sync/render-baselines/phase2/antigravity/overlays__antigravity__GEMINI.md)** is **composed** (header + promoted-twin bodies + [`footers/gemini-wiring.md`](../../overlays/antigravity/footers/gemini-wiring.md)) — full-replace global rules surface |
+| Always-on gate text | [`rules/*.md`](../../rules/_index.md) | Gate-body edits land in the **repo-root rule twin** (SoT) and flow to hosts by composition — OpenCode `instructions/cursor-escape-loop.md` is **composed** (host `__header__.md` part + authored base body + [`footers/instructions-wiring.md`](../../overlays/opencode/footers/instructions-wiring.md)) with `AGENTS.md` dual-written from the render; Cursor thin `.mdc` hybrid render + matching user-rules-snippet; Antigravity, VS Code, Cline, and Kilo Code always-on gates compose `rules/agent-invocation.md` first, followed by their loop/gate bodies and host wiring; **Antigravity [`GEMINI.md` expected render](../../scripts/host-sync/render-baselines/phase2/antigravity/overlays__antigravity__GEMINI.md)** remains the full-replace regression anchor |
 | Report / deep schema | [`workflow/<leaf>.md`](../../workflow/_index.md) (e.g. `plan-reviewer-report.md`) | Thin agent/skill **Read when** only — do **not** paste full schema into `agents/` or overlay stubs |
 | Plan-review loop | [`workflow/iterative-plan-review.md`](../../workflow/iterative-plan-review.md) + [`skills/plan-review`](../../skills/plan-review/SKILL.md) / [`implementation-plan`](../../skills/implementation-plan/SKILL.md) | Matching Cursor/OpenCode stubs **and** [Antigravity stubs](../../overlays/antigravity/skills/) (`implementation-plan`, `plan-review`) — gate-text changes also echo the Antigravity `GEMINI.md` always-on; always-on plan section in OpenCode C1 dual-write if gate text changes |
 | Composed-gate wiring (manifest `Parts`/`Footer`/`base:`/`shared:` classes) | [`scripts/host-sync/manifests/*.psd1`](../../scripts/host-sync/) + the referenced part/footer leaves | FA recording ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md#per-entry-v2-sourcing-overlay-remediation-phase-12--required)); [host-sync README](../../scripts/host-sync/README.md) v2 surface; render-baselines under [`scripts/host-sync/render-baselines/`](../../scripts/host-sync/render-baselines/phase2/) re-captured in the same changeset; unit/remediation checks extended if a new field class appears |
@@ -88,8 +91,11 @@ pwsh scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1
 pwsh scripts/host-sync/Invoke-HostSyncDriftFixtureChecks.ps1
 pwsh scripts/host-sync/Test-HostHarnessDrift.ps1
 
-# Companion SoT still states the new policy (example: pressure release)
-rg "pressure-release|4-iteration|cap-exhausted" workflow/iterative-code-review.md skills/implementation-review/SKILL.md skills/composer/SKILL.md
+# Companion SoT still states the new policy
+rg "canonical envelope|agent-invocation|Completion gate: review-loop" workflow/agent-invocation.md rules/agent-invocation.md workflow skills agents overlays
+
+# Six-stack source-only render regression anchor
+pwsh scripts/host-sync/Get-ExistingSixStackRenderLedger.ps1 -Verify
 
 # Active procedure surfaces plus generated evidence must not reintroduce the retired paired phase abbreviations
 rg "\b[Nn][AaBb]\b" agents rules scripts/host-sync/render-baselines skills workflow docs/featureArchitecture docs/SOPs overlays --glob '!research/imported/**' --glob '!docs/roadmaps/**'

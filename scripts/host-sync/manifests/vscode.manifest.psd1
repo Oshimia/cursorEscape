@@ -9,9 +9,9 @@
     SharedRoot          = 'overlays/opencode'
     CopyEntries         = @(
         # --- composed always-on gate instructions (applyTo: '**' at dest, added by footer note) ---
-        @{ Source = 'base:rules/iterative-plan-review.md'; Dest = 'instructions/cursor-escape-loop.instructions.md'
+        @{ Source = 'base:rules/agent-invocation.md'; Dest = 'instructions/cursor-escape-loop.instructions.md'
            Parts = @('instructions/__header__.md')
-           Footer = @('base:rules/iterative-code-review.md', 'footers/instructions-wiring.md') }
+           Footer = @('base:rules/iterative-plan-review.md', 'base:rules/iterative-code-review.md', 'footers/instructions-wiring.md') }
         # --- composed pre-commit instructions leaf ---
         @{ Source = 'base:rules/pre-commit-ci-gate.md'; Dest = 'instructions/pre-commit-gate.instructions.md'
            Footer = @('footers/pre-commit-vscode.md') }

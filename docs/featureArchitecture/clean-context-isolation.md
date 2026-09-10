@@ -1,12 +1,12 @@
 # Clean Context and Isolation
 
-**Last updated:** 2026-09-10
+**Last updated:** 2026-09-11
 
 ## Context
 
 This document is **Target** design for **isolated child handoffs** — how parents invoke reviewers and phase subagents without shared chat memory. It is distinct from [instruction-layering.md](./instruction-layering.md) (token/context *budget*) and from [intended-workflow.md](./intended-workflow.md) (loop *stages*). Isolation is about **honesty of each review pass**, not how thin always-on text is.
 
-**Required** portable intent: plan_reviewer, production_readiness_reviewer, bug_reviewer, and Composer phase subagents run in isolated child context; the parent packs everything they need into the invoke message. Cursor Task / OpenCode Task child sessions are **Cursor-specific** / host mappings of that intent.
+**Required** portable intent: every governed child launched under [agent invocation](../../workflow/agent-invocation.md)—including `planner`, `ad_hoc_child`, `repository_explorer`, and `test_reviewer`—runs in isolated child context; the parent packs everything it needs into the invocation. Host child sessions, fresh task/session replacements, and managed-agent routes are host mappings of that intent; they never relax the packed-payload or no-prior-transcript requirements.
 
 Observed overlay agents under [overlays/cursor/agents](../../overlays/cursor/agents/) illustrate the pattern (e.g. “You run in isolated context”). Live `~/.cursor` is the running install; the overlay is the in-repo **Observed** record (thin wrappers). This page is SoT for the portable isolation contract.
 
@@ -20,18 +20,22 @@ Shared parent chat history lets a child “remember” prior review transcripts,
 
 ### Who runs isolated (Required)
 
-| Role / actor | Isolation |
-| ------------ | --------- |
+All governed child agents use clean context. Role-specific requirements add to, and never relax, this baseline:
+
+| Role / actor | Isolation requirements |
+| ------------ | ---------------------- |
+| [planner](../../agents/planner.md) | Child session; parent supplies task summary, applicable docs, and constraints |
 | [plan_reviewer](../../agents/plan_reviewer.md) | Child session; full synthesized plan each pass — **no** prior review transcripts |
 | [production_readiness_reviewer](../../agents/production_readiness_reviewer.md) | Child session; locked opener; parent supplies Completion gate + CI Observed |
 | [bug_reviewer](../../agents/bug_reviewer.md) | Child session; Custom Instructions envelope for scope |
+| [repository_explorer](../../agents/repository_explorer.md) | Child session; parent supplies only the bounded question, thoroughness, and path hints |
+| [test_reviewer](../../agents/test_reviewer.md) | Child session; parent supplies changeset scope and test context |
+| `ad_hoc_child` | Child session; parent supplies the packed task procedure, purpose, scope, and output format |
 | Composer phase subagent | Child implementer + review-loop parent for the phase ([composer](../../skills/composer/SKILL.md)) |
-
-[repository_explorer](../../agents/repository_explorer.md) and optional [test_reviewer](../../agents/test_reviewer.md) should follow the same pack-everything-in-invoke pattern when launched as children.
 
 ### Parent duties (Required)
 
-1. Launch the child with a **complete** invoke payload for that role (see agent contract Inputs).
+1. Launch the child with a **complete** invoke payload for that role (see agent contract Inputs), beginning with the [agent invocation](../../workflow/agent-invocation.md) envelope.
 2. On re-invoke: pass **synthesized** artifacts only — updated full plan, or narrower task summary + applicable docs — **not** the previous child’s transcript.
 3. Own Fast CI Observed before dual-gate reviewers; do not ask reviewers to re-run CI.
 4. After dual APPROVED, run Full CI **without** reviewers ([intended-workflow](./intended-workflow.md)).
@@ -68,11 +72,16 @@ Composer **QC** reads closeout reports and may audit child transcripts for proce
 
 ### Host mapping
 
-| Portable idea | Cursor-specific | OpenCode (first attempt) |
-| ------------- | --------------- | ------------------------ |
-| Isolated child | Task / subagent clean context | Task / `@agent` child session |
-| Pack invoke message | Parent Task prompt | Parent Task prompt |
-| Deny reviewer edits | Host policy | `permission.edit: deny` on reviewer agents |
+| Host | Isolated child mapping | Invocation notes |
+| --- | --- | --- |
+| Cursor | Task/subagent clean context | Aliases `plan-reviewer`, `reviewer-a`, or Bugbot may route, but the envelope supplies canonical identity. |
+| OpenCode | Task / `@agent` child session | Canonical routes use host alias `none`; reviewer permissions deny edits. |
+| Antigravity | `invoke_subagent` clean context | Reviewer subagent defs are read-only; dual review launches both legs. |
+| VS Code | Custom-agent handoff / subagent at depth 1 | Handoff prompts contain fillable payload fields and attestation markers after the envelope. |
+| Cline | Separate fresh task/session per reviewer leg until child spawn is attested | Same-conversation persona blocks are not clean-context and are prohibited. |
+| Kilo Code | Separate fresh task/session per reviewer leg until `subtask` isolation is attested | The parent transfers only loop decisions, never prior reviewer reasoning. |
+| Codex | Managed agent route from TOML contract | Canonical routes use host alias `none`. |
+| Portable contract | Parent packs all role-required inputs after `---` | Host metadata, surrounding chat, and prior transcripts never establish identity or scope. |
 
 ---
 

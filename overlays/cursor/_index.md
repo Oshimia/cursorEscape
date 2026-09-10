@@ -83,6 +83,7 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 | Rule | Overlay | Base |
 | ---- | ------- | ---- |
 | iterative-plan-review | [iterative-plan-review.mdc](./rules/iterative-plan-review.mdc) | `{{COMPANION_ROOT}}/rules/iterative-plan-review.md` |
+| agent-invocation | [agent-invocation.mdc](./rules/agent-invocation.mdc) | `{{COMPANION_ROOT}}/rules/agent-invocation.md` |
 | iterative-code-review | [iterative-code-review.mdc](./rules/iterative-code-review.mdc) | `{{COMPANION_ROOT}}/rules/iterative-code-review.md` |
 | pre-commit-ci-gate | [pre-commit-ci-gate.mdc](./rules/pre-commit-ci-gate.mdc) | `{{COMPANION_ROOT}}/rules/pre-commit-ci-gate.md` |
 

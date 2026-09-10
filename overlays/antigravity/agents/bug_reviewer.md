@@ -20,6 +20,10 @@ Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/bug_reviewer.md`.
 
 **Read before hunting:** `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md` (report vs ignore SoT), then `{{COMPANION_ROOT}}/skills/bug-review-sweep/SKILL.md` (ordered class passes + gates; canonical SoT companion repo).
 
+## Invocation envelope (required)
+
+Every `invoke_subagent` payload must begin with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md`: `bug_reviewer` identity, this contract first, the finding rubric and sweep skill, host alias `none`, clean context, read-only authority, and `review-loop` gate. A missing, malformed, contradictory, or unreadable envelope produces one finding titled `Missing invocation envelope`; do not infer identity from host routing.
+
 ## Purpose
 
 Find bugs, security issues, concurrency problems, and high-value correctness defects **introduced by** the phase changeset. Runs **in parallel** with `production_readiness_reviewer`.

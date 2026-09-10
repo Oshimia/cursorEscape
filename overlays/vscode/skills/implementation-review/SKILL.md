@@ -28,7 +28,7 @@ Implement
 ```
 
 1. **Fast CI Observed** — per-command rows. Do **not** launch reviewers on fail, skipped (when Fast ≠ n/a), or claimed-only.
-2. **Parallel subagent launch** — `production_readiness_reviewer` and `bug_reviewer` (agents dropdown selections, or model-initiated where toolsets allow). Reviewers run isolated with clean context; each return echoes the payload's attestation marker verbatim; an empty/fast return (< ~1s) is a routing/auth failure — fail loud, never read as "no bugs found".
+2. **Parallel subagent launch** — `production_readiness_reviewer` and `bug_reviewer` (agents dropdown selections, or model-initiated where toolsets allow). Begin each payload with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md`, then add scope and attestation marker after the separator. Reviewers run isolated with clean context; each return echoes the payload's attestation marker verbatim; an empty/fast return (< ~1s) is a routing/auth failure — fail loud, never read as "no bugs found".
 3. Fix must-fix; re-run Observed Fast CI (when Fast ≠ n/a); at most **4** dual-review iterations per block — **do not launch a 5th pair**. **Auto-continue:** the block runs to dual APPROVED or iteration 4 without permission pauses.
 4. **Exit:** dual APPROVED → Full CI only (never with reviewers). Iteration 4 without dual APPROVED → normal reassessment or Composer cap-exhausted handoff — **no Full**, never self-Waive (Waive = Composer-only). Then disposition deferred batchables (before Full, per companion rubric).
 

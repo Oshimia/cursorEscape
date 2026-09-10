@@ -8,7 +8,7 @@ One question per run, stated by the parent with an explicit success criterion (w
 
 ## One packed read-only child
 
-Run exactly one isolated read-only child per question per [clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md): the input packs the question, success criterion, scope notes, candidate source list, and output format. The child never spawns further agents, never edits the workspace, and never writes outside its returned report. Network fetching is expected; if sources are unreachable, the child reports them as unknowns instead of filling gaps from memory.
+Run exactly one isolated read-only child per question per [clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md). Begin the packed input with the canonical [agent invocation](agent-invocation.md) envelope using the `ad_hoc_child` identity and `workflow/research.md` as required task procedure; then add the question, success criterion, scope notes, candidate source list, and output format. The child never spawns further agents, never edits the workspace, and never writes outside its returned report. Network fetching is expected; if sources are unreachable, the child reports them as unknowns instead of filling gaps from memory.
 
 ## Primary sources only
 

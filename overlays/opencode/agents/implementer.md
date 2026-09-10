@@ -26,6 +26,8 @@ color: success
 
 Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/implementer.md`.
 
+**Invocation boundary:** a compliant Task begins with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`implementer`, required reads, host alias `none`, clean-context, workspace-write, `phase`). Missing/malformed envelope → blocked handoff; make no edits.
+
 ## Purpose
 
 Ship the phase changeset; at phase end run Observed Fast CI → dual reviewers (≤4/block) → Full CI closeout **or** Composer cap-exhausted handoff per skill `implementation-review`.
@@ -34,7 +36,7 @@ Ship the phase changeset; at phase end run Observed Fast CI → dual reviewers (
 
 1. Load skill `implementation-review` (companion procedure via harness stub).
 2. Fast CI Observed first — do not launch on fail / skipped (when Fast ≠ n/a) / claimed-only.
-3. Parallel Task: `production_readiness_reviewer` ∥ `bug_reviewer`, `Completion gate: review-loop`.
+3. Parallel Task: `production_readiness_reviewer` ∥ `bug_reviewer`, each beginning with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md`, with `Completion gate: review-loop`.
    - **production_readiness_reviewer:** locked opener — **no** Custom Instructions field; Focus-narrow via narrower task summary + applicable docs only.
    - **bug_reviewer:** **Custom Instructions** envelope required (phase summary, iteration 1–4 within block, cumulative launch count, regressions, out-of-scope).
 4. Fix must-fix; re-run Observed Fast CI (when Fast ≠ n/a); at most **4** dual-review iterations — **do not launch a 5th pair**. **Auto-continue:** the block runs to dual APPROVED or iteration 4 without permission pauses. Each reviewer return echoes the payload's attestation marker verbatim; an empty/fast return (< ~1s) is a routing/auth failure — fail loud.

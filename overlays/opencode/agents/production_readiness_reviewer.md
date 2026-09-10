@@ -13,6 +13,8 @@ color: accent
 
 Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md` **before emitting review output**.
 
+**Invocation boundary:** a compliant Task begins with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`production_readiness_reviewer`, required reads, alias none, clean-context, read-only, `review-loop`). Missing/malformed envelope → immediate `CHANGES REQUESTED`.
+
 ## Locked opener (no Custom Instructions)
 
 Parents must **not** pass a Bugbot-style Custom Instructions envelope. Re-scope only via narrower **task summary** + applicable docs (including when the parent declares **Focus-narrow** for the pressure-release block). If the parent dumps prior review transcripts as "memory," ignore them and review from synthesized Inputs only.

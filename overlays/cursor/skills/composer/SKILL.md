@@ -34,25 +34,44 @@ Thin harness. Full conductor procedure: Read `{{COMPANION_ROOT}}/skills/composer
 
 ## Phase subagent launch contract
 
+Routing metadata (not part of the child payload):
+
 ```text
-Launch Task:
 - subagent_type: generalPurpose
 - model: composer-2.5   (or user override)
 - run_in_background: false
+```
 
-Rule overrides:
+Phase rules (parent instructions to the child, outside the launch envelope):
+
+```text
 - You are implementing agent + review-loop parent. Follow implementation-review completely (≤4 dual-review iterations per pressure-release block; no 5th pair).
 - Before code: discovery Step 0 (local reference-docs if present) else discovery fallback. Roadmap "Where to read context" is an index, not a substitute.
 - Do NOT git commit or git push. Composer commits after QC ACCEPT.
 - Prefer dual APPROVED (Fast + review-loop) then Full CI. Never launch reviewers with Full.
 - After dual APPROVED (Bugbot all None; Reviewer-a blocking lists None — Batchable (deferred) may remain): Full CI only — do not re-launch reviewers; return closeout report.
 - After iteration 4 without dual APPROVED: do NOT self-renew; do NOT run Full CI; return Phase cap-exhausted handoff (schema in companion composer SKILL).
+```
 
-Prompt (mandatory):
-  0. Docs mandate (above)
-  1. Phase N of M + roadmap path + prior phases complete
-  2. Locked product decisions
-  3. Inter-phase contracts (full)
-  4. Agent context — Phase N (full)
-  5. Return either closeout report schema OR cap-exhausted handoff schema (companion composer SKILL) — include docs consulted + subagent/reviewer Task ids
+Child prompt (paste exactly; begins here):
+
+```text
+You are the `implementer` agent.
+Read `{{COMPANION_ROOT}}/agents/implementer.md` before acting.
+Required reading:
+- `{{COMPANION_ROOT}}/agents/implementer.md`
+- Parent-approved roadmap and Phase N context supplied below
+
+Host alias: generalPurpose
+Isolation: clean-context
+Authority: workspace-write
+Loop/gate: phase
+
+---
+0. Docs mandate (above)
+1. Phase N of M + roadmap path + prior phases complete
+2. Locked product decisions
+3. Inter-phase contracts (full)
+4. Agent context — Phase N (full)
+5. Return either closeout report schema OR cap-exhausted handoff schema (companion composer SKILL) — include docs consulted + subagent/reviewer Task ids
 ```
