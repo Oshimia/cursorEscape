@@ -14,7 +14,7 @@ Draft plan; apply the phase sizing/split gate from implementation-plan (Escalati
   → Phase N+1 …
 ```
 
-Use this SOP whenever the sizing gate requires more than one review/deployment unit. Planning default: keep each reviewable phase to **≤8 reviewed files / ≤500 changed hand-authored lines**, with **>15 files / >800 lines** as a hard split signal. A migration plus dependent API behavior plus UI contracts plus tests normally must be split, not treated as one phase.
+Use this SOP whenever the sizing gate requires more than one review/deployment unit. Planning default: keep each reviewable phase to **≤8 reviewed files / ≤800 changed hand-authored lines**, with **>15 files / >1000 lines** as a hard split signal. A migration plus dependent API behavior plus UI contracts plus tests normally must be split, not treated as one phase.
 
 ## Roadmap location
 

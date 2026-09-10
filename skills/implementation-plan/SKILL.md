@@ -215,7 +215,7 @@ Complete this gate **before** naming phases. A phase is a **review and deploymen
 
 | Dimension | Target | Split gate |
 |---|---|---|
-| Hand-authored changed lines | ≤500 per phase | >800 |
+| Hand-authored changed lines | ≤800 per phase | >1000 |
 | Files reviewed together | ≤8 | >15 |
 | Deployment/runtime seams | one primary seam | schema + backend + UI + infra together |
 | External apply gates | one coherent gate | independent migration/infra/config gates bundled |
