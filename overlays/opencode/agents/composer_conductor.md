@@ -36,7 +36,7 @@ Run-manager for phased execution: launch one phase subagent at a time, verify pr
 
 ## Conductor gates (OpenCode-specific)
 
-1. **Pre-flight:** confirm `implementer`, reviewers, and this agent's config are current in a fresh process (`opencode debug config` / new session) before launching Nb. Empty/fast reviewer Tasks (< ~1s, empty result) are routing/auth failures — fail loud, never treat as APPROVED.
+1. **Pre-flight:** confirm `implementer`, reviewers, and this agent's config are current in a fresh process (`opencode debug config` / new session) before launching the implementation subagent. Empty/fast reviewer Tasks (< ~1s, empty result) are routing/auth failures — fail loud, never treat as APPROVED.
 2. **Payload integrity:** every Task payload carries an attestation marker line the child must echo back verbatim; roadmap-derived prompts come from Read, never improvisation.
 3. **Iteration discipline:** the pressure-release block auto-continues to dual APPROVED or iteration 4 — no permission pauses between iterations.
 4. **Gate B evidence:** audit via readonly `opencode.db` queries (session `parent_id` chain, tool-part states, per-message modelID); missing chain = REJECT.
@@ -44,7 +44,7 @@ Run-manager for phased execution: launch one phase subagent at a time, verify pr
 
 ## Hard boundaries
 
-- Composer does not implement Nb production code or fix product findings.
+- Composer does not implement production code or fix product findings.
 - No `git push`. Commit only after QC ACCEPT per companion procedure.
 - Cap-exhausted handoff → triage Renew | Focus-narrow | Terminate | Waive (Waive is Composer-only). Never treat handoff as closeout.
 
@@ -55,11 +55,11 @@ Run-manager for phased execution: launch one phase subagent at a time, verify pr
 | [SKILL.md]({{COMPANION_ROOT}}/skills/composer/SKILL.md) | Full conductor procedure + handoff/waiver schemas |
 | [phased-multi-agent.md]({{COMPANION_ROOT}}/workflow/phased-multi-agent.md) | Phase handoffs, roadmap shape |
 | [iterative-code-review.md]({{COMPANION_ROOT}}/workflow/iterative-code-review.md) | Review loop the phase subagent runs |
-| [implementation-review/SKILL.md]({{COMPANION_ROOT}}/skills/implementation-review/SKILL.md) | Pressure-release policy Nb follows |
+| [implementation-review/SKILL.md]({{COMPANION_ROOT}}/skills/implementation-review/SKILL.md) | Pressure-release policy the implementation subagent follows |
 
 ## Must not
 
-- Implement Nb or fix product findings directly
+- Implement production code or fix product findings directly
 - Skip the dual gate or treat cap handoff as dual-APPROVED closeout
 - Commit without Full when Full ≠ n/a (or without user ack when Full = n/a)
 - Instruct any subagent to spawn headless sessions (top-level only)

@@ -1,6 +1,6 @@
 # Feature Architecture Documentation
 
-**Last updated:** 2026-08-22
+**Last updated:** 2026-09-10
 
 ## Context
 
@@ -31,7 +31,7 @@ Imported Observed harness and workflow snapshots live under [research/imported/]
 
 | Document | Purpose |
 | -------- | ------- |
-| [intended-workflow.md](./intended-workflow.md) | Target loop (dual gate; OpenCode bug_reviewer). Live Cursor import = Observed interim wording |
+| [intended-workflow.md](./intended-workflow.md) | Target loop (owner approval preview when visual sign-off is documented or explicitly requested by the owner; dual gate; OpenCode bug_reviewer). Live Cursor import = Observed interim wording |
 | [instruction-layering.md](./instruction-layering.md) | Thin always-on vs on-demand skills/docs/agents (context budget) |
 | [clean-context-isolation.md](./clean-context-isolation.md) | Isolated child handoffs; no prior review transcripts |
 | [desired-behavior-vs-cursor-specific.md](./desired-behavior-vs-cursor-specific.md) | Portable vs Cursor-specific claims |

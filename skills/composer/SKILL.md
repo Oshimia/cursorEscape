@@ -2,8 +2,8 @@
 name: composer
 description: >-
   Thread conductor and run manager for phased multi-agent execution when the
-  user explicitly assigns the composer/conductor role. Delegates Nb
-  implementation and per-phase review loops to subagents; Na previews and
+  user explicitly assigns the composer/conductor role. Delegates
+  implementation and per-phase review loops to subagents; approval previews and
   migration drafts only; QC closeout reports plus transcript audit; automatic
   local commit per phase; never git push.
 disable-model-invocation: true
@@ -19,14 +19,14 @@ Composer is the **run manager**: launch work, then **verify process and evidence
 
 If assigned as Composer and the user asks you to **plan** (e.g. “plan with Composer”, “composer-level plan”): tell them to stay in Plan mode / [`implementation-plan`](../implementation-plan/SKILL.md) with Escalation **yes** / `user-labeled-composer`. Do not author the plan while conducting.
 
-Multi-phase Composer work **requires** a **repo** roadmap file via the `roadmap` skill (never under `~/.cursor`). Nb launches still require full Agent context from that roadmap ([plan-agent-context.md](../../workflow/plan-agent-context.md)).
+Multi-phase Composer work **requires** a **repo** roadmap file via the `roadmap` skill (never under `~/.cursor`). Implementation-subagent launches still require full Agent context from that roadmap ([plan-agent-context.md](../../workflow/plan-agent-context.md)).
 
 **Read before conducting** (workflow docs):
 
 | Doc | When |
 |-----|------|
 | [phased-multi-agent.md](../../workflow/phased-multi-agent.md) | Phase handoffs, roadmap shape, Composer lifecycle context |
-| [plan-agent-context.md](../../workflow/plan-agent-context.md) | Agent context headings Nb must receive |
+| [plan-agent-context.md](../../workflow/plan-agent-context.md) | Agent context headings the implementation subagent must receive |
 | [discovery.md](../../workflow/discovery.md) | How to find repo docs (Step 0 + fallback) |
 | [iterative-code-review.md](../../workflow/iterative-code-review.md) | Review loop the phase subagent must run |
 | [ci-ladder.md](../../workflow/ci-ladder.md) | Fast/Full CI mapping for any repo |
@@ -52,8 +52,8 @@ Absolute fallback if relative links fail: `C:/Users/admin/.cursor/` workflow mir
 
 ```text
 User ──(activation, product choices)──► Composer
-Composer ── Na: disposable preview (if needed) ──► User sign-off
-Composer ── Nb: launch ──► Phase subagent ── review loop (≤4/block) ──► closeout OR cap-exhausted handoff
+Composer ── approval preview (if needed) ──► User sign-off
+Composer ── launch ──► implementation subagent ── review loop (≤4/block) ──► closeout OR cap-exhausted handoff
 Composer ── on closeout: QC (report + transcript audit) ──► accept/reject
 Composer ── on cap handoff: transcript audit → triage (Renew|Focus-narrow|Terminate|Waive)
 Composer ── Full CI + git commit (local only) after ACCEPT ──► next phase
@@ -66,9 +66,9 @@ User ── git push (manual) ──► origin
 
 ### Composer DOES
 
-- Own thread state: phase, Na/Nb, locked decisions, blockers, todos
-- Ensure a repo roadmap exists (`roadmap` skill) before multi-phase Nb
-- Build disposable **Na** previews only when the roadmap/repo docs call for sign-off
+- Own thread state: phase, approval preview, implementation subagent, locked decisions, blockers, todos
+- Ensure a repo roadmap exists (`roadmap` skill) before multi-phase implementation
+- Build disposable **approval previews** when visual sign-off is documented or explicitly requested by the owner
 - Draft migration / external-apply artifacts only when the repo documents a user-apply gate; wait for user confirmation
 - Follow [discovery](../../workflow/discovery.md) (Step 0 local `reference-docs` if present)
 - Launch one phase subagent at a time (Cursor Task spawn: [composer overlay](../../overlays/cursor/skills/composer/SKILL.md#phase-subagent-launch-contract))
@@ -80,19 +80,19 @@ User ── git push (manual) ──► origin
 
 ### Composer DOES NOT
 
-- Implement Nb production code or fix review findings in product files
+- Implement production code or fix review findings in product files
 - Run `reviewer-a` / Bugbot for phase work (phase subagent owns the loop)
 - Start phase N+1 before phase N closeout completes
 - Run **`git push`** to any remote — even if the user says "push"
 - Attach prior chat transcripts to phase subagents
-- Commit migration-only changes before Nb dual APPROVED (or Composer-attested waiver after pressure-release triage)
+- Commit migration-only changes before the implementation subagent reaches dual APPROVED (or Composer-attested waiver after pressure-release triage)
 
 ### Phase subagent DOES
 
 - Discover docs first ([discovery](../../workflow/discovery.md); Step 0 `reference-docs` if present)
-- Implement Nb per roadmap **Agent context**
+- Implement the phase per roadmap **Agent context**
 - Run full `implementation-review` as review-loop parent (**≤4 dual-review iterations per block**; no 5th pair)
-- Delete disposable Na preview folder on closeout when required
+- Delete disposable approval-preview folder on closeout when required
 - Return [closeout report](#closeout-report-schema) after dual APPROVED + Full **or** [cap-exhausted handoff](#cap-exhausted-handoff-schema) after iteration 4 without dual APPROVED (**no Full** on handoff; **do not self-renew**)
 - **Never** `git commit` or `git push`
 - **Never** self-Waive
@@ -101,17 +101,19 @@ User ── git push (manual) ──► origin
 
 ## Phase lifecycle
 
+**Resume/compaction:** before any phase action, reread this skill, the active roadmap, and repo preview conventions. Never infer approval or migration gates from a summary.
+
 ```text
 Phase N:
-  1. Na? → Composer builds disposable preview → user sign-off → lock in roadmap
+  1. Approval preview required (documented or explicitly requested by the owner)? → Composer builds disposable preview → user sign-off → lock in roadmap
   2. Migration/external gate? → Composer drafts → user applies → confirm
-  3. Launch Nb subagent
-  4. Nb: implement → Fast + dual review (≤4/block)
+  3. Launch the implementation subagent
+  4. Implementation subagent: implement → Fast + dual review (≤4/block)
        ├─ dual APPROVED → Full CI → cleanup → closeout report → step 5a
        └─ iter 4 without dual APPROVED → cap-exhausted handoff (no Full) → step 5b
   5a. Composer QC on closeout (report + transcript audit) → ACCEPT → roadmap → Full → commit → next
   5b. Composer transcript audit on handoff → triage (Renew|Focus-narrow|Terminate|Waive)
-       ├─ Renew / Focus-narrow → relaunch/resume Nb (iteration reset to 1; ≤4 more) → step 4
+       ├─ Renew / Focus-narrow → relaunch/resume the implementation subagent (iteration reset to 1; ≤4 more) → step 4
        ├─ Terminate / change approach → escalate to user; no ACCEPT
        └─ Waive (process/out-of-spec only) → waiver attestation → Composer Full → ACCEPT → commit
   6. Next phase
@@ -123,16 +125,16 @@ Phase N:
 
 ---
 
-## Na / disposable previews
+## Approval previews
 
-Only when roadmap or repo docs require visual sign-off.
+Only when visual sign-off is documented or explicitly requested by the owner.
 
 - Prefer a disposable path the repo documents
 - **Common Next.js convention (when applicable):** `frontend/src/app/tmp-ui-signoff/<feature>/phase-N/**` with `notFound()` outside development and a delete-after-closeout banner
 - Never under product `/dev` routes unless the repo already uses that pattern intentionally
-- Phase subagent deletes the phase folder on Nb closeout
+- The implementation subagent deletes the phase folder on closeout
 
-If the stack has no suitable preview surface, skip Na and record the decision in the roadmap.
+If no suitable preview surface exists, stop at the approval gate and ask the owner to approve an alternative preview or deferral; do not launch the implementation subagent without explicit owner confirmation.
 
 ---
 
@@ -143,10 +145,10 @@ Only if the repo documents a user-apply process (migrations, secrets, manual ops
 | Step                                  | Owner                           |
 | ------------------------------------- | ------------------------------- |
 | Draft + risk notes                    | Composer                        |
-| User applies                          | User — block Nb until confirmed |
-| File + app code in reviewed changeset | Phase subagent (Nb)             |
+| User applies                          | User — block implementation until confirmed |
+| File + app code in reviewed changeset | Composer phase implementation subagent |
 
-Never commit migration-only before Nb dual APPROVED.
+Never commit migration-only before the implementation subagent reaches dual APPROVED.
 
 **Resume vs relaunch:** QC reject → `resume` with gap list when possible; else fresh launch with Current state. Max 2 substantive QC rejections → escalate to user.
 
@@ -191,7 +193,7 @@ Never commit migration-only before Nb dual APPROVED.
 - Subagent / reviewer Task ids (or transcript refs):
 
 ### Cleanup
-- Disposable Na preview deleted: yes | n/a
+- Disposable approval preview deleted: yes | n/a
 
 ### Blockers
 - none | [list]
@@ -201,7 +203,7 @@ Never commit migration-only before Nb dual APPROVED.
 
 ## Cap-exhausted handoff schema
 
-When iteration 4 ends without dual APPROVED, Nb returns this instead of a closeout report. **No Full CI.** This QC cap path is distinct from the user-invoked portable handoff defined in [handoff.md](../../workflow/handoff.md), which it does not replace or duplicate.
+When iteration 4 ends without dual APPROVED, the implementation subagent returns this instead of a closeout report. **No Full CI.** This QC cap path is distinct from the user-invoked portable handoff defined in [handoff.md](../../workflow/handoff.md), which it does not replace or duplicate.
 
 ```markdown
 ## Phase cap-exhausted handoff — Phase N of M
@@ -243,7 +245,7 @@ When iteration 4 ends without dual APPROVED, Nb returns this instead of a closeo
 
 On receiving a **cap-exhausted handoff** (not a dual-APPROVED closeout): **do not** run the dual-APPROVED QC ACCEPT path. Run transcript audit first (verify ≤4 iterations this block, no 5th pair, no Full-before-handoff), then choose exactly one:
 
-1. **Renew** — relaunch/resume Nb with the in-spec must-fix list; reset review iteration to 1; ≤4 more iterations; same phase scope
+1. **Renew** — relaunch/resume the implementation subagent with the in-spec must-fix list; reset review iteration to 1; ≤4 more iterations; same phase scope
 2. **Focus-narrow** — same as Renew but reduced file/doc scope and Bugbot Custom Instructions = current-fix only (maps closed-roadmap “narrowed spec” / “change approach” when the fix is to shrink scope)
 3. **Terminate** — escalate to user or replan; do not silent-continue; no ACCEPT (maps closed-roadmap “change approach” when stopping the loop)
 4. **Waive** — only out-of-spec or process-only nits; write [Composer waiver attestation](#composer-waiver-attestation); **never** waive Fast/Full CI failures; then Composer Full (or user ack if `n/a`) → ACCEPT
@@ -275,13 +277,13 @@ QC has **two mandatory gates** on the **dual-APPROVED closeout** path — both m
 
 Compare report to **attestation** `git diff --name-only` (not the live tree after roadmap edits).
 
-**REJECT** if: missing attestation; not dual APPROVED / Bugbot lists ≠ `"None"` or Reviewer-a blocking lists ≠ `"None"` (Batchable (deferred) may be non-None — do not REJECT for that alone); Full not pass (unless blocked → ask user to stop lockers); reviewers launched with Full or after dual APPROVED without code changes; phase N+1 production paths in attestation (vs phase Agent context); required Na folder still present; subagent committed/pushed; empty docs-consulted section.
+**REJECT** if: missing attestation; not dual APPROVED / Bugbot lists ≠ `"None"` or Reviewer-a blocking lists ≠ `"None"` (Batchable (deferred) may be non-None — do not REJECT for that alone); Full not pass (unless blocked → ask user to stop lockers); reviewers launched with Full or after dual APPROVED without code changes; phase N+1 production paths in attestation (vs phase Agent context); required approval-preview folder still present; subagent committed/pushed; empty docs-consulted section.
 
 **Cap→Waive ACCEPT:** do **not** REJECT solely for missing dual APPROVED when a complete [Composer waiver attestation](#composer-waiver-attestation) is present and Full passes (or `n/a` + user ack). Still REJECT if Fast/Full failures were “waived,” or if waived items were clearly in-spec must-fix.
 
 ### B. Transcript audit (hard gate)
 
-After Nb returns (and after any Na / migration Composer did for this phase), read transcripts and audit for **evidence in the transcript** (or, for nested Bugbot only, harness Task UI/result summary per [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence)), not self-attestation alone.
+After the implementation subagent returns (and after any approval preview or migration work Composer did for this phase), read transcripts and audit for **evidence in the transcript** (or, for nested Bugbot only, harness Task UI/result summary per [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence)), not self-attestation alone.
 
 **On cap-exhausted handoff:** run this audit **before** triage.
 
@@ -289,9 +291,9 @@ After Nb returns (and after any Na / migration Composer did for this phase), rea
 
 | Who | What to read |
 |-----|----------------|
-| Phase Nb subagent | Full transcript for that Task (via agent id / agent-transcripts path from the launch) |
-| Nested `reviewer-a` / Bugbot | Each nested reviewer’s transcript when IDs or transcript paths appear in the Nb transcript or Task results |
-| Composer (self) | This thread’s own actions for Na preview and migration/external-apply drafts for this phase |
+| Phase implementation subagent | Full transcript for that Task (via agent id / agent-transcripts path from the launch) |
+| Nested `reviewer-a` / Bugbot | Each nested reviewer’s transcript when IDs or transcript paths appear in the implementation-subagent transcript or Task results |
+| Composer (self) | This thread’s own actions for the approval preview and migration/external-apply drafts for this phase |
 
 If a nested **Reviewer-a** transcript cannot be located after a reasonable search, **REJECT** — do not ACCEPT on trust of the closeout claim alone. Missing Task ids in the closeout report alone is not automatic accept; Composer must still find and read Reviewer-a transcripts. For **Bugbot**, prefer the transcript when readable; if the body is empty/redacted, apply [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence) before REJECT.
 
@@ -303,11 +305,11 @@ When the nested Bugbot transcript body is empty, redacted, or only `<answer></an
 
 - **Discovery / SOP skip:** no reads of discovery Step 0 / required repo docs / roadmap “Where to read context” before implementing
 - **Review loop skip or compression:** missing Fast CI before reviewers; missing parallel `reviewer-a` + Bugbot; claimed APPROVED without matching reviewer output (**except** Bugbot when [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence) applies); must-fix findings left open on closeout path (Bugbot any list, or Reviewer-a Blocking / Non-blocking / blocking test/docs); do **not** treat Reviewer-a Batchable (deferred) as findings left open; iteration count doesn’t match launches/fixes
-- **Pressure-release misuse:** 5th reviewer pair in a block; Full CI run on cap-exhausted handoff; self-renew past the block without Composer triage; Normal-agent-style Terminate used by Nb to claim phase complete
+- **Pressure-release misuse:** 5th reviewer pair in a block; Full CI run on cap-exhausted handoff; self-renew past the block without Composer triage; Normal-agent-style Terminate used by the implementation subagent to claim phase complete
 - **Gate misuse:** reviewers launched with Full CI; reviewers re-launched after dual APPROVED with no code changes; Full CI skipped or run before dual APPROVED on the closeout path
-- **Shortcut closeout:** empty/fake docs-consulted; Na folder not deleted when required; `git commit` / `git push` by subagent
+- **Shortcut closeout:** empty/fake docs-consulted; approval-preview folder not deleted when required; `git commit` / `git push` by subagent
 - **Scope leak:** work clearly outside this phase’s Agent context / into phase N+1
-- **Composer self-audit fails:** Na built when not required, or skipped when required; migration draft/apply gate violated; Nb launched before user confirmation on gated steps
+- **Composer self-audit fails:** approval preview built when not required, or skipped when required; migration draft/apply gate violated; implementation subagent launched before user confirmation on gated steps
 - **Nested reviewer audit fails:** reviewer did not actually review the phase changeset / rubber-stamped without reading changed files (when transcript shows that)
 
 On REJECT: `resume` with gap list when possible; else fresh launch with Current state. Max 2 substantive QC rejections → escalate to user.
@@ -345,10 +347,10 @@ Against attestation paths vs **this phase’s Agent context** — do not assume 
 
 | Wrong                          | Right                         |
 | ------------------------------ | ----------------------------- |
-| Composer implements Nb         | Launch phase subagent         |
+| Composer would implement production code | Launch the implementation subagent |
 | Skip dual APPROVED (no waiver) | QC reject                     |
 | Cap handoff treated as closeout ACCEPT | Triage first; Waive only with attestation |
-| Nb self-renews past 4 iterations | Cap-exhausted handoff to Composer |
+| Implementation subagent self-renews past 4 iterations | Cap-exhausted handoff to Composer |
 | Ask user to confirm commit     | Auto-commit after QC + Full   |
 | `git push`                     | Forbidden — user pushes       |
 | Roadmap under `~/.cursor`      | Repo path via `roadmap` skill |
@@ -365,7 +367,7 @@ Against attestation paths vs **this phase’s Agent context** — do not assume 
 | Mid-phase assignment              | `git status`; launch with Current state                    |
 | Full blocked (dev server / locks) | Ask user to stop; no commit until Full passes or `n/a` ack |
 | User says "push"                  | Refuse                                                     |
-| Single-phase with conductor       | One Nb + same QC/commit flow                               |
+| Single-phase with conductor       | One implementation subagent + same QC/commit flow |
 | Cap-exhausted handoff             | Audit → triage; do not dual-APPROVED REJECT reflex         |
 
 ---

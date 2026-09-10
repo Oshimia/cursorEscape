@@ -1,6 +1,6 @@
 # Skills
 
-**Last updated:** 2026-09-08
+**Last updated:** 2026-09-10
 
 ## Context
 
@@ -90,6 +90,8 @@ Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overla
 | resolving-merge-conflicts | [resolving-merge-conflicts/SKILL.md](./resolving-merge-conflicts/SKILL.md) | — (portable, caller-loaded) |
 
 ### Optional orchestration (Nice-to-have / Cursor-specific)
+
+Composer runs an owner approval preview when visual sign-off is documented or explicitly requested by the owner, then launches an implementation subagent for the reviewed phase.
 
 | Skill | Procedure | Cursor overlay | OpenCode overlay |
 | ----- | --------- | -------------- | ---------------- |

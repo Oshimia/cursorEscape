@@ -46,7 +46,7 @@ Phase **incomplete** until **one** of:
 
 1. Observed Fast CI (when Fast ≠ n/a) → dual APPROVED → Full CI (when Full ≠ n/a)
 2. When Full = `n/a`: dual APPROVED + explicit user ack (Composer: return closeout only, no commit)
-3. **Composer Nb only:** iteration 4 without dual APPROVED → return **cap-exhausted handoff** per companion `skills/composer/SKILL.md` (no Full; not phase-complete)
+3. **Composer phase implementation subagent only:** iteration 4 without dual APPROVED → return **cap-exhausted handoff** per companion `skills/composer/SKILL.md` (no Full; not phase-complete)
 
 ## Composer
 

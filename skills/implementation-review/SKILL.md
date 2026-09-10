@@ -32,9 +32,9 @@ Absolute fallback: `C:/Users/admin/.cursor/` workflow mirror (copy-out only).
 
 When the user assigns [`composer`](../composer/SKILL.md) for phased execution:
 
-- The **phase subagent** is the implementing agent and **review-loop parent** for Nb
-- The Composer does not implement Nb, run reviewers for phase work, or fix product findings
-- After dual `APPROVED` + Full CI, Composer QC's the closeout report **and audits transcripts** (Nb, nested reviewers, and Composer's own Na/migration work for the phase), then runs **Full CI** again and an **automatic local commit** (never `git push`)
+- The **phase subagent** is the implementing agent and **review-loop parent**
+- The Composer does not implement production code, run reviewers for phase work, or fix product findings
+- After dual `APPROVED` + Full CI, Composer QC's the closeout report **and audits transcripts** (implementation subagent, nested reviewers, and Composer's own approval-preview/migration work for the phase), then runs **Full CI** again and an **automatic local commit** (never `git push`)
 - If Full = `n/a`, dual APPROVED + explicit user ack before commit
 - **Pressure release:** after a 4-iteration block without dual APPROVED, the phase subagent does **not** self-renew and does **not** run Full CI — return a **cap-exhausted handoff** per [`composer`](../composer/SKILL.md). Schemas and triage live there. **Waive = Composer-only.**
 
@@ -82,7 +82,7 @@ Implement phase
   → for each ≤4-iteration block:
       [Fast CI Observed → Reviewer A + Bugbot → fix must-fix] (max 4)
       → dual APPROVED? → Full CI → complete
-      → else pressure-release reassessment (normal) or cap-exhausted handoff (Composer Nb)
+      → else pressure-release reassessment (normal) or cap-exhausted handoff (Composer phase implementation subagent)
 ```
 
 1. **Implement** the current phase (or full scope if single-phase) using discovery + this repo’s documented conventions.
@@ -181,7 +181,7 @@ Reviewers are **only** invoked with `Completion gate: review-loop` and **Fast** 
 
 1. **Never** launch Reviewer A or Bugbot with Full CI — reviewers always follow Fast CI only.
 2. **Never** launch reviewers again after dual `APPROVED` (split bars) unless you subsequently changed code. Open Reviewer-a **Batchable (deferred)** alone does **not** invalidate approval.
-3. **Closeout = Full CI only** after dual `APPROVED`. After a **4-iteration pressure-release block** without dual APPROVED, Composer Nb returns a cap-exhausted handoff instead — **no Full**.
+3. **Closeout = Full CI only** after dual `APPROVED`. After a **4-iteration pressure-release block** without dual APPROVED, the Composer phase implementation subagent returns a cap-exhausted handoff instead — **no Full**.
 4. If Full CI fails after dual `APPROVED`, fix and re-run **Full** only. Re-run reviewers only if fixes invalidate the prior approval.
 
 ---
@@ -235,7 +235,7 @@ After dual `APPROVED` + Full CI, report at least:
 - **Batchable (deferred):** copy from Reviewer-a final output, or `"None"`
 - **Caveat:** dual APPROVED is the loop completion bar — not proven ship-class catch or proven no-escape. Do not run a post-clean audit unless the user asks.
 
-Cap-exhausted handoff (Composer Nb, no dual APPROVED): do **not** use this closeout schema — use the handoff schema in [`composer`](../composer/SKILL.md).
+Cap-exhausted handoff (Composer phase implementation subagent, no dual APPROVED): do **not** use this closeout schema — use the handoff schema in [`composer`](../composer/SKILL.md).
 
 ---
 

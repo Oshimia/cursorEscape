@@ -27,7 +27,7 @@ Skip only for the truly trivial plan-review cases or explicit user opt-out such 
 
 ## Codex skills and pointers
 
-The installed catalog has 23 thin wrappers. Invoke the exact `$skill-id` when using Codex; load the matching canonical skill before non-trivial work. `opencode-headless-run` and `opencode-history-search` are explicit-only. For deep procedure, FA, SOP, rule, workflow, and agent-contract reads, use the absolute companion path shown by `C:/codex-phase1-fixture/companion`; never replace it with a relative hop from the Codex home or skill root, and never treat host-local files as procedure source-of-truth.
+The installed catalog has 23 thin wrappers. Invoke the exact `$skill-id` when using Codex; load the matching canonical skill before non-trivial work. `opencode-headless-run` and `opencode-history-search` are explicit-only. For deep procedure, FA, SOP, rule, workflow, and agent-contract reads, use the absolute companion path shown by `C:/codex-phase1-fixture/companion`; never replace it with a relative hop from the Codex home or skill root, and never treat host-local files as procedure source-of-truth. When acting as Composer after resume or compaction, reread canonical `composer/SKILL.md` and the active roadmap before any phase action.
 
 ## Isolation and safety boundaries
 

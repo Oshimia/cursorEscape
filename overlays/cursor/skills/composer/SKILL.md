@@ -2,8 +2,8 @@
 name: composer
 description: >-
   Thread conductor and run manager for phased multi-agent execution when the
-  user explicitly assigns the composer/conductor role. Delegates Nb
-  implementation and per-phase review loops to subagents; Na previews and
+  user explicitly assigns the composer/conductor role. Delegates
+  implementation and per-phase review loops to subagents; approval previews and
   migration drafts only; QC closeout reports plus transcript audit; automatic
   local commit per phase; never git push.
 disable-model-invocation: true
@@ -19,7 +19,7 @@ Thin harness. Full conductor procedure: Read `{{COMPANION_ROOT}}/skills/composer
 |-----|------|
 | [SKILL.md]({{COMPANION_ROOT}}/skills/composer/SKILL.md) | Full conductor procedure |
 | [phased-multi-agent.md]({{COMPANION_ROOT}}/workflow/phased-multi-agent.md) | Phase handoffs, roadmap shape, Composer lifecycle context |
-| [plan-agent-context.md]({{COMPANION_ROOT}}/workflow/plan-agent-context.md) | Agent context headings Nb must receive |
+| [plan-agent-context.md]({{COMPANION_ROOT}}/workflow/plan-agent-context.md) | Agent context headings the implementation subagent must receive |
 | [discovery.md]({{COMPANION_ROOT}}/workflow/discovery.md) | How to find repo docs (Step 0 + fallback) |
 | [iterative-code-review.md]({{COMPANION_ROOT}}/workflow/iterative-code-review.md) | Review loop the phase subagent must run |
 | [ci-ladder.md]({{COMPANION_ROOT}}/workflow/ci-ladder.md) | Fast/Full CI mapping for any repo |
@@ -28,7 +28,7 @@ Thin harness. Full conductor procedure: Read `{{COMPANION_ROOT}}/skills/composer
 
 **Companion reachability:** `{{COMPANION_ROOT}}` resolves to the cursorEscape SoT checkout — required when workspace ≠ cursorEscape. Copy-out fallback (transitional mirror only): `C:/Users/admin/.cursor/docs/workflow/`.
 
-**Cursor conductor notes:** Phase subagent is the implementer and review-loop parent (≤4 dual-review iterations per pressure-release block). Composer does not implement Nb, run reviewers for phase work, or fix product findings. On dual APPROVED closeout: Composer QC's closeout + transcript audit, then Full CI + automatic local commit (never `git push`). On cap-exhausted handoff: audit → triage per companion composer skill (schemas live there). Bugbot QC evidence (incl. Task UI “found no bugs” when the nested transcript is empty/redacted) is defined in companion Composer QC Gate B — do not re-launch Bugbot solely for that pattern.
+**Cursor conductor notes:** Build an approval preview first when visual sign-off is documented or explicitly requested by the owner. The phase subagent is the implementer and review-loop parent (≤4 dual-review iterations per pressure-release block). Composer does not implement production code, run reviewers for phase work, or fix product findings. On dual APPROVED closeout: Composer QC's closeout + transcript audit, then Full CI + automatic local commit (never `git push`). On cap-exhausted handoff: audit → triage per companion composer skill (schemas live there). Bugbot QC evidence (incl. Task UI “found no bugs” when the nested transcript is empty/redacted) is defined in companion Composer QC Gate B — do not re-launch Bugbot solely for that pattern. After resume or compaction, reread the companion Composer skill and active roadmap before any phase action.
 
 ---
 

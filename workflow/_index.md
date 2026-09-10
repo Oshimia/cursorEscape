@@ -1,6 +1,6 @@
 # Workflow docs (shared deep procedure)
 
-**Last updated:** 2026-08-23
+**Last updated:** 2026-09-10
 
 **Ownership:** Process changes land here first. Repo SOPs may extend with local paths; they must not contradict this core.
 
@@ -12,7 +12,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 |-----|---------|
 | [discovery.md](discovery.md) | How to find repo docs (Step 0 + fallback) |
 | [documentation-architecture.md](documentation-architecture.md) | Default layout when bootstrapping **new** docs |
-| [phased-multi-agent.md](phased-multi-agent.md) | Large multi-phase handoffs + roadmap shape |
+| [phased-multi-agent.md](phased-multi-agent.md) | Large multi-phase handoffs, roadmap shape, and owner approval previews when visual sign-off is documented or explicitly requested by the owner |
 | [plan-agent-context.md](plan-agent-context.md) | Escalation field + Agent context headings (escalated plans only) |
 | [plan-reviewer-report.md](plan-reviewer-report.md) | Plan-reviewer output schema (limits, severity, exact report structure) |
 | [iterative-plan-review.md](iterative-plan-review.md) | Plan → plan-reviewer loop |
@@ -43,7 +43,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [plan-review](../skills/plan-review/SKILL.md) | Plan → plan-reviewer loop gate |
 | [implementation-plan](../skills/implementation-plan/SKILL.md) | Plan drafting + Incomplete until SoT |
 | [implementation-review](../skills/implementation-review/SKILL.md) | Per-phase Reviewer A + Bugbot |
-| [composer](../skills/composer/SKILL.md) | Phased execution conductor |
+| [composer](../skills/composer/SKILL.md) | Phased execution conductor: approval preview when needed, then implementation subagent |
 | [roadmap](../skills/roadmap/SKILL.md) | Repo multi-phase handoff files |
 | [documentation-architecture](../skills/documentation-architecture/SKILL.md) | Bootstrap/extend repo docs layout |
 | [codebase-design](../skills/codebase-design/SKILL.md) | Portable deep-module design reference |

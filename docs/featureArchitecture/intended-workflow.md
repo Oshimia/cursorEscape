@@ -1,6 +1,6 @@
 # Intended Workflow
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-09-10
 
 ## Context
 
@@ -17,11 +17,12 @@ Dual-gate review research (openBuggy) informs leg responsibilities. First recrea
 ```text
 Discover repo docs (discovery)
   → Plan (implementation-plan skill; plan_reviewer gate)  [default on]
-  → Implement (implementer; phase subagent on multi-phase work)
+  → Owner approval preview (when visual sign-off is documented or explicitly requested by the owner)
+  → Implement (implementer; Composer phase implementation subagent on multi-phase work)
   → ≤4× (Fast CI Observed → production_readiness_reviewer ∥ bug_reviewer → fix must-fix)
   → dual APPROVED (split bars) → Full CI (closeout; no reviewers) → phase complete / commit
   → else: normal reassessment (Renew | Focus-narrow | Terminate+user) with anti-abuse
-       [Composer Nb only:] cap-exhausted handoff → Composer triage
+       [Composer phase implementation subagent only:] cap-exhausted handoff → Composer triage
 ```
 
 | Stage | Owner | Claim |
@@ -31,6 +32,7 @@ Discover repo docs (discovery)
 | Fast CI before reviewers | Review-loop parent | **Required** — per-command Observed rows when Fast ≠ `n/a` |
 | Parallel dual review | production_readiness_reviewer ∥ bug_reviewer | **Required** default on for non-trivial changes — same skip list as plan gate ([implementation-review](../../skills/implementation-review/SKILL.md)) |
 | Full CI at closeout | Parent (never paired with reviewers) | **Required** when Full ≠ `n/a` |
+| Owner approval preview | Composer | **Required when visual sign-off is documented or explicitly requested by the owner** — disposable UI approval preview before implementation ([composer](../../skills/composer/SKILL.md)) |
 | Composer conductor on phased roadmaps | Composer QC + phase subagent parent | **Cursor-specific** optional orchestration — see [composer skill](../../skills/composer/SKILL.md) |
 
 ### Dual-gate review (Required)
@@ -48,7 +50,7 @@ Aligned with companion [implementation-review](../../skills/implementation-revie
 
 **Required (live):** Observed Fast CI — no launch on fail, skipped (when Fast ≠ `n/a`), or claimed-only prose. openBuggy study ranks this enforcement highly ([ci-gating](../../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/ci-gating.md)). On OpenCode, Fast CI remains **parent skill discipline** (not host-enforced).
 
-**Required:** 4-iteration pressure release for review parents — at most 4 dual-review iterations per block, then normal-agent reassessment (Renew | Focus-narrow | Terminate+user with anti-abuse); cumulative per-leg launch counts ([implementation-review](../../skills/implementation-review/SKILL.md)). Supersedes historical “narrow when `count >= 9` / no hard stop” ([workflow-source-delta](../../research/imported/workflow-source-delta.md#iteration-narrowing-live-only) = Observed archaeology). Composer Nb cap-exhausted handoff + Waive = Composer-only when conducting ([composer](../../skills/composer/SKILL.md)).
+**Required:** 4-iteration pressure release for review parents — at most 4 dual-review iterations per block, then normal-agent reassessment (Renew | Focus-narrow | Terminate+user with anti-abuse); cumulative per-leg launch counts ([implementation-review](../../skills/implementation-review/SKILL.md)). Supersedes historical “narrow when `count >= 9` / no hard stop” ([workflow-source-delta](../../research/imported/workflow-source-delta.md#iteration-narrowing-live-only) = Observed archaeology). Composer phase implementation subagent cap-exhausted handoff + Waive = Composer-only when conducting ([composer](../../skills/composer/SKILL.md)).
 
 **First host (Desired):** Dual review as **one OpenCode session** with two Task launches in parallel — not two T3 worktrees ([workspace model](./workspace-model.md)).
 
@@ -63,7 +65,7 @@ Do **not** copy freeze baseline's hardcoded four npm commands into cursorEscape 
 
 ### Phased multi-agent (Nice-to-have / Cursor-specific)
 
-On initialization-style roadmaps, **Composer** conducts: phase subagent implements, owns review loop (≤4 iterations per pressure-release block), reaches dual APPROVED then first Full CI when Full ≠ `n/a` (or returns after dual APPROVED when Full = `n/a`); on cap without dual APPROVED returns **cap-exhausted handoff** (no Full) for Composer triage. Composer QCs closeout + transcripts (or audits handoff then Renew/Focus-narrow/Terminate/Waive), runs second Full CI when Full ≠ `n/a` on the dual-APPROVED path (or single Composer Full on Cap→Waive; or obtains user ack when Full = `n/a`), then local commit (never push) ([composer](../../skills/composer/SKILL.md)). Host-agnostic equivalent: any orchestrator that enforces the same gates without Cursor Task IDs (OpenCode parent + Task subagents).
+On initialization-style roadmaps, **Composer** conducts: builds an owner approval preview when visual sign-off is documented or explicitly requested by the owner; the phase implementation subagent then implements, owns the review loop (≤4 iterations per pressure-release block), reaches dual APPROVED then first Full CI when Full ≠ `n/a` (or returns after dual APPROVED when Full = `n/a`); on cap without dual APPROVED it returns a **cap-exhausted handoff** (no Full) for Composer triage. Composer QCs closeout + transcripts (or audits handoff then Renew/Focus-narrow/Terminate/Waive), runs second Full CI when Full ≠ `n/a` on the dual-APPROVED path (or single Composer Full on Cap→Waive; or obtains user ack when Full = `n/a`), then local commit (never push) ([composer](../../skills/composer/SKILL.md)). Host-agnostic equivalent: any orchestrator that enforces the same gates without Cursor Task IDs (OpenCode parent + Task subagents).
 
 ### What cursorEscape does not own in v0
 

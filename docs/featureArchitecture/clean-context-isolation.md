@@ -1,6 +1,6 @@
 # Clean Context and Isolation
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-09-10
 
 ## Context
 
@@ -25,7 +25,7 @@ Shared parent chat history lets a child “remember” prior review transcripts,
 | [plan_reviewer](../../agents/plan_reviewer.md) | Child session; full synthesized plan each pass — **no** prior review transcripts |
 | [production_readiness_reviewer](../../agents/production_readiness_reviewer.md) | Child session; locked opener; parent supplies Completion gate + CI Observed |
 | [bug_reviewer](../../agents/bug_reviewer.md) | Child session; Custom Instructions envelope for scope |
-| Composer phase subagent | Child implementer + review-loop parent for phase Nb ([composer](../../skills/composer/SKILL.md)) |
+| Composer phase subagent | Child implementer + review-loop parent for the phase ([composer](../../skills/composer/SKILL.md)) |
 
 [repository_explorer](../../agents/repository_explorer.md) and optional [test_reviewer](../../agents/test_reviewer.md) should follow the same pack-everything-in-invoke pattern when launched as children.
 

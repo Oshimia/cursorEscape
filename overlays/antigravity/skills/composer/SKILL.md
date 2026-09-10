@@ -24,7 +24,7 @@ User assigns Composer for multi-phase roadmap execution after an accepted plan.
 ## Antigravity conductor protocol
 
 1. **Pre-flight:** confirm `implementer`, reviewer subagent defs, and this conductor's config are current in a **fresh session / full restart** before launching any phase subagent — mid-session config edits stay invisible until restart. Empty/fast reviewer subagents (< ~1s, empty result) are routing failures — **fail loud**, never treat as APPROVED.
-2. **Nb launch contract:** every `invoke_subagent` payload carries an **attestation marker line** the child must echo back verbatim (mangling detection); roadmap-derived prompts come from **Read** of the roadmap doc — never improvised from memory.
+2. **Implementation launch contract:** every `invoke_subagent` payload carries an **attestation marker line** the child must echo back verbatim (mangling detection); roadmap-derived prompts come from **Read** of the roadmap doc — never improvised from memory.
 3. **Iteration discipline:** auto-continue within each 4-iteration pressure-release block — no permission pauses between iterations; track cumulative per-leg launch counts across blocks.
 4. **Gate B evidence:** audit via the Antigravity subagent panel and conversation transcripts (JSONL logs) — parent → subagent chain visible per conversation ids; returned summaries are secondary evidence only. Missing chain = **REJECT** the closeout claim.
 5. **CLI fallback** (only when IDE nesting degraded): **top-level only** — never instruct a subagent to spawn sessions; write the review brief with the native write tool (no shell redirection); invoke the `agy` CLI headless with a single-line prompt referencing the brief; capture stdout as the verdict artifact; record the session id.
@@ -37,11 +37,11 @@ User assigns Composer for multi-phase roadmap execution after an accepted plan.
 | [SKILL.md]({{COMPANION_ROOT}}/skills/composer/SKILL.md) | Full conductor procedure + handoff/waiver schemas |
 | [phased-multi-agent.md]({{COMPANION_ROOT}}/workflow/phased-multi-agent.md) | Handoff shape |
 | [iterative-code-review.md]({{COMPANION_ROOT}}/workflow/iterative-code-review.md) | Review loop the subagent must run |
-| [implementation-review/SKILL.md]({{COMPANION_ROOT}}/skills/implementation-review/SKILL.md) | Pressure-release policy Nb must follow |
+| [implementation-review/SKILL.md]({{COMPANION_ROOT}}/skills/implementation-review/SKILL.md) | Pressure-release policy the implementation subagent must follow |
 
 ## Must not
 
-- Composer implementing Nb
+- Composer implementing production code
 - Skipping dual gate
 - Treating cap handoff as dual-APPROVED closeout
 - Commit without Full when Full ≠ `n/a` (or without user ack when Full = `n/a`; Cap→Waive = single Composer Full)
