@@ -40,6 +40,6 @@ pwsh scripts\Sync-HostHarness.ps1                                # normative -Ta
 ## Risks / notes
 
 - **Subagent depth 1** — reviewer fan-out parent-side (attested deviation, Antigravity C3 precedent).
-- **4-stack fan-out** — every procedure edit now fans out to 4 host surfaces during the editing-companion cascade; golden/check upkeep multiplies accordingly.
+- **4-stack fan-out** — every procedure edit now fans out to 4 host surfaces during the editing-companion cascade; baseline/check upkeep multiplies accordingly.
 - **Baseline restore** — pre-bringup baseline dir is restore-only if an Apply damages pre-existing content.
 - **Future note** — if a 5th stack arrives, propose a shared generic adapter to the owner instead of a 4th/5th clone (cost note, 2026-09-01 review).

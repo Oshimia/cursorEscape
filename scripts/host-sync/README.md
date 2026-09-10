@@ -49,7 +49,7 @@ Entry keys beyond `Source`/`Dest`:
 - **`Parts` / `Footer`** — compose the dest from ordered file references (e.g. host `__header__.md` part + `base:` body + wiring footer). Composed dests leave no second authored procedure.
 - **`Substitutions`** — fail-closed: each must match **exactly once**; no-match / double-match = hard render error.
 - **`PlannedContent`** — dry-run captures would-be written content (incl. dual-written mirrors) for CI asserts.
-- **Goldens** — committed expected-renders under [`goldens/`](./goldens/phase2/) are the byte-exact regression anchor for composed dests.
+- **Expected renders** — committed expected-renders under [`render-baselines/`](./render-baselines/phase2/) are the byte-exact regression anchor for composed dests.
 - **Ref resolution contract** (unit checks U17–U20): rooted/absolute refs verbatim; un-pre-resolved classed refs throw; overlay-relative refs resolve source-dir first, then `OverlayRoot` fallback.
 
 FA recording: [skill-source-and-host-overlays](../../docs/featureArchitecture/skill-source-and-host-overlays.md#per-entry-v2-sourcing-overlay-remediation-phase-12--required).

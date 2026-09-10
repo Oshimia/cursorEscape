@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "kind": "codex-phase1-normalized-render-hash-golden",
+  "kind": "codex-phase1-normalized-render-hash-baseline",
   "normalization": "UTF-8 SHA-256 after CRLF-to-LF and exactly one terminal LF; explicit fixture roots; no live host state",
   "fixtureCompanionRoot": "C:/codex-phase1-fixture/companion",
   "entries": [

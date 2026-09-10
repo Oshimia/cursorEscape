@@ -3,7 +3,7 @@
 .SYNOPSIS
   Phase 2 remediation checks (per-entry v2 migration): single-source-per-Dest，
   fail-closed substitution behavior (via unit checks)， residual host markers，
-  C1 gate atoms， persistent 12k rendered size， golden byte-equality for migrated
+  C1 gate atoms， persistent 12k rendered size， baseline byte-equality for migrated
   whole-file shares， composed-instruction surface properties.
   Exits non-zero on any failure. Read-only + scratch only (no live writes).
 #>
@@ -62,38 +62,38 @@ foreach ($sid in @('Antigravity', 'OpenCode', 'Cursor', 'Vscode', 'Cline', 'Kilo
     $planned[$sid] = $report
 }
 
-# ---------- 3. Golden byte-equality: rendered antigravity skill dests == committed goldens ----------
-# Compare basis (remediation-checks spec, single statement): the committed golden renders
-# (scripts/host-sync/goldens/phase2/) are THE regression surface for the relocation class —
-# each golden is the token-merged HEAD-authored overlay leaf captured at migration time.
-$goldenRoot = Join-Path $hostSyncRoot 'goldens\phase2\antigravity'
-$goldenPairs = @(
-    @{ Dest = 'config/skills/discovery/SKILL.md';                    Golden = 'overlays__antigravity__skills__discovery__SKILL.md' }
-    @{ Dest = 'config/skills/implementation-plan/SKILL.md';          Golden = 'overlays__antigravity__skills__implementation-plan__SKILL.md' }
-    @{ Dest = 'config/skills/plan-review/SKILL.md';                  Golden = 'overlays__antigravity__skills__plan-review__SKILL.md' }
-    @{ Dest = 'config/skills/documentation-architecture/SKILL.md';   Golden = 'overlays__antigravity__skills__documentation-architecture__SKILL.md' }
-    @{ Dest = 'config/skills/roadmap/SKILL.md';                      Golden = 'overlays__antigravity__skills__roadmap__SKILL.md' }
-    @{ Dest = 'config/skills/diagnosing-bugs/SKILL.md';              Golden = 'overlays__antigravity__skills__diagnosing-bugs__SKILL.md' }
-    @{ Dest = 'config/skills/opencode-headless-run/SKILL.md';        Golden = 'overlays__antigravity__skills__opencode-headless-run__SKILL.md' }
+# ---------- 3. Baseline byte-equality: rendered antigravity skill dests == committed baselines ----------
+# Compare basis (remediation-checks spec, single statement): the committed render baselines
+# (scripts/host-sync/render-baselines/phase2/) are THE regression surface for the relocation class —
+# each baseline is the token-merged HEAD-authored overlay leaf captured at migration time.
+$baselineRoot = Join-Path $hostSyncRoot 'render-baselines\phase2\antigravity'
+$baselinePairs = @(
+    @{ Dest = 'config/skills/discovery/SKILL.md';                    Baseline = 'overlays__antigravity__skills__discovery__SKILL.md' }
+    @{ Dest = 'config/skills/implementation-plan/SKILL.md';          Baseline = 'overlays__antigravity__skills__implementation-plan__SKILL.md' }
+    @{ Dest = 'config/skills/plan-review/SKILL.md';                  Baseline = 'overlays__antigravity__skills__plan-review__SKILL.md' }
+    @{ Dest = 'config/skills/documentation-architecture/SKILL.md';   Baseline = 'overlays__antigravity__skills__documentation-architecture__SKILL.md' }
+    @{ Dest = 'config/skills/roadmap/SKILL.md';                      Baseline = 'overlays__antigravity__skills__roadmap__SKILL.md' }
+    @{ Dest = 'config/skills/diagnosing-bugs/SKILL.md';              Baseline = 'overlays__antigravity__skills__diagnosing-bugs__SKILL.md' }
+    @{ Dest = 'config/skills/opencode-headless-run/SKILL.md';        Baseline = 'overlays__antigravity__skills__opencode-headless-run__SKILL.md' }
 )
-foreach ($pair in $goldenPairs) {
+foreach ($pair in $baselinePairs) {
     $destKey = $pair.Dest
-    $goldenPath = Join-Path $goldenRoot $pair.Golden
+    $baselinePath = Join-Path $baselineRoot $pair.Baseline
     $hasContent = $planned['Antigravity'].PlannedContent.ContainsKey($destKey)
-    $goldenExists = Test-Path -LiteralPath $goldenPath
+    $baselineExists = Test-Path -LiteralPath $baselinePath
     $eq = $false
-    if ($hasContent -and $goldenExists) {
-        $golden = [IO.File]::ReadAllText($goldenPath)
+    if ($hasContent -and $baselineExists) {
+        $baseline = [IO.File]::ReadAllText($baselinePath)
         $rendered = $planned['Antigravity'].PlannedContent[$destKey]
-        # Goldens are HEAD overlay files: they still carry {{COMPANION_ROOT}} tokens.
+        # Baselines are HEAD overlay files: they still carry {{COMPANION_ROOT}} tokens.
         # Apply the same token merge the render pipeline applies, then compare.
-        $goldenMerged = Merge-CompanionTokens -Content $golden -CompanionRoot $companionNorm
+        $baselineMerged = Merge-CompanionTokens -Content $baseline -CompanionRoot $companionNorm
         # Normalize EOL + trailing whitespace only.
         $renderedNorm = ($rendered -replace "`r`n", "`n").TrimEnd()
-        $goldenNorm = ($goldenMerged -replace "`r`n", "`n").TrimEnd()
-        $eq = ($renderedNorm -eq $goldenNorm)
+        $baselineNorm = ($baselineMerged -replace "`r`n", "`n").TrimEnd()
+        $eq = ($renderedNorm -eq $baselineNorm)
     }
-    Assert-Pass "golden equal (antigravity): $destKey" ($hasContent -and $goldenExists -and $eq)
+    Assert-Pass "baseline equal (antigravity): $destKey" ($hasContent -and $baselineExists -and $eq)
 }
 
 # ---------- 4. Residual host markers ----------

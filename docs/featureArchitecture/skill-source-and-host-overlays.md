@@ -67,7 +67,7 @@ Composition and safety semantics (all **Required**):
 - **Parts / Footer** — a dest may compose from multiple file references (a host `__header__.md` part + the `base:`/twin body + a host wiring footer), concatenated in declared order at sync time. Composed dests leave **no second authored procedure** — each part is either host-mechanics or shared SoT.
 - **Substitutions are fail-closed** — declared per entry, must match **exactly once**; a no-match or double-match is a hard render error, never a silent skip.
 - **PlannedContent capture** — dry-run captures the would-be written content (including dual-written mirrors like `AGENTS.md`) so CI can assert on renders without touching live trees.
-- **Golden substrate** — committed expected-renders under `scripts/host-sync/goldens/` are the regression anchor for composed dests; renders must equal goldens byte-for-byte.
+- **Baseline substrate** — committed expected-renders under `scripts/host-sync/render-baselines/` are the regression anchor for composed dests; renders must equal baselines byte-for-byte.
 - **Skew degeneration** — the cross-stack skew guard keys on **source identity + sibling stacks** at whole-leaf (Dest) granularity; when sources degenerate to overlay-only, single-stack Apply stops failing closed for that leaf (documented, not silent).
 - **Ref resolution contract** (pinned by unit checks U17–U20): rooted/absolute refs are used **verbatim**; un-pre-resolved classed refs throw a clear error; overlay-relative refs resolve source-dir first, then fall back to `OverlayRoot`.
 

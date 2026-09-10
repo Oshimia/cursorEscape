@@ -45,7 +45,7 @@ The safe capture recipe is [New-CodexPhase0Baseline.ps1](../scripts/host-sync/Ne
 
 ## Recovery and regression evidence
 
-`Invoke-CodexPhase0Checks.ps1` is scratch-only Fast CI. It verifies the owner gate, path containment, two-root separation, source immutability, destination schema, inventory counts, and restore-only semantics. `Get-ExistingSixStackRenderLedger.ps1` renders every current existing-stack destination with a temporary synthetic live root and writes/verifies the normalized six-stack hash ledger at [existing-six-stack-render-hashes-2026-09.json](../scripts/host-sync/goldens/existing-six-stack-render-hashes-2026-09.json). The ledger records one aggregate hash per stack over sorted destination/hash pairs, so a changed planned destination fails the comparison without reading a live host.
+`Invoke-CodexPhase0Checks.ps1` is scratch-only Fast CI. It verifies the owner gate, path containment, two-root separation, source immutability, destination schema, inventory counts, and restore-only semantics. `Get-ExistingSixStackRenderLedger.ps1` renders every current existing-stack destination with a temporary synthetic live root and writes/verifies the normalized six-stack hash ledger at [existing-six-stack-render-hashes-2026-09.json](../scripts/host-sync/render-baselines/existing-six-stack-render-hashes-2026-09.json). The ledger records one aggregate hash per stack over sorted destination/hash pairs, so a changed planned destination fails the comparison without reading a live host.
 
 ## C1–C6 mapping (unchanged)
 

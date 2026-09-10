@@ -35,7 +35,7 @@ Change portable loop/gate
 | Always-on gate text | [`rules/*.md`](../../rules/_index.md) | Gate-body edits land in the **repo-root rule twin** (SoT) and flow to hosts by composition — OpenCode `instructions/cursor-escape-loop.md` is **composed** (host `__header__.md` part + authored base body + [`footers/instructions-wiring.md`](../../overlays/opencode/footers/instructions-wiring.md)) with `AGENTS.md` dual-written from the render; Cursor thin `.mdc` hybrid render + matching user-rules-snippet; **Antigravity [`GEMINI.md`](../../overlays/antigravity/GEMINI.md)** is **composed** (header + promoted-twin bodies + [`footers/gemini-wiring.md`](../../overlays/antigravity/footers/gemini-wiring.md)) — full-replace global rules surface |
 | Report / deep schema | [`workflow/<leaf>.md`](../../workflow/_index.md) (e.g. `plan-reviewer-report.md`) | Thin agent/skill **Read when** only — do **not** paste full schema into `agents/` or overlay stubs |
 | Plan-review loop | [`workflow/iterative-plan-review.md`](../../workflow/iterative-plan-review.md) + [`skills/plan-review`](../../skills/plan-review/SKILL.md) / [`implementation-plan`](../../skills/implementation-plan/SKILL.md) | Matching Cursor/OpenCode stubs **and** [Antigravity stubs](../../overlays/antigravity/skills/) (`implementation-plan`, `plan-review`) — gate-text changes also echo the Antigravity `GEMINI.md` always-on; always-on plan section in OpenCode C1 dual-write if gate text changes |
-| Composed-gate wiring (manifest `Parts`/`Footer`/`base:`/`shared:` classes) | [`scripts/host-sync/manifests/*.psd1`](../../scripts/host-sync/) + the referenced part/footer leaves | FA recording ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md#per-entry-v2-sourcing-overlay-remediation-phase-12--required)); [host-sync README](../../scripts/host-sync/README.md) v2 surface; render-goldens under [`scripts/host-sync/goldens/`](../../scripts/host-sync/goldens/phase2/) re-captured in the same changeset; unit/remediation checks extended if a new field class appears |
+| Composed-gate wiring (manifest `Parts`/`Footer`/`base:`/`shared:` classes) | [`scripts/host-sync/manifests/*.psd1`](../../scripts/host-sync/) + the referenced part/footer leaves | FA recording ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md#per-entry-v2-sourcing-overlay-remediation-phase-12--required)); [host-sync README](../../scripts/host-sync/README.md) v2 surface; render-baselines under [`scripts/host-sync/render-baselines/`](../../scripts/host-sync/render-baselines/phase2/) re-captured in the same changeset; unit/remediation checks extended if a new field class appears |
 
 ### Anti-patterns
 
@@ -88,7 +88,7 @@ rg "pressure-release|4-iteration|cap-exhausted" workflow/iterative-code-review.m
 
 # Composed surfaces (Phase 2+): gate atoms flow via composition — verify by render, not by prose grep
 pwsh scripts/host-sync/Invoke-RemediationUnitChecks.ps1      # 22/22 incl. U17-U20 ref-resolution contract
-pwsh scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1   # 63/63: composed renders, goldens, atoms, single-source-per-Dest
+pwsh scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1   # 63/63: composed renders, baselines, atoms, single-source-per-Dest
 ```
 
 Expect: zero matches on the first `rg` after migrating off unbounded loops; C1 hashes equal; companion SoT still documents the current policy; unit + remediation suites exit 0.

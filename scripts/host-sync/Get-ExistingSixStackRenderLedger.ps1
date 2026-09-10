@@ -11,7 +11,7 @@
 [CmdletBinding()]
 param(
     [string] $CompanionRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),
-    [string] $LedgerPath = (Join-Path $PSScriptRoot 'goldens/existing-six-stack-render-hashes-2026-09.json'),
+    [string] $LedgerPath = (Join-Path $PSScriptRoot 'render-baselines/existing-six-stack-render-hashes-2026-09.json'),
     [switch] $Verify,
     [switch] $WriteLedger,
     [switch] $SkipRepeatability

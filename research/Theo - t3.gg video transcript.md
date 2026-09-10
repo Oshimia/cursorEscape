@@ -758,7 +758,7 @@ much this does. Like this one scale has cost me hundreds of dollars of inference
 much tied to cursor specifically, which is the biggest issue with Pstack. I honestly would be pumped if somebody like cloned all the Pstack skills in a
 32:48
 32 minutes, 48 seconds
-generic not cursor specific way because there's so much gold in here, but a handful of these are just a little too
+generic not cursor specific way because there's so much useful material in here, but a handful of these are just a little too
 32:55
 32 minutes, 55 seconds
 cursory. She did also pull the bro skill from uh I believe it was originally Dylan Moy, the effect and functional

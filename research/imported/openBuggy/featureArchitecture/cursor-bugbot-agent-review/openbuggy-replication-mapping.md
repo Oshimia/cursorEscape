@@ -21,7 +21,7 @@ Maps Cursor Agent Review **Observed** behaviors to openBuggy’s **proposed** do
 | XML findings; empty answer = clean                                         | [findings-schema-and-agent-contract.md](../findings-schema-and-agent-contract.md)                                                                                                | Prefer JSON envelope; preserve semantic fields                                                                                                   |
 | Dual-gate with production-readiness reviewer                               | [ide-and-agent-integration.md](../ide-and-agent-integration.md), SOP [running-an-agent-review-loop-with-openBuggy.md](../../SOPs/running-an-agent-review-loop-with-openBuggy.md) | openBuggy = bug leg only                                                                                                                         |
 | Parent retries + NL fallback                                               | Failure handling in engine + CLI exit codes                                                                                                                                      | Mirror [failure-modes-and-retries.md](./failure-modes-and-retries.md)                                                                            |
-| No Cursor proprietary eval data                                            | [eval-harness-and-tuning.md](../eval-harness-and-tuning.md), `eval/cases/` | Committed anonymized fixtures + agent scorer; not JSONL gold |
+| No Cursor proprietary eval data                                            | [eval-harness-and-tuning.md](../eval-harness-and-tuning.md), `eval/cases/` | Committed anonymized fixtures + agent scorer; not JSONL ground-truth data |
 | Product/API/billing constraints                                            | [bugbot-product-and-api-limits.md](../../research/bugbot-product-and-api-limits.md)                                                                                              | Zero Cursor Bugbot API dependency                                                                                                                |
 | Design focus = local agent loop                                            | [market-gap-and-positioning.md](../market-gap-and-positioning.md)                                                                                                                | Align scope/docs with Agent Review replacement, not PR-bot clone                                                                                 |
 
@@ -63,7 +63,7 @@ Maps Cursor Agent Review **Observed** behaviors to openBuggy’s **proposed** do
 ## Implications / open questions
 
 1. When implementation starts, freeze `schema_version` after aligning severity mapping with real eval cases.
-2. Do not import Cursor transcript JSONL into the eval harness as proprietary gold data.
+2. Do not import Cursor transcript JSONL into the eval harness as proprietary ground-truth data.
 
 ## Sources
 

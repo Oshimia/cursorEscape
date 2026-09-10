@@ -4,7 +4,7 @@
 
 ## Context
 
-Record of the [overlay-remediation](../docs/roadmaps/overlay-remediation.md) program through Phase 3: what migrated, what the golden-render surface pins, and the Reviewer A loop incident. Claim labels: **Observed** / **Inferred**.
+Record of the [overlay-remediation](../docs/roadmaps/overlay-remediation.md) program through Phase 3: what migrated, what the render-baseline surface pins, and the Reviewer A loop incident. Claim labels: **Observed** / **Inferred**.
 
 ## Substance
 
@@ -22,13 +22,13 @@ Record of the [overlay-remediation](../docs/roadmaps/overlay-remediation.md) pro
 - **Recovered reviewer finding fixed (Observed):** `overlays/opencode/footers/instructions-wiring.md` carried a duplicated `## Shell & native tools (all repos)` section (em-dash vs hyphen variants) — the finding the doom-looped reviewer never delivered. Removed the duplicate; composed instructions now render it once.
 - **No new review loop** — owner ruling 2026-08-29 ("we don't need *another* review of this. Just get moving onto the next thing").
 
-### Golden-render index
+### Render-baseline index
 
-| Composed dest | Golden |
+| Composed dest | Baseline |
 | ------------- | ------ |
-| `~/.gemini/GEMINI.md` | `scripts/host-sync/goldens/phase2/antigravity/` (7 relocation-class goldens verified equal to HEAD-authored leaves; roadmap golden recaptured for a line-wrap artifact) |
+| `~/.gemini/GEMINI.md` | `scripts/host-sync/render-baselines/phase2/antigravity/` (7 relocation-class baselines verified equal to HEAD-authored leaves; roadmap baseline recaptured for a line-wrap artifact) |
 
-Composed opencode instructions / pre-commit stubs are asserted by the 63 remediation checks (atoms + single-source-per-Dest + render equality against PlannedContent) rather than file goldens.
+Composed opencode instructions / pre-commit stubs are asserted by the 63 remediation checks (atoms + single-source-per-Dest + render equality against PlannedContent) rather than file baselines.
 
 ### Phase 4 (2026-08-31, owner-delegated)
 

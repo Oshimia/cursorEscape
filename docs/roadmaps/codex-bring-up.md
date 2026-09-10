@@ -64,7 +64,7 @@ The implementation follows the reviewed plan after its three-pass cap. The final
 - **Do not touch:** `~/.codex/config.toml`, authentication, sessions, logs, databases, extension state, existing live harness content, or other host installs.
 - **In scope:** D1 effective-home discovery; D2 external companion reachability; D3 skill-catalog budget; D4 reviewer sandbox boundary design; D5 two-root scratch seam; destination-level baseline recipe/artifact; normalized six-stack render hash ledger; Codex C1–C6 mapping.
 - **Out of scope:** Codex overlay implementation, adapter write logic, registry changes, and live installation.
-- **Files expected:** `analysis/codex-load-surface-2026-09.md`, this roadmap, narrowly scoped baseline metadata/tooling if authorized, and existing-golden/check extensions for the six-stack hash ledger.
+- **Files expected:** `analysis/codex-load-surface-2026-09.md`, this roadmap, narrowly scoped baseline metadata/tooling if authorized, and existing-baseline/check extensions for the six-stack hash ledger.
 - **Where to read context:** `workflow/discovery.md`; `scripts/host-sync/README.md`; `HostSync.Core.ps1`; existing manifests/adapters; `docs/roadmaps/vscode-bring-up.md`; `docs/featureArchitecture/host-adaptation-fidelity.md`; official OpenAI Codex skill, AGENTS, subagent, and developer-settings docs.
 - **Fast CI:** Scratch two-root routing and baseline path-containment/schema checks; record each command actually run.
 - **Full CI:** Restore fixture plus reproducible six-stack normalized hash comparison; no script that performs live Apply.
@@ -78,7 +78,7 @@ The implementation follows the reviewed plan after its three-pass cap. The final
 - **Do not touch:** Canonical procedure bodies, existing host overlays except shared indexes required in this phase, live homes, or `config.toml`.
 - **In scope:** Managed AGENTS block source; 23 skill wrappers; minimal `agents/openai.yaml` metadata; seven TOML agents; ownership markers; `{{COMPANION_ROOT}}` pointers; Codex manifest; overlay index; expected renders.
 - **Out of scope:** Adapter write/merge logic, registry, global Apply orchestration, and live installation.
-- **Files expected:** `overlays/codex/**`, `scripts/host-sync/manifests/codex.manifest.psd1`, focused render fixtures/goldens.
+- **Files expected:** `overlays/codex/**`, `scripts/host-sync/manifests/codex.manifest.psd1`, focused render fixtures/baselines.
 - **Where to read context:** `skills/_index.md`; `agents/_index.md`; `rules/`; `workflow/`; `instruction-layering.md`; `skill-source-and-host-overlays.md`; official Codex skill/subagent docs; Phase 0 analysis.
 - **Fast CI:** Parse all frontmatter/YAML/TOML; assert 23/7 inventory, required TOML fields, unique filename-matched names, reviewer read-only defaults, no model/reasoning pins, zero unresolved tokens, and zero wrong-base relative hops.
 - **Full CI:** In-process Codex rendering plus existing six-stack normalized hash equality; no live Apply.

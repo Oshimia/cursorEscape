@@ -6,12 +6,12 @@
 .DESCRIPTION
   This check never reads or writes a real Codex home or skill home. Rendering is
   in-process against explicit roots; materialized evidence lives only in a fresh
-  temporary scratch root. -WriteGolden refreshes the committed Phase 1 goldens.
+  temporary scratch root. -WriteBaseline refreshes the committed Phase 1 baselines.
 #>
 [CmdletBinding()]
 param(
     [string] $CompanionRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),
-    [switch] $WriteGolden
+    [switch] $WriteBaseline
 )
 
 Set-StrictMode -Version Latest
@@ -22,7 +22,7 @@ $hostSyncRoot = $PSScriptRoot
 $overlayRoot = Join-Path $companionRoot 'overlays/codex'
 $manifestPath = Join-Path $hostSyncRoot 'manifests/codex.manifest.psd1'
 $schemaPath = Join-Path $hostSyncRoot 'baselines/codex-phase0-baseline-schema-2026-09.json'
-$goldenRoot = Join-Path $hostSyncRoot 'goldens/codex-phase1'
+$baselineRoot = Join-Path $hostSyncRoot 'render-baselines/codex-phase1'
 $fixtureCompanion = 'C:/codex-phase1-fixture/companion'
 $marker = 'cursorEscape-managed:v1'
 $blockMarker = 'cursorEscape-managed-block:v1'
@@ -182,7 +182,7 @@ function ConvertFrom-CodexOpenAiYamlSubset {
     return $result
 }
 
-function New-CodexGoldenArtifact {
+function New-CodexRenderBaseline {
     param([Parameter(Mandatory)][System.Collections.Generic.List[hashtable]] $Rows)
     $sorted = [object[]]@($Rows | Sort-Object -Property Destination)
     $entries = @(foreach ($row in $sorted) {
@@ -195,14 +195,14 @@ function New-CodexGoldenArtifact {
     })
     return [ordered]@{
         schemaVersion = 1
-        kind = 'codex-phase1-normalized-render-hash-golden'
+        kind = 'codex-phase1-normalized-render-hash-baseline'
         normalization = 'UTF-8 SHA-256 after CRLF-to-LF and exactly one terminal LF; explicit fixture roots; no live host state'
         fixtureCompanionRoot = $fixtureCompanion
         entries = $entries
     }
 }
 
-function Test-CodexGoldenEqual {
+function Test-CodexRenderBaselineEqual {
     param($Expected, $Actual)
     if ($Expected.schemaVersion -ne $Actual.schemaVersion -or $Expected.kind -ne $Actual.kind -or
         $Expected.normalization -ne $Actual.normalization -or $Expected.fixtureCompanionRoot -ne $Actual.fixtureCompanionRoot) { return $false }
@@ -421,12 +421,12 @@ try {
         'skill-root/opencode-headless-run/SKILL.md'
         'skill-root/pre-commit-ci-gate/SKILL.md'
     )
-    $actualGolden = New-CodexGoldenArtifact -Rows $fixturePlan
-    $goldenPath = Join-Path $goldenRoot 'render-plan.json'
-    if ($WriteGolden) {
-        New-Item -ItemType Directory -Path $goldenRoot -Force | Out-Null
-        [IO.File]::WriteAllText($goldenPath, ($actualGolden | ConvertTo-Json -Depth 6), [Text.UTF8Encoding]::new($false))
-        $fixtureTextRoot = Join-Path $goldenRoot 'fixtures'
+    $actualBaseline = New-CodexRenderBaseline -Rows $fixturePlan
+    $baselinePath = Join-Path $baselineRoot 'render-plan.json'
+    if ($WriteBaseline) {
+        New-Item -ItemType Directory -Path $baselineRoot -Force | Out-Null
+        [IO.File]::WriteAllText($baselinePath, ($actualBaseline | ConvertTo-Json -Depth 6), [Text.UTF8Encoding]::new($false))
+        $fixtureTextRoot = Join-Path $baselineRoot 'fixtures'
         New-Item -ItemType Directory -Path $fixtureTextRoot -Force | Out-Null
         foreach ($destination in $focusedDestinations) {
             $row = $fixturePlan | Where-Object Destination -eq $destination
@@ -442,15 +442,15 @@ try {
             [IO.File]::WriteAllText($target, [IO.File]::ReadAllText($sourcePath), [Text.UTF8Encoding]::new($false))
         }
     }
-    if (Test-Path -LiteralPath $goldenPath) {
-        $expectedGolden = Get-Content -LiteralPath $goldenPath -Raw | ConvertFrom-Json
-        Assert-Pass 'normalized render golden matches all 31 destinations' (Test-CodexGoldenEqual $expectedGolden $actualGolden)
+    if (Test-Path -LiteralPath $baselinePath) {
+        $expectedBaseline = Get-Content -LiteralPath $baselinePath -Raw | ConvertFrom-Json
+        Assert-Pass 'normalized render baseline matches all 31 destinations' (Test-CodexRenderBaselineEqual $expectedBaseline $actualBaseline)
         $tomlEscapeLeaks = @($fixturePlan | Where-Object {
             $_.Destination -like '*.toml' -and ($_.Content -match '\\(?!\\)')
         })
         Assert-Pass 'rendered TOML backslashes are escaped' ($tomlEscapeLeaks.Count -eq 0)
         $fixtureMisses = [System.Collections.Generic.List[string]]::new()
-        $fixtureTextRoot = Join-Path $goldenRoot 'fixtures'
+        $fixtureTextRoot = Join-Path $baselineRoot 'fixtures'
         foreach ($metadata in $manifest.OverlayOnlySkillMetadata) {
             $fixturePath = Join-Path $fixtureTextRoot (($metadata.RelativePath -replace '/', [IO.Path]::DirectorySeparatorChar))
             $sourcePath = Join-Path $overlayRoot (($metadata.RelativePath -replace '/', [IO.Path]::DirectorySeparatorChar))
@@ -469,7 +469,7 @@ try {
         Assert-Pass 'focused fixture inventory has no orphans' ($fixtureFileCount -eq 13)
     }
     else {
-        Assert-Pass 'normalized render golden exists' $false
+        Assert-Pass 'normalized render baseline exists' $false
     }
 }
 finally {
