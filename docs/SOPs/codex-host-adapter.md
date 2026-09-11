@@ -1,5 +1,7 @@
 # Codex host adapter SOP
 
+**Last updated:** 2026-09-11
+
 **Stack:** `Codex` · **Logical roots:** effective `CODEX_HOME` (default `~/.codex`) + `~/.agents/skills` · **Surface:** managed `AGENTS.md` block, seven TOML agents, 23 skill wrappers
 
 **Status:** registered Phase 3 2026-09-08; `ApplyState = Active` (activated 2026-09-08 after owner-authorized install; three-client smoke attested 2026-09-08: CLI, VS Code extension, ChatGPT desktop).
@@ -18,7 +20,7 @@ The specialized adapter requires two explicit absolute roots. The operator entry
 - Keep `AGENTS.md` as marker-bounded managed block content; preserve foreign text outside the block.
 - Treat `codex-home/AGENTS.override.md` as guard-only: a non-empty file must block Apply.
 - Run the all-stack preflight before any Apply write pass when `Target All` is selected.
-- Obtain separate owner authorization, a current Phase 4 baseline, three-client C1–C6 attestation, and a lifecycle activation decision before Codex Apply.
+- For re-activation after setting ApplyState = BringUp: obtain separate owner authorization, a current baseline, and three-client C1–C6 attestation.
 
 **Must-not**
 
@@ -55,7 +57,7 @@ pwsh scripts/Sync-HostHarness.ps1 -Target Codex
 pwsh scripts/Sync-HostHarness.ps1 -Target All -Apply
 ```
 
-There is no `-AllowSkew` exception for lifecycle refusal. Phase 4 will use a separate Codex-only bring-up authorization rather than an ordinary global Apply.
+There is no `-AllowSkew` exception for lifecycle refusal. Codex was activated on 2026-09-08 via a separate Codex-only owner authorization followed by three-client C1–C6 smoke attestation (CLI, VS Code extension, ChatGPT desktop). If Codex is later re-armed to `BringUp`, reactivation requires the same policy: separate owner authorization, a current baseline, and fresh three-client C1–C6 attestation.
 
 ## Safety and verification
 
@@ -65,6 +67,6 @@ There is no `-AllowSkew` exception for lifecycle refusal. Phase 4 will use a sep
 - Fast CI: `scripts/host-sync/Invoke-CodexPhase3Checks.ps1` proves explicit-root Codex dry-run, all-stack dry-run, BringUp All-Apply refusal, Active-state Codex collision with zero selected-stack writes, and complete invalid-target output.
 - Existing six-stack ledger parity remains the regression anchor for established planned renders; Codex is intentionally not in that ledger.
 
-## Runtime acceptance (Phase 4)
+## Runtime acceptance (historical — completed 2026-09-08)
 
-C1–C6 runtime evidence is **not** inferred from registration or dry-run success. A future clean CLI, VS Code extension, and ChatGPT desktop session must attest plan gates, catalog behavior, isolated reviewer spawning, companion Read wiring, and end-to-end workflow behavior before `ApplyState` activation. See [host adaptation fidelity](../featureArchitecture/host-adaptation-fidelity.md).
+C1–C6 runtime evidence was attested on 2026-09-08 across CLI, VS Code extension, and ChatGPT desktop: plan gates, catalog behavior, isolated reviewer spawning, companion Read wiring, and end-to-end workflow behavior were verified before `ApplyState` activation. See [host adaptation fidelity](../featureArchitecture/host-adaptation-fidelity.md). If Codex is later re-armed to `BringUp`, a fresh C1–C6 attestation is required before re-activation.

@@ -10,6 +10,7 @@ Desktop.ini
 
 # Local operator material (studies, scratch, coding sheets)
 **/.local/
+.plans
 
 # Editors / agent tooling (do not commit local IDE state)
 .vscode/

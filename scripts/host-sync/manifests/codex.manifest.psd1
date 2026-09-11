@@ -1,7 +1,9 @@
 @{
-    # Codex registered source-only manifest (Phase 3). The specialized adapter
-    # owns two-root writes; orchestration force-holds this stack BringUp until
-    # Phase 4 three-client smoke acceptance and explicit owner authorization.
+    # Codex registered manifest (Phase 3). The specialized adapter
+    # owns two-root writes. ApplyState was activated 2026-09-08 after owner
+    # authorization and three-client C1–C6 smoke attestation. Reactivation
+    # from BringUp requires explicit owner authorization and fresh
+    # three-client C1–C6 attestation.
     SchemaVersion                    = 1
     StackId                          = 'Codex'
     DisplayName                      = 'OpenAI Codex'

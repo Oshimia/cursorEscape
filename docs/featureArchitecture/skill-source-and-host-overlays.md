@@ -29,7 +29,7 @@ Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 
 ### Job (Required)
 
-This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`, `~/.gemini`, effective `CODEX_HOME`, and other registered homes) are **copy-out / install targets**, not a second authored procedure tree. **Live sync:** [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` operator-gated and global-preflighted) from the registered overlay trees, including [overlays/codex](../../overlays/codex/_index.md) — modular layout in [host-sync README](../../scripts/host-sync/README.md). Sync **does not create backups**; Phase 0 baselines are restore-only. Codex is registered source-only and forced `BringUp`; its C6 remains unattested. **pointer-first-4** deleted OpenCode procedure mirror (2026-08-20). C6 minimum runtime smoke **pass** (2026-08-20 operator post-mirror) per [host-adapter](../SOPs/opencode-host-adapter.md) and [closeout](../../analysis/pointer-first-4-closeout-2026-08.md). Do not create repo-root `adapters/` directories.
+This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`, `~/.gemini`, effective `CODEX_HOME`, and other registered homes) are **copy-out / install targets**, not a second authored procedure tree. **Live sync:** [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` operator-gated and global-preflighted) from the registered overlay trees, including [overlays/codex](../../overlays/codex/_index.md) — modular layout in [host-sync README](../../scripts/host-sync/README.md). Sync **does not create backups**; Phase 0 baselines are restore-only. Codex became Active on 2026-09-08 with C1–C6 attested; fresh owner authorization and C1–C6 attestation are required only if re-armed to `BringUp`. **pointer-first-4** deleted OpenCode procedure mirror (2026-08-20). C6 minimum runtime smoke **pass** (2026-08-20 operator post-mirror) per [host-adapter](../SOPs/opencode-host-adapter.md) and [closeout](../../analysis/pointer-first-4-closeout-2026-08.md). Do not create repo-root `adapters/` directories.
 
 ### Target taxonomy — Approach A (Required)
 
@@ -176,6 +176,6 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 - [OpenCode host adapter](../SOPs/opencode-host-adapter.md)
 - [Shared workflow docs roadmap](../roadmaps/shared-workflow-docs.md)
 - [Cursor overlay](../../overlays/cursor/_index.md)
-- [Codex overlay](../../overlays/codex/_index.md) — registered source-only; forced BringUp
+- [Codex overlay](../../overlays/codex/_index.md) — Active since 2026-09-08
 - [Theo fleet skill management (Observed)](../../research/theo-fleet-skill-management.md)
 - [Companion pointer-first](../roadmaps/pointer-first.md)

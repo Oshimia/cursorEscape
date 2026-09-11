@@ -1,6 +1,6 @@
 # Host harness sync (modular layout)
 
-**Last updated:** 2026-09-10
+**Last updated:** 2026-09-11
 
 Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require `-Apply` and a valid Phase 0 baseline gate artifact.
 
@@ -103,7 +103,7 @@ One-time baselines taken before building this tool. Used for **restore if Apply 
 | Cline | `C:\Users\admin\.cline-backup-pre-kilobringup-20260901-180000` (registered 2026-09-01) |
 | Kilo Code | `C:\Users\admin\.kilocode-backup-pre-kilobringup-20260901-180000` (registered 2026-09-01) |
 
-**Apply coupling (all six established-stack baselines required):** `-Apply` for any established stack fails closed until all six Phase 0 baselines exist — deliberate conservatism because Antigravity Apply wholesale-replaces `~/.gemini/GEMINI.md`, VS Code Apply writes into the shared user-level `~/.copilot`, and the 5th/6th stacks write into `~/.cline` and `~/.kilocode`. Dry-runs are unaffected. VS Code/Cline/Kilocode baselines registered 2026-09-01 (six-stack gate, owner-approved). Codex remains behind the separate BringUp gate and will receive its Phase 4 initial baseline only before an owner-authorized Codex-only Apply; this six-path artifact is not a Codex Apply authorization.
+**Apply coupling (all six established-stack baselines required):** `-Apply` for any established stack fails closed until all six Phase 0 baselines exist — deliberate conservatism because Antigravity Apply wholesale-replaces `~/.gemini/GEMINI.md`, VS Code Apply writes into the shared user-level `~/.copilot`, and the 5th/6th stacks write into `~/.cline` and `~/.kilocode`. Dry-runs are unaffected. VS Code/Cline/Kilocode baselines registered 2026-09-01 (six-stack gate, owner-approved). Codex is governed by its own lifecycle (ApplyState = Active since 2026-09-08) but the global `-Apply` gate still requires the six-stack baseline artifact; a Codex-only baseline bypass is not implemented in the current gate.
 
 Gate artifact: [`baseline-backups.paths.json`](./baseline-backups.paths.json)
 

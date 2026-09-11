@@ -1,0 +1,4110 @@
+{
+  "schema_version": 2,
+  "inventory_date": "2026-09-11",
+  "phase": 0,
+  "roadmap": "docs/roadmaps/procedure-registry-normalization.md",
+  "hosts": [
+    "Cursor",
+    "OpenCode",
+    "Antigravity",
+    "Vscode",
+    "Cline",
+    "Kilocode",
+    "Codex"
+  ],
+  "governed_agents": [
+    "planner",
+    "plan_reviewer",
+    "implementer",
+    "production_readiness_reviewer",
+    "bug_reviewer",
+    "repository_explorer",
+    "test_reviewer"
+  ],
+  "representation_values": [
+    "native-definition",
+    "generated-native-projection",
+    "fallback-launch-contract",
+    "missing"
+  ],
+  "parity_matrix": [
+    {
+      "host": "Cursor",
+      "agent": "planner",
+      "representation": "missing",
+      "evidence_paths": [
+        "overlays/cursor/agents/"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/planner.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "native",
+      "classification": null,
+      "canonical_identity": "planner",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/planner.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Cursor",
+      "agent": "plan_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/cursor/agents/plan-reviewer.md"
+      ],
+      "route_identity": "plan-reviewer",
+      "alias": "plan-reviewer",
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/plan_reviewer.md",
+      "launch_mechanism": "Cursor Task with subagent_type plan-reviewer",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "plan_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/plan_reviewer.md",
+        "workflow/plan-reviewer-report.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Cursor",
+      "agent": "implementer",
+      "representation": "missing",
+      "evidence_paths": [
+        "overlays/cursor/agents/"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/implementer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "native",
+      "classification": null,
+      "canonical_identity": "implementer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/implementer.md"
+      ]
+    },
+    {
+      "host": "Cursor",
+      "agent": "production_readiness_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/cursor/agents/reviewer-a.md"
+      ],
+      "route_identity": "reviewer-a",
+      "alias": "reviewer-a",
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/production_readiness_reviewer.md",
+      "launch_mechanism": "Cursor Task with subagent_type reviewer-a",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "production_readiness_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/production_readiness_reviewer.md"
+      ]
+    },
+    {
+      "host": "Cursor",
+      "agent": "bug_reviewer",
+      "representation": "fallback-launch-contract",
+      "evidence_paths": [
+        "overlays/cursor/agents/reviewer-a.md",
+        "skills/implementation-review/SKILL.md",
+        "overlays/cursor/review-subagent-models.md"
+      ],
+      "route_identity": "bugbot",
+      "alias": "Bugbot",
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/bug_reviewer.md",
+      "launch_mechanism": "Cursor Task with subagent_type bugbot (built-in; spawn instructions in implementation-review SKILL)",
+      "proposed_phase2_representation": "retain-fallback-with-explicit-envelope-and-isolation",
+      "classification": "intentional host deviation",
+      "canonical_identity": "bug_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/bug_reviewer.md",
+        "docs/featureArchitecture/bug-reviewer-finding-rubric.md",
+        "skills/bug-review-sweep/SKILL.md"
+      ]
+    },
+    {
+      "host": "Cursor",
+      "agent": "repository_explorer",
+      "representation": "missing",
+      "evidence_paths": [
+        "overlays/cursor/agents/"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/repository_explorer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "native",
+      "classification": null,
+      "canonical_identity": "repository_explorer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/repository_explorer.md"
+      ]
+    },
+    {
+      "host": "Cursor",
+      "agent": "test_reviewer",
+      "representation": "missing",
+      "evidence_paths": [
+        "overlays/cursor/agents/"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/test_reviewer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "native",
+      "classification": null,
+      "canonical_identity": "test_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/test_reviewer.md"
+      ]
+    },
+    {
+      "host": "OpenCode",
+      "agent": "planner",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/opencode/agents/planner.md",
+        "scripts/host-sync/manifests/opencode.manifest.psd1",
+        "overlays/opencode/opencode.specimen.json"
+      ],
+      "route_identity": "planner",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/planner.md",
+      "launch_mechanism": "OpenCode Task with mode subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "planner",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/planner.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "OpenCode",
+      "agent": "plan_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/opencode/agents/plan_reviewer.md",
+        "scripts/host-sync/manifests/opencode.manifest.psd1",
+        "overlays/opencode/opencode.specimen.json"
+      ],
+      "route_identity": "plan_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/plan_reviewer.md",
+      "launch_mechanism": "OpenCode Task with mode subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "plan_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/plan_reviewer.md",
+        "workflow/plan-reviewer-report.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "OpenCode",
+      "agent": "implementer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/opencode/agents/implementer.md",
+        "scripts/host-sync/manifests/opencode.manifest.psd1",
+        "overlays/opencode/opencode.specimen.json"
+      ],
+      "route_identity": "implementer",
+      "alias": null,
+      "authority": "workspace-write",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/implementer.md",
+      "launch_mechanism": "OpenCode primary mode with Task/routing delegation to isolated child agents",
+      "proposed_phase2_representation": null,
+      "classification": "primary-mode definition",
+      "canonical_identity": "implementer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/implementer.md"
+      ]
+    },
+    {
+      "host": "OpenCode",
+      "agent": "production_readiness_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/opencode/agents/production_readiness_reviewer.md",
+        "scripts/host-sync/manifests/opencode.manifest.psd1",
+        "overlays/opencode/opencode.specimen.json"
+      ],
+      "route_identity": "production_readiness_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/production_readiness_reviewer.md",
+      "launch_mechanism": "OpenCode Task with mode subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "production_readiness_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/production_readiness_reviewer.md"
+      ]
+    },
+    {
+      "host": "OpenCode",
+      "agent": "bug_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/opencode/agents/bug_reviewer.md",
+        "scripts/host-sync/manifests/opencode.manifest.psd1",
+        "overlays/opencode/opencode.specimen.json"
+      ],
+      "route_identity": "bug_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/bug_reviewer.md",
+      "launch_mechanism": "OpenCode Task with mode subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "bug_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/bug_reviewer.md",
+        "docs/featureArchitecture/bug-reviewer-finding-rubric.md",
+        "skills/bug-review-sweep/SKILL.md"
+      ]
+    },
+    {
+      "host": "OpenCode",
+      "agent": "repository_explorer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/opencode/agents/repository_explorer.md",
+        "scripts/host-sync/manifests/opencode.manifest.psd1",
+        "overlays/opencode/opencode.specimen.json"
+      ],
+      "route_identity": "repository_explorer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/repository_explorer.md",
+      "launch_mechanism": "OpenCode Task with mode subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "repository_explorer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/repository_explorer.md"
+      ]
+    },
+    {
+      "host": "OpenCode",
+      "agent": "test_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/opencode/agents/test_reviewer.md",
+        "scripts/host-sync/manifests/opencode.manifest.psd1",
+        "overlays/opencode/opencode.specimen.json"
+      ],
+      "route_identity": "test_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/test_reviewer.md",
+      "launch_mechanism": "OpenCode Task with mode subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "test_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/test_reviewer.md"
+      ]
+    },
+    {
+      "host": "Antigravity",
+      "agent": "planner",
+      "representation": "missing",
+      "evidence_paths": [
+        "overlays/antigravity/agents/"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/planner.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "native",
+      "classification": null,
+      "canonical_identity": "planner",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/planner.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Antigravity",
+      "agent": "plan_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/antigravity/agents/plan_reviewer.md",
+        "scripts/host-sync/manifests/antigravity.manifest.psd1"
+      ],
+      "route_identity": "plan_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/plan_reviewer.md",
+      "launch_mechanism": "Antigravity invoke_subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "plan_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/plan_reviewer.md",
+        "workflow/plan-reviewer-report.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Antigravity",
+      "agent": "implementer",
+      "representation": "missing",
+      "evidence_paths": [
+        "overlays/antigravity/agents/"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/implementer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "native",
+      "classification": null,
+      "canonical_identity": "implementer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/implementer.md"
+      ]
+    },
+    {
+      "host": "Antigravity",
+      "agent": "production_readiness_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/antigravity/agents/production_readiness_reviewer.md",
+        "scripts/host-sync/manifests/antigravity.manifest.psd1"
+      ],
+      "route_identity": "production_readiness_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/production_readiness_reviewer.md",
+      "launch_mechanism": "Antigravity invoke_subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "production_readiness_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/production_readiness_reviewer.md"
+      ]
+    },
+    {
+      "host": "Antigravity",
+      "agent": "bug_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/antigravity/agents/bug_reviewer.md",
+        "scripts/host-sync/manifests/antigravity.manifest.psd1"
+      ],
+      "route_identity": "bug_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/bug_reviewer.md",
+      "launch_mechanism": "Antigravity invoke_subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "bug_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/bug_reviewer.md",
+        "docs/featureArchitecture/bug-reviewer-finding-rubric.md",
+        "skills/bug-review-sweep/SKILL.md"
+      ]
+    },
+    {
+      "host": "Antigravity",
+      "agent": "repository_explorer",
+      "representation": "missing",
+      "evidence_paths": [
+        "overlays/antigravity/agents/"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/repository_explorer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "native",
+      "classification": null,
+      "canonical_identity": "repository_explorer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/repository_explorer.md"
+      ]
+    },
+    {
+      "host": "Antigravity",
+      "agent": "test_reviewer",
+      "representation": "missing",
+      "evidence_paths": [
+        "overlays/antigravity/agents/"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/test_reviewer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "native",
+      "classification": null,
+      "canonical_identity": "test_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/test_reviewer.md"
+      ]
+    },
+    {
+      "host": "Vscode",
+      "agent": "planner",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/vscode/agents/planner.agent.md",
+        "scripts/host-sync/manifests/vscode.manifest.psd1"
+      ],
+      "route_identity": "planner",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/planner.md",
+      "launch_mechanism": "VS Code Copilot agent invocation",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "planner",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/planner.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Vscode",
+      "agent": "plan_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/vscode/agents/plan_reviewer.agent.md",
+        "scripts/host-sync/manifests/vscode.manifest.psd1"
+      ],
+      "route_identity": "plan_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/plan_reviewer.md",
+      "launch_mechanism": "VS Code Copilot agent invocation or handoff from planner",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "plan_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/plan_reviewer.md",
+        "workflow/plan-reviewer-report.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Vscode",
+      "agent": "implementer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/vscode/agents/implementer.agent.md",
+        "scripts/host-sync/manifests/vscode.manifest.psd1"
+      ],
+      "route_identity": "implementer",
+      "alias": null,
+      "authority": "workspace-write",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/implementer.md",
+      "launch_mechanism": "VS Code Copilot agent invocation",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "implementer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/implementer.md"
+      ]
+    },
+    {
+      "host": "Vscode",
+      "agent": "production_readiness_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/vscode/agents/production_readiness_reviewer.agent.md",
+        "scripts/host-sync/manifests/vscode.manifest.psd1"
+      ],
+      "route_identity": "production_readiness_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/production_readiness_reviewer.md",
+      "launch_mechanism": "VS Code Copilot agent invocation",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "production_readiness_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/production_readiness_reviewer.md"
+      ]
+    },
+    {
+      "host": "Vscode",
+      "agent": "bug_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/vscode/agents/bug_reviewer.agent.md",
+        "scripts/host-sync/manifests/vscode.manifest.psd1"
+      ],
+      "route_identity": "bug_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/bug_reviewer.md",
+      "launch_mechanism": "VS Code Copilot agent invocation",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "bug_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/bug_reviewer.md",
+        "docs/featureArchitecture/bug-reviewer-finding-rubric.md",
+        "skills/bug-review-sweep/SKILL.md"
+      ]
+    },
+    {
+      "host": "Vscode",
+      "agent": "repository_explorer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/vscode/agents/repository_explorer.agent.md",
+        "scripts/host-sync/manifests/vscode.manifest.psd1"
+      ],
+      "route_identity": "repository_explorer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/repository_explorer.md",
+      "launch_mechanism": "VS Code Copilot agent invocation",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "repository_explorer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/repository_explorer.md"
+      ]
+    },
+    {
+      "host": "Vscode",
+      "agent": "test_reviewer",
+      "representation": "native-definition",
+      "evidence_paths": [
+        "overlays/vscode/agents/test_reviewer.agent.md",
+        "scripts/host-sync/manifests/vscode.manifest.psd1"
+      ],
+      "route_identity": "test_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/test_reviewer.md",
+      "launch_mechanism": "VS Code Copilot agent invocation",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "test_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/test_reviewer.md"
+      ]
+    },
+    {
+      "host": "Cline",
+      "agent": "planner",
+      "representation": "missing",
+      "evidence_paths": [
+        "scripts/host-sync/manifests/cline.manifest.psd1",
+        "analysis/cline-kilo-probes-2026-09.md"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/planner.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "fresh-task-session-fallback",
+      "classification": null,
+      "canonical_identity": "planner",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/planner.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Cline",
+      "agent": "plan_reviewer",
+      "representation": "fallback-launch-contract",
+      "evidence_paths": [
+        "overlays/cline/workflows/plan.md",
+        "scripts/host-sync/manifests/cline.manifest.psd1"
+      ],
+      "route_identity": "plan_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
+      "first_read_contract": "agents/plan_reviewer.md",
+      "launch_mechanism": "Cline fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "plan_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/plan_reviewer.md",
+        "workflow/plan-reviewer-report.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Cline",
+      "agent": "implementer",
+      "representation": "missing",
+      "evidence_paths": [
+        "scripts/host-sync/manifests/cline.manifest.psd1",
+        "analysis/cline-kilo-probes-2026-09.md"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/implementer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "fresh-task-session-fallback",
+      "classification": null,
+      "canonical_identity": "implementer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/implementer.md"
+      ]
+    },
+    {
+      "host": "Cline",
+      "agent": "production_readiness_reviewer",
+      "representation": "fallback-launch-contract",
+      "evidence_paths": [
+        "overlays/cline/workflows/review.md",
+        "scripts/host-sync/manifests/cline.manifest.psd1"
+      ],
+      "route_identity": "production_readiness_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
+      "first_read_contract": "agents/production_readiness_reviewer.md",
+      "launch_mechanism": "Cline fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "production_readiness_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/production_readiness_reviewer.md"
+      ]
+    },
+    {
+      "host": "Cline",
+      "agent": "bug_reviewer",
+      "representation": "fallback-launch-contract",
+      "evidence_paths": [
+        "overlays/cline/workflows/review.md",
+        "scripts/host-sync/manifests/cline.manifest.psd1"
+      ],
+      "route_identity": "bug_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
+      "first_read_contract": "agents/bug_reviewer.md",
+      "launch_mechanism": "Cline fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "bug_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/bug_reviewer.md",
+        "docs/featureArchitecture/bug-reviewer-finding-rubric.md",
+        "skills/bug-review-sweep/SKILL.md"
+      ]
+    },
+    {
+      "host": "Cline",
+      "agent": "repository_explorer",
+      "representation": "missing",
+      "evidence_paths": [
+        "scripts/host-sync/manifests/cline.manifest.psd1",
+        "analysis/cline-kilo-probes-2026-09.md"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/repository_explorer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "fresh-task-session-fallback",
+      "classification": null,
+      "canonical_identity": "repository_explorer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/repository_explorer.md"
+      ]
+    },
+    {
+      "host": "Cline",
+      "agent": "test_reviewer",
+      "representation": "missing",
+      "evidence_paths": [
+        "scripts/host-sync/manifests/cline.manifest.psd1",
+        "analysis/cline-kilo-probes-2026-09.md"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/test_reviewer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "fresh-task-session-fallback",
+      "classification": null,
+      "canonical_identity": "test_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/test_reviewer.md"
+      ]
+    },
+    {
+      "host": "Kilocode",
+      "agent": "planner",
+      "representation": "missing",
+      "evidence_paths": [
+        "scripts/host-sync/manifests/kilocode.manifest.psd1",
+        "analysis/cline-kilo-probes-2026-09.md"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/planner.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "fresh-task-session-fallback",
+      "classification": null,
+      "canonical_identity": "planner",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/planner.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Kilocode",
+      "agent": "plan_reviewer",
+      "representation": "fallback-launch-contract",
+      "evidence_paths": [
+        "overlays/kilocode/workflows/plan.md",
+        "scripts/host-sync/manifests/kilocode.manifest.psd1"
+      ],
+      "route_identity": "plan_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
+      "first_read_contract": "agents/plan_reviewer.md",
+      "launch_mechanism": "Kilocode fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "plan_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/plan_reviewer.md",
+        "workflow/plan-reviewer-report.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Kilocode",
+      "agent": "implementer",
+      "representation": "missing",
+      "evidence_paths": [
+        "scripts/host-sync/manifests/kilocode.manifest.psd1",
+        "analysis/cline-kilo-probes-2026-09.md"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/implementer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "fresh-task-session-fallback",
+      "classification": null,
+      "canonical_identity": "implementer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/implementer.md"
+      ]
+    },
+    {
+      "host": "Kilocode",
+      "agent": "production_readiness_reviewer",
+      "representation": "fallback-launch-contract",
+      "evidence_paths": [
+        "overlays/kilocode/workflows/review.md",
+        "scripts/host-sync/manifests/kilocode.manifest.psd1"
+      ],
+      "route_identity": "production_readiness_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
+      "first_read_contract": "agents/production_readiness_reviewer.md",
+      "launch_mechanism": "Kilocode fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "production_readiness_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/production_readiness_reviewer.md"
+      ]
+    },
+    {
+      "host": "Kilocode",
+      "agent": "bug_reviewer",
+      "representation": "fallback-launch-contract",
+      "evidence_paths": [
+        "overlays/kilocode/workflows/review.md",
+        "scripts/host-sync/manifests/kilocode.manifest.psd1"
+      ],
+      "route_identity": "bug_reviewer",
+      "alias": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
+      "first_read_contract": "agents/bug_reviewer.md",
+      "launch_mechanism": "Kilocode fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
+      "canonical_identity": "bug_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/bug_reviewer.md",
+        "docs/featureArchitecture/bug-reviewer-finding-rubric.md",
+        "skills/bug-review-sweep/SKILL.md"
+      ]
+    },
+    {
+      "host": "Kilocode",
+      "agent": "repository_explorer",
+      "representation": "missing",
+      "evidence_paths": [
+        "scripts/host-sync/manifests/kilocode.manifest.psd1",
+        "analysis/cline-kilo-probes-2026-09.md"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/repository_explorer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "fresh-task-session-fallback",
+      "classification": null,
+      "canonical_identity": "repository_explorer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/repository_explorer.md"
+      ]
+    },
+    {
+      "host": "Kilocode",
+      "agent": "test_reviewer",
+      "representation": "missing",
+      "evidence_paths": [
+        "scripts/host-sync/manifests/kilocode.manifest.psd1",
+        "analysis/cline-kilo-probes-2026-09.md"
+      ],
+      "route_identity": null,
+      "alias": null,
+      "authority": null,
+      "isolation": null,
+      "first_read_contract": "agents/test_reviewer.md",
+      "launch_mechanism": null,
+      "proposed_phase2_representation": "fresh-task-session-fallback",
+      "classification": null,
+      "canonical_identity": "test_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/test_reviewer.md"
+      ]
+    },
+    {
+      "host": "Codex",
+      "agent": "planner",
+      "representation": "generated-native-projection",
+      "evidence_paths": [
+        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/planner.toml",
+        "scripts/host-sync/manifests/codex.manifest.psd1"
+      ],
+      "route_identity": "planner",
+      "alias": null,
+      "authority": "read-only (sandbox_mode)",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/planner.md",
+      "launch_mechanism": "Codex custom agent (TOML definition)",
+      "proposed_phase2_representation": null,
+      "classification": "generated output",
+      "canonical_identity": "planner",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/planner.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Codex",
+      "agent": "plan_reviewer",
+      "representation": "generated-native-projection",
+      "evidence_paths": [
+        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/plan_reviewer.toml",
+        "scripts/host-sync/manifests/codex.manifest.psd1"
+      ],
+      "route_identity": "plan_reviewer",
+      "alias": null,
+      "authority": "read-only (sandbox_mode)",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/plan_reviewer.md",
+      "launch_mechanism": "Codex custom agent (TOML definition)",
+      "proposed_phase2_representation": null,
+      "classification": "generated output",
+      "canonical_identity": "plan_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/plan_reviewer.md",
+        "workflow/plan-reviewer-report.md",
+        "skills/implementation-plan/SKILL.md"
+      ]
+    },
+    {
+      "host": "Codex",
+      "agent": "implementer",
+      "representation": "generated-native-projection",
+      "evidence_paths": [
+        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/implementer.toml",
+        "scripts/host-sync/manifests/codex.manifest.psd1"
+      ],
+      "route_identity": "implementer",
+      "alias": null,
+      "authority": "workspace-write (sandbox_mode)",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/implementer.md",
+      "launch_mechanism": "Codex custom agent (TOML definition)",
+      "proposed_phase2_representation": null,
+      "classification": "generated output",
+      "canonical_identity": "implementer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/implementer.md"
+      ]
+    },
+    {
+      "host": "Codex",
+      "agent": "production_readiness_reviewer",
+      "representation": "generated-native-projection",
+      "evidence_paths": [
+        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/production_readiness_reviewer.toml",
+        "scripts/host-sync/manifests/codex.manifest.psd1"
+      ],
+      "route_identity": "production_readiness_reviewer",
+      "alias": null,
+      "authority": "read-only (sandbox_mode)",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/production_readiness_reviewer.md",
+      "launch_mechanism": "Codex custom agent (TOML definition)",
+      "proposed_phase2_representation": null,
+      "classification": "generated output",
+      "canonical_identity": "production_readiness_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/production_readiness_reviewer.md"
+      ]
+    },
+    {
+      "host": "Codex",
+      "agent": "bug_reviewer",
+      "representation": "generated-native-projection",
+      "evidence_paths": [
+        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/bug_reviewer.toml",
+        "scripts/host-sync/manifests/codex.manifest.psd1"
+      ],
+      "route_identity": "bug_reviewer",
+      "alias": null,
+      "authority": "read-only (sandbox_mode)",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/bug_reviewer.md",
+      "launch_mechanism": "Codex custom agent (TOML definition)",
+      "proposed_phase2_representation": null,
+      "classification": "generated output",
+      "canonical_identity": "bug_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/bug_reviewer.md",
+        "docs/featureArchitecture/bug-reviewer-finding-rubric.md",
+        "skills/bug-review-sweep/SKILL.md"
+      ]
+    },
+    {
+      "host": "Codex",
+      "agent": "repository_explorer",
+      "representation": "generated-native-projection",
+      "evidence_paths": [
+        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/repository_explorer.toml",
+        "scripts/host-sync/manifests/codex.manifest.psd1"
+      ],
+      "route_identity": "repository_explorer",
+      "alias": null,
+      "authority": "read-only (sandbox_mode)",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/repository_explorer.md",
+      "launch_mechanism": "Codex custom agent (TOML definition)",
+      "proposed_phase2_representation": null,
+      "classification": "generated output",
+      "canonical_identity": "repository_explorer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/repository_explorer.md"
+      ]
+    },
+    {
+      "host": "Codex",
+      "agent": "test_reviewer",
+      "representation": "generated-native-projection",
+      "evidence_paths": [
+        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/test_reviewer.toml",
+        "scripts/host-sync/manifests/codex.manifest.psd1"
+      ],
+      "route_identity": "test_reviewer",
+      "alias": null,
+      "authority": "read-only (sandbox_mode)",
+      "isolation": "clean-context",
+      "first_read_contract": "agents/test_reviewer.md",
+      "launch_mechanism": "Codex custom agent (TOML definition)",
+      "proposed_phase2_representation": null,
+      "classification": "generated output",
+      "canonical_identity": "test_reviewer",
+      "launch_mechanism_definition": "separate from representation",
+      "required_reading": [
+        "workflow/agent-invocation.md",
+        "agents/test_reviewer.md"
+      ]
+    }
+  ],
+  "skills_inventory": {
+    "canonical_skills": [
+      {
+        "id": "architecture-survey",
+        "source": "skills/architecture-survey/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/architecture-survey/SKILL.md",
+            "destination": "architecture-survey/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "bug-review-sweep",
+        "source": "skills/bug-review-sweep/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/bug-review-sweep/SKILL.md",
+            "destination": "bug-review-sweep/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "codebase-design",
+        "source": "skills/codebase-design/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/codebase-design/SKILL.md",
+            "destination": "codebase-design/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "composer",
+        "source": "skills/composer/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "applicable",
+            "source": "skills/composer/SKILL.md",
+            "destination": "skills/composer/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "applicable",
+            "source": "skills/composer/SKILL.md",
+            "destination": "skills/composer/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "applicable",
+            "source": "skills/composer/SKILL.md",
+            "destination": "config/skills/composer/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "applicable",
+            "source": "skills/composer/SKILL.md",
+            "destination": "skills/composer/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/composer/SKILL.md",
+            "destination": "composer/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "diagnosing-bugs",
+        "source": "skills/diagnosing-bugs/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "applicable",
+            "source": "skills/diagnosing-bugs/SKILL.md",
+            "destination": "skills/diagnosing-bugs/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "applicable",
+            "source": "shared:skills/diagnosing-bugs/SKILL.md",
+            "destination": "config/skills/diagnosing-bugs/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "applicable",
+            "source": "shared:skills/diagnosing-bugs/SKILL.md",
+            "destination": "skills/diagnosing-bugs/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/diagnosing-bugs/SKILL.md",
+            "destination": "diagnosing-bugs/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "discovery",
+        "source": "skills/discovery/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "applicable",
+            "source": "skills/discovery/SKILL.md",
+            "destination": "skills/discovery/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "applicable",
+            "source": "shared:skills/discovery/SKILL.md",
+            "destination": "config/skills/discovery/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "applicable",
+            "source": "shared:skills/discovery/SKILL.md",
+            "destination": "skills/discovery/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/discovery/SKILL.md",
+            "destination": "discovery/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "documentation-architecture",
+        "source": "skills/documentation-architecture/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "applicable",
+            "source": "skills/documentation-architecture/SKILL.md",
+            "destination": "skills/documentation-architecture/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "applicable",
+            "source": "skills/documentation-architecture/SKILL.md",
+            "destination": "skills/documentation-architecture/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "applicable",
+            "source": "shared:skills/documentation-architecture/SKILL.md",
+            "destination": "config/skills/documentation-architecture/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "applicable",
+            "source": "shared:skills/documentation-architecture/SKILL.md",
+            "destination": "skills/documentation-architecture/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/documentation-architecture/SKILL.md",
+            "destination": "documentation-architecture/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "domain-modeling",
+        "source": "skills/domain-modeling/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/domain-modeling/SKILL.md",
+            "destination": "domain-modeling/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "grilling",
+        "source": "skills/grilling/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/grilling/SKILL.md",
+            "destination": "grilling/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "implementation-plan",
+        "source": "skills/implementation-plan/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "applicable",
+            "source": "skills/implementation-plan/SKILL.md",
+            "destination": "skills/implementation-plan/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "applicable",
+            "source": "skills/implementation-plan/SKILL.md",
+            "destination": "skills/implementation-plan/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "applicable",
+            "source": "shared:skills/implementation-plan/SKILL.md",
+            "destination": "config/skills/implementation-plan/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "applicable",
+            "source": "shared:skills/implementation-plan/SKILL.md",
+            "destination": "skills/implementation-plan/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/implementation-plan/SKILL.md",
+            "destination": "implementation-plan/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "implementation-review",
+        "source": "skills/implementation-review/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "applicable",
+            "source": "skills/implementation-review/SKILL.md",
+            "destination": "skills/implementation-review/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "applicable",
+            "source": "skills/implementation-review/SKILL.md",
+            "destination": "skills/implementation-review/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "applicable",
+            "source": "skills/implementation-review/SKILL.md",
+            "destination": "config/skills/implementation-review/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "applicable",
+            "source": "skills/implementation-review/SKILL.md",
+            "destination": "skills/implementation-review/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/implementation-review/SKILL.md",
+            "destination": "implementation-review/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "opencode-headless-run",
+        "source": "skills/opencode-headless-run/SKILL.md",
+        "explicit_only": true,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "applicable",
+            "source": "skills/opencode-headless-run/SKILL.md",
+            "destination": "skills/opencode-headless-run/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "applicable",
+            "source": "skills/opencode-headless-run/SKILL.md",
+            "destination": "skills/opencode-headless-run/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "applicable",
+            "source": "shared:skills/opencode-headless-run/SKILL.md",
+            "destination": "config/skills/opencode-headless-run/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "applicable",
+            "source": "shared:skills/opencode-headless-run/SKILL.md",
+            "destination": "skills/opencode-headless-run/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/opencode-headless-run/SKILL.md",
+            "destination": "opencode-headless-run/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "opencode-history-search",
+        "source": "skills/opencode-history-search/SKILL.md",
+        "explicit_only": true,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "applicable",
+            "source": "skills/opencode-history-search/SKILL.md",
+            "destination": "skills/opencode-history-search/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "applicable",
+            "source": "skills/opencode-history-search/SKILL.md",
+            "destination": "skills/opencode-history-search/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "applicable",
+            "source": "skills/opencode-history-search/SKILL.md",
+            "destination": "config/skills/opencode-history-search/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "applicable",
+            "source": "skills/opencode-history-search/SKILL.md",
+            "destination": "skills/opencode-history-search/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/opencode-history-search/SKILL.md",
+            "destination": "opencode-history-search/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "plan-review",
+        "source": "skills/plan-review/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "applicable",
+            "source": "skills/plan-review/SKILL.md",
+            "destination": "skills/plan-review/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "applicable",
+            "source": "shared:skills/plan-review/SKILL.md",
+            "destination": "config/skills/plan-review/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "applicable",
+            "source": "shared:skills/plan-review/SKILL.md",
+            "destination": "skills/plan-review/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/plan-review/SKILL.md",
+            "destination": "plan-review/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "prototype",
+        "source": "skills/prototype/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/prototype/SKILL.md",
+            "destination": "prototype/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "research",
+        "source": "skills/research/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/research/SKILL.md",
+            "destination": "research/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "resolving-merge-conflicts",
+        "source": "skills/resolving-merge-conflicts/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/resolving-merge-conflicts/SKILL.md",
+            "destination": "resolving-merge-conflicts/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "roadmap",
+        "source": "skills/roadmap/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "applicable",
+            "source": "skills/roadmap/SKILL.md",
+            "destination": "skills/roadmap/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "applicable",
+            "source": "skills/roadmap/SKILL.md",
+            "destination": "skills/roadmap/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "applicable",
+            "source": "shared:skills/roadmap/SKILL.md",
+            "destination": "config/skills/roadmap/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "applicable",
+            "source": "shared:skills/roadmap/SKILL.md",
+            "destination": "skills/roadmap/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/roadmap/SKILL.md",
+            "destination": "roadmap/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tdd",
+        "source": "skills/tdd/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/tdd/SKILL.md",
+            "destination": "tdd/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "teach",
+        "source": "skills/teach/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/teach/SKILL.md",
+            "destination": "teach/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wait-what",
+        "source": "skills/wait-what/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/wait-what/SKILL.md",
+            "destination": "wait-what/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wizard",
+        "source": "skills/wizard/SKILL.md",
+        "explicit_only": false,
+        "host_applicability": [
+          {
+            "host": "Cursor",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cursor.manifest.psd1"
+            ]
+          },
+          {
+            "host": "OpenCode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/opencode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Antigravity",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/antigravity.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Vscode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/vscode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Cline",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/cline.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Kilocode",
+            "status": "not-applicable",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/kilocode.manifest.psd1"
+            ]
+          },
+          {
+            "host": "Codex",
+            "status": "applicable",
+            "source": "skills/wizard/SKILL.md",
+            "destination": "wizard/SKILL.md",
+            "evidence_paths": [
+              "scripts/host-sync/manifests/codex.manifest.psd1"
+            ]
+          }
+        ]
+      }
+    ],
+    "generated_rule_wrapper": {
+      "id": "pre-commit-ci-gate",
+      "source": "rules/pre-commit-ci-gate.md",
+      "host_applicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidence_paths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "applicable",
+          "source": "base:rules/pre-commit-ci-gate.md",
+          "destination": "skills/pre-commit-ci-gate/SKILL.md",
+          "evidence_paths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "applicable",
+          "source": "base:rules/pre-commit-ci-gate.md",
+          "destination": "config/skills/pre-commit-ci-gate/SKILL.md",
+          "evidence_paths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "applicable",
+          "source": "base:rules/pre-commit-ci-gate.md",
+          "destination": "skills/pre-commit-ci-gate/SKILL.md",
+          "evidence_paths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidence_paths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidence_paths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "source": "skills/pre-commit-ci-gate/SKILL.md",
+          "destination": "pre-commit-ci-gate/SKILL.md",
+          "evidence_paths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    "skill_count_canonical": 22,
+    "skill_count_total_with_generated": 23
+  },
+  "rules_workflows": {
+    "canonical_rules": [
+      {
+        "id": "agent-invocation",
+        "source": "rules/agent-invocation.md"
+      },
+      {
+        "id": "iterative-code-review",
+        "source": "rules/iterative-code-review.md"
+      },
+      {
+        "id": "iterative-plan-review",
+        "source": "rules/iterative-plan-review.md"
+      },
+      {
+        "id": "pre-commit-ci-gate",
+        "source": "rules/pre-commit-ci-gate.md"
+      },
+      {
+        "id": "red-line",
+        "source": "rules/red-line.md"
+      },
+      {
+        "id": "shell-native-tool-policy",
+        "source": "rules/shell-native-tool-policy.md"
+      }
+    ],
+    "canonical_workflows": [
+      {
+        "id": "agent-invocation",
+        "source": "workflow/agent-invocation.md"
+      },
+      {
+        "id": "architecture-survey",
+        "source": "workflow/architecture-survey.md"
+      },
+      {
+        "id": "ci-ladder",
+        "source": "workflow/ci-ladder.md"
+      },
+      {
+        "id": "code-review-frame",
+        "source": "workflow/code-review-frame.md"
+      },
+      {
+        "id": "diagnosing-bugs",
+        "source": "workflow/diagnosing-bugs.md"
+      },
+      {
+        "id": "discovery",
+        "source": "workflow/discovery.md"
+      },
+      {
+        "id": "documentation-architecture",
+        "source": "workflow/documentation-architecture.md"
+      },
+      {
+        "id": "domain-modeling",
+        "source": "workflow/domain-modeling.md"
+      },
+      {
+        "id": "grilling",
+        "source": "workflow/grilling.md"
+      },
+      {
+        "id": "handoff",
+        "source": "workflow/handoff.md"
+      },
+      {
+        "id": "iterative-code-review",
+        "source": "workflow/iterative-code-review.md"
+      },
+      {
+        "id": "iterative-plan-review",
+        "source": "workflow/iterative-plan-review.md"
+      },
+      {
+        "id": "phased-multi-agent",
+        "source": "workflow/phased-multi-agent.md"
+      },
+      {
+        "id": "plan-agent-context",
+        "source": "workflow/plan-agent-context.md"
+      },
+      {
+        "id": "plan-reviewer-report",
+        "source": "workflow/plan-reviewer-report.md"
+      },
+      {
+        "id": "prototype",
+        "source": "workflow/prototype.md"
+      },
+      {
+        "id": "research",
+        "source": "workflow/research.md"
+      },
+      {
+        "id": "resolving-merge-conflicts",
+        "source": "workflow/resolving-merge-conflicts.md"
+      },
+      {
+        "id": "tdd-mocking",
+        "source": "workflow/tdd-mocking.md"
+      },
+      {
+        "id": "tdd-tests",
+        "source": "workflow/tdd-tests.md"
+      },
+      {
+        "id": "teach",
+        "source": "workflow/teach.md"
+      },
+      {
+        "id": "wait-what",
+        "source": "workflow/wait-what.md"
+      },
+      {
+        "id": "wizard",
+        "source": "workflow/wizard.md"
+      }
+    ],
+    "compositions": [
+      {
+        "host": "OpenCode",
+        "canonical_source": "base:rules/pre-commit-ci-gate.md",
+        "destination": "skills/pre-commit-ci-gate/SKILL.md",
+        "parts": "shared:pre-commit-frontmatter.md",
+        "footer": "footers/pre-commit-opencode.md",
+        "composition_order": [
+          "shared:pre-commit-frontmatter.md",
+          "base:rules/pre-commit-ci-gate.md",
+          "footers/pre-commit-opencode.md"
+        ],
+        "evidence_paths": [
+          "scripts/host-sync/manifests/opencode.manifest.psd1"
+        ]
+      },
+      {
+        "host": "Antigravity",
+        "canonical_source": "base:rules/agent-invocation.md",
+        "destination": "GEMINI.md",
+        "parts": "instructions/__header__.md",
+        "footer": [
+          "base:rules/iterative-plan-review.md",
+          "base:rules/iterative-code-review.md",
+          "footers/gemini-wiring.md"
+        ],
+        "composition_order": [
+          "instructions/__header__.md",
+          "base:rules/agent-invocation.md",
+          "base:rules/iterative-plan-review.md",
+          "base:rules/iterative-code-review.md",
+          "footers/gemini-wiring.md"
+        ],
+        "evidence_paths": [
+          "scripts/host-sync/manifests/antigravity.manifest.psd1"
+        ]
+      },
+      {
+        "host": "Antigravity",
+        "canonical_source": "base:rules/pre-commit-ci-gate.md",
+        "destination": "config/skills/pre-commit-ci-gate/SKILL.md",
+        "parts": "shared:pre-commit-frontmatter.md",
+        "footer": "footers/pre-commit-antigravity.md",
+        "composition_order": [
+          "shared:pre-commit-frontmatter.md",
+          "base:rules/pre-commit-ci-gate.md",
+          "footers/pre-commit-antigravity.md"
+        ],
+        "evidence_paths": [
+          "scripts/host-sync/manifests/antigravity.manifest.psd1"
+        ]
+      },
+      {
+        "host": "Vscode",
+        "canonical_source": "base:rules/agent-invocation.md",
+        "destination": "instructions/cursor-escape-loop.instructions.md",
+        "parts": "instructions/__header__.md",
+        "footer": [
+          "base:rules/iterative-plan-review.md",
+          "base:rules/iterative-code-review.md",
+          "footers/instructions-wiring.md"
+        ],
+        "composition_order": [
+          "instructions/__header__.md",
+          "base:rules/agent-invocation.md",
+          "base:rules/iterative-plan-review.md",
+          "base:rules/iterative-code-review.md",
+          "footers/instructions-wiring.md"
+        ],
+        "evidence_paths": [
+          "scripts/host-sync/manifests/vscode.manifest.psd1"
+        ]
+      },
+      {
+        "host": "Vscode",
+        "canonical_source": "base:rules/pre-commit-ci-gate.md",
+        "destination": "instructions/pre-commit-gate.instructions.md",
+        "parts": [],
+        "footer": [
+          "footers/pre-commit-vscode.md"
+        ],
+        "composition_order": [
+          "base:rules/pre-commit-ci-gate.md",
+          "footers/pre-commit-vscode.md"
+        ],
+        "evidence_paths": [
+          "scripts/host-sync/manifests/vscode.manifest.psd1"
+        ]
+      },
+      {
+        "host": "Vscode",
+        "canonical_source": "base:rules/pre-commit-ci-gate.md",
+        "destination": "skills/pre-commit-ci-gate/SKILL.md",
+        "parts": "shared:pre-commit-frontmatter.md",
+        "footer": "footers/pre-commit-vscode.md",
+        "composition_order": [
+          "shared:pre-commit-frontmatter.md",
+          "base:rules/pre-commit-ci-gate.md",
+          "footers/pre-commit-vscode.md"
+        ],
+        "evidence_paths": [
+          "scripts/host-sync/manifests/vscode.manifest.psd1"
+        ]
+      },
+      {
+        "host": "Cline",
+        "canonical_source": "base:rules/agent-invocation.md",
+        "destination": "rules/cursor-escape-loop.md",
+        "parts": "instructions/__header__.md",
+        "footer": [
+          "base:rules/iterative-plan-review.md",
+          "base:rules/iterative-code-review.md",
+          "base:rules/pre-commit-ci-gate.md",
+          "footers/cline-wiring.md"
+        ],
+        "composition_order": [
+          "instructions/__header__.md",
+          "base:rules/agent-invocation.md",
+          "base:rules/iterative-plan-review.md",
+          "base:rules/iterative-code-review.md",
+          "base:rules/pre-commit-ci-gate.md",
+          "footers/cline-wiring.md"
+        ],
+        "evidence_paths": [
+          "scripts/host-sync/manifests/cline.manifest.psd1"
+        ]
+      },
+      {
+        "host": "Kilocode",
+        "canonical_source": "base:rules/agent-invocation.md",
+        "destination": "rules/cursor-escape-loop.md",
+        "parts": "instructions/__header__.md",
+        "footer": [
+          "base:rules/iterative-plan-review.md",
+          "base:rules/iterative-code-review.md",
+          "base:rules/pre-commit-ci-gate.md",
+          "footers/kilocode-wiring.md"
+        ],
+        "composition_order": [
+          "instructions/__header__.md",
+          "base:rules/agent-invocation.md",
+          "base:rules/iterative-plan-review.md",
+          "base:rules/iterative-code-review.md",
+          "base:rules/pre-commit-ci-gate.md",
+          "footers/kilocode-wiring.md"
+        ],
+        "evidence_paths": [
+          "scripts/host-sync/manifests/kilocode.manifest.psd1"
+        ]
+      }
+    ]
+  },
+  "manifests": [
+    {
+      "host": "Cursor",
+      "path": "scripts/host-sync/manifests/cursor.manifest.psd1",
+      "stack_id": "Cursor",
+      "binding_model": "single-root",
+      "overlay_root": "overlays/cursor",
+      "overlay_relative_root": "overlays/cursor",
+      "live_relative_root": ".cursor",
+      "shared_root": null,
+      "logical_roots": null,
+      "copy_entry_count": 13,
+      "hard_excludes": [
+        "skills-cursor",
+        "settings.json"
+      ],
+      "never_touch": [
+        "docs/workflow"
+      ],
+      "hybrid_rule_ids": [
+        "agent-invocation",
+        "iterative-plan-review",
+        "iterative-code-review",
+        "pre-commit-ci-gate"
+      ],
+      "entries": [
+        {
+          "source": "skills/implementation-plan/SKILL.md",
+          "destination": "skills/implementation-plan/SKILL.md"
+        },
+        {
+          "source": "skills/implementation-plan/user-rules-snippet.md",
+          "destination": "skills/implementation-plan/user-rules-snippet.md"
+        },
+        {
+          "source": "skills/implementation-review/SKILL.md",
+          "destination": "skills/implementation-review/SKILL.md"
+        },
+        {
+          "source": "skills/implementation-review/user-rules-snippet.md",
+          "destination": "skills/implementation-review/user-rules-snippet.md"
+        },
+        {
+          "source": "skills/composer/SKILL.md",
+          "destination": "skills/composer/SKILL.md"
+        },
+        {
+          "source": "skills/composer/user-rules-snippet.md",
+          "destination": "skills/composer/user-rules-snippet.md"
+        },
+        {
+          "source": "skills/roadmap/SKILL.md",
+          "destination": "skills/roadmap/SKILL.md"
+        },
+        {
+          "source": "skills/documentation-architecture/SKILL.md",
+          "destination": "skills/documentation-architecture/SKILL.md"
+        },
+        {
+          "source": "skills/opencode-headless-run/SKILL.md",
+          "destination": "skills/opencode-headless-run/SKILL.md"
+        },
+        {
+          "source": "skills/opencode-history-search/SKILL.md",
+          "destination": "skills/opencode-history-search/SKILL.md"
+        },
+        {
+          "source": "agents/plan-reviewer.md",
+          "destination": "agents/plan-reviewer.md"
+        },
+        {
+          "source": "agents/reviewer-a.md",
+          "destination": "agents/reviewer-a.md"
+        },
+        {
+          "source": "review-subagent-models.md",
+          "destination": "review-subagent-models.md"
+        }
+      ]
+    },
+    {
+      "host": "OpenCode",
+      "path": "scripts/host-sync/manifests/opencode.manifest.psd1",
+      "stack_id": "OpenCode",
+      "binding_model": "single-root",
+      "overlay_root": "overlays/opencode",
+      "overlay_relative_root": "overlays/opencode",
+      "live_relative_root": ".config/opencode",
+      "shared_root": "overlays/opencode",
+      "logical_roots": null,
+      "copy_entry_count": 19,
+      "hard_excludes": [
+        "docs/workflow",
+        "review-subagent-models"
+      ],
+      "never_touch": [
+        "docs/workflow"
+      ],
+      "hybrid_rule_ids": [],
+      "entries": [
+        {
+          "source": "base:rules/pre-commit-ci-gate.md",
+          "destination": "skills/pre-commit-ci-gate/SKILL.md",
+          "parts": [
+            "shared:pre-commit-frontmatter.md"
+          ],
+          "footer": [
+            "footers/pre-commit-opencode.md"
+          ]
+        },
+        {
+          "source": "skills/discovery/SKILL.md",
+          "destination": "skills/discovery/SKILL.md"
+        },
+        {
+          "source": "skills/implementation-plan/SKILL.md",
+          "destination": "skills/implementation-plan/SKILL.md"
+        },
+        {
+          "source": "skills/plan-review/SKILL.md",
+          "destination": "skills/plan-review/SKILL.md"
+        },
+        {
+          "source": "skills/implementation-review/SKILL.md",
+          "destination": "skills/implementation-review/SKILL.md"
+        },
+        {
+          "source": "skills/composer/SKILL.md",
+          "destination": "skills/composer/SKILL.md"
+        },
+        {
+          "source": "skills/documentation-architecture/SKILL.md",
+          "destination": "skills/documentation-architecture/SKILL.md"
+        },
+        {
+          "source": "skills/roadmap/SKILL.md",
+          "destination": "skills/roadmap/SKILL.md"
+        },
+        {
+          "source": "skills/diagnosing-bugs/SKILL.md",
+          "destination": "skills/diagnosing-bugs/SKILL.md"
+        },
+        {
+          "source": "skills/opencode-headless-run/SKILL.md",
+          "destination": "skills/opencode-headless-run/SKILL.md"
+        },
+        {
+          "source": "skills/opencode-history-search/SKILL.md",
+          "destination": "skills/opencode-history-search/SKILL.md"
+        },
+        {
+          "source": "agents/planner.md",
+          "destination": "agents/planner.md"
+        },
+        {
+          "source": "agents/plan_reviewer.md",
+          "destination": "agents/plan_reviewer.md"
+        },
+        {
+          "source": "agents/implementer.md",
+          "destination": "agents/implementer.md"
+        },
+        {
+          "source": "agents/production_readiness_reviewer.md",
+          "destination": "agents/production_readiness_reviewer.md"
+        },
+        {
+          "source": "agents/bug_reviewer.md",
+          "destination": "agents/bug_reviewer.md"
+        },
+        {
+          "source": "agents/repository_explorer.md",
+          "destination": "agents/repository_explorer.md"
+        },
+        {
+          "source": "agents/test_reviewer.md",
+          "destination": "agents/test_reviewer.md"
+        },
+        {
+          "source": "agents/composer_conductor.md",
+          "destination": "agents/composer_conductor.md"
+        }
+      ],
+      "agents_dual_write": {
+        "instructions_rel": "instructions/cursor-escape-loop.md",
+        "agents_rel": "AGENTS.md",
+        "parts": [
+          "instructions/__header__.md",
+          "base:rules/agent-invocation.md",
+          "base:rules/iterative-plan-review.md",
+          "base:rules/iterative-code-review.md"
+        ],
+        "footer": [
+          "footers/instructions-wiring.md"
+        ]
+      },
+      "json_merge": {
+        "specimen_rel": "opencode.specimen.json",
+        "dest_rel": "opencode.json",
+        "preserve_top_level_keys": [
+          "model",
+          "provider"
+        ]
+      }
+    },
+    {
+      "host": "Antigravity",
+      "path": "scripts/host-sync/manifests/antigravity.manifest.psd1",
+      "stack_id": "Antigravity",
+      "binding_model": "single-root",
+      "overlay_root": "overlays/antigravity",
+      "overlay_relative_root": "overlays/antigravity",
+      "live_relative_root": ".gemini",
+      "shared_root": "overlays/opencode",
+      "logical_roots": null,
+      "copy_entry_count": 18,
+      "hard_excludes": [
+        "antigravity/global_workflows/caveman.md",
+        "settings.json",
+        "config/mcp_config.json",
+        "oauth_creds.json",
+        "google_accounts.json",
+        "state.json",
+        "trustedFolders.json",
+        "installation_id"
+      ],
+      "never_touch": [
+        "antigravity/global_workflows/caveman.md",
+        "config/projects"
+      ],
+      "hybrid_rule_ids": [],
+      "entries": [
+        {
+          "source": "base:rules/agent-invocation.md",
+          "destination": "GEMINI.md",
+          "parts": [
+            "instructions/__header__.md"
+          ],
+          "footer": [
+            "base:rules/iterative-plan-review.md",
+            "base:rules/iterative-code-review.md",
+            "footers/gemini-wiring.md"
+          ]
+        },
+        {
+          "source": "shared:skills/discovery/SKILL.md",
+          "destination": "config/skills/discovery/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(Antigravity harness)"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/implementation-plan/SKILL.md",
+          "destination": "config/skills/implementation-plan/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(Antigravity harness)"
+            },
+            {
+              "find": "Invoke OpenCode agent `plan_reviewer` via Task",
+              "replace": "Invoke subagent `plan_reviewer` via `invoke_subagent`"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/plan-review/SKILL.md",
+          "destination": "config/skills/plan-review/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(Antigravity harness)"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/documentation-architecture/SKILL.md",
+          "destination": "config/skills/documentation-architecture/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(Antigravity harness)"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/roadmap/SKILL.md",
+          "destination": "config/skills/roadmap/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(not under ~/.config/opencode)",
+              "replace": "(not under the Antigravity adapter tree)"
+            },
+            {
+              "find": "Never write them under the OpenCode adapter tree.",
+              "replace": "Never write them under the Antigravity adapter tree (`~/.gemini`)."
+            },
+            {
+              "find": "Store roadmaps under `~/.config/opencode` or the adapter skills tree",
+              "replace": "Store roadmaps under `~/.gemini` or the adapter skills tree"
+            },
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(Antigravity harness)"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/diagnosing-bugs/SKILL.md",
+          "destination": "config/skills/diagnosing-bugs/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(Antigravity harness)"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/opencode-headless-run/SKILL.md",
+          "destination": "config/skills/opencode-headless-run/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(Antigravity overlay)"
+            }
+          ]
+        },
+        {
+          "source": "base:rules/pre-commit-ci-gate.md",
+          "destination": "config/skills/pre-commit-ci-gate/SKILL.md",
+          "parts": [
+            "shared:pre-commit-frontmatter.md"
+          ],
+          "footer": [
+            "footers/pre-commit-antigravity.md"
+          ]
+        },
+        {
+          "source": "skills/composer/SKILL.md",
+          "destination": "config/skills/composer/SKILL.md"
+        },
+        {
+          "source": "skills/implementation-review/SKILL.md",
+          "destination": "config/skills/implementation-review/SKILL.md"
+        },
+        {
+          "source": "skills/opencode-history-search/SKILL.md",
+          "destination": "config/skills/opencode-history-search/SKILL.md"
+        },
+        {
+          "source": "workflows/escape-plan.md",
+          "destination": "antigravity/global_workflows/escape-plan.md"
+        },
+        {
+          "source": "workflows/escape-review.md",
+          "destination": "antigravity/global_workflows/escape-review.md"
+        },
+        {
+          "source": "workflows/escape-closeout.md",
+          "destination": "antigravity/global_workflows/escape-closeout.md"
+        },
+        {
+          "source": "agents/plan_reviewer.md",
+          "destination": "config/agents/plan_reviewer.md"
+        },
+        {
+          "source": "agents/production_readiness_reviewer.md",
+          "destination": "config/agents/production_readiness_reviewer.md"
+        },
+        {
+          "source": "agents/bug_reviewer.md",
+          "destination": "config/agents/bug_reviewer.md"
+        }
+      ]
+    },
+    {
+      "host": "Vscode",
+      "path": "scripts/host-sync/manifests/vscode.manifest.psd1",
+      "stack_id": "Vscode",
+      "binding_model": "single-root",
+      "overlay_root": "overlays/vscode",
+      "overlay_relative_root": "overlays/vscode",
+      "live_relative_root": ".copilot",
+      "shared_root": "overlays/opencode",
+      "logical_roots": null,
+      "copy_entry_count": 21,
+      "hard_excludes": [
+        "review-subagent-models.md",
+        "config.json"
+      ],
+      "never_touch": [
+        "config.json",
+        "ide",
+        "logs"
+      ],
+      "hybrid_rule_ids": [],
+      "entries": [
+        {
+          "source": "base:rules/agent-invocation.md",
+          "destination": "instructions/cursor-escape-loop.instructions.md",
+          "parts": [
+            "instructions/__header__.md"
+          ],
+          "footer": [
+            "base:rules/iterative-plan-review.md",
+            "base:rules/iterative-code-review.md",
+            "footers/instructions-wiring.md"
+          ]
+        },
+        {
+          "source": "base:rules/pre-commit-ci-gate.md",
+          "destination": "instructions/pre-commit-gate.instructions.md",
+          "footer": [
+            "footers/pre-commit-vscode.md"
+          ]
+        },
+        {
+          "source": "shared:skills/discovery/SKILL.md",
+          "destination": "skills/discovery/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(VS Code harness)"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/implementation-plan/SKILL.md",
+          "destination": "skills/implementation-plan/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(VS Code harness)"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/plan-review/SKILL.md",
+          "destination": "skills/plan-review/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(VS Code harness)"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/documentation-architecture/SKILL.md",
+          "destination": "skills/documentation-architecture/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(VS Code harness)"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/roadmap/SKILL.md",
+          "destination": "skills/roadmap/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(not under ~/.config/opencode)",
+              "replace": "(not under the VS Code adapter tree)"
+            },
+            {
+              "find": "Never write them under the OpenCode adapter tree.",
+              "replace": "Never write them under the VS Code adapter tree (`~/.copilot`)."
+            },
+            {
+              "find": "Store roadmaps under `~/.config/opencode` or the adapter skills tree",
+              "replace": "Store roadmaps under `~/.copilot` or the adapter skills tree"
+            },
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(VS Code harness)"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/diagnosing-bugs/SKILL.md",
+          "destination": "skills/diagnosing-bugs/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(VS Code harness)"
+            }
+          ]
+        },
+        {
+          "source": "shared:skills/opencode-headless-run/SKILL.md",
+          "destination": "skills/opencode-headless-run/SKILL.md",
+          "substitutions": [
+            {
+              "find": "(OpenCode harness)",
+              "replace": "(VS Code overlay)"
+            }
+          ]
+        },
+        {
+          "source": "base:rules/pre-commit-ci-gate.md",
+          "destination": "skills/pre-commit-ci-gate/SKILL.md",
+          "parts": [
+            "shared:pre-commit-frontmatter.md"
+          ],
+          "footer": [
+            "footers/pre-commit-vscode.md"
+          ]
+        },
+        {
+          "source": "skills/composer/SKILL.md",
+          "destination": "skills/composer/SKILL.md"
+        },
+        {
+          "source": "skills/implementation-review/SKILL.md",
+          "destination": "skills/implementation-review/SKILL.md"
+        },
+        {
+          "source": "skills/opencode-history-search/SKILL.md",
+          "destination": "skills/opencode-history-search/SKILL.md"
+        },
+        {
+          "source": "agents/planner.agent.md",
+          "destination": "agents/planner.agent.md"
+        },
+        {
+          "source": "agents/plan_reviewer.agent.md",
+          "destination": "agents/plan_reviewer.agent.md"
+        },
+        {
+          "source": "agents/implementer.agent.md",
+          "destination": "agents/implementer.agent.md"
+        },
+        {
+          "source": "agents/production_readiness_reviewer.agent.md",
+          "destination": "agents/production_readiness_reviewer.agent.md"
+        },
+        {
+          "source": "agents/bug_reviewer.agent.md",
+          "destination": "agents/bug_reviewer.agent.md"
+        },
+        {
+          "source": "agents/repository_explorer.agent.md",
+          "destination": "agents/repository_explorer.agent.md"
+        },
+        {
+          "source": "agents/test_reviewer.agent.md",
+          "destination": "agents/test_reviewer.agent.md"
+        },
+        {
+          "source": "agents/composer.agent.md",
+          "destination": "agents/composer.agent.md"
+        }
+      ]
+    },
+    {
+      "host": "Cline",
+      "path": "scripts/host-sync/manifests/cline.manifest.psd1",
+      "stack_id": "Cline",
+      "binding_model": "single-root",
+      "overlay_root": "overlays/cline",
+      "overlay_relative_root": "overlays/cline",
+      "live_relative_root": ".cline",
+      "shared_root": "overlays/opencode",
+      "logical_roots": null,
+      "copy_entry_count": 4,
+      "hard_excludes": [
+        "review-subagent-models.md",
+        "workflows/plan.md",
+        "workflows/review.md",
+        "workflows/closeout.md"
+      ],
+      "never_touch": [
+        "data/settings",
+        "data/sessions",
+        "data/db",
+        "data/cache",
+        "data/workspaces",
+        "data/globalState.json",
+        "data/tasks"
+      ],
+      "hybrid_rule_ids": [],
+      "entries": [
+        {
+          "source": "base:rules/agent-invocation.md",
+          "destination": "rules/cursor-escape-loop.md",
+          "parts": [
+            "instructions/__header__.md"
+          ],
+          "footer": [
+            "base:rules/iterative-plan-review.md",
+            "base:rules/iterative-code-review.md",
+            "base:rules/pre-commit-ci-gate.md",
+            "footers/cline-wiring.md"
+          ]
+        },
+        {
+          "source": "workflows/plan.md",
+          "destination": "data/workflows/plan.md"
+        },
+        {
+          "source": "workflows/review.md",
+          "destination": "data/workflows/review.md"
+        },
+        {
+          "source": "workflows/closeout.md",
+          "destination": "data/workflows/closeout.md"
+        }
+      ]
+    },
+    {
+      "host": "Kilocode",
+      "path": "scripts/host-sync/manifests/kilocode.manifest.psd1",
+      "stack_id": "Kilocode",
+      "binding_model": "single-root",
+      "overlay_root": "overlays/kilocode",
+      "overlay_relative_root": "overlays/kilocode",
+      "live_relative_root": ".kilocode",
+      "shared_root": "overlays/opencode",
+      "logical_roots": null,
+      "copy_entry_count": 4,
+      "hard_excludes": [
+        "review-subagent-models.md"
+      ],
+      "never_touch": [
+        "workflows/probe-slash-20260901.md"
+      ],
+      "hybrid_rule_ids": [],
+      "entries": [
+        {
+          "source": "base:rules/agent-invocation.md",
+          "destination": "rules/cursor-escape-loop.md",
+          "parts": [
+            "instructions/__header__.md"
+          ],
+          "footer": [
+            "base:rules/iterative-plan-review.md",
+            "base:rules/iterative-code-review.md",
+            "base:rules/pre-commit-ci-gate.md",
+            "footers/kilocode-wiring.md"
+          ]
+        },
+        {
+          "source": "workflows/plan.md",
+          "destination": "workflows/plan.md"
+        },
+        {
+          "source": "workflows/review.md",
+          "destination": "workflows/review.md"
+        },
+        {
+          "source": "workflows/closeout.md",
+          "destination": "workflows/closeout.md"
+        }
+      ]
+    },
+    {
+      "host": "Codex",
+      "path": "scripts/host-sync/manifests/codex.manifest.psd1",
+      "stack_id": "Codex",
+      "binding_model": "codex-two-logical-roots",
+      "overlay_root": "overlays/codex",
+      "overlay_relative_root": "overlays/codex",
+      "live_relative_root": null,
+      "shared_root": null,
+      "logical_roots": [
+        "codex-home",
+        "skill-root"
+      ],
+      "copy_entry_count": 32,
+      "hard_excludes": [
+        "codex-home:config.toml",
+        "codex-home:auth.json",
+        "codex-home:history.jsonl",
+        "codex-home:logs",
+        "codex-home:sessions",
+        "codex-home:databases"
+      ],
+      "never_touch": [
+        "codex-home:config.toml",
+        "codex-home:auth.json",
+        "codex-home:history.jsonl",
+        "codex-home:logs",
+        "codex-home:sessions",
+        "codex-home:databases"
+      ],
+      "hybrid_rule_ids": [],
+      "entries": [
+        {
+          "source": "instructions/agents-block.md",
+          "destination": "AGENTS.md",
+          "logical_root": "codex-home",
+          "role": "managed-block-target"
+        },
+        {
+          "source": null,
+          "destination": "AGENTS.override.md",
+          "logical_root": "codex-home",
+          "role": "guard-only-override",
+          "guard_only": true
+        },
+        {
+          "source": "agents/planner.toml",
+          "destination": "agents/planner.toml",
+          "logical_root": "codex-home",
+          "role": "managed-agent-target"
+        },
+        {
+          "source": "agents/plan_reviewer.toml",
+          "destination": "agents/plan_reviewer.toml",
+          "logical_root": "codex-home",
+          "role": "managed-agent-target"
+        },
+        {
+          "source": "agents/implementer.toml",
+          "destination": "agents/implementer.toml",
+          "logical_root": "codex-home",
+          "role": "managed-agent-target"
+        },
+        {
+          "source": "agents/production_readiness_reviewer.toml",
+          "destination": "agents/production_readiness_reviewer.toml",
+          "logical_root": "codex-home",
+          "role": "managed-agent-target"
+        },
+        {
+          "source": "agents/bug_reviewer.toml",
+          "destination": "agents/bug_reviewer.toml",
+          "logical_root": "codex-home",
+          "role": "managed-agent-target"
+        },
+        {
+          "source": "agents/repository_explorer.toml",
+          "destination": "agents/repository_explorer.toml",
+          "logical_root": "codex-home",
+          "role": "managed-agent-target"
+        },
+        {
+          "source": "agents/test_reviewer.toml",
+          "destination": "agents/test_reviewer.toml",
+          "logical_root": "codex-home",
+          "role": "managed-agent-target"
+        },
+        {
+          "source": "skills/architecture-survey/SKILL.md",
+          "destination": "architecture-survey/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/bug-review-sweep/SKILL.md",
+          "destination": "bug-review-sweep/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/codebase-design/SKILL.md",
+          "destination": "codebase-design/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/composer/SKILL.md",
+          "destination": "composer/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/diagnosing-bugs/SKILL.md",
+          "destination": "diagnosing-bugs/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/discovery/SKILL.md",
+          "destination": "discovery/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/documentation-architecture/SKILL.md",
+          "destination": "documentation-architecture/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/domain-modeling/SKILL.md",
+          "destination": "domain-modeling/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/grilling/SKILL.md",
+          "destination": "grilling/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/implementation-plan/SKILL.md",
+          "destination": "implementation-plan/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/implementation-review/SKILL.md",
+          "destination": "implementation-review/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/opencode-headless-run/SKILL.md",
+          "destination": "opencode-headless-run/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper-explicit-only"
+        },
+        {
+          "source": "skills/opencode-history-search/SKILL.md",
+          "destination": "opencode-history-search/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper-explicit-only"
+        },
+        {
+          "source": "skills/plan-review/SKILL.md",
+          "destination": "plan-review/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/prototype/SKILL.md",
+          "destination": "prototype/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/research/SKILL.md",
+          "destination": "research/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/resolving-merge-conflicts/SKILL.md",
+          "destination": "resolving-merge-conflicts/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/roadmap/SKILL.md",
+          "destination": "roadmap/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/tdd/SKILL.md",
+          "destination": "tdd/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/teach/SKILL.md",
+          "destination": "teach/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/wait-what/SKILL.md",
+          "destination": "wait-what/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/wizard/SKILL.md",
+          "destination": "wizard/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-skill-wrapper"
+        },
+        {
+          "source": "skills/pre-commit-ci-gate/SKILL.md",
+          "destination": "pre-commit-ci-gate/SKILL.md",
+          "logical_root": "skill-root",
+          "role": "generated-rule-wrapper"
+        }
+      ],
+      "apply_state": "Active",
+      "logical_roots": [
+        "codex-home",
+        "skill-root"
+      ],
+      "ownership_marker": "cursorEscape-managed:v1",
+      "managed_block_marker": "cursorEscape-managed-block:v1",
+      "skill_catalog_budget_characters": 8000,
+      "overlay_only_skill_metadata": [
+        {
+          "skill_id": "opencode-headless-run",
+          "relative_path": "skills/opencode-headless-run/agents/openai.yaml",
+          "allow_implicit_invocation": false
+        },
+        {
+          "skill_id": "opencode-history-search",
+          "relative_path": "skills/opencode-history-search/agents/openai.yaml",
+          "allow_implicit_invocation": false
+        }
+      ]
+    }
+  ],
+  "aliases": [
+    {
+      "host": "Cursor",
+      "canonical_role": "plan_reviewer",
+      "host_alias": "plan-reviewer"
+    },
+    {
+      "host": "Cursor",
+      "canonical_role": "production_readiness_reviewer",
+      "host_alias": "reviewer-a"
+    },
+    {
+      "host": "Cursor",
+      "canonical_role": "bug_reviewer",
+      "host_alias": "Bugbot (built-in; subagent_type bugbot)"
+    }
+  ],
+  "render_baselines": {
+    "phase2_path": "scripts/host-sync/render-baselines/phase2/",
+    "phase2_hosts": [
+      "antigravity",
+      "opencode",
+      "vscode",
+      "cline",
+      "kilocode",
+      "cursor"
+    ],
+    "six_stack_ledger_path": "scripts/host-sync/render-baselines/existing-six-stack-render-hashes-2026-09.json",
+    "six_stack_ledger_entries": [
+      {
+        "stack": "Cursor",
+        "destinationCount": 17,
+        "sha256": "6ddc5c6750ee17df5a44ade17fdb733ca782da21f3bc62b059010f95e62004df"
+      },
+      {
+        "stack": "OpenCode",
+        "destinationCount": 21,
+        "sha256": "2639f4245c2ba75951ae8b7891379ab8786c1b3919c1e7c85b18f057cc363d1b"
+      },
+      {
+        "stack": "Antigravity",
+        "destinationCount": 18,
+        "sha256": "5caf6a13afc34ca4eb4863c9591432c7aafc806f13b67e90a13ab21f0526bac5"
+      },
+      {
+        "stack": "Vscode",
+        "destinationCount": 21,
+        "sha256": "fd7043a298657edd7d0bb487a5d01b696542be8ebb67d411fb42e0575c9f37d9"
+      },
+      {
+        "stack": "Cline",
+        "destinationCount": 4,
+        "sha256": "6f9819220adedb14f25564f2ec16dbe85f9aa224f488f216074abc9d6a3165b4"
+      },
+      {
+        "stack": "Kilocode",
+        "destinationCount": 4,
+        "sha256": "cfd466d68312a64968b6ba1a7d6a466b99705b9554ded3e82dc2e21002749dda"
+      }
+    ],
+    "codex_render_plan_path": "scripts/host-sync/render-baselines/codex-phase1/render-plan.json",
+    "codex_rendered_destination_count": 31,
+    "codex_physical_fixture_root": "scripts/host-sync/render-baselines/codex-phase1/fixtures/",
+    "codex_physical_fixture_files": [
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/bug_reviewer.toml",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/implementer.toml",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/plan_reviewer.toml",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/planner.toml",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/production_readiness_reviewer.toml",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/repository_explorer.toml",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/test_reviewer.toml",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/AGENTS.md",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/implementation-plan/SKILL.md",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/opencode-headless-run/SKILL.md",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/pre-commit-ci-gate/SKILL.md",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/skills/opencode-headless-run/agents/openai.yaml",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/skills/opencode-history-search/agents/openai.yaml"
+    ],
+    "codex_physical_fixture_count": 13,
+    "codex_explicit_only_openai_metadata_files": [
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/skills/opencode-headless-run/agents/openai.yaml",
+      "scripts/host-sync/render-baselines/codex-phase1/fixtures/skills/opencode-history-search/agents/openai.yaml"
+    ],
+    "baseline_directories_historical": [
+      "C:\\Users\\admin\\.cursor-backup-pre-host-sync-build-20260821-012600",
+      "C:\\Users\\admin\\.config\\opencode-backup-pre-host-sync-build-20260821-012600",
+      "C:\\Users\\admin\\.gemini-backup-pre-host-sync-build-20260824-064125",
+      "C:\\Users\\admin\\.copilot-backup-pre-vscode-bringup-20260901-120000",
+      "C:\\Users\\admin\\.cline-backup-pre-kilobringup-20260901-180000",
+      "C:\\Users\\admin\\.kilocode-backup-pre-kilobringup-20260901-180000"
+    ],
+    "baseline_directories_note": "Historical restore points for the six pre-Codex stacks only; Codex uses the committed render plan and physical fixture leaves."
+  },
+  "operator_matrix": [
+    {
+      "host": "Cursor",
+      "lifecycle_evidence": "scripts/host-sync/manifests/cursor.manifest.psd1; scripts/host-sync/adapters/Cursor.Adapter.ps1",
+      "restart_reload": "Restart Cursor IDE after Apply; hybrid rules are scanned on workspace open.",
+      "smoke_check": "Open clean workspace; verify plan-review default-on gate from .cursor/rules/agent-invocation.mdc; invoke subagent_type plan-reviewer via Task.",
+      "recovery_owner": "Operator (restore from baseline backup; re-run Sync-HostHarness.ps1 dry-run to verify)."
+    },
+    {
+      "host": "OpenCode",
+      "lifecycle_evidence": "scripts/host-sync/manifests/opencode.manifest.psd1; scripts/host-sync/adapters/OpenCode.Adapter.ps1",
+      "restart_reload": "Restart OpenCode CLI/extension after Apply; instructions and agents are loaded on session start.",
+      "smoke_check": "Run `opencode` in clean terminal; verify always-on gate from AGENTS.md; invoke planner agent via Task.",
+      "recovery_owner": "Operator (restore from baseline backup; re-run dry-run to verify)."
+    },
+    {
+      "host": "Antigravity",
+      "lifecycle_evidence": "scripts/host-sync/manifests/antigravity.manifest.psd1; scripts/host-sync/adapters/Generic.Adapter.ps1",
+      "restart_reload": "Restart Antigravity app after Apply; GEMINI.md is read at session start.",
+      "smoke_check": "Launch Antigravity; verify GEMINI.md always-on gate; invoke plan_reviewer subagent via invoke_subagent.",
+      "recovery_owner": "Operator (restore GEMINI.md from baseline backup)."
+    },
+    {
+      "host": "Vscode",
+      "lifecycle_evidence": "scripts/host-sync/manifests/vscode.manifest.psd1; scripts/host-sync/adapters/Generic.Adapter.ps1",
+      "restart_reload": "Restart VS Code after Apply; instructions are loaded on Copilot chat open.",
+      "smoke_check": "Open VS Code Copilot chat; verify cursor-escape-loop instructions; invoke planner agent.",
+      "recovery_owner": "Operator (restore from baseline backup)."
+    },
+    {
+      "host": "Cline",
+      "lifecycle_evidence": "scripts/host-sync/manifests/cline.manifest.psd1; scripts/host-sync/adapters/Generic.Adapter.ps1",
+      "restart_reload": "Reload VS Code window after Apply; rules are scanned on Cline tab activation.",
+      "smoke_check": "Open Cline tab; verify cursor-escape-loop rule; start fresh task with canonical envelope for plan_reviewer.",
+      "recovery_owner": "Operator (restore from baseline backup)."
+    },
+    {
+      "host": "Kilocode",
+      "lifecycle_evidence": "scripts/host-sync/manifests/kilocode.manifest.psd1; scripts/host-sync/adapters/Generic.Adapter.ps1",
+      "restart_reload": "Reload VS Code window after Apply; rules auto-included on startup via legacy-compat loader.",
+      "smoke_check": "Open Kilo Code tab; verify cursor-escape-loop rule; start fresh task with canonical envelope.",
+      "recovery_owner": "Operator (restore from baseline backup)."
+    },
+    {
+      "host": "Codex",
+      "lifecycle_evidence": "scripts/host-sync/manifests/codex.manifest.psd1; scripts/host-sync/adapters/Codex.Adapter.ps1",
+      "restart_reload": "Restart Codex CLI / VS Code extension / ChatGPT desktop after Apply; agents loaded at session start.",
+      "smoke_check": "Run `codex` CLI in clean terminal; verify AGENTS.md managed block; invoke planner via Codex custom-agent mechanism.",
+      "recovery_owner": "Operator (Codex has no baseline directory; committed fixtures in render-baselines/codex-phase1/ provide the expected content for manual restore)."
+    }
+  ],
+  "missing_pairs_with_proposed_phase2": [
+    {
+      "host": "Cursor",
+      "agent": "planner",
+      "proposed_phase2": "native"
+    },
+    {
+      "host": "Cursor",
+      "agent": "implementer",
+      "proposed_phase2": "native"
+    },
+    {
+      "host": "Cursor",
+      "agent": "repository_explorer",
+      "proposed_phase2": "native"
+    },
+    {
+      "host": "Cursor",
+      "agent": "test_reviewer",
+      "proposed_phase2": "native"
+    },
+    {
+      "host": "Antigravity",
+      "agent": "planner",
+      "proposed_phase2": "native"
+    },
+    {
+      "host": "Antigravity",
+      "agent": "implementer",
+      "proposed_phase2": "native"
+    },
+    {
+      "host": "Antigravity",
+      "agent": "repository_explorer",
+      "proposed_phase2": "native"
+    },
+    {
+      "host": "Antigravity",
+      "agent": "test_reviewer",
+      "proposed_phase2": "native"
+    },
+    {
+      "host": "Cline",
+      "agent": "planner",
+      "proposed_phase2": "fresh-task-session-fallback"
+    },
+    {
+      "host": "Cline",
+      "agent": "implementer",
+      "proposed_phase2": "fresh-task-session-fallback"
+    },
+    {
+      "host": "Cline",
+      "agent": "repository_explorer",
+      "proposed_phase2": "fresh-task-session-fallback"
+    },
+    {
+      "host": "Cline",
+      "agent": "test_reviewer",
+      "proposed_phase2": "fresh-task-session-fallback"
+    },
+    {
+      "host": "Kilocode",
+      "agent": "planner",
+      "proposed_phase2": "fresh-task-session-fallback"
+    },
+    {
+      "host": "Kilocode",
+      "agent": "implementer",
+      "proposed_phase2": "fresh-task-session-fallback"
+    },
+    {
+      "host": "Kilocode",
+      "agent": "repository_explorer",
+      "proposed_phase2": "fresh-task-session-fallback"
+    },
+    {
+      "host": "Kilocode",
+      "agent": "test_reviewer",
+      "proposed_phase2": "fresh-task-session-fallback"
+    }
+  ],
+  "represented_count": 33,
+  "missing_count": 16,
+  "total_pairs": 49,
+  "ambiguities_requiring_owner_confirmation": [
+    {
+      "id": "U-Cursor-Bugbot",
+      "question": "Should Cursor Bugbot (built-in) remain classified as fallback-launch-contract or should Phase 2 add a dedicated native bug_reviewer agent definition?",
+      "current": "fallback-launch-contract via implementation-review SKILL spawn instructions"
+    },
+    {
+      "id": "U-Cline-Kilocode-Planner",
+      "question": "Cline and Kilocode currently lack planner and implementer agent representations. Should Phase 2 add workflow-based fallback contracts for planner/implementer, or add native agent stubs if the platform supports them?",
+      "current": "missing; proposed Phase 2 = fresh-task/session fallback"
+    },
+    {
+      "id": "U-Antigravity-Agent-Completeness",
+      "question": "Antigravity has plan_reviewer, production_readiness_reviewer, and bug_reviewer but lacks planner, implementer, repository_explorer, and test_reviewer. Phase 2 proposal is native definitions for all four missing roles. Confirm the Antigravity subagent mechanism supports workspace-write (for implementer).",
+      "current": "missing; proposed Phase 2 = native"
+    },
+    {
+      "id": "U-Render-Baseline-Reconciliation",
+      "question": "Which render baselines will change mechanically after deterministic normalization? This cannot be determined until Phase 2 generators exist.",
+      "current": "unknown"
+    }
+  ],
+  "status": "implementation-under-review",
+  "review_iteration": 3,
+  "representation_terms": {
+    "native-definition": "host-loaded primary-mode or subagent definition artifact; launch mechanism is separate",
+    "generated-native-projection": "deterministically generated host-native artifact deployed as the representation; launch mechanism is separate",
+    "fallback-launch-contract": "explicit fresh-task/session launch contract rather than host agent definition",
+    "missing": "no current representation"
+  },
+  "generation_values": {
+    "hand-authored": "directly authored host artifact",
+    "generated-projection": "deterministically rendered host artifact"
+  },
+  "proposed_phase2_values": [
+    "native",
+    "fresh-task-session-fallback",
+    "retain-fallback-with-explicit-envelope-and-isolation"
+  ],
+  "allowed_authority_values": [
+    "read-only",
+    "workspace-write",
+    "read-only (sandbox_mode)",
+    "workspace-write (sandbox_mode)"
+  ],
+  "allowed_isolation_values": [
+    "clean-context",
+    "fresh task/session per pass"
+  ],
+  "allowed_classification_values": [
+    "host wrapper",
+    "generated output",
+    "intentional host deviation",
+    "primary-mode definition",
+    "fallback contract"
+  ],
+  "canonical_required_reading": {
+    "planner": [
+      "workflow/agent-invocation.md",
+      "agents/planner.md",
+      "skills/implementation-plan/SKILL.md"
+    ],
+    "plan_reviewer": [
+      "workflow/agent-invocation.md",
+      "agents/plan_reviewer.md",
+      "workflow/plan-reviewer-report.md",
+      "skills/implementation-plan/SKILL.md"
+    ],
+    "implementer": [
+      "workflow/agent-invocation.md",
+      "agents/implementer.md"
+    ],
+    "production_readiness_reviewer": [
+      "workflow/agent-invocation.md",
+      "agents/production_readiness_reviewer.md"
+    ],
+    "bug_reviewer": [
+      "workflow/agent-invocation.md",
+      "agents/bug_reviewer.md",
+      "docs/featureArchitecture/bug-reviewer-finding-rubric.md",
+      "skills/bug-review-sweep/SKILL.md"
+    ],
+    "repository_explorer": [
+      "workflow/agent-invocation.md",
+      "agents/repository_explorer.md"
+    ],
+    "test_reviewer": [
+      "workflow/agent-invocation.md",
+      "agents/test_reviewer.md"
+    ]
+  }
+}

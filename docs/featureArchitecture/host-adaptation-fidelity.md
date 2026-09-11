@@ -1,10 +1,10 @@
 # Host adaptation fidelity
 
-**Last updated:** 2026-09-08
+**Last updated:** 2026-09-11
 
 ## Context
 
-This document is **Target** design for **complete host adaptation** — the binding bar that every registered stack (now including Codex) must meet before an overlay or live adapter is considered **Done**. It is not implied polish: operator workflow **loops** (plan review, implementation review with Fast → dual → Full, skill ids, clean-context isolation, Incomplete-until / dual-APPROVED bars) must behave the same on every host. Codex Phase 3 registration is **not** Done: it is forced BringUp and has no C1–C6 runtime attestation.
+This document is **Target** design for **complete host adaptation** — the binding bar that every registered stack (now including Codex) must meet before an overlay or live adapter is considered **Done**. It is not implied polish: operator workflow **loops** (plan review, implementation review with Fast → dual → Full, skill ids, clean-context isolation, Incomplete-until / dual-APPROVED bars) must behave the same on every host. Codex Phase 3 registration is **Done**: ApplyState = Active (activated 2026-09-08) with three-client C1–C6 runtime attestation recorded.
 
 **Scope:** Wiring bar, anti-patterns, checklist→verification matrix (C1–C6), doc boundaries, and phase-number disambiguation for the [OpenCode overlays SoT program](../roadmaps/opencode-overlays-sot.md) (program phases **0–3**) and [Companion pointer-first](../roadmaps/pointer-first.md) (`pointer-first-0` … `pointer-first-4`). **Out of scope here:** re-pasting Observed behavior tables ([cursor-behavior-to-reproduce](./cursor-behavior-to-reproduce.md)); always-on vs skill budget ([instruction-layering](./instruction-layering.md)); SoT vs overlay taxonomy ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)).
 
@@ -16,7 +16,7 @@ This document is **Target** design for **complete host adaptation** — the bind
 
 ### Success criterion (Required)
 
-**Done** means the operator can run the **same loops** on every registered stack (Cursor, OpenCode, Antigravity):
+**Done** means the operator can run the **same loops** on every registered stack (Cursor, OpenCode, Antigravity, Vscode, Cline, Kilocode, Codex):
 
 | Loop element | Required parity |
 | ------------ | --------------- |
@@ -33,7 +33,7 @@ Host chrome (Task UI, tray restart, permission prompts) may differ. **Loop seman
 
 | Required adaptation | Anti-pattern (reject) |
 | ------------------- | --------------------- |
-| Always-on gates wired to host **load surface** that actually injects (OpenCode: **absolute** `opencode.json` → `instructions` under `OPENCODE_HOME` **plus** matching global `AGENTS.md`; Cursor: User Rules / thin `.mdc`; Codex: managed `AGENTS.md` block plus independent skill-root catalog — runtime pending) | Relative `instructions/…` in **global** `opencode.json` (resolved vs **project cwd** — file on disk under `~/.config/opencode` but **not** injected); gates only in `instructions/` with no `AGENTS.md`; treating skill-description “default on” quotes as C1 pass; treating Codex registration or dry-run as C1 |
+| Always-on gates wired to host **load surface** that actually injects (OpenCode: **absolute** `opencode.json` → `instructions` under `OPENCODE_HOME` **plus** matching global `AGENTS.md`; Cursor: User Rules / thin `.mdc`; Codex: managed `AGENTS.md` block plus independent skill-root catalog — active since 2026-09-08 with C1–C6 attested) | Relative `instructions/…` in **global** `opencode.json` (resolved vs **project cwd** — file on disk under `~/.config/opencode` but **not** injected); gates only in `instructions/` with no `AGENTS.md`; treating skill-description “default on” quotes as C1 pass; treating Codex registration or dry-run as C1 |
 | Every workflow skill advertised with matching frontmatter `name` + `description` (OpenCode); on-demand invocation (Cursor: `disable-model-invocation`) | Skills on disk with **description only** — empty skill-tool catalog ([skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)) |
 | `skills.paths` or equivalent discovery roots registered (OpenCode) | Relying on default scan when catalog is empty |
 | Reviewer agents `permission.edit: deny`; dual Task launch in one parent turn | Unwired stub agents; sequential-only “dual” review |
