@@ -1,19 +1,34 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Complete — Phase 0 dual-approved and Full CI passed 2026-09-11
+Status:              Phase 0 complete; Phase 1 complete — dual approval and Full CI passed 2026-09-13
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 awaits the Phase 0 closeout commit
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2 awaits the Phase 1 closeout commit
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
-Last updated:        2026-09-11
+Last updated:        2026-09-13
 Live Apply:          Phase 6 only, with explicit owner authorization
 ```
 
 ## Current execution status
 
 Phase 0 is **complete**. Renewed loop iteration 3 achieved dual approval, and Composer observed the Full CI set passing on 2026-09-11. The local plan snapshot is immutable historical provenance, not current acceptance state. Do not infer completion from historical plan-review approval alone.
+
+Phase 1 recovery is **complete**. Integration achieved dual approval after bounded correction loops, and Composer observed the sole normalization Full CI passing on 2026-09-13. Closeout commit is the next gate.
+
+The owner directed an efficiency-preserving recovery: retain the largely complete tree, review it in declared functional scopes, fix only review-identified defects, then run one integration reviewer pair and normalization Full CI. This exception does not authorize additional foundation expansion; the packed recovery contract governs the active recovery.
+
+### Phase 1 recovery gates
+
+1. Bootstrap outside the measured changeset: preserve the exact tree as a reference patch and baseline ledger under `.local/`; reconcile every changed/new/untracked path before recovery edits.
+2. Review in functional scopes: data/schema, registry engine, rendering/semantic order, then CI/docs.
+3. Tie every fix to an individually identified reviewer finding. Limit status/governance edits to individually predeclared status, index, or ledger text corrections.
+4. Recompute and report the full physical-line ledger after each recovery step, including untracked files.
+5. Enforce a cumulative recovery delta cap of 500 changed/new physical lines against the preserved baseline; warn and stop for Composer review at 400, and hard-stop at 500.
+6. Run observed Fast CI at the end of each functional scope and again after integration fixes.
+7. Run one integration production/bug pair over the complete Phase 1 tree; the bug reviewer remains tightly diff-focused and time-bounded.
+8. Only after integration dual approval, Composer observes `Invoke-NormalizationFullCI.ps1`, runs the pre-commit gate, and creates the local Phase 1 commit.
 
 ## Phase 0 checklist
 
@@ -23,6 +38,17 @@ Phase 0 is **complete**. Renewed loop iteration 3 achieved dual approval, and Co
 - [x] Stale lifecycle documentation reconciled in this changeset.
 - [x] Full CI observed pass (Composer, 2026-09-11).
 
+## Phase 1 recovery checklist (complete)
+
+- [x] Registry catalogs and schema cover the Phase 0 inventory.
+- [x] Fail-closed registry validator and canonical consistency checks.
+- [x] Temporary deterministic managed-view renderer/checker and resolver seams.
+- [x] Sole normalization Fast/Full entry points implemented.
+- [x] Functional recovery review scopes completed.
+- [x] Integration production/bug pair approved.
+- [x] Dual reviewer approval.
+- [x] Composer-observed normalization Full CI and closeout.
+
 ## Product decisions
 
 1. Registry is the sole writable source for canonical machine metadata and semantic composition order.
@@ -31,7 +57,8 @@ Phase 0 is **complete**. Renewed loop iteration 3 achieved dual approval, and Co
 4. Host aliases may route; they never replace canonical identity.
 5. Skills may have explicit host non-applicability; governed agents may not.
 6. Generated files, baselines, and current-state fixtures are never hand-edited.
-7. Per-slice cap: maximum 15 directly reviewed files and 1,000 hand-authored changed lines.
+7. Per-slice cap: maximum 15 directly reviewed files and 1,000 changed/new physical tracked lines, including generated, inventory-derived, test, script, doc, and roadmap lines.
+   There is no post-hoc hand-authored reclassification. Modified files count added plus deleted lines; new files count their full physical length. At 800 lines the implementer must stop for a Composer scope check; at 1,000 lines it must return a cap-exhausted handoff without Fast or reviewers.
 8. Review sequence is Fast CI → production/bug reviewer pair → fixes → Fast CI → fresh replacement reviewer pair → dual approval → Full CI → pre-commit gate → local commit.
 9. No live host Apply before Phase 6.
 10. Phase 6 Apply requires explicit owner authorization.
@@ -80,6 +107,7 @@ Phase 0 is **complete**. Renewed loop iteration 3 achieved dual approval, and Co
 | Existing sync behavior | `scripts/host-sync/Invoke-RemediationUnitChecks.ps1` | Every phase |
 | Tree hygiene | `git diff --check` | Every slice/closeout |
 | Registry validity | `Test-ProcedureRegistry.ps1` | Phase 1+ |
+| Registry managed views | `Test-ProcedureRegistryViews.ps1` | Phase 1+ |
 | 7x7 parity | Registry/generated parity report | Phase 2A+ and Phase 6 |
 | Deterministic generation | Render twice; compare hashes | Phase 2+ |
 | Sole normalization Full | `Invoke-NormalizationFullCI.ps1` | Phase 1+ |

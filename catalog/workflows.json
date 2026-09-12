@@ -1,0 +1,199 @@
+{
+  "schema": "catalog/v1",
+  "kind": "workflows",
+  "items": [
+    {
+      "id": "agent-invocation",
+      "body": "workflow/agent-invocation.md"
+    },
+    {
+      "id": "architecture-survey",
+      "body": "workflow/architecture-survey.md"
+    },
+    {
+      "id": "ci-ladder",
+      "body": "workflow/ci-ladder.md"
+    },
+    {
+      "id": "code-review-frame",
+      "body": "workflow/code-review-frame.md"
+    },
+    {
+      "id": "diagnosing-bugs",
+      "body": "workflow/diagnosing-bugs.md"
+    },
+    {
+      "id": "discovery",
+      "body": "workflow/discovery.md"
+    },
+    {
+      "id": "documentation-architecture",
+      "body": "workflow/documentation-architecture.md"
+    },
+    {
+      "id": "domain-modeling",
+      "body": "workflow/domain-modeling.md"
+    },
+    {
+      "id": "grilling",
+      "body": "workflow/grilling.md"
+    },
+    {
+      "id": "handoff",
+      "body": "workflow/handoff.md"
+    },
+    {
+      "id": "iterative-code-review",
+      "body": "workflow/iterative-code-review.md"
+    },
+    {
+      "id": "iterative-plan-review",
+      "body": "workflow/iterative-plan-review.md"
+    },
+    {
+      "id": "phased-multi-agent",
+      "body": "workflow/phased-multi-agent.md"
+    },
+    {
+      "id": "plan-agent-context",
+      "body": "workflow/plan-agent-context.md"
+    },
+    {
+      "id": "plan-reviewer-report",
+      "body": "workflow/plan-reviewer-report.md"
+    },
+    {
+      "id": "prototype",
+      "body": "workflow/prototype.md"
+    },
+    {
+      "id": "research",
+      "body": "workflow/research.md"
+    },
+    {
+      "id": "resolving-merge-conflicts",
+      "body": "workflow/resolving-merge-conflicts.md"
+    },
+    {
+      "id": "tdd-mocking",
+      "body": "workflow/tdd-mocking.md"
+    },
+    {
+      "id": "tdd-tests",
+      "body": "workflow/tdd-tests.md"
+    },
+    {
+      "id": "teach",
+      "body": "workflow/teach.md"
+    },
+    {
+      "id": "wait-what",
+      "body": "workflow/wait-what.md"
+    },
+    {
+      "id": "wizard",
+      "body": "workflow/wizard.md"
+    }
+  ],
+  "compositions": [
+    {
+      "id": "opencode-skill",
+      "host": "OpenCode",
+      "references": [
+        "shared:pre-commit-frontmatter.md",
+        "base:rules/pre-commit-ci-gate.md",
+        "footers/pre-commit-opencode.md"
+      ],
+      "canonicalReferenceId": "pre-commit-ci-gate"
+    },
+    {
+      "id": "antigravity-gemini",
+      "host": "Antigravity",
+      "references": [
+        "instructions/__header__.md",
+        "base:rules/agent-invocation.md",
+        "base:rules/iterative-plan-review.md",
+        "base:rules/iterative-code-review.md",
+        "footers/gemini-wiring.md"
+      ],
+      "canonicalReferenceId": "agent-invocation"
+    },
+    {
+      "id": "antigravity-skill",
+      "host": "Antigravity",
+      "references": [
+        "shared:pre-commit-frontmatter.md",
+        "base:rules/pre-commit-ci-gate.md",
+        "footers/pre-commit-antigravity.md"
+      ],
+      "canonicalReferenceId": "pre-commit-ci-gate"
+    },
+    {
+      "id": "vscode-cursor-escape-loop-instructions",
+      "host": "Vscode",
+      "references": [
+        "instructions/__header__.md",
+        "base:rules/agent-invocation.md",
+        "base:rules/iterative-plan-review.md",
+        "base:rules/iterative-code-review.md",
+        "footers/instructions-wiring.md"
+      ],
+      "canonicalReferenceId": "agent-invocation"
+    },
+    {
+      "id": "vscode-pre-commit-gate-instructions",
+      "host": "Vscode",
+      "references": [
+        "base:rules/pre-commit-ci-gate.md",
+        "footers/pre-commit-vscode.md"
+      ],
+      "canonicalReferenceId": "pre-commit-ci-gate"
+    },
+    {
+      "id": "vscode-skill",
+      "host": "Vscode",
+      "references": [
+        "shared:pre-commit-frontmatter.md",
+        "base:rules/pre-commit-ci-gate.md",
+        "footers/pre-commit-vscode.md"
+      ],
+      "canonicalReferenceId": "pre-commit-ci-gate"
+    },
+    {
+      "id": "cline-cursor-escape-loop",
+      "host": "Cline",
+      "references": [
+        "instructions/__header__.md",
+        "base:rules/agent-invocation.md",
+        "base:rules/iterative-plan-review.md",
+        "base:rules/iterative-code-review.md",
+        "base:rules/pre-commit-ci-gate.md",
+        "footers/cline-wiring.md"
+      ],
+      "canonicalReferenceId": "agent-invocation"
+    },
+    {
+      "id": "kilocode-cursor-escape-loop",
+      "host": "Kilocode",
+      "references": [
+        "instructions/__header__.md",
+        "base:rules/agent-invocation.md",
+        "base:rules/iterative-plan-review.md",
+        "base:rules/iterative-code-review.md",
+        "base:rules/pre-commit-ci-gate.md",
+        "footers/kilocode-wiring.md"
+      ],
+      "canonicalReferenceId": "agent-invocation"
+    }
+  ],
+  "semanticOrder": [
+    "opencode-skill",
+    "antigravity-gemini",
+    "antigravity-skill",
+    "vscode-cursor-escape-loop-instructions",
+    "vscode-pre-commit-gate-instructions",
+    "vscode-skill",
+    "cline-cursor-escape-loop",
+    "kilocode-cursor-escape-loop"
+  ]
+}

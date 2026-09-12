@@ -1,0 +1,30 @@
+{
+  "schema": "catalog/v1",
+  "kind": "rules",
+  "items": [
+    {
+      "id": "agent-invocation",
+      "body": "rules/agent-invocation.md"
+    },
+    {
+      "id": "iterative-code-review",
+      "body": "rules/iterative-code-review.md"
+    },
+    {
+      "id": "iterative-plan-review",
+      "body": "rules/iterative-plan-review.md"
+    },
+    {
+      "id": "pre-commit-ci-gate",
+      "body": "rules/pre-commit-ci-gate.md"
+    },
+    {
+      "id": "red-line",
+      "body": "rules/red-line.md"
+    },
+    {
+      "id": "shell-native-tool-policy",
+      "body": "rules/shell-native-tool-policy.md"
+    }
+  ]
+}

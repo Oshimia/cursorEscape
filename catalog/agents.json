@@ -1,0 +1,806 @@
+{
+  "schema": "catalog/v1",
+  "kind": "agents",
+  "items": [
+    {
+      "id": "planner",
+      "body": "agents/planner.md",
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "loopGate": "planning",
+      "failLoudShape": "Return a planning failure naming the missing envelope element; do not draft.",
+      "requiredReading": [
+        "workflow/agent-invocation.md",
+        "agents/planner.md",
+        "skills/implementation-plan/SKILL.md"
+      ],
+      "aliases": [],
+      "hostBindings": [
+        {
+          "host": "Cursor",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "overlays/cursor/agents/"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "representation": "native-definition",
+          "routeIdentity": "planner",
+          "alias": null,
+          "launchMechanism": "OpenCode Task with mode subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/opencode/agents/planner.md",
+            "scripts/host-sync/manifests/opencode.manifest.psd1",
+            "overlays/opencode/opencode.specimen.json"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "overlays/antigravity/agents/"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "representation": "native-definition",
+          "routeIdentity": "planner",
+          "alias": null,
+          "launchMechanism": "VS Code Copilot agent invocation",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/vscode/agents/planner.agent.md",
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1",
+            "analysis/cline-kilo-probes-2026-09.md"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1",
+            "analysis/cline-kilo-probes-2026-09.md"
+          ]
+        },
+        {
+          "host": "Codex",
+          "representation": "generated-native-projection",
+          "routeIdentity": "planner",
+          "alias": null,
+          "launchMechanism": "Codex custom agent (TOML definition)",
+          "authority": "read-only (sandbox_mode)",
+          "isolation": "clean-context",
+          "classification": "generated output",
+          "evidencePaths": [
+            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/planner.toml",
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plan_reviewer",
+      "body": "agents/plan_reviewer.md",
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "loopGate": "plan-review",
+      "failLoudShape": "Return CHANGES REQUESTED: missing invocation envelope and list the missing elements.",
+      "requiredReading": [
+        "workflow/agent-invocation.md",
+        "agents/plan_reviewer.md",
+        "workflow/plan-reviewer-report.md",
+        "skills/implementation-plan/SKILL.md"
+      ],
+      "aliases": [
+        "plan-reviewer"
+      ],
+      "hostBindings": [
+        {
+          "host": "Cursor",
+          "representation": "native-definition",
+          "routeIdentity": "plan-reviewer",
+          "alias": "plan-reviewer",
+          "launchMechanism": "Cursor Task with subagent_type plan-reviewer",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/cursor/agents/plan-reviewer.md"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "representation": "native-definition",
+          "routeIdentity": "plan_reviewer",
+          "alias": null,
+          "launchMechanism": "OpenCode Task with mode subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/opencode/agents/plan_reviewer.md",
+            "scripts/host-sync/manifests/opencode.manifest.psd1",
+            "overlays/opencode/opencode.specimen.json"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "representation": "native-definition",
+          "routeIdentity": "plan_reviewer",
+          "alias": null,
+          "launchMechanism": "Antigravity invoke_subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/antigravity/agents/plan_reviewer.md",
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "representation": "native-definition",
+          "routeIdentity": "plan_reviewer",
+          "alias": null,
+          "launchMechanism": "VS Code Copilot agent invocation or handoff from planner",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/vscode/agents/plan_reviewer.agent.md",
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "plan_reviewer",
+          "alias": null,
+          "launchMechanism": "Cline fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/cline/workflows/plan.md",
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "plan_reviewer",
+          "alias": null,
+          "launchMechanism": "Kilocode fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/kilocode/workflows/plan.md",
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "representation": "generated-native-projection",
+          "routeIdentity": "plan_reviewer",
+          "alias": null,
+          "launchMechanism": "Codex custom agent (TOML definition)",
+          "authority": "read-only (sandbox_mode)",
+          "isolation": "clean-context",
+          "classification": "generated output",
+          "evidencePaths": [
+            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/plan_reviewer.toml",
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "implementer",
+      "body": "agents/implementer.md",
+      "authority": "workspace-write",
+      "isolation": "clean-context",
+      "loopGate": "phase",
+      "failLoudShape": "Return a blocked handoff; make no edits.",
+      "requiredReading": [
+        "workflow/agent-invocation.md",
+        "agents/implementer.md"
+      ],
+      "aliases": [],
+      "hostBindings": [
+        {
+          "host": "Cursor",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "overlays/cursor/agents/"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "representation": "native-definition",
+          "routeIdentity": "implementer",
+          "alias": null,
+          "launchMechanism": "OpenCode primary mode with Task/routing delegation to isolated child agents",
+          "authority": "workspace-write",
+          "isolation": "clean-context",
+          "classification": "primary-mode definition",
+          "evidencePaths": [
+            "overlays/opencode/agents/implementer.md",
+            "scripts/host-sync/manifests/opencode.manifest.psd1",
+            "overlays/opencode/opencode.specimen.json"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "overlays/antigravity/agents/"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "representation": "native-definition",
+          "routeIdentity": "implementer",
+          "alias": null,
+          "launchMechanism": "VS Code Copilot agent invocation",
+          "authority": "workspace-write",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/vscode/agents/implementer.agent.md",
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1",
+            "analysis/cline-kilo-probes-2026-09.md"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1",
+            "analysis/cline-kilo-probes-2026-09.md"
+          ]
+        },
+        {
+          "host": "Codex",
+          "representation": "generated-native-projection",
+          "routeIdentity": "implementer",
+          "alias": null,
+          "launchMechanism": "Codex custom agent (TOML definition)",
+          "authority": "workspace-write (sandbox_mode)",
+          "isolation": "clean-context",
+          "classification": "generated output",
+          "evidencePaths": [
+            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/implementer.toml",
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "production_readiness_reviewer",
+      "body": "agents/production_readiness_reviewer.md",
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "loopGate": "review-loop",
+      "failLoudShape": "Return CHANGES REQUESTED: missing invocation envelope.",
+      "requiredReading": [
+        "workflow/agent-invocation.md",
+        "agents/production_readiness_reviewer.md"
+      ],
+      "aliases": [
+        "reviewer-a"
+      ],
+      "hostBindings": [
+        {
+          "host": "Cursor",
+          "representation": "native-definition",
+          "routeIdentity": "reviewer-a",
+          "alias": "reviewer-a",
+          "launchMechanism": "Cursor Task with subagent_type reviewer-a",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/cursor/agents/reviewer-a.md"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "representation": "native-definition",
+          "routeIdentity": "production_readiness_reviewer",
+          "alias": null,
+          "launchMechanism": "OpenCode Task with mode subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/opencode/agents/production_readiness_reviewer.md",
+            "scripts/host-sync/manifests/opencode.manifest.psd1",
+            "overlays/opencode/opencode.specimen.json"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "representation": "native-definition",
+          "routeIdentity": "production_readiness_reviewer",
+          "alias": null,
+          "launchMechanism": "Antigravity invoke_subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/antigravity/agents/production_readiness_reviewer.md",
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "representation": "native-definition",
+          "routeIdentity": "production_readiness_reviewer",
+          "alias": null,
+          "launchMechanism": "VS Code Copilot agent invocation",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/vscode/agents/production_readiness_reviewer.agent.md",
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "production_readiness_reviewer",
+          "alias": null,
+          "launchMechanism": "Cline fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/cline/workflows/review.md",
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "production_readiness_reviewer",
+          "alias": null,
+          "launchMechanism": "Kilocode fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/kilocode/workflows/review.md",
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "representation": "generated-native-projection",
+          "routeIdentity": "production_readiness_reviewer",
+          "alias": null,
+          "launchMechanism": "Codex custom agent (TOML definition)",
+          "authority": "read-only (sandbox_mode)",
+          "isolation": "clean-context",
+          "classification": "generated output",
+          "evidencePaths": [
+            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/production_readiness_reviewer.toml",
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bug_reviewer",
+      "body": "agents/bug_reviewer.md",
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "loopGate": "review-loop",
+      "failLoudShape": "Return one finding titled Missing invocation envelope.",
+      "requiredReading": [
+        "workflow/agent-invocation.md",
+        "agents/bug_reviewer.md",
+        "docs/featureArchitecture/bug-reviewer-finding-rubric.md",
+        "skills/bug-review-sweep/SKILL.md"
+      ],
+      "aliases": [
+        "Bugbot"
+      ],
+      "hostBindings": [
+        {
+          "host": "Cursor",
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "bugbot",
+          "alias": "Bugbot",
+          "launchMechanism": "Cursor Task with subagent_type bugbot (built-in; spawn instructions in implementation-review SKILL)",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "intentional host deviation",
+          "evidencePaths": [
+            "overlays/cursor/agents/reviewer-a.md",
+            "skills/implementation-review/SKILL.md",
+            "overlays/cursor/review-subagent-models.md"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "representation": "native-definition",
+          "routeIdentity": "bug_reviewer",
+          "alias": null,
+          "launchMechanism": "OpenCode Task with mode subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/opencode/agents/bug_reviewer.md",
+            "scripts/host-sync/manifests/opencode.manifest.psd1",
+            "overlays/opencode/opencode.specimen.json"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "representation": "native-definition",
+          "routeIdentity": "bug_reviewer",
+          "alias": null,
+          "launchMechanism": "Antigravity invoke_subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/antigravity/agents/bug_reviewer.md",
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "representation": "native-definition",
+          "routeIdentity": "bug_reviewer",
+          "alias": null,
+          "launchMechanism": "VS Code Copilot agent invocation",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/vscode/agents/bug_reviewer.agent.md",
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "bug_reviewer",
+          "alias": null,
+          "launchMechanism": "Cline fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/cline/workflows/review.md",
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "bug_reviewer",
+          "alias": null,
+          "launchMechanism": "Kilocode fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/kilocode/workflows/review.md",
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "representation": "generated-native-projection",
+          "routeIdentity": "bug_reviewer",
+          "alias": null,
+          "launchMechanism": "Codex custom agent (TOML definition)",
+          "authority": "read-only (sandbox_mode)",
+          "isolation": "clean-context",
+          "classification": "generated output",
+          "evidencePaths": [
+            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/bug_reviewer.toml",
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "repository_explorer",
+      "body": "agents/repository_explorer.md",
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "loopGate": "investigation",
+      "failLoudShape": "Return a blocked result; do not explore.",
+      "requiredReading": [
+        "workflow/agent-invocation.md",
+        "agents/repository_explorer.md"
+      ],
+      "aliases": [],
+      "hostBindings": [
+        {
+          "host": "Cursor",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "overlays/cursor/agents/"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "representation": "native-definition",
+          "routeIdentity": "repository_explorer",
+          "alias": null,
+          "launchMechanism": "OpenCode Task with mode subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/opencode/agents/repository_explorer.md",
+            "scripts/host-sync/manifests/opencode.manifest.psd1",
+            "overlays/opencode/opencode.specimen.json"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "overlays/antigravity/agents/"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "representation": "native-definition",
+          "routeIdentity": "repository_explorer",
+          "alias": null,
+          "launchMechanism": "VS Code Copilot agent invocation",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/vscode/agents/repository_explorer.agent.md",
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1",
+            "analysis/cline-kilo-probes-2026-09.md"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1",
+            "analysis/cline-kilo-probes-2026-09.md"
+          ]
+        },
+        {
+          "host": "Codex",
+          "representation": "generated-native-projection",
+          "routeIdentity": "repository_explorer",
+          "alias": null,
+          "launchMechanism": "Codex custom agent (TOML definition)",
+          "authority": "read-only (sandbox_mode)",
+          "isolation": "clean-context",
+          "classification": "generated output",
+          "evidencePaths": [
+            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/repository_explorer.toml",
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "test_reviewer",
+      "body": "agents/test_reviewer.md",
+      "authority": "read-only",
+      "isolation": "clean-context",
+      "loopGate": "test-review",
+      "failLoudShape": "Return a blocking advisory finding titled Missing invocation envelope.",
+      "requiredReading": [
+        "workflow/agent-invocation.md",
+        "agents/test_reviewer.md"
+      ],
+      "aliases": [],
+      "hostBindings": [
+        {
+          "host": "Cursor",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "overlays/cursor/agents/"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "representation": "native-definition",
+          "routeIdentity": "test_reviewer",
+          "alias": null,
+          "launchMechanism": "OpenCode Task with mode subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/opencode/agents/test_reviewer.md",
+            "scripts/host-sync/manifests/opencode.manifest.psd1",
+            "overlays/opencode/opencode.specimen.json"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "overlays/antigravity/agents/"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "representation": "native-definition",
+          "routeIdentity": "test_reviewer",
+          "alias": null,
+          "launchMechanism": "VS Code Copilot agent invocation",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
+          "evidencePaths": [
+            "overlays/vscode/agents/test_reviewer.agent.md",
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1",
+            "analysis/cline-kilo-probes-2026-09.md"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "representation": "missing",
+          "routeIdentity": null,
+          "alias": null,
+          "launchMechanism": null,
+          "authority": null,
+          "isolation": null,
+          "classification": null,
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1",
+            "analysis/cline-kilo-probes-2026-09.md"
+          ]
+        },
+        {
+          "host": "Codex",
+          "representation": "generated-native-projection",
+          "routeIdentity": "test_reviewer",
+          "alias": null,
+          "launchMechanism": "Codex custom agent (TOML definition)",
+          "authority": "read-only (sandbox_mode)",
+          "isolation": "clean-context",
+          "classification": "generated output",
+          "evidencePaths": [
+            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/test_reviewer.toml",
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    }
+  ]
+}

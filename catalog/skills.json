@@ -1,0 +1,1238 @@
+{
+  "schema": "catalog/v1",
+  "kind": "skills",
+  "items": [
+    {
+      "id": "architecture-survey",
+      "body": "skills/architecture-survey/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bug-review-sweep",
+      "body": "skills/bug-review-sweep/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "codebase-design",
+      "body": "skills/codebase-design/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "composer",
+      "body": "skills/composer/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "diagnosing-bugs",
+      "body": "skills/diagnosing-bugs/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "discovery",
+      "body": "skills/discovery/SKILL.md",
+      "explicitOnly": false,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "documentation-architecture",
+      "body": "skills/documentation-architecture/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain-modeling",
+      "body": "skills/domain-modeling/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grilling",
+      "body": "skills/grilling/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "implementation-plan",
+      "body": "skills/implementation-plan/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "implementation-review",
+      "body": "skills/implementation-review/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opencode-headless-run",
+      "body": "skills/opencode-headless-run/SKILL.md",
+      "explicitOnly": false,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opencode-history-search",
+      "body": "skills/opencode-history-search/SKILL.md",
+      "explicitOnly": false,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plan-review",
+      "body": "skills/plan-review/SKILL.md",
+      "explicitOnly": false,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "prototype",
+      "body": "skills/prototype/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "research",
+      "body": "skills/research/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "resolving-merge-conflicts",
+      "body": "skills/resolving-merge-conflicts/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "roadmap",
+      "body": "skills/roadmap/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tdd",
+      "body": "skills/tdd/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "teach",
+      "body": "skills/teach/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wait-what",
+      "body": "skills/wait-what/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wizard",
+      "body": "skills/wizard/SKILL.md",
+      "explicitOnly": true,
+      "hostApplicability": [
+        {
+          "host": "Cursor",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
+          ]
+        },
+        {
+          "host": "OpenCode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/opencode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Antigravity",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Vscode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/vscode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Cline",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/cline.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Kilocode",
+          "status": "not-applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
+          ]
+        },
+        {
+          "host": "Codex",
+          "status": "applicable",
+          "evidencePaths": [
+            "scripts/host-sync/manifests/codex.manifest.psd1"
+          ]
+        }
+      ]
+    }
+  ]
+}
