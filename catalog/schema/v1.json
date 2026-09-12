@@ -80,11 +80,12 @@
     },
     "skillsItem": {
       "type": "object",
-      "required": ["id", "body", "explicitOnly", "hostApplicability"],
+      "required": ["id", "body", "modelInvocationDisabled", "explicitOnly", "hostApplicability"],
       "additionalProperties": false,
       "properties": {
         "id": { "type": "string", "pattern": "^[a-z][a-z0-9_-]{0,63}$" },
         "body": { "$ref": "#/$defs/repoPath" },
+        "modelInvocationDisabled": { "type": "boolean" },
         "explicitOnly": { "type": "boolean" },
         "hostApplicability": { "type": "array", "minItems": 7, "maxItems": 7, "items": { "$ref": "#/$defs/skillBinding" } }
       }

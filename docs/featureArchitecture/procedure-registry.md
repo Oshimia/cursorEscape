@@ -1,6 +1,6 @@
 # Procedure registry
 
-**Last updated:** 2026-09-12
+**Last updated:** 2026-09-13
 
 ## Context
 
@@ -10,11 +10,11 @@ Phase 1 introduces a writable semantic registry for machine metadata (agent iden
 
 ### Ownership model
 
-Registry catalogs own machine identity, aliases, required reading, authority/isolation, loop/gate policy, fail-loud behavior, host representation, explicit skill applicability, composition references, and semantic order. Markdown owns prose; manifests own destination/binding.
+Registry catalogs own machine identity, aliases, required reading, authority/isolation, loop/gate policy, fail-loud behavior, host representation, skill explicit-only policy, composition references, and semantic order. Markdown owns prose; manifests own destination/binding. Skill entries keep two distinct booleans: `modelInvocationDisabled` mirrors the canonical skill frontmatter `disable-model-invocation` flag, while `explicitOnly` must exactly match Phase 0 inventory `explicit_only` (currently only `opencode-headless-run` and `opencode-history-search`).
 
 ### Fail-closed boundary
 
-`ProcedureRegistry.psm1` validates schema/version, exact Phase 0 inventory coverage, IDs, canonical identity and first-read contract, required reading, aliases, authority/isolation, loop/gate, fail-loud behavior, host representation, route identity, launch mechanism and evidence, explicit skill applicability, rules/workflow canonical sources, one-to-one composition coverage, duplicate-free semantic order, and path containment. Schema items are closed to their declared ownership fields; skill registry entries reject destination metadata because manifests own bindings. Any ambiguity fails rather than falling back to host metadata.
+`ProcedureRegistry.psm1` validates schema/version, exact Phase 0 inventory coverage, IDs, canonical identity and first-read contract, required reading, aliases, authority/isolation, loop/gate, fail-loud behavior, host representation, route identity, launch mechanism and evidence, both skill booleans (`modelInvocationDisabled` against frontmatter; `explicitOnly` against inventory), explicit skill applicability, rules/workflow canonical sources, one-to-one composition coverage, duplicate-free semantic order, and path containment. Schema items are closed to their declared ownership fields; skill registry entries reject destination metadata because manifests own bindings. Any ambiguity fails rather than falling back to host metadata. Historical baseline directories fail closed when absent or inaccessible; the checker's explicit sandbox opt-out waives inaccessibility only, and absence always fails.
 
 ### Renderer and CI
 

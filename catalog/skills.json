@@ -5,7 +5,8 @@
     {
       "id": "architecture-survey",
       "body": "skills/architecture-survey/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -61,7 +62,8 @@
     {
       "id": "bug-review-sweep",
       "body": "skills/bug-review-sweep/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -117,7 +119,8 @@
     {
       "id": "codebase-design",
       "body": "skills/codebase-design/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -173,7 +176,8 @@
     {
       "id": "composer",
       "body": "skills/composer/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -229,7 +233,8 @@
     {
       "id": "diagnosing-bugs",
       "body": "skills/diagnosing-bugs/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -285,6 +290,7 @@
     {
       "id": "discovery",
       "body": "skills/discovery/SKILL.md",
+      "modelInvocationDisabled": false,
       "explicitOnly": false,
       "hostApplicability": [
         {
@@ -341,7 +347,8 @@
     {
       "id": "documentation-architecture",
       "body": "skills/documentation-architecture/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -397,7 +404,8 @@
     {
       "id": "domain-modeling",
       "body": "skills/domain-modeling/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -453,7 +461,8 @@
     {
       "id": "grilling",
       "body": "skills/grilling/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -509,7 +518,8 @@
     {
       "id": "implementation-plan",
       "body": "skills/implementation-plan/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -565,7 +575,8 @@
     {
       "id": "implementation-review",
       "body": "skills/implementation-review/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -621,7 +632,8 @@
     {
       "id": "opencode-headless-run",
       "body": "skills/opencode-headless-run/SKILL.md",
-      "explicitOnly": false,
+      "modelInvocationDisabled": false,
+      "explicitOnly": true,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -677,7 +689,8 @@
     {
       "id": "opencode-history-search",
       "body": "skills/opencode-history-search/SKILL.md",
-      "explicitOnly": false,
+      "modelInvocationDisabled": false,
+      "explicitOnly": true,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -733,6 +746,7 @@
     {
       "id": "plan-review",
       "body": "skills/plan-review/SKILL.md",
+      "modelInvocationDisabled": false,
       "explicitOnly": false,
       "hostApplicability": [
         {
@@ -789,7 +803,8 @@
     {
       "id": "prototype",
       "body": "skills/prototype/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -845,7 +860,8 @@
     {
       "id": "research",
       "body": "skills/research/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -901,7 +917,8 @@
     {
       "id": "resolving-merge-conflicts",
       "body": "skills/resolving-merge-conflicts/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -957,7 +974,8 @@
     {
       "id": "roadmap",
       "body": "skills/roadmap/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -1013,7 +1031,8 @@
     {
       "id": "tdd",
       "body": "skills/tdd/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -1069,7 +1088,8 @@
     {
       "id": "teach",
       "body": "skills/teach/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -1125,7 +1145,8 @@
     {
       "id": "wait-what",
       "body": "skills/wait-what/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",
@@ -1181,7 +1202,8 @@
     {
       "id": "wizard",
       "body": "skills/wizard/SKILL.md",
-      "explicitOnly": true,
+      "modelInvocationDisabled": true,
+      "explicitOnly": false,
       "hostApplicability": [
         {
           "host": "Cursor",

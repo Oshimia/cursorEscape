@@ -63,6 +63,14 @@ function Invoke-EdgeCase([string]$Kind,[scriptblock]$Mutate) {
   }
   return [pscustomobject]@{ Valid = ($observed.Count -eq 0); Failures = $observed }
 }
+function Invoke-SkillInventoryEdgeCase([scriptblock]$MutateInventory) {
+  $inventory = $registry.Inventory | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+  & $MutateInventory $inventory
+  $catalog = Get-FreshCatalogs
+  $catalog.skills.schema = 'catalog/v1'; $catalog.skills.kind = 'skills'
+  $observed = @(Test-RegistryCatalog -Catalog $catalog.skills -Kind 'skills' -RepoRoot $RepoRoot -Inventory $inventory)
+  return [pscustomobject]@{ Valid = ($observed.Count -eq 0); Failures = $observed }
+}
 try {
   $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].id = 'duplicate-id'; $c.agents.items[1].id = 'duplicate-id' }
   Assert-RegistryFailure $result 'duplicate agent ID fails' 'DuplicateId'
@@ -103,6 +111,12 @@ try {
   Assert-RegistryFailure $result 'agent host classification mismatch fails' 'HostClassification'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].explicitOnly = -not $c.skills.items[0].explicitOnly }
   Assert-RegistryFailure $result 'explicit-only mismatch fails' 'ExplicitOnlyMismatch'
+  $result = Invoke-SkillInventoryEdgeCase { param($i) $i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'architecture-survey' } | ForEach-Object { $_.PSObject.Properties.Remove('explicit_only') } }
+  Assert-RegistryFailure $result 'missing inventory explicit_only fails' 'ExplicitOnlyMismatch'
+  $result = Invoke-SkillInventoryEdgeCase { param($i) $i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'architecture-survey' } | ForEach-Object { $_.explicit_only = 'yes' } }
+  Assert-RegistryFailure $result 'non-boolean inventory explicit_only fails' 'ExplicitOnlyMismatch'
+  $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].modelInvocationDisabled = -not $c.skills.items[0].modelInvocationDisabled }
+  Assert-RegistryFailure $result 'model-invocation-disabled mismatch fails' 'ModelInvocationDisabledMismatch'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].hostApplicability[0].status = 'maybe' }
   Assert-RegistryFailure $result 'non-explicit skill behavior fails' 'NonExplicitSkillBehavior'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].hostApplicability[0].status = 'applicable' }
@@ -131,6 +145,12 @@ try {
   $unknownCatalog.rules.items[0] | Add-Member IgnoredMetadata 'not-owned'
   $unknownJson = $unknownCatalog.rules | ConvertTo-Json -Depth 12
   Assert-View 'schema rejects ignored generic metadata' (-not (Test-Json -Json $unknownJson -Schema $schemaJson -ErrorAction SilentlyContinue))
+  $nonBooleanCatalog = Get-FreshCatalogs
+  $nonBooleanCatalog.skills.items[0].explicitOnly = 'yes'
+  Assert-View 'schema rejects non-boolean explicitOnly' (-not (Test-Json -Json ($nonBooleanCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
+  $nonBooleanCatalog = Get-FreshCatalogs
+  $nonBooleanCatalog.skills.items[0].modelInvocationDisabled = 'yes'
+  Assert-View 'schema rejects non-boolean modelInvocationDisabled' (-not (Test-Json -Json ($nonBooleanCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
 
   $original = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $RepoRoot
   $originalRows = @([string]$original.Files['composition-order.tsv'] -split "`r?`n" | Where-Object { $_ })
@@ -148,6 +168,31 @@ try {
   try { $null = Test-RegistryOutputRoot -OutputRoot $temporaryRootExact -RepoRoot $RepoRoot -AllowTemporaryRoot } catch { $temporaryRootThrew = $true }
   Assert-View 'exact OS temporary root fails closed' $temporaryRootThrew
 } catch { $failures++; Write-Output "FAIL: edge-case execution: $($_.Exception.Message)"; Write-Output $_.ScriptStackTrace }
+
+# Current-state checker contract: an explicit -RepoRoot is honored from any
+# working directory, and an absent historical baseline fails closed even under
+# the sandbox opt-out (which waives inaccessibility only, never absence).
+$checker = Join-Path $PSScriptRoot 'Invoke-CurrentStateFixtureChecks.ps1'
+$checkerTemp = Join-Path ([IO.Path]::GetTempPath()) ("current-state-checker-" + [Guid]::NewGuid().ToString('N'))
+try {
+  New-Item -ItemType Directory -Path $checkerTemp | Out-Null
+  Push-Location $checkerTemp
+  try {
+    & $checker -RepoRoot $RepoRoot -AllowInaccessibleHistoricalBaseline *> $null
+    Assert-View 'current-state checker honors explicit RepoRoot from foreign CWD' ($LASTEXITCODE -eq 0) "exit=$LASTEXITCODE"
+  } finally { Pop-Location }
+  $checkerInventory = Get-Content -Raw (Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json') | ConvertFrom-Json
+  $checkerInventory.render_baselines.baseline_directories_historical = @((Join-Path $checkerTemp 'absent-historical-baseline')) + @($checkerInventory.render_baselines.baseline_directories_historical | Select-Object -Skip 1)
+  $absentInventoryPath = Join-Path $checkerTemp 'absent-baselines.json'
+  $checkerInventory | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $absentInventoryPath
+  $absentOptOutOutput = (& $checker -RepoRoot $RepoRoot -InventoryJsonPath $absentInventoryPath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
+  $absentOptOutExit = $LASTEXITCODE
+  Assert-View 'absent historical baseline fails closed under opt-out' ($absentOptOutExit -eq 1 -and $absentOptOutOutput.Contains('HistoricalBaselinePath: absent')) "exit=$absentOptOutExit"
+  $absentDefaultOutput = (& $checker -RepoRoot $RepoRoot -InventoryJsonPath $absentInventoryPath *>&1 | Out-String)
+  $absentDefaultExit = $LASTEXITCODE
+  Assert-View 'absent historical baseline fails closed by default' ($absentDefaultExit -eq 1 -and $absentDefaultOutput.Contains('HistoricalBaselinePath: absent')) "exit=$absentDefaultExit"
+} catch { $failures++; Write-Output "FAIL: current-state checker execution: $($_.Exception.Message)" }
+finally { if (Test-Path -LiteralPath $checkerTemp) { Remove-Item -LiteralPath $checkerTemp -Recurse -Force -ErrorAction SilentlyContinue } }
 
 if (Test-Path -LiteralPath $temp) { Remove-Item -LiteralPath $temp -Recurse -Force -ErrorAction SilentlyContinue }
 Write-Output ('registry view checks: {0} passed, {1} failed' -f $pass,$failures)

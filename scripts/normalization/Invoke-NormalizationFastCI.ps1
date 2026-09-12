@@ -10,7 +10,11 @@ $checks = @(
   @{ Name='host-sync-units'; File=(Join-Path (Join-Path $RepoRoot 'scripts/host-sync') 'Invoke-RemediationUnitChecks.ps1') }
 )
 foreach ($check in $checks) {
-  if ($check.Name -in @('registry','views')) { & $check.File -RepoRoot $RepoRoot } else { & $check.File }
+  # The current-state checker gets a deliberate sandbox opt-out: host backup
+  # directories can be unreadable under restricted CI, but absent baselines
+  # still fail closed because the opt-out never waives absence.
+  if ($check.Name -eq 'phase0-current-state') { & $check.File -RepoRoot $RepoRoot -AllowInaccessibleHistoricalBaseline }
+  elseif ($check.Name -in @('registry','views')) { & $check.File -RepoRoot $RepoRoot } else { & $check.File }
   if ($LASTEXITCODE -ne 0) { throw "FAIL: $($check.Name) exited $LASTEXITCODE" }
 }
 $retiredFixtureTerm = [string]::Join('', [char]0x67, [char]0x6F, [char]0x6C, [char]0x64, [char]0x65, [char]0x6E)

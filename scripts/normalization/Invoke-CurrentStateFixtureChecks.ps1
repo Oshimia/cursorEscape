@@ -5,11 +5,18 @@
 .DESCRIPTION
     Fails closed on inventory/manifest/baseline/Markdown inconsistency or missing
     referenced evidence. Performs no live host writes and no repository writes.
+    Historical baseline directories fail closed when absent; inaccessible (sandbox
+    denied) directories fail closed unless -AllowInaccessibleHistoricalBaseline is
+    passed explicitly, and that opt-out never waives absence.
 #>
+param(
+    [string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..' '..')).Path,
+    [string]$InventoryJsonPath = '',
+    [switch]$AllowInaccessibleHistoricalBaseline
+)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..' '..')).Path
-$JsonPath = Join-Path $RepoRoot 'analysis' 'procedure-normalization-inventory-2026-09.json'
+$JsonPath = if ($InventoryJsonPath) { $InventoryJsonPath } else { Join-Path $RepoRoot 'analysis' 'procedure-normalization-inventory-2026-09.json' }
 $MdPath = Join-Path $RepoRoot 'analysis' 'procedure-normalization-inventory-2026-09.md'
 $failures = [System.Collections.Generic.List[string]]::new()
 function Add-Failure([string]$Invariant,[string]$Detail) { $failures.Add("${Invariant}: $Detail") }
@@ -25,7 +32,13 @@ function Test-RepoPath([string]$Relative,[string]$Invariant,[switch]$Directory) 
 }
 function Test-ExternalPath([string]$Path,[string]$Invariant) {
     if ([string]::IsNullOrWhiteSpace($Path)) { Add-Failure $Invariant 'empty path'; return }
-    try { $null = Test-Path -LiteralPath $Path -PathType Container -ErrorAction Stop } catch { Write-Warning "${Invariant}: sandbox access denied for $Path (non-fatal)." }
+    try { $present = [bool](Test-Path -LiteralPath $Path -ErrorAction Stop) } catch {
+        if ($AllowInaccessibleHistoricalBaseline) { Write-Warning "${Invariant}: inaccessible historical baseline (deliberate opt-out): $Path :: $($_.Exception.Message)" }
+        else { Add-Failure $Invariant "inaccessible $Path :: $($_.Exception.Message)" }
+        return
+    }
+    if (-not $present) { Add-Failure $Invariant "absent $Path"; return }
+    if (-not (Test-Path -LiteralPath $Path -PathType Container -ErrorAction Stop)) { Add-Failure $Invariant "not a directory: $Path" }
 }
 function Compare-Arr($A,$E,[string]$Inv,[string]$Name) {
     $a = @($A); $e = @($E)

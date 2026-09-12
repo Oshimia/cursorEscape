@@ -145,10 +145,17 @@ function Test-RegistryCatalog {
         } }
       }
     } elseif ($Kind -eq 'skills') {
+      if ($null -eq $Inventory) { throw 'FAIL: skill canonical consistency requires the Phase 0 inventory' }
       $raw = Get-Content -LiteralPath $body -Raw
       if ($raw -notmatch "(?m)^name:\s*$([regex]::Escape($id))\s*$") { Add-RegistryFailure $failures 'CanonicalIdentity' "$id skill frontmatter name" }
-      $declared = $raw -match '(?mi)^disable-model-invocation:\s*true\s*$'
-      if ($item.explicitOnly -isnot [bool] -or $item.explicitOnly -ne $declared) { Add-RegistryFailure $failures 'ExplicitOnlyMismatch' "$id registry=$($item.explicitOnly) markdown=$declared" }
+      $inventorySkill = @($Inventory.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq $id })
+      if ($inventorySkill.Count -ne 1) { Add-RegistryFailure $failures 'SkillInventory' "$id has $($inventorySkill.Count) inventory rows"; continue }
+      $declaredDisabled = $raw -match '(?mi)^disable-model-invocation:\s*true\s*$'
+      if ($item.modelInvocationDisabled -isnot [bool] -or $item.modelInvocationDisabled -ne $declaredDisabled) { Add-RegistryFailure $failures 'ModelInvocationDisabledMismatch' "$id registry=$($item.modelInvocationDisabled) markdown=$declaredDisabled" }
+      $inventoryExplicitOnlyProp = $inventorySkill[0].PSObject.Properties['explicit_only']
+      $inventoryExplicitOnly = if ($null -ne $inventoryExplicitOnlyProp) { $inventoryExplicitOnlyProp.Value } else { $null }
+      $inventoryExplicitOnlyText = if ($null -eq $inventoryExplicitOnly) { '<missing>' } else { $inventoryExplicitOnly }
+      if ($item.explicitOnly -isnot [bool] -or $inventoryExplicitOnly -isnot [bool] -or $item.explicitOnly -ne $inventoryExplicitOnly) { Add-RegistryFailure $failures 'ExplicitOnlyMismatch' "$id registry=$($item.explicitOnly) inventory=$inventoryExplicitOnlyText" }
       if (@($item.hostApplicability).Count -ne 7) { Add-RegistryFailure $failures 'SkillHostCoverage' "$id has $(@($item.hostApplicability).Count) bindings" }
       $seen = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
       foreach ($binding in @($item.hostApplicability)) {
@@ -156,9 +163,6 @@ function Test-RegistryCatalog {
         if ($hostName -notin $script:Hosts) { Add-RegistryFailure $failures 'InvalidHost' "$id/$hostName"; continue }
         if (-not $seen.Add($hostName)) { Add-RegistryFailure $failures 'DuplicateHostBinding' "$id/$hostName" }
         if ([string]$binding.status -notin @('applicable','not-applicable')) { Add-RegistryFailure $failures 'NonExplicitSkillBehavior' "$id/$hostName/$($binding.status)" }
-        if ($null -eq $Inventory) { throw 'FAIL: skill canonical consistency requires the Phase 0 inventory' }
-        $inventorySkill = @($Inventory.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq $id })
-        if ($inventorySkill.Count -ne 1) { Add-RegistryFailure $failures 'SkillInventory' "$id has $($inventorySkill.Count) inventory rows"; continue }
         if ([string]$item.body -cne [string]$inventorySkill[0].source) { Add-RegistryFailure $failures 'SkillCanonicalSource' "$id registry='$($item.body)' inventory='$($inventorySkill[0].source)'" }
         $inventoryBinding = @($inventorySkill[0].host_applicability | Where-Object { [string]$_.host -eq $hostName })
         if ($inventoryBinding.Count -ne 1) { Add-RegistryFailure $failures 'SkillHostInventory' "$id/$hostName has $($inventoryBinding.Count) inventory rows"; continue }

@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete — dual approval and Full CI passed 2026-09-13
+Status:              Phase 0 complete; Phase 1 complete — integrated corrections approved and committed 2026-09-13
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2 awaits the Phase 1 closeout commit
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2 ready
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -13,9 +13,11 @@ Live Apply:          Phase 6 only, with explicit owner authorization
 
 ## Current execution status
 
-Phase 0 is **complete**. Renewed loop iteration 3 achieved dual approval, and Composer observed the Full CI set passing on 2026-09-11. The local plan snapshot is immutable historical provenance, not current acceptance state. Do not infer completion from historical plan-review approval alone.
+Phase 0 was closed in good faith on 2026-09-11: renewed loop iteration 3 achieved dual approval, and Composer observed the Full CI set passing. A post-closeout integrated review reopened Phase 0 on 2026-09-13 because its current-state checker contract required corrections (explicit repository-root propagation and fail-closed historical-baseline behavior). The integrated correction cycle is now complete: the bounded corrections passed replacement dual review with production readiness APPROVED and the bug sweep CLEAN, and Composer observed final Fast and sole normalization Full CI before the local correction closeout commit.
 
-Phase 1 recovery is **complete**. Integration achieved dual approval after bounded correction loops, and Composer observed the sole normalization Full CI passing on 2026-09-13. Closeout commit is the next gate.
+Phase 1 recovery was closed in good faith on 2026-09-13: integration achieved dual approval after bounded correction loops, Composer observed the sole normalization Full CI passing, and the good-faith historical closeout commit `6fcb695` exists. The same post-closeout integrated review reopened Phase 1 on 2026-09-13 because the registry conflated frontmatter model-invocation disabling with explicit-only inventory policy. The integrated correction cycle is now complete: the bounded corrections passed replacement dual review with production readiness APPROVED and the bug sweep CLEAN, and Composer observed final Fast and sole normalization Full CI before the local correction closeout commit.
+
+Final Composer closeout comprised observed Fast and sole normalization Full CI, the pre-commit gate, and one local correction commit; it does not authorize push or live Apply.
 
 The owner directed an efficiency-preserving recovery: retain the largely complete tree, review it in declared functional scopes, fix only review-identified defects, then run one integration reviewer pair and normalization Full CI. This exception does not authorize additional foundation expansion; the packed recovery contract governs the active recovery.
 
@@ -37,8 +39,10 @@ The owner directed an efficiency-preserving recovery: retain the largely complet
 - [x] Per-host restart/smoke/recovery matrix.
 - [x] Stale lifecycle documentation reconciled in this changeset.
 - [x] Full CI observed pass (Composer, 2026-09-11).
+- [x] Post-closeout integrated-review corrections complete and Composer-corrected status recorded.
+- [x] Integrated-correction replacement dual approval and Composer closeout.
 
-## Phase 1 recovery checklist (complete)
+## Phase 1 recovery checklist (post-closeout corrections complete; closeout pending)
 
 - [x] Registry catalogs and schema cover the Phase 0 inventory.
 - [x] Fail-closed registry validator and canonical consistency checks.
@@ -48,6 +52,8 @@ The owner directed an efficiency-preserving recovery: retain the largely complet
 - [x] Integration production/bug pair approved.
 - [x] Dual reviewer approval.
 - [x] Composer-observed normalization Full CI and closeout.
+- [x] Post-closeout integrated-review corrections complete and Composer-corrected status recorded.
+- [x] Integrated-correction replacement dual approval and Composer closeout.
 
 ## Product decisions
 
