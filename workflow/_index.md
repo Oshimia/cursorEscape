@@ -1,6 +1,6 @@
 # Workflow docs (shared deep procedure)
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-13
 
 **Ownership:** Process changes land here first. Repo SOPs may extend with local paths; they must not contradict this core.
 
@@ -17,7 +17,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [plan-agent-context.md](plan-agent-context.md) | Escalation field + Agent context headings (escalated plans only) |
 | [plan-reviewer-report.md](plan-reviewer-report.md) | Plan-reviewer output schema (limits, severity, exact report structure) |
 | [iterative-plan-review.md](iterative-plan-review.md) | Plan → plan-reviewer loop |
-| [iterative-code-review.md](iterative-code-review.md) | Per-phase Reviewer A + Bugbot loop |
+| [iterative-code-review.md](iterative-code-review.md) | Per-phase Reviewer A + Bugbot loop; conditional integrated gate |
 | [ci-ladder.md](ci-ladder.md) | Fast/Full CI discovery for any repo |
 | [tdd-tests.md](tdd-tests.md) | Test-first guidance: agreed seams, red-green slices, independent oracles |
 | [tdd-mocking.md](tdd-mocking.md) | Mocking guidance: boundary-only doubles, fakes and in-memory adapters |
@@ -43,7 +43,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [discovery](../skills/discovery/SKILL.md) | Repo doc discovery (Step 0 + fallback) |
 | [plan-review](../skills/plan-review/SKILL.md) | Plan → plan-reviewer loop gate |
 | [implementation-plan](../skills/implementation-plan/SKILL.md) | Plan drafting + Incomplete until SoT |
-| [implementation-review](../skills/implementation-review/SKILL.md) | Per-phase Reviewer A + Bugbot |
+| [implementation-review](../skills/implementation-review/SKILL.md) | Per-phase Reviewer A + Bugbot; conditional integrated gate |
 | [composer](../skills/composer/SKILL.md) | Phased execution conductor: approval preview when needed, then implementation subagent |
 | [roadmap](../skills/roadmap/SKILL.md) | Repo multi-phase handoff files |
 | [documentation-architecture](../skills/documentation-architecture/SKILL.md) | Bootstrap/extend repo docs layout |

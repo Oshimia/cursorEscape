@@ -4,8 +4,9 @@ description: >-
   Run the iterative Reviewer A + Bugbot review loop after non-trivial
   implementation — once per plan phase on multi-phase plans, or once at
   completion for single-phase work. Covers CI gate (parent-only, once per
-  iteration), parallel reviewer launch, fix-all policy, and completion bar.
-  Use proactively when closing a phase or any non-trivial task.
+  iteration), parallel reviewer launch, fix-all policy, conditional integrated
+  review for assembled multi-slice work, and completion bar. Use proactively
+  when closing a phase or any non-trivial task.
 disable-model-invocation: true
 ---
 
@@ -86,7 +87,7 @@ Implement phase
 ```
 
 1. **Implement** the current phase (or full scope if single-phase) using discovery + this repo’s documented conventions.
-2. **Review loop (within a 4-iteration block):** Run **Fast CI Observed** once, then launch **Reviewer A + Bugbot in parallel** with `Completion gate: review-loop` only. Cursor Task spawn: [implementation-review overlay](../../overlays/cursor/skills/implementation-review/SKILL.md). **Do not launch reviewers if Fast CI fails, is skipped (when Fast is not `n/a`), or is claimed-only** (prose “Fast CI passed” / `ci: pass` with no per-command rows).
+2. **Review loop (within a 4-iteration block):** Run **Fast CI Observed** once, then launch **Reviewer A + Bugbot in parallel** with `Completion gate: review-loop` for the ordinary loop. Cursor Task spawn: [implementation-review overlay](../../overlays/cursor/skills/implementation-review/SKILL.md). **Do not launch reviewers if Fast CI fails, is skipped (when Fast is not `n/a`), or is claimed-only** (prose “Fast CI passed” / `ci: pass` with no per-command rows).
    Both launches must begin with the mandatory [agent invocation](../../workflow/agent-invocation.md) envelope; aliases never replace canonical reviewer identity.
 
    Optional evidence frame: when a fixed point and an originating spec both exist, the parent may add `Fixed point:` and `Spec path:` lines to the reviewer invoke payload to enable Standards/Spec axis framing with per-finding citations per [code-review-frame.md](../../workflow/code-review-frame.md). Absent those inputs, reviews are unchanged.
@@ -165,15 +166,24 @@ Pressure release is a **stuckness / thrash brake**, not an opt-out from dual APP
 
 **Example (Reviewer-a):** A missing unit test for a new auth branch is **blocking test/docs**. A wish-list for broader e2e coverage of an untouched flow is **Batchable (deferred)** and may remain on `APPROVED`.
 
+### Integrated review gate (conditional)
+
+The ordinary phase review already covers integration when one bounded implementer produces one cohesive diff. Use a separate integrated gate only when independently reviewed slices, recovered scopes, or reopened closeouts are assembled into one phase diff. It is not a default loop and never rescues an oversized changeset that should be split.
+
+The integrated gate uses the same reviewer pair and approval bar, but `Completion gate: integrated-review`, the true pre-assembly baseline, and an explicitly bounded assembled diff. Findings must concern concrete integration defects in that diff: cross-slice contracts, direct callers/callees, shared configuration/schema/CI behavior, generated-projection compatibility, or status truth. Broad repository review, prior transcripts, pre-existing issues, and unrelated improvements remain out of scope.
+
+Run at most an initial integrated pair plus one replacement pair after targeted fixes and fresh Fast CI. A second non-approval stops as `INTEGRATION REVIEW EXHAUSTED` before Full CI for Composer/owner triage. Deep procedure: [iterative-code-review.md](../../workflow/iterative-code-review.md#integrated-review-gate-conditional).
+
 ---
 
 ## Completion gate selection & stop rules
 
-Reviewers are **only** invoked with `Completion gate: review-loop` and **Fast** CI. **`task-phase-complete` is not a reviewer gate** — it labels the phase closeout report after dual `APPROVED` + Full CI.
+Reviewers are invoked only under the ordinary `Completion gate: review-loop` or the conditional integrated gate below, always after observed **Fast** CI. **`task-phase-complete` is not a reviewer gate** — it labels the phase closeout report after dual `APPROVED` + Full CI.
 
 | Situation | CI tier | Reviewers? | Completion gate (reviewers) | Next step |
 |-----------|---------|------------|----------------------------|-----------|
 | Mid-loop / still fixing (iterations 1–3 of block, or 4 with dual APPROVED pending after this launch) | **Fast** | Yes — Reviewer A + Bugbot | `review-loop` | Fix must-fix findings → new review iteration **within the block** (max 4) |
+| Assembled multi-slice / reopened-closeout gate | **Fast** | Yes — fresh Reviewer A + Bugbot | `integrated-review` | Fix cross-slice must-fix findings → at most one replacement integrated pair |
 | Dual `APPROVED` (split bars; Reviewer-a batchable may remain) | — | **No** | — | Run **Full** CI only (closeout) |
 | Full CI pass after dual `APPROVED` | **Full** | **No** | — | Report `task-phase-complete`; stop |
 | Iteration 4 without dual `APPROVED` | — | **No** further launches | — | Pressure release: normal reassessment or Composer cap-exhausted handoff — **no Full**, **no** `task-phase-complete` |
@@ -230,6 +240,7 @@ After dual `APPROVED` + Full CI, report at least:
 
 - Dual-APPROVED review iteration (within final block)
 - Pressure-release **block** number
+- Integrated-gate outcome, or `"Not triggered"`
 - `Reviewer-a launches this phase: <N>` (cumulative)
 - `Bugbot launches this phase: <N>` (cumulative)
 - Full CI result
