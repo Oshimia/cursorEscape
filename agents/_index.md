@@ -1,6 +1,6 @@
 # Agent Role Contracts
 
-**Last updated:** 2026-09-13
+**Last updated:** 2026-09-14
 
 ## Context
 
@@ -21,7 +21,7 @@ Codex mirrors the seven portable roles as TOML wiring in [overlays/codex/agents]
 | implementer | [implementer.md](./implementer.md) | Build | (no Cursor agent file) |
 | production_readiness_reviewer | [production_readiness_reviewer.md](./production_readiness_reviewer.md) | Review (dual gate) | [reviewer-a.md](../overlays/cursor/agents/reviewer-a.md) |
 | bug_reviewer | [bug_reviewer.md](./bug_reviewer.md) | Review (dual gate) | Cursor product Bugbot (no owner file) |
-| repository_explorer | [repository_explorer.md](./repository_explorer.md) | Investigate | (no Cursor agent file) |
+| repository_explorer | [repository_explorer.md](./repository_explorer.md) | Investigate | [repository_explorer.md](../overlays/cursor/agents/repository_explorer.md) |
 | test_reviewer | [test_reviewer.md](./test_reviewer.md) | Review (optional; **not** default dual gate) | (no Cursor agent file) |
 
 ### Shared contract fields (Required)

@@ -13,8 +13,8 @@
   "entries": [
     {
       "stack": "Cursor",
-      "destinationCount": 18,
-      "sha256": "d715ef7decfa0032e3c8354f13cbb3ba83af22c95e2baaecf7be4c9ef6912830"
+      "destinationCount": 19,
+      "sha256": "95a92ecdceaae62310b145b551585b8c245367ecd5ad016e519b43abb53e3ef5"
     },
     {
       "stack": "OpenCode",
@@ -23,8 +23,8 @@
     },
     {
       "stack": "Antigravity",
-      "destinationCount": 19,
-      "sha256": "c04a2c228b668e631783a2e9b8167f9b311fd617f113465d14fa14886253f0d3"
+      "destinationCount": 20,
+      "sha256": "bc1b68164b71634b41381bc116b47548a57d1918b644d4bf8d4f2bec1983867c"
     },
     {
       "stack": "Vscode",
@@ -34,12 +34,12 @@
     {
       "stack": "Cline",
       "destinationCount": 4,
-      "sha256": "9a44ce7eacd8f9a3144e50334f3121ec1a6532068eaa56d498696704dce228c5"
+      "sha256": "b5c95cbc24ea6dd9854167634ea0b7741cf5a465e795962a0a7810593fc2c8df"
     },
     {
       "stack": "Kilocode",
       "destinationCount": 4,
-      "sha256": "5cd41571bd75d5670d02a5c9231635d3cff7e409de570840140dbacdbaae75d0"
+      "sha256": "d6a76b99c515d19f85a5fb0c743ce0884042ce344ec039523be3fa73ebf0ab41"
     }
   ]
 }

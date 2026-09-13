@@ -596,15 +596,16 @@
       "hostBindings": [
         {
           "host": "Cursor",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "native-definition",
+          "routeIdentity": "repository_explorer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Cursor Task with subagent_type repository_explorer",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
           "evidencePaths": [
-            "overlays/cursor/agents/"
+            "overlays/cursor/agents/repository_explorer.md",
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
           ]
         },
         {
@@ -624,15 +625,16 @@
         },
         {
           "host": "Antigravity",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "native-definition",
+          "routeIdentity": "repository_explorer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Antigravity invoke_subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
           "evidencePaths": [
-            "overlays/antigravity/agents/"
+            "overlays/antigravity/agents/repository_explorer.md",
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
           ]
         },
         {
@@ -651,28 +653,30 @@
         },
         {
           "host": "Cline",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "repository_explorer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Cline fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
           "evidencePaths": [
+            "overlays/cline/footers/cline-wiring.md",
             "scripts/host-sync/manifests/cline.manifest.psd1",
             "analysis/cline-kilo-probes-2026-09.md"
           ]
         },
         {
           "host": "Kilocode",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "repository_explorer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Kilocode fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
           "evidencePaths": [
+            "overlays/kilocode/footers/kilocode-wiring.md",
             "scripts/host-sync/manifests/kilocode.manifest.psd1",
             "analysis/cline-kilo-probes-2026-09.md"
           ]

@@ -135,7 +135,7 @@ if (Test-Path -LiteralPath $agyManifestPath) {
     $wfDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'antigravity/global_workflows/*' })
     Assert-Pass 'antigravity workflow dests under global_workflows' ($wfDests.Count -eq 3)
     $agentDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'config/agents/*' })
-    Assert-Pass 'antigravity governed role defs under config/agents' ($agentDests.Count -eq 4)
+    Assert-Pass 'antigravity governed role defs under config/agents' ($agentDests.Count -eq 5)
 }
 
 $agyAdapterPath = Join-Path $hostSyncRoot 'adapters\Generic.Adapter.ps1'

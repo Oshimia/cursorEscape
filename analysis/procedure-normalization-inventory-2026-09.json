@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "inventory_date": "2026-09-11",
-  "last_updated": "2026-09-13",
+  "last_updated": "2026-09-14",
   "phase": 0,
   "roadmap": "docs/roadmaps/procedure-registry-normalization.md",
   "hosts": [
@@ -149,18 +149,19 @@
     {
       "host": "Cursor",
       "agent": "repository_explorer",
-      "representation": "missing",
+      "representation": "native-definition",
       "evidence_paths": [
-        "overlays/cursor/agents/"
+        "overlays/cursor/agents/repository_explorer.md",
+        "scripts/host-sync/manifests/cursor.manifest.psd1"
       ],
-      "route_identity": null,
+      "route_identity": "repository_explorer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
       "first_read_contract": "agents/repository_explorer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "native",
-      "classification": null,
+      "launch_mechanism": "Cursor Task with subagent_type repository_explorer",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "repository_explorer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -485,18 +486,19 @@
     {
       "host": "Antigravity",
       "agent": "repository_explorer",
-      "representation": "missing",
+      "representation": "native-definition",
       "evidence_paths": [
-        "overlays/antigravity/agents/"
+        "overlays/antigravity/agents/repository_explorer.md",
+        "scripts/host-sync/manifests/antigravity.manifest.psd1"
       ],
-      "route_identity": null,
+      "route_identity": "repository_explorer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
       "first_read_contract": "agents/repository_explorer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "native",
-      "classification": null,
+      "launch_mechanism": "Antigravity invoke_subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "repository_explorer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -816,19 +818,20 @@
     {
       "host": "Cline",
       "agent": "repository_explorer",
-      "representation": "missing",
+      "representation": "fallback-launch-contract",
       "evidence_paths": [
+        "overlays/cline/footers/cline-wiring.md",
         "scripts/host-sync/manifests/cline.manifest.psd1",
         "analysis/cline-kilo-probes-2026-09.md"
       ],
-      "route_identity": null,
+      "route_identity": "repository_explorer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
       "first_read_contract": "agents/repository_explorer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "fresh-task-session-fallback",
-      "classification": null,
+      "launch_mechanism": "Cline fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "repository_explorer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -983,19 +986,20 @@
     {
       "host": "Kilocode",
       "agent": "repository_explorer",
-      "representation": "missing",
+      "representation": "fallback-launch-contract",
       "evidence_paths": [
+        "overlays/kilocode/footers/kilocode-wiring.md",
         "scripts/host-sync/manifests/kilocode.manifest.psd1",
         "analysis/cline-kilo-probes-2026-09.md"
       ],
-      "route_identity": null,
+      "route_identity": "repository_explorer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
       "first_read_contract": "agents/repository_explorer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "fresh-task-session-fallback",
-      "classification": null,
+      "launch_mechanism": "Kilocode fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "repository_explorer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -2896,7 +2900,7 @@
       "live_relative_root": ".cursor",
       "shared_root": null,
       "logical_roots": null,
-      "copy_entry_count": 14,
+      "copy_entry_count": 15,
       "hard_excludes": [
         "skills-cursor",
         "settings.json"
@@ -2962,6 +2966,10 @@
         {
           "source": "agents/reviewer-a.md",
           "destination": "agents/reviewer-a.md"
+        },
+        {
+          "source": "agents/repository_explorer.md",
+          "destination": "agents/repository_explorer.md"
         },
         {
           "source": "review-subagent-models.md",
@@ -3104,7 +3112,7 @@
       "live_relative_root": ".gemini",
       "shared_root": "overlays/opencode",
       "logical_roots": null,
-      "copy_entry_count": 19,
+      "copy_entry_count": 20,
       "hard_excludes": [
         "antigravity/global_workflows/caveman.md",
         "settings.json",
@@ -3268,6 +3276,10 @@
         {
           "source": "agents/bug_reviewer.md",
           "destination": "config/agents/bug_reviewer.md"
+        },
+        {
+          "source": "agents/repository_explorer.md",
+          "destination": "config/agents/repository_explorer.md"
         }
       ]
     },
@@ -3830,8 +3842,8 @@
     "six_stack_ledger_entries": [
       {
         "stack": "Cursor",
-        "destinationCount": 18,
-        "sha256": "d715ef7decfa0032e3c8354f13cbb3ba83af22c95e2baaecf7be4c9ef6912830"
+        "destinationCount": 19,
+        "sha256": "95a92ecdceaae62310b145b551585b8c245367ecd5ad016e519b43abb53e3ef5"
       },
       {
         "stack": "OpenCode",
@@ -3840,8 +3852,8 @@
       },
       {
         "stack": "Antigravity",
-        "destinationCount": 19,
-      "sha256": "c04a2c228b668e631783a2e9b8167f9b311fd617f113465d14fa14886253f0d3"
+        "destinationCount": 20,
+        "sha256": "bc1b68164b71634b41381bc116b47548a57d1918b644d4bf8d4f2bec1983867c"
       },
       {
         "stack": "Vscode",
@@ -3851,12 +3863,12 @@
       {
         "stack": "Cline",
         "destinationCount": 4,
-        "sha256": "9a44ce7eacd8f9a3144e50334f3121ec1a6532068eaa56d498696704dce228c5"
+        "sha256": "b5c95cbc24ea6dd9854167634ea0b7741cf5a465e795962a0a7810593fc2c8df"
       },
       {
         "stack": "Kilocode",
         "destinationCount": 4,
-        "sha256": "5cd41571bd75d5670d02a5c9231635d3cff7e409de570840140dbacdbaae75d0"
+        "sha256": "d6a76b99c515d19f85a5fb0c743ce0884042ce344ec039523be3fa73ebf0ab41"
       }
     ],
     "codex_render_plan_path": "scripts/host-sync/render-baselines/codex-phase1/render-plan.json",
@@ -3951,11 +3963,6 @@
     },
     {
       "host": "Cursor",
-      "agent": "repository_explorer",
-      "proposed_phase2": "native"
-    },
-    {
-      "host": "Cursor",
       "agent": "test_reviewer",
       "proposed_phase2": "native"
     },
@@ -3966,22 +3973,12 @@
     },
     {
       "host": "Antigravity",
-      "agent": "repository_explorer",
-      "proposed_phase2": "native"
-    },
-    {
-      "host": "Antigravity",
       "agent": "test_reviewer",
       "proposed_phase2": "native"
     },
     {
       "host": "Cline",
       "agent": "implementer",
-      "proposed_phase2": "fresh-task-session-fallback"
-    },
-    {
-      "host": "Cline",
-      "agent": "repository_explorer",
       "proposed_phase2": "fresh-task-session-fallback"
     },
     {
@@ -3992,11 +3989,6 @@
     {
       "host": "Kilocode",
       "agent": "implementer",
-      "proposed_phase2": "fresh-task-session-fallback"
-    },
-    {
-      "host": "Kilocode",
-      "agent": "repository_explorer",
       "proposed_phase2": "fresh-task-session-fallback"
     },
     {
@@ -4005,8 +3997,8 @@
       "proposed_phase2": "fresh-task-session-fallback"
     }
   ],
-  "represented_count": 37,
-  "missing_count": 12,
+  "represented_count": 41,
+  "missing_count": 8,
   "total_pairs": 49,
   "ambiguities_requiring_owner_confirmation": [
     {
@@ -4018,23 +4010,20 @@
     {
       "id": "U-Cline-Kilocode-Routes",
       "question": "Phase 2 proposes fresh-task/session fallback for all missing Cline/Kilocode roles. Confirm operator/task workflow acceptance.",
-      "current": "planner represented via fresh-task/session fallback; implementer, repository_explorer, and test_reviewer missing",
+      "current": "planner and repository_explorer represented via fresh-task/session fallback; implementer and test_reviewer missing",
       "pending_missing_pairs": [
         { "host": "Cline", "agent": "implementer" },
-        { "host": "Cline", "agent": "repository_explorer" },
         { "host": "Cline", "agent": "test_reviewer" },
         { "host": "Kilocode", "agent": "implementer" },
-        { "host": "Kilocode", "agent": "repository_explorer" },
         { "host": "Kilocode", "agent": "test_reviewer" }
       ]
     },
     {
       "id": "U-Antigravity-Authority",
       "question": "Confirm the Antigravity subagent mechanism can express workspace-write for `implementer` when migrated.",
-      "current": "planner represented natively; implementer, repository_explorer, and test_reviewer missing",
+      "current": "planner and repository_explorer represented natively; implementer and test_reviewer missing",
       "pending_missing_pairs": [
         { "host": "Antigravity", "agent": "implementer" },
-        { "host": "Antigravity", "agent": "repository_explorer" },
         { "host": "Antigravity", "agent": "test_reviewer" }
       ]
     },

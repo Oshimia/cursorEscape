@@ -384,8 +384,8 @@ foreach ($x in $b.baseline_directories_historical) { Test-ExternalPath $x 'Histo
 if ($md -notmatch [regex]::Escape('| Total pairs | 49 |')) { Add-Failure 'MarkdownTotalPairs' }
 if ($snapshotDate -and -not ($md -match [regex]::Escape("**Snapshot date:** $snapshotDate"))) { Add-Failure 'MarkdownInventorySnapshotDate' "expected '$snapshotDate'" }
 if ($lastUpdated -and -not ($md -match [regex]::Escape("**Last updated:** $lastUpdated"))) { Add-Failure 'MarkdownInventoryLastUpdated' "expected '$lastUpdated'" }
-if ($md -notmatch [regex]::Escape('| Represented | 37 |')) { Add-Failure 'MarkdownRepresented' }
-if ($md -notmatch [regex]::Escape('| Missing | 12 |')) { Add-Failure 'MarkdownMissing' }
+if ($md -notmatch [regex]::Escape('| Represented | 41 |')) { Add-Failure 'MarkdownRepresented' }
+if ($md -notmatch [regex]::Escape('| Missing | 8 |')) { Add-Failure 'MarkdownMissing' }
 foreach ($h in $hosts) { $hr = @($j.parity_matrix | Where-Object host -eq $h); $n = @($hr | Where-Object representation -eq 'native-definition').Count; $g = @($hr | Where-Object representation -eq 'generated-native-projection').Count; $fb = @($hr | Where-Object representation -eq 'fallback-launch-contract').Count; $ms = @($hr | Where-Object representation -eq 'missing').Count; if ($md -notmatch [regex]::Escape("| $h | $n | $g | $fb | $ms |")) { Add-Failure 'MarkdownMatrixRow' $h } }
 foreach ($x in $j.missing_pairs_with_proposed_phase2) { $row = "| $($x.host) | ``$($x.agent)`` | ``$($x.proposed_phase2)`` |"; if (-not $md.Contains($row)) { Add-Failure 'MarkdownMissingPair' "$($x.host)/$($x.agent)" } }
 

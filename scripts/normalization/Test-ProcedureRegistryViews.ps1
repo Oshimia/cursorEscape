@@ -232,7 +232,7 @@ try {
   # invariants, so the mutation asserts both observed signatures.
   Assert-CheckerMutation 'ledger destination-count mismatch fails' {
     param($i) $i.render_baselines.six_stack_ledger_entries[0].destinationCount = 99
-  } @('LedgerDestinationCount: Cursor manifest-derived=18 ledger=99', 'LedgerRowAgreement: row 0')
+  } @('LedgerDestinationCount: Cursor manifest-derived=19 ledger=99', 'LedgerRowAgreement: row 0')
   Assert-CheckerMutation 'missing last_updated date fails' {
     param($i) $i.PSObject.Properties.Remove('last_updated')
   } @("InventoryLastUpdatedFormat: invalid ISO calendar date ''")
@@ -252,7 +252,7 @@ try {
   $markdownRenamedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownRenamedPath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
   Assert-View 'markdown ambiguity id drift fails' ($LASTEXITCODE -eq 1 -and $markdownRenamedOutput.Contains("MarkdownAmbiguityId: row 0 expected 'U-Cursor-Bugbot', got 'U-Renamed-Bugbot'")) "exit=$LASTEXITCODE"
   $markdownNoUpdatePath = Join-Path $checkerTemp 'stale-dates.md'
-  ($markdownOriginal -replace ' · \*\*Last updated:\*\* 2026-09-13', '') | Set-Content -LiteralPath $markdownNoUpdatePath
+  ($markdownOriginal -replace ' · \*\*Last updated:\*\* 2026-09-14', '') | Set-Content -LiteralPath $markdownNoUpdatePath
   $markdownNoUpdateOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownNoUpdatePath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
   Assert-View 'markdown last-updated drift fails' ($LASTEXITCODE -eq 1 -and $markdownNoUpdateOutput.Contains('MarkdownInventoryLastUpdated')) "exit=$LASTEXITCODE"
 } catch { $failures++; Write-Output "FAIL: current-state checker execution: $($_.Exception.Message)" }

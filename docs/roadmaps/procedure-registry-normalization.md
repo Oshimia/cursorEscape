@@ -1,13 +1,13 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B ready
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
-Last updated:        2026-09-13
+Last updated:        2026-09-14
 Live Apply:          Phase 6 only, with explicit owner authorization
 ```
 
@@ -22,6 +22,8 @@ Final Composer closeout comprised observed Fast and sole normalization Full CI, 
 Phase 2A added explicit `planner` routes for Cursor and Antigravity plus Cline and Kilocode fresh-task/session fallbacks. It completed iteration 3 with production readiness APPROVED and `bug_reviewer` CLEAN, raising represented agent/host pairs from 33 to 37 of 49. Composer accepted the transparent 21-file scope deviation because the additional files were generated-ledger and route-map/index cascade required by must-fix findings; the slice remained under the 473 changed/new physical lines recorded for review. Final Fast and sole normalization Full CI passed, followed by the pre-commit gate; this roadmap row is closed by the Phase 2A slice commit that contains it.
 
 The owner directed an efficiency-preserving recovery: retain the largely complete tree, review it in declared functional scopes, fix only review-identified defects, then run one integration reviewer pair and normalization Full CI. This exception does not authorize additional foundation expansion; the packed recovery contract governs the active recovery.
+
+Phase 2B retained the efficiency-preserving recovery and closed through a separate bounded documentation-cascade correction. Composer-final Full CI then exposed one stale invariant: the `antigravity governed role defs under config/agents` expectation in `scripts/host-sync/Invoke-Phase2FastCI.ps1` still counted four destinations and was corrected to the manifest's five (including `repository_explorer`) in this working tree. The combined working tree now contains 21 files and 249 changed/new physical lines against baseline `1c87201`. The implementer-owned review used 2 of 4 iterations, ended with production readiness APPROVED and `bug_reviewer` CLEAN, and left no Batchable findings.
 
 ### Phase 1 recovery gates
 
@@ -259,6 +261,24 @@ The approved local plan remains the full source of goals, alternatives, assumpti
 - [x] Inventory dates: JSON and Markdown keep the Phase 0 snapshot date `2026-09-11` and add last-updated `2026-09-13`; the checker validates presence, ISO format, ordering, and cross-surface agreement.
 - [x] Cline/Kilocode SOP/overlay wording generalized to governed child-agent legs so the planner fallback is no longer excluded; pointers stay canonical (`workflow/agent-invocation.md`, `agents/planner.md`).
 - [x] Focused mutation tests cover represented/unknown pending-ambiguity pairs, ledger destination-count mismatch, `MarkdownAmbiguity*` drift, and inventory-date drift via temporary fixtures.
+
+
+### Phase 2B — repository_explorer parity on Cursor, Antigravity, Cline, and Kilocode
+
+- **Status:** complete.
+- **Scope:** explicit `repository_explorer` route on the four previously missing hosts only.
+- **Routes:** Cursor and Antigravity native host-definition wrappers (`overlays/cursor/agents/repository_explorer.md`, `overlays/antigravity/agents/repository_explorer.md`) with manifest copy entries; Cline and Kilocode explicit fresh-task/session fallback contracts in `overlays/cline/footers/cline-wiring.md` and `overlays/kilocode/footers/kilocode-wiring.md` — fresh task per investigation pass; a reused conversation, empty response, or routing placeholder is a routing failure, never a valid result.
+- **Unchanged:** OpenCode, Vscode, and Codex `repository_explorer` routes; Cursor Bugbot and `U-Cursor-Bugbot`; no other missing pairs migrated.
+- **Slice shadow comparison:** `n/a` — no deterministic canonical→host shadow-comparison machinery exists yet (see `U-Render-Baseline-Reconciliation`). Parity is enforced by the catalog↔inventory contract checks, evidence-path validation, and the deterministic six-stack render ledger.
+- **Six-stack ledger:** regenerated through `Get-ExistingSixStackRenderLedger.ps1 -WriteLedger` after the two native manifest additions and the two composed-rule footer changes.
+- **Closeout (2026-09-14):** Cursor and Antigravity index/SOP documentation, the Cline governed-leg index, and the overlay provenance date were synchronized in a separate bounded correction slice. Implementer-owned review iteration 2 ended with production readiness APPROVED and `bug_reviewer` CLEAN; Composer observed final Fast and sole normalization Full CI, ran the pre-commit gate, and made one local closeout commit. Composer-final Full CI later exposed the stale `antigravity governed role defs under config/agents` count in `Invoke-Phase2FastCI.ps1`; the expectation was corrected from 4 to the manifest's five governed destinations (including `repository_explorer`) with the combined working-tree counts above recomputed accordingly.
+- **Checklist:**
+  - [x] Four missing `repository_explorer` routes implemented without changing OpenCode, VS Code, or Codex routes.
+  - [x] Registry, inventory, current-state checks, and six-stack ledger updated through sanctioned mechanisms.
+  - [x] Cursor, Antigravity, Cline, Kilocode, and overlay documentation cascades synchronized.
+  - [x] Implementer-owned dual review APPROVED.
+  - [x] Composer Full CI, pre-commit gate, and local commit.
+
 
 ---
 

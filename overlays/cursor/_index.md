@@ -1,6 +1,6 @@
 # Cursor overlay — copy-out map
 
-**Last updated:** 2026-09-13
+**Last updated:** 2026-09-14
 **Status:** pointer-first live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) — thin skills/agents + hybrid rules on `~/.cursor`. Phase 0 baseline (restore-only): `C:/Users/admin/.cursor-backup-pre-host-sync-build-20260821-012600`. Sync does **not** create backups.
 
 ## Context
@@ -34,6 +34,7 @@ On copy-out: merge `{{COMPANION_ROOT}}` → absolute path to this repo (e.g. `C:
 | `agents/planner.md` | [agents/planner.md](./agents/planner.md) | `{{COMPANION_ROOT}}/agents/planner.md` |
 | `agents/plan-reviewer.md` | [agents/plan-reviewer.md](./agents/plan-reviewer.md) | `{{COMPANION_ROOT}}/agents/plan_reviewer.md` |
 | `agents/reviewer-a.md` | [agents/reviewer-a.md](./agents/reviewer-a.md) | `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md` |
+| `agents/repository_explorer.md` | [agents/repository_explorer.md](./agents/repository_explorer.md) | `{{COMPANION_ROOT}}/agents/repository_explorer.md` |
 | `rules/*.mdc` | [rules/](./rules/) | `{{COMPANION_ROOT}}/rules/` (+ spawn blocks to host `skills/`) |
 | `review-subagent-models.md` | [review-subagent-models.md](./review-subagent-models.md) | overlay leaf; companion cites in body |
 
@@ -46,6 +47,7 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 | `planner` | `planner` |
 | `plan-reviewer` | `plan_reviewer` |
 | `reviewer-a` | `production_readiness_reviewer` |
+| `repository_explorer` | `repository_explorer` |
 | Bugbot | `bug_reviewer` (Target contract only) |
 
 ### Skills without Cursor overlay harness (by design)
@@ -96,6 +98,7 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 | planner | [planner.md](./agents/planner.md) | `{{COMPANION_ROOT}}/agents/planner.md` |
 | plan-reviewer | [plan-reviewer.md](./agents/plan-reviewer.md) | `{{COMPANION_ROOT}}/agents/plan_reviewer.md` |
 | reviewer-a | [reviewer-a.md](./agents/reviewer-a.md) | `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md` |
+| repository_explorer | [repository_explorer.md](./agents/repository_explorer.md) | `{{COMPANION_ROOT}}/agents/repository_explorer.md` |
 
 ## Provenance
 

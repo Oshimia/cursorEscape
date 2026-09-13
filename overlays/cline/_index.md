@@ -1,5 +1,7 @@
 # cline overlay (5th stack — VS Code extension harness)
 
+**Last updated:** 2026-09-14
+
 **Stack:** `Cline` · **Live root:** `~/.cline/` (docs-verified 2026-09-01; see `analysis/cline-kilo-probes-2026-09.md`) · **Manifest:** `scripts/host-sync/manifests/cline.manifest.psd1` · **Adapter:** shared `Generic.Adapter.ps1` (dispatch fallback — no per-stack adapter file)
 
 Thin host harness per Approach A. Pointer-first: rule/workflow bodies Read companion procedure via absolute `{{COMPANION_ROOT}}` paths after token merge.
@@ -11,7 +13,7 @@ Thin host harness per Approach A. Pointer-first: rule/workflow bodies Read compa
 | Global rules | `~/.cline/rules/` | 1 always-on composed rule (this stack) |
 | Global workflows | `~/.cline/data/workflows/` | plan/review/closeout trio |
 | Rules toggles | new files default-ON; user can toggle OFF | deviation row: gate persistence depends on toggles |
-| Dual review | separate fresh task/session per governed child-agent leg (no nested subagent spawn; per cline-cli-subagent orchestr analysis) | governed legs — reviewers and the planner fallback — isolated by fresh task, with canonical envelopes |
+| Governed child agents | separate fresh task/session per governed child-agent leg (no nested subagent spawn; per cline-cli-subagent orchestr analysis) | governed legs — reviewers, planner, and `repository_explorer` investigations — isolated by fresh task, with canonical envelopes |
 | MCP | `~/.cline/data/settings/cline_mcp_settings.json` | NeverTouch |
 | Compat dirs | `~/Documents/Cline/{Rules,Workflows}` read too | fallback table (composite dest) only if probe claims primary scan fails |
 

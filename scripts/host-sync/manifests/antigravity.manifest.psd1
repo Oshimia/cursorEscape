@@ -52,6 +52,7 @@
         @{ Source = 'agents/plan_reviewer.md'; Dest = 'config/agents/plan_reviewer.md' }
         @{ Source = 'agents/production_readiness_reviewer.md'; Dest = 'config/agents/production_readiness_reviewer.md' }
         @{ Source = 'agents/bug_reviewer.md'; Dest = 'config/agents/bug_reviewer.md' }
+        @{ Source = 'agents/repository_explorer.md'; Dest = 'config/agents/repository_explorer.md' }
     )
     HardExcludes        = @(
         'antigravity/global_workflows/caveman.md',
