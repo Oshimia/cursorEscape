@@ -1,8 +1,8 @@
 # Procedure normalization inventory — 2026-09
 
-**Phase:** 0 · **Status:** implementation-under-review · **Schema:** v2 · **Snapshot date:** 2026-09-11
+**Phase:** 0 · **Status:** implementation-under-review · **Schema:** v2 · **Snapshot date:** 2026-09-11 · **Last updated:** 2026-09-13
 
-This is a read-only current-state snapshot. It identifies evidence and policy; it does not authorize migration or Apply.
+This is a read-only current-state snapshot. It identifies evidence and policy; it does not authorize migration or Apply. The snapshot date is the original Phase 0 capture; the last-updated date records later reconciliation edits only.
 
 ## Representation terms
 

@@ -11,7 +11,7 @@ Thin host harness per Approach A. Pointer-first: rule/workflow bodies Read compa
 | Global rules | `~/.cline/rules/` | 1 always-on composed rule (this stack) |
 | Global workflows | `~/.cline/data/workflows/` | plan/review/closeout trio |
 | Rules toggles | new files default-ON; user can toggle OFF | deviation row: gate persistence depends on toggles |
-| Dual review | separate fresh task/session per reviewer leg (no nested subagent spawn; per cline-cli-subagent orchestr analysis) | reviewers isolated by fresh task, with canonical envelopes |
+| Dual review | separate fresh task/session per governed child-agent leg (no nested subagent spawn; per cline-cli-subagent orchestr analysis) | governed legs — reviewers and the planner fallback — isolated by fresh task, with canonical envelopes |
 | MCP | `~/.cline/data/settings/cline_mcp_settings.json` | NeverTouch |
 | Compat dirs | `~/Documents/Cline/{Rules,Workflows}` read too | fallback table (composite dest) only if probe claims primary scan fails |
 
@@ -33,4 +33,4 @@ Pointer-only (never copied): `_index.md`, this mapping, companion SoT trees.
 
 - `~/.cline/data/{sessions,db,cache,workspaces,settings/{providers,global-settings}}`, MCP settings — **NeverTouch** (live app state; secrets).
 - `~/Documents/Cline/**` — compat path; not written (read-only consideration).
-- No agent defs synced (separate fresh task/session planner and reviewer legs per deviation).
+- No agent defs synced (separate fresh task/session per governed child-agent leg per deviation; see `workflow/agent-invocation.md` and `agents/planner.md`).

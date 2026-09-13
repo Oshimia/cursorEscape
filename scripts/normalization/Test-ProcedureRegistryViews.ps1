@@ -48,6 +48,19 @@ try {
   Assert-View 'empty resolver result fails closed' $threw
 } catch { $failures++; Write-Output "FAIL: resolver execution: $($_.Exception.Message)" }
 
+try {
+  Assert-View 'destination count: copy entries' ((Get-StackManifestDestinationCount -Manifest @{ CopyEntries = @(1,2,3) }) -eq 3)
+  Assert-View 'destination count: hybrid rules' ((Get-StackManifestDestinationCount -Manifest @{ CopyEntries = @(1,2); HybridRuleIds = @(1,2,3) }) -eq 5)
+  Assert-View 'destination count: dual write' ((Get-StackManifestDestinationCount -Manifest @{ CopyEntries = @(1); AgentsDualWrite = @{}; JsonMerge = @{} }) -eq 3)
+  Assert-View 'destination count: destination entries' ((Get-StackManifestDestinationCount -Manifest @{ DestinationEntries = @(1,2,3,4) }) -eq 4)
+  $halfDualWriteThrew = $false
+  try { $null = Get-StackManifestDestinationCount -Manifest @{ CopyEntries = @(1); AgentsDualWrite = @{} } } catch { $halfDualWriteThrew = $true }
+  Assert-View 'destination count: half dual-write fails closed' $halfDualWriteThrew
+  $unknownShapeThrew = $false
+  try { $null = Get-StackManifestDestinationCount -Manifest @{} } catch { $unknownShapeThrew = $true }
+  Assert-View 'destination count: unknown manifest shape fails closed' $unknownShapeThrew
+} catch { $failures++; Write-Output "FAIL: destination-count helper execution: $($_.Exception.Message)" }
+
 function Get-FreshCatalogs {
   $catalogs = @{}
   foreach ($kind in @('agents','skills','rules','workflows')) { $catalogs[$kind] = Get-Content -Raw (Join-Path $RepoRoot "catalog/$kind.json") | ConvertFrom-Json }
@@ -191,6 +204,57 @@ try {
   $absentDefaultOutput = (& $checker -RepoRoot $RepoRoot -InventoryJsonPath $absentInventoryPath *>&1 | Out-String)
   $absentDefaultExit = $LASTEXITCODE
   Assert-View 'absent historical baseline fails closed by default' ($absentDefaultExit -eq 1 -and $absentDefaultOutput.Contains('HistoricalBaselinePath: absent')) "exit=$absentDefaultExit"
+
+  function Invoke-InventoryMutation([scriptblock]$Mutate) {
+    $inventory = Get-Content -Raw (Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json') | ConvertFrom-Json
+    & $Mutate $inventory
+    $path = Join-Path $checkerTemp ("inventory-" + [Guid]::NewGuid().ToString('N') + '.json')
+    $inventory | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $path
+    $output = (& $checker -RepoRoot $RepoRoot -InventoryJsonPath $path -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
+    return [pscustomobject]@{ Exit = $LASTEXITCODE; Output = $output }
+  }
+  function Assert-CheckerMutation([string]$Name,[scriptblock]$Mutate,[string[]]$Signatures) {
+    $observed = Invoke-InventoryMutation $Mutate
+    $missing = @($Signatures | Where-Object { -not $observed.Output.Contains($_) })
+    Assert-View $Name ($observed.Exit -eq 1 -and $missing.Count -eq 0) "exit=$($observed.Exit); missing=$($missing -join '; ')"
+  }
+  Assert-CheckerMutation 'represented pair listed as pending ambiguity fails' {
+    param($i)
+    $ambiguity = $i.ambiguities_requiring_owner_confirmation | Where-Object { $_.id -eq 'U-Cursor-Bugbot' }
+    $ambiguity.pending_missing_pairs = @([pscustomobject]@{ host = 'Cline'; agent = 'planner' })
+  } @('AmbiguityPendingPairRepresented: U-Cursor-Bugbot -> Cline|planner')
+  Assert-CheckerMutation 'unknown pair listed as pending ambiguity fails' {
+    param($i)
+    $ambiguity = $i.ambiguities_requiring_owner_confirmation | Where-Object { $_.id -eq 'U-Cursor-Bugbot' }
+    $ambiguity.pending_missing_pairs = @([pscustomobject]@{ host = 'Cline'; agent = 'not-a-governed-agent' })
+  } @('AmbiguityPendingPairUnknown: U-Cursor-Bugbot -> Cline|not-a-governed-agent')
+  # The declared ledger row feeds both row-agreement and manifest-derived count
+  # invariants, so the mutation asserts both observed signatures.
+  Assert-CheckerMutation 'ledger destination-count mismatch fails' {
+    param($i) $i.render_baselines.six_stack_ledger_entries[0].destinationCount = 99
+  } @('LedgerDestinationCount: Cursor manifest-derived=18 ledger=99', 'LedgerRowAgreement: row 0')
+  Assert-CheckerMutation 'missing last_updated date fails' {
+    param($i) $i.PSObject.Properties.Remove('last_updated')
+  } @("InventoryLastUpdatedFormat: invalid ISO calendar date ''")
+  Assert-CheckerMutation 'snapshot date drift fails' {
+    param($i) $i.inventory_date = '2026-09-12'
+  } @("InventorySnapshotDate: expected '2026-09-11', got '2026-09-12'")
+
+  # Markdown drift uses a temporary fixture through the -InventoryMdPath seam;
+  # repository evidence is never mutated.
+  $markdownOriginal = Get-Content -Raw (Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.md')
+  $markdownTrimmedPath = Join-Path $checkerTemp 'trimmed-ambiguities.md'
+  ($markdownOriginal -replace '\| U-Render-Baseline-Reconciliation \|[^\r\n]+', '') | Set-Content -LiteralPath $markdownTrimmedPath
+  $markdownTrimmedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownTrimmedPath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
+  Assert-View 'markdown ambiguity row removal fails' ($LASTEXITCODE -eq 1 -and $markdownTrimmedOutput.Contains('MarkdownAmbiguityCount: expected 4, got 3')) "exit=$LASTEXITCODE"
+  $markdownRenamedPath = Join-Path $checkerTemp 'renamed-ambiguity.md'
+  ($markdownOriginal -replace '\| U-Cursor-Bugbot \|', '| U-Renamed-Bugbot |') | Set-Content -LiteralPath $markdownRenamedPath
+  $markdownRenamedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownRenamedPath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
+  Assert-View 'markdown ambiguity id drift fails' ($LASTEXITCODE -eq 1 -and $markdownRenamedOutput.Contains("MarkdownAmbiguityId: row 0 expected 'U-Cursor-Bugbot', got 'U-Renamed-Bugbot'")) "exit=$LASTEXITCODE"
+  $markdownNoUpdatePath = Join-Path $checkerTemp 'stale-dates.md'
+  ($markdownOriginal -replace ' · \*\*Last updated:\*\* 2026-09-13', '') | Set-Content -LiteralPath $markdownNoUpdatePath
+  $markdownNoUpdateOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownNoUpdatePath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
+  Assert-View 'markdown last-updated drift fails' ($LASTEXITCODE -eq 1 -and $markdownNoUpdateOutput.Contains('MarkdownInventoryLastUpdated')) "exit=$LASTEXITCODE"
 } catch { $failures++; Write-Output "FAIL: current-state checker execution: $($_.Exception.Message)" }
 finally { if (Test-Path -LiteralPath $checkerTemp) { Remove-Item -LiteralPath $checkerTemp -Recurse -Force -ErrorAction SilentlyContinue } }
 

@@ -253,6 +253,15 @@ The approved local plan remains the full source of goals, alternatives, assumpti
 
 ---
 
+#### Phase 2A deferred batchables (closed 2026-09-13)
+
+- [x] Shared destination-count helper `Get-StackManifestDestinationCount` exported from `scripts/normalization/ProcedureRegistry.psm1`; the current-state checker and the six-stack render ledger derive the rule from that one fail-closed function. Ledger bytes verified unchanged (no regeneration required).
+- [x] Inventory dates: JSON and Markdown keep the Phase 0 snapshot date `2026-09-11` and add last-updated `2026-09-13`; the checker validates presence, ISO format, ordering, and cross-surface agreement.
+- [x] Cline/Kilocode SOP/overlay wording generalized to governed child-agent legs so the planner fallback is no longer excluded; pointers stay canonical (`workflow/agent-invocation.md`, `agents/planner.md`).
+- [x] Focused mutation tests cover represented/unknown pending-ambiguity pairs, ledger destination-count mismatch, `MarkdownAmbiguity*` drift, and inventory-date drift via temporary fixtures.
+
+---
+
 
 ### Phase 3 — Skill normalization in bounded batches
 

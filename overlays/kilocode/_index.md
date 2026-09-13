@@ -10,8 +10,8 @@ Thin host harness per Approach A. Pointer-first via absolute `{{COMPANION_ROOT}}
 |---|---|---|
 | Global rules | `.kilocode/rules/` **auto-included** (backward compat; new model = `kilo.jsonc instructions`) | 1 always-on composed rule |
 | Global workflows | **auto-migrated from `.kilocode/workflows/` to command format on startup**; slash = `/filename` | trio (`/plan`, `/review`, `/closeout`) |
-| Frontmatter | `description`, `agent`, `model`, `variant`, `subtask` | `subtask: true` potential for review legs (probe at smoke before reliance) |
-| Subagents | first-class NEW feature; depth/behavior unproven | until attested, use separate fresh task/session isolation per reviewer leg |
+| Frontmatter | `description`, `agent`, `model`, `variant`, `subtask` | `subtask: true` potential for governed child-agent legs (probe at smoke before reliance) |
+| Subagents | first-class NEW feature; depth/behavior unproven | until attested, use separate fresh task/session isolation per governed child-agent leg |
 | Rules toggles | none (all discovered rules concatenate always-on; global-first) | no toggle deviation; thin budget mandatory |
 | MCP | `<globalStorage>/settings/mcp_settings.json` + `.kilo/mcp.json` | NeverTouch |
 

@@ -37,6 +37,34 @@ function Get-MarkdownTableRow([string[]]$Lines,[string]$Heading,[string]$Id,[int
   return $null
 }
 
+function Get-StackManifestDestinationCount {
+  <#
+    Shared fail-closed rule for the expected render-destination count of one
+    parsed host stack manifest. Used by the current-state checker and the
+    six-stack render ledger so the count is expressed exactly once:
+    CopyEntries (+ HybridRuleIds for Cursor) (+ the two dual-write
+    AGENTS/opencode.json destinations for OpenCode), or the generic
+    DestinationEntries model.
+  #>
+  param([Parameter(Mandatory)]$Manifest)
+  if ($null -eq $Manifest -or $Manifest -isnot [System.Collections.IDictionary]) { throw 'FAIL: stack manifest must be a parsed hashtable' }
+  $hasCopy = $Manifest.Contains('CopyEntries')
+  $hasDestinations = $Manifest.Contains('DestinationEntries')
+  if ($hasCopy -and $hasDestinations) { throw 'FAIL: stack manifest defines both CopyEntries and DestinationEntries' }
+  if ($hasDestinations) {
+    foreach ($extra in @('HybridRuleIds','AgentsDualWrite','JsonMerge')) { if ($Manifest.Contains($extra)) { throw "FAIL: DestinationEntries manifest also defines $extra" } }
+    return @($Manifest['DestinationEntries']).Count
+  }
+  if (-not $hasCopy) { throw 'FAIL: stack manifest defines neither CopyEntries nor DestinationEntries' }
+  $count = @($Manifest['CopyEntries']).Count
+  if ($Manifest.Contains('HybridRuleIds')) { $count += @($Manifest['HybridRuleIds']).Count }
+  $hasDualWrite = $Manifest.Contains('AgentsDualWrite')
+  $hasJsonMerge = $Manifest.Contains('JsonMerge')
+  if ($hasDualWrite -ne $hasJsonMerge) { throw 'FAIL: dual-write stacks must define both AgentsDualWrite and JsonMerge' }
+  if ($hasDualWrite) { $count += 2 }
+  return $count
+}
+
 function Get-CanonicalAgentContracts([string]$RepoRoot,$Inventory) {
   $workflowPath = Join-Path $RepoRoot 'workflow/agent-invocation.md'
   if (-not (Test-Path -LiteralPath $workflowPath -PathType Leaf)) { throw "FAIL: canonical invocation contract missing: workflow/agent-invocation.md" }
@@ -344,4 +372,4 @@ function Write-RegistryManagedView {
   return $view
 }
 
-Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot')
+Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot','Get-StackManifestDestinationCount')

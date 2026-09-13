@@ -26,7 +26,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Apply                    # global (normativ
 
 | # | Deviation | Evidence |
 | --- | --------- | -------- |
-| 1 | Subagents are first-class NEW in this platform; depth/behavior unproven — verify at smoke before conductor reliance | kilo.ai custom-subagents docs |
+| 1 | Subagents are first-class NEW in this platform; depth/behavior unproven — governed child-agent legs use separate fresh task/session until smoke-attested | kilo.ai custom-subagents docs; [canonical invocation](../../workflow/agent-invocation.md) |
 | 2 | Reviewer read-only is instruction-level (mode-defs / custom-modes out of scope) | kilo.ai custom-modes docs |
 | 3 | All discovered rules concatenate always-on (no toggle; global-first; project precedence on conflict) | kilo.ai custom-rules "Rule Loading Order" |
 | 4 | `kilo.jsonc` new-model config (global `~/.config/kilo`) is out-of-scope — future-migration leg only, owner-decided | kilo.ai custom-rules migration note |

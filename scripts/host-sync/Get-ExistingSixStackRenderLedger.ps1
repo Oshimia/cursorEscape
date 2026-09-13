@@ -19,6 +19,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+Import-Module (Join-Path $PSScriptRoot '..' 'normalization' 'ProcedureRegistry.psm1') -Force
 
 function Test-PathWithin {
     param(
@@ -141,6 +142,13 @@ function Add-RenderRows {
         $merged = Merge-OpenCodeHarnessJson -Specimen $specimen -LiveJsonPath (Join-Path $ScratchRoot 'absent-opencode.json') `
             -PreserveTopLevelKeys @($Manifest.JsonMerge.PreserveTopLevelKeys)
         [void]$Rows.Add([ordered]@{ stack = $StackId; destination = 'opencode.json'; sha256 = Get-NormalizedSha256 ((ConvertTo-CanonicalRenderNode $merged) | ConvertTo-Json -Depth 100) })
+    }
+    # The destination-count rule lives in ProcedureRegistry.psm1 and is shared
+    # with the current-state checker; a disagreement is a rendering defect.
+    $expectedCount = Get-StackManifestDestinationCount -Manifest $Manifest
+    $renderedCount = @($Rows | Where-Object { [string]$_.stack -eq $StackId }).Count
+    if ($renderedCount -ne $expectedCount) {
+        throw "Destination-count rule violated for ${StackId}: rendered=$renderedCount manifest-derived=$expectedCount"
     }
 }
 

@@ -27,7 +27,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Apply                 # global (normative)
 
 | # | Deviation | Evidence |
 | --- | --------- | -------- |
-| 1 | Separate fresh task/session per reviewer leg; no nested subagent spawn | [cline-cli-subagent orchestration](../../analysis/cline-cli-subagent-orchestration-2026-08.md) |
+| 1 | Separate fresh task/session per governed child-agent leg; no nested subagent spawn | [canonical invocation](../../workflow/agent-invocation.md); [cline-cli-subagent orchestration](../../analysis/cline-cli-subagent-orchestration-2026-08.md) |
 | 2 | Rules toggle-able by user (gates discover-default-ON but can be toggled OFF) | Cline rules docs (toggle semantics) |
 | 3 | Skills rendered as named `.md` workflows (no SKILL.md-dir contract) | Cline workflows docs |
 | 4 | `cline_mcp_settings.json` + `~/.cline/data/{sessions,db,cache,workspaces}` never touched | manifest NeverTouch |

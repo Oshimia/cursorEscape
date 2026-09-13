@@ -12,12 +12,14 @@
 param(
     [string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..' '..')).Path,
     [string]$InventoryJsonPath = '',
+    [string]$InventoryMdPath = '',
     [switch]$AllowInaccessibleHistoricalBaseline
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+Import-Module (Join-Path $PSScriptRoot 'ProcedureRegistry.psm1') -Force
 $JsonPath = if ($InventoryJsonPath) { $InventoryJsonPath } else { Join-Path $RepoRoot 'analysis' 'procedure-normalization-inventory-2026-09.json' }
-$MdPath = Join-Path $RepoRoot 'analysis' 'procedure-normalization-inventory-2026-09.md'
+$MdPath = if ($InventoryMdPath) { $InventoryMdPath } else { Join-Path $RepoRoot 'analysis' 'procedure-normalization-inventory-2026-09.md' }
 $failures = [System.Collections.Generic.List[string]]::new()
 function Add-Failure([string]$Invariant,[string]$Detail) { $failures.Add("${Invariant}: $Detail") }
 function Test-RepoPath([string]$Relative,[string]$Invariant,[switch]$Directory) {
@@ -80,6 +82,18 @@ foreach ($r in $reps) { if ($r -notin $j.representation_values) { Add-Failure 'R
 if ($j.schema_version -ne 2) { Add-Failure 'SchemaVersion' "expected 2" }
 if ($j.status -ne 'implementation-under-review') { Add-Failure 'Status' 'wrong' }
 if ($j.review_iteration -ne 3) { Add-Failure 'ReviewIteration' "expected 3, got $($j.review_iteration)" }
+
+# Inventory dates: inventory_date is the immutable Phase 0 snapshot; last_updated
+# records later maintenance. Both are required, must parse as ISO calendar dates,
+# and must stay ordered. Presence is not optional.
+$snapshotDate = [string](Get-SourceProp $j 'inventory_date')
+$lastUpdated = [string](Get-SourceProp $j 'last_updated')
+if ($snapshotDate -ne '2026-09-11') { Add-Failure 'InventorySnapshotDate' "expected '2026-09-11', got '$snapshotDate'" }
+$parsedSnapshot = [datetime]::MinValue; $parsedUpdated = [datetime]::MinValue
+$snapshotParsed = [datetime]::TryParseExact($snapshotDate, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$parsedSnapshot)
+$updatedParsed = [datetime]::TryParseExact($lastUpdated, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$parsedUpdated)
+if (-not $updatedParsed) { Add-Failure 'InventoryLastUpdatedFormat' "invalid ISO calendar date '$lastUpdated'" }
+elseif (-not $snapshotParsed -or $parsedUpdated -lt $parsedSnapshot) { Add-Failure 'InventoryLastUpdatedFormat' "last_updated '$lastUpdated' predates snapshot '$snapshotDate'" }
 if (($j.hosts | Sort-Object) -join '|' -ne (($hosts | Sort-Object) -join '|')) { Add-Failure 'HostSet' 'differs' }
 if (($j.governed_agents | Sort-Object) -join '|' -ne (($agents | Sort-Object) -join '|')) { Add-Failure 'AgentSet' 'differs' }
 if ($j.parity_matrix.Count -ne 49) { Add-Failure 'CartesianCoverage' "expected 49, got $($j.parity_matrix.Count)" }
@@ -347,15 +361,13 @@ $ledger = Get-Content -Raw (Join-Path $RepoRoot $b.six_stack_ledger_path) | Conv
 if ($b.six_stack_ledger_entries.Count -ne 6) { Add-Failure 'SixStackLedgerRowCount' }
 for ($i = 0; $i -lt 6; $i++) { $a = $ledger.entries[$i]; $dd = $b.six_stack_ledger_entries[$i]; if ($a.stack -ne $dd.stack -or $a.destinationCount -ne $dd.destinationCount -or $a.sha256 -ne $dd.sha256) { Add-Failure 'LedgerRowAgreement' "row $i" } }
 # Manifest-derived destination counts must match the declared ledger rows
-# before review launch. Count rule mirrors Get-ExistingSixStackRenderLedger:
-# CopyEntries + HybridRuleIds (Cursor) + dual-write AGENTS/opencode pair (OpenCode).
+# before review launch. The count rule is shared with Get-ExistingSixStackRenderLedger
+# through Get-StackManifestDestinationCount; a malformed manifest shape fails closed.
 for ($i = 0; $i -lt 6; $i++) {
     $dd = $b.six_stack_ledger_entries[$i]; $stack = [string]$dd.stack
     if (-not $manifestData.ContainsKey($stack)) { Add-Failure 'LedgerStackManifestMissing' $stack; continue }
     $stackManifest = $manifestData[$stack]
-    $expectedCount = @($stackManifest.CopyEntries).Count
-    if ($stack -eq 'Cursor') { $expectedCount += @($stackManifest.HybridRuleIds).Count }
-    if ($stack -eq 'OpenCode') { $expectedCount += 2 }
+    try { $expectedCount = Get-StackManifestDestinationCount -Manifest $stackManifest } catch { Add-Failure 'LedgerDestinationCount' "$stack $($_.Exception.Message)"; continue }
     if ([int]$dd.destinationCount -ne $expectedCount) { Add-Failure 'LedgerDestinationCount' "$stack manifest-derived=$expectedCount ledger=$($dd.destinationCount)" }
 }
 if ($b.codex_rendered_destination_count -ne $render.entries.Count) { Add-Failure 'CodexRenderedCount' }
@@ -370,6 +382,8 @@ foreach ($x in $b.baseline_directories_historical) { Test-ExternalPath $x 'Histo
 
 # Markdown/JSON consistency
 if ($md -notmatch [regex]::Escape('| Total pairs | 49 |')) { Add-Failure 'MarkdownTotalPairs' }
+if ($snapshotDate -and -not ($md -match [regex]::Escape("**Snapshot date:** $snapshotDate"))) { Add-Failure 'MarkdownInventorySnapshotDate' "expected '$snapshotDate'" }
+if ($lastUpdated -and -not ($md -match [regex]::Escape("**Last updated:** $lastUpdated"))) { Add-Failure 'MarkdownInventoryLastUpdated' "expected '$lastUpdated'" }
 if ($md -notmatch [regex]::Escape('| Represented | 37 |')) { Add-Failure 'MarkdownRepresented' }
 if ($md -notmatch [regex]::Escape('| Missing | 12 |')) { Add-Failure 'MarkdownMissing' }
 foreach ($h in $hosts) { $hr = @($j.parity_matrix | Where-Object host -eq $h); $n = @($hr | Where-Object representation -eq 'native-definition').Count; $g = @($hr | Where-Object representation -eq 'generated-native-projection').Count; $fb = @($hr | Where-Object representation -eq 'fallback-launch-contract').Count; $ms = @($hr | Where-Object representation -eq 'missing').Count; if ($md -notmatch [regex]::Escape("| $h | $n | $g | $fb | $ms |")) { Add-Failure 'MarkdownMatrixRow' $h } }
