@@ -1,12 +1,11 @@
 # plan (Cline overlay)
 
-Thin harness. Full procedure: Read `{{COMPANION_ROOT}}/workflow/discovery.md` then `{{COMPANION_ROOT}}/skills/implementation-plan/SKILL.md`.
+Thin harness. Full procedure: Read `{{COMPANION_ROOT}}/workflow/discovery.md` then `{{COMPANION_ROOT}}/skills/implementation-plan/SKILL.md`. `planner` and `plan_reviewer` are fresh-task/session fallback routes — Cline has no governed subagent definitions for them, and none is claimed here.
 
 ## Steps
 
-1. Read companion skill `{{COMPANION_ROOT}}/skills/implementation-plan/SKILL.md`.
-2. Follow `{{COMPANION_ROOT}}/workflow/discovery.md` Step 0/fallback.
-3. Draft the plan per the implementation-plan template; then start the plan-review loop (see below via the plan-review workflow).
-4. For each plan-review pass, start a fresh Cline task/session for `plan_reviewer`; do not reuse the drafting conversation. Begin its payload with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`plan_reviewer`; alias `plan_reviewer`; clean-context; read-only; `plan-review`). After `---`, explicitly pack absolute repository path, one-paragraph task summary, review pass, the full synthesized plan, and a prohibition on prior review transcripts. Return only that reviewer's result to the parent.
+1. **Planner pass (fresh task/session):** start a fresh Cline task/session for `planner`; never reuse the requesting conversation or a prior planning task. Begin its payload with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`planner`; alias `none`; clean-context; read-only; `planning`), first-read `{{COMPANION_ROOT}}/agents/planner.md`, and required reading `workflow/agent-invocation.md`, `agents/planner.md`, `skills/implementation-plan/SKILL.md`. After `---`, explicitly pack the absolute repository path, one-paragraph task summary, applicable docs, constraints, and the optional Escalation hint. Inside that task, read the implementation-plan skill and follow `{{COMPANION_ROOT}}/workflow/discovery.md` Step 0/fallback, then draft per the template. A missing, malformed, contradictory, or unreadable envelope fails loudly as a planning failure naming the element; do not draft and do not infer identity from host routing.
+2. **Valid planner result only:** return only that planner task's structured plan to the parent. A reused conversation, an empty response, or a routing placeholder is **not** a valid planner result — treat it as a planning failure and start another fresh task; never reconstruct the plan from surrounding chat.
+3. For each plan-review pass, start a fresh Cline task/session for `plan_reviewer`; do not reuse the planner's conversation. Begin its payload with the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`plan_reviewer`; alias `plan_reviewer`; clean-context; read-only; `plan-review`). After `---`, explicitly pack absolute repository path, one-paragraph task summary, review pass, the full synthesized plan, and a prohibition on prior review transcripts. Return only that reviewer's result to the parent.
 
 Companion reachability: `{{COMPANION_ROOT}}` resolves to the cursorEscape SoT checkout.

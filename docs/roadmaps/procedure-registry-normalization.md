@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete — integrated corrections approved and committed 2026-09-13
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2 ready
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B ready
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -18,6 +18,8 @@ Phase 0 was closed in good faith on 2026-09-11: renewed loop iteration 3 achieve
 Phase 1 recovery was closed in good faith on 2026-09-13: integration achieved dual approval after bounded correction loops, Composer observed the sole normalization Full CI passing, and the good-faith historical closeout commit `6fcb695` exists. The same post-closeout integrated review reopened Phase 1 on 2026-09-13 because the registry conflated frontmatter model-invocation disabling with explicit-only inventory policy. The integrated correction cycle is now complete: the bounded corrections passed replacement dual review with production readiness APPROVED and the bug sweep CLEAN, and Composer observed final Fast and sole normalization Full CI before the local correction closeout commit.
 
 Final Composer closeout comprised observed Fast and sole normalization Full CI, the pre-commit gate, and one local correction commit; it does not authorize push or live Apply.
+
+Phase 2A added explicit `planner` routes for Cursor and Antigravity plus Cline and Kilocode fresh-task/session fallbacks. It completed iteration 3 with production readiness APPROVED and `bug_reviewer` CLEAN, raising represented agent/host pairs from 33 to 37 of 49. Composer accepted the transparent 21-file scope deviation because the additional files were generated-ledger and route-map/index cascade required by must-fix findings; the slice remained under the 473 changed/new physical lines recorded for review. Final Fast and sole normalization Full CI passed, followed by the pre-commit gate; this roadmap row is closed by the Phase 2A slice commit that contains it.
 
 The owner directed an efficiency-preserving recovery: retain the largely complete tree, review it in declared functional scopes, fix only review-identified defects, then run one integration reviewer pair and normalization Full CI. This exception does not authorize additional foundation expansion; the packed recovery contract governs the active recovery.
 
@@ -224,6 +226,30 @@ The approved local plan remains the full source of goals, alternatives, assumpti
   - [ ] Baseline churn limited to slice.
   - [ ] Full CI observed pass after dual approval.
 - **Risks:** Missing fallback route or host format regression.
+
+---
+
+### Phase 2A — planner parity on Cursor, Antigravity, Cline, and Kilocode
+
+- **Status:** complete.
+- **Scope:** explicit `planner` route on the four previously missing hosts only.
+- **Routes:** Cursor and Antigravity native host-definition wrappers (`overlays/cursor/agents/planner.md`, `overlays/antigravity/agents/planner.md`) with manifest copy entries; Cline and Kilocode explicit fresh-task/session fallback launch contracts in `overlays/cline/workflows/plan.md` and `overlays/kilocode/workflows/plan.md` — fresh task per planning pass; a reused conversation or empty response is a planning failure, never a valid planner result.
+- **Unchanged:** OpenCode, Vscode, and Codex `planner` routes; Cursor Bugbot (U-Cursor-Bugbot left untouched); no other missing pairs migrated.
+- **Slice shadow comparison:** `n/a` — no deterministic canonical→host shadow-comparison machinery exists yet (first generator/shadow seam is later Phase 2/3 render work; see U-Render-Baseline-Reconciliation). This slice's parity is enforced instead by the registry catalog↔inventory contract checks, fixture evidence-path validation, and the deterministic double-rendered managed view in Fast CI.
+- **Six-stack ledger:** regenerated through `Get-ExistingSixStackRenderLedger.ps1 -WriteLedger` (repeatability verified). The ledger was already stale at baseline `fae5945` — last regenerated at `6a377c0`, while `fae5945` changed `rules/iterative-code-review.md`, which feeds all six stacks — so the regeneration also repairs that pre-existing drift; inventory ledger rows are synchronized.
+- **Committed OpenCode C1 mirrors:** regenerated from the current planned dual-write render after Composer Full CI exposed the same pre-existing shared-rule drift at baseline `fae5945`. This generated-artifact repair is limited to the two byte-identical portable token mirrors and does not introduce new policy wording.
+- **File-count deviation for Composer scope check:** the corrected slice touches 21 files versus the 15-file per-slice cap. The four initial routes required the declared registry/inventory/manifest/wrapper/workflow surface (16 files), and must-fix review corrections added the generated ledger plus the source-facing agent/overlay indexes and host SOP route maps. Flagged here transparently for Composer triage (split, accept, or direct further correction); no hand-authored reclassification is implied.
+
+#### Phase 2A checklist
+
+- [x] Registry catalog and Phase 0 inventory parity matrix reconciled for the four `planner` pairs (37 represented / 12 missing).
+- [x] Cursor and Antigravity native wrappers plus manifest copy entries mirrored in the inventory.
+- [x] Cline and Kilocode fresh-task/session fallback contracts.
+- [x] Six-stack render ledger regenerated via the sanctioned generator and synchronized with the inventory.
+- [x] Ambiguity records reconciled with the parity matrix (structured pending-missing pairs; fail-closed checker added).
+- [x] Observed Fast CI and `git diff --check`; slice shadow comparison recorded `n/a` with reason above.
+- [x] Dual review APPROVED.
+- [x] Composer Full CI, pre-commit gate, and local commit.
 
 ---
 

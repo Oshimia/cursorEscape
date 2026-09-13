@@ -20,7 +20,7 @@ Thin host harness per Approach A. Pointer-first via absolute `{{COMPANION_ROOT}}
 | Live dest | Source class | Authored here? |
 |---|---|---|
 | `rules/cursor-escape-loop.md` | composed in sync order: `instructions/__header__.md` + `base:rules/agent-invocation.md` + `base:rules/iterative-plan-review.md` + `base:rules/iterative-code-review.md` + `base:rules/pre-commit-ci-gate.md` + `footers/kilocode-wiring.md` | header/footer |
-| `workflows/plan.md`, `workflows/review.md`, `workflows/closeout.md` | authored in this overlay (interactive dual-review adaptation) | trio only (host-adapted) |
+| `workflows/plan.md`, `workflows/review.md`, `workflows/closeout.md` | authored in this overlay (interactive dual-review adaptation) | trio only (host-adapted); `plan.md` carries the `planner` fresh-task fallback route |
 
 Pointer-only: `_index.md`, companion SoT trees.
 

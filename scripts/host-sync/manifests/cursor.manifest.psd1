@@ -14,6 +14,7 @@
         @{ Source = 'skills/documentation-architecture/SKILL.md'; Dest = 'skills/documentation-architecture/SKILL.md' }
         @{ Source = 'skills/opencode-headless-run/SKILL.md'; Dest = 'skills/opencode-headless-run/SKILL.md' }
         @{ Source = 'skills/opencode-history-search/SKILL.md'; Dest = 'skills/opencode-history-search/SKILL.md' }
+        @{ Source = 'agents/planner.md'; Dest = 'agents/planner.md' }
         @{ Source = 'agents/plan-reviewer.md'; Dest = 'agents/plan-reviewer.md' }
         @{ Source = 'agents/reviewer-a.md'; Dest = 'agents/reviewer-a.md' }
         @{ Source = 'review-subagent-models.md'; Dest = 'review-subagent-models.md' }

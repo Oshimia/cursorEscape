@@ -99,15 +99,15 @@ try {
   Assert-RegistryFailure $result 'agent route identity mismatch fails' 'HostRouteIdentity'
   $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].launchMechanism = 'wrong launch' }
   Assert-RegistryFailure $result 'agent launch mechanism mismatch fails' 'HostLaunchMechanism'
-  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].representation = 'native-definition' }
+  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].representation = 'generated-native-projection' }
   Assert-RegistryFailure $result 'agent host representation mismatch fails' 'HostRepresentation'
   $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].alias = 'wrong-alias' }
   Assert-RegistryFailure $result 'agent host alias mismatch fails' 'HostAlias'
-  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].authority = 'read-only' }
+  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].authority = 'workspace-write' }
   Assert-RegistryFailure $result 'agent host authority mismatch fails' 'HostAuthority'
-  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].isolation = 'clean-context' }
+  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].isolation = 'fresh task/session per pass' }
   Assert-RegistryFailure $result 'agent host isolation mismatch fails' 'HostIsolation'
-  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].classification = 'host wrapper' }
+  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].classification = 'generated output' }
   Assert-RegistryFailure $result 'agent host classification mismatch fails' 'HostClassification'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].explicitOnly = -not $c.skills.items[0].explicitOnly }
   Assert-RegistryFailure $result 'explicit-only mismatch fails' 'ExplicitOnlyMismatch'

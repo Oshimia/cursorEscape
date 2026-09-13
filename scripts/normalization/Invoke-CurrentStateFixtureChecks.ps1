@@ -128,6 +128,22 @@ foreach ($p in $j.parity_matrix) {
     foreach ($e in @($p.evidence_paths)) { if ($e -match "/$") { Test-RepoPath $e "PairEvidence[$k]" -Directory } else { Test-RepoPath $e "PairEvidence[$k]" } }
 }
 
+# Ambiguity truth: an open owner question may reference only pairs that are
+# still missing in the parity matrix. A represented pair (or an unknown pair)
+# listed as pending reopens settled work and fails closed.
+foreach ($a in @($j.ambiguities_requiring_owner_confirmation)) {
+    $aid = [string]$a.id
+    if ([string]::IsNullOrWhiteSpace($aid)) { Add-Failure 'AmbiguityIdentity' 'missing id'; continue }
+    $pendingProp = $a.PSObject.Properties['pending_missing_pairs']
+    if ($null -eq $pendingProp) { Add-Failure 'AmbiguityPendingPairsMissing' $aid; continue }
+    $pending = @($pendingProp.Value)
+    foreach ($pair in @($pending)) {
+        $pk = "$($pair.host)|$($pair.agent)"
+        if (-not $rows.ContainsKey($pk)) { Add-Failure 'AmbiguityPendingPairUnknown' "$aid -> $pk"; continue }
+        if ($rows[$pk].representation -ne 'missing') { Add-Failure 'AmbiguityPendingPairRepresented' "$aid -> $pk is $($rows[$pk].representation)" }
+    }
+}
+
 # Counts
 $actualMissing = @($j.parity_matrix | Where-Object representation -eq 'missing')
 if ($j.missing_count -ne $actualMissing.Count -or $j.represented_count -ne (49 - $actualMissing.Count) -or $j.total_pairs -ne 49) { Add-Failure 'ParityCounts' 'wrong' }
@@ -330,6 +346,18 @@ Test-RepoPath $b.six_stack_ledger_path 'LedgerPath'; Test-RepoPath $b.codex_rend
 $ledger = Get-Content -Raw (Join-Path $RepoRoot $b.six_stack_ledger_path) | ConvertFrom-Json; $render = Get-Content -Raw (Join-Path $RepoRoot $b.codex_render_plan_path) | ConvertFrom-Json
 if ($b.six_stack_ledger_entries.Count -ne 6) { Add-Failure 'SixStackLedgerRowCount' }
 for ($i = 0; $i -lt 6; $i++) { $a = $ledger.entries[$i]; $dd = $b.six_stack_ledger_entries[$i]; if ($a.stack -ne $dd.stack -or $a.destinationCount -ne $dd.destinationCount -or $a.sha256 -ne $dd.sha256) { Add-Failure 'LedgerRowAgreement' "row $i" } }
+# Manifest-derived destination counts must match the declared ledger rows
+# before review launch. Count rule mirrors Get-ExistingSixStackRenderLedger:
+# CopyEntries + HybridRuleIds (Cursor) + dual-write AGENTS/opencode pair (OpenCode).
+for ($i = 0; $i -lt 6; $i++) {
+    $dd = $b.six_stack_ledger_entries[$i]; $stack = [string]$dd.stack
+    if (-not $manifestData.ContainsKey($stack)) { Add-Failure 'LedgerStackManifestMissing' $stack; continue }
+    $stackManifest = $manifestData[$stack]
+    $expectedCount = @($stackManifest.CopyEntries).Count
+    if ($stack -eq 'Cursor') { $expectedCount += @($stackManifest.HybridRuleIds).Count }
+    if ($stack -eq 'OpenCode') { $expectedCount += 2 }
+    if ([int]$dd.destinationCount -ne $expectedCount) { Add-Failure 'LedgerDestinationCount' "$stack manifest-derived=$expectedCount ledger=$($dd.destinationCount)" }
+}
 if ($b.codex_rendered_destination_count -ne $render.entries.Count) { Add-Failure 'CodexRenderedCount' }
 $phys = @(Get-ChildItem -LiteralPath (Join-Path $RepoRoot $b.codex_physical_fixture_root) -Recurse -File | ForEach-Object { $_.FullName.Substring($RepoRoot.Length+1).Replace('\','/') } | Sort-Object)
 $decFix = @($b.codex_physical_fixture_files | Sort-Object)
@@ -342,10 +370,18 @@ foreach ($x in $b.baseline_directories_historical) { Test-ExternalPath $x 'Histo
 
 # Markdown/JSON consistency
 if ($md -notmatch [regex]::Escape('| Total pairs | 49 |')) { Add-Failure 'MarkdownTotalPairs' }
-if ($md -notmatch [regex]::Escape('| Represented | 33 |')) { Add-Failure 'MarkdownRepresented' }
-if ($md -notmatch [regex]::Escape('| Missing | 16 |')) { Add-Failure 'MarkdownMissing' }
+if ($md -notmatch [regex]::Escape('| Represented | 37 |')) { Add-Failure 'MarkdownRepresented' }
+if ($md -notmatch [regex]::Escape('| Missing | 12 |')) { Add-Failure 'MarkdownMissing' }
 foreach ($h in $hosts) { $hr = @($j.parity_matrix | Where-Object host -eq $h); $n = @($hr | Where-Object representation -eq 'native-definition').Count; $g = @($hr | Where-Object representation -eq 'generated-native-projection').Count; $fb = @($hr | Where-Object representation -eq 'fallback-launch-contract').Count; $ms = @($hr | Where-Object representation -eq 'missing').Count; if ($md -notmatch [regex]::Escape("| $h | $n | $g | $fb | $ms |")) { Add-Failure 'MarkdownMatrixRow' $h } }
 foreach ($x in $j.missing_pairs_with_proposed_phase2) { $row = "| $($x.host) | ``$($x.agent)`` | ``$($x.proposed_phase2)`` |"; if (-not $md.Contains($row)) { Add-Failure 'MarkdownMissingPair' "$($x.host)/$($x.agent)" } }
+
+# Ambiguity IDs must agree exactly between JSON and the Markdown table.
+$ambiguityHeader = '| ID | Question |'
+$ambiguityRows = @(Get-MarkdownTableRows $md $ambiguityHeader)
+$mdAmbiguityIds = @($ambiguityRows | ForEach-Object { @($_.Trim('|').Split('|'))[0].Trim() } | Where-Object { $_ })
+$jsonAmbiguityIds = @($j.ambiguities_requiring_owner_confirmation | ForEach-Object { [string]$_.id })
+if ($mdAmbiguityIds.Count -ne $jsonAmbiguityIds.Count) { Add-Failure 'MarkdownAmbiguityCount' "expected $($jsonAmbiguityIds.Count), got $($mdAmbiguityIds.Count)" }
+else { for ($i = 0; $i -lt $jsonAmbiguityIds.Count; $i++) { if ($mdAmbiguityIds[$i] -cne $jsonAmbiguityIds[$i]) { Add-Failure 'MarkdownAmbiguityId' "row $i expected '$($jsonAmbiguityIds[$i])', got '$($mdAmbiguityIds[$i])'" } } }
 
 # Manifest summary: every Markdown column is checked against inventory and the
 # parsed manifest. Table order also makes the reverse direction exact.

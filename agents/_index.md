@@ -1,6 +1,6 @@
 # Agent Role Contracts
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-13
 
 ## Context
 
@@ -16,7 +16,7 @@ Codex mirrors the seven portable roles as TOML wiring in [overlays/codex/agents]
 
 | Role | Contract | Phase | Cursor overlay (thin wrapper) |
 | ---- | -------- | ----- | ------------------------- |
-| planner | [planner.md](./planner.md) | Plan | (no Cursor agent file) |
+| planner | [planner.md](./planner.md) | Plan | [planner.md](../overlays/cursor/agents/planner.md) |
 | plan_reviewer | [plan_reviewer.md](./plan_reviewer.md) | Plan gate | [plan-reviewer.md](../overlays/cursor/agents/plan-reviewer.md) |
 | implementer | [implementer.md](./implementer.md) | Build | (no Cursor agent file) |
 | production_readiness_reviewer | [production_readiness_reviewer.md](./production_readiness_reviewer.md) | Review (dual gate) | [reviewer-a.md](../overlays/cursor/agents/reviewer-a.md) |

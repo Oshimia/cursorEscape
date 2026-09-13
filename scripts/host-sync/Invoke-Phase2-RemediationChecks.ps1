@@ -137,10 +137,10 @@ foreach ($kv in $planned['Antigravity'].PlannedContent.GetEnumerator()) {
 }
 Assert-Pass 'persistent 12k rendered ceiling: antigravity' ($over12k.Count -eq 0) (($over12k) -join ', ')
 
-# ---------- 7. Authored antigravity leaves stay authored (composer/implementation-review/history-search/agents x3) ----------
+# ---------- 7. Authored antigravity leaves stay authored (composer/implementation-review/history-search/governed agents x4) ----------
 $agyOverlay = Join-Path $companionRoot 'overlays\antigravity'
 foreach ($authored in @('skills\composer\SKILL.md', 'skills\implementation-review\SKILL.md', 'skills\opencode-history-search\SKILL.md',
-    'agents\plan_reviewer.md', 'agents\production_readiness_reviewer.md', 'agents\bug_reviewer.md')) {
+    'agents\planner.md', 'agents\plan_reviewer.md', 'agents\production_readiness_reviewer.md', 'agents\bug_reviewer.md')) {
     Assert-Pass "authored leaf still present: $authored" (Test-Path -LiteralPath (Join-Path $agyOverlay $authored))
 }
 

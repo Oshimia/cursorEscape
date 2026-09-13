@@ -18,15 +18,15 @@
       "hostBindings": [
         {
           "host": "Cursor",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "native-definition",
+          "routeIdentity": "planner",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Cursor Task with subagent_type planner",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
           "evidencePaths": [
-            "overlays/cursor/agents/"
+            "overlays/cursor/agents/planner.md"
           ]
         },
         {
@@ -46,15 +46,16 @@
         },
         {
           "host": "Antigravity",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "native-definition",
+          "routeIdentity": "planner",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Antigravity invoke_subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
           "evidencePaths": [
-            "overlays/antigravity/agents/"
+            "overlays/antigravity/agents/planner.md",
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
           ]
         },
         {
@@ -73,28 +74,30 @@
         },
         {
           "host": "Cline",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "planner",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Cline fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
           "evidencePaths": [
+            "overlays/cline/workflows/plan.md",
             "scripts/host-sync/manifests/cline.manifest.psd1",
             "analysis/cline-kilo-probes-2026-09.md"
           ]
         },
         {
           "host": "Kilocode",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "planner",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Kilocode fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
           "evidencePaths": [
+            "overlays/kilocode/workflows/plan.md",
             "scripts/host-sync/manifests/kilocode.manifest.psd1",
             "analysis/cline-kilo-probes-2026-09.md"
           ]

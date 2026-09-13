@@ -1,6 +1,6 @@
 # Cursor overlay — copy-out map
 
-**Last updated:** 2026-08-29
+**Last updated:** 2026-09-13
 **Status:** pointer-first live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) — thin skills/agents + hybrid rules on `~/.cursor`. Phase 0 baseline (restore-only): `C:/Users/admin/.cursor-backup-pre-host-sync-build-20260821-012600`. Sync does **not** create backups.
 
 ## Context
@@ -31,6 +31,7 @@ On copy-out: merge `{{COMPANION_ROOT}}` → absolute path to this repo (e.g. `C:
 | `skills/roadmap/SKILL.md` | [skills/roadmap/SKILL.md](./skills/roadmap/SKILL.md) | `{{COMPANION_ROOT}}/skills/roadmap/SKILL.md` |
 | `skills/documentation-architecture/SKILL.md` | [skills/documentation-architecture/SKILL.md](./skills/documentation-architecture/SKILL.md) | `{{COMPANION_ROOT}}/skills/documentation-architecture/SKILL.md` |
 | `skills/*/user-rules-snippet.md` | overlay only (paste targets) | `{{COMPANION_ROOT}}/rules/` — not copied under repo `skills/` |
+| `agents/planner.md` | [agents/planner.md](./agents/planner.md) | `{{COMPANION_ROOT}}/agents/planner.md` |
 | `agents/plan-reviewer.md` | [agents/plan-reviewer.md](./agents/plan-reviewer.md) | `{{COMPANION_ROOT}}/agents/plan_reviewer.md` |
 | `agents/reviewer-a.md` | [agents/reviewer-a.md](./agents/reviewer-a.md) | `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md` |
 | `rules/*.mdc` | [rules/](./rules/) | `{{COMPANION_ROOT}}/rules/` (+ spawn blocks to host `skills/`) |
@@ -42,6 +43,7 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 
 | Cursor overlay | Portable base |
 | -------------- | --------------- |
+| `planner` | `planner` |
 | `plan-reviewer` | `plan_reviewer` |
 | `reviewer-a` | `production_readiness_reviewer` |
 | Bugbot | `bug_reviewer` (Target contract only) |
@@ -91,6 +93,7 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 
 | Agent | Overlay | Base |
 | ----- | ------- | ---- |
+| planner | [planner.md](./agents/planner.md) | `{{COMPANION_ROOT}}/agents/planner.md` |
 | plan-reviewer | [plan-reviewer.md](./agents/plan-reviewer.md) | `{{COMPANION_ROOT}}/agents/plan_reviewer.md` |
 | reviewer-a | [reviewer-a.md](./agents/reviewer-a.md) | `{{COMPANION_ROOT}}/agents/production_readiness_reviewer.md` |
 

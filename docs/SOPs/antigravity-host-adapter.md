@@ -27,14 +27,14 @@ Owner decisions (2026-08-23): cursorEscape is **sole SoT**; live global rules (`
 | Always-on (thin) | Gate pointers only | `GEMINI.md` (global rules surface — injected across all workspaces; **full replacement**) |
 | Skills (on-demand) | [skills/](../../skills/_index.md) thin stubs | `config/skills/<id>/SKILL.md` → Read `{{COMPANION_ROOT}}/skills|workflow/…` (auto-discovered catalog) |
 | Workflows | Trajectory wrappers | `antigravity/global_workflows/escape-{plan,review,closeout}.md` → `/escape-*` slash commands |
-| Reviewer legs | [agents/](../../agents/_index.md) contracts | `config/agents/{plan_reviewer,production_readiness_reviewer,bug_reviewer}.md` — read-only tool allowlists (edit-deny parity); spawned via `invoke_subagent`, concurrent clean-context children |
+| Agent routes | [agents/](../../agents/_index.md) contracts | `config/agents/{planner,plan_reviewer,production_readiness_reviewer,bug_reviewer}.md` — read-only tool allowlists (edit-deny parity); spawned via `invoke_subagent`, concurrent clean-context children. `planner` is source-ready (Phase 2A); live pickup at the next authorized Apply. |
 
 ### Inventory
 
 - **Always-on:** `GEMINI.md` — default-on plan + dual review; when-in-doubt; eval/harness not exempt; Incomplete-until pointer.
 - **Skills (11):** `discovery`, `implementation-plan`, `plan-review`, `implementation-review`, `pre-commit-ci-gate`, `composer`, `documentation-architecture`, `roadmap`, `diagnosing-bugs`, plus the global `opencode-headless-run`, `opencode-history-search` (2026-08-26 owner ruling: opencode-* pair mirrors on every stack; parity bar otherwise = OpenCode overlay inventory; `pre-commit-ci-gate` has no companion skill base — SoT is [`rules/pre-commit-ci-gate.md`](../../rules/pre-commit-ci-gate.md)).
 - **Workflows (3):** `/escape-plan`, `/escape-review`, `/escape-closeout`.
-- **Subagents (3):** reviewer legs with read-only tool lists (`view_file`, `grep_search`, `run_command`); exact tool names only — misspellings hang subagents (known upstream issue).
+- **Subagents (4):** `planner` (source-ready Phase 2A; canonical `planning` gate, live pickup at the next authorized Apply) plus the three reviewer legs with read-only tool lists (`view_file`, `grep_search`, `run_command`); exact tool names only — misspellings hang subagents (known upstream issue).
 - **Never synced / never touched:** `antigravity/global_workflows/caveman.md`; credential/app-state files (`settings.json`, `config/mcp_config.json`, `oauth_creds.json`, `google_accounts.json`, `state.json`, `trustedFolders.json`, `installation_id`); `config/projects`.
 
 ### Live sync (Sync-HostHarness)

@@ -95,7 +95,7 @@ When syncing outside the script (not recommended):
 | plan-review | absent as skill | Via implementation-plan loop |
 | pre-commit-ci-gate | rule only | Hybrid `.mdc` present |
 
-**Agents (2)** — thin overlay harness live: `plan-reviewer.md`, `reviewer-a.md`
+**Agents (3 source / 2 live)** — thin overlay harness: `plan-reviewer.md`, `reviewer-a.md` live; `planner.md` added in source (Phase 2A, 2026-09-13) with live pickup deferred to the next authorized Apply.
 
 **Rules (3)** — **hybrid** live: companion gate body (incl. pressure-release) + overlay frontmatter/spawn pointers. Pre-sync fat bodies restored from backup if needed.
 

@@ -18,49 +18,45 @@ This is a read-only current-state snapshot. It identifies evidence and policy; i
 | Metric | Count |
 |---|---:|
 | Total pairs | 49 |
-| Represented | 33 |
-| Missing | 16 |
+| Represented | 37 |
+| Missing | 12 |
 
 | Host | native-definition | generated-native-projection | fallback-launch-contract | missing |
 |---|---:|---:|---:|---:|
-| Cursor | 2 | 0 | 1 | 4 |
+| Cursor | 3 | 0 | 1 | 3 |
 | OpenCode | 7 | 0 | 0 | 0 |
-| Antigravity | 3 | 0 | 0 | 4 |
+| Antigravity | 4 | 0 | 0 | 3 |
 | Vscode | 7 | 0 | 0 | 0 |
-| Cline | 0 | 0 | 3 | 4 |
-| Kilocode | 0 | 0 | 3 | 4 |
+| Cline | 0 | 0 | 4 | 3 |
+| Kilocode | 0 | 0 | 4 | 3 |
 | Codex | 0 | 7 | 0 | 0 |
 
 ## Missing pairs and Phase 2 proposals
 
 | Host | Agent | Proposal |
 |---|---|---|
-| Cursor | `planner` | `native` |
 | Cursor | `implementer` | `native` |
 | Cursor | `repository_explorer` | `native` |
 | Cursor | `test_reviewer` | `native` |
-| Antigravity | `planner` | `native` |
 | Antigravity | `implementer` | `native` |
 | Antigravity | `repository_explorer` | `native` |
 | Antigravity | `test_reviewer` | `native` |
-| Cline | `planner` | `fresh-task-session-fallback` |
 | Cline | `implementer` | `fresh-task-session-fallback` |
 | Cline | `repository_explorer` | `fresh-task-session-fallback` |
 | Cline | `test_reviewer` | `fresh-task-session-fallback` |
-| Kilocode | `planner` | `fresh-task-session-fallback` |
 | Kilocode | `implementer` | `fresh-task-session-fallback` |
 | Kilocode | `repository_explorer` | `fresh-task-session-fallback` |
 | Kilocode | `test_reviewer` | `fresh-task-session-fallback` |
 
-Notable route facts: Cursor built-in Bugbot remains `fallback-launch-contract`; Phase 2 may retain it only if the canonical envelope and clean-context isolation are explicit. OpenCode `implementer` is a primary-mode definition with Task/routing delegation to isolated child agents, not a subagent mode. Cline and Kilocode `plan_reviewer` fallback evidence points to `workflows/plan.md` (the planning-gate workflow). OpenCode host authority is derived from agent frontmatter plus `overlays/opencode/opencode.specimen.json`; configured `bash` behavior is ask with an explicit read-oriented allowlist, not denied.
+Notable route facts: `planner` is now represented on all seven hosts — Cursor and Antigravity as native host-definition wrappers (`overlays/cursor/agents/planner.md`, `overlays/antigravity/agents/planner.md`); Cline and Kilocode as fresh-task/session fallback contracts in `workflows/plan.md` (fresh task per pass; a reused conversation or empty response is a planning failure, never a valid planner result). Cursor built-in Bugbot remains `fallback-launch-contract`; Phase 2 may retain it only if the canonical envelope and clean-context isolation are explicit. OpenCode `implementer` is a primary-mode definition with Task/routing delegation to isolated child agents, not a subagent mode. Cline and Kilocode `plan_reviewer` fallback evidence points to `workflows/plan.md` (the planning-gate workflow). OpenCode host authority is derived from agent frontmatter plus `overlays/opencode/opencode.specimen.json`; configured `bash` behavior is ask with an explicit read-oriented allowlist, not denied.
 
 ## Manifest summary
 
 | Host | Manifest | Binding model | Copy/Destination entries | HardExcludes | NeverTouch | HybridRuleIds |
 |---|---|---|---:|---:|---:|---:|
-| Cursor | `scripts/host-sync/manifests/cursor.manifest.psd1` | `single-root` | 13 | 2 | 1 | 4 |
+| Cursor | `scripts/host-sync/manifests/cursor.manifest.psd1` | `single-root` | 14 | 2 | 1 | 4 |
 | OpenCode | `scripts/host-sync/manifests/opencode.manifest.psd1` | `single-root` | 19 | 2 | 1 | 0 |
-| Antigravity | `scripts/host-sync/manifests/antigravity.manifest.psd1` | `single-root` | 18 | 8 | 2 | 0 |
+| Antigravity | `scripts/host-sync/manifests/antigravity.manifest.psd1` | `single-root` | 19 | 8 | 2 | 0 |
 | Vscode | `scripts/host-sync/manifests/vscode.manifest.psd1` | `single-root` | 21 | 2 | 3 | 0 |
 | Cline | `scripts/host-sync/manifests/cline.manifest.psd1` | `single-root` | 4 | 4 | 7 | 0 |
 | Kilocode | `scripts/host-sync/manifests/kilocode.manifest.psd1` | `single-root` | 4 | 1 | 1 | 0 |

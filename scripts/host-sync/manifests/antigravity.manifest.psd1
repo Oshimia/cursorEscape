@@ -48,6 +48,7 @@
         @{ Source = 'workflows/escape-review.md'; Dest = 'antigravity/global_workflows/escape-review.md' }
         @{ Source = 'workflows/escape-closeout.md'; Dest = 'antigravity/global_workflows/escape-closeout.md' }
         # --- agents: authored frontmatter + body (host deltas confirmed on disk) ---
+        @{ Source = 'agents/planner.md'; Dest = 'config/agents/planner.md' }
         @{ Source = 'agents/plan_reviewer.md'; Dest = 'config/agents/plan_reviewer.md' }
         @{ Source = 'agents/production_readiness_reviewer.md'; Dest = 'config/agents/production_readiness_reviewer.md' }
         @{ Source = 'agents/bug_reviewer.md'; Dest = 'config/agents/bug_reviewer.md' }

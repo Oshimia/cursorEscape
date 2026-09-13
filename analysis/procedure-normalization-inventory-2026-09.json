@@ -31,18 +31,18 @@
     {
       "host": "Cursor",
       "agent": "planner",
-      "representation": "missing",
+      "representation": "native-definition",
       "evidence_paths": [
-        "overlays/cursor/agents/"
+        "overlays/cursor/agents/planner.md"
       ],
-      "route_identity": null,
+      "route_identity": "planner",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
       "first_read_contract": "agents/planner.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "native",
-      "classification": null,
+      "launch_mechanism": "Cursor Task with subagent_type planner",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "planner",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -365,18 +365,19 @@
     {
       "host": "Antigravity",
       "agent": "planner",
-      "representation": "missing",
+      "representation": "native-definition",
       "evidence_paths": [
-        "overlays/antigravity/agents/"
+        "overlays/antigravity/agents/planner.md",
+        "scripts/host-sync/manifests/antigravity.manifest.psd1"
       ],
-      "route_identity": null,
+      "route_identity": "planner",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
       "first_read_contract": "agents/planner.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "native",
-      "classification": null,
+      "launch_mechanism": "Antigravity invoke_subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "planner",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -693,19 +694,20 @@
     {
       "host": "Cline",
       "agent": "planner",
-      "representation": "missing",
+      "representation": "fallback-launch-contract",
       "evidence_paths": [
+        "overlays/cline/workflows/plan.md",
         "scripts/host-sync/manifests/cline.manifest.psd1",
         "analysis/cline-kilo-probes-2026-09.md"
       ],
-      "route_identity": null,
+      "route_identity": "planner",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
       "first_read_contract": "agents/planner.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "fresh-task-session-fallback",
-      "classification": null,
+      "launch_mechanism": "Cline fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "planner",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -859,19 +861,20 @@
     {
       "host": "Kilocode",
       "agent": "planner",
-      "representation": "missing",
+      "representation": "fallback-launch-contract",
       "evidence_paths": [
+        "overlays/kilocode/workflows/plan.md",
         "scripts/host-sync/manifests/kilocode.manifest.psd1",
         "analysis/cline-kilo-probes-2026-09.md"
       ],
-      "route_identity": null,
+      "route_identity": "planner",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
       "first_read_contract": "agents/planner.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "fresh-task-session-fallback",
-      "classification": null,
+      "launch_mechanism": "Kilocode fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "planner",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -2892,7 +2895,7 @@
       "live_relative_root": ".cursor",
       "shared_root": null,
       "logical_roots": null,
-      "copy_entry_count": 13,
+      "copy_entry_count": 14,
       "hard_excludes": [
         "skills-cursor",
         "settings.json"
@@ -2946,6 +2949,10 @@
         {
           "source": "skills/opencode-history-search/SKILL.md",
           "destination": "skills/opencode-history-search/SKILL.md"
+        },
+        {
+          "source": "agents/planner.md",
+          "destination": "agents/planner.md"
         },
         {
           "source": "agents/plan-reviewer.md",
@@ -3096,7 +3103,7 @@
       "live_relative_root": ".gemini",
       "shared_root": "overlays/opencode",
       "logical_roots": null,
-      "copy_entry_count": 18,
+      "copy_entry_count": 19,
       "hard_excludes": [
         "antigravity/global_workflows/caveman.md",
         "settings.json",
@@ -3244,6 +3251,10 @@
         {
           "source": "workflows/escape-closeout.md",
           "destination": "antigravity/global_workflows/escape-closeout.md"
+        },
+        {
+          "source": "agents/planner.md",
+          "destination": "config/agents/planner.md"
         },
         {
           "source": "agents/plan_reviewer.md",
@@ -3818,33 +3829,33 @@
     "six_stack_ledger_entries": [
       {
         "stack": "Cursor",
-        "destinationCount": 17,
-        "sha256": "6ddc5c6750ee17df5a44ade17fdb733ca782da21f3bc62b059010f95e62004df"
+        "destinationCount": 18,
+        "sha256": "d715ef7decfa0032e3c8354f13cbb3ba83af22c95e2baaecf7be4c9ef6912830"
       },
       {
         "stack": "OpenCode",
         "destinationCount": 21,
-        "sha256": "2639f4245c2ba75951ae8b7891379ab8786c1b3919c1e7c85b18f057cc363d1b"
+        "sha256": "34fdbeb66136c2573d61d78e5c8584a02a0dc305f4ad2d0edd66afb97884eec5"
       },
       {
         "stack": "Antigravity",
-        "destinationCount": 18,
-        "sha256": "5caf6a13afc34ca4eb4863c9591432c7aafc806f13b67e90a13ab21f0526bac5"
+        "destinationCount": 19,
+      "sha256": "c04a2c228b668e631783a2e9b8167f9b311fd617f113465d14fa14886253f0d3"
       },
       {
         "stack": "Vscode",
         "destinationCount": 21,
-        "sha256": "fd7043a298657edd7d0bb487a5d01b696542be8ebb67d411fb42e0575c9f37d9"
+        "sha256": "1497226130bd01658b59bfeaa15aeb83c3a8e79160c0b4834578f694cf2d7e5b"
       },
       {
         "stack": "Cline",
         "destinationCount": 4,
-        "sha256": "6f9819220adedb14f25564f2ec16dbe85f9aa224f488f216074abc9d6a3165b4"
+        "sha256": "9a44ce7eacd8f9a3144e50334f3121ec1a6532068eaa56d498696704dce228c5"
       },
       {
         "stack": "Kilocode",
         "destinationCount": 4,
-        "sha256": "cfd466d68312a64968b6ba1a7d6a466b99705b9554ded3e82dc2e21002749dda"
+        "sha256": "5cd41571bd75d5670d02a5c9231635d3cff7e409de570840140dbacdbaae75d0"
       }
     ],
     "codex_render_plan_path": "scripts/host-sync/render-baselines/codex-phase1/render-plan.json",
@@ -3934,11 +3945,6 @@
   "missing_pairs_with_proposed_phase2": [
     {
       "host": "Cursor",
-      "agent": "planner",
-      "proposed_phase2": "native"
-    },
-    {
-      "host": "Cursor",
       "agent": "implementer",
       "proposed_phase2": "native"
     },
@@ -3950,11 +3956,6 @@
     {
       "host": "Cursor",
       "agent": "test_reviewer",
-      "proposed_phase2": "native"
-    },
-    {
-      "host": "Antigravity",
-      "agent": "planner",
       "proposed_phase2": "native"
     },
     {
@@ -3974,11 +3975,6 @@
     },
     {
       "host": "Cline",
-      "agent": "planner",
-      "proposed_phase2": "fresh-task-session-fallback"
-    },
-    {
-      "host": "Cline",
       "agent": "implementer",
       "proposed_phase2": "fresh-task-session-fallback"
     },
@@ -3990,11 +3986,6 @@
     {
       "host": "Cline",
       "agent": "test_reviewer",
-      "proposed_phase2": "fresh-task-session-fallback"
-    },
-    {
-      "host": "Kilocode",
-      "agent": "planner",
       "proposed_phase2": "fresh-task-session-fallback"
     },
     {
@@ -4013,29 +4004,44 @@
       "proposed_phase2": "fresh-task-session-fallback"
     }
   ],
-  "represented_count": 33,
-  "missing_count": 16,
+  "represented_count": 37,
+  "missing_count": 12,
   "total_pairs": 49,
   "ambiguities_requiring_owner_confirmation": [
     {
       "id": "U-Cursor-Bugbot",
       "question": "Should Cursor Bugbot (built-in) remain classified as fallback-launch-contract or should Phase 2 add a dedicated native bug_reviewer agent definition?",
-      "current": "fallback-launch-contract via implementation-review SKILL spawn instructions"
+      "current": "fallback-launch-contract via implementation-review SKILL spawn instructions",
+      "pending_missing_pairs": []
     },
     {
-      "id": "U-Cline-Kilocode-Planner",
-      "question": "Cline and Kilocode currently lack planner and implementer agent representations. Should Phase 2 add workflow-based fallback contracts for planner/implementer, or add native agent stubs if the platform supports them?",
-      "current": "missing; proposed Phase 2 = fresh-task/session fallback"
+      "id": "U-Cline-Kilocode-Routes",
+      "question": "Phase 2 proposes fresh-task/session fallback for all missing Cline/Kilocode roles. Confirm operator/task workflow acceptance.",
+      "current": "planner represented via fresh-task/session fallback; implementer, repository_explorer, and test_reviewer missing",
+      "pending_missing_pairs": [
+        { "host": "Cline", "agent": "implementer" },
+        { "host": "Cline", "agent": "repository_explorer" },
+        { "host": "Cline", "agent": "test_reviewer" },
+        { "host": "Kilocode", "agent": "implementer" },
+        { "host": "Kilocode", "agent": "repository_explorer" },
+        { "host": "Kilocode", "agent": "test_reviewer" }
+      ]
     },
     {
-      "id": "U-Antigravity-Agent-Completeness",
-      "question": "Antigravity has plan_reviewer, production_readiness_reviewer, and bug_reviewer but lacks planner, implementer, repository_explorer, and test_reviewer. Phase 2 proposal is native definitions for all four missing roles. Confirm the Antigravity subagent mechanism supports workspace-write (for implementer).",
-      "current": "missing; proposed Phase 2 = native"
+      "id": "U-Antigravity-Authority",
+      "question": "Confirm the Antigravity subagent mechanism can express workspace-write for `implementer` when migrated.",
+      "current": "planner represented natively; implementer, repository_explorer, and test_reviewer missing",
+      "pending_missing_pairs": [
+        { "host": "Antigravity", "agent": "implementer" },
+        { "host": "Antigravity", "agent": "repository_explorer" },
+        { "host": "Antigravity", "agent": "test_reviewer" }
+      ]
     },
     {
       "id": "U-Render-Baseline-Reconciliation",
       "question": "Which render baselines will change mechanically after deterministic normalization? This cannot be determined until Phase 2 generators exist.",
-      "current": "unknown"
+      "current": "unknown",
+      "pending_missing_pairs": []
     }
   ],
   "status": "implementation-under-review",
