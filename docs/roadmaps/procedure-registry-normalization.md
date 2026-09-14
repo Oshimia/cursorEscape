@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -660,6 +660,31 @@ manifests, baselines, and runtime projections remain unchanged.
 - [x] Managed-view evidence covers exact row growth 84→105, per-skill Codex-only applicability/absence, and deterministic five-file double render.
 - [x] Observed Fast CI before review (normalization Fast CI + `git diff --check`).
 - [x] No Full CI is claimed by this implementation slice.
+
+
+#### Phase 3I status — tdd / resolving-merge-conflicts wrapper-frontmatter enforcement
+
+```text
+Status:              Complete; dual review APPROVED (iteration 1 of 4, 2026-09-14)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 293/293 view checks, 24/24 unit checks, git diff --check)
+Changed files:       4 directly reviewed/permitted files, 87 final changed/new physical lines (82 added, 5 removed)
+Review launches:     production_readiness_reviewer: 1, bug_reviewer: 1 (dual APPROVED at iteration 1); all children closed
+Composer Full CI:    PASS 2026-09-14
+Batchables open:     No new deferred; carried forward from Phase 3E
+```
+
+Phase 3I reuses the Phase 3B–3H enforcement-first pattern without redesign. The
+registry now owns wrapper frontmatter identity for exactly `tdd` and
+`resolving-merge-conflicts`. Companion inventory, manifests, and wrappers establish
+the same topology independently for each: one Codex-only applicable binding, six
+not-applicable hosts, canonical body `skills/<id>/SKILL.md`, and wrapper
+`overlays/codex/skills/<id>/SKILL.md`. Canonical bodies and wrapper prose remain
+unchanged.
+
+- [x] Two registry-owned Codex profiles pin exact plain-scalar wrapper descriptions and effective `modelInvocationDisabled: false`.
+- [x] Governed profile allowlist extended with exactly the two Phase 3I skills; outside-set profiles continue to fail closed.
+- [x] Per-skill tests cover applicability/absence, source routing, description and disable mismatches, not-applicable injection, missing/duplicate delivery, canonical 22/22 shadow, exact 105→119 row growth, and deterministic five-file double render.
+- [x] Observed final Fast CI and whitespace checks; no Full CI, commit, push, or live Apply is claimed by this implementation slice.
 
 
 ### Phase 4 — Rules/workflows/instructions in bounded batches

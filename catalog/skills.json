@@ -1496,6 +1496,19 @@
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/resolving-merge-conflicts/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Resolve active merge, rebase, or cherry-pick conflicts with intent-traced hunks."
+            ]
+          },
+          "modelInvocationDisabled": false
+        }
       ]
     },
     {
@@ -1675,6 +1688,19 @@
           "evidencePaths": [
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
+        }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/tdd/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Guide test-first work at agreed seams with red-green slices and boundary-only doubles."
+            ]
+          },
+          "modelInvocationDisabled": false
         }
       ]
     },

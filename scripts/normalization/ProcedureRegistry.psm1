@@ -4,7 +4,7 @@ $ErrorActionPreference = 'Stop'
 $script:Hosts = @('Cursor','OpenCode','Antigravity','Vscode','Cline','Kilocode','Codex')
 $script:ExpectedKinds = @{ agents = 'agents.json'; skills = 'skills.json'; rules = 'rules.json'; workflows = 'workflows.json' }
 $script:CanonicalAgentContractCache = @{}
-$script:SkillHostFrontmatterProfileSkillIds = @('implementation-plan','plan-review','implementation-review','composer','discovery','documentation-architecture','roadmap','research','bug-review-sweep','diagnosing-bugs','architecture-survey','codebase-design','domain-modeling','grilling','prototype')
+$script:SkillHostFrontmatterProfileSkillIds = @('implementation-plan','plan-review','implementation-review','composer','discovery','documentation-architecture','roadmap','research','bug-review-sweep','diagnosing-bugs','architecture-survey','codebase-design','domain-modeling','grilling','prototype','tdd','resolving-merge-conflicts')
 
 function Add-RegistryFailure([System.Collections.Generic.List[string]]$Failures,[string]$Invariant,[string]$Detail) {
   $Failures.Add("${Invariant}: $Detail")
