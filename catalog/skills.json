@@ -722,6 +722,19 @@
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/domain-modeling/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Sharpen shared project language by canonicalizing ambiguous terms and cross-checking code."
+            ]
+          },
+          "modelInvocationDisabled": false
+        }
       ]
     },
     {
@@ -785,6 +798,19 @@
           "evidencePaths": [
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
+        }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/grilling/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Interview the user to resolve a design tree before planning or deciding."
+            ]
+          },
+          "modelInvocationDisabled": false
         }
       ]
     },
@@ -1309,6 +1335,19 @@
           "evidencePaths": [
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
+        }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/prototype/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Build a disposable prototype that answers one design or interaction question."
+            ]
+          },
+          "modelInvocationDisabled": false
         }
       ]
     },

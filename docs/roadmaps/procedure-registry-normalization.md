@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -628,6 +628,36 @@ Composer-resolved policy:
 - [x] Two registry-owned profile objects pin exact wrapper description style/content and effective disable policy.
 - [x] Applicability and manifest routing enforced through the existing Phase 0 inventory/manifest seams.
 - [x] Focused tests cover exact managed-view row growth (70→84), architecture-survey Codex-only topology, codebase-design Codex-only topology, profile removal, uncovered/not-applicable coverage, wrong-source routing, exact description/disable comparison, disable mismatch, not-applicable delivery injection, missing/duplicate delivery, canonical 22/22 shadow, and deterministic five-file double-render.
+- [x] Observed Fast CI before review (normalization Fast CI + `git diff --check`).
+- [x] No Full CI is claimed by this implementation slice.
+
+
+#### Phase 3H status — domain-modeling / grilling / prototype wrapper-frontmatter enforcement
+
+```text
+Status:              Complete; dual review APPROVED (iteration 2 of 4, 2026-09-14)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 273/273 view checks, 24/24 unit checks, git diff --check)
+Changed files:       4 directly reviewed files, 79 implementation changed/new physical lines before this roadmap row
+                     113 final changed/new physical lines (105 added, 8 removed)
+Review launches:     production_readiness_reviewer: 2, bug_reviewer: 2 (dual APPROVED at iteration 2); all children closed
+Composer Full CI:    PASS 2026-09-14
+Batchables open:     No new deferred; carried forward from Phase 3E
+```
+
+Phase 3H reuses the Phase 3B–3G enforcement-first pattern without redesign. The
+registry now owns wrapper frontmatter identity for exactly `domain-modeling`,
+`grilling`, and `prototype`. Companion registry inventory, manifests, and current
+wrapper sources establish the same topology independently for each skill: one
+Codex-only applicable binding, six not-applicable hosts, canonical body
+`skills/<id>/SKILL.md`, and manifest-routed wrapper
+`overlays/codex/skills/<id>/SKILL.md`. Wrapper bodies, canonical bodies,
+manifests, baselines, and runtime projections remain unchanged.
+
+- [x] Three registry-owned Codex profiles pin exact wrapper plain-scalar descriptions and effective `modelInvocationDisabled: false` matching current wrappers.
+- [x] Canonical folded descriptions, canonical disable policies, and explicit-only semantics remain unchanged; canonical 22/22 frontmatter shadow remains clean.
+- [x] Governed profile-skill allowlist extended with exactly the three Phase 3H skills; outside-set profiles continue to fail closed.
+- [x] Per-skill fail-closed tests cover profile removal, not-applicable applicability, exact Codex source routing, description and disable mismatches, not-applicable delivery injection, missing delivery, and duplicate delivery.
+- [x] Managed-view evidence covers exact row growth 84→105, per-skill Codex-only applicability/absence, and deterministic five-file double render.
 - [x] Observed Fast CI before review (normalization Fast CI + `git diff --check`).
 - [x] No Full CI is claimed by this implementation slice.
 
