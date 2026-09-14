@@ -1,6 +1,6 @@
 # Roadmaps
 
-**Last updated:** 2026-09-13 (procedure registry normalization)
+**Last updated:** 2026-09-15 (procedure registry normalization)
 
 ## Context
 
@@ -20,7 +20,7 @@ Multi-phase handoff roadmaps for cursorEscape. Each roadmap file carries **Agent
 | [Overlay architecture remediation](./overlay-remediation.md) | **COMPLETE** (Phases 0–4; Phase 4 executed 2026-08-31 owner-delegated: drift survey → global Apply → live==planned verified, Apply-leg parity defect fixed) | Fix overlay architecture: overlays carry only host differences (per-entry v2 sourcing, promote-into-twin gate composition, render-baseline regression surface, CI drift fixes) |
 | [VS Code bring-up](./vscode-bring-up.md) | **Phases 0–3 complete** 2026-09-01; Phase 4 (Apply + C1–C6 smoke) pending operator authorization | 4th sync stack: `~/.copilot` user-level surface (instructions/agents/skills); closes parked vscode overlay item from overlay-remediation |
 | [Kilo + Cline bring-up](./kilo-cline-bring-up.md) | **Phases 0–4a complete** 2026-09-01; Phase 4b (2 applies + smoke) pending operator authorization | 5th/6th stacks (`~/.cline`, `~/.kilocode`) + shared Generic adapter conversion (clone pattern retired) |
-| [Procedure registry normalization](./procedure-registry-normalization.md) | **Phase 0–1 complete** after integrated correction closeout 2026-09-13 (prior closeouts were good faith) | One semantic registry and deterministic projections; agents, skills, rules/workflows; 7×7 all-host agent parity |
+| [Procedure registry normalization](./procedure-registry-normalization.md) | **Phase 0–3 complete** with post-Phase 3 batchable resolution 2026-09-14; **Phase 4 not started** | One semantic registry and deterministic projections; agents, skills, rules/workflows; 7×7 all-host agent parity |
 
 ## Implications / open questions
 

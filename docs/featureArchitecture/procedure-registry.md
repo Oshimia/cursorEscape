@@ -1,6 +1,6 @@
 # Procedure registry
 
-**Last updated:** 2026-09-13
+**Last updated:** 2026-09-14
 
 ## Context
 
@@ -11,6 +11,8 @@ Phase 1 introduces a writable semantic registry for machine metadata (agent iden
 ### Ownership model
 
 Registry catalogs own machine identity, aliases, required reading, authority/isolation, loop/gate policy, fail-loud behavior, host representation, skill explicit-only policy, composition references, and semantic order. Markdown owns prose; manifests own destination/binding. Skill entries keep two distinct booleans: `modelInvocationDisabled` mirrors the canonical skill frontmatter `disable-model-invocation` flag, while `explicitOnly` must exactly match Phase 0 inventory `explicit_only` (currently only `opencode-headless-run` and `opencode-history-search`).
+
+Host-mechanics deviations (including the retained Cursor `disable-model-invocation: true` asymmetry) and shared-source topology governance are documented in [skill-source-and-host-overlays](./skill-source-and-host-overlays.md); registry profiles enforce the fail-closed boundary.
 
 ### Fail-closed boundary
 

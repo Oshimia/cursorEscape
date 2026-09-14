@@ -1,6 +1,6 @@
 # Skill source and host overlays
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-14
 
 ## Context
 
@@ -113,6 +113,42 @@ Only **harness mechanics** and **additive safety**, for example:
 - Config wiring (`opencode.json` `instructions`, `skills.paths`).
 
 Those lines change when **the product** changes, not when **you** change discovery or Escalation.
+
+### Host-mechanics deviations and shared-source governance (Required)
+
+Post-Phase 3L Composer decisions formally retain two aspects of the current
+wrapper topology. These are durable governance policy, not historical drift.
+
+**Cursor `disable-model-invocation: true` asymmetry (Required — retained).**
+The Cursor-specific `disable-model-invocation: true` flag remains set for
+exactly `implementation-plan`, `implementation-review`, `composer`,
+`documentation-architecture`, and `roadmap`. The flag is part of Cursor
+skill-advertisement/load mechanics — it controls whether the Cursor UI
+auto-suggests the skill during drafting — not a license for any host to
+override canonical procedure ownership. Registry profiles remain the
+fail-closed source of each wrapper's exact description and effective invocation
+metadata. Cross-host behavior remains governed by canonical procedure and
+registry contracts; the differing flag is an intentional host-mechanics
+deviation under "What may differ per stack" above. Other hosts must not adopt
+this flag as a policy signal.
+
+**OpenCode / Antigravity / VS Code shared-source topology (Required — retained).**
+The current topology is formally retained: use a shared physical source only
+when host mechanics are genuinely identical; retain separate sources where
+authored host deltas exist. Equality across these three hosts is enforced at
+the governed semantic/metadata boundary by registry profiles and applicability
+checks, not by requiring unrelated wrapper sources to be byte-identical or by
+collapsing sources solely to reduce file count. Cross-host equality does not
+mean byte-equality of wrapper files; it means the registry-validated
+description, invocation policy, and routing contract hold for every applicable
+host binding regardless of whether the physical source is shared or authored
+separately.
+
+**Cross-reference:** the registry ownership boundary in
+[procedure-registry](./procedure-registry.md) is the fail-closed enforcement
+seam for both policies. No wrapper body, canonical skill body, catalog value,
+schema, baseline, runtime projection, or test is affected by this governance
+resolution.
 
 ### Concrete overlay examples (Required)
 

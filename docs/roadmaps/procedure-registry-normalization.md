@@ -1,13 +1,13 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete — Phase 3 closeout dual-approved
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete — Phase 3 closed
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
-Last updated:        2026-09-14
+Last updated:        2026-09-15
 Live Apply:          Phase 6 only, with explicit owner authorization
 ```
 
@@ -317,7 +317,7 @@ The approved local plan remains the full source of goals, alternatives, assumpti
 Status:              Complete; dual review APPROVED (iteration 1 of 4, 2026-09-14)
 Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 100/100 view checks, git diff --check)
 Changed files:       5 directly reviewed files, 454 changed/new physical lines
-Composer Full CI:    PASS 2026-09-14
+Composer Full CI:    PASS 2026-09-15
 Review launches:     production_readiness_reviewer 1; bug_reviewer 1; both closed
 Batchables open:     2 (deferred; see punch list below)
 ```
@@ -770,6 +770,28 @@ or disable-policy mismatch.
 - [x] Sanctioned temporary render reconciliation found no drift; deterministic double render passed and no generated baseline changed.
 - [x] Review pair inspected the code/test diff at iteration 1; roadmap status was added only after dual approval.
 - [x] Observed final Fast CI and whitespace checks after the status-only roadmap cascade; no Full CI, commit, push, or live Apply is run or claimed by Phase 3L implementation.
+
+
+#### Post-Phase 3L batchable resolution
+
+```text
+Status:              Complete; docs-only governance resolution (2026-09-14)
+Scope:               Two carried Phase 3 batchables formally resolved; no wrapper, canonical skill, catalog, schema, baseline, runtime projection, or test changed
+Changed files:       4 directly reviewed/permitted docs files; 76 final changed/new physical lines (68 added, 8 removed)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 362/362 view checks, 24/24 unit checks, git diff --check)
+Review launches:     production_readiness_reviewer: 2, bug_reviewer: 2 (dual APPROVED at iteration 2); all children closed
+Composer Full CI:    PASS 2026-09-14
+Batchables open:     None; the reviewer-identified stale roadmap-index row was corrected as a Composer-only status/index correction
+Phase 4:             Not started
+```
+
+**Resolution 1 — Cursor `disable-model-invocation: true` asymmetry: formally retained.** The Cursor-specific flag remains set for exactly `implementation-plan`, `implementation-review`, `composer`, `documentation-architecture`, and `roadmap`. The flag is part of Cursor skill-advertisement/load mechanics, not a license for hosts to override canonical procedure ownership. Registry profiles remain the fail-closed source of each wrapper's exact description and effective invocation metadata. Cross-host behavior remains governed by canonical procedure and registry contracts; the differing flag is an intentional host-mechanics deviation, not historical drift. Durable policy recorded in [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md).
+
+**Resolution 2 — OpenCode / Antigravity / VS Code shared-source topology and cross-host equality: formally retained.** The current topology is retained. Use a shared physical source only when host mechanics are genuinely identical; retain separate sources where authored host deltas exist. Equality is enforced at the governed semantic/metadata boundary by registry profiles and applicability checks, not by requiring unrelated wrapper sources to be byte-identical or by collapsing sources solely to reduce file count. Durable policy recorded in [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md).
+
+**Evidence summary.** The Phase 3C batchable (source consolidation / cross-host equality evaluation) and the Phase 3D/3E expanded batchable (Cursor disable-flag normalization/retention evaluation) are both closed as formal retention decisions. No source consolidation was performed; no wrapper bodies, canonical skill bodies, manifests, baselines, schema, runtime projection, or test files were changed. No Full CI, commit, push, or live Apply is claimed by this docs-only resolution.
+
+**Phase 4 remains not started.** This resolution changes no production behavior and clears no Phase 4 deliverable.
 
 
 ### Phase 4 — Rules/workflows/instructions in bounded batches
