@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -710,6 +710,35 @@ remain unchanged.
 - [x] Three registry-owned Codex profiles pin exact plain-scalar wrapper descriptions and effective `modelInvocationDisabled: false` matching current wrappers.
 - [x] Governed profile allowlist extended with exactly the three Phase 3J skills; outside-set profiles continue to fail closed.
 - [x] Per-skill tests cover applicability/absence, source routing, description and disable mismatches, not-applicable injection, missing/duplicate delivery, canonical 22/22 shadow, exact 119→140 row growth, and deterministic five-file double render.
+- [x] Observed final Fast CI and whitespace checks before the review pair; no Full CI, commit, push, or live Apply is claimed by this implementation slice.
+
+
+#### Phase 3K status — opencode-headless-run / opencode-history-search wrapper-frontmatter enforcement
+
+```text
+Status:              Complete; dual review APPROVED (iteration 3 of 4, 2026-09-14)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 360/360 view checks, 24/24 unit checks, git diff --check)
+Changed files:       4 directly reviewed/permitted files
+                     199 final changed/new physical lines (191 added, 8 removed)
+Review launches:     production_readiness_reviewer: 3 (iteration 1 APPROVED, iteration 2 CHANGES REQUESTED, iteration 3 APPROVED); bug_reviewer: 3 (iteration 1 must-fix, iterations 2–3 CLEAN); dual APPROVED at iteration 3 of 4; all children closed
+Composer Full CI:    PASS 2026-09-14
+Batchables open:     No new deferred
+```
+
+Phase 3K reuses the Phase 3B–3J enforcement-first pattern without redesign. The
+registry now owns wrapper frontmatter identity for exactly `opencode-headless-run`
+and `opencode-history-search`, the two remaining explicit-only Phase 0 skills.
+Companion inventory, manifests, and current wrapper sources establish the actual
+wrapper/source topology independently for each. `opencode-headless-run` has 3
+profiles (Cursor / shared OpenCode+Antigravity+Vscode / Codex);
+`opencode-history-search` has 5 authored per-host wrapper sources. Both pin
+effective `modelInvocationDisabled: false` and remain `explicitOnly: true`.
+Canonical bodies, canonical folded descriptions, wrapper prose, manifests, and
+schema remain unchanged.
+
+- [x] Registry-owned profiles pin exact wrapper descriptions and effective disable/model-invocation policy matching current wrappers.
+- [x] Governed profile allowlist extended with exactly the two Phase 3K skills; all 22 catalog skills are now governed.
+- [x] Per-skill tests cover explicit-only policy, applicability/absence, source routing, description and disable mismatches, wrong-source routing, not-applicable injection, missing/duplicate delivery, canonical 22/22 shadow, exact 119→154 row growth, and deterministic double render.
 - [x] Observed final Fast CI and whitespace checks before the review pair; no Full CI, commit, push, or live Apply is claimed by this implementation slice.
 
 

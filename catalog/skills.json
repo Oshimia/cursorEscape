@@ -1118,6 +1118,47 @@
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Cursor"],
+          "wrapperSource": "overlays/cursor/skills/opencode-headless-run/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Run reliable headless (non-interactive) OpenCode sessions with opencode run.",
+              "Use when scripting OpenCode, automating reviews or tasks, wiring CI agents, or",
+              "debugging headless failures like empty answers, permission denials, or Session",
+              "not found errors."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["OpenCode", "Antigravity", "Vscode"],
+          "wrapperSource": "overlays/opencode/skills/opencode-headless-run/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Run reliable headless (non-interactive) OpenCode sessions with opencode run.",
+              "Use when scripting OpenCode, automating reviews or tasks, wiring CI agents, or",
+              "debugging headless failures like empty answers, permission denials, or Session",
+              "not found errors."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/opencode-headless-run/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Explicit-only OpenCode headless runs for scripting, automation, CI, and failure debugging."
+            ]
+          },
+          "modelInvocationDisabled": false
+        }
       ]
     },
     {
@@ -1180,6 +1221,75 @@
           "evidencePaths": [
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
+        }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Cursor"],
+          "wrapperSource": "overlays/cursor/skills/opencode-history-search/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Search and extract past OpenCode sessions and chat history. Use when looking",
+              "for prior sessions, transcripts, tool-call records, or answers the user",
+              "remembers from earlier OpenCode conversations; includes CLI commands, export,",
+              "and direct SQLite fallback with schema gotchas."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["OpenCode"],
+          "wrapperSource": "overlays/opencode/skills/opencode-history-search/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Search and extract past OpenCode sessions and chat history. Use when looking",
+              "for prior sessions, transcripts, tool-call records, or answers the user",
+              "remembers from earlier OpenCode conversations; includes CLI commands, export,",
+              "and direct SQLite fallback with schema gotchas."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Antigravity"],
+          "wrapperSource": "overlays/antigravity/skills/opencode-history-search/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Search and extract past OpenCode sessions and chat history. Use when looking",
+              "for prior sessions, transcripts, tool-call records, or answers the user",
+              "remembers from earlier OpenCode conversations; includes CLI commands, export,",
+              "and direct SQLite fallback with schema gotchas."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Vscode"],
+          "wrapperSource": "overlays/vscode/skills/opencode-history-search/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Search and extract past OpenCode sessions and chat history. Use when looking",
+              "for prior sessions, transcripts, tool-call records, or answers the user",
+              "remembers from earlier OpenCode conversations; includes CLI commands, export,",
+              "and direct SQLite fallback with schema gotchas."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/opencode-history-search/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Explicit-only search and extraction of past OpenCode sessions and transcripts."
+            ]
+          },
+          "modelInvocationDisabled": false
         }
       ]
     },
