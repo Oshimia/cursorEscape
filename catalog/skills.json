@@ -66,6 +66,19 @@
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/architecture-survey/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Run a read-only architecture survey and rank improvement options with explicit inaction costs."
+            ]
+          },
+          "modelInvocationDisabled": false
+        }
       ]
     },
     {
@@ -209,6 +222,19 @@
           "evidencePaths": [
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
+        }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/codebase-design/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Apply deep-module design vocabulary to interfaces, seams, tests, and alternatives."
+            ]
+          },
+          "modelInvocationDisabled": false
         }
       ]
     },
