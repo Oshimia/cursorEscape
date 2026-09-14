@@ -1,6 +1,6 @@
 # Antigravity overlay — harness copy-out map
 
-**Last updated:** 2026-09-14
+**Last updated:** 2026-09-15
 
 ## Context
 
@@ -23,7 +23,7 @@ Owner decisions (2026-08-23): cursorEscape is the **sole SoT** — live global r
 | `GEMINI.md` | [GEMINI.md](./GEMINI.md) | Thin always-on gate — **full replacement** of live global rules (sole SoT) |
 | `config/skills/<11 ids>/SKILL.md` | [skills/*/SKILL.md](./skills/) | Thin stubs mirroring the OpenCode overlay set; absolute `{{COMPANION_ROOT}}` Reads; `pre-commit-ci-gate` composed from `base:rules/pre-commit-ci-gate.md` + host footer (Phase 2) |
 | `antigravity/global_workflows/escape-{plan,review,closeout}.md` | [workflows/](./workflows/) | Trajectory-level wrappers invoking companion procedures |
-| `config/agents/{planner,plan_reviewer,production_readiness_reviewer,bug_reviewer,repository_explorer}.md` | [agents/](./agents/) | Planner + investigation + reviewer legs; read-only tools; parallel via `invoke_subagent` |
+| `config/agents/{planner,plan_reviewer,implementer,production_readiness_reviewer,bug_reviewer,repository_explorer,test_reviewer}.md` | [agents/](./agents/) | Governed planner/implementation/investigation/reviewer legs; reviewer defs use read-only tools; `implementer` canonical authority is workspace-write but live-write smoke remains Phase 6; parallel via `invoke_subagent` |
 
 **Deliberate exclusion:** companion `skills/` holds more ids than mirrored here (e.g. `grilling`, `tdd-*`, `wizard`, `teach`) — parity bar is the **OpenCode overlay inventory** ([opencode-host-adapter](../../docs/SOPs/opencode-host-adapter.md)); extend deliberately, not by default. 2026-08-26 owner ruling: the `opencode-*` infrastructure pair (`opencode-headless-run`, `opencode-history-search`) is **global** and must mirror on every stack. Note: `pre-commit-ci-gate` has no companion skill base — its portable SoT is [`rules/pre-commit-ci-gate.md`](../../rules/pre-commit-ci-gate.md); since Phase 2 the stub is **composed at sync time** from that rule (base: sourcing) plus the host footer, not hand-restated.
 
@@ -34,7 +34,7 @@ Owner decisions (2026-08-23): cursorEscape is the **sole SoT** — live global r
 1. Gate-text changes must echo here **and** in Cursor/OpenCode overlays per [editing companion workflow](../../docs/SOPs/editing-companion-workflow.md).
 2. D2 (restart vs hot-reload) unresolved until operator post-Apply smoke — SOP assumes full quit + restart.
 3. Workspace-level surfaces (`.agents/rules`, `.agents/skills`, project-root `AGENTS.md`) are **future scope**, not synced by v1.
-4. Commit ordering: this overlay's `bug_reviewer.md` cites `{{COMPANION_ROOT}}/skills/bug-review-sweep/SKILL.md` — that base currently exists only as untracked owner work; land or co-commit it before/with this overlay's commit.
+4. Dependency availability: this overlay's `bug_reviewer.md` cites `{{COMPANION_ROOT}}/skills/bug-review-sweep/SKILL.md`; that canonical base is tracked, so this wrapper has no separate land/co-commit ordering constraint.
 
 ## Related
 

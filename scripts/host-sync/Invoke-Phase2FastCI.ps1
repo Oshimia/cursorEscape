@@ -135,7 +135,12 @@ if (Test-Path -LiteralPath $agyManifestPath) {
     $wfDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'antigravity/global_workflows/*' })
     Assert-Pass 'antigravity workflow dests under global_workflows' ($wfDests.Count -eq 3)
     $agentDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'config/agents/*' })
-    Assert-Pass 'antigravity governed role defs under config/agents' ($agentDests.Count -eq 5)
+    $governedAgentIds = @('planner', 'plan_reviewer', 'implementer', 'production_readiness_reviewer', 'bug_reviewer', 'repository_explorer', 'test_reviewer')
+    $actualAgentIds = @($agentDests | ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_.Dest) } | Sort-Object)
+    Assert-Pass 'antigravity governed role defs under config/agents' (
+        $agentDests.Count -eq $governedAgentIds.Count -and
+        ($actualAgentIds -join '|') -eq (($governedAgentIds | Sort-Object) -join '|')
+    )
 }
 
 $agyAdapterPath = Join-Path $hostSyncRoot 'adapters\Generic.Adapter.ps1'

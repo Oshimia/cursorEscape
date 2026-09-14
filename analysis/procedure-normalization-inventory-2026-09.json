@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "inventory_date": "2026-09-11",
-  "last_updated": "2026-09-14",
+  "last_updated": "2026-09-15",
   "phase": 0,
   "roadmap": "docs/roadmaps/procedure-registry-normalization.md",
   "hosts": [
@@ -79,18 +79,19 @@
     {
       "host": "Cursor",
       "agent": "implementer",
-      "representation": "missing",
+      "representation": "native-definition",
       "evidence_paths": [
-        "overlays/cursor/agents/"
+        "overlays/cursor/agents/implementer.md",
+        "scripts/host-sync/manifests/cursor.manifest.psd1"
       ],
-      "route_identity": null,
+      "route_identity": "implementer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "workspace-write",
+      "isolation": "clean-context",
       "first_read_contract": "agents/implementer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "native",
-      "classification": null,
+      "launch_mechanism": "Cursor Task with subagent_type implementer",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "implementer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -172,18 +173,19 @@
     {
       "host": "Cursor",
       "agent": "test_reviewer",
-      "representation": "missing",
+      "representation": "native-definition",
       "evidence_paths": [
-        "overlays/cursor/agents/"
+        "overlays/cursor/agents/test_reviewer.md",
+        "scripts/host-sync/manifests/cursor.manifest.psd1"
       ],
-      "route_identity": null,
+      "route_identity": "test_reviewer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
       "first_read_contract": "agents/test_reviewer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "native",
-      "classification": null,
+      "launch_mechanism": "Cursor Task with subagent_type test_reviewer",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "test_reviewer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -416,18 +418,19 @@
     {
       "host": "Antigravity",
       "agent": "implementer",
-      "representation": "missing",
+      "representation": "native-definition",
       "evidence_paths": [
-        "overlays/antigravity/agents/"
+        "overlays/antigravity/agents/implementer.md",
+        "scripts/host-sync/manifests/antigravity.manifest.psd1"
       ],
-      "route_identity": null,
+      "route_identity": "implementer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "workspace-write",
+      "isolation": "clean-context",
       "first_read_contract": "agents/implementer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "native",
-      "classification": null,
+      "launch_mechanism": "Antigravity invoke_subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "implementer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -509,18 +512,19 @@
     {
       "host": "Antigravity",
       "agent": "test_reviewer",
-      "representation": "missing",
+      "representation": "native-definition",
       "evidence_paths": [
-        "overlays/antigravity/agents/"
+        "overlays/antigravity/agents/test_reviewer.md",
+        "scripts/host-sync/manifests/antigravity.manifest.psd1"
       ],
-      "route_identity": null,
+      "route_identity": "test_reviewer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "clean-context",
       "first_read_contract": "agents/test_reviewer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "native",
-      "classification": null,
+      "launch_mechanism": "Antigravity invoke_subagent",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "test_reviewer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -2900,7 +2904,7 @@
       "live_relative_root": ".cursor",
       "shared_root": null,
       "logical_roots": null,
-      "copy_entry_count": 15,
+      "copy_entry_count": 17,
       "hard_excludes": [
         "skills-cursor",
         "settings.json"
@@ -2970,6 +2974,14 @@
         {
           "source": "agents/repository_explorer.md",
           "destination": "agents/repository_explorer.md"
+        },
+        {
+          "source": "agents/implementer.md",
+          "destination": "agents/implementer.md"
+        },
+        {
+          "source": "agents/test_reviewer.md",
+          "destination": "agents/test_reviewer.md"
         },
         {
           "source": "review-subagent-models.md",
@@ -3112,7 +3124,7 @@
       "live_relative_root": ".gemini",
       "shared_root": "overlays/opencode",
       "logical_roots": null,
-      "copy_entry_count": 20,
+      "copy_entry_count": 22,
       "hard_excludes": [
         "antigravity/global_workflows/caveman.md",
         "settings.json",
@@ -3280,6 +3292,14 @@
         {
           "source": "agents/repository_explorer.md",
           "destination": "config/agents/repository_explorer.md"
+        },
+        {
+          "source": "agents/implementer.md",
+          "destination": "config/agents/implementer.md"
+        },
+        {
+          "source": "agents/test_reviewer.md",
+          "destination": "config/agents/test_reviewer.md"
         }
       ]
     },
@@ -3842,8 +3862,8 @@
     "six_stack_ledger_entries": [
       {
         "stack": "Cursor",
-        "destinationCount": 19,
-        "sha256": "95a92ecdceaae62310b145b551585b8c245367ecd5ad016e519b43abb53e3ef5"
+        "destinationCount": 21,
+        "sha256": "9432c1268341b322134e1283f60233442b42467b57e6e517d616ab592b3e8911"
       },
       {
         "stack": "OpenCode",
@@ -3852,8 +3872,8 @@
       },
       {
         "stack": "Antigravity",
-        "destinationCount": 20,
-        "sha256": "bc1b68164b71634b41381bc116b47548a57d1918b644d4bf8d4f2bec1983867c"
+        "destinationCount": 22,
+        "sha256": "afd40a9e59d1a47b01ebe43a6c5925ce6ee5a1468b00b6fd4d092889ee4990f3"
       },
       {
         "stack": "Vscode",
@@ -3957,26 +3977,6 @@
   ],
   "missing_pairs_with_proposed_phase2": [
     {
-      "host": "Cursor",
-      "agent": "implementer",
-      "proposed_phase2": "native"
-    },
-    {
-      "host": "Cursor",
-      "agent": "test_reviewer",
-      "proposed_phase2": "native"
-    },
-    {
-      "host": "Antigravity",
-      "agent": "implementer",
-      "proposed_phase2": "native"
-    },
-    {
-      "host": "Antigravity",
-      "agent": "test_reviewer",
-      "proposed_phase2": "native"
-    },
-    {
       "host": "Cline",
       "agent": "implementer",
       "proposed_phase2": "fresh-task-session-fallback"
@@ -3997,8 +3997,8 @@
       "proposed_phase2": "fresh-task-session-fallback"
     }
   ],
-  "represented_count": 41,
-  "missing_count": 8,
+  "represented_count": 45,
+  "missing_count": 4,
   "total_pairs": 49,
   "ambiguities_requiring_owner_confirmation": [
     {
@@ -4016,15 +4016,6 @@
         { "host": "Cline", "agent": "test_reviewer" },
         { "host": "Kilocode", "agent": "implementer" },
         { "host": "Kilocode", "agent": "test_reviewer" }
-      ]
-    },
-    {
-      "id": "U-Antigravity-Authority",
-      "question": "Confirm the Antigravity subagent mechanism can express workspace-write for `implementer` when migrated.",
-      "current": "planner and repository_explorer represented natively; implementer and test_reviewer missing",
-      "pending_missing_pairs": [
-        { "host": "Antigravity", "agent": "implementer" },
-        { "host": "Antigravity", "agent": "test_reviewer" }
       ]
     },
     {

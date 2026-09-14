@@ -18,6 +18,8 @@
         @{ Source = 'agents/plan-reviewer.md'; Dest = 'agents/plan-reviewer.md' }
         @{ Source = 'agents/reviewer-a.md'; Dest = 'agents/reviewer-a.md' }
         @{ Source = 'agents/repository_explorer.md'; Dest = 'agents/repository_explorer.md' }
+        @{ Source = 'agents/implementer.md'; Dest = 'agents/implementer.md' }
+        @{ Source = 'agents/test_reviewer.md'; Dest = 'agents/test_reviewer.md' }
         @{ Source = 'review-subagent-models.md'; Dest = 'review-subagent-models.md' }
     )
     HybridRuleIds       = @('agent-invocation', 'iterative-plan-review', 'iterative-code-review', 'pre-commit-ci-gate')

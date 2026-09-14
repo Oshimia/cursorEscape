@@ -1,6 +1,6 @@
 # Procedure normalization inventory — 2026-09
 
-**Phase:** 0 · **Status:** implementation-under-review · **Schema:** v2 · **Snapshot date:** 2026-09-11 · **Last updated:** 2026-09-14
+**Phase:** 0 · **Status:** implementation-under-review · **Schema:** v2 · **Snapshot date:** 2026-09-11 · **Last updated:** 2026-09-15
 
 This is a read-only current-state snapshot. It identifies evidence and policy; it does not authorize migration or Apply. The snapshot date is the original Phase 0 capture; the last-updated date records later reconciliation edits only.
 
@@ -18,14 +18,14 @@ This is a read-only current-state snapshot. It identifies evidence and policy; i
 | Metric | Count |
 |---|---:|
 | Total pairs | 49 |
-| Represented | 41 |
-| Missing | 8 |
+| Represented | 45 |
+| Missing | 4 |
 
 | Host | native-definition | generated-native-projection | fallback-launch-contract | missing |
 |---|---:|---:|---:|---:|
-| Cursor | 4 | 0 | 1 | 2 |
+| Cursor | 6 | 0 | 1 | 0 |
 | OpenCode | 7 | 0 | 0 | 0 |
-| Antigravity | 5 | 0 | 0 | 2 |
+| Antigravity | 7 | 0 | 0 | 0 |
 | Vscode | 7 | 0 | 0 | 0 |
 | Cline | 0 | 0 | 5 | 2 |
 | Kilocode | 0 | 0 | 5 | 2 |
@@ -35,10 +35,6 @@ This is a read-only current-state snapshot. It identifies evidence and policy; i
 
 | Host | Agent | Proposal |
 |---|---|---|
-| Cursor | `implementer` | `native` |
-| Cursor | `test_reviewer` | `native` |
-| Antigravity | `implementer` | `native` |
-| Antigravity | `test_reviewer` | `native` |
 | Cline | `implementer` | `fresh-task-session-fallback` |
 | Cline | `test_reviewer` | `fresh-task-session-fallback` |
 | Kilocode | `implementer` | `fresh-task-session-fallback` |
@@ -50,9 +46,9 @@ Notable route facts: `planner` is represented on all seven hosts — Cursor and 
 
 | Host | Manifest | Binding model | Copy/Destination entries | HardExcludes | NeverTouch | HybridRuleIds |
 |---|---|---|---:|---:|---:|---:|
-| Cursor | `scripts/host-sync/manifests/cursor.manifest.psd1` | `single-root` | 15 | 2 | 1 | 4 |
+| Cursor | `scripts/host-sync/manifests/cursor.manifest.psd1` | `single-root` | 17 | 2 | 1 | 4 |
 | OpenCode | `scripts/host-sync/manifests/opencode.manifest.psd1` | `single-root` | 19 | 2 | 1 | 0 |
-| Antigravity | `scripts/host-sync/manifests/antigravity.manifest.psd1` | `single-root` | 20 | 8 | 2 | 0 |
+| Antigravity | `scripts/host-sync/manifests/antigravity.manifest.psd1` | `single-root` | 22 | 8 | 2 | 0 |
 | Vscode | `scripts/host-sync/manifests/vscode.manifest.psd1` | `single-root` | 21 | 2 | 3 | 0 |
 | Cline | `scripts/host-sync/manifests/cline.manifest.psd1` | `single-root` | 4 | 4 | 7 | 0 |
 | Kilocode | `scripts/host-sync/manifests/kilocode.manifest.psd1` | `single-root` | 4 | 1 | 1 | 0 |
@@ -92,5 +88,4 @@ The six historical restore directories cover Cursor, OpenCode, Antigravity, Vsco
 |---|---|
 | U-Cursor-Bugbot | Retain built-in Bugbot fallback only with explicit canonical envelope and isolation, or add a native definition in Phase 2? |
 | U-Cline-Kilocode-Routes | Phase 2 proposes fresh-task/session fallback for all missing Cline/Kilocode roles. Confirm operator/task workflow acceptance. |
-| U-Antigravity-Authority | Confirm the Antigravity subagent mechanism can express workspace-write for `implementer` when migrated. |
 | U-Render-Baseline-Reconciliation | Identify mechanical baseline changes after generators exist; cannot be derived safely until Phase 2. |

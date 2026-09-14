@@ -17,6 +17,83 @@ $registry = Test-ProcedureRegistryCatalogs -RepoRoot $RepoRoot
 Assert-View 'registry is valid' $registry.Valid (($registry.Failures | Select-Object -First 5) -join '; ')
 Assert-View 'all registered skills carry frontmatter description metadata' (@($registry.Catalogs.skills.items | Where-Object { $null -ne $_.PSObject.Properties['description'] }).Count -eq @($registry.Catalogs.skills.items).Count)
 
+$phase2cPairs = @(
+  @{ Host = 'Cursor'; Agent = 'implementer'; Wrapper = 'overlays/cursor/agents/implementer.md'; Destination = 'agents/implementer.md'; Launch = 'Cursor Task with subagent_type implementer'; Authority = 'workspace-write' },
+  @{ Host = 'Cursor'; Agent = 'test_reviewer'; Wrapper = 'overlays/cursor/agents/test_reviewer.md'; Destination = 'agents/test_reviewer.md'; Launch = 'Cursor Task with subagent_type test_reviewer'; Authority = 'read-only' },
+  @{ Host = 'Antigravity'; Agent = 'implementer'; Wrapper = 'overlays/antigravity/agents/implementer.md'; Destination = 'config/agents/implementer.md'; Launch = 'Antigravity invoke_subagent'; Authority = 'workspace-write' },
+  @{ Host = 'Antigravity'; Agent = 'test_reviewer'; Wrapper = 'overlays/antigravity/agents/test_reviewer.md'; Destination = 'config/agents/test_reviewer.md'; Launch = 'Antigravity invoke_subagent'; Authority = 'read-only' }
+)
+foreach ($pair in $phase2cPairs) {
+  $item = @($registry.Catalogs.agents.items | Where-Object { [string]$_.id -eq $pair.Agent })[0]
+  $binding = @($item.hostBindings | Where-Object { [string]$_.host -eq $pair.Host })[0]
+  $row = @($registry.Inventory.parity_matrix | Where-Object { [string]$_.host -eq $pair.Host -and [string]$_.agent -eq $pair.Agent })[0]
+  Assert-View "Phase 2C registry binding parity: $($pair.Host)|$($pair.Agent)" (
+    [string]$binding.representation -eq 'native-definition' -and
+    [string]$binding.routeIdentity -eq $pair.Agent -and
+    [string]$binding.alias -eq '' -and
+    [string]$binding.launchMechanism -eq $pair.Launch -and
+    [string]$binding.authority -eq $pair.Authority -and
+    [string]$binding.isolation -eq 'clean-context' -and
+    [string]$binding.classification -eq 'host wrapper' -and
+    [string]$row.representation -eq 'native-definition' -and
+    [string]$row.route_identity -eq $pair.Agent -and
+    [string]$row.launch_mechanism -eq $pair.Launch -and
+    [string]$row.authority -eq $pair.Authority -and
+    [string]$row.isolation -eq 'clean-context' -and
+    [string]$row.classification -eq 'host wrapper'
+  ) "binding=$($binding | ConvertTo-Json -Compress)"
+
+  $manifest = @($registry.Inventory.manifests | Where-Object { [string]$_.host -eq $pair.Host })[0]
+  $entries = @($manifest.entries | Where-Object {
+    [string]$_.source -eq $pair.Wrapper.Substring($manifest.overlay_root.Length + 1) -and
+    [string]$_.destination -eq $pair.Destination
+  })
+  Assert-View "Phase 2C evidence-path/manifest agreement: $($pair.Host)|$($pair.Agent)" (
+    @($binding.evidencePaths) -contains $pair.Wrapper -and
+    @($binding.evidencePaths) -contains $manifest.path -and
+    @($row.evidence_paths) -contains $pair.Wrapper -and
+    @($row.evidence_paths) -contains $manifest.path -and
+    $entries.Count -eq 1
+  ) "entries=$($entries.Count)"
+}
+$cursorImplementer = @(@($registry.Catalogs.agents.items | Where-Object { [string]$_.id -eq 'implementer' })[0].hostBindings | Where-Object { [string]$_.host -eq 'Cursor' })[0]
+$cursorTestReviewer = @(@($registry.Catalogs.agents.items | Where-Object { [string]$_.id -eq 'test_reviewer' })[0].hostBindings | Where-Object { [string]$_.host -eq 'Cursor' })[0]
+$cursorImplementerRaw = Get-Content -Raw (Join-Path $RepoRoot 'overlays/cursor/agents/implementer.md')
+$cursorTestReviewerRaw = Get-Content -Raw (Join-Path $RepoRoot 'overlays/cursor/agents/test_reviewer.md')
+Assert-View 'Phase 2C Cursor authority difference is explicit in metadata and spawn route' (
+  [string]$cursorImplementer.authority -eq 'workspace-write' -and
+  [string]$cursorTestReviewer.authority -eq 'read-only' -and
+  $cursorImplementerRaw.Contains('readonly: false') -and
+  $cursorTestReviewerRaw.Contains('readonly: true')
+)
+$antigravityTestReviewer = @(@($registry.Catalogs.agents.items | Where-Object { [string]$_.id -eq 'test_reviewer' })[0].hostBindings | Where-Object { [string]$_.host -eq 'Antigravity' })[0]
+$antigravityTestReviewerRaw = Get-Content -Raw (Join-Path $RepoRoot 'overlays/antigravity/agents/test_reviewer.md')
+$toolsMatch = [regex]::Match($antigravityTestReviewerRaw, '(?m)^tools:\r?$([\s\S]*?)^subagent:')
+$observedTools = @(
+  if ($toolsMatch.Success) {
+    @($toolsMatch.Groups[1].Value -split '\r?\n' | ForEach-Object { ($_.Trim() -replace '^-\s*', '').Trim() } | Where-Object { $_ })
+  }
+)
+Assert-View 'Phase 2C Antigravity test_reviewer preserves the read-only reviewer allowlist' (
+  [string]$antigravityTestReviewer.authority -eq 'read-only' -and
+  ($observedTools -join ',') -eq 'view_file,grep_search,run_command' -and
+  $antigravityTestReviewerRaw.Contains('commandExecutionPolicy: sandbox') -and
+  $antigravityTestReviewerRaw.Contains('tool allowlist is read-only')
+)
+Assert-View 'Phase 2C inventory derives exact 45 represented / 4 missing counts' (
+  [int]$registry.Inventory.represented_count -eq 45 -and
+  [int]$registry.Inventory.missing_count -eq 4 -and
+  @($registry.Inventory.parity_matrix | Where-Object { $_.representation -ne 'missing' }).Count -eq 45 -and
+  @($registry.Inventory.parity_matrix | Where-Object { $_.representation -eq 'missing' }).Count -eq 4 -and
+  @($registry.Inventory.missing_pairs_with_proposed_phase2).Count -eq 4
+)
+$representedKeys = @($phase2cPairs | ForEach-Object { "$($_.Host)|$($_.Agent)" })
+$pendingPairs = @($registry.Inventory.ambiguities_requiring_owner_confirmation | ForEach-Object { $_.pending_missing_pairs } | ForEach-Object { "$($_.host)|$($_.agent)" })
+Assert-View 'Phase 2C represented pairs are closed against every pending ambiguity' (
+  @($pendingPairs | Where-Object { $representedKeys -contains $_ }).Count -eq 0 -and
+  @($registry.Inventory.ambiguities_requiring_owner_confirmation | Where-Object { [string]$_.id -eq 'U-Antigravity-Authority' }).Count -eq 0
+) "pending=$($pendingPairs -join '; ')"
+
 $temp = Join-Path ([IO.Path]::GetTempPath()) ("procedure-registry-" + [Guid]::NewGuid().ToString('N'))
 try {
   $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
@@ -669,9 +746,13 @@ try {
   # Phase 3A machinery guard: the shadow slice must not change canonical skill
   # bodies or any host/runtime projection. Phase 3B replaces this guard with
   # managed-frontmatter migration checks when canonical files are regenerated.
-  $sliceDrift = @(& git -C $RepoRoot status --porcelain -- skills overlays scripts/host-sync)
+  # Phase 2 agent parity legitimately edits agent wrappers, manifests, and
+  # overlay indexes. Scope the residual Phase 3A guard to canonical and host
+  # skill projections; broader source agreement remains in the registry,
+  # inventory, manifest, and current-state checks.
+  $sliceDrift = @(& git -C $RepoRoot status --porcelain -- skills 'overlays/*/skills')
   if ($LASTEXITCODE -ne 0) { throw "FAIL: Phase 3A drift status exited $LASTEXITCODE" }
-  Assert-View 'Phase 3A leaves canonical skills and host projections unchanged' ($sliceDrift.Count -eq 0) (($sliceDrift | Select-Object -First 5) -join '; ')
+  Assert-View 'Phase 3A leaves canonical skills and host skill projections unchanged' ($sliceDrift.Count -eq 0) (($sliceDrift | Select-Object -First 5) -join '; ')
 } catch { $failures++; Write-Output "FAIL: edge-case execution: $($_.Exception.Message)"; Write-Output $_.ScriptStackTrace }
 
 # Current-state checker contract: an explicit -RepoRoot is honored from any
@@ -720,11 +801,16 @@ try {
     $ambiguity = $i.ambiguities_requiring_owner_confirmation | Where-Object { $_.id -eq 'U-Cursor-Bugbot' }
     $ambiguity.pending_missing_pairs = @([pscustomobject]@{ host = 'Cline'; agent = 'not-a-governed-agent' })
   } @('AmbiguityPendingPairUnknown: U-Cursor-Bugbot -> Cline|not-a-governed-agent')
-  # The declared ledger row feeds both row-agreement and manifest-derived count
-  # invariants, so the mutation asserts both observed signatures.
+  Assert-CheckerMutation 'missing pair agreement mismatch fails' {
+    param($i) $i.missing_pairs_with_proposed_phase2[0].host = 'WrongHost'
+  } @('MissingPairAgreement: row 0 host')
+  # The ledger mutation proves the immutable inventory declaration remains
+  # row-agreement-checked; source manifest counts are separately checked as
+  # current Phase 2 evidence rather than being conflated with historical render
+  # output.
   Assert-CheckerMutation 'ledger destination-count mismatch fails' {
     param($i) $i.render_baselines.six_stack_ledger_entries[0].destinationCount = 99
-  } @('LedgerDestinationCount: Cursor manifest-derived=19 ledger=99', 'LedgerRowAgreement: row 0')
+  } @('LedgerRowAgreement: row 0')
   Assert-CheckerMutation 'missing last_updated date fails' {
     param($i) $i.PSObject.Properties.Remove('last_updated')
   } @("InventoryLastUpdatedFormat: invalid ISO calendar date ''")
@@ -738,13 +824,13 @@ try {
   $markdownTrimmedPath = Join-Path $checkerTemp 'trimmed-ambiguities.md'
   ($markdownOriginal -replace '\| U-Render-Baseline-Reconciliation \|[^\r\n]+', '') | Set-Content -LiteralPath $markdownTrimmedPath
   $markdownTrimmedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownTrimmedPath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
-  Assert-View 'markdown ambiguity row removal fails' ($LASTEXITCODE -eq 1 -and $markdownTrimmedOutput.Contains('MarkdownAmbiguityCount: expected 4, got 3')) "exit=$LASTEXITCODE"
+  Assert-View 'markdown ambiguity row removal fails' ($LASTEXITCODE -eq 1 -and $markdownTrimmedOutput.Contains('MarkdownAmbiguityCount: expected 3, got 2')) "exit=$LASTEXITCODE"
   $markdownRenamedPath = Join-Path $checkerTemp 'renamed-ambiguity.md'
   ($markdownOriginal -replace '\| U-Cursor-Bugbot \|', '| U-Renamed-Bugbot |') | Set-Content -LiteralPath $markdownRenamedPath
   $markdownRenamedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownRenamedPath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
   Assert-View 'markdown ambiguity id drift fails' ($LASTEXITCODE -eq 1 -and $markdownRenamedOutput.Contains("MarkdownAmbiguityId: row 0 expected 'U-Cursor-Bugbot', got 'U-Renamed-Bugbot'")) "exit=$LASTEXITCODE"
   $markdownNoUpdatePath = Join-Path $checkerTemp 'stale-dates.md'
-  ($markdownOriginal -replace ' · \*\*Last updated:\*\* 2026-09-14', '') | Set-Content -LiteralPath $markdownNoUpdatePath
+  ($markdownOriginal -replace ' · \*\*Last updated:\*\* 2026-09-15', '') | Set-Content -LiteralPath $markdownNoUpdatePath
   $markdownNoUpdateOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownNoUpdatePath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
   Assert-View 'markdown last-updated drift fails' ($LASTEXITCODE -eq 1 -and $markdownNoUpdateOutput.Contains('MarkdownInventoryLastUpdated')) "exit=$LASTEXITCODE"
 } catch { $failures++; Write-Output "FAIL: current-state checker execution: $($_.Exception.Message)" }

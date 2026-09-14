@@ -1,6 +1,6 @@
 # Antigravity host adapter
 
-**Last updated:** 2026-09-14
+**Last updated:** 2026-09-15
 
 ## Context
 
@@ -27,14 +27,14 @@ Owner decisions (2026-08-23): cursorEscape is **sole SoT**; live global rules (`
 | Always-on (thin) | Gate pointers only | `GEMINI.md` (global rules surface — injected across all workspaces; **full replacement**) |
 | Skills (on-demand) | [skills/](../../skills/_index.md) thin stubs | `config/skills/<id>/SKILL.md` → Read `{{COMPANION_ROOT}}/skills|workflow/…` (auto-discovered catalog) |
 | Workflows | Trajectory wrappers | `antigravity/global_workflows/escape-{plan,review,closeout}.md` → `/escape-*` slash commands |
-| Agent routes | [agents/](../../agents/_index.md) contracts | `config/agents/{planner,plan_reviewer,production_readiness_reviewer,bug_reviewer,repository_explorer}.md` — read-only tool allowlists (edit-deny parity); spawned via `invoke_subagent`, concurrent clean-context children. `planner` is source-ready (Phase 2A) and `repository_explorer` is source-ready (Phase 2B); live pickup at the next authorized Apply. |
+| Agent routes | [agents/](../../agents/_index.md) contracts | `config/agents/{planner,plan_reviewer,implementer,production_readiness_reviewer,bug_reviewer,repository_explorer,test_reviewer}.md` — planning, investigation, and reviewer legs use read-only tool allowlists (edit-deny parity); `implementer` records canonical workspace-write authority without runtime attestation. Spawned via `invoke_subagent`, concurrent clean-context children. `planner` (Phase 2A), `repository_explorer` (Phase 2B), and `implementer`/`test_reviewer` (Phase 2C-native) are source-ready; live pickup and Antigravity live-write smoke await the next authorized Apply/Phase 6. |
 
 ### Inventory
 
 - **Always-on:** `GEMINI.md` — default-on plan + dual review; when-in-doubt; eval/harness not exempt; Incomplete-until pointer.
 - **Skills (11):** `discovery`, `implementation-plan`, `plan-review`, `implementation-review`, `pre-commit-ci-gate`, `composer`, `documentation-architecture`, `roadmap`, `diagnosing-bugs`, plus the global `opencode-headless-run`, `opencode-history-search` (2026-08-26 owner ruling: opencode-* pair mirrors on every stack; parity bar otherwise = OpenCode overlay inventory; `pre-commit-ci-gate` has no companion skill base — SoT is [`rules/pre-commit-ci-gate.md`](../../rules/pre-commit-ci-gate.md)).
 - **Workflows (3):** `/escape-plan`, `/escape-review`, `/escape-closeout`.
-- **Subagents (5):** `planner` (source-ready Phase 2A; canonical `planning` gate, live pickup at the next authorized Apply), `repository_explorer` (source-ready Phase 2B; canonical `investigation` gate, live pickup at the next authorized Apply), plus the three reviewer legs with read-only tool lists (`view_file`, `grep_search`, `run_command`); exact tool names only — misspellings hang subagents (known upstream issue).
+- **Subagents (7):** `planner` (source-ready Phase 2A; canonical `planning` gate), `repository_explorer` (source-ready Phase 2B; canonical `investigation` gate), `implementer` and `test_reviewer` (source-ready Phase 2C-native; canonical `phase` and `test-review` gates), plus the three reviewer legs with read-only tool lists (`view_file`, `grep_search`, `run_command`). `implementer` has canonical workspace-write authority, but runtime write behavior is not attested until Phase 6; source-ready routes have live pickup only at the next authorized Apply. Exact tool names only — misspellings hang subagents (known upstream issue).
 - **Never synced / never touched:** `antigravity/global_workflows/caveman.md`; credential/app-state files (`settings.json`, `config/mcp_config.json`, `oauth_creds.json`, `google_accounts.json`, `state.json`, `trustedFolders.json`, `installation_id`); `config/projects`.
 
 ### Live sync (Sync-HostHarness)
@@ -57,7 +57,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Apply
 2. **All-three-baseline Apply coupling:** until the `~/.gemini` baseline exists and its path fills the `antigravity` property, `-Apply -Target Cursor/OpenCode` also fails closed. Deliberate conservatism.
 3. **Gemini CLI tolerance of additive subtrees** (`config/skills/**`, `config/agents/**`) — accepted risk; post-Apply smoke catches anomalies.
 4. **Deliberate skill-set exclusion:** only eleven ids mirrored; extend deliberately per parity bar, not by default.
-5. **Commit ordering:** this stack's `bug_reviewer.md` harness cites `{{COMPANION_ROOT}}/skills/bug-review-sweep/SKILL.md` — currently untracked owner work; land or co-commit it before/with this overlay's commit ([overlay _index implication #4](../../overlays/antigravity/_index.md)).
+5. **Dependency availability:** this stack's `bug_reviewer.md` harness cites `{{COMPANION_ROOT}}/skills/bug-review-sweep/SKILL.md`; that canonical base is tracked, so the wrapper has no separate land/co-commit ordering constraint ([overlay _index implication #4](../../overlays/antigravity/_index.md)).
 
 ### Smoke table (C1–C6 mapped)
 

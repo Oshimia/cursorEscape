@@ -250,15 +250,16 @@
       "hostBindings": [
         {
           "host": "Cursor",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "native-definition",
+          "routeIdentity": "implementer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Cursor Task with subagent_type implementer",
+          "authority": "workspace-write",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
           "evidencePaths": [
-            "overlays/cursor/agents/"
+            "overlays/cursor/agents/implementer.md",
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
           ]
         },
         {
@@ -278,15 +279,16 @@
         },
         {
           "host": "Antigravity",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "native-definition",
+          "routeIdentity": "implementer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Antigravity invoke_subagent",
+          "authority": "workspace-write",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
           "evidencePaths": [
-            "overlays/antigravity/agents/"
+            "overlays/antigravity/agents/implementer.md",
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
           ]
         },
         {
@@ -712,15 +714,16 @@
       "hostBindings": [
         {
           "host": "Cursor",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "native-definition",
+          "routeIdentity": "test_reviewer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Cursor Task with subagent_type test_reviewer",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
           "evidencePaths": [
-            "overlays/cursor/agents/"
+            "overlays/cursor/agents/test_reviewer.md",
+            "scripts/host-sync/manifests/cursor.manifest.psd1"
           ]
         },
         {
@@ -740,15 +743,16 @@
         },
         {
           "host": "Antigravity",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "native-definition",
+          "routeIdentity": "test_reviewer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Antigravity invoke_subagent",
+          "authority": "read-only",
+          "isolation": "clean-context",
+          "classification": "host wrapper",
           "evidencePaths": [
-            "overlays/antigravity/agents/"
+            "overlays/antigravity/agents/test_reviewer.md",
+            "scripts/host-sync/manifests/antigravity.manifest.psd1"
           ]
         },
         {

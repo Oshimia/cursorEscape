@@ -234,6 +234,17 @@ foreach ($h in $hosts) {
         never_touch = @($d.NeverTouch).Count
         hybrid_rule_ids = @($hybrid).Count
     }
+    # Current source-state manifest agreement: every native wrapper named by a
+    # represented parity row must be delivered exactly once by its host
+    # manifest. This is separate from the historical six-stack render ledger
+    # below, which remains a restore/reference snapshot until Phase 6.
+    foreach ($p in @($j.parity_matrix | Where-Object { $_.host -eq $h -and $_.representation -eq 'native-definition' })) {
+        $wrapper = @(@($p.evidence_paths) | Where-Object { $_.StartsWith(($m.overlay_root.TrimEnd('/','\') + '/'), [StringComparison]::OrdinalIgnoreCase) } | Select-Object -First 1)
+        if ($wrapper.Count -ne 1) { continue }
+        $expectedSource = $wrapper[0].Substring($m.overlay_root.TrimEnd('/','\').Length + 1).Replace('\','/')
+        $matches = @(@($m.entries) | Where-Object { "$($_.source)" -ceq $expectedSource })
+        if ($matches.Count -ne 1) { Add-Failure 'NativeManifestEntry' "$h|$($p.agent) expected source '$expectedSource', found $($matches.Count)" }
+    }
     if (@($m.entries).Count -ne $actualEntries.Count) { Add-Failure 'InventoryEntryCount' "$h expected $($actualEntries.Count), got $(@($m.entries).Count)" }
     else {
         for ($i = 0; $i -lt $actualEntries.Count; $i++) {
@@ -360,16 +371,11 @@ Test-RepoPath $b.six_stack_ledger_path 'LedgerPath'; Test-RepoPath $b.codex_rend
 $ledger = Get-Content -Raw (Join-Path $RepoRoot $b.six_stack_ledger_path) | ConvertFrom-Json; $render = Get-Content -Raw (Join-Path $RepoRoot $b.codex_render_plan_path) | ConvertFrom-Json
 if ($b.six_stack_ledger_entries.Count -ne 6) { Add-Failure 'SixStackLedgerRowCount' }
 for ($i = 0; $i -lt 6; $i++) { $a = $ledger.entries[$i]; $dd = $b.six_stack_ledger_entries[$i]; if ($a.stack -ne $dd.stack -or $a.destinationCount -ne $dd.destinationCount -or $a.sha256 -ne $dd.sha256) { Add-Failure 'LedgerRowAgreement' "row $i" } }
-# Manifest-derived destination counts must match the declared ledger rows
-# before review launch. The count rule is shared with Get-ExistingSixStackRenderLedger
-# through Get-StackManifestDestinationCount; a malformed manifest shape fails closed.
-for ($i = 0; $i -lt 6; $i++) {
-    $dd = $b.six_stack_ledger_entries[$i]; $stack = [string]$dd.stack
-    if (-not $manifestData.ContainsKey($stack)) { Add-Failure 'LedgerStackManifestMissing' $stack; continue }
-    $stackManifest = $manifestData[$stack]
-    try { $expectedCount = Get-StackManifestDestinationCount -Manifest $stackManifest } catch { Add-Failure 'LedgerDestinationCount' "$stack $($_.Exception.Message)"; continue }
-    if ([int]$dd.destinationCount -ne $expectedCount) { Add-Failure 'LedgerDestinationCount' "$stack manifest-derived=$expectedCount ledger=$($dd.destinationCount)" }
-}
+# The six-stack ledger is an immutable historical restore/reference snapshot.
+# Its rows must agree with the inventory's declared ledger, while current
+# manifest agreement is enforced above against inventory manifest entries.
+# Phase 2C closeout reconciles these derived inventory rows through the
+# sanctioned ledger writer only; no live render/Apply is implied.
 if ($b.codex_rendered_destination_count -ne $render.entries.Count) { Add-Failure 'CodexRenderedCount' }
 $phys = @(Get-ChildItem -LiteralPath (Join-Path $RepoRoot $b.codex_physical_fixture_root) -Recurse -File | ForEach-Object { $_.FullName.Substring($RepoRoot.Length+1).Replace('\','/') } | Sort-Object)
 $decFix = @($b.codex_physical_fixture_files | Sort-Object)
@@ -384,8 +390,8 @@ foreach ($x in $b.baseline_directories_historical) { Test-ExternalPath $x 'Histo
 if ($md -notmatch [regex]::Escape('| Total pairs | 49 |')) { Add-Failure 'MarkdownTotalPairs' }
 if ($snapshotDate -and -not ($md -match [regex]::Escape("**Snapshot date:** $snapshotDate"))) { Add-Failure 'MarkdownInventorySnapshotDate' "expected '$snapshotDate'" }
 if ($lastUpdated -and -not ($md -match [regex]::Escape("**Last updated:** $lastUpdated"))) { Add-Failure 'MarkdownInventoryLastUpdated' "expected '$lastUpdated'" }
-if ($md -notmatch [regex]::Escape('| Represented | 41 |')) { Add-Failure 'MarkdownRepresented' }
-if ($md -notmatch [regex]::Escape('| Missing | 8 |')) { Add-Failure 'MarkdownMissing' }
+if (-not ($md -match [regex]::Escape("| Represented | $($j.represented_count) |"))) { Add-Failure 'MarkdownRepresented' }
+if (-not ($md -match [regex]::Escape("| Missing | $($j.missing_count) |"))) { Add-Failure 'MarkdownMissing' }
 foreach ($h in $hosts) { $hr = @($j.parity_matrix | Where-Object host -eq $h); $n = @($hr | Where-Object representation -eq 'native-definition').Count; $g = @($hr | Where-Object representation -eq 'generated-native-projection').Count; $fb = @($hr | Where-Object representation -eq 'fallback-launch-contract').Count; $ms = @($hr | Where-Object representation -eq 'missing').Count; if ($md -notmatch [regex]::Escape("| $h | $n | $g | $fb | $ms |")) { Add-Failure 'MarkdownMatrixRow' $h } }
 foreach ($x in $j.missing_pairs_with_proposed_phase2) { $row = "| $($x.host) | ``$($x.agent)`` | ``$($x.proposed_phase2)`` |"; if (-not $md.Contains($row)) { Add-Failure 'MarkdownMissingPair' "$($x.host)/$($x.agent)" } }
 

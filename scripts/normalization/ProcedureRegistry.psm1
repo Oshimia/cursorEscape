@@ -41,8 +41,10 @@ function Get-MarkdownTableRow([string[]]$Lines,[string]$Heading,[string]$Id,[int
 function Get-StackManifestDestinationCount {
   <#
     Shared fail-closed rule for the expected render-destination count of one
-    parsed host stack manifest. Used by the current-state checker and the
-    six-stack render ledger so the count is expressed exactly once:
+    parsed host stack manifest. Used by the six-stack render ledger generator
+    and its registry-view unit checks; the current-state checker validates
+    current manifest agreement separately from historical row-agreement ledger
+    checks. In each supported shape the count is expressed exactly once:
     CopyEntries (+ HybridRuleIds for Cursor) (+ the two dual-write
     AGENTS/opencode.json destinations for OpenCode), or the generic
     DestinationEntries model.

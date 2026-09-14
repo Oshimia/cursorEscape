@@ -13,8 +13,8 @@
   "entries": [
     {
       "stack": "Cursor",
-      "destinationCount": 19,
-      "sha256": "95a92ecdceaae62310b145b551585b8c245367ecd5ad016e519b43abb53e3ef5"
+      "destinationCount": 21,
+      "sha256": "9432c1268341b322134e1283f60233442b42467b57e6e517d616ab592b3e8911"
     },
     {
       "stack": "OpenCode",
@@ -23,8 +23,8 @@
     },
     {
       "stack": "Antigravity",
-      "destinationCount": 20,
-      "sha256": "bc1b68164b71634b41381bc116b47548a57d1918b644d4bf8d4f2bec1983867c"
+      "destinationCount": 22,
+      "sha256": "afd40a9e59d1a47b01ebe43a6c5925ce6ee5a1468b00b6fd4d092889ee4990f3"
     },
     {
       "stack": "Vscode",

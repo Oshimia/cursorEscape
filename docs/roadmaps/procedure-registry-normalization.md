@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete — Phase 2 fallback closeout pending; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete — Phase 2 fallback closeout pending; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -24,6 +24,8 @@ Phase 2A added explicit `planner` routes for Cursor and Antigravity plus Cline a
 The owner directed an efficiency-preserving recovery: retain the largely complete tree, review it in declared functional scopes, fix only review-identified defects, then run one integration reviewer pair and normalization Full CI. This exception does not authorize additional foundation expansion; the packed recovery contract governs the active recovery.
 
 Phase 2B retained the efficiency-preserving recovery and closed through a separate bounded documentation-cascade correction. Composer-final Full CI then exposed one stale invariant: the `antigravity governed role defs under config/agents` expectation in `scripts/host-sync/Invoke-Phase2FastCI.ps1` still counted four destinations and was corrected to the manifest's five (including `repository_explorer`) in this working tree. The combined working tree now contains 21 files and 249 changed/new physical lines against baseline `1c87201`. The implementer-owned review used 2 of 4 iterations, ended with production readiness APPROVED and `bug_reviewer` CLEAN, and left no Batchable findings.
+
+Phase 2C-native adds only the four missing native `implementer` and `test_reviewer` routes on Cursor and Antigravity, raising represented pairs to 45 of 49. The remaining four pairs are the Cline/Kilocode implementer and test_reviewer fallback closeout. After replacement dual approval, Composer reconciled the historical six-stack render ledger and its derived inventory rows through the sanctioned writer; Composer Full CI and the local Phase 2C closeout commit remain pending.
 
 ### Phase 1 recovery gates
 
@@ -278,6 +280,27 @@ The approved local plan remains the full source of goals, alternatives, assumpti
   - [x] Cursor, Antigravity, Cline, Kilocode, and overlay documentation cascades synchronized.
   - [x] Implementer-owned dual review APPROVED.
   - [x] Composer Full CI, pre-commit gate, and local commit.
+
+
+---
+
+
+### Phase 2C-native — implementer and test_reviewer native parity on Cursor and Antigravity
+
+- **Status:** Phase 2C-native complete — Phase 2 fallback closeout pending.
+- **Scope:** four previously missing pairs only: `Cursor|implementer`, `Cursor|test_reviewer`, `Antigravity|implementer`, and `Antigravity|test_reviewer`.
+- **Routes:** Cursor native wrappers with canonical route identities (`implementer`, `test_reviewer`) and writable/read-only Task spawn metadata respectively; Antigravity native `invoke_subagent` wrappers using the established subagent structure. Antigravity `test_reviewer` preserves the existing read-only tool allowlist; `implementer` records canonical workspace-write authority without runtime attestation, and live-write smoke remains pending for Phase 6.
+- **Cascade:** Composer triage produced a transparent one-time 20-file integrated-scope exception under the owner's explicit finish-Phase-2 direction—not a general cap increase. It authorized five review-required cascade files plus `ProcedureRegistry.psm1` comment correction. `Invoke-Phase2FastCI.ps1` derives the exact seven governed Antigravity agent routes; the Antigravity SOP records all seven routes; the Cursor SOP records six source-ready routes with two live; the canonical agent index links the new Cursor wrappers; and the top-level overlay index records the complete seven-route Antigravity set. After dual approval, Composer ran the sanctioned ledger writer, adding the generated six-stack ledger as a 21st mechanical closeout file. Live pickup and live-write smoke remain Phase 6.
+- **Unchanged:** canonical contracts, OpenCode/Vscode/Codex routes, Cline and Kilocode routes, other SOPs outside the declared Cursor/Antigravity cascades, runtime projections, skills, and live hosts. No Phase 4 work is started.
+- **Representation:** 45 represented / 4 missing of 49. `U-Antigravity-Authority` is closed because neither newly represented Antigravity pair remains pending; Cline/Kilocode route acceptance remains open for the four fallback closeout pairs.
+- **Deferred Batchables (explicitly not implemented):** harden `NativeManifestEntry` to require exactly one wrapper-like evidence path before selection rather than selecting the first qualifying path; add focused source-level assertions for Antigravity `implementer` workspace-write wording and the Phase 6 runtime-attestation boundary; complete the historical-ledger comment-boundary clarification without regenerating or mutating historical ledger bytes.
+- **Checklist:**
+  - [x] Registry, Phase 0 inventory, manifests, wrappers, indexes, and current-state invariants reconciled for the four native pairs.
+  - [x] Focused tests cover binding parity, evidence/manifest agreement, Cursor authority difference, Antigravity read-only test reviewer, exact 45/4 counts, and ambiguity closure.
+  - [x] Renewed-block iteration-2 replacement dual review after observed Fast CI and `git diff --check`: production readiness APPROVED and `bug_reviewer` CLEAN; both reviewers closed.
+  - [x] Historical ledger and derived inventory-row reconciliation through the sanctioned writer after dual approval.
+  - [x] Composer observed sole normalization Full CI PASS after the generated-ledger closeout; pre-commit gate loaded. No live Apply.
+  - [ ] Phase 2 fallback closeout for Cline/Kilocode `implementer` and `test_reviewer`.
 
 
 ---

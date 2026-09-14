@@ -1,6 +1,6 @@
 # Host overlays (recorded files)
 
-**Last updated:** 2026-09-14
+**Last updated:** 2026-09-15
 
 ## Context
 
@@ -14,7 +14,7 @@ Architecture: [skill source and host overlays](../docs/featureArchitecture/skill
 | ---- | -------- | ------ |
 | [cursor/](./cursor/_index.md) | Skills, rules, agents from live `~/.cursor`; deep procedure at repo-root [`workflow/`](../workflow/_index.md) | **Thin wrappers** — included in global pushes (`-Apply`) |
 | [opencode/](./opencode/_index.md) | OpenCode harness: instructions, thin skill stubs, agent harness, specimen config | **pointer-first-4 complete** — included in global pushes; procedure mirror deleted |
-| [antigravity/](./antigravity/_index.md) | Antigravity harness: GEMINI.md gate (full-replace), 11 skill stubs, 3 escape-* workflows, planner + repository_explorer + 3 reviewer subagent defs | **Live sync authorized** (owner ruling 2026-08-26) — included in global pushes; SOP: [antigravity-host-adapter](../docs/SOPs/antigravity-host-adapter.md) |
+| [antigravity/](./antigravity/_index.md) | Antigravity harness: GEMINI.md gate (full-replace), 11 skill stubs, 3 escape-* workflows, all seven governed subagent defs (`planner`, `plan_reviewer`, `implementer`, `production_readiness_reviewer`, `bug_reviewer`, `repository_explorer`, `test_reviewer`) | **Live sync authorized** (owner ruling 2026-08-26) — source routes included in global pushes; runtime/live-write smoke remains Phase 6; SOP: [antigravity-host-adapter](../docs/SOPs/antigravity-host-adapter.md) |
 | [vscode/](./vscode/_index.md) | VS Code (Copilot) harness: 2 composed always-on instructions, 11 skill stubs, 8 `.agent.md` roles | **Brought up 2026-09-01** — Phase 4 (Apply + smoke) pending operator authorization; SOP: [vscode-host-adapter](../docs/SOPs/vscode-host-adapter.md) |
 | [cline/](./cline/_index.md) | Cline harness: composed always-on rule + escape trio workflows + fresh-task repository_explorer route | **Brought up 2026-09-01** — dispatches to shared Generic adapter; SOP: [cline-host-adapter](../docs/SOPs/cline-host-adapter.md) |
 | [kilocode/](./kilocode/_index.md) | Kilo Code harness: composed always-on rule + escape trio (slash via auto-migration) + fresh-task repository_explorer route | **Brought up 2026-09-01** — dispatches to shared Generic adapter; SOP: [kilocode-host-adapter](../docs/SOPs/kilocode-host-adapter.md) |
