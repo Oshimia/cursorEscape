@@ -307,28 +307,30 @@
         },
         {
           "host": "Cline",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "implementer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Cline fresh task with canonical envelope",
+          "authority": "workspace-write",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
           "evidencePaths": [
+            "overlays/cline/workflows/agents.md",
             "scripts/host-sync/manifests/cline.manifest.psd1",
             "analysis/cline-kilo-probes-2026-09.md"
           ]
         },
         {
           "host": "Kilocode",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "implementer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Kilocode fresh task with canonical envelope",
+          "authority": "workspace-write",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
           "evidencePaths": [
+            "overlays/kilocode/workflows/agents.md",
             "scripts/host-sync/manifests/kilocode.manifest.psd1",
             "analysis/cline-kilo-probes-2026-09.md"
           ]
@@ -771,28 +773,30 @@
         },
         {
           "host": "Cline",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "test_reviewer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Cline fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
           "evidencePaths": [
+            "overlays/cline/workflows/agents.md",
             "scripts/host-sync/manifests/cline.manifest.psd1",
             "analysis/cline-kilo-probes-2026-09.md"
           ]
         },
         {
           "host": "Kilocode",
-          "representation": "missing",
-          "routeIdentity": null,
+          "representation": "fallback-launch-contract",
+          "routeIdentity": "test_reviewer",
           "alias": null,
-          "launchMechanism": null,
-          "authority": null,
-          "isolation": null,
-          "classification": null,
+          "launchMechanism": "Kilocode fresh task with canonical envelope",
+          "authority": "read-only",
+          "isolation": "fresh task/session per pass",
+          "classification": "host wrapper",
           "evidencePaths": [
+            "overlays/kilocode/workflows/agents.md",
             "scripts/host-sync/manifests/kilocode.manifest.psd1",
             "analysis/cline-kilo-probes-2026-09.md"
           ]

@@ -9,7 +9,7 @@ Thin host harness per Approach A. Pointer-first via absolute `{{COMPANION_ROOT}}
 | Fact | Value | Consequence |
 |---|---|---|
 | Global rules | `.kilocode/rules/` **auto-included** (backward compat; new model = `kilo.jsonc instructions`) | 1 always-on composed rule |
-| Global workflows | **auto-migrated from `.kilocode/workflows/` to command format on startup**; slash = `/filename` | trio (`/plan`, `/review`, `/closeout`) |
+| Global workflows | **auto-migrated from `.kilocode/workflows/` to command format on startup**; slash = `/filename` | four workflows (`/plan`, `/review`, `/closeout`, `/agents`) |
 | Frontmatter | `description`, `agent`, `model`, `variant`, `subtask` | `subtask: true` potential for governed child-agent legs (probe at smoke before reliance) |
 | Subagents | first-class NEW feature; depth/behavior unproven | until attested, use separate fresh task/session isolation per governed child-agent leg |
 | Rules toggles | none (all discovered rules concatenate always-on; global-first) | no toggle deviation; thin budget mandatory |
@@ -20,13 +20,13 @@ Thin host harness per Approach A. Pointer-first via absolute `{{COMPANION_ROOT}}
 | Live dest | Source class | Authored here? |
 |---|---|---|
 | `rules/cursor-escape-loop.md` | composed in sync order: `instructions/__header__.md` + `base:rules/agent-invocation.md` + `base:rules/iterative-plan-review.md` + `base:rules/iterative-code-review.md` + `base:rules/pre-commit-ci-gate.md` + `footers/kilocode-wiring.md` | header/footer |
-| `workflows/plan.md`, `workflows/review.md`, `workflows/closeout.md` | authored in this overlay (interactive dual-review adaptation) | trio only (host-adapted); `plan.md` carries the `planner` fresh-task fallback route |
+| `workflows/plan.md`, `workflows/review.md`, `workflows/closeout.md`, `workflows/agents.md` | authored in this overlay (interactive dual-review and governed-agent fallback adaptations) | four host workflows; `plan.md` retains `planner` and `plan_reviewer` route evidence, while `agents.md` covers the canonical all-role fallback set |
 
 Pointer-only: `_index.md`, companion SoT trees.
 
-## Parity inventory (11 ids) + escape trio
+## Parity inventory (11 ids) + escape trio and governed-agent fallback
 
-`discovery` · `implementation-plan` · `plan-review` · `implementation-review` · `pre-commit-ci-gate` · `composer` · `documentation-architecture` · `roadmap` · `diagnosing-bugs` · `opencode-headless-run` · `opencode-history-search` — plus the workflow trio `plan` / `review` / `closeout` (workflow names, not skills).
+`discovery` · `implementation-plan` · `plan-review` · `implementation-review` · `pre-commit-ci-gate` · `composer` · `documentation-architecture` · `roadmap` · `diagnosing-bugs` · `opencode-headless-run` · `opencode-history-search` — plus the workflow trio `plan` / `review` / `closeout` and the all-role fallback workflow `agents` (workflow names, not skills).
 
 ## Deliberate exclusions
 

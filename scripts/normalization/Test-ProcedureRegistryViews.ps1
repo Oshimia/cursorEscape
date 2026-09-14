@@ -80,17 +80,106 @@ Assert-View 'Phase 2C Antigravity test_reviewer preserves the read-only reviewer
   $antigravityTestReviewerRaw.Contains('commandExecutionPolicy: sandbox') -and
   $antigravityTestReviewerRaw.Contains('tool allowlist is read-only')
 )
-Assert-View 'Phase 2C inventory derives exact 45 represented / 4 missing counts' (
-  [int]$registry.Inventory.represented_count -eq 45 -and
-  [int]$registry.Inventory.missing_count -eq 4 -and
-  @($registry.Inventory.parity_matrix | Where-Object { $_.representation -ne 'missing' }).Count -eq 45 -and
-  @($registry.Inventory.parity_matrix | Where-Object { $_.representation -eq 'missing' }).Count -eq 4 -and
-  @($registry.Inventory.missing_pairs_with_proposed_phase2).Count -eq 4
+
+$phase2FallbackPairs = @(
+  @{ Host = 'Cline'; Agent = 'implementer'; Workflow = 'overlays/cline/workflows/agents.md'; Destination = 'data/workflows/agents.md'; Launch = 'Cline fresh task with canonical envelope'; Authority = 'workspace-write'; LoopGate = 'phase' },
+  @{ Host = 'Cline'; Agent = 'test_reviewer'; Workflow = 'overlays/cline/workflows/agents.md'; Destination = 'data/workflows/agents.md'; Launch = 'Cline fresh task with canonical envelope'; Authority = 'read-only'; LoopGate = 'test-review' },
+  @{ Host = 'Kilocode'; Agent = 'implementer'; Workflow = 'overlays/kilocode/workflows/agents.md'; Destination = 'workflows/agents.md'; Launch = 'Kilocode fresh task with canonical envelope'; Authority = 'workspace-write'; LoopGate = 'phase' },
+  @{ Host = 'Kilocode'; Agent = 'test_reviewer'; Workflow = 'overlays/kilocode/workflows/agents.md'; Destination = 'workflows/agents.md'; Launch = 'Kilocode fresh task with canonical envelope'; Authority = 'read-only'; LoopGate = 'test-review' }
 )
-$representedKeys = @($phase2cPairs | ForEach-Object { "$($_.Host)|$($_.Agent)" })
+$governedRouteIdentities = @('planner','plan_reviewer','implementer','production_readiness_reviewer','bug_reviewer','repository_explorer','test_reviewer')
+$routeIdentityTick = [char]96
+foreach ($pair in $phase2FallbackPairs) {
+  $item = @($registry.Catalogs.agents.items | Where-Object { [string]$_.id -eq $pair.Agent })[0]
+  $binding = @($item.hostBindings | Where-Object { [string]$_.host -eq $pair.Host })[0]
+  $row = @($registry.Inventory.parity_matrix | Where-Object { [string]$_.host -eq $pair.Host -and [string]$_.agent -eq $pair.Agent })[0]
+  $manifest = @($registry.Inventory.manifests | Where-Object { [string]$_.host -eq $pair.Host })[0]
+  $workflowRelative = $pair.Workflow.Substring($manifest.overlay_root.Length + 1)
+  $inventoryEntries = @($manifest.entries | Where-Object {
+    [string]$_.source -eq $workflowRelative -and [string]$_.destination -eq $pair.Destination
+  })
+  $manifestData = Import-PowerShellDataFile (Join-Path $RepoRoot $manifest.path)
+  $manifestEntries = @($manifestData.CopyEntries | Where-Object {
+    [string]$_['Source'] -eq $workflowRelative -and [string]$_['Dest'] -eq $pair.Destination
+  })
+  $workflowLines = @(Get-Content (Join-Path $RepoRoot $pair.Workflow))
+  $workflowRaw = $workflowLines -join "`n"
+  $routeRows = @($workflowLines | Where-Object { $_.StartsWith('| `') })
+  $sectionStart = -1
+  for ($lineIndex = 0; $lineIndex -lt $workflowLines.Count; $lineIndex++) {
+    if ($workflowLines[$lineIndex].StartsWith('## ') -and
+        $workflowLines[$lineIndex].Contains($pair.Agent) -and
+        $workflowLines[$lineIndex].Contains('fresh-task envelope')) { $sectionStart = $lineIndex; break }
+  }
+  $sectionEnd = $workflowLines.Count
+  for ($lineIndex = $sectionStart + 1; $lineIndex -lt $workflowLines.Count; $lineIndex++) {
+    if ($workflowLines[$lineIndex].StartsWith('## ')) { $sectionEnd = $lineIndex; break }
+  }
+  $section = if ($sectionStart -ge 0 -and $sectionEnd -gt ($sectionStart + 1)) {
+    $workflowLines[($sectionStart + 1)..($sectionEnd - 1)] -join "`n"
+  } else { '' }
+  $identityMatchFailures = @(
+    foreach ($identity in $governedRouteIdentities) {
+      if (@($routeRows | Where-Object { $_.Contains("| $routeIdentityTick$identity$routeIdentityTick |") }).Count -ne 1) { $identity }
+    }
+  )
+  $identityRowsExactOnce = $identityMatchFailures.Count -eq 0
+  Assert-View "Phase 2 fallback binding parity: $($pair.Host)|$($pair.Agent)" (
+    [string]$binding.representation -eq 'fallback-launch-contract' -and
+    [string]$binding.routeIdentity -eq $pair.Agent -and
+    [string]$binding.alias -eq '' -and
+    [string]$binding.launchMechanism -eq $pair.Launch -and
+    [string]$binding.authority -eq $pair.Authority -and
+    [string]$binding.isolation -eq 'fresh task/session per pass' -and
+    [string]$binding.classification -eq 'host wrapper' -and
+    [string]$row.representation -eq 'fallback-launch-contract' -and
+    [string]$row.route_identity -eq $pair.Agent -and
+    [string]$row.launch_mechanism -eq $pair.Launch -and
+    [string]$row.authority -eq $pair.Authority -and
+    [string]$row.isolation -eq 'fresh task/session per pass' -and
+    [string]$row.classification -eq 'host wrapper'
+  ) "binding=$($binding | ConvertTo-Json -Compress)"
+  Assert-View "Phase 2 fallback delivery is exactly once: $($pair.Host)|$($pair.Agent)" (
+    @($binding.evidencePaths) -contains $pair.Workflow -and
+    @($binding.evidencePaths) -contains $manifest.path -and
+    @($row.evidence_paths) -contains $pair.Workflow -and
+    @($row.evidence_paths) -contains $manifest.path -and
+    $inventoryEntries.Count -eq 1 -and
+    $manifestEntries.Count -eq 1
+  ) "inventory=$($inventoryEntries.Count); manifest=$($manifestEntries.Count)"
+  Assert-View "Phase 2 fallback workflow contract: $($pair.Host)|$($pair.Agent)" (
+    $workflowRaw.Contains('separate fresh') -and
+    $workflowRaw.Contains('per governed leg') -and
+    $routeRows.Count -eq 7 -and
+    $identityRowsExactOnce -and
+    $section.Contains("You are the ``$($pair.Agent)`` agent.") -and
+    $section.Contains('Read `{{COMPANION_ROOT}}/agents/' + $pair.Agent + '.md` before acting.') -and
+    $section.Contains('Required reading:') -and
+    $section.Contains('{{COMPANION_ROOT}}/workflow/agent-invocation.md') -and
+    $section.Contains('{{COMPANION_ROOT}}/agents/' + $pair.Agent + '.md') -and
+    $section.Contains('Host alias: none') -and
+    $section.Contains('Isolation: clean-context') -and
+    $section.Contains('Authority: ' + $pair.Authority) -and
+    $section.Contains('Loop/gate: ' + $pair.LoopGate) -and
+    $section.Contains("`n---`n") -and
+    $workflowRaw.Contains('missing, malformed, contradictory, or unreadable envelope')
+  ) "workflow=$($pair.Workflow); routeRows=$($routeRows.Count); identityFailures=$($identityMatchFailures -join ','); section=$($sectionStart -ge 0)"
+}
+
+Assert-View 'Phase 2 inventory derives exact final 49 represented / 0 missing counts' (
+  [int]$registry.Inventory.represented_count -eq 49 -and
+  [int]$registry.Inventory.missing_count -eq 0 -and
+  @($registry.Inventory.parity_matrix | Where-Object { $_.representation -ne 'missing' }).Count -eq 49 -and
+  @($registry.Inventory.parity_matrix | Where-Object { $_.representation -eq 'missing' }).Count -eq 0 -and
+  @($registry.Inventory.missing_pairs_with_proposed_phase2).Count -eq 0
+)
+$representedKeys = @(
+  $phase2cPairs + $phase2FallbackPairs | ForEach-Object { "$($_.Host)|$($_.Agent)" }
+)
 $pendingPairs = @($registry.Inventory.ambiguities_requiring_owner_confirmation | ForEach-Object { $_.pending_missing_pairs } | ForEach-Object { "$($_.host)|$($_.agent)" })
-Assert-View 'Phase 2C represented pairs are closed against every pending ambiguity' (
+Assert-View 'Phase 2 represented pairs are closed against every pending ambiguity' (
   @($pendingPairs | Where-Object { $representedKeys -contains $_ }).Count -eq 0 -and
+  @($pendingPairs).Count -eq 0 -and
   @($registry.Inventory.ambiguities_requiring_owner_confirmation | Where-Object { [string]$_.id -eq 'U-Antigravity-Authority' }).Count -eq 0
 ) "pending=$($pendingPairs -join '; ')"
 
@@ -801,9 +890,11 @@ try {
     $ambiguity = $i.ambiguities_requiring_owner_confirmation | Where-Object { $_.id -eq 'U-Cursor-Bugbot' }
     $ambiguity.pending_missing_pairs = @([pscustomobject]@{ host = 'Cline'; agent = 'not-a-governed-agent' })
   } @('AmbiguityPendingPairUnknown: U-Cursor-Bugbot -> Cline|not-a-governed-agent')
-  Assert-CheckerMutation 'missing pair agreement mismatch fails' {
-    param($i) $i.missing_pairs_with_proposed_phase2[0].host = 'WrongHost'
-  } @('MissingPairAgreement: row 0 host')
+  Assert-CheckerMutation 'invented missing pair fails closed at zero missing' {
+    param($i) $i.missing_pairs_with_proposed_phase2 = @(
+      [pscustomobject]@{ host = 'Cline'; agent = 'implementer'; proposed_phase2 = 'fresh-task-session-fallback' }
+    )
+  } @('MissingPairCount: expected 0, got 1')
   # The ledger mutation proves the immutable inventory declaration remains
   # row-agreement-checked; source manifest counts are separately checked as
   # current Phase 2 evidence rather than being conflated with historical render

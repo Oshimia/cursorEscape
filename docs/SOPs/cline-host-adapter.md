@@ -1,6 +1,6 @@
 # Cline host adapter — global `~/.cline` inventory & sync
 
-**Last updated:** 2026-09-01
+**Last updated:** 2026-09-15
 **Status:** brought up 2026-09-01 (5th stack; shared `Generic.Adapter.ps1` dispatch — no per-stack adapter file). Apply gated on all-six Phase 0 baselines.
 
 ## Context
@@ -20,14 +20,14 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Apply                 # global (normative)
 | Live surface | Content | SoT |
 | --- | ------- | --- |
 | `~/.cline/rules/cursor-escape-loop.md` | composed always-on rule in sync order (header + agent-invocation + iterative-plan-review + iterative-code-review + pre-commit-ci-gate + wiring) | [overlays/cline](../../overlays/cline/_index.md) |
-| `~/.cline/data/workflows/{plan,review,closeout}.md` | plan/review/closeout workflows (serial review adaptation) | overlays/cline/workflows |
+| `~/.cline/data/workflows/{plan,review,closeout,agents}.md` | plan/review/closeout workflows plus all-seven governed-agent fallback route (serial review adaptation) | overlays/cline/workflows |
 | `~/.cline/data/workflows/<11 pointer workflows>` | parity set | `shared:` sources |
 
 ## Deviations (attested)
 
 | # | Deviation | Evidence |
 | --- | --------- | -------- |
-| 1 | Separate fresh task/session per governed child-agent leg; no nested subagent spawn | [canonical invocation](../../workflow/agent-invocation.md); [cline-cli-subagent orchestration](../../analysis/cline-cli-subagent-orchestration-2026-08.md) |
+| 1 | Separate fresh task/session per governed child-agent leg; no native subagent definitions. `workflows/agents.md` gives all seven canonical routes; `implementer` is workspace-write and `test_reviewer` is read-only. | [canonical invocation](../../workflow/agent-invocation.md); [cline-cli-subagent orchestration](../../analysis/cline-cli-subagent-orchestration-2026-08.md); [governed fallback routes](../../overlays/cline/workflows/agents.md) |
 | 2 | Rules toggle-able by user (gates discover-default-ON but can be toggled OFF) | Cline rules docs (toggle semantics) |
 | 3 | Skills rendered as named `.md` workflows (no SKILL.md-dir contract) | Cline workflows docs |
 | 4 | `cline_mcp_settings.json` + `~/.cline/data/{sessions,db,cache,workspaces}` never touched | manifest NeverTouch |

@@ -751,19 +751,20 @@
     {
       "host": "Cline",
       "agent": "implementer",
-      "representation": "missing",
+      "representation": "fallback-launch-contract",
       "evidence_paths": [
+        "overlays/cline/workflows/agents.md",
         "scripts/host-sync/manifests/cline.manifest.psd1",
         "analysis/cline-kilo-probes-2026-09.md"
       ],
-      "route_identity": null,
+      "route_identity": "implementer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "workspace-write",
+      "isolation": "fresh task/session per pass",
       "first_read_contract": "agents/implementer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "fresh-task-session-fallback",
-      "classification": null,
+      "launch_mechanism": "Cline fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "implementer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -846,19 +847,20 @@
     {
       "host": "Cline",
       "agent": "test_reviewer",
-      "representation": "missing",
+      "representation": "fallback-launch-contract",
       "evidence_paths": [
+        "overlays/cline/workflows/agents.md",
         "scripts/host-sync/manifests/cline.manifest.psd1",
         "analysis/cline-kilo-probes-2026-09.md"
       ],
-      "route_identity": null,
+      "route_identity": "test_reviewer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
       "first_read_contract": "agents/test_reviewer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "fresh-task-session-fallback",
-      "classification": null,
+      "launch_mechanism": "Cline fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "test_reviewer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -919,19 +921,20 @@
     {
       "host": "Kilocode",
       "agent": "implementer",
-      "representation": "missing",
+      "representation": "fallback-launch-contract",
       "evidence_paths": [
+        "overlays/kilocode/workflows/agents.md",
         "scripts/host-sync/manifests/kilocode.manifest.psd1",
         "analysis/cline-kilo-probes-2026-09.md"
       ],
-      "route_identity": null,
+      "route_identity": "implementer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "workspace-write",
+      "isolation": "fresh task/session per pass",
       "first_read_contract": "agents/implementer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "fresh-task-session-fallback",
-      "classification": null,
+      "launch_mechanism": "Kilocode fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "implementer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -1014,19 +1017,20 @@
     {
       "host": "Kilocode",
       "agent": "test_reviewer",
-      "representation": "missing",
+      "representation": "fallback-launch-contract",
       "evidence_paths": [
+        "overlays/kilocode/workflows/agents.md",
         "scripts/host-sync/manifests/kilocode.manifest.psd1",
         "analysis/cline-kilo-probes-2026-09.md"
       ],
-      "route_identity": null,
+      "route_identity": "test_reviewer",
       "alias": null,
-      "authority": null,
-      "isolation": null,
+      "authority": "read-only",
+      "isolation": "fresh task/session per pass",
       "first_read_contract": "agents/test_reviewer.md",
-      "launch_mechanism": null,
-      "proposed_phase2_representation": "fresh-task-session-fallback",
-      "classification": null,
+      "launch_mechanism": "Kilocode fresh task with canonical envelope",
+      "proposed_phase2_representation": null,
+      "classification": "host wrapper",
       "canonical_identity": "test_reviewer",
       "launch_mechanism_definition": "separate from representation",
       "required_reading": [
@@ -3492,7 +3496,7 @@
       "live_relative_root": ".cline",
       "shared_root": "overlays/opencode",
       "logical_roots": null,
-      "copy_entry_count": 4,
+      "copy_entry_count": 5,
       "hard_excludes": [
         "review-subagent-models.md",
         "workflows/plan.md",
@@ -3534,6 +3538,10 @@
         {
           "source": "workflows/closeout.md",
           "destination": "data/workflows/closeout.md"
+        },
+        {
+          "source": "workflows/agents.md",
+          "destination": "data/workflows/agents.md"
         }
       ]
     },
@@ -3547,7 +3555,7 @@
       "live_relative_root": ".kilocode",
       "shared_root": "overlays/opencode",
       "logical_roots": null,
-      "copy_entry_count": 4,
+      "copy_entry_count": 5,
       "hard_excludes": [
         "review-subagent-models.md"
       ],
@@ -3580,6 +3588,10 @@
         {
           "source": "workflows/closeout.md",
           "destination": "workflows/closeout.md"
+        },
+        {
+          "source": "workflows/agents.md",
+          "destination": "workflows/agents.md"
         }
       ]
     },
@@ -3882,13 +3894,13 @@
       },
       {
         "stack": "Cline",
-        "destinationCount": 4,
-        "sha256": "b5c95cbc24ea6dd9854167634ea0b7741cf5a465e795962a0a7810593fc2c8df"
+        "destinationCount": 5,
+        "sha256": "4fabff762dbb7f00a21a44dec5228832f8419a3df03cea0775c69e1134c0b506"
       },
       {
         "stack": "Kilocode",
-        "destinationCount": 4,
-        "sha256": "d6a76b99c515d19f85a5fb0c743ce0884042ce344ec039523be3fa73ebf0ab41"
+        "destinationCount": 5,
+        "sha256": "0fb2e7392e8a86dd8b188fc7208df213268a5d86021e871898d60f9772e1f0c3"
       }
     ],
     "codex_render_plan_path": "scripts/host-sync/render-baselines/codex-phase1/render-plan.json",
@@ -3957,14 +3969,14 @@
       "host": "Cline",
       "lifecycle_evidence": "scripts/host-sync/manifests/cline.manifest.psd1; scripts/host-sync/adapters/Generic.Adapter.ps1",
       "restart_reload": "Reload VS Code window after Apply; rules are scanned on Cline tab activation.",
-      "smoke_check": "Open Cline tab; verify cursor-escape-loop rule; start fresh task with canonical envelope for plan_reviewer.",
+      "smoke_check": "Open Cline tab; verify cursor-escape-loop rule and data/workflows/agents.md; start fresh task with canonical envelope for implementer, then another for test_reviewer.",
       "recovery_owner": "Operator (restore from baseline backup)."
     },
     {
       "host": "Kilocode",
       "lifecycle_evidence": "scripts/host-sync/manifests/kilocode.manifest.psd1; scripts/host-sync/adapters/Generic.Adapter.ps1",
       "restart_reload": "Reload VS Code window after Apply; rules auto-included on startup via legacy-compat loader.",
-      "smoke_check": "Open Kilo Code tab; verify cursor-escape-loop rule; start fresh task with canonical envelope.",
+      "smoke_check": "Open Kilo Code tab; verify cursor-escape-loop rule and workflows/agents.md; start fresh task with canonical envelope for implementer, then another for test_reviewer.",
       "recovery_owner": "Operator (restore from baseline backup)."
     },
     {
@@ -3975,30 +3987,9 @@
       "recovery_owner": "Operator (Codex has no baseline directory; committed fixtures in render-baselines/codex-phase1/ provide the expected content for manual restore)."
     }
   ],
-  "missing_pairs_with_proposed_phase2": [
-    {
-      "host": "Cline",
-      "agent": "implementer",
-      "proposed_phase2": "fresh-task-session-fallback"
-    },
-    {
-      "host": "Cline",
-      "agent": "test_reviewer",
-      "proposed_phase2": "fresh-task-session-fallback"
-    },
-    {
-      "host": "Kilocode",
-      "agent": "implementer",
-      "proposed_phase2": "fresh-task-session-fallback"
-    },
-    {
-      "host": "Kilocode",
-      "agent": "test_reviewer",
-      "proposed_phase2": "fresh-task-session-fallback"
-    }
-  ],
-  "represented_count": 45,
-  "missing_count": 4,
+  "missing_pairs_with_proposed_phase2": [],
+  "represented_count": 49,
+  "missing_count": 0,
   "total_pairs": 49,
   "ambiguities_requiring_owner_confirmation": [
     {
@@ -4010,13 +4001,8 @@
     {
       "id": "U-Cline-Kilocode-Routes",
       "question": "Phase 2 proposes fresh-task/session fallback for all missing Cline/Kilocode roles. Confirm operator/task workflow acceptance.",
-      "current": "planner and repository_explorer represented via fresh-task/session fallback; implementer and test_reviewer missing",
-      "pending_missing_pairs": [
-        { "host": "Cline", "agent": "implementer" },
-        { "host": "Cline", "agent": "test_reviewer" },
-        { "host": "Kilocode", "agent": "implementer" },
-        { "host": "Kilocode", "agent": "test_reviewer" }
-      ]
+      "current": "all seven governed roles represented via explicit fresh-task/session fallback contracts",
+      "pending_missing_pairs": []
     },
     {
       "id": "U-Render-Baseline-Reconciliation",

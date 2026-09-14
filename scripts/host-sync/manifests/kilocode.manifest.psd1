@@ -16,6 +16,8 @@
         @{ Source = 'workflows/plan.md'; Dest = 'workflows/plan.md' }
         @{ Source = 'workflows/review.md'; Dest = 'workflows/review.md' }
         @{ Source = 'workflows/closeout.md'; Dest = 'workflows/closeout.md' }
+        # --- governed-agent fallback routes (fresh task/session per leg) ---
+        @{ Source = 'workflows/agents.md'; Dest = 'workflows/agents.md' }
     )
     HardExcludes        = @(
         'review-subagent-models.md'

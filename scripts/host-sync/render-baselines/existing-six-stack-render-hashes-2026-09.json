@@ -33,13 +33,13 @@
     },
     {
       "stack": "Cline",
-      "destinationCount": 4,
-      "sha256": "b5c95cbc24ea6dd9854167634ea0b7741cf5a465e795962a0a7810593fc2c8df"
+      "destinationCount": 5,
+      "sha256": "4fabff762dbb7f00a21a44dec5228832f8419a3df03cea0775c69e1134c0b506"
     },
     {
       "stack": "Kilocode",
-      "destinationCount": 4,
-      "sha256": "d6a76b99c515d19f85a5fb0c743ce0884042ce344ec039523be3fa73ebf0ab41"
+      "destinationCount": 5,
+      "sha256": "0fb2e7392e8a86dd8b188fc7208df213268a5d86021e871898d60f9772e1f0c3"
     }
   ]
 }

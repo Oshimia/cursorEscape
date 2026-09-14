@@ -1,6 +1,6 @@
 # Kilo Code host adapter — global `~/.kilocode` inventory & sync
 
-**Last updated:** 2026-09-01
+**Last updated:** 2026-09-15
 **Status:** brought up 2026-09-01 (6th stack; shared `Generic.Adapter.ps1` dispatch — no per-stack adapter file). Apply gated on all-six Phase 0 baselines.
 
 ## Context
@@ -20,13 +20,13 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Apply                    # global (normativ
 | Live surface | Content | SoT |
 | --- | ------- | --- |
 | `~/.kilocode/rules/cursor-escape-loop.md` | composed always-on rule (auto-included by compat loader; no toggles) | [overlays/kilocode](../../overlays/kilocode/_index.md) |
-| `~/.kilocode/workflows/{plan,review,closeout}.md` | plan/review/closeout workflows (auto-migrated to `/` commands at startup) | overlays/kilocode/workflows |
+| `~/.kilocode/workflows/{plan,review,closeout,agents}.md` | plan/review/closeout workflows plus all-seven governed-agent fallback route (auto-migrated to `/` commands at startup) | overlays/kilocode/workflows |
 
 ## Deviations (attested)
 
 | # | Deviation | Evidence |
 | --- | --------- | -------- |
-| 1 | Subagents are first-class NEW in this platform; depth/behavior unproven — governed child-agent legs use separate fresh task/session until smoke-attested | kilo.ai custom-subagents docs; [canonical invocation](../../workflow/agent-invocation.md) |
+| 1 | Subagents are first-class NEW in this platform; depth/behavior unproven — governed child-agent legs use separate fresh task/session until smoke-attested. `workflows/agents.md` gives all seven canonical routes; `implementer` is workspace-write and `test_reviewer` is read-only. | kilo.ai custom-subagents docs; [canonical invocation](../../workflow/agent-invocation.md); [governed fallback routes](../../overlays/kilocode/workflows/agents.md) |
 | 2 | Reviewer read-only is instruction-level (mode-defs / custom-modes out of scope) | kilo.ai custom-modes docs |
 | 3 | All discovered rules concatenate always-on (no toggle; global-first; project precedence on conflict) | kilo.ai custom-rules "Rule Loading Order" |
 | 4 | `kilo.jsonc` new-model config (global `~/.config/kilo`) is out-of-scope — future-migration leg only, owner-decided | kilo.ai custom-rules migration note |

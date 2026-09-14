@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete — Phase 2 fallback closeout pending; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete — Phase 2 fallback closeout pending; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -25,7 +25,7 @@ The owner directed an efficiency-preserving recovery: retain the largely complet
 
 Phase 2B retained the efficiency-preserving recovery and closed through a separate bounded documentation-cascade correction. Composer-final Full CI then exposed one stale invariant: the `antigravity governed role defs under config/agents` expectation in `scripts/host-sync/Invoke-Phase2FastCI.ps1` still counted four destinations and was corrected to the manifest's five (including `repository_explorer`) in this working tree. The combined working tree now contains 21 files and 249 changed/new physical lines against baseline `1c87201`. The implementer-owned review used 2 of 4 iterations, ended with production readiness APPROVED and `bug_reviewer` CLEAN, and left no Batchable findings.
 
-Phase 2C-native adds only the four missing native `implementer` and `test_reviewer` routes on Cursor and Antigravity, raising represented pairs to 45 of 49. The remaining four pairs are the Cline/Kilocode implementer and test_reviewer fallback closeout. After replacement dual approval, Composer reconciled the historical six-stack render ledger and its derived inventory rows through the sanctioned writer; Composer Full CI and the local Phase 2C closeout commit remain pending.
+Phase 2C-native adds only the four missing native `implementer` and `test_reviewer` routes on Cursor and Antigravity, raising represented pairs to 45 of 49. After replacement dual approval, Composer reconciled the historical six-stack render ledger and its derived inventory rows through the sanctioned writer, observed Full CI, and made local closeout commit `e007976`. The subsequent Phase 2C-fallback closes the final Cline/Kilocode implementer and test_reviewer pairs through explicit fresh-task/session contracts, reaching 49 represented / 0 missing of 49.
 
 ### Phase 1 recovery gates
 
@@ -300,8 +300,24 @@ The approved local plan remains the full source of goals, alternatives, assumpti
   - [x] Renewed-block iteration-2 replacement dual review after observed Fast CI and `git diff --check`: production readiness APPROVED and `bug_reviewer` CLEAN; both reviewers closed.
   - [x] Historical ledger and derived inventory-row reconciliation through the sanctioned writer after dual approval.
   - [x] Composer observed sole normalization Full CI PASS after the generated-ledger closeout; pre-commit gate loaded. No live Apply.
-  - [ ] Phase 2 fallback closeout for Cline/Kilocode `implementer` and `test_reviewer`.
+  - [x] Phase 2 fallback closeout for Cline/Kilocode `implementer` and `test_reviewer`.
 
+
+---
+
+### Phase 2C-fallback — implementer and test_reviewer closeout on Cline and Kilocode
+
+- **Status:** Phase 2C-fallback complete — Phase 2 parity 49/49.
+- **Scope:** the final four pairs only: `Cline|implementer`, `Cline|test_reviewer`, `Kilocode|implementer`, and `Kilocode|test_reviewer`.
+- **Routes:** one explicit all-role `fallback-launch-contract` workflow per host at `overlays/cline/workflows/agents.md` and `overlays/kilocode/workflows/agents.md`. Every governed role uses a separate fresh task/session per leg until attested native subtask isolation exists; the workflows state exact canonical envelope identity, first-read contract, authority, isolation, and loop/gate for `implementer` (workspace-write, `phase`) and `test_reviewer` (read-only, `test-review`). Each manifest delivers its new workflow exactly once.
+- **Unchanged:** canonical contracts, planner/plan_reviewer/production_readiness_reviewer/bug_reviewer/repository_explorer route evidence, other hosts, runtime projections, skills, and live hosts. No Phase 4 work is started.
+- **Representation:** 49 represented / 0 missing of 49. `U-Cline-Kilocode-Routes` retains the owner-acceptance record with no pending missing pairs.
+- **Checklist:**
+  - [x] Registry, Phase 0 inventory, manifests, workflow routes, indexes, SOPs, and focused tests reconciled for the four fallback pairs.
+  - [x] Six-stack render ledger regenerated through the sanctioned writer and derived inventory rows synchronized.
+  - [x] Observed Fast CI and `git diff --check` before the iteration-1 review; rerun after must-fix edits.
+  - [x] Replacement-capable dual review within four iterations: production readiness APPROVED and `bug_reviewer` CLEAN at iteration 4; both reviewers closed. Iteration 1 captured must-fix cascade findings, iteration 3 ended in a Composer time-boundary process failure without verdicts, and iteration 4 completed the final review.
+  - [x] Composer observed sole normalization Full CI PASS; pre-commit gate loaded. No live Apply.
 
 ---
 
