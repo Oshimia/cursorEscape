@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -685,6 +685,32 @@ unchanged.
 - [x] Governed profile allowlist extended with exactly the two Phase 3I skills; outside-set profiles continue to fail closed.
 - [x] Per-skill tests cover applicability/absence, source routing, description and disable mismatches, not-applicable injection, missing/duplicate delivery, canonical 22/22 shadow, exact 105→119 row growth, and deterministic five-file double render.
 - [x] Observed final Fast CI and whitespace checks; no Full CI, commit, push, or live Apply is claimed by this implementation slice.
+
+
+#### Phase 3J status — teach / wait-what / wizard wrapper-frontmatter enforcement
+
+```text
+Status:              Complete; dual review APPROVED (iteration 1 of 4, 2026-09-14)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 328/328 view checks, 24/24 unit checks, git diff --check)
+Changed files:       4 directly reviewed/permitted files, 91 changed/new physical lines (83 added, 8 removed)
+Review launches:     production_readiness_reviewer: 1, bug_reviewer: 1 (dual APPROVED at iteration 1); all children closed
+Composer Full CI:    PASS 2026-09-14
+Batchables open:     No new deferred; carried forward from Phase 3E
+```
+
+Phase 3J reuses the Phase 3B–3I enforcement-first pattern without redesign. The
+registry now owns wrapper frontmatter identity for exactly `teach`, `wait-what`,
+and `wizard`. Companion inventory, manifests, and current wrapper sources establish
+the same topology independently for each: one Codex-only applicable binding, six
+not-applicable hosts, canonical body `skills/<id>/SKILL.md`, and wrapper
+`overlays/codex/skills/<id>/SKILL.md`. Canonical bodies, canonical folded
+descriptions, canonical disable policies, wrapper prose, manifests, and schema
+remain unchanged.
+
+- [x] Three registry-owned Codex profiles pin exact plain-scalar wrapper descriptions and effective `modelInvocationDisabled: false` matching current wrappers.
+- [x] Governed profile allowlist extended with exactly the three Phase 3J skills; outside-set profiles continue to fail closed.
+- [x] Per-skill tests cover applicability/absence, source routing, description and disable mismatches, not-applicable injection, missing/duplicate delivery, canonical 22/22 shadow, exact 119→140 row growth, and deterministic five-file double render.
+- [x] Observed final Fast CI and whitespace checks before the review pair; no Full CI, commit, push, or live Apply is claimed by this implementation slice.
 
 
 ### Phase 4 — Rules/workflows/instructions in bounded batches

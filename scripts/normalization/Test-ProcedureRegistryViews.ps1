@@ -32,7 +32,7 @@ try {
   Assert-View 'skill frontmatter shadow view covers 22 rows' ($shadowRows.Count -eq 23) "rows=$($shadowRows.Count)"
   Assert-View 'skill frontmatter shadow reports all matches' (@($shadowRows | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`tmatch`t" }).Count -eq 0) (($shadowRows | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`tmatch`t" }) -join '; ')
   $wrapperRows = @(Get-Content (Join-Path (Join-Path $temp 'one') 'skill-host-frontmatter-shadow.tsv'))
-  Assert-View 'skill host wrapper shadow view grows exactly 105 to 119 rows' ($wrapperRows.Count -eq 120) "rows=$($wrapperRows.Count)"
+  Assert-View 'skill host wrapper shadow view grows exactly 119 to 140 rows' ($wrapperRows.Count -eq 141) "rows=$($wrapperRows.Count)"
   Assert-View 'skill host wrapper shadow reports only match or not-applicable' (@($wrapperRows | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`t(match|not-applicable)`t" }).Count -eq 0) (($wrapperRows | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`t(match|not-applicable)`t" }) -join '; ')
   Assert-View 'skill host wrapper shadow pins the shared OpenCode source' ((@($wrapperRows | Where-Object { $_ -like "implementation-plan`tAntigravity`tmatch`toverlays/opencode/skills/implementation-plan/SKILL.md" }).Count -eq 1) -and (@($wrapperRows | Where-Object { $_ -like "plan-review`tVscode`tmatch`toverlays/opencode/skills/plan-review/SKILL.md" }).Count -eq 1))
   Assert-View 'skill host wrapper shadow pins authored per-source deltas' ((@($wrapperRows | Where-Object { $_ -like "implementation-review`tAntigravity`tmatch`toverlays/antigravity/skills/implementation-review/SKILL.md" }).Count -eq 1) -and (@($wrapperRows | Where-Object { $_ -like "composer`tVscode`tmatch`toverlays/vscode/skills/composer/SKILL.md" }).Count -eq 1))
@@ -50,6 +50,11 @@ try {
     $codexRows = @($wrapperRows | Where-Object { $_ -like "$phase3IId`t*" })
     $expectedSource = "overlays/codex/skills/$phase3IId/SKILL.md"
     Assert-View "skill host wrapper shadow pins $phase3IId Codex-only source" ($codexRows.Count -eq 7 -and @($codexRows | Where-Object { $_ -like "$phase3IId`tCodex`tmatch`t$expectedSource" }).Count -eq 1 -and @($codexRows | Where-Object { $_ -like "$phase3IId`t*`tnot-applicable`t-" }).Count -eq 6) (($codexRows) -join '; ')
+  }
+  foreach ($phase3JId in @('teach','wait-what','wizard')) {
+    $codexRows = @($wrapperRows | Where-Object { $_ -like "$phase3JId`t*" })
+    $expectedSource = "overlays/codex/skills/$phase3JId/SKILL.md"
+    Assert-View "skill host wrapper shadow pins $phase3JId Codex-only source" ($codexRows.Count -eq 7 -and @($codexRows | Where-Object { $_ -like "$phase3JId`tCodex`tmatch`t$expectedSource" }).Count -eq 1 -and @($codexRows | Where-Object { $_ -like "$phase3JId`t*`tnot-applicable`t-" }).Count -eq 6) (($codexRows) -join '; ')
   }
   foreach ($perSourceId in @('implementation-review','composer')) {
     $sources = @($wrapperRows | Select-Object -Skip 1 | Where-Object { $_ -like "$perSourceId`t*`tmatch`t*" } | ForEach-Object { ($_ -split "`t")[3] })
@@ -77,7 +82,12 @@ try {
     @{ Skill = 'codebase-design'; MatchedHosts = 1; DistinctSources = 1 },
     @{ Skill = 'domain-modeling'; MatchedHosts = 1; DistinctSources = 1 },
     @{ Skill = 'grilling'; MatchedHosts = 1; DistinctSources = 1 },
-    @{ Skill = 'prototype'; MatchedHosts = 1; DistinctSources = 1 }
+    @{ Skill = 'prototype'; MatchedHosts = 1; DistinctSources = 1 },
+    @{ Skill = 'tdd'; MatchedHosts = 1; DistinctSources = 1 },
+    @{ Skill = 'resolving-merge-conflicts'; MatchedHosts = 1; DistinctSources = 1 },
+    @{ Skill = 'teach'; MatchedHosts = 1; DistinctSources = 1 },
+    @{ Skill = 'wait-what'; MatchedHosts = 1; DistinctSources = 1 },
+    @{ Skill = 'wizard'; MatchedHosts = 1; DistinctSources = 1 }
   )) {
     $sources = @($wrapperRows | Select-Object -Skip 1 | Where-Object { $_ -like "$($sourceTopology.Skill)`t*`tmatch`t*" } | ForEach-Object { ($_ -split "`t")[3] })
     Assert-View "skill host wrapper shadow routes $($sourceTopology.Skill) through its shared and distinct sources" ($sources.Count -eq $sourceTopology.MatchedHosts -and @($sources | Select-Object -Unique).Count -eq $sourceTopology.DistinctSources) (($sources | Select-Object -Unique) -join ', ')
@@ -154,7 +164,7 @@ try {
     New-Item -ItemType Directory -Force -Path (Split-Path -Parent $mirrorPath) | Out-Null
     Copy-Item -LiteralPath (Join-Path $RepoRoot ([string]$skill.body)) -Destination $mirrorPath
   }
-  foreach ($namedId in @('implementation-plan','plan-review','implementation-review','composer','discovery','documentation-architecture','roadmap','research','bug-review-sweep','diagnosing-bugs','architecture-survey','codebase-design','domain-modeling','grilling','prototype','tdd','resolving-merge-conflicts')) {
+  foreach ($namedId in @('implementation-plan','plan-review','implementation-review','composer','discovery','documentation-architecture','roadmap','research','bug-review-sweep','diagnosing-bugs','architecture-survey','codebase-design','domain-modeling','grilling','prototype','tdd','resolving-merge-conflicts','teach','wait-what','wizard')) {
     foreach ($profile in @(@($registry.Catalogs.skills.items | Where-Object { [string]$_.id -eq $namedId }).hostFrontmatterProfiles)) {
       $mirrorPath = Join-Path $viewMirror ([string]$profile.wrapperSource)
       New-Item -ItemType Directory -Force -Path (Split-Path -Parent $mirrorPath) | Out-Null
@@ -362,7 +372,7 @@ try {
     $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq $notApplicableHost }))[0].entries += [pscustomobject]@{ source = "skills/$profileId/SKILL.md"; destination = "skills/$profileId/SKILL.md" } }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId not-applicable delivery injection fails closed" 'SkillWrapperNotApplicable'
   }
-  foreach ($profileId in @('tdd','resolving-merge-conflicts')) {
+  foreach ($profileId in @('tdd','resolving-merge-conflicts','teach','wait-what','wizard')) {
     $result = Invoke-EdgeCase 'skills' { param($c) (@($c.skills.items | Where-Object { [string]$_.id -eq $profileId }))[0].PSObject.Properties.Remove('hostFrontmatterProfiles') }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId profile removal fails closed" 'SkillHostFrontmatterProfileMissing'
     $result = Invoke-EdgeCase 'skills' { param($c) @((@($c.skills.items | Where-Object { [string]$_.id -eq $profileId }))[0].hostFrontmatterProfiles)[0].hosts = @('Cursor') }.GetNewClosure()
@@ -375,7 +385,7 @@ try {
     Assert-RegistryFailure $result "$profileId Codex disable mismatch fails closed" 'SkillWrapperDisableModelInvocation'
     $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq $profileId }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Codex' })[0].wrapperSource = 'overlays/codex/skills/roadmap/SKILL.md' }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId wrong profile-source routing fails closed" 'SkillWrapperRouting'
-    $notApplicableHost = if ($profileId -eq 'tdd') { 'Cursor' } else { 'Kilocode' }
+    $notApplicableHost = if ($profileId -eq 'tdd') { 'Cursor' } elseif ($profileId -eq 'resolving-merge-conflicts') { 'Kilocode' } elseif ($profileId -eq 'teach') { 'OpenCode' } elseif ($profileId -eq 'wait-what') { 'Antigravity' } else { 'Vscode' }
     $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq $notApplicableHost }))[0].entries += [pscustomobject]@{ source = "skills/$profileId/SKILL.md"; destination = "skills/$profileId/SKILL.md" } }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId not-applicable delivery injection fails closed" 'SkillWrapperNotApplicable'
     $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0].entries += [pscustomobject]@{ source = "skills/$profileId/SKILL.md"; destination = "$profileId/SKILL.md" } }.GetNewClosure()

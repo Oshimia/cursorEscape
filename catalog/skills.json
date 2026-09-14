@@ -1768,6 +1768,19 @@
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/teach/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Create an isolated owner-selected learning workspace for a named topic."
+            ]
+          },
+          "modelInvocationDisabled": false
+        }
       ]
     },
     {
@@ -1835,6 +1848,19 @@
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/wait-what/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Repair communication when the owner says the prior explanation did not land."
+            ]
+          },
+          "modelInvocationDisabled": false
+        }
       ]
     },
     {
@@ -1901,6 +1927,19 @@
           "evidencePaths": [
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
+        }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/wizard/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Generate staged interactive scripts for human-only console, credential, or migration steps."
+            ]
+          },
+          "modelInvocationDisabled": false
         }
       ]
     }
