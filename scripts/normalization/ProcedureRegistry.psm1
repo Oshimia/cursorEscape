@@ -4,6 +4,7 @@ $ErrorActionPreference = 'Stop'
 $script:Hosts = @('Cursor','OpenCode','Antigravity','Vscode','Cline','Kilocode','Codex')
 $script:ExpectedKinds = @{ agents = 'agents.json'; skills = 'skills.json'; rules = 'rules.json'; workflows = 'workflows.json' }
 $script:CanonicalAgentContractCache = @{}
+$script:SkillHostFrontmatterProfileSkillIds = @('implementation-plan','plan-review')
 
 function Add-RegistryFailure([System.Collections.Generic.List[string]]$Failures,[string]$Invariant,[string]$Detail) {
   $Failures.Add("${Invariant}: $Detail")
@@ -90,6 +91,11 @@ function Get-RegistrySkillFrontmatterDescription {
     if ($scalarIndicators -contains $lines[0].Substring(0,1) -or $lines[0].Contains(': ') -or $lines[0].EndsWith(':') -or $lines[0].Contains(' #')) {
       Add-RegistryFailure $Failures 'SkillDescriptionScalar' "$id plain-scalar description is not a safe single-line YAML value"; return $null
     }
+    $yaml11BoolOrNull = $lines[0] -cmatch '^(?:y|Y|yes|Yes|YES|n|N|no|No|NO|true|True|TRUE|false|False|FALSE|on|On|ON|off|Off|OFF|~|null|Null|NULL)$'
+    $yaml11Number = $lines[0] -cmatch '^(?:[-+]?(?:0[bB][0-1_]+|0[xX][0-9A-Fa-f_]+|0[oO][0-7_]+|(?:[0-9][0-9_]*(?:\.[0-9_]*)?|\.[0-9_]+)(?:[eE][-+]?[0-9]+)?|[0-9][0-9_]*(?::[0-5]?[0-9])+(?:\.[0-9_]*)?)|[-+]?\.(?:inf|Inf|INF|nan|NaN|NAN))$'
+    if ($yaml11BoolOrNull -or $yaml11Number) {
+      Add-RegistryFailure $Failures 'SkillDescriptionScalar' "$id plain-scalar description '$($lines[0])' resolves to a YAML-1.1 bool, null, or number-like value"; return $null
+    }
   }
   return [pscustomobject]@{ Style = $style; Lines = $lines }
 }
@@ -152,6 +158,34 @@ function Get-RegistryFrontmatterNewlinePattern {
   return 'mixed'
 }
 
+function Get-RegistrySkillSourceRaw {
+  <#
+    BOM fail-closed file ingress for canonical and host wrapper skill sources.
+    Registry-rendered sources are UTF-8 without a BOM, so every Unicode BOM
+    signature is rejected from the leading bytes before decoding instead of
+    being silently stripped by a BOM-aware reader. Returns the decoded text
+    or $null after appending an invariant failure.
+  #>
+  param([Parameter(Mandatory)][string]$Path,[Parameter(Mandatory)][string]$Label,[System.Collections.Generic.List[string]]$Failures)
+  try { $bytes = [IO.File]::ReadAllBytes($Path) } catch {
+    Add-RegistryFailure $Failures 'SkillSourceRead' "$Label skill source could not be read: $($_.Exception.Message)"
+    return $null
+  }
+  $bomSignatures = @(
+    ,([byte[]]@(0xEF,0xBB,0xBF))
+    ,([byte[]]@(0xFE,0xFF))
+    ,([byte[]]@(0xFF,0xFE))
+    ,([byte[]]@(0x00,0x00,0xFE,0xFF))
+  )
+  foreach ($signature in $bomSignatures) {
+    if ($bytes.Length -lt $signature.Length) { continue }
+    $matched = $true
+    for ($index = 0; $index -lt $signature.Length; $index++) { if ($bytes[$index] -ne $signature[$index]) { $matched = $false; break } }
+    if ($matched) { Add-RegistryFailure $Failures 'SkillSourceBom' "$Label skill source begins with a Unicode BOM"; return $null }
+  }
+  return [Text.UTF8Encoding]::new($false).GetString($bytes)
+}
+
 function Get-RegistrySkillFrontmatterShadow {
   <#
     Fail-closed Phase 3A shadow comparison for one registered skill: the
@@ -185,6 +219,219 @@ function Get-RegistrySkillFrontmatterShadow {
   }
   $status = if ($failures.Count -eq 0) { 'match' } else { 'mismatch' }
   return [pscustomobject]@{ Id = $id; Status = $status; Newlines = $newlines; Failures = $failures }
+}
+
+function Get-RegistrySkillWrapperFrontmatterShadow {
+  <#
+    Fail-closed Phase 3B comparator for one applicable host binding: the
+    registry-owned host frontmatter profile must byte-match the wrapper's
+    frontmatter under the render-ledger comparison convention. Canonical
+    name, exact description, and the effective disable-model-invocation
+    policy are each checked so every mismatch names both the host and the
+    canonical skill id. Nothing is rewritten or silently normalized.
+  #>
+  param([Parameter(Mandatory)][string]$SkillId,[Parameter(Mandatory)]$Profile,[Parameter(Mandatory)][string]$HostName,[Parameter(Mandatory)][string]$Raw,[System.Collections.Generic.List[string]]$Failures)
+  $before = $Failures.Count
+  $canonical = Get-RegistrySkillCanonicalFrontmatter -Raw $Raw
+  if ($null -eq $canonical) {
+    Add-RegistryFailure $Failures 'SkillWrapperShape' "$SkillId/$HostName wrapper has no frontmatter block"
+    return 'mismatch'
+  }
+  $normalized = Get-RegistryComparableFrontmatter $canonical
+  if ($normalized -notmatch "(?m)^name:[ \t]*$([regex]::Escape($SkillId))[ \t]*$") {
+    Add-RegistryFailure $Failures 'SkillWrapperName' "$SkillId/$HostName wrapper name does not equal the canonical registry id"
+  }
+  $disabledProperty = $Profile.PSObject.Properties['modelInvocationDisabled']
+  $effectiveDisabled = $normalized -match '(?m)^disable-model-invocation:[ \t]*true[ \t]*$'
+  if ($null -eq $disabledProperty -or $disabledProperty.Value -isnot [bool]) {
+    Add-RegistryFailure $Failures 'SkillHostFrontmatterProfilePolicy' "$SkillId/$HostName profile modelInvocationDisabled must be boolean"
+  } elseif ($effectiveDisabled -ne $disabledProperty.Value) {
+    Add-RegistryFailure $Failures 'SkillWrapperDisableModelInvocation' "$SkillId/$HostName effective=$effectiveDisabled profile=$($disabledProperty.Value)"
+  }
+  $descriptionProperty = $Profile.PSObject.Properties['description']
+  $descriptionValid = $false
+  if ($null -eq $descriptionProperty) {
+    Add-RegistryFailure $Failures 'SkillDescriptionMissing' "$SkillId/$HostName host frontmatter profile has no description"
+  } else {
+    $profileDisabled = if ($null -ne $disabledProperty -and $disabledProperty.Value -is [bool]) { $disabledProperty.Value } else { $false }
+    $profileSkill = [pscustomobject]@{ id = $SkillId; description = $descriptionProperty.Value; modelInvocationDisabled = $profileDisabled }
+    $descriptionFailures = [System.Collections.Generic.List[string]]::new()
+    $null = Get-RegistrySkillFrontmatterDescription -Skill $profileSkill -Failures $descriptionFailures
+    foreach ($descriptionFailure in $descriptionFailures) { $Failures.Add($descriptionFailure) }
+    $descriptionValid = $descriptionFailures.Count -eq 0
+    if ($descriptionValid) {
+      try {
+        $expected = Get-RegistrySkillFrontmatter -Skill $profileSkill
+        if ((Get-RegistryComparableFrontmatter $expected) -cne $normalized) {
+          Add-RegistryFailure $Failures 'SkillWrapperFrontmatterShadow' "$SkillId/$HostName registry profile and wrapper frontmatter differ"
+        }
+      }
+      catch { Add-RegistryFailure $Failures 'SkillWrapperFrontmatterMetadata' "$SkillId/$HostName $($_.Exception.Message -replace '^FAIL:\s*','')" }
+    }
+  }
+  return $(if ($Failures.Count -eq $before) { 'match' } else { 'mismatch' })
+}
+
+function Get-RegistrySkillWrapperSourcePath {
+  <#
+    Resolves one applicable skill binding's manifest-declared wrapper source to
+    a repository-relative path through the existing Phase 0 inventory manifest
+    seam (binding source plus the host's overlay/shared root). No second
+    routing system is introduced and manifests are never duplicated.
+  #>
+  param([Parameter(Mandatory)]$Binding,[Parameter(Mandatory)]$Manifest,[Parameter(Mandatory)][string]$SkillId,[Parameter(Mandatory)][string]$HostName,[System.Collections.Generic.List[string]]$Failures)
+  $sourceProperty = $Binding.PSObject.Properties['source']
+  if ($null -eq $sourceProperty -or [string]::IsNullOrWhiteSpace([string]$sourceProperty.Value)) {
+    Add-RegistryFailure $Failures 'SkillWrapperSource' "$SkillId/$HostName applicable binding declares no manifest source"; return $null
+  }
+  $source = [string]$sourceProperty.Value
+  $rootName = if ($source.StartsWith('shared:', [StringComparison]::Ordinal)) { 'shared_root' } else { 'overlay_root' }
+  $rootProperty = $Manifest.PSObject.Properties[$rootName]
+  $root = if ($null -ne $rootProperty) { [string]$rootProperty.Value } else { '' }
+  if ([string]::IsNullOrWhiteSpace($root)) {
+    Add-RegistryFailure $Failures 'SkillWrapperSource' "$SkillId/$HostName manifest source '$source' has no '$rootName'"; return $null
+  }
+  $rest = if ($source.StartsWith('shared:', [StringComparison]::Ordinal)) { $source.Substring(7) } else { $source }
+  return (($root.TrimEnd('/','\')) + '/' + $rest)
+}
+
+function Get-RegistrySkillHostFrontmatterShadow {
+  <#
+    Phase 3B wrapper-frontmatter shadow check for one registered skill across
+    all seven hosts. Applicable bindings resolve their manifest-derived
+    wrapper source and byte-compare its frontmatter against the registry-owned
+    host frontmatter profile; declared not-applicable bindings must show no
+    manifest entry delivering the skill wrapper. Returns one row per host for
+    managed-view evidence; all defects are appended as fail-closed invariants.
+  #>
+  param([Parameter(Mandatory)]$Skill,[Parameter(Mandatory)]$Inventory,[Parameter(Mandatory)][string]$RepoRoot,[System.Collections.Generic.List[string]]$Failures)
+  $id = [string]$Skill.id
+  $profilesProperty = $Skill.PSObject.Properties['hostFrontmatterProfiles']
+  $profiles = @(if ($null -ne $profilesProperty) { $profilesProperty.Value })
+  $required = $id -in $script:SkillHostFrontmatterProfileSkillIds
+  if (-not $required) {
+    if ($profiles.Count -gt 0) { Add-RegistryFailure $Failures 'SkillHostFrontmatterProfileScope' "$id is outside the Phase 3B host-frontmatter profile set" }
+    return @()
+  }
+  $manifestsByHost = @{}
+  $manifestHostsSeen = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($manifest in @($Inventory.manifests)) {
+    $manifestHost = [string]$manifest.host
+    if (-not $manifestHostsSeen.Add($manifestHost)) {
+      Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id has more than one Phase 0 manifest for host '$manifestHost'"
+      continue
+    }
+    $manifestsByHost[$manifestHost] = $manifest
+  }
+  $bindingsByHost = @{}
+  foreach ($binding in @($Skill.hostApplicability)) { $bindingsByHost[[string]$binding.host] = $binding }
+  $inventorySkill = @($Inventory.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq $id })
+  $inventoryBindingsByHost = @{}
+  if ($inventorySkill.Count -eq 1) { foreach ($binding in @($inventorySkill[0].host_applicability)) { $inventoryBindingsByHost[[string]$binding.host] = $binding } }
+  $profileByHost = @{}
+  $covered = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($profile in $profiles) {
+    $hostsProperty = $profile.PSObject.Properties['hosts']
+    $hosts = @(if ($null -ne $hostsProperty) { Get-RegistrySequence $hostsProperty.Value })
+    if ($hosts.Count -eq 0) { Add-RegistryFailure $Failures 'SkillHostFrontmatterProfileHosts' "$id has a host frontmatter profile with no hosts"; continue }
+    foreach ($hostName in $hosts) {
+      if ($hostName -notin $script:Hosts) { Add-RegistryFailure $Failures 'SkillHostFrontmatterProfileHosts' "$id/$hostName profile declares an invalid host"; continue }
+      if (-not $covered.Add($hostName)) { Add-RegistryFailure $Failures 'SkillHostFrontmatterProfileOverlap' "$id/$hostName is covered by multiple host frontmatter profiles"; continue }
+      $status = if ($bindingsByHost.ContainsKey($hostName)) { [string]$bindingsByHost[$hostName].status } else { '<missing>' }
+      if ($status -cne 'applicable') { Add-RegistryFailure $Failures 'SkillHostFrontmatterProfileApplicability' "$id/$hostName profile covers a '$status' binding" }
+      if (-not $profileByHost.ContainsKey($hostName)) { $profileByHost[$hostName] = $profile }
+    }
+    $sourceProperty = $profile.PSObject.Properties['wrapperSource']
+    if ($null -eq $sourceProperty -or [string]::IsNullOrWhiteSpace([string]$sourceProperty.Value)) {
+      Add-RegistryFailure $Failures 'SkillWrapperSource' "$id profile declares no wrapperSource"
+    } else {
+      $null = Test-RegistryDescendantPath $RepoRoot ([string]$sourceProperty.Value) $Failures "SkillWrapperSource:$id" -Leaf
+    }
+    $disabledProperty = $profile.PSObject.Properties['modelInvocationDisabled']
+    if ($null -eq $disabledProperty -or $disabledProperty.Value -isnot [bool]) { Add-RegistryFailure $Failures 'SkillHostFrontmatterProfilePolicy' "$id profile modelInvocationDisabled must be boolean" }
+    $descriptionProperty = $profile.PSObject.Properties['description']
+    if ($null -eq $descriptionProperty) { Add-RegistryFailure $Failures 'SkillDescriptionMissing' "$id host frontmatter profile has no description" }
+    else {
+      $profileSkill = [pscustomobject]@{ id = $id; description = $descriptionProperty.Value; modelInvocationDisabled = $true }
+      $descriptionFailures = [System.Collections.Generic.List[string]]::new()
+      $null = Get-RegistrySkillFrontmatterDescription -Skill $profileSkill -Failures $descriptionFailures
+      foreach ($descriptionFailure in $descriptionFailures) { $Failures.Add($descriptionFailure) }
+    }
+  }
+  if ($profiles.Count -eq 0) { Add-RegistryFailure $Failures 'SkillHostFrontmatterProfileMissing' "$id must declare host frontmatter profiles" }
+  $rows = [System.Collections.Generic.List[object]]::new()
+  foreach ($hostName in $script:Hosts) {
+    $binding = if ($bindingsByHost.ContainsKey($hostName)) { $bindingsByHost[$hostName] } else { $null }
+    $status = if ($null -ne $binding) { [string]$binding.status } else { '<missing>' }
+    $manifest = if ($manifestsByHost.ContainsKey($hostName)) { $manifestsByHost[$hostName] } else { $null }
+    $manifestEntries = $null
+    if ($null -eq $manifest) {
+      Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id/$hostName has no Phase 0 host manifest"
+    } else {
+      $entriesProperty = $manifest.PSObject.Properties['entries']
+      if ($null -eq $entriesProperty) {
+        Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id/$hostName Phase 0 host manifest declares no entries"
+      } else {
+        $manifestEntries = @($entriesProperty.Value)
+      }
+    }
+    if ($status -ceq 'applicable') {
+      if (-not $covered.Contains($hostName)) { Add-RegistryFailure $Failures 'SkillHostFrontmatterProfileCoverage' "$id/$hostName applicable binding has no host frontmatter profile" }
+      $rowStatus = 'mismatch'; $wrapperSource = '-'
+      $profile = if ($profileByHost.ContainsKey($hostName)) { $profileByHost[$hostName] } else { $null }
+      $inventoryBinding = if ($inventoryBindingsByHost.ContainsKey($hostName)) { $inventoryBindingsByHost[$hostName] } else { $null }
+      $sourceProperty = if ($null -ne $profile) { $profile.PSObject.Properties['wrapperSource'] } else { $null }
+      $bindingSource = ''; $bindingDestination = ''
+      $deliveryEvidence = -1
+      if ($null -ne $inventoryBinding -and $null -ne $manifestEntries) {
+        $bindingSourceProperty = $inventoryBinding.PSObject.Properties['source']
+        $bindingDestinationProperty = $inventoryBinding.PSObject.Properties['destination']
+        $bindingSource = if ($null -ne $bindingSourceProperty) { [string]$bindingSourceProperty.Value } else { '' }
+        $bindingDestination = if ($null -ne $bindingDestinationProperty) { [string]$bindingDestinationProperty.Value } else { '' }
+        $deliveryEvidence = @($manifestEntries | Where-Object {
+          $entrySource = if ($_.PSObject.Properties['source']) { [string]$_.source } else { '' }
+          $entryDestination = if ($_.PSObject.Properties['destination']) { [string]$_.destination } else { '' }
+          $entrySource -ceq $bindingSource -and $entryDestination -ceq $bindingDestination
+        }).Count
+      }
+      if ($deliveryEvidence -ne 1) {
+        Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id/$hostName expected exactly one manifest entry delivering source='$bindingSource' destination='$bindingDestination'; found $deliveryEvidence"
+      }
+      if ($null -ne $profile -and $null -ne $sourceProperty -and $null -ne $inventoryBinding -and $null -ne $manifest -and $null -ne $manifestEntries) {
+        $wrapperSource = [string]$sourceProperty.Value
+        $resolved = Get-RegistrySkillWrapperSourcePath -Binding $inventoryBinding -Manifest $manifest -SkillId $id -HostName $hostName -Failures $Failures
+        if ($null -ne $resolved) {
+          if ($resolved -cne $wrapperSource) {
+            Add-RegistryFailure $Failures 'SkillWrapperRouting' "$id/$hostName manifest-resolved='$resolved' profile='$wrapperSource'"
+          } elseif ($deliveryEvidence -eq 1) {
+            $raw = Get-RegistrySkillSourceRaw -Path (Join-Path $RepoRoot $resolved) -Label "$id/$hostName" -Failures $Failures
+            if ($null -ne $raw) {
+              $rowStatus = Get-RegistrySkillWrapperFrontmatterShadow -SkillId $id -Profile $profile -HostName $hostName -Raw $raw -Failures $Failures
+            }
+          }
+        }
+      }
+      $rows.Add([pscustomobject]@{ Skill = $id; Host = $hostName; Status = $rowStatus; WrapperSource = $wrapperSource })
+    } else {
+      $delivering = @()
+      $provedAbsent = $false
+      if ($status -ceq 'not-applicable' -and $null -ne $manifestEntries) {
+        $delivering = @($manifestEntries | Where-Object {
+          $entrySource = if ($_.PSObject.Properties['source']) { [string]$_.source } else { '' }
+          $entryDestination = if ($_.PSObject.Properties['destination']) { [string]$_.destination } else { '' }
+          $entrySource -ceq "skills/$id/SKILL.md" -or $entrySource -ceq "shared:skills/$id/SKILL.md" -or $entryDestination -cmatch "(^|/)$([regex]::Escape($id))/SKILL\.md$"
+        })
+        if ($delivering.Count -gt 0) {
+          $delivered = if ($delivering[0].PSObject.Properties['destination']) { [string]$delivering[0].destination } else { '<unknown>' }
+          Add-RegistryFailure $Failures 'SkillWrapperNotApplicable' "$id/$hostName declared not-applicable but the manifest delivers a wrapper ('$delivered')"
+        } else {
+          $provedAbsent = $true
+        }
+      }
+      $rows.Add([pscustomobject]@{ Skill = $id; Host = $hostName; Status = $(if ($provedAbsent) { 'not-applicable' } else { 'mismatch' }); WrapperSource = '-' })
+    }
+  }
+  return $rows
 }
 
 function Get-CanonicalAgentContracts([string]$RepoRoot,$Inventory) {
@@ -296,9 +543,11 @@ function Test-RegistryCatalog {
       }
     } elseif ($Kind -eq 'skills') {
       if ($null -eq $Inventory) { throw 'FAIL: skill canonical consistency requires the Phase 0 inventory' }
-      $raw = Get-Content -LiteralPath $body -Raw
+      $raw = Get-RegistrySkillSourceRaw -Path $body -Label $id -Failures $failures
+      if ($null -eq $raw) { continue }
       $frontmatterShadow = Get-RegistrySkillFrontmatterShadow -Skill $item -Raw $raw
       foreach ($shadowFailure in $frontmatterShadow.Failures) { $failures.Add($shadowFailure) }
+      $null = Get-RegistrySkillHostFrontmatterShadow -Skill $item -Inventory $Inventory -RepoRoot $RepoRoot -Failures $failures
       if ($raw -notmatch "(?m)^name:\s*$([regex]::Escape($id))\s*$") { Add-RegistryFailure $failures 'CanonicalIdentity' "$id skill frontmatter name" }
       $inventorySkill = @($Inventory.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq $id })
       if ($inventorySkill.Count -ne 1) { Add-RegistryFailure $failures 'SkillInventory' "$id has $($inventorySkill.Count) inventory rows"; continue }
@@ -440,7 +689,7 @@ function Resolve-RegistryProjection {
 }
 
 function Get-RegistryManagedView {
-  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$RepoRoot,$Resolver = (New-RegistryProjectionResolver))
+  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$RepoRoot,$Resolver = (New-RegistryProjectionResolver),$Inventory = $null)
   $identity = [ordered]@{ schema = 'managed-view/v1'; generatedFrom = 'catalog/v1'; hosts = @($script:Hosts); counts = [ordered]@{} }
   foreach ($kind in @('agents','skills','rules','workflows')) { $identity.counts[$kind] = @($Catalogs[$kind].items).Count }
   $identityJson = $identity | ConvertTo-Json -Depth 5
@@ -466,11 +715,25 @@ function Get-RegistryManagedView {
   }
   $skillShadow = [System.Collections.Generic.List[string]]::new(); $skillShadow.Add("skill`tfrontmatterShadow`tcanonicalNewlines")
   foreach ($skill in $Catalogs.skills.items) {
-    $skillRaw = Get-Content -LiteralPath (Join-Path $RepoRoot ([string]$skill.body)) -Raw
+    $renderFailures = [System.Collections.Generic.List[string]]::new()
+    $skillRaw = Get-RegistrySkillSourceRaw -Path (Join-Path $RepoRoot ([string]$skill.body)) -Label ([string]$skill.id) -Failures $renderFailures
+    if ($null -eq $skillRaw) { throw "FAIL: $($renderFailures[0])" }
     $shadow = Get-RegistrySkillFrontmatterShadow -Skill $skill -Raw $skillRaw
     $skillShadow.Add(($shadow.Id,$shadow.Status,$shadow.Newlines) -join "`t")
   }
-  [pscustomobject]@{ Files = [ordered]@{ 'identity.json' = $identityJson + "`n"; 'agent-parity.tsv' = ($parity -join "`n") + "`n"; 'composition-order.tsv' = ($composition -join "`n") + "`n"; 'skill-frontmatter-shadow.tsv' = ($skillShadow -join "`n") + "`n" } }
+  if ($null -eq $Inventory) {
+    $inventoryPath = Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json'
+    try { $Inventory = Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json } catch { throw "FAIL: invalid inventory: $($_.Exception.Message)" }
+  }
+  $wrapperShadow = [System.Collections.Generic.List[string]]::new(); $wrapperShadow.Add("skill`thost`twrapperShadow`twrapperSource")
+  foreach ($skill in $Catalogs.skills.items) {
+    $shadowFailures = [System.Collections.Generic.List[string]]::new()
+    foreach ($row in (Get-RegistrySkillHostFrontmatterShadow -Skill $skill -Inventory $Inventory -RepoRoot $RepoRoot -Failures $shadowFailures)) {
+      $wrapperShadow.Add(($row.Skill,$row.Host,$row.Status,$row.WrapperSource) -join "`t")
+    }
+    if ($shadowFailures.Count -gt 0) { throw "FAIL: $($shadowFailures[0])" }
+  }
+  [pscustomobject]@{ Files = [ordered]@{ 'identity.json' = $identityJson + "`n"; 'agent-parity.tsv' = ($parity -join "`n") + "`n"; 'composition-order.tsv' = ($composition -join "`n") + "`n"; 'skill-frontmatter-shadow.tsv' = ($skillShadow -join "`n") + "`n"; 'skill-host-frontmatter-shadow.tsv' = ($wrapperShadow -join "`n") + "`n" } }
 }
 
 function Test-RegistryOutputRoot([string]$OutputRoot,[string]$RepoRoot,[switch]$AllowTemporaryRoot) {
@@ -493,13 +756,13 @@ function Test-RegistryOutputRoot([string]$OutputRoot,[string]$RepoRoot,[switch]$
 }
 
 function Write-RegistryManagedView {
-  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$OutputRoot,[string]$RepoRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),$Resolver = (New-RegistryProjectionResolver),[switch]$AllowTemporaryRoot)
+  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$OutputRoot,[string]$RepoRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),$Resolver = (New-RegistryProjectionResolver),$Inventory = $null,[switch]$AllowTemporaryRoot)
   Test-RegistryOutputRoot -OutputRoot $OutputRoot -RepoRoot $RepoRoot -AllowTemporaryRoot:$AllowTemporaryRoot
-  $view = Get-RegistryManagedView -Catalogs $Catalogs -RepoRoot $RepoRoot -Resolver $Resolver
+  $view = Get-RegistryManagedView -Catalogs $Catalogs -RepoRoot $RepoRoot -Resolver $Resolver -Inventory $Inventory
   New-Item -ItemType Directory -Force -Path $OutputRoot | Out-Null
   $encoding = [System.Text.UTF8Encoding]::new($false)
   foreach ($file in $view.Files.GetEnumerator()) { [IO.File]::WriteAllText((Join-Path $OutputRoot $file.Key), [string]$file.Value, $encoding) }
   return $view
 }
 
-Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot','Get-StackManifestDestinationCount','Get-RegistrySkillFrontmatter','Get-RegistrySkillCanonicalFrontmatter','Get-RegistryComparableFrontmatter','Get-RegistrySkillFrontmatterShadow')
+Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot','Get-StackManifestDestinationCount','Get-RegistrySkillFrontmatter','Get-RegistrySkillCanonicalFrontmatter','Get-RegistryComparableFrontmatter','Get-RegistrySkillSourceRaw','Get-RegistrySkillFrontmatterShadow','Get-RegistrySkillWrapperFrontmatterShadow','Get-RegistrySkillWrapperSourcePath','Get-RegistrySkillHostFrontmatterShadow')

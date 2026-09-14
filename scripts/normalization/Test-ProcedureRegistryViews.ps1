@@ -19,9 +19,9 @@ Assert-View 'all registered skills carry frontmatter description metadata' (@($r
 
 $temp = Join-Path ([IO.Path]::GetTempPath()) ("procedure-registry-" + [Guid]::NewGuid().ToString('N'))
 try {
-  $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -AllowTemporaryRoot
-  $two = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'two') -RepoRoot $RepoRoot -AllowTemporaryRoot
-  Assert-View 'double render has four files' ($one.Files.Keys.Count -eq 4 -and $two.Files.Keys.Count -eq 4)
+  $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
+  $two = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'two') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
+  Assert-View 'double render has five files' ($one.Files.Keys.Count -eq 5 -and $two.Files.Keys.Count -eq 5)
   foreach ($name in @($one.Files.Keys)) {
     $hashA = (Get-FileHash (Join-Path (Join-Path $temp 'one') $name) -Algorithm SHA256).Hash
     $hashB = (Get-FileHash (Join-Path (Join-Path $temp 'two') $name) -Algorithm SHA256).Hash
@@ -31,15 +31,19 @@ try {
   $shadowRows = @(Get-Content (Join-Path (Join-Path $temp 'one') 'skill-frontmatter-shadow.tsv'))
   Assert-View 'skill frontmatter shadow view covers 22 rows' ($shadowRows.Count -eq 23) "rows=$($shadowRows.Count)"
   Assert-View 'skill frontmatter shadow reports all matches' (@($shadowRows | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`tmatch`t" }).Count -eq 0) (($shadowRows | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`tmatch`t" }) -join '; ')
+  $wrapperRows = @(Get-Content (Join-Path (Join-Path $temp 'one') 'skill-host-frontmatter-shadow.tsv'))
+  Assert-View 'skill host wrapper shadow view covers 14 rows' ($wrapperRows.Count -eq 15) "rows=$($wrapperRows.Count)"
+  Assert-View 'skill host wrapper shadow reports only match or not-applicable' (@($wrapperRows | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`t(match|not-applicable)`t" }).Count -eq 0) (($wrapperRows | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`t(match|not-applicable)`t" }) -join '; ')
+  Assert-View 'skill host wrapper shadow pins the shared OpenCode source' ((@($wrapperRows | Where-Object { $_ -like "implementation-plan`tAntigravity`tmatch`toverlays/opencode/skills/implementation-plan/SKILL.md" }).Count -eq 1) -and (@($wrapperRows | Where-Object { $_ -like "plan-review`tVscode`tmatch`toverlays/opencode/skills/plan-review/SKILL.md" }).Count -eq 1))
 
   $publicRender = Join-Path $temp 'public-render'
   & $RenderScript -OutputRoot $publicRender -AllowTemporaryRoot | Out-Null
   $publicFiles = @(Get-ChildItem -LiteralPath $publicRender -File)
-  Assert-View 'public render integration' ($publicFiles.Count -eq 4) "files=$($publicFiles.Count)"
+  Assert-View 'public render integration' ($publicFiles.Count -eq 5) "files=$($publicFiles.Count)"
   $explicitRepoRender = Join-Path $temp 'explicit-repo-render'
   & $RenderScript -RepoRoot $RepoRoot -OutputRoot $explicitRepoRender -AllowTemporaryRoot | Out-Null
   $explicitFiles = @(Get-ChildItem -LiteralPath $explicitRepoRender -File)
-  Assert-View 'explicit RepoRoot render integration' ($explicitFiles.Count -eq 4) "files=$($explicitFiles.Count)"
+  Assert-View 'explicit RepoRoot render integration' ($explicitFiles.Count -eq 5) "files=$($explicitFiles.Count)"
   $rejected = $false
   try { & $RenderScript -OutputRoot $publicRender | Out-Null } catch { $rejected = $true }
   Assert-View 'public render rejects temporary root without ownership switch' $rejected
@@ -74,6 +78,55 @@ try {
   $builderThrew = $false
   try { $null = Get-RegistrySkillFrontmatter -Skill ([pscustomobject]@{ id = 'broken'; description = [pscustomobject]@{ style = 'plain-scalar'; lines = @('a','b') }; modelInvocationDisabled = $false }) } catch { $builderThrew = $true }
   Assert-View 'frontmatter builder fails closed on malformed description' $builderThrew
+  $yamlBuilderThrew = $false
+  try { $null = Get-RegistrySkillFrontmatter -Skill ([pscustomobject]@{ id = 'yaml-ambiguous'; description = [pscustomobject]@{ style = 'plain-scalar'; lines = @('on') }; modelInvocationDisabled = $false }) } catch { $yamlBuilderThrew = $true }
+  Assert-View 'frontmatter builder fails closed on YAML-1.1 bool description' $yamlBuilderThrew
+  $foldedAmbiguousThrew = $false
+  try { $null = Get-RegistrySkillFrontmatter -Skill ([pscustomobject]@{ id = 'folded-ok'; description = [pscustomobject]@{ style = 'folded-block'; lines = @('no','on') }; modelInvocationDisabled = $false }) } catch { $foldedAmbiguousThrew = $true }
+  Assert-View 'folded-block descriptions keep working despite scalar-looking words' (-not $foldedAmbiguousThrew)
+  $bomSkill = $skillsById['implementation-plan']
+  $bomRaw = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot ([string]$bomSkill.body))
+  $bomShadow = Get-RegistrySkillFrontmatterShadow -Skill $bomSkill -Raw ("$([char]0xFEFF)$bomRaw")
+  Assert-View 'BOM-prefixed canonical skill frontmatter fails closed' ($bomShadow.Status -eq 'mismatch' -and @($bomShadow.Failures | Where-Object { $_.StartsWith('SkillFrontmatterShape:', [StringComparison]::Ordinal) }).Count -gt 0) (($bomShadow.Failures | Select-Object -First 1) -join '')
+  $bomPath = Join-Path $temp 'bom-source.md'
+  [IO.File]::WriteAllBytes($bomPath, [byte[]]([byte[]]@(0xEF,0xBB,0xBF) + [Text.UTF8Encoding]::new($false).GetBytes($bomRaw)))
+  $bomIngressFailures = [System.Collections.Generic.List[string]]::new()
+  $bomIngressRaw = Get-RegistrySkillSourceRaw -Path $bomPath -Label 'implementation-plan' -Failures $bomIngressFailures
+  Assert-View 'BOM-prefixed skill source fails closed at the file ingress loader' ($null -eq $bomIngressRaw -and @($bomIngressFailures | Where-Object { $_.StartsWith('SkillSourceBom:', [StringComparison]::Ordinal) }).Count -gt 0) (($bomIngressFailures | Select-Object -First 1) -join '')
+  $cleanSourcePath = Join-Path $temp 'clean-source.md'
+  [IO.File]::WriteAllBytes($cleanSourcePath, [Text.UTF8Encoding]::new($false).GetBytes($bomRaw))
+  $cleanIngressFailures = [System.Collections.Generic.List[string]]::new()
+  $cleanIngressRaw = Get-RegistrySkillSourceRaw -Path $cleanSourcePath -Label 'implementation-plan' -Failures $cleanIngressFailures
+  Assert-View 'BOM-free skill source ingests unchanged through the loader' ($null -ne $cleanIngressRaw -and $cleanIngressRaw -ceq $bomRaw -and $cleanIngressFailures.Count -eq 0) (($cleanIngressFailures | Select-Object -First 1) -join '')
+  $missingIngressFailures = [System.Collections.Generic.List[string]]::new()
+  $missingIngressRaw = Get-RegistrySkillSourceRaw -Path (Join-Path $temp 'missing-source.md') -Label 'implementation-plan' -Failures $missingIngressFailures
+  Assert-View 'unreadable skill source fails closed instead of crashing the validator' ($null -eq $missingIngressRaw -and @($missingIngressFailures | Where-Object { $_.StartsWith('SkillSourceRead:', [StringComparison]::Ordinal) }).Count -gt 0) (($missingIngressFailures | Select-Object -First 1) -join '')
+  $viewMirror = Join-Path $temp 'view-mirror'
+  foreach ($skill in $registry.Catalogs.skills.items) {
+    $mirrorPath = Join-Path $viewMirror ([string]$skill.body)
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $mirrorPath) | Out-Null
+    Copy-Item -LiteralPath (Join-Path $RepoRoot ([string]$skill.body)) -Destination $mirrorPath
+  }
+  foreach ($namedId in @('implementation-plan','plan-review')) {
+    foreach ($profile in @(@($registry.Catalogs.skills.items | Where-Object { [string]$_.id -eq $namedId }).hostFrontmatterProfiles)) {
+      $mirrorPath = Join-Path $viewMirror ([string]$profile.wrapperSource)
+      New-Item -ItemType Directory -Force -Path (Split-Path -Parent $mirrorPath) | Out-Null
+      Copy-Item -LiteralPath (Join-Path $RepoRoot ([string]$profile.wrapperSource)) -Destination $mirrorPath
+    }
+  }
+  $cleanView = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $viewMirror -Inventory $registry.Inventory
+  Assert-View 'managed view renders clean sources through the ingress loader' ((@(($cleanView.Files['skill-frontmatter-shadow.tsv'] -split "`n" | Where-Object { $_ }) | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`tmatch`t" })).Count -eq 0)
+  [IO.File]::WriteAllBytes((Join-Path $viewMirror ([string]$bomSkill.body)), [byte[]]([byte[]]@(0xEF,0xBB,0xBF) + [Text.UTF8Encoding]::new($false).GetBytes($bomRaw)))
+  $viewBomThrew = $false
+  try { $null = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $viewMirror -Inventory $registry.Inventory } catch { $viewBomThrew = ($_.Exception.Message -like 'FAIL: SkillSourceBom:*') }
+  Assert-View 'managed view rejects a BOM-prefixed canonical source before rendering shadow evidence' $viewBomThrew
+  $cursorProfile = @(@($registry.Catalogs.skills.items | Where-Object { [string]$_.id -eq 'implementation-plan' }).hostFrontmatterProfiles | Where-Object { @($_.hosts) -contains 'Cursor' })[0]
+  $wrongNameFailures = [System.Collections.Generic.List[string]]::new()
+  $wrongNameStatus = Get-RegistrySkillWrapperFrontmatterShadow -SkillId 'implementation-plan' -Profile $cursorProfile -HostName 'Cursor' -Raw "---`nname: wrong-name`ndescription: ignored`n---`n" -Failures $wrongNameFailures
+  Assert-View 'wrapper name mismatch names host and skill id' ($wrongNameStatus -eq 'mismatch' -and @($wrongNameFailures | Where-Object { $_.StartsWith('SkillWrapperName: implementation-plan/Cursor', [StringComparison]::Ordinal) }).Count -gt 0) (($wrongNameFailures | Select-Object -First 2) -join '; ')
+  $shapeFailures = [System.Collections.Generic.List[string]]::new()
+  $shapeStatus = Get-RegistrySkillWrapperFrontmatterShadow -SkillId 'implementation-plan' -Profile $cursorProfile -HostName 'Cursor' -Raw 'no frontmatter here' -Failures $shapeFailures
+  Assert-View 'wrapper without frontmatter fails closed naming host and skill id' ($shapeStatus -eq 'mismatch' -and @($shapeFailures | Where-Object { $_.StartsWith('SkillWrapperShape: implementation-plan/Cursor', [StringComparison]::Ordinal) }).Count -gt 0) (($shapeFailures | Select-Object -First 2) -join '; ')
 } catch { $failures++; Write-Output "FAIL: frontmatter builder execution: $($_.Exception.Message)" }
 
 try {
@@ -174,6 +227,41 @@ try {
   Assert-RegistryFailure $result 'skill host applicability mismatch fails' 'SkillHostStatus'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].hostApplicability[0] | Add-Member Destination 'owned-by-registry' }
   Assert-RegistryFailure $result 'registry-owned skill destination fails' 'DestinationOwnership'
+  foreach ($yamlScalar in @('no','on','null','42','0b1010','1:30','190:20:30','190:20:30.15')) {
+    $scalarValue = $yamlScalar
+    $result = Invoke-EdgeCase 'skills' { param($c) (@($c.skills.items | Where-Object { [string]$_.id -eq 'opencode-headless-run' }))[0].description.lines = @($scalarValue) }.GetNewClosure()
+    Assert-RegistryFailure $result "plain-scalar YAML-1.1 value '$yamlScalar' fails closed" 'SkillDescriptionScalar'
+  }
+  $result = Invoke-EdgeCase 'skills' { param($c) (@($c.skills.items | Where-Object { [string]$_.id -eq 'implementation-plan' }))[0].PSObject.Properties.Remove('hostFrontmatterProfiles') }
+  Assert-RegistryFailure $result 'missing host frontmatter profiles fails closed' 'SkillHostFrontmatterProfileMissing'
+  $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq 'implementation-plan' }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Vscode' })[0].hosts = @('OpenCode','Antigravity') }
+  Assert-RegistryFailure $result 'uncovered applicable host binding fails closed' 'SkillHostFrontmatterProfileCoverage'
+  $result = Invoke-EdgeCase 'skills' { param($c) @((@($c.skills.items | Where-Object { [string]$_.id -eq 'plan-review' }))[0].hostFrontmatterProfiles)[0].hosts = @('Cline') }
+  Assert-RegistryFailure $result 'profile covering a not-applicable host fails closed' 'SkillHostFrontmatterProfileApplicability'
+  $result = Invoke-EdgeCase 'skills' { param($c) @((@($c.skills.items | Where-Object { [string]$_.id -eq 'plan-review' }))[0].hostFrontmatterProfiles)[1].hosts = @('OpenCode','Codex') }
+  Assert-RegistryFailure $result 'overlapping profile host coverage fails closed' 'SkillHostFrontmatterProfileOverlap'
+  $result = Invoke-EdgeCase 'skills' { param($c) (@($c.skills.items | Where-Object { [string]$_.id -eq 'architecture-survey' }))[0] | Add-Member hostFrontmatterProfiles @([pscustomobject]@{ hosts = @('Cursor'); wrapperSource = 'overlays/cursor/skills/implementation-plan/SKILL.md'; description = [pscustomobject]@{ style = 'plain-scalar'; lines = @('outside the named-skill set') }; modelInvocationDisabled = $false }) }
+  Assert-RegistryFailure $result 'profiles outside the named-skill set fail closed' 'SkillHostFrontmatterProfileScope'
+  $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq 'plan-review' }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Codex' })[0].description.lines = @('Wrong wrapper description.') }
+  Assert-RegistryFailure $result 'wrapper description mismatch fails closed' 'SkillWrapperFrontmatterShadow'
+  $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq 'implementation-plan' }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Cursor' })[0].modelInvocationDisabled = $false }
+  Assert-RegistryFailure $result 'wrapper disable-model-invocation mismatch fails closed' 'SkillWrapperDisableModelInvocation'
+  $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq 'implementation-plan' }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'OpenCode' })[0].wrapperSource = 'overlays/antigravity/skills/implementation-plan/SKILL.md' }
+  Assert-RegistryFailure $result 'profile wrapper source disagreement fails closed' 'SkillWrapperRouting'
+  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'implementation-plan' }))[0].host_applicability | Where-Object { [string]$_.host -eq 'Antigravity' } | ForEach-Object { $_.source = 'skills/implementation-plan/SKILL.md' } }
+  Assert-RegistryFailure $result 'shared wrapper source rebinding fails closed' 'SkillWrapperRouting'
+  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Cursor' }))[0].entries += [pscustomobject]@{ source = 'skills/plan-review/SKILL.md'; destination = 'skills/plan-review/SKILL.md' } }
+  Assert-RegistryFailure $result 'declared not-applicable wrapper delivery fails closed' 'SkillWrapperNotApplicable'
+  $result = Invoke-SkillInventoryEdgeCase { param($i) $i.manifests = @($i.manifests | Where-Object { [string]$_.host -ne 'Cline' }) }
+  Assert-RegistryFailure $result 'missing host manifest evidence fails closed' 'SkillWrapperManifestInventory'
+  $result = Invoke-SkillInventoryEdgeCase { param($i) @($i.manifests | Where-Object { [string]$_.host -eq 'Cline' })[0].PSObject.Properties.Remove('entries') }
+  Assert-RegistryFailure $result 'manifest without entries fails closed' 'SkillWrapperManifestInventory'
+  $result = Invoke-SkillInventoryEdgeCase { param($i) $i.manifests = @($i.manifests) + @($i.manifests[0]) }
+  Assert-RegistryFailure $result 'duplicate host manifest inventory fails closed' 'SkillWrapperManifestInventory'
+  $result = Invoke-SkillInventoryEdgeCase { param($i) $cursorManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Cursor' })[0]; $cursorManifest.entries = @($cursorManifest.entries | Where-Object { -not ($_.source -ceq 'skills/implementation-plan/SKILL.md' -and $_.destination -ceq 'skills/implementation-plan/SKILL.md') }) }
+  Assert-RegistryFailure $result 'applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
+  $result = Invoke-SkillInventoryEdgeCase { param($i) $cursorManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Cursor' })[0]; $cursorManifest.entries = @($cursorManifest.entries) + @(@($cursorManifest.entries | Where-Object { $_.source -ceq 'skills/implementation-plan/SKILL.md' }) | Select-Object -First 1) }
+  Assert-RegistryFailure $result 'duplicate delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
   $result = Invoke-EdgeCase 'rules' { param($c) $c.rules.items[0].body = 'rules/pre-commit-ci-gate.md' }
   Assert-RegistryFailure $result 'rules canonical source mismatch fails' 'CanonicalSourceContract'
   $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.compositions[0].canonicalReferenceId = '__missing__' }
@@ -217,6 +305,18 @@ try {
   $paddedLineCatalog = Get-FreshCatalogs
   $paddedLineCatalog.skills.items[0].description.lines = @(' leading whitespace') + @($paddedLineCatalog.skills.items[0].description.lines | Select-Object -Skip 1)
   Assert-View 'schema rejects padded description line' (-not (Test-Json -Json ($paddedLineCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
+  $profileExtraCatalog = Get-FreshCatalogs
+  @(@($profileExtraCatalog.skills.items | Where-Object { [string]$_.id -eq 'plan-review' }).hostFrontmatterProfiles)[0] | Add-Member Destination 'owned-by-registry'
+  Assert-View 'schema rejects unknown host frontmatter profile metadata' (-not (Test-Json -Json ($profileExtraCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
+  $profileHostCatalog = Get-FreshCatalogs
+  @(@($profileHostCatalog.skills.items | Where-Object { [string]$_.id -eq 'plan-review' }).hostFrontmatterProfiles)[0].hosts = @('NotAHost')
+  Assert-View 'schema rejects unknown profile host' (-not (Test-Json -Json ($profileHostCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
+  $profileFlagCatalog = Get-FreshCatalogs
+  @(@($profileFlagCatalog.skills.items | Where-Object { [string]$_.id -eq 'plan-review' }).hostFrontmatterProfiles)[0].modelInvocationDisabled = 'yes'
+  Assert-View 'schema rejects non-boolean profile modelInvocationDisabled' (-not (Test-Json -Json ($profileFlagCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
+  $duplicateHostCatalog = Get-FreshCatalogs
+  @(@($duplicateHostCatalog.skills.items | Where-Object { [string]$_.id -eq 'plan-review' }).hostFrontmatterProfiles)[0].hosts = @('OpenCode','OpenCode')
+  Assert-View 'schema rejects duplicate profile hosts' (-not (Test-Json -Json ($duplicateHostCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
 
   $original = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $RepoRoot
   $originalRows = @([string]$original.Files['composition-order.tsv'] -split "`r?`n" | Where-Object { $_ })

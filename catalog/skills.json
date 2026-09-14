@@ -656,6 +656,45 @@
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Cursor"],
+          "wrapperSource": "overlays/cursor/skills/implementation-plan/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Draft comprehensive implementation plans for Plan mode. Covers goal, scope,",
+              "confidence-rated assumptions, discovery steps, conditional A/B/C, incremental",
+              "phases, and verification. Use proactively when planning any non-trivial change,",
+              "before invoking the plan-reviewer subagent (max 3 passes per loop)."
+            ]
+          },
+          "modelInvocationDisabled": true
+        },
+        {
+          "hosts": ["OpenCode", "Antigravity", "Vscode"],
+          "wrapperSource": "overlays/opencode/skills/implementation-plan/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Draft structured implementation plans. Default on unless truly trivial or",
+              "explicit user opt-out. Escalation when-table SoT. Then invoke plan_reviewer."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/implementation-plan/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Plan non-trivial implementation work into reviewed phases, assumptions, and verification."
+            ]
+          },
+          "modelInvocationDisabled": false
+        }
       ]
     },
     {
@@ -913,6 +952,31 @@
           "evidencePaths": [
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
+        }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["OpenCode", "Antigravity", "Vscode"],
+          "wrapperSource": "overlays/opencode/skills/plan-review/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Iterative plan_reviewer gate (clean context, max 3 passes). Default on for",
+              "every drafted plan — not only Escalation=yes or multi-phase roadmaps."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/plan-review/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Run the clean-context plan_reviewer loop as the default gate for drafted plans."
+            ]
+          },
+          "modelInvocationDisabled": false
         }
       ]
     },

@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -346,6 +346,50 @@ Batchable (deferred) punch list for a later slice (does not block approval):
 
 1. Plain-scalar YAML type-ambiguity hardening: reject YAML-1.1 bool/null/number-like plain-scalar descriptions (e.g. exactly `no`, `on`, `null`, `42`) before Phase 3B regeneration.
 2. Add a module-side negative test for a BOM-prefixed canonical skill file (currently fails closed via `SkillFrontmatterShape`, but the edge is untested).
+
+---
+
+#### Phase 3B status — implementation-plan / plan-review wrapper-frontmatter enforcement
+
+```text
+Status:              Complete; dual review APPROVED (iteration 3)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 141/141 view checks, git diff --check)
+Changed files:       5 directly reviewed files, 513 changed/new physical lines (498 added, 15 removed)
+Composer Full CI:    PASS 2026-09-14
+Review launches:     production_readiness_reviewer: 3, bug_reviewer: 3 (dual APPROVED at iteration 3)
+Batchables open:     3 deferred (UTF-16/32 BOM fixtures, wrapper-extra-metadata fixture, profile-validation helper consolidation)
+```
+
+Phase 3B is an **enforcement-first migration slice**: the registry now owns
+host-wrapper frontmatter identity for exactly `implementation-plan` and
+`plan-review` through explicit host frontmatter profiles under the fail-closed
+schema (`additionalProperties: false`), while canonical skill frontmatter
+ownership from Phase 3A is preserved. Wrapper bodies and thin host procedure
+prose are untouched; host wrapper descriptions intentionally differ from
+canonical descriptions and are pinned exactly per wrapper source:
+
+- Cursor — `implementation-plan` only.
+- Shared OpenCode wrapper source — both skills; also covering Antigravity and VS Code.
+- Codex wrapper source — both skills.
+
+Declared `not-applicable` hosts must show no manifest entry delivering the
+skill wrapper in the relevant destination surface. Routing is derived from the
+existing Phase 0 manifest inventory seam (binding source plus overlay/shared
+roots) — no second routing system and no manifest duplication. The
+**no-baseline-churn boundary** held: no render baselines, manifests, wrapper
+bodies, or canonical skill bodies changed.
+
+- [x] Phase 3A deferred guard closed: YAML-1.1 bool/null/number-like plain-scalar descriptions (e.g. `no`, `on`, `null`, `42`) rejected; folded-block descriptions keep working.
+- [x] Module-side negative test added for a BOM-prefixed canonical skill frontmatter/body fixture failing closed.
+- [x] Registry-owned host frontmatter profiles added only for the two named skills; canonical id/name ownership and canonical descriptions unchanged.
+- [x] Fail-closed wrapper-frontmatter shadow check runs for every applicable binding of both skills (name, exact description, effective `disable-model-invocation`), mismatches naming host and skill id.
+- [x] `not-applicable` hosts assert wrapper absence in the manifest destination surface.
+- [x] Managed view exposes `skill-host-frontmatter-shadow.tsv`; deterministic double-render covered by the existing hash loop (five files).
+- [x] Focused tests: profile completeness/applicability, shared-source coverage, not-applicable absence, metadata mismatch, plain-scalar hardening, BOM rejection, deterministic double-render.
+- [x] Phase 3B checks are integrated into the registry/views checks; no separate CI command is needed.
+- [x] Observed Fast CI (normalization Fast CI + `git diff --check`).
+- [x] Dual review APPROVED (production readiness + bug sweep CLEAN).
+- [x] Composer Full CI observed pass after dual approval (no live Apply).
 
 ---
 

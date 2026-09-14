@@ -88,7 +88,8 @@
         "description": { "$ref": "#/$defs/skillDescription" },
         "modelInvocationDisabled": { "type": "boolean" },
         "explicitOnly": { "type": "boolean" },
-        "hostApplicability": { "type": "array", "minItems": 7, "maxItems": 7, "items": { "$ref": "#/$defs/skillBinding" } }
+        "hostApplicability": { "type": "array", "minItems": 7, "maxItems": 7, "items": { "$ref": "#/$defs/skillBinding" } },
+        "hostFrontmatterProfiles": { "type": "array", "items": { "$ref": "#/$defs/skillHostFrontmatterProfile" } }
       }
     },
     "skillDescription": {
@@ -123,6 +124,17 @@
         "host": { "$ref": "#/$defs/host" },
         "status": { "enum": ["applicable", "not-applicable"] },
         "evidencePaths": { "type": "array", "items": { "$ref": "#/$defs/repoPath" } }
+      }
+    },
+    "skillHostFrontmatterProfile": {
+      "type": "object",
+      "required": ["hosts", "wrapperSource", "description", "modelInvocationDisabled"],
+      "additionalProperties": false,
+      "properties": {
+        "hosts": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/host" } },
+        "wrapperSource": { "$ref": "#/$defs/repoPath" },
+        "description": { "$ref": "#/$defs/skillDescription" },
+        "modelInvocationDisabled": { "type": "boolean" }
       }
     },
     "composition": {
