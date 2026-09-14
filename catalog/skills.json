@@ -264,6 +264,73 @@
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Cursor"],
+          "wrapperSource": "overlays/cursor/skills/composer/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Thread conductor and run manager for phased multi-agent execution when the",
+              "user explicitly assigns the composer/conductor role. Delegates",
+              "implementation and per-phase review loops to subagents; approval previews and",
+              "migration drafts only; QC closeout reports plus transcript audit; automatic",
+              "local commit per phase; never git push."
+            ]
+          },
+          "modelInvocationDisabled": true
+        },
+        {
+          "hosts": ["OpenCode"],
+          "wrapperSource": "overlays/opencode/skills/composer/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Conduct multi-phase roadmap execution: launch phase implementer subagents",
+              "(≤4 dual-review iterations per block), QC closeout or triage cap-exhausted",
+              "handoff, Full CI, local commit never push. Use when the user assigns Composer."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Antigravity"],
+          "wrapperSource": "overlays/antigravity/skills/composer/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Conduct multi-phase roadmap execution: launch phase implementer subagents",
+              "(≤4 dual-review iterations per block), QC closeout or triage cap-exhausted",
+              "handoff, Full CI, local commit never push. Use when the user assigns Composer."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Vscode"],
+          "wrapperSource": "overlays/vscode/skills/composer/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Conduct multi-phase roadmap execution: launch phase implementer subagents",
+              "(≤4 dual-review iterations per block), QC closeout or triage cap-exhausted",
+              "handoff, Full CI, local commit never push. Use when the user assigns Composer."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/composer/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Conduct phased multi-agent execution when explicitly assigned the composer role."
+            ]
+          },
+          "modelInvocationDisabled": false
+        }
       ]
     },
     {
@@ -762,6 +829,76 @@
           "evidencePaths": [
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
+        }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Cursor"],
+          "wrapperSource": "overlays/cursor/skills/implementation-review/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Run the iterative Reviewer A + Bugbot review loop after non-trivial",
+              "implementation — once per plan phase on multi-phase plans, or once at",
+              "completion for single-phase work. Covers CI gate (parent-only, once per",
+              "iteration), parallel reviewer launch, fix-all policy, and completion bar.",
+              "Use proactively when closing a phase or any non-trivial task."
+            ]
+          },
+          "modelInvocationDisabled": true
+        },
+        {
+          "hosts": ["OpenCode"],
+          "wrapperSource": "overlays/opencode/skills/implementation-review/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Run the dual-gate review loop after implementation: Observed Fast CI,",
+              "parallel production_readiness_reviewer + bug_reviewer (≤4 iterations per",
+              "pressure-release block), then Full CI closeout — or reassessment / Composer",
+              "cap-exhausted handoff. Default on unless truly trivial or explicit user opt-out."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Antigravity"],
+          "wrapperSource": "overlays/antigravity/skills/implementation-review/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Run the dual-gate review loop after implementation: Observed Fast CI,",
+              "parallel production_readiness_reviewer + bug_reviewer (≤4 iterations per",
+              "pressure-release block), then Full CI closeout — or reassessment / Composer",
+              "cap-exhausted handoff. Default on unless truly trivial or explicit user opt-out."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Vscode"],
+          "wrapperSource": "overlays/vscode/skills/implementation-review/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Run the dual-gate review loop after implementation: Observed Fast CI,",
+              "parallel production_readiness_reviewer + bug_reviewer (≤4 iterations per",
+              "pressure-release block), then Full CI closeout — or reassessment / Composer",
+              "cap-exhausted handoff. Default on unless truly trivial or explicit user opt-out."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/implementation-review/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Run Fast CI, parallel reviewers, fixes, and the completion gate after non-trivial work."
+            ]
+          },
+          "modelInvocationDisabled": false
         }
       ]
     },

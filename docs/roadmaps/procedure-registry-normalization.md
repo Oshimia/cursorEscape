@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -390,6 +390,64 @@ bodies, or canonical skill bodies changed.
 - [x] Observed Fast CI (normalization Fast CI + `git diff --check`).
 - [x] Dual review APPROVED (production readiness + bug sweep CLEAN).
 - [x] Composer Full CI observed pass after dual approval (no live Apply).
+
+---
+
+#### Phase 3C status — implementation-review / composer wrapper-frontmatter enforcement
+
+```text
+Status:              Complete; dual review APPROVED (iteration 1 of 4, 2026-09-14)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, view checks, git diff --check)
+Changed files:       4 directly reviewed files, 246 changed/new physical lines (238 added, 8 removed)
+Composer Full CI:    PASS 2026-09-14
+Review launches:     production_readiness_reviewer: 1, bug_reviewer: 1 (both closed)
+Batchables open:     1 deferred (source consolidation / cross-host equality evaluation; see below)
+```
+
+Phase 3C reuses the Phase 3B enforcement-first pattern without redesign.
+The registry now owns host-wrapper frontmatter identity for exactly
+`implementation-review` and `composer`, and the stale Phase 3B-only
+profile-scope failure wording was generalized to the governed profile set.
+Canonical skill frontmatter ownership from Phase 3A is preserved; the
+canonical shadow comparison still covers all 22 registered skills.
+
+Composer-resolved policy for this slice:
+
+- **No source consolidation.** OpenCode, Antigravity, and VS Code wrapper
+  sources stay separate even where current frontmatter bytes are identical;
+  authored host deltas and the no-churn boundary are preserved.
+- **Ten new profile objects.** Five per-source profiles per skill (Cursor,
+  OpenCode, Antigravity, Vscode, Codex) pin exact description style/content
+  and effective `disable-model-invocation` from the current wrappers.
+- **Cursor disable-flag asymmetry preserved exactly as on disk.** Both Cursor
+  wrappers carry `disable-model-invocation: true`; the other four wrappers per
+  skill do not. No wrapper was rewritten to normalize this, and Cursor
+  `user-rules-snippet.md` companions are untouched.
+- **No cross-host equality invariant** was added in this slice; see the
+  deferred batchable below.
+
+The no-baseline-churn boundary held: no render baselines, manifests, wrapper
+bodies, canonical skill bodies, or generated files changed.
+
+- [x] Skill-host frontmatter profile allowlist extended with exactly `implementation-review` and `composer`.
+- [x] Registry-owned per-source host frontmatter profiles added for the five applicable sources per skill (ten profile objects total).
+- [x] Applicability enforced: `applicable` on Cursor, OpenCode, Antigravity, Vscode, and Codex; `not-applicable` on Cline and Kilocode through the Phase 0 manifest inventory seam.
+- [x] Wrapper presence/routing and exactly-one manifest delivery enforced per applicable binding; not-applicable wrapper absence asserted for Cline and Kilocode.
+- [x] Exact description and effective `disable-model-invocation` byte-comparison enforced per source; Cursor disable-flag asymmetry pinned, not normalized.
+- [x] Stale Phase 3B-only profile-scope failure wording generalized to the governed host-frontmatter profile set.
+- [x] Canonical descriptions and canonical/wrapper bodies unchanged; canonical frontmatter shadow still 22/22 matches.
+- [x] Managed-view evidence grows from 14 to 28 wrapper rows; five-file deterministic double-render preserved.
+- [x] Focused tests cover both new skills: profile coverage/scope, per-source routing, description/disable comparison, wrong-source routing, profile removal, not-applicable delivery injection, missing/duplicate manifest delivery, canonical shadow, row growth, deterministic double-render.
+- [x] Observed Fast CI (normalization Fast CI + `git diff --check`).
+- [x] Dual review APPROVED (production readiness APPROVED with Blocking, Non-blocking code/process, and blocking test/docs all None; `bug_reviewer` CLEAN).
+- [x] Composer Full CI observed pass after dual approval (no live Apply).
+
+Batchable (deferred) punch list for a later slice (does not block approval):
+
+1. Evaluate whether identical OpenCode/Antigravity/VS Code wrapper sources
+   should eventually be consolidated or governed by a cross-host equality
+   invariant. Deferred deliberately under the Phase 3C no-churn boundary; any
+   such move requires manifest/wrapper changes outside this slice.
 
 ---
 

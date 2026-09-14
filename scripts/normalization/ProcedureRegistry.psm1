@@ -4,7 +4,7 @@ $ErrorActionPreference = 'Stop'
 $script:Hosts = @('Cursor','OpenCode','Antigravity','Vscode','Cline','Kilocode','Codex')
 $script:ExpectedKinds = @{ agents = 'agents.json'; skills = 'skills.json'; rules = 'rules.json'; workflows = 'workflows.json' }
 $script:CanonicalAgentContractCache = @{}
-$script:SkillHostFrontmatterProfileSkillIds = @('implementation-plan','plan-review')
+$script:SkillHostFrontmatterProfileSkillIds = @('implementation-plan','plan-review','implementation-review','composer')
 
 function Add-RegistryFailure([System.Collections.Generic.List[string]]$Failures,[string]$Invariant,[string]$Detail) {
   $Failures.Add("${Invariant}: $Detail")
@@ -223,7 +223,7 @@ function Get-RegistrySkillFrontmatterShadow {
 
 function Get-RegistrySkillWrapperFrontmatterShadow {
   <#
-    Fail-closed Phase 3B comparator for one applicable host binding: the
+    Fail-closed wrapper-frontmatter comparator for one applicable host binding: the
     registry-owned host frontmatter profile must byte-match the wrapper's
     frontmatter under the render-ledger comparison convention. Canonical
     name, exact description, and the effective disable-model-invocation
@@ -297,7 +297,7 @@ function Get-RegistrySkillWrapperSourcePath {
 
 function Get-RegistrySkillHostFrontmatterShadow {
   <#
-    Phase 3B wrapper-frontmatter shadow check for one registered skill across
+    Wrapper-frontmatter shadow check for one registered skill across
     all seven hosts. Applicable bindings resolve their manifest-derived
     wrapper source and byte-compare its frontmatter against the registry-owned
     host frontmatter profile; declared not-applicable bindings must show no
@@ -310,7 +310,7 @@ function Get-RegistrySkillHostFrontmatterShadow {
   $profiles = @(if ($null -ne $profilesProperty) { $profilesProperty.Value })
   $required = $id -in $script:SkillHostFrontmatterProfileSkillIds
   if (-not $required) {
-    if ($profiles.Count -gt 0) { Add-RegistryFailure $Failures 'SkillHostFrontmatterProfileScope' "$id is outside the Phase 3B host-frontmatter profile set" }
+    if ($profiles.Count -gt 0) { Add-RegistryFailure $Failures 'SkillHostFrontmatterProfileScope' "$id is outside the governed host-frontmatter profile set" }
     return @()
   }
   $manifestsByHost = @{}
