@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -493,6 +493,61 @@ Composer-resolved policy:
 - [x] Observed Fast CI before review (normalization Fast CI + `git diff --check`).
 - [x] Dual review APPROVED (production readiness Blocking / Non-blocking / blocking test/docs all None; `bug_reviewer` CLEAN).
 - [x] Composer Full CI observed pass after dual approval (no live Apply).
+
+#### Phase 3E status — roadmap / research wrapper-frontmatter enforcement
+
+```text
+Status:              Complete; dual review APPROVED (iteration 1 of 4, 2026-09-14)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 201 view checks and 24 unit checks, git diff --check)
+Changed files:       4 permitted files, 171 changed/new physical lines (165 added, 6 removed)
+Composer Full CI:    PASS 2026-09-14
+Review launches:     production_readiness_reviewer 1; bug_reviewer 1 (dual APPROVED at iteration 1; both children closed)
+Batchables open:     1 expanded deferred Cursor disable evaluation; 1 carried forward from Phase 3C
+```
+
+Phase 3E reuses the Phase 3B/3C/3D enforcement-first pattern without
+redesign. The registry now owns wrapper frontmatter identity for exactly
+`roadmap` and `research`. Canonical skill descriptions and wrapper bodies
+remain unchanged; no baseline, manifest, wrapper, runtime, or schema drift is
+introduced.
+
+Composer-resolved policy:
+
+- **Enforcement first, no churn.** Add fail-closed registry profiles and
+  evidence; do not rewrite wrapper prose or normalize historical sources.
+- **Profile topology.** `roadmap` has three profile objects: distinct Cursor,
+  OpenCode shared source for OpenCode/Antigravity/Vscode, and distinct Codex;
+  Cline and Kilocode are not applicable. `research` has one Codex-only profile;
+  the other six hosts are not applicable. This is the first Codex-only
+  governed wrapper-frontmatter slice.
+- **Disable asymmetry pinned.** Cursor `roadmap` remains
+  `disable-model-invocation: true`; its OpenCode shared source and Codex
+  wrappers remain false. Codex-only `research` remains false. No wrapper is
+  rewritten and no cross-host equality invariant is added in Phase 3E.
+- **No explicit-only metadata.** Neither skill has `openai.yaml` or
+  explicit-only metadata; none was added.
+- **Expanded deferred batchable.** During later closeout, evaluate whether
+  Cursor disable asymmetry should be normalized or formally retained for
+  `roadmap` alongside the existing documented Cursor disable cases.
+
+- [x] Governed profile-skill allowlist extended with exactly `roadmap` and `research`.
+- [x] Four registry-owned profile objects pin exact wrapper description style/content and effective disable policy.
+- [x] Applicability and manifest routing enforced through the existing Phase 0 inventory/manifest seams.
+- [x] Focused tests cover exact managed-view row growth, shared/distinct topology, roadmap three-source topology, research one-source topology, profile removal, uncovered applicable hosts, wrong-source routing, exact description/disable comparison, roadmap Cursor disable mismatch, not-applicable injection, missing/duplicate delivery, canonical 22/22 shadow, and deterministic five-file double-render.
+- [x] Observed Fast CI before review (normalization Fast CI + `git diff --check`).
+- [x] Dual review APPROVED (production readiness Blocking / Non-blocking / blocking test/docs all None; `bug_reviewer` CLEAN).
+- [x] No Full CI is claimed by this implementation slice.
+
+Batchable (deferred) punch list for a later slice (does not block approval):
+
+1. Evaluate Cursor `disable-model-invocation: true` asymmetry normalization or
+   formal retention for `implementation-plan`, `implementation-review`,
+   `composer`, `documentation-architecture`, and `roadmap`; any change requires
+   wrapper churn outside Phase 3E.
+2. Carry forward the Phase 3C evaluation of whether OpenCode/Antigravity/VS
+   Code shared-source topology or cross-host equality governance should change;
+   `roadmap` currently follows the existing no-churn shared-source pattern.
+
 
 ### Phase 4 — Rules/workflows/instructions in bounded batches
 

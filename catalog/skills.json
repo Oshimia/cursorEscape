@@ -1312,6 +1312,21 @@
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": [
+            "Codex"
+          ],
+          "wrapperSource": "overlays/codex/skills/research/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Run bounded primary-source research and produce one cited evidence artifact."
+            ]
+          },
+          "modelInvocationDisabled": false
+        }
       ]
     },
     {
@@ -1443,6 +1458,55 @@
           "evidencePaths": [
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
+        }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": [
+            "Cursor"
+          ],
+          "wrapperSource": "overlays/cursor/skills/roadmap/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Create or update multi-phase handoff roadmaps as repository documentation",
+              "(not under ~/.cursor). Resolves path via local convention or defaults to",
+              "docs/roadmaps/<feature>.md. Use for large/complex phased work, Composer",
+              "handoffs, or when restructuring an approved plan into per-phase Agent context."
+            ]
+          },
+          "modelInvocationDisabled": true
+        },
+        {
+          "hosts": [
+            "OpenCode",
+            "Antigravity",
+            "Vscode"
+          ],
+          "wrapperSource": "overlays/opencode/skills/roadmap/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Create or update multi-phase handoff roadmaps as repository documentation",
+              "(not under ~/.config/opencode). Resolves path via local convention or defaults",
+              "to docs/roadmaps/<feature>.md. Use for large/complex phased work, Composer",
+              "handoffs, or when restructuring an approved plan into per-phase Agent context."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": [
+            "Codex"
+          ],
+          "wrapperSource": "overlays/codex/skills/roadmap/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Create or update repository multi-phase handoff roadmaps for large work."
+            ]
+          },
+          "modelInvocationDisabled": false
         }
       ]
     },
