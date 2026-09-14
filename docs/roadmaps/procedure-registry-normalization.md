@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -451,6 +451,48 @@ Batchable (deferred) punch list for a later slice (does not block approval):
 
 ---
 
+
+#### Phase 3D status — discovery / documentation-architecture wrapper-frontmatter enforcement
+
+```text
+Status:              Complete; dual review APPROVED (iteration 2 of 4, 2026-09-14)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 181 view checks and 24 unit checks, git diff --check)
+Changed files:       4 permitted files, 169 changed/new physical lines (164 added, 5 removed)
+Composer Full CI:    PASS 2026-09-14
+Review launches:     production_readiness_reviewer 2; bug_reviewer 2 (dual APPROVED at iteration 2; both children closed)
+Batchables open:     1 new deferred (Cursor disable-flag normalization/retention evaluation); 1 carried forward from Phase 3C
+```
+
+Phase 3D reuses the Phase 3B/3C enforcement-first pattern without redesign.
+The registry now owns wrapper frontmatter identity for exactly `discovery`
+and `documentation-architecture`. Canonical skill descriptions and wrapper
+bodies remain unchanged; no baseline, manifest, wrapper, runtime, or schema
+drift is introduced.
+
+Composer-resolved policy:
+
+- **Enforcement first, no churn.** Add fail-closed registry profiles and
+  evidence; do not rewrite wrapper prose or normalize historical sources.
+- **Shared-versus-distinct sources.** `discovery` has two profile objects:
+  OpenCode shared source for OpenCode/Antigravity/Vscode plus distinct Codex;
+  Cursor, Cline, and Kilocode are not applicable. `documentation-architecture`
+  has three profile objects: distinct Cursor, OpenCode shared source for
+  OpenCode/Antigravity/Vscode, and distinct Codex; Cline and Kilocode are not
+  applicable.
+- **Disable asymmetry pinned.** Cursor `documentation-architecture` remains
+  `disable-model-invocation: true`; the OpenCode shared source and Codex
+  wrappers remain false. No wrapper is rewritten and no cross-host equality
+  invariant is added in Phase 3D.
+- **Deferred batchable.** During later closeout, evaluate whether the
+  Cursor-only disable asymmetry should be normalized or formally retained.
+
+- [x] Governed profile-skill allowlist extended with exactly `discovery` and `documentation-architecture`.
+- [x] Five registry-owned profile objects pin exact wrapper description style/content and effective disable policy.
+- [x] Applicability and manifest routing enforced through the existing Phase 0 inventory/manifest seams.
+- [x] Focused tests cover shared/distinct source topology, profile removal and uncovered/wrong routing, exact description/disable comparison, not-applicable injection, missing/duplicate delivery, canonical 22/22 shadow, exact wrapper-row growth, and deterministic five-file double-render.
+- [x] Observed Fast CI before review (normalization Fast CI + `git diff --check`).
+- [x] Dual review APPROVED (production readiness Blocking / Non-blocking / blocking test/docs all None; `bug_reviewer` CLEAN).
+- [x] Composer Full CI observed pass after dual approval (no live Apply).
 
 ### Phase 4 — Rules/workflows/instructions in bounded batches
 

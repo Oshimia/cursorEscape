@@ -461,6 +461,31 @@
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["OpenCode", "Antigravity", "Vscode"],
+          "wrapperSource": "overlays/opencode/skills/discovery/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Discover repository documentation hubs before non-trivial planning or",
+              "implementation. Use before drafting plans or judging architecture alignment."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/discovery/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Find repository documentation hubs before non-trivial planning or architecture work."
+            ]
+          },
+          "modelInvocationDisabled": false
+        }
       ]
     },
     {
@@ -526,6 +551,46 @@
           "evidencePaths": [
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
+        }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Cursor"],
+          "wrapperSource": "overlays/cursor/skills/documentation-architecture/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Bootstrap or extend repository documentation using a procedures-vs-design",
+              "layout. Use when creating new docs areas, standardizing an under-documented",
+              "repo, or when the user asks for SOPs / feature architecture structure. Follow",
+              "existing layouts when present; do not invent parallel trees."
+            ]
+          },
+          "modelInvocationDisabled": true
+        },
+        {
+          "hosts": ["OpenCode", "Antigravity", "Vscode"],
+          "wrapperSource": "overlays/opencode/skills/documentation-architecture/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "Bootstrap or extend repository documentation with procedures-vs-design",
+              "layout. Use when creating new docs areas or standardizing an under-documented",
+              "repo — follow existing coherent layouts instead of inventing parallel trees."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/documentation-architecture/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Bootstrap or extend procedures-versus-design repository documentation without parallel trees."
+            ]
+          },
+          "modelInvocationDisabled": false
         }
       ]
     },
