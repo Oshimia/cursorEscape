@@ -65,6 +65,128 @@ function Get-StackManifestDestinationCount {
   return $count
 }
 
+function Get-RegistrySkillFrontmatterDescription {
+  <#
+    Fail-closed accessor for one skill's registry-owned description metadata.
+    Returns a Style/Lines object or $null after appending invariant failures.
+  #>
+  param([Parameter(Mandatory)]$Skill,[System.Collections.Generic.List[string]]$Failures)
+  $id = [string]$Skill.id
+  $property = $Skill.PSObject.Properties['description']
+  if ($null -eq $property) { Add-RegistryFailure $Failures 'SkillDescriptionMissing' "$id has no registry-owned description metadata"; return $null }
+  $description = $property.Value
+  $style = [string]$description.style
+  if ($style -notin @('folded-block','plain-scalar')) { Add-RegistryFailure $Failures 'SkillDescriptionStyle' "$id style='$style'"; return $null }
+  $lines = @(Get-RegistrySequence $description.lines)
+  if ($lines.Count -eq 0) { Add-RegistryFailure $Failures 'SkillDescriptionMissing' "$id has no description lines"; return $null }
+  for ($index = 0; $index -lt $lines.Count; $index++) {
+    if ($lines[$index].Length -eq 0 -or $lines[$index] -match '^\s' -or $lines[$index] -match '\s$' -or $lines[$index] -match '[\r\n\t]') {
+      Add-RegistryFailure $Failures 'SkillDescriptionLine' "$id line $index has leading/trailing whitespace or an embedded line break"; return $null
+    }
+  }
+  if ($style -eq 'plain-scalar') {
+    if ($lines.Count -ne 1) { Add-RegistryFailure $Failures 'SkillDescriptionScalar' "$id plain-scalar description must be exactly one physical line"; return $null }
+    $scalarIndicators = @('-','?',':',',','[',']','{','}','#','&','*','!','|','>','''','"','%','@','`')
+    if ($scalarIndicators -contains $lines[0].Substring(0,1) -or $lines[0].Contains(': ') -or $lines[0].EndsWith(':') -or $lines[0].Contains(' #')) {
+      Add-RegistryFailure $Failures 'SkillDescriptionScalar' "$id plain-scalar description is not a safe single-line YAML value"; return $null
+    }
+  }
+  return [pscustomobject]@{ Style = $style; Lines = $lines }
+}
+
+function Get-RegistrySkillFrontmatter {
+  <#
+    Deterministic canonical skill frontmatter builder. Emits the exact YAML
+    frontmatter byte sequence — delimiters, metadata lines, and a terminal
+    newline — using LF, matching the managed-view renderer's byte convention.
+    Methodology prose is never duplicated: only frontmatter metadata is owned
+    here and it is sourced from the registry catalog.
+  #>
+  param([Parameter(Mandatory)]$Skill)
+  $failures = [System.Collections.Generic.List[string]]::new()
+  $description = Get-RegistrySkillFrontmatterDescription -Skill $Skill -Failures $failures
+  if ($null -eq $description) { throw "FAIL: $($failures[0])" }
+  $id = [string]$Skill.id
+  if ([string]::IsNullOrWhiteSpace($id) -or $id -notmatch '^[a-z][a-z0-9_-]{0,63}$') { throw "FAIL: skill frontmatter requires a canonical registry id: '$id'" }
+  $lines = [System.Collections.Generic.List[string]]::new()
+  $lines.Add('---')
+  $lines.Add("name: $id")
+  if ($description.Style -eq 'folded-block') {
+    $lines.Add('description: >-')
+    foreach ($line in $description.Lines) { $lines.Add("  $line") }
+  } else {
+    $lines.Add("description: $($description.Lines[0])")
+  }
+  $disabled = $Skill.PSObject.Properties['modelInvocationDisabled']
+  if ($null -ne $disabled -and $disabled.Value -is [bool] -and $disabled.Value) { $lines.Add('disable-model-invocation: true') }
+  $lines.Add('---')
+  return (($lines -join "`n") + "`n")
+}
+
+function Get-RegistrySkillCanonicalFrontmatter {
+  <# Extracts the leading frontmatter block, including both delimiters. #>
+  param([Parameter(Mandatory)][string]$Raw)
+  $match = [regex]::Match($Raw, '\A---\r?\n.*?\r?\n---(?:\r?\n|\z)', [Text.RegularExpressions.RegexOptions]::Singleline)
+  if (-not $match.Success) { return $null }
+  return $match.Value
+}
+
+function Get-RegistryComparableFrontmatter {
+  <#
+    Canonical comparison form, matching the repo render-ledger convention:
+    UTF-8 text after CRLF-to-LF and exactly one terminal LF. Existing skill
+    files carry mixed historical line endings; the normalization is explicit
+    and every file's observed newline pattern is still reported as evidence.
+  #>
+  param([Parameter(Mandatory)][string]$Value)
+  return (($Value -replace "`r`n", "`n").TrimEnd("`r", "`n") + "`n")
+}
+
+function Get-RegistryFrontmatterNewlinePattern {
+  param([Parameter(Mandatory)][string]$Value)
+  $crlf = [regex]::Matches($Value, "\r\n").Count
+  $lf = [regex]::Matches($Value, "(?<!\r)\n").Count
+  if ($crlf -eq 0 -and $lf -eq 0) { return 'none' }
+  if ($crlf -eq 0) { return 'lf' }
+  if ($lf -eq 0) { return 'crlf' }
+  return 'mixed'
+}
+
+function Get-RegistrySkillFrontmatterShadow {
+  <#
+    Fail-closed Phase 3A shadow comparison for one registered skill: the
+    registry-generated frontmatter must byte-match the canonical skill-file
+    frontmatter under the explicit comparison convention. Differences are
+    reported under the invariant plus the stable skill id; nothing is
+    rewritten or silently normalized.
+  #>
+  param([Parameter(Mandatory)]$Skill,[Parameter(Mandatory)][string]$Raw)
+  $failures = [System.Collections.Generic.List[string]]::new()
+  $id = [string]$Skill.id
+  $canonical = Get-RegistrySkillCanonicalFrontmatter -Raw $Raw
+  $newlines = 'none'
+  if ($null -eq $canonical) {
+    Add-RegistryFailure $failures 'SkillFrontmatterShape' "$id canonical body has no frontmatter block"
+  } else {
+    $newlines = Get-RegistryFrontmatterNewlinePattern $canonical
+    $descriptionFailures = [System.Collections.Generic.List[string]]::new()
+    $null = Get-RegistrySkillFrontmatterDescription -Skill $Skill -Failures $descriptionFailures
+    if ($descriptionFailures.Count -gt 0) {
+      foreach ($descriptionFailure in $descriptionFailures) { $failures.Add($descriptionFailure) }
+    } else {
+      try {
+        $generated = Get-RegistrySkillFrontmatter -Skill $Skill
+        if ((Get-RegistryComparableFrontmatter $canonical) -cne (Get-RegistryComparableFrontmatter $generated)) {
+          Add-RegistryFailure $failures 'SkillFrontmatterShadow' "$id registry-generated and canonical frontmatter differ"
+        }
+      }
+      catch { Add-RegistryFailure $failures 'SkillFrontmatterMetadata' "$id $($_.Exception.Message -replace '^FAIL:\s*','')" }
+    }
+  }
+  $status = if ($failures.Count -eq 0) { 'match' } else { 'mismatch' }
+  return [pscustomobject]@{ Id = $id; Status = $status; Newlines = $newlines; Failures = $failures }
+}
+
 function Get-CanonicalAgentContracts([string]$RepoRoot,$Inventory) {
   $workflowPath = Join-Path $RepoRoot 'workflow/agent-invocation.md'
   if (-not (Test-Path -LiteralPath $workflowPath -PathType Leaf)) { throw "FAIL: canonical invocation contract missing: workflow/agent-invocation.md" }
@@ -175,6 +297,8 @@ function Test-RegistryCatalog {
     } elseif ($Kind -eq 'skills') {
       if ($null -eq $Inventory) { throw 'FAIL: skill canonical consistency requires the Phase 0 inventory' }
       $raw = Get-Content -LiteralPath $body -Raw
+      $frontmatterShadow = Get-RegistrySkillFrontmatterShadow -Skill $item -Raw $raw
+      foreach ($shadowFailure in $frontmatterShadow.Failures) { $failures.Add($shadowFailure) }
       if ($raw -notmatch "(?m)^name:\s*$([regex]::Escape($id))\s*$") { Add-RegistryFailure $failures 'CanonicalIdentity' "$id skill frontmatter name" }
       $inventorySkill = @($Inventory.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq $id })
       if ($inventorySkill.Count -ne 1) { Add-RegistryFailure $failures 'SkillInventory' "$id has $($inventorySkill.Count) inventory rows"; continue }
@@ -340,7 +464,13 @@ function Get-RegistryManagedView {
     $refs = @($compositionItem.references | ForEach-Object { Resolve-RegistryProjection $Resolver -Value $_ -Seam Reference })
     $composition.Add(($compositionItem.id,$host,$compositionItem.canonicalReferenceId,($refs -join '|')) -join "`t")
   }
-  [pscustomobject]@{ Files = [ordered]@{ 'identity.json' = $identityJson + "`n"; 'agent-parity.tsv' = ($parity -join "`n") + "`n"; 'composition-order.tsv' = ($composition -join "`n") + "`n" } }
+  $skillShadow = [System.Collections.Generic.List[string]]::new(); $skillShadow.Add("skill`tfrontmatterShadow`tcanonicalNewlines")
+  foreach ($skill in $Catalogs.skills.items) {
+    $skillRaw = Get-Content -LiteralPath (Join-Path $RepoRoot ([string]$skill.body)) -Raw
+    $shadow = Get-RegistrySkillFrontmatterShadow -Skill $skill -Raw $skillRaw
+    $skillShadow.Add(($shadow.Id,$shadow.Status,$shadow.Newlines) -join "`t")
+  }
+  [pscustomobject]@{ Files = [ordered]@{ 'identity.json' = $identityJson + "`n"; 'agent-parity.tsv' = ($parity -join "`n") + "`n"; 'composition-order.tsv' = ($composition -join "`n") + "`n"; 'skill-frontmatter-shadow.tsv' = ($skillShadow -join "`n") + "`n" } }
 }
 
 function Test-RegistryOutputRoot([string]$OutputRoot,[string]$RepoRoot,[switch]$AllowTemporaryRoot) {
@@ -372,4 +502,4 @@ function Write-RegistryManagedView {
   return $view
 }
 
-Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot','Get-StackManifestDestinationCount')
+Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot','Get-StackManifestDestinationCount','Get-RegistrySkillFrontmatter','Get-RegistrySkillCanonicalFrontmatter','Get-RegistryComparableFrontmatter','Get-RegistrySkillFrontmatterShadow')

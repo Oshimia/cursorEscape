@@ -15,27 +15,31 @@ function Assert-RegistryFailure($Result,[string]$Name,[string]$Invariant) {
 }
 $registry = Test-ProcedureRegistryCatalogs -RepoRoot $RepoRoot
 Assert-View 'registry is valid' $registry.Valid (($registry.Failures | Select-Object -First 5) -join '; ')
+Assert-View 'all registered skills carry frontmatter description metadata' (@($registry.Catalogs.skills.items | Where-Object { $null -ne $_.PSObject.Properties['description'] }).Count -eq @($registry.Catalogs.skills.items).Count)
 
 $temp = Join-Path ([IO.Path]::GetTempPath()) ("procedure-registry-" + [Guid]::NewGuid().ToString('N'))
 try {
   $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -AllowTemporaryRoot
   $two = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'two') -RepoRoot $RepoRoot -AllowTemporaryRoot
-  Assert-View 'double render has three files' ($one.Files.Keys.Count -eq 3 -and $two.Files.Keys.Count -eq 3)
+  Assert-View 'double render has four files' ($one.Files.Keys.Count -eq 4 -and $two.Files.Keys.Count -eq 4)
   foreach ($name in @($one.Files.Keys)) {
     $hashA = (Get-FileHash (Join-Path (Join-Path $temp 'one') $name) -Algorithm SHA256).Hash
     $hashB = (Get-FileHash (Join-Path (Join-Path $temp 'two') $name) -Algorithm SHA256).Hash
     Assert-View "deterministic render: $name" ($hashA -eq $hashB) "$hashA != $hashB"
   }
   Assert-View 'parity view covers 49 rows' ((Get-Content (Join-Path (Join-Path $temp 'one') 'agent-parity.tsv')).Count -eq 50)
+  $shadowRows = @(Get-Content (Join-Path (Join-Path $temp 'one') 'skill-frontmatter-shadow.tsv'))
+  Assert-View 'skill frontmatter shadow view covers 22 rows' ($shadowRows.Count -eq 23) "rows=$($shadowRows.Count)"
+  Assert-View 'skill frontmatter shadow reports all matches' (@($shadowRows | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`tmatch`t" }).Count -eq 0) (($shadowRows | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`tmatch`t" }) -join '; ')
 
   $publicRender = Join-Path $temp 'public-render'
   & $RenderScript -OutputRoot $publicRender -AllowTemporaryRoot | Out-Null
   $publicFiles = @(Get-ChildItem -LiteralPath $publicRender -File)
-  Assert-View 'public render integration' ($publicFiles.Count -eq 3) "files=$($publicFiles.Count)"
+  Assert-View 'public render integration' ($publicFiles.Count -eq 4) "files=$($publicFiles.Count)"
   $explicitRepoRender = Join-Path $temp 'explicit-repo-render'
   & $RenderScript -RepoRoot $RepoRoot -OutputRoot $explicitRepoRender -AllowTemporaryRoot | Out-Null
   $explicitFiles = @(Get-ChildItem -LiteralPath $explicitRepoRender -File)
-  Assert-View 'explicit RepoRoot render integration' ($explicitFiles.Count -eq 3) "files=$($explicitFiles.Count)"
+  Assert-View 'explicit RepoRoot render integration' ($explicitFiles.Count -eq 4) "files=$($explicitFiles.Count)"
   $rejected = $false
   try { & $RenderScript -OutputRoot $publicRender | Out-Null } catch { $rejected = $true }
   Assert-View 'public render rejects temporary root without ownership switch' $rejected
@@ -47,6 +51,30 @@ try {
   $threw = $false; try { $null = Resolve-RegistryProjection (New-RegistryProjectionResolver -ResolveHostName { param($n) '' }) -Value 'Codex' -Seam HostName } catch { $threw = $true }
   Assert-View 'empty resolver result fails closed' $threw
 } catch { $failures++; Write-Output "FAIL: resolver execution: $($_.Exception.Message)" }
+
+try {
+  $skillsById = @{}
+  foreach ($skill in $registry.Catalogs.skills.items) { $skillsById[[string]$skill.id] = $skill }
+  foreach ($id in @('architecture-survey','composer','discovery','opencode-headless-run','opencode-history-search')) {
+    $skill = $skillsById[$id]
+    $raw = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot ([string]$skill.body))
+    $canonical = Get-RegistrySkillCanonicalFrontmatter -Raw $raw
+    Assert-View "frontmatter builder is byte-exact: $id" ($null -ne $canonical -and ((Get-RegistryComparableFrontmatter $canonical) -ceq (Get-RegistryComparableFrontmatter (Get-RegistrySkillFrontmatter -Skill $skill))))
+    $shadow = Get-RegistrySkillFrontmatterShadow -Skill $skill -Raw $raw
+    Assert-View "frontmatter shadow matches: $id" ($shadow.Status -eq 'match' -and $shadow.Failures.Count -eq 0) (($shadow.Failures | Select-Object -First 2) -join '; ')
+  }
+  $folded = Get-RegistrySkillFrontmatter -Skill $skillsById['architecture-survey']
+  Assert-View 'frontmatter bytes include delimiters, LF endings, and one terminal LF' ($folded.StartsWith("---`n") -and $folded.EndsWith("---`n") -and -not $folded.Contains("`r"))
+  Assert-View 'frontmatter keeps the registry id as canonical name' ($folded.Contains("name: architecture-survey`n"))
+  Assert-View 'frontmatter includes disable flag for disabled skills' ($folded.Contains("disable-model-invocation: true`n"))
+  $invocable = Get-RegistrySkillFrontmatter -Skill $skillsById['discovery']
+  Assert-View 'frontmatter omits disable flag for invocable skills' (-not $invocable.Contains('disable-model-invocation'))
+  $plain = Get-RegistrySkillFrontmatter -Skill $skillsById['opencode-headless-run']
+  Assert-View 'plain-scalar description renders on one metadata line' (@($plain -split "`n" | Where-Object { $_ -like 'description:*' }).Count -eq 1)
+  $builderThrew = $false
+  try { $null = Get-RegistrySkillFrontmatter -Skill ([pscustomobject]@{ id = 'broken'; description = [pscustomobject]@{ style = 'plain-scalar'; lines = @('a','b') }; modelInvocationDisabled = $false }) } catch { $builderThrew = $true }
+  Assert-View 'frontmatter builder fails closed on malformed description' $builderThrew
+} catch { $failures++; Write-Output "FAIL: frontmatter builder execution: $($_.Exception.Message)" }
 
 try {
   Assert-View 'destination count: copy entries' ((Get-StackManifestDestinationCount -Manifest @{ CopyEntries = @(1,2,3) }) -eq 3)
@@ -130,6 +158,16 @@ try {
   Assert-RegistryFailure $result 'non-boolean inventory explicit_only fails' 'ExplicitOnlyMismatch'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].modelInvocationDisabled = -not $c.skills.items[0].modelInvocationDisabled }
   Assert-RegistryFailure $result 'model-invocation-disabled mismatch fails' 'ModelInvocationDisabledMismatch'
+  $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].description.lines[0] = 'mutated registry description line' }
+  Assert-RegistryFailure $result 'skill frontmatter shadow mismatch fails' 'SkillFrontmatterShadow'
+  $shadowMismatch = @($result.Failures | Where-Object { $_.StartsWith('SkillFrontmatterShadow:', [StringComparison]::Ordinal) })
+  Assert-View 'skill frontmatter mismatch names the stable skill id' ($shadowMismatch.Count -gt 0 -and $shadowMismatch[0].Contains('architecture-survey')) (($shadowMismatch | Select-Object -First 1) -join '')
+  $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].PSObject.Properties.Remove('description') }
+  Assert-RegistryFailure $result 'missing registry description fails closed' 'SkillDescriptionMissing'
+  $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].description.style = 'plain-scalar' }
+  Assert-RegistryFailure $result 'plain-scalar description with folded lines fails' 'SkillDescriptionScalar'
+  $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].description.lines = @(' leading whitespace', 'trailing') }
+  Assert-RegistryFailure $result 'description line whitespace fails closed' 'SkillDescriptionLine'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].hostApplicability[0].status = 'maybe' }
   Assert-RegistryFailure $result 'non-explicit skill behavior fails' 'NonExplicitSkillBehavior'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].hostApplicability[0].status = 'applicable' }
@@ -164,6 +202,21 @@ try {
   $nonBooleanCatalog = Get-FreshCatalogs
   $nonBooleanCatalog.skills.items[0].modelInvocationDisabled = 'yes'
   Assert-View 'schema rejects non-boolean modelInvocationDisabled' (-not (Test-Json -Json ($nonBooleanCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
+  $missingDescriptionCatalog = Get-FreshCatalogs
+  $missingDescriptionCatalog.skills.items[0].PSObject.Properties.Remove('description')
+  Assert-View 'schema rejects missing skill description metadata' (-not (Test-Json -Json ($missingDescriptionCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
+  $unknownDescriptionCatalog = Get-FreshCatalogs
+  $unknownDescriptionCatalog.skills.items[0].description | Add-Member IgnoredMetadata 'not-owned'
+  Assert-View 'schema rejects unknown description metadata' (-not (Test-Json -Json ($unknownDescriptionCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
+  $plainMultiLineCatalog = Get-FreshCatalogs
+  @($plainMultiLineCatalog.skills.items | Where-Object { [string]$_.id -eq 'opencode-headless-run' })[0].description.lines = @('first plain line','second plain line')
+  Assert-View 'schema rejects multi-line plain-scalar description' (-not (Test-Json -Json ($plainMultiLineCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
+  $emptyLinesCatalog = Get-FreshCatalogs
+  $emptyLinesCatalog.skills.items[0].description.lines = @()
+  Assert-View 'schema rejects empty description lines' (-not (Test-Json -Json ($emptyLinesCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
+  $paddedLineCatalog = Get-FreshCatalogs
+  $paddedLineCatalog.skills.items[0].description.lines = @(' leading whitespace') + @($paddedLineCatalog.skills.items[0].description.lines | Select-Object -Skip 1)
+  Assert-View 'schema rejects padded description line' (-not (Test-Json -Json ($paddedLineCatalog.skills | ConvertTo-Json -Depth 12) -Schema $schemaJson -ErrorAction SilentlyContinue))
 
   $original = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $RepoRoot
   $originalRows = @([string]$original.Files['composition-order.tsv'] -split "`r?`n" | Where-Object { $_ })
@@ -176,10 +229,22 @@ try {
   $protectedRootThrew = $false
   try { $null = Test-RegistryOutputRoot -OutputRoot (Join-Path $RepoRoot 'docs') -RepoRoot $RepoRoot } catch { $protectedRootThrew = $true }
   Assert-View 'exact protected output root fails closed' $protectedRootThrew
+  foreach ($protectedTree in @('skills','overlays')) {
+    $canonicalRootThrew = $false
+    try { $null = Test-RegistryOutputRoot -OutputRoot (Join-Path $RepoRoot $protectedTree) -RepoRoot $RepoRoot } catch { $canonicalRootThrew = $true }
+    Assert-View "canonical/host output root '$protectedTree' fails closed" $canonicalRootThrew
+  }
   $temporaryRootExact = [IO.Path]::GetFullPath([IO.Path]::GetTempPath())
   $temporaryRootThrew = $false
   try { $null = Test-RegistryOutputRoot -OutputRoot $temporaryRootExact -RepoRoot $RepoRoot -AllowTemporaryRoot } catch { $temporaryRootThrew = $true }
   Assert-View 'exact OS temporary root fails closed' $temporaryRootThrew
+
+  # Phase 3A machinery guard: the shadow slice must not change canonical skill
+  # bodies or any host/runtime projection. Phase 3B replaces this guard with
+  # managed-frontmatter migration checks when canonical files are regenerated.
+  $sliceDrift = @(& git -C $RepoRoot status --porcelain -- skills overlays scripts/host-sync)
+  if ($LASTEXITCODE -ne 0) { throw "FAIL: Phase 3A drift status exited $LASTEXITCODE" }
+  Assert-View 'Phase 3A leaves canonical skills and host projections unchanged' ($sliceDrift.Count -eq 0) (($sliceDrift | Select-Object -First 5) -join '; ')
 } catch { $failures++; Write-Output "FAIL: edge-case execution: $($_.Exception.Message)"; Write-Output $_.ScriptStackTrace }
 
 # Current-state checker contract: an explicit -RepoRoot is honored from any

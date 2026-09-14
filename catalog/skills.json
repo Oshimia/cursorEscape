@@ -5,6 +5,15 @@
     {
       "id": "architecture-survey",
       "body": "skills/architecture-survey/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Guided read-only review that finds architecture-improvement opportunities,",
+          "explains each issue plainly, compares solutions including the cost of doing",
+          "nothing, and ends in an improvement plan the owner understands and agrees",
+          "with."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -62,6 +71,15 @@
     {
       "id": "bug-review-sweep",
       "body": "skills/bug-review-sweep/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Structured sweep protocol for bug hunts: ordered passes over eight",
+          "bug-pattern classes with per-class checks and evidence bars, plus scope,",
+          "nit-suppression, pre-existing, and clean-case gates applied before any",
+          "finding is reported. Load before hunting."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -119,6 +137,14 @@
     {
       "id": "codebase-design",
       "body": "skills/codebase-design/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Reference vocabulary for reasoning about deep modules, interfaces, seams,",
+          "test surfaces, and alternative designs. Use when a caller needs design",
+          "language, not a new workflow or automatic refactoring."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -176,6 +202,16 @@
     {
       "id": "composer",
       "body": "skills/composer/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Thread conductor and run manager for phased multi-agent execution when the",
+          "user explicitly assigns the composer/conductor role. Delegates",
+          "implementation and per-phase review loops to subagents; approval previews and",
+          "migration drafts only; QC closeout reports plus transcript audit; automatic",
+          "local commit per phase; never git push."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -233,6 +269,15 @@
     {
       "id": "diagnosing-bugs",
       "body": "skills/diagnosing-bugs/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "User-invoked diagnosis loop for bugs and performance regressions in already",
+          "accepted or shipped code: red-capable reproduction first, minimisation,",
+          "ranked hypotheses, tagged probes, redacted evidence, regression proof,",
+          "cleanup. Not for reviewing current diffs."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -290,6 +335,13 @@
     {
       "id": "discovery",
       "body": "skills/discovery/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Discover repository documentation hubs before non-trivial planning or",
+          "implementation. Use before drafting plans or judging architecture alignment."
+        ]
+      },
       "modelInvocationDisabled": false,
       "explicitOnly": false,
       "hostApplicability": [
@@ -347,6 +399,15 @@
     {
       "id": "documentation-architecture",
       "body": "skills/documentation-architecture/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Bootstrap or extend repository documentation using a procedures-vs-design",
+          "layout. Use when creating new docs areas, standardizing an under-documented",
+          "repo, or when the user asks for SOPs / feature architecture structure. Follow",
+          "existing layouts when present; do not invent parallel trees."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -404,6 +465,15 @@
     {
       "id": "domain-modeling",
       "body": "skills/domain-modeling/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Opt-in discipline for sharpening a project's shared language: challenge",
+          "ambiguous terms into canonical definitions, record avoided synonyms,",
+          "pressure-test with scenarios, cross-check code, and route resolutions per",
+          "the documented-alignment policy."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -461,6 +531,13 @@
     {
       "id": "grilling",
       "body": "skills/grilling/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Structured interview that resolves a design tree's open questions before",
+          "planning or deciding; user-triggered, never ambient."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -518,6 +595,15 @@
     {
       "id": "implementation-plan",
       "body": "skills/implementation-plan/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Draft comprehensive implementation plans for Plan mode. Covers goal, scope,",
+          "confidence-rated assumptions, discovery steps, conditional A/B/C, incremental",
+          "phases, and verification. Use proactively when planning any non-trivial change,",
+          "before invoking the plan-reviewer subagent (max 3 passes per loop)."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -575,6 +661,17 @@
     {
       "id": "implementation-review",
       "body": "skills/implementation-review/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Run the iterative Reviewer A + Bugbot review loop after non-trivial",
+          "implementation — once per plan phase on multi-phase plans, or once at",
+          "completion for single-phase work. Covers CI gate (parent-only, once per",
+          "iteration), parallel reviewer launch, fix-all policy, conditional integrated",
+          "review for assembled multi-slice work, and completion bar. Use proactively",
+          "when closing a phase or any non-trivial task."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -632,6 +729,12 @@
     {
       "id": "opencode-headless-run",
       "body": "skills/opencode-headless-run/SKILL.md",
+      "description": {
+        "style": "plain-scalar",
+        "lines": [
+          "Run reliable headless (non-interactive) OpenCode sessions with opencode run. Use when scripting OpenCode, automating reviews or tasks, wiring CI agents, or debugging headless failures like empty answers, permission denials, or Session not found errors."
+        ]
+      },
       "modelInvocationDisabled": false,
       "explicitOnly": true,
       "hostApplicability": [
@@ -689,6 +792,12 @@
     {
       "id": "opencode-history-search",
       "body": "skills/opencode-history-search/SKILL.md",
+      "description": {
+        "style": "plain-scalar",
+        "lines": [
+          "Search and extract past OpenCode sessions and chat history. Use when looking for prior sessions, transcripts, tool-call records, or answers the user remembers from earlier OpenCode conversations; includes CLI commands, export, and direct SQLite fallback with schema gotchas."
+        ]
+      },
       "modelInvocationDisabled": false,
       "explicitOnly": true,
       "hostApplicability": [
@@ -746,6 +855,13 @@
     {
       "id": "plan-review",
       "body": "skills/plan-review/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Iterative plan_reviewer gate (clean context, max 3 passes). Default on for",
+          "every drafted plan — not only Escalation=yes or multi-phase roadmaps."
+        ]
+      },
       "modelInvocationDisabled": false,
       "explicitOnly": false,
       "hostApplicability": [
@@ -803,6 +919,15 @@
     {
       "id": "prototype",
       "body": "skills/prototype/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Question-first throwaway code that answers one design or interaction",
+          "question: pure logic modules or visibly distinct UI variants, built on an",
+          "approved disposable path, answered, recorded, then discarded or explicitly",
+          "promoted."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -860,6 +985,15 @@
     {
       "id": "research",
       "body": "skills/research/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Bounded primary-source research producing one cited Markdown artifact under",
+          "research/. One question, one packed read-only child, claim-level citations",
+          "with freshness labels. Output is Observed evidence, not contract source of",
+          "truth."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -917,6 +1051,15 @@
     {
       "id": "resolving-merge-conflicts",
       "body": "skills/resolving-merge-conflicts/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "User-invoked Git procedure for an active merge, rebase, or cherry-pick",
+          "conflict: state inspection first, hunk-by-hunk intent tracing to each",
+          "side's primary source, verification through the project's checks, and",
+          "owner-owned completion. Abort only on explicit user authorization."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -974,6 +1117,15 @@
     {
       "id": "roadmap",
       "body": "skills/roadmap/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Create or update multi-phase handoff roadmaps as repository documentation",
+          "(not under ~/.cursor). Resolves path via local convention or defaults to",
+          "docs/roadmaps/<feature>.md. Use for large/complex phased work, Composer",
+          "handoffs, or when restructuring an approved plan into per-phase Agent context."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -1031,6 +1183,14 @@
     {
       "id": "tdd",
       "body": "skills/tdd/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Reference discipline for test-first work at agreed seams: red-green vertical",
+          "slices, independent expected values, and boundary-only doubles. Use when a",
+          "caller reasons about test design; it does not run tests or enforce a gate."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -1088,6 +1248,15 @@
     {
       "id": "teach",
       "body": "skills/teach/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Dedicated opt-in Markdown learning workspace: owner-named topic, cited",
+          "high-trust resources, small single-skill lessons, retrieval and spaced",
+          "review records. Runs in an isolated owner-selected directory; never",
+          "loaded during ordinary coding sessions."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -1145,6 +1314,16 @@
     {
       "id": "wait-what",
       "body": "skills/wait-what/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "User-invoked communication repair: when the owner says the last explanation",
+          "did not land, re-pitch it by naming what failed and adding the missing",
+          "premise in a simplified technical register, using locally discovered shared",
+          "vocabulary when a glossary exists. Never model-invoked; never invents a",
+          "glossary."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [
@@ -1202,6 +1381,16 @@
     {
       "id": "wizard",
       "body": "skills/wizard/SKILL.md",
+      "description": {
+        "style": "folded-block",
+        "lines": [
+          "Author staged interactive scripts for steps only the human can perform:",
+          "external consoles, credentials, provisioning portals, one-off migrations.",
+          "Values mapped by source, destination, sensitivity, and stage; statically",
+          "validated; handed to the owner to run outside the agent. Never executed",
+          "in-agent."
+        ]
+      },
       "modelInvocationDisabled": true,
       "explicitOnly": false,
       "hostApplicability": [

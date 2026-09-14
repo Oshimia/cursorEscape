@@ -3,7 +3,7 @@
 ```text
 Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -308,6 +308,44 @@ The approved local plan remains the full source of goals, alternatives, assumpti
   - [ ] Baseline churn limited to batch.
   - [ ] Full CI observed pass after dual approval.
 - **Risks:** Changing skill discovery subsets unintentionally.
+
+---
+
+#### Phase 3A status — Skill renderer/frontmatter builder/shadow comparison
+
+```text
+Status:              Complete; dual review APPROVED (iteration 1 of 4, 2026-09-14)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 100/100 view checks, git diff --check)
+Changed files:       5 directly reviewed files, 454 changed/new physical lines
+Composer Full CI:    PASS 2026-09-14
+Review launches:     production_readiness_reviewer 1; bug_reviewer 1; both closed
+Batchables open:     2 (deferred; see punch list below)
+```
+
+Phase 3A added registry-owned skill frontmatter metadata (`description` with
+explicit `folded-block`/`plain-scalar` physical-line style) for all 22
+registered skills, a deterministic frontmatter builder, and a fail-closed
+shadow comparison wired into the registry validator and the managed-view
+renderer (`skill-frontmatter-shadow.tsv` reports every skill id, match/mismatch
+status, and the canonical file's observed newline pattern). Byte comparison
+follows the repo render-ledger convention — UTF-8 text after CRLF-to-LF and
+exactly one terminal LF — so mixed historical line endings are explicit
+evidence, never silently normalized; all 22 canonical files currently match.
+
+- [x] Registry owns description metadata; canonical name remains the registry id.
+- [x] Existing `modelInvocationDisabled` and `explicitOnly` semantics unchanged.
+- [x] Fail-closed schema (`additionalProperties: false`) covers description shape.
+- [x] Deterministic frontmatter builder emits delimiters, metadata, and terminal LF.
+- [x] Shadow comparison covers all 22 skills; mismatches report invariant + skill id.
+- [x] Shadow evidence exposed through the deterministic managed-view renderer; double-render byte-identical.
+- [x] No runtime wrapper, overlay, host projection, manifest, or canonical skill file changed.
+- [x] Dual review APPROVED (production readiness APPROVED with Blocking, Non-blocking code/process, and blocking test/docs all None; `bug_reviewer` CLEAN).
+- [x] Composer Full CI observed pass after dual approval.
+
+Batchable (deferred) punch list for a later slice (does not block approval):
+
+1. Plain-scalar YAML type-ambiguity hardening: reject YAML-1.1 bool/null/number-like plain-scalar descriptions (e.g. exactly `no`, `on`, `null`, `42`) before Phase 3B regeneration.
+2. Add a module-side negative test for a BOM-prefixed canonical skill file (currently fails closed via `SkillFrontmatterShape`, but the edge is untested).
 
 ---
 

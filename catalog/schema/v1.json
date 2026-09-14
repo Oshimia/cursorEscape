@@ -80,15 +80,40 @@
     },
     "skillsItem": {
       "type": "object",
-      "required": ["id", "body", "modelInvocationDisabled", "explicitOnly", "hostApplicability"],
+      "required": ["id", "body", "description", "modelInvocationDisabled", "explicitOnly", "hostApplicability"],
       "additionalProperties": false,
       "properties": {
         "id": { "type": "string", "pattern": "^[a-z][a-z0-9_-]{0,63}$" },
         "body": { "$ref": "#/$defs/repoPath" },
+        "description": { "$ref": "#/$defs/skillDescription" },
         "modelInvocationDisabled": { "type": "boolean" },
         "explicitOnly": { "type": "boolean" },
         "hostApplicability": { "type": "array", "minItems": 7, "maxItems": 7, "items": { "$ref": "#/$defs/skillBinding" } }
       }
+    },
+    "skillDescription": {
+      "type": "object",
+      "required": ["style", "lines"],
+      "additionalProperties": false,
+      "properties": {
+        "style": { "enum": ["folded-block", "plain-scalar"] },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "allOf": [
+              { "type": "string", "minLength": 1 },
+              { "not": { "pattern": "^\\s|[\\r\\n\\t]|\\s$" } }
+            ]
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "style": { "const": "plain-scalar" } } },
+          "then": { "properties": { "lines": { "maxItems": 1 } } }
+        }
+      ]
     },
     "skillBinding": {
       "type": "object",
