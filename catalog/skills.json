@@ -132,6 +132,19 @@
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/bug-review-sweep/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Run structured bug-hunt passes with evidence gates; reviewer-loaded sweep protocol."
+            ]
+          },
+          "modelInvocationDisabled": false
+        }
       ]
     },
     {
@@ -396,6 +409,31 @@
           "evidencePaths": [
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
+        }
+      ],
+      "hostFrontmatterProfiles": [
+        {
+          "hosts": ["OpenCode", "Antigravity", "Vscode"],
+          "wrapperSource": "overlays/opencode/skills/diagnosing-bugs/SKILL.md",
+          "description": {
+            "style": "folded-block",
+            "lines": [
+              "User-invoked diagnosis loop for bugs/regressions in already accepted or",
+              "shipped code. Use when the owner starts a diagnosis."
+            ]
+          },
+          "modelInvocationDisabled": false
+        },
+        {
+          "hosts": ["Codex"],
+          "wrapperSource": "overlays/codex/skills/diagnosing-bugs/SKILL.md",
+          "description": {
+            "style": "plain-scalar",
+            "lines": [
+              "Diagnose accepted or shipped-code bugs and regressions with reproduction-first evidence."
+            ]
+          },
+          "modelInvocationDisabled": false
         }
       ]
     },

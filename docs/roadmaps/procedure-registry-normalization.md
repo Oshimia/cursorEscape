@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -547,6 +547,48 @@ Batchable (deferred) punch list for a later slice (does not block approval):
 2. Carry forward the Phase 3C evaluation of whether OpenCode/Antigravity/VS
    Code shared-source topology or cross-host equality governance should change;
    `roadmap` currently follows the existing no-churn shared-source pattern.
+
+
+#### Phase 3F status — bug-review-sweep / diagnosing-bugs wrapper-frontmatter enforcement
+
+```text
+Status:              Complete; dual review APPROVED (iteration 1 of 4, 2026-09-14)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 219 view checks and 24 unit checks, git diff --check)
+Changed files:       4 permitted files, 124 changed/new physical lines (118 added, 6 removed)
+Composer Full CI:    PASS 2026-09-14
+Review launches:     production_readiness_reviewer 1; bug_reviewer 1 (dual APPROVED at iteration 1; both children closed)
+Batchables open:     No new deferred; carried forward from Phase 3E
+```
+
+Phase 3F reuses the Phase 3B/3C/3D/3E enforcement-first pattern without
+redesign. The registry now owns wrapper frontmatter identity for exactly
+`bug-review-sweep` and `diagnosing-bugs`. Wrapper bodies, canonical bodies,
+source topology, manifests, baselines, and runtime projections remain
+unchanged; no explicit-only or `openai.yaml` metadata was added.
+
+Composer-resolved policy:
+
+- **Enforcement first, no churn.** Add fail-closed registry profiles and
+  evidence; do not rewrite wrapper prose or normalize historical sources.
+- **Profile topology.** `bug-review-sweep` has one Codex-only profile; all
+  other six hosts are not applicable. `diagnosing-bugs` has two profile
+  objects: a shared OpenCode physical source covering OpenCode, Antigravity,
+  and Vscode, and a distinct Codex source; Cursor, Cline, and Kilocode are
+  not applicable. Neither skill has a Cursor wrapper.
+- **Disable policy pinned.** Both wrapper profiles pin effective
+  `modelInvocationDisabled: false` matching current wrappers. No cross-host
+  equality invariant is added in Phase 3F.
+- **No explicit-only metadata.** Neither skill has `openai.yaml` or
+  explicit-only metadata; none was added.
+- **No new Cursor asymmetry batchable.** Neither skill has a Cursor wrapper,
+  so the deferred Cursor disable evaluation is not expanded.
+
+- [x] Governed profile-skill allowlist extended with exactly `bug-review-sweep` and `diagnosing-bugs`.
+- [x] Three registry-owned profile objects pin exact wrapper description style/content and effective disable policy.
+- [x] Applicability and manifest routing enforced through the existing Phase 0 inventory/manifest seams.
+- [x] Focused tests cover exact managed-view row growth (56→70), bug-review-sweep Codex-only topology, diagnosing-bugs shared/distinct topology, profile removal, uncovered applicable hosts, wrong-source routing, exact description/disable comparison, disable mismatch, not-applicable injection, missing/duplicate delivery, canonical 22/22 shadow, and deterministic five-file double-render.
+- [x] Observed Fast CI before review (normalization Fast CI + `git diff --check`).
+- [x] No Full CI is claimed by this implementation slice.
 
 
 ### Phase 4 — Rules/workflows/instructions in bounded batches
