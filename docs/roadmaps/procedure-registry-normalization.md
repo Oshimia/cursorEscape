@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete — Phase 3 closeout dual-approved
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete — Phase 3 closed
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -722,7 +722,7 @@ Changed files:       4 directly reviewed/permitted files
                      199 final changed/new physical lines (191 added, 8 removed)
 Review launches:     production_readiness_reviewer: 3 (iteration 1 APPROVED, iteration 2 CHANGES REQUESTED, iteration 3 APPROVED); bug_reviewer: 3 (iteration 1 must-fix, iterations 2–3 CLEAN); dual APPROVED at iteration 3 of 4; all children closed
 Composer Full CI:    PASS 2026-09-14
-Batchables open:     No new deferred
+Batchables open:     No new deferred; 2 carried forward from Phases 3C and 3E
 ```
 
 Phase 3K reuses the Phase 3B–3J enforcement-first pattern without redesign. The
@@ -740,6 +740,36 @@ schema remain unchanged.
 - [x] Governed profile allowlist extended with exactly the two Phase 3K skills; all 22 catalog skills are now governed.
 - [x] Per-skill tests cover explicit-only policy, applicability/absence, source routing, description and disable mismatches, wrong-source routing, not-applicable injection, missing/duplicate delivery, canonical 22/22 shadow, exact 119→154 row growth, and deterministic double render.
 - [x] Observed final Fast CI and whitespace checks before the review pair; no Full CI, commit, push, or live Apply is claimed by this implementation slice.
+
+
+#### Phase 3L status — blocking skill closeout guard and applicability verification
+
+```text
+Status:              Complete; dual review APPROVED (iteration 1 of 4, 2026-09-14)
+Observed Fast:       PASS 2026-09-14 (normalization Fast CI, 362/362 view checks, 24/24 unit checks, git diff --check)
+Changed files:       3 directly reviewed/permitted files (roadmap is the post-approval status-only cascade)
+                     59 final changed/new physical lines (56 added, 3 removed)
+Review launches:     production_readiness_reviewer: 1 (APPROVED); bug_reviewer: 1 (CLEAN); dual APPROVED at iteration 1 of 4; all children closed
+Composer Full CI:    PASS 2026-09-14
+Batchables open:     No new deferred
+```
+
+Phase 3L adds the registry-owned fail-closed Phase 3 blocking closeout guard.
+Rendering and validation now require the registered catalog skill set, the
+Phase 0 canonical skill inventory, and the governed host-frontmatter profile
+identity set to be the same exact 22 skills. Tests prove uncovered governed
+catalog and outside/non-governed identity mutations fail through
+`SkillHostFrontmatterProfileGuard`. Existing Phase 3A–3K checks continue to
+fail closed for uncovered applicable hosts, wrong wrapper source, missing or
+duplicate delivery, invalid not-applicable injection, and wrapper description
+or disable-policy mismatch.
+
+- [x] All 22 catalog skills are governed and have registry-owned host-frontmatter coverage.
+- [x] Canonical shadow coverage is exactly 22/22 matches; wrapper applicability is exactly 154 rows: 59 applicable matches, 95 explicit not-applicable, and 0 mismatch across seven hosts.
+- [x] `explicitOnly` and `modelInvocationDisabled` remain separately validated; the two explicit-only skills remain invocable, while registry/inventory/schema checks preserve each policy independently.
+- [x] Sanctioned temporary render reconciliation found no drift; deterministic double render passed and no generated baseline changed.
+- [x] Review pair inspected the code/test diff at iteration 1; roadmap status was added only after dual approval.
+- [x] Observed final Fast CI and whitespace checks after the status-only roadmap cascade; no Full CI, commit, push, or live Apply is run or claimed by Phase 3L implementation.
 
 
 ### Phase 4 — Rules/workflows/instructions in bounded batches

@@ -419,6 +419,18 @@ try {
   $catalogSkillIdSet = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
   foreach ($skillItem in $registry.Catalogs.skills.items) { $null = $catalogSkillIdSet.Add([string]$skillItem.id) }
   Assert-View 'governed profile skill set equals the full catalog skill set' ($governedSkillIdSet.Count -eq 22 -and $catalogSkillIdSet.Count -eq 22 -and $governedSkillIdSet.SetEquals($catalogSkillIdSet)) "governed=$($governedSkillIdSet.Count) catalog=$($catalogSkillIdSet.Count)"
+  $registryModule = Get-Module ProcedureRegistry
+  $governedSkillIdBackup = @(& $registryModule { $script:SkillHostFrontmatterProfileSkillIds })
+  try {
+    & $registryModule { $script:SkillHostFrontmatterProfileSkillIds = @($script:SkillHostFrontmatterProfileSkillIds | Where-Object { $_ -cne 'composer' }) }
+    $result = Invoke-EdgeCase 'skills' { param($c) }
+    Assert-RegistryFailure $result 'uncovered governed catalog skill fails the blocking closeout guard' 'SkillHostFrontmatterProfileGuard'
+    & $registryModule { $script:SkillHostFrontmatterProfileSkillIds = @($script:SkillHostFrontmatterProfileSkillIds) + @('not-a-catalog-skill') }
+    $result = Invoke-EdgeCase 'skills' { param($c) }
+    Assert-RegistryFailure $result 'profile guard identity outside the registered governed set fails closed' 'SkillHostFrontmatterProfileGuard'
+  } finally {
+    & $registryModule { $script:SkillHostFrontmatterProfileSkillIds = $args[0] } $governedSkillIdBackup
+  }
   foreach ($phase3KId in @('opencode-headless-run','opencode-history-search')) {
     $result = Invoke-EdgeCase 'skills' { param($c) (@($c.skills.items | Where-Object { [string]$_.id -eq $phase3KId }))[0].PSObject.Properties.Remove('hostFrontmatterProfiles') }.GetNewClosure()
     Assert-RegistryFailure $result "$phase3KId profile removal fails closed" 'SkillHostFrontmatterProfileMissing'

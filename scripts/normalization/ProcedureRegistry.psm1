@@ -482,6 +482,20 @@ function Test-RegistryCatalog {
   $items = @($Catalog.items); $ids = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
   $allIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
   foreach ($item in $items) { if (-not $allIds.Add([string]$item.id)) { Add-RegistryFailure $failures 'DuplicateId' "$Kind/$($item.id)" } }
+  if ($Kind -eq 'skills') {
+    if ($null -eq $Inventory) { throw 'FAIL: skill canonical consistency requires the Phase 0 inventory' }
+    $registeredSkillIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($item in $items) { $null = $registeredSkillIds.Add([string]$item.id) }
+    $inventorySkillIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($item in @($Inventory.skills_inventory.canonical_skills)) { $null = $inventorySkillIds.Add([string]$item.id) }
+    $governedProfileIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($skillId in $script:SkillHostFrontmatterProfileSkillIds) { $null = $governedProfileIds.Add([string]$skillId) }
+    $guardComplete = $registeredSkillIds.Count -eq 22 -and $inventorySkillIds.Count -eq 22 -and $governedProfileIds.Count -eq 22 -and
+      $registeredSkillIds.SetEquals($inventorySkillIds) -and $registeredSkillIds.SetEquals($governedProfileIds)
+    if (-not $guardComplete) {
+      Add-RegistryFailure $failures 'SkillHostFrontmatterProfileGuard' "registered=$($registeredSkillIds.Count) inventory=$($inventorySkillIds.Count) governed=$($governedProfileIds.Count) sets-equal=$($registeredSkillIds.SetEquals($inventorySkillIds) -and $registeredSkillIds.SetEquals($governedProfileIds))"
+    }
+  }
   $aliasOwners = [System.Collections.Generic.Dictionary[string,string]]::new([StringComparer]::Ordinal)
   foreach ($item in $items) {
     $id = [string]$item.id
