@@ -187,7 +187,7 @@ $temp = Join-Path ([IO.Path]::GetTempPath()) ("procedure-registry-" + [Guid]::Ne
 try {
   $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
   $two = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'two') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
-  Assert-View 'double render has five files' ($one.Files.Keys.Count -eq 5 -and $two.Files.Keys.Count -eq 5)
+  Assert-View 'double render has thirteen files (five base + eight compositions)' ($one.Files.Keys.Count -eq 13 -and $two.Files.Keys.Count -eq 13) "one=$($one.Files.Keys.Count) two=$($two.Files.Keys.Count)"
   foreach ($name in @($one.Files.Keys)) {
     $hashA = (Get-FileHash (Join-Path (Join-Path $temp 'one') $name) -Algorithm SHA256).Hash
     $hashB = (Get-FileHash (Join-Path (Join-Path $temp 'two') $name) -Algorithm SHA256).Hash
@@ -356,6 +356,16 @@ try {
       $mirrorPath = Join-Path $viewMirror ([string]$profile.wrapperSource)
       New-Item -ItemType Directory -Force -Path (Split-Path -Parent $mirrorPath) | Out-Null
       Copy-Item -LiteralPath (Join-Path $RepoRoot ([string]$profile.wrapperSource)) -Destination $mirrorPath
+    }
+  }
+  $mirrorOverlayRoots = @{}
+  foreach ($mirrorManifest in @($registry.Inventory.manifests)) { $mirrorOverlayRoots[[string]$mirrorManifest.host] = @{ Overlay = $mirrorManifest.overlay_root; Shared = $mirrorManifest.shared_root } }
+  foreach ($mirrorComposition in @($registry.Catalogs.workflows.compositions)) {
+    foreach ($mirrorReference in @($mirrorComposition.references)) {
+      $mirrorRefPath = Get-RegistryCompositionReferencePath -Reference ([string]$mirrorReference) -HostName ([string]$mirrorComposition.host) -OverlayRoots $mirrorOverlayRoots
+      $mirrorTarget = Join-Path $viewMirror $mirrorRefPath
+      New-Item -ItemType Directory -Force -Path (Split-Path -Parent $mirrorTarget) | Out-Null
+      Copy-Item -LiteralPath (Join-Path $RepoRoot $mirrorRefPath) -Destination $mirrorTarget
     }
   }
   $cleanView = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $viewMirror -Inventory $registry.Inventory
@@ -831,6 +841,63 @@ try {
   $temporaryRootThrew = $false
   try { $null = Test-RegistryOutputRoot -OutputRoot $temporaryRootExact -RepoRoot $RepoRoot -AllowTemporaryRoot } catch { $temporaryRootThrew = $true }
   Assert-View 'exact OS temporary root fails closed' $temporaryRootThrew
+
+  # --- Phase 4A: composition renderer, semantic-order validator, and boundary verifier ---
+  $compositionFileKeys = @($one.Files.Keys | Where-Object { $_ -like 'compositions/*' })
+  Assert-View 'composition render produces eight managed files' ($compositionFileKeys.Count -eq 8) "count=$($compositionFileKeys.Count)"
+  Assert-View 'composition render order matches registry semantic order' (
+    (@($compositionFileKeys) -join '|') -ceq (@($registry.Catalogs.workflows.semanticOrder | ForEach-Object { "compositions/$($_).md" }) -join '|')
+  ) "observed=$(($compositionFileKeys | Select-Object -First 3) -join '|')"
+  $invOverlayRoots = @{}
+  foreach ($invManifest in @($registry.Inventory.manifests)) { $invOverlayRoots[[string]$invManifest.host] = @{ Overlay = $invManifest.overlay_root; Shared = $invManifest.shared_root } }
+  foreach ($compositionItem in @($registry.Catalogs.workflows.compositions)) {
+    $cid = [string]$compositionItem.id
+    $expectedContent = ''
+    foreach ($reference in @($compositionItem.references)) {
+      $refPath = Get-RegistryCompositionReferencePath -Reference ([string]$reference) -HostName ([string]$compositionItem.host) -OverlayRoots $invOverlayRoots
+      $expectedContent += [Text.UTF8Encoding]::new($false).GetString([IO.File]::ReadAllBytes((Join-Path $RepoRoot $refPath)))
+    }
+    $observedContent = [string]$one.Files["compositions/$cid.md"]
+    Assert-View "composition $cid content matches reference concatenation" ($observedContent -ceq $expectedContent) "observed=$($observedContent.Length) expected=$($expectedContent.Length)"
+  }
+  $originalCompKeys = @($original.Files.Keys | Where-Object { $_ -like 'compositions/*' })
+  $reorderedCompKeys = @($reordered.Files.Keys | Where-Object { $_ -like 'compositions/*' })
+  Assert-View 'semantic order controls composition file sequence' (($originalCompKeys.Count -eq $reorderedCompKeys.Count) -and ($originalCompKeys[0] -ne $reorderedCompKeys[0]) -and ($originalCompKeys[1] -ne $reorderedCompKeys[1])) "orig0=$($originalCompKeys[0]) reord0=$($reorderedCompKeys[0])"
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.compositions[0].references = @($c.workflows.compositions[0].references) + @($c.workflows.compositions[0].references[0]) }
+  Assert-RegistryFailure $result 'duplicate composition reference fails closed' 'DuplicateSemanticPart'
+  $unresolvedCatalogs = Get-FreshCatalogs
+  $unresolvedCatalogs.workflows.compositions[0].references[0] = 'base:rules/__missing__.md'
+  $unresolvedThrew = $false
+  try { $null = Get-RegistryCompositionFiles -Catalogs $unresolvedCatalogs -RepoRoot $RepoRoot -Inventory $registry.Inventory } catch { $unresolvedThrew = ($_.Exception.Message -like 'FAIL: SemanticReference:*') }
+  Assert-View 'unresolved composition reference fails closed in renderer' $unresolvedThrew
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.semanticOrder[0] = 'unknown-composition-id' }
+  Assert-RegistryFailure $result 'unknown semantic order ID fails closed' 'SemanticOrderUnknownId'
+  foreach ($protectedTree4A in @('instructions','config')) {
+    $protected4AThrew = $false
+    try { $null = Test-RegistryOutputRoot -OutputRoot (Join-Path $RepoRoot $protectedTree4A) -RepoRoot $RepoRoot } catch { $protected4AThrew = $true }
+    Assert-View "protected output root '$protectedTree4A' fails closed" $protected4AThrew
+  }
+  foreach ($boundaryCase in @(
+    @{ Name = 'canonical body'; Path = 'workflow/agent-invocation.md' },
+    @{ Name = 'overlay leaf'; Path = 'overlays/cursor' },
+    @{ Name = 'host projection GEMINI.md'; Path = 'GEMINI.md' },
+    @{ Name = 'host projection AGENTS.md'; Path = 'AGENTS.md' },
+    @{ Name = 'protected tree instructions'; Path = 'instructions' },
+    @{ Name = 'protected tree config'; Path = 'config/generated' }
+  )) {
+    $boundaryThrew = $false
+    try { $null = Test-RegistryCompositionOutputBoundary -OutputRoot (Join-Path $RepoRoot $boundaryCase.Path) -RepoRoot $RepoRoot -Catalogs $registry.Catalogs -Inventory $registry.Inventory } catch { $boundaryThrew = $true }
+    Assert-View "composition output boundary: $($boundaryCase.Name) fails closed" $boundaryThrew
+  }
+  $boundaryTempOk = $false
+  try { $null = Test-RegistryCompositionOutputBoundary -OutputRoot (Join-Path ([IO.Path]::GetTempPath()) 'procedure-registry-boundary-ok') -RepoRoot $RepoRoot -Catalogs $registry.Catalogs -Inventory $registry.Inventory; $boundaryTempOk = $true } catch { }
+  Assert-View 'composition output boundary: temporary root passes' $boundaryTempOk
+  $writeBoundaryThrew = $false
+  try { $null = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $RepoRoot 'GEMINI.md') -RepoRoot $RepoRoot -Inventory $registry.Inventory } catch { $writeBoundaryThrew = $true }
+  Assert-View 'managed writer rejects host projection output root' $writeBoundaryThrew
+  $phase4aDrift = @(& git -C $RepoRoot status --porcelain -- rules workflow 'overlays')
+  if ($LASTEXITCODE -ne 0) { throw "FAIL: Phase 4A drift status exited $LASTEXITCODE" }
+  Assert-View 'Phase 4A leaves canonical rules, workflows, and overlay leaves unchanged' ($phase4aDrift.Count -eq 0) (($phase4aDrift | Select-Object -First 5) -join '; ')
 
   # Phase 3A machinery guard: the shadow slice must not change canonical skill
   # bodies or any host/runtime projection. Phase 3B replaces this guard with

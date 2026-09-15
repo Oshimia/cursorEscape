@@ -478,6 +478,26 @@ function Test-RegistryDescendantPath([string]$RepoRoot,[string]$Relative,[System
   return $full
 }
 
+function Get-RegistryCompositionReferencePath {
+  <#
+    Shared fail-closed reference resolver for registry-declared composition
+    references. Returns the repository-relative path for one reference token;
+    callers remain responsible for leaf existence checks.
+  #>
+  param([Parameter(Mandatory)][string]$Reference,[Parameter(Mandatory)][string]$HostName,$OverlayRoots = @{})
+  if ($Reference.StartsWith('base:', [StringComparison]::Ordinal)) { return $Reference.Substring(5) }
+  $roots = if ($OverlayRoots.ContainsKey($HostName)) { $OverlayRoots[$HostName] } else { @{} }
+  if ($Reference.StartsWith('shared:', [StringComparison]::Ordinal)) {
+    $rest = $Reference.Substring(7)
+    $sharedRoot = if ($roots.ContainsKey('Shared') -and $null -ne $roots.Shared) { $roots.Shared } else { $roots['Overlay'] }
+    return "$sharedRoot/$rest"
+  }
+  if ($Reference.StartsWith('instructions/', [StringComparison]::Ordinal) -or $Reference.StartsWith('footers/', [StringComparison]::Ordinal)) {
+    return "$($roots['Overlay'])/$Reference"
+  }
+  return $Reference
+}
+
 function Test-RegistryCatalog {
   param([Parameter(Mandatory)]$Catalog,[Parameter(Mandatory)][ValidateSet('agents','rules','skills','workflows')][string]$Kind,[Parameter(Mandatory)][string]$RepoRoot,$OverlayRoots = @{},$Inventory = $null)
   $failures = [System.Collections.Generic.List[string]]::new()
@@ -612,6 +632,11 @@ function Test-RegistryCatalog {
       if ([string]$composition.host -notin $script:Hosts) { Add-RegistryFailure $failures 'InvalidHost' "$cid/$($composition.host)" }
       if (-not $knownIds.Contains([string]$composition.canonicalReferenceId)) { Add-RegistryFailure $failures 'InvalidCompositionReference' "$cid canonical '$($composition.canonicalReferenceId)'" }
       if ($null -eq $Inventory) { throw 'FAIL: composition consistency requires the Phase 0 inventory' }
+      $duplicateRefs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+      foreach ($reference in @($composition.references)) {
+        $ref = [string]$reference
+        if (-not $duplicateRefs.Add($ref)) { Add-RegistryFailure $failures 'DuplicateSemanticPart' "$cid/$ref" }
+      }
       $registryReferences = @(Get-RegistrySequence $composition.references)
       $matchedIndex = -1
       for ($index = 0; $index -lt @($Inventory.rules_workflows.compositions).Count; $index++) {
@@ -625,17 +650,9 @@ function Test-RegistryCatalog {
       }
       if ($matchedIndex -lt 0) { Add-RegistryFailure $failures 'CompositionInventory' "$cid has no unused matching Phase 0 composition"; continue }
       $null = $consumedInventoryCompositions.Add($matchedIndex)
-      $refs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
       foreach ($reference in @($composition.references)) {
         $ref = [string]$reference
-        if (-not $refs.Add($ref)) { Add-RegistryFailure $failures 'DuplicateSemanticPart' "$cid/$ref" }
-        if ($ref.StartsWith('base:', [StringComparison]::Ordinal)) { $path = $ref.Substring(5) }
-        else {
-          $path = $ref -replace '^shared:',''
-          $roots = if ($OverlayRoots.ContainsKey($composition.host)) { $OverlayRoots[$composition.host] } else { @{} }
-          if ($ref.StartsWith('shared:',[StringComparison]::Ordinal)) { $sharedRoot = if ($roots.ContainsKey('Shared') -and $null -ne $roots.Shared) { $roots.Shared } else { $roots['Overlay'] }; $path = "$sharedRoot/$path" }
-          elseif ($path.StartsWith('instructions/',[StringComparison]::Ordinal) -or $path.StartsWith('footers/',[StringComparison]::Ordinal)) { $path = "$($roots['Overlay'])/$path" }
-        }
+        $path = Get-RegistryCompositionReferencePath -Reference $ref -HostName ([string]$composition.host) -OverlayRoots $OverlayRoots
         $null = Test-RegistryDescendantPath $RepoRoot $path $failures "SemanticReference:$cid" -Leaf
       }
     }
@@ -749,11 +766,111 @@ function Get-RegistryManagedView {
     }
     if ($shadowFailures.Count -gt 0) { throw "FAIL: $($shadowFailures[0])" }
   }
-  [pscustomobject]@{ Files = [ordered]@{ 'identity.json' = $identityJson + "`n"; 'agent-parity.tsv' = ($parity -join "`n") + "`n"; 'composition-order.tsv' = ($composition -join "`n") + "`n"; 'skill-frontmatter-shadow.tsv' = ($skillShadow -join "`n") + "`n"; 'skill-host-frontmatter-shadow.tsv' = ($wrapperShadow -join "`n") + "`n" } }
+  $files = [ordered]@{ 'identity.json' = $identityJson + "`n"; 'agent-parity.tsv' = ($parity -join "`n") + "`n"; 'composition-order.tsv' = ($composition -join "`n") + "`n"; 'skill-frontmatter-shadow.tsv' = ($skillShadow -join "`n") + "`n"; 'skill-host-frontmatter-shadow.tsv' = ($wrapperShadow -join "`n") + "`n" }
+  $compositionFiles = Get-RegistryCompositionFiles -Catalogs $Catalogs -RepoRoot $RepoRoot -Inventory $Inventory
+  foreach ($compositionKey in @($compositionFiles.Keys)) { $files[$compositionKey] = [string]$compositionFiles[$compositionKey] }
+  [pscustomobject]@{ Files = $files }
+}
+
+function Get-RegistryCompositionFiles {
+  <#
+    Phase 4A deterministic composition renderer: for each registry composition,
+    in registry-declared semantic order, resolves every registry-declared
+    reference and concatenates the referenced leaf bodies. Fail-closed on
+    missing/duplicate compositions, missing semantic order, unresolved
+    references, or BOM-marked inputs. Output is managed-view-only; canonical
+    and host files are never written by this function.
+  #>
+  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$RepoRoot,$Inventory = $null)
+  $workflowsProperty = $Catalogs.workflows.PSObject.Properties['compositions']
+  $orderProperty = $Catalogs.workflows.PSObject.Properties['semanticOrder']
+  if ($null -eq $workflowsProperty -or $null -eq $orderProperty) { throw 'FAIL: composition render requires registry-owned compositions and semanticOrder' }
+  $comps = @($workflowsProperty.Value)
+  $order = @(Get-RegistrySequence $orderProperty.Value)
+  if ($order.Count -ne $comps.Count) { throw "FAIL: SemanticOrderCoverage: expected $($comps.Count), got $($order.Count)" }
+  $compositionById = @{}
+  foreach ($compositionItem in $comps) {
+    $compositionId = [string]$compositionItem.id
+    if ($compositionById.ContainsKey($compositionId)) { throw "FAIL: DuplicateCompositionId: $compositionId" }
+    $compositionById[$compositionId] = $compositionItem
+  }
+  if ($null -eq $Inventory) {
+    $inventoryPath = Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json'
+    try { $Inventory = Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json } catch { throw "FAIL: invalid inventory: $($_.Exception.Message)" }
+  }
+  $overlayRoots = @{}
+  foreach ($manifest in @($Inventory.manifests)) { $overlayRoots[[string]$manifest.host] = @{ Overlay = $manifest.overlay_root; Shared = $manifest.shared_root } }
+  $files = [ordered]@{}
+  foreach ($compositionId in $order) {
+    if (-not $compositionById.ContainsKey($compositionId)) { throw "FAIL: SemanticOrderUnknownId: $compositionId" }
+    $compositionItem = $compositionById[$compositionId]
+    $null = $compositionById.Remove($compositionId)
+    $parts = [System.Collections.Generic.List[string]]::new()
+    $seenRefs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($reference in @($compositionItem.references)) {
+      $ref = [string]$reference
+      if (-not $seenRefs.Add($ref)) { throw "FAIL: DuplicateSemanticPart: $compositionId/$ref" }
+      $path = Get-RegistryCompositionReferencePath -Reference $ref -HostName ([string]$compositionItem.host) -OverlayRoots $overlayRoots
+      $pathFailures = [System.Collections.Generic.List[string]]::new()
+      $resolved = Test-RegistryDescendantPath $RepoRoot $path $pathFailures "SemanticReference:$compositionId" -Leaf
+      if ($null -eq $resolved) { throw "FAIL: $($pathFailures[0])" }
+      $readFailures = [System.Collections.Generic.List[string]]::new()
+      $raw = Get-RegistrySkillSourceRaw -Path $resolved -Label "$compositionId/$ref" -Failures $readFailures
+      if ($null -eq $raw) { throw "FAIL: $($readFailures[0])" }
+      $parts.Add($raw)
+    }
+    $files["compositions/$compositionId.md"] = ($parts -join '')
+  }
+  foreach ($remaining in $compositionById.Keys) { throw "FAIL: SemanticOrderMissingId: $remaining" }
+  return $files
+}
+
+function Test-RegistryCompositionOutputBoundary {
+  <#
+    Phase 4A fail-closed boundary verifier: no canonical body, overlay leaf,
+    protected repository tree, or host projection may receive generated
+    composition output. Temporary output under the OS temporary root passes.
+  #>
+  param([Parameter(Mandatory)][string]$OutputRoot,[Parameter(Mandatory)][string]$RepoRoot,[Parameter(Mandatory)]$Catalogs,$Inventory = $null)
+  $full = [IO.Path]::GetFullPath($OutputRoot)
+  $root = [IO.Path]::GetFullPath($RepoRoot).TrimEnd('\','/') + '\'
+  $temporaryRoot = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd('\','/') + '\'
+  if ($full.StartsWith($temporaryRoot, [StringComparison]::OrdinalIgnoreCase)) { return }
+  if (-not $full.StartsWith($root, [StringComparison]::OrdinalIgnoreCase)) { throw "FAIL: CompositionOutputBoundary outside repository and temporary root: $OutputRoot" }
+  $relative = $full.Substring($root.Length).Trim('\','/').Replace('/','\')
+  if ($relative.Length -eq 0) { throw "FAIL: CompositionOutputBoundary rejects the repository root: $OutputRoot" }
+  $relativeLower = $relative.ToLowerInvariant()
+  $protectedTreeSegments = @('overlays','agents','skills','rules','workflow','docs','.git','.cursor','.config','catalog','scripts','instructions','config')
+  foreach ($segment in @($relativeLower -split '[\\/]')) {
+    if ($protectedTreeSegments -ccontains $segment) { throw "FAIL: CompositionOutputBoundary violates protected tree '$segment': $OutputRoot" }
+  }
+  foreach ($kind in @('agents','rules','skills','workflows')) {
+    foreach ($item in @($Catalogs[$kind].items)) {
+      $bodyLower = ([string]$item.body).Replace('/','\').ToLowerInvariant()
+      if ($relativeLower -eq $bodyLower -or $relativeLower.StartsWith("$bodyLower\")) { throw "FAIL: CompositionOutputBoundary violates canonical body '$($item.body)': $OutputRoot" }
+    }
+  }
+  if ($null -eq $Inventory) {
+    $inventoryPath = Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json'
+    try { $Inventory = Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json } catch { throw "FAIL: invalid inventory: $($_.Exception.Message)" }
+  }
+  foreach ($manifest in @($Inventory.manifests)) {
+    foreach ($boundaryPath in @($manifest.overlay_root, $manifest.shared_root)) {
+      if ([string]::IsNullOrWhiteSpace([string]$boundaryPath)) { continue }
+      $boundaryLower = ([string]$boundaryPath).Replace('/','\').TrimEnd('\','/').ToLowerInvariant()
+      if ($relativeLower -eq $boundaryLower -or $relativeLower.StartsWith("$boundaryLower\")) { throw "FAIL: CompositionOutputBoundary violates overlay leaf '$boundaryPath': $OutputRoot" }
+    }
+    foreach ($entry in @($manifest.entries)) {
+      $destinationProperty = $entry.PSObject.Properties['destination']
+      if ($null -eq $destinationProperty -or [string]::IsNullOrWhiteSpace([string]$destinationProperty.Value)) { continue }
+      $destinationLower = ([string]$destinationProperty.Value).Replace('/','\').ToLowerInvariant()
+      if ($relativeLower -eq $destinationLower -or $relativeLower.StartsWith("$destinationLower\")) { throw "FAIL: CompositionOutputBoundary violates host projection '$($destinationProperty.Value)': $OutputRoot" }
+    }
+  }
 }
 
 function Test-RegistryOutputRoot([string]$OutputRoot,[string]$RepoRoot,[switch]$AllowTemporaryRoot) {
-  $forbidden = @('overlays','agents','skills','rules','workflow','docs','.git','.cursor','.config')
+  $forbidden = @('overlays','agents','skills','rules','workflow','docs','.git','.cursor','.config','instructions','config')
   $full = [IO.Path]::GetFullPath($OutputRoot); $root = [IO.Path]::GetFullPath($RepoRoot).TrimEnd('\','/') + '\'
   $temporaryRoot = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd('\','/') + '\'
   $protectedTrees = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
@@ -774,11 +891,21 @@ function Test-RegistryOutputRoot([string]$OutputRoot,[string]$RepoRoot,[switch]$
 function Write-RegistryManagedView {
   param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$OutputRoot,[string]$RepoRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),$Resolver = (New-RegistryProjectionResolver),$Inventory = $null,[switch]$AllowTemporaryRoot)
   Test-RegistryOutputRoot -OutputRoot $OutputRoot -RepoRoot $RepoRoot -AllowTemporaryRoot:$AllowTemporaryRoot
+  if ($null -eq $Inventory) {
+    $inventoryPath = Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json'
+    try { $Inventory = Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json } catch { throw "FAIL: invalid inventory: $($_.Exception.Message)" }
+  }
+  Test-RegistryCompositionOutputBoundary -OutputRoot $OutputRoot -RepoRoot $RepoRoot -Catalogs $Catalogs -Inventory $Inventory
   $view = Get-RegistryManagedView -Catalogs $Catalogs -RepoRoot $RepoRoot -Resolver $Resolver -Inventory $Inventory
   New-Item -ItemType Directory -Force -Path $OutputRoot | Out-Null
   $encoding = [System.Text.UTF8Encoding]::new($false)
-  foreach ($file in $view.Files.GetEnumerator()) { [IO.File]::WriteAllText((Join-Path $OutputRoot $file.Key), [string]$file.Value, $encoding) }
+  foreach ($file in $view.Files.GetEnumerator()) {
+    $filePath = Join-Path $OutputRoot $file.Key
+    $fileDir = Split-Path -Parent $filePath
+    if (-not (Test-Path -LiteralPath $fileDir)) { New-Item -ItemType Directory -Force -Path $fileDir | Out-Null }
+    [IO.File]::WriteAllText($filePath, [string]$file.Value, $encoding)
+  }
   return $view
 }
 
-Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot','Get-StackManifestDestinationCount','Get-RegistrySkillFrontmatter','Get-RegistrySkillCanonicalFrontmatter','Get-RegistryComparableFrontmatter','Get-RegistrySkillSourceRaw','Get-RegistrySkillFrontmatterShadow','Get-RegistrySkillWrapperFrontmatterShadow','Get-RegistrySkillWrapperSourcePath','Get-RegistrySkillHostFrontmatterShadow')
+Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot','Get-RegistryCompositionReferencePath','Get-RegistryCompositionFiles','Test-RegistryCompositionOutputBoundary','Get-StackManifestDestinationCount','Get-RegistrySkillFrontmatter','Get-RegistrySkillCanonicalFrontmatter','Get-RegistryComparableFrontmatter','Get-RegistrySkillSourceRaw','Get-RegistrySkillFrontmatterShadow','Get-RegistrySkillWrapperFrontmatterShadow','Get-RegistrySkillWrapperSourcePath','Get-RegistrySkillHostFrontmatterShadow')

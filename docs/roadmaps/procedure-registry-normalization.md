@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete — Phase 4 remains open, 4B next
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete — Phase 4 not started
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete — Phase 4 remains open, 4B next
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -830,7 +830,7 @@ Phase 4:             Not started
 
 **Evidence summary.** The Phase 3C batchable (source consolidation / cross-host equality evaluation) and the Phase 3D/3E expanded batchable (Cursor disable-flag normalization/retention evaluation) are both closed as formal retention decisions. No source consolidation was performed; no wrapper bodies, canonical skill bodies, manifests, baselines, schema, runtime projection, or test files were changed. No Full CI, commit, push, or live Apply is claimed by this docs-only resolution.
 
-**Phase 4 remains not started.** This resolution changes no production behavior and clears no Phase 4 deliverable.
+**Phase 4 remains open.** This resolution changes no production behavior and clears no Phase 4 deliverable; the later Phase 4A machinery slice is tracked separately below.
 
 
 ### Phase 4 — Rules/workflows/instructions in bounded batches
@@ -860,8 +860,22 @@ Phase 4:             Not started
   - [ ] Full CI observed pass after dual approval.
 - **Risks:** Changing always-on gates unintentionally.
 
----
+#### Phase 4A — Composition machinery (no runtime switch)
 
+- **Status:** Phase 4A complete — overall Phase 4 remains open; 4B next.
+- **Boundary:** Composition renderer, semantic-order validator, and managed-boundary verifier only. No host adapter, manifest runtime, live host, canonical body, or substantive procedure text migrated.
+- **Evidence:**
+  - [x] Registry semantic order controls composed output order.
+  - [x] Reference concatenation is deterministic from resolved registry references.
+  - [x] Unresolved, duplicate, and missing references fail closed.
+  - [x] Canonical body, overlay leaf, protected tree, and host projection boundaries reject composition output.
+  - [x] Deterministic double render is byte-identical.
+  - [x] Existing 49/49 parity and host-sync behavior unchanged.
+  - [x] Implementer-owned review completed at iteration 2: production readiness APPROVED and `bug_reviewer` CLEAN; both reviewers closed.
+  - [x] Three deferred Batchables recorded: composition-specific source-ingress wrapper naming, tighter reference-grammar allowlist, and renderer-level `SemanticOrderMissingId` coverage.
+  - [x] Composer observed sole normalization Full CI PASS; pre-commit gate loaded. No live Apply or runtime switch.
+
+---
 
 ### Phase 5 — Documentation, guards, baselines, and roadmap
 
