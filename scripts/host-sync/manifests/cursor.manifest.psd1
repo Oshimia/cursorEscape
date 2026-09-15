@@ -23,6 +23,12 @@
         @{ Source = 'review-subagent-models.md'; Dest = 'review-subagent-models.md' }
     )
     HybridRuleIds       = @('agent-invocation', 'iterative-plan-review', 'iterative-code-review', 'pre-commit-ci-gate')
+    HybridCompositions  = @(
+        @{ RuleId = 'agent-invocation'; CompositionId = 'cursor-agent-invocation'; Destination = 'rules/agent-invocation.mdc' }
+        @{ RuleId = 'iterative-plan-review'; CompositionId = 'cursor-iterative-plan-review'; Destination = 'rules/iterative-plan-review.mdc' }
+        @{ RuleId = 'iterative-code-review'; CompositionId = 'cursor-iterative-code-review'; Destination = 'rules/iterative-code-review.mdc' }
+        @{ RuleId = 'pre-commit-ci-gate'; CompositionId = 'cursor-pre-commit-ci-gate'; Destination = 'rules/pre-commit-ci-gate.mdc' }
+    )
     HardExcludes        = @('skills-cursor', 'settings.json')
     NeverTouch          = @('docs/workflow')
 }

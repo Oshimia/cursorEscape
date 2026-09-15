@@ -361,6 +361,7 @@ try {
   $mirrorOverlayRoots = @{}
   foreach ($mirrorManifest in @($registry.Inventory.manifests)) { $mirrorOverlayRoots[[string]$mirrorManifest.host] = @{ Overlay = $mirrorManifest.overlay_root; Shared = $mirrorManifest.shared_root } }
   foreach ($mirrorComposition in @($registry.Catalogs.workflows.compositions)) {
+    if ($mirrorComposition.PSObject.Properties['runtimeOnly'] -and [bool]$mirrorComposition.runtimeOnly) { continue }
     foreach ($mirrorReference in @($mirrorComposition.references)) {
       $mirrorRefPath = Get-RegistryCompositionReferencePath -Reference ([string]$mirrorReference) -HostName ([string]$mirrorComposition.host) -OverlayRoots $mirrorOverlayRoots
       $mirrorTarget = Join-Path $viewMirror $mirrorRefPath
@@ -845,12 +846,16 @@ try {
   # --- Phase 4A: composition renderer, semantic-order validator, and boundary verifier ---
   $compositionFileKeys = @($one.Files.Keys | Where-Object { $_ -like 'compositions/*' })
   Assert-View 'composition render produces eight managed files' ($compositionFileKeys.Count -eq 8) "count=$($compositionFileKeys.Count)"
+  $nonRuntimeOrderIds = @($registry.Catalogs.workflows.compositions | Where-Object {
+    -not ($_.PSObject.Properties['runtimeOnly'] -and [bool]$_.runtimeOnly)
+  } | ForEach-Object { [string]$_.id })
   Assert-View 'composition render order matches registry semantic order' (
-    (@($compositionFileKeys) -join '|') -ceq (@($registry.Catalogs.workflows.semanticOrder | ForEach-Object { "compositions/$($_).md" }) -join '|')
+    (@($compositionFileKeys) -join '|') -ceq (@($registry.Catalogs.workflows.semanticOrder | Where-Object { $_ -in $nonRuntimeOrderIds } | ForEach-Object { "compositions/$($_).md" }) -join '|')
   ) "observed=$(($compositionFileKeys | Select-Object -First 3) -join '|')"
   $invOverlayRoots = @{}
   foreach ($invManifest in @($registry.Inventory.manifests)) { $invOverlayRoots[[string]$invManifest.host] = @{ Overlay = $invManifest.overlay_root; Shared = $invManifest.shared_root } }
   foreach ($compositionItem in @($registry.Catalogs.workflows.compositions)) {
+    if ($compositionItem.PSObject.Properties['runtimeOnly'] -and [bool]$compositionItem.runtimeOnly) { continue }
     $cid = [string]$compositionItem.id
     $expectedContent = ''
     foreach ($reference in @($compositionItem.references)) {
@@ -971,6 +976,247 @@ try {
   }
   $alwaysOnRenderB = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $RepoRoot
   Assert-View 'always-on managed view is deterministic across calls' ([string]$one.Files['always-on.tsv'] -ceq [string]$alwaysOnRenderB.Files['always-on.tsv'])
+
+  # --- Phase 4C: Cursor hybrid rules and OpenCode AGENTS/instruction dual-write ---
+  $runtimeComps = @($registry.Catalogs.workflows.compositions | Where-Object { $_.PSObject.Properties['runtimeOnly'] -and [bool]$_.runtimeOnly })
+  $expectedRuntimeIds = [string[]]@(
+    'cursor-agent-invocation','cursor-iterative-plan-review','cursor-iterative-code-review','cursor-pre-commit-ci-gate',
+    'opencode-agents-dual-write-instructions','opencode-agents-dual-write-agents'
+  )
+  Assert-View 'Phase 4C registry has exactly six runtime compositions' ($runtimeComps.Count -eq 6) "count=$($runtimeComps.Count)"
+  Assert-View 'Phase 4C runtime composition IDs match expected set' (
+    (@($runtimeComps | ForEach-Object { [string]$_.id }) -join '|') -ceq ($expectedRuntimeIds -join '|')
+  ) "observed=$(($runtimeComps | ForEach-Object { [string]$_.id }) -join '|')"
+  $runtimeOrderInSemantic = @($registry.Catalogs.workflows.semanticOrder | Where-Object { $_ -in $expectedRuntimeIds })
+  Assert-View 'Phase 4C semanticOrder owns all six runtime IDs in correct order' (
+    (@($runtimeOrderInSemantic) -join '|') -ceq ($expectedRuntimeIds -join '|')
+  ) "semantic=$(($runtimeOrderInSemantic) -join '|')"
+
+  # Registry order ownership: Get-RegistryCompositionOrderById returns deterministic refs.
+  $openCodeInstrRefs = Get-RegistryCompositionOrderById -Catalogs $registry.Catalogs -CompositionId 'opencode-agents-dual-write-instructions'
+  $openCodeAgentsRefs = Get-RegistryCompositionOrderById -Catalogs $registry.Catalogs -CompositionId 'opencode-agents-dual-write-agents'
+  $openCodeInstrRefsAgain = Get-RegistryCompositionOrderById -Catalogs $registry.Catalogs -CompositionId 'opencode-agents-dual-write-instructions'
+  Assert-View 'Phase 4C OpenCode instructions composition order is deterministic' (($openCodeInstrRefs -join '|') -ceq ($openCodeInstrRefsAgain -join '|')) "refs=$(($openCodeInstrRefs) -join '|')"
+  Assert-View 'Phase 4C OpenCode instruction/AGENTS registry orders are identical' (($openCodeInstrRefs -join '|') -ceq ($openCodeAgentsRefs -join '|'))
+  $expectedOpenCodeRefs = [string[]]@(
+    'instructions/__header__.md',
+    'base:rules/agent-invocation.md',
+    'base:rules/iterative-plan-review.md',
+    'base:rules/iterative-code-review.md',
+    'footers/instructions-wiring.md'
+  )
+  Assert-View 'Phase 4C OpenCode registry order matches known byte-parity reference sequence' (
+    (@($openCodeInstrRefs) -join '|') -ceq ($expectedOpenCodeRefs -join '|')
+  ) "observed=$(($openCodeInstrRefs) -join '|')"
+
+  # Effective-order mismatches fail closed at both sources of the order:
+  # semanticOrder -> Cursor canonical rules, and manifest composition bindings.
+  $result4CCursorSemanticOrder = Invoke-EdgeCase 'workflows' {
+    param($c)
+    $cursorRuntimeIds = @(
+      $c.workflows.semanticOrder | Where-Object {
+        $semanticId = [string]$_
+        $composition = @($c.workflows.compositions | Where-Object { [string]$_.id -eq $semanticId })[0]
+        $null -ne $composition -and [string]$composition.host -ceq 'Cursor' -and
+          $composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly
+      }
+    )
+    $firstIndex = [int]@($c.workflows.semanticOrder).IndexOf([string]$cursorRuntimeIds[0])
+    $lastIndex = [int]@($c.workflows.semanticOrder).IndexOf([string]$cursorRuntimeIds[-1])
+    $semantic = @($c.workflows.semanticOrder)
+    $semantic[$firstIndex] = [string]$cursorRuntimeIds[-1]
+    $semantic[$lastIndex] = [string]$cursorRuntimeIds[0]
+    $c.workflows.semanticOrder = $semantic
+  }
+  Assert-RegistryFailure $result4CCursorSemanticOrder 'Phase 4C Cursor semanticOrder reorder fails' 'composition-order-ownership'
+
+  $manifestMismatchRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase4c-manifest-mismatch-" + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $manifestMismatchRoot 'scripts/host-sync/manifests') -Force | Out-Null
+    Copy-Item (Join-Path $RepoRoot 'scripts/host-sync/manifests/cursor.manifest.psd1') (Join-Path $manifestMismatchRoot 'scripts/host-sync/manifests/cursor.manifest.psd1')
+    $cursorManifestPath = Join-Path $manifestMismatchRoot 'scripts/host-sync/manifests/cursor.manifest.psd1'
+    $cursorManifestText = Get-Content -Raw $cursorManifestPath
+    $cursorManifestText = $cursorManifestText.Replace(
+      "@('agent-invocation', 'iterative-plan-review', 'iterative-code-review', 'pre-commit-ci-gate')",
+      "@('iterative-plan-review', 'agent-invocation', 'iterative-code-review', 'pre-commit-ci-gate')"
+    )
+    Set-Content -LiteralPath $cursorManifestPath -Value $cursorManifestText -NoNewline
+    $manifestFailures = [System.Collections.Generic.List[string]]::new()
+    $freshWorkflows = (Get-FreshCatalogs).workflows
+    & (Get-Module ProcedureRegistry) { param($Catalog,$RepoRoot,$Failures)
+      Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $Failures
+    } $freshWorkflows $manifestMismatchRoot $manifestFailures
+    Assert-View 'Phase 4C Cursor manifest rule reorder fails' (
+      @($manifestFailures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -gt 0
+    ) (($manifestFailures | Select-Object -First 3) -join '; ')
+  } finally {
+    if (Test-Path -LiteralPath $manifestMismatchRoot) { Remove-Item -LiteralPath $manifestMismatchRoot -Recurse -Force }
+  }
+
+  $cursorComp1Refs = Get-RegistryCompositionOrderById -Catalogs $registry.Catalogs -CompositionId 'cursor-agent-invocation'
+  Assert-View 'Phase 4C Cursor composition has three references (frontmatter, body, pointer)' (
+    $cursorComp1Refs.Count -eq 3 -and
+    $cursorComp1Refs[0] -ceq 'cursor-host:rules/agent-invocation.mdc#frontmatter' -and
+    $cursorComp1Refs[1] -ceq 'base:rules/agent-invocation.md' -and
+    $cursorComp1Refs[2] -ceq 'cursor-generated:cursor-hybrid-pointer#agent-invocation'
+  ) "refs=$(($cursorComp1Refs) -join '|')"
+
+  # Runtime compositions are excluded from managed-view composition file output.
+  $allCompositionFileKeys = @($one.Files.Keys | Where-Object { $_ -like 'compositions/*' })
+  Assert-View 'Phase 4C runtime compositions excluded from managed composition output' (
+    $allCompositionFileKeys.Count -eq 8 -and
+    @($allCompositionFileKeys | Where-Object { $_ -match 'compositions/cursor-|compositions/opencode-agents' }).Count -eq 0
+  ) "keys=$($allCompositionFileKeys -join ';')"
+
+  # Host composition ownership: validation passes on current working tree (uses full-catalog registry result which includes overlay roots).
+  Assert-View 'Phase 4C host composition ownership passes on current tree' (
+    $registry.Valid -and @($registry.Failures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -eq 0
+  ) (($registry.Failures | Select-Object -First 3) -join '; ')
+
+  # Registry-owned Cursor reference reorder is valid: the registry is the sole
+  # owner of runtime composition order, and no hardcoded canonical sequence is
+  # used to validate it. Only cross-composition invariants reject mismatch.
+  $result4CMismatch = Invoke-EdgeCase 'workflows' {
+    param($c)
+    $comp = @($c.workflows.compositions | Where-Object { [string]$_.id -eq 'cursor-agent-invocation' })[0]
+    $refs = @($comp.references); $refs[0],$refs[1] = $refs[1],$refs[0]
+    $comp.references = $refs
+  }
+  Assert-View 'Phase 4C Cursor registry-owned reference reorder remains valid' (
+    @($result4CMismatch.Failures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -eq 0
+  ) (($result4CMismatch.Failures | Select-Object -First 3) -join '; ')
+
+  $result4COrder = Invoke-EdgeCase 'workflows' {
+    param($c)
+    $order = @($c.workflows.semanticOrder)
+    $c.workflows.semanticOrder = @($order[0],$order[0]) + @($order | Select-Object -Skip 1)
+  }
+  Assert-RegistryFailure $result4COrder 'Phase 4C semantic order duplication fails' 'SemanticOrderDuplicate'
+
+  $result4COpenCodeRefs = Invoke-EdgeCase 'workflows' {
+    param($c)
+    $comp = @($c.workflows.compositions | Where-Object { [string]$_.id -eq 'opencode-agents-dual-write-instructions' })[0]
+    $reversed = @($comp.references); [array]::Reverse($reversed)
+    $comp.references = $reversed
+  }
+  Assert-RegistryFailure $result4COpenCodeRefs 'Phase 4C OpenCode reference sequence mismatch fails' 'composition-order-ownership'
+
+  # OpenCode manifest fail-closed: forbidden manifest-owned Parts/Footer field.
+  $openCodePartsRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase4c-opencode-parts-" + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $openCodePartsRoot 'scripts/host-sync/manifests') -Force | Out-Null
+    Copy-Item (Join-Path $RepoRoot 'scripts/host-sync/manifests/opencode.manifest.psd1') (Join-Path $openCodePartsRoot 'scripts/host-sync/manifests/opencode.manifest.psd1')
+    $openCodeManifestPath = Join-Path $openCodePartsRoot 'scripts/host-sync/manifests/opencode.manifest.psd1'
+    $openCodeManifestText = Get-Content -Raw $openCodeManifestPath
+    $openCodeManifestText = $openCodeManifestText.Replace(
+      "AgentsCompositionId       = 'opencode-agents-dual-write-agents'",
+      "AgentsCompositionId       = 'opencode-agents-dual-write-agents'`n        Parts           = @('instructions/__header__.md')"
+    )
+    Set-Content -LiteralPath $openCodeManifestPath -Value $openCodeManifestText -NoNewline
+    $openCodePartsFailures = [System.Collections.Generic.List[string]]::new()
+    $freshWorkflowsParts = (Get-FreshCatalogs).workflows
+    & (Get-Module ProcedureRegistry) { param($Catalog,$RepoRoot,$Failures)
+      Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $Failures
+    } $freshWorkflowsParts $openCodePartsRoot $openCodePartsFailures
+    Assert-View 'Phase 4C OpenCode forbidden manifest Parts fails' (
+      @($openCodePartsFailures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -gt 0
+    ) (($openCodePartsFailures | Select-Object -First 3) -join '; ')
+  } finally {
+    if (Test-Path -LiteralPath $openCodePartsRoot) { Remove-Item -LiteralPath $openCodePartsRoot -Recurse -Force }
+  }
+
+  # OpenCode manifest fail-closed: missing InstructionsCompositionId.
+  $openCodeMissingRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase4c-opencode-missing-" + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $openCodeMissingRoot 'scripts/host-sync/manifests') -Force | Out-Null
+    Copy-Item (Join-Path $RepoRoot 'scripts/host-sync/manifests/opencode.manifest.psd1') (Join-Path $openCodeMissingRoot 'scripts/host-sync/manifests/opencode.manifest.psd1')
+    $openCodeMissingPath = Join-Path $openCodeMissingRoot 'scripts/host-sync/manifests/opencode.manifest.psd1'
+    $openCodeMissingText = Get-Content -Raw $openCodeMissingPath
+    $openCodeMissingText = $openCodeMissingText.Replace(
+      "        InstructionsCompositionId = 'opencode-agents-dual-write-instructions'`n",
+      ''
+    )
+    Set-Content -LiteralPath $openCodeMissingPath -Value $openCodeMissingText -NoNewline
+    $openCodeMissingFailures = [System.Collections.Generic.List[string]]::new()
+    $freshWorkflowsMissing = (Get-FreshCatalogs).workflows
+    & (Get-Module ProcedureRegistry) { param($Catalog,$RepoRoot,$Failures)
+      Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $Failures
+    } $freshWorkflowsMissing $openCodeMissingRoot $openCodeMissingFailures
+    Assert-View 'Phase 4C OpenCode missing composition ID fails' (
+      @($openCodeMissingFailures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -gt 0
+    ) (($openCodeMissingFailures | Select-Object -First 3) -join '; ')
+  } finally {
+    if (Test-Path -LiteralPath $openCodeMissingRoot) { Remove-Item -LiteralPath $openCodeMissingRoot -Recurse -Force }
+  }
+
+  # Runtime fail-closed paths: Cursor preflight and OpenCode dual-write guards.
+  # Source HostSync.Core.ps1 for the runtime helper functions (not normally
+  # loaded by this test script; dot-sourcing is scoped to the test block).
+  . (Join-Path $PSScriptRoot (Join-Path '..' (Join-Path 'host-sync' 'HostSync.Contract.ps1')))
+  . (Join-Path $PSScriptRoot (Join-Path '..' (Join-Path 'host-sync' 'HostSync.Core.ps1')))
+  . (Join-Path $PSScriptRoot (Join-Path '..' (Join-Path 'host-sync' (Join-Path 'adapters' 'OpenCode.Adapter.ps1'))))
+  $runtimeThrowMsg = ''
+  $runtimeThrew = $false
+  try {
+    Test-RegistryCursorHybridOrder -CompanionRoot $RepoRoot -RuleIds @('iterative-plan-review','agent-invocation','iterative-code-review','pre-commit-ci-gate')
+  } catch { $runtimeThrew = $true; $runtimeThrowMsg = $_.Exception.Message }
+  Assert-View 'Phase 4C Cursor preflight fails closed on reordered rule IDs' (
+    $runtimeThrew -and $runtimeThrowMsg -like '*composition-order-ownership*')
+  $runtimeThrew = $false
+  try {
+    Test-RegistryCursorHybridOrder -CompanionRoot $RepoRoot -RuleIds @('agent-invocation','iterative-plan-review','iterative-code-review','pre-commit-ci-gate')
+  } catch { $runtimeThrew = $true }
+  Assert-View 'Phase 4C Cursor preflight passes with registry-owned order' (-not $runtimeThrew)
+  # Regression: a cursor-* semanticOrder entry whose composition is missing from
+  # the catalog must reach the composition-order-ownership invariant path (via
+  # the shortened expected-rule list failing the join comparison), not an
+  # out-of-bounds indexing error under StrictMode.
+  $cursorMissingCompRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase4c-cursor-missing-comp-" + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $cursorMissingCompRoot 'catalog') -Force | Out-Null
+    $wfRaw = Get-Content -Raw (Join-Path $RepoRoot 'catalog/workflows.json')
+    $wfObj = $wfRaw | ConvertFrom-Json
+    $filteredComps = @($wfObj.compositions | Where-Object { [string]$_.id -cne 'cursor-agent-invocation' })
+    $wfObj.compositions = $filteredComps
+    $wfJson = $wfObj | ConvertTo-Json -Depth 100
+    Set-Content -LiteralPath (Join-Path $cursorMissingCompRoot 'catalog/workflows.json') -Value $wfJson -NoNewline
+    $runtimeThrew = $false; $runtimeThrowMsg = ''
+    try {
+      Test-RegistryCursorHybridOrder -CompanionRoot $cursorMissingCompRoot -RuleIds @('agent-invocation','iterative-plan-review','iterative-code-review','pre-commit-ci-gate')
+    } catch { $runtimeThrew = $true; $runtimeThrowMsg = $_.Exception.Message }
+    Assert-View 'Phase 4C Cursor preflight fails closed when cursor composition is missing' (
+      $runtimeThrew -and $runtimeThrowMsg -like '*composition-order-ownership*' -and
+      $runtimeThrowMsg -notlike '*Index*' -and $runtimeThrowMsg -notlike '*index*')
+  } finally {
+    if (Test-Path -LiteralPath $cursorMissingCompRoot) { Remove-Item -LiteralPath $cursorMissingCompRoot -Recurse -Force }
+  }
+  $runtimeThrew = $false; $runtimeThrowMsg = ''
+  try {
+    Get-RegistryRuntimeCompositionOrder -CompanionRoot $RepoRoot -CompositionId 'nonexistent-composition'
+  } catch { $runtimeThrew = $true; $runtimeThrowMsg = $_.Exception.Message }
+  Assert-View 'Phase 4C runtime composition order fails closed on missing ID' (
+    $runtimeThrew -and $runtimeThrowMsg -like '*CompositionOrderMissing*')
+  $dualWriteReport = New-HostSyncReport -StackId 'OpenCode' -Mode ([HostSyncMode]::DryRun)
+  $dualConfigParts = @{
+    InstructionsRel = 'instructions/cursor-escape-loop.md'; AgentsRel = 'AGENTS.md'
+    InstructionsCompositionId = 'opencode-agents-dual-write-instructions'
+    AgentsCompositionId = 'opencode-agents-dual-write-agents'
+    Parts = @('instructions/__header__.md')
+  }
+  Invoke-OpenCodeAgentsDualWrite -Report $dualWriteReport -Mode ([HostSyncMode]::DryRun) `
+    -OverlayRoot (Join-Path $RepoRoot 'overlays/opencode') -LiveRoot (Join-Path ([IO.Path]::GetTempPath()) 'phase4c-dual-write-test') `
+    -CompanionRoot $RepoRoot -DualWriteConfig $dualConfigParts
+  Assert-View 'Phase 4C OpenCode dual-write rejects manifest-owned Parts fail-closed' (
+    -not $dualWriteReport.Success -and
+    @($dualWriteReport.Errors | Where-Object { $_ -like '*composition-order-ownership*' }).Count -gt 0)
+  $dualWriteReportMissing = New-HostSyncReport -StackId 'OpenCode' -Mode ([HostSyncMode]::DryRun)
+  $dualConfigMissing = @{ InstructionsRel = 'instructions/cursor-escape-loop.md'; AgentsRel = 'AGENTS.md' }
+  Invoke-OpenCodeAgentsDualWrite -Report $dualWriteReportMissing -Mode ([HostSyncMode]::DryRun) `
+    -OverlayRoot (Join-Path $RepoRoot 'overlays/opencode') -LiveRoot (Join-Path ([IO.Path]::GetTempPath()) 'phase4c-dual-write-test') `
+    -CompanionRoot $RepoRoot -DualWriteConfig $dualConfigMissing
+  Assert-View 'Phase 4C OpenCode dual-write rejects missing composition IDs fail-closed' (
+    -not $dualWriteReportMissing.Success -and
+    @($dualWriteReportMissing.Errors | Where-Object { $_ -like '*composition-order-ownership*' }).Count -gt 0)
 
   # Phase 3A machinery guard: the shadow slice must not change canonical skill
   # bodies or any host/runtime projection. Phase 3B replaces this guard with

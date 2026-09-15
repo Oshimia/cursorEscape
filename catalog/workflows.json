@@ -184,6 +184,76 @@
         "footers/kilocode-wiring.md"
       ],
       "canonicalReferenceId": "agent-invocation"
+    },
+    {
+      "id": "cursor-agent-invocation",
+      "host": "Cursor",
+      "canonicalReferenceId": "agent-invocation",
+      "runtimeOnly": true,
+      "references": [
+        "cursor-host:rules/agent-invocation.mdc#frontmatter",
+        "base:rules/agent-invocation.md",
+        "cursor-generated:cursor-hybrid-pointer#agent-invocation"
+      ]
+    },
+    {
+      "id": "cursor-iterative-plan-review",
+      "host": "Cursor",
+      "canonicalReferenceId": "iterative-plan-review",
+      "runtimeOnly": true,
+      "references": [
+        "cursor-host:rules/iterative-plan-review.mdc#frontmatter",
+        "base:rules/iterative-plan-review.md",
+        "cursor-generated:cursor-hybrid-pointer#iterative-plan-review"
+      ]
+    },
+    {
+      "id": "cursor-iterative-code-review",
+      "host": "Cursor",
+      "canonicalReferenceId": "iterative-code-review",
+      "runtimeOnly": true,
+      "references": [
+        "cursor-host:rules/iterative-code-review.mdc#frontmatter",
+        "base:rules/iterative-code-review.md",
+        "cursor-generated:cursor-hybrid-pointer#iterative-code-review"
+      ]
+    },
+    {
+      "id": "cursor-pre-commit-ci-gate",
+      "host": "Cursor",
+      "canonicalReferenceId": "pre-commit-ci-gate",
+      "runtimeOnly": true,
+      "references": [
+        "cursor-host:rules/pre-commit-ci-gate.mdc#frontmatter",
+        "base:rules/pre-commit-ci-gate.md",
+        "cursor-generated:cursor-hybrid-pointer#pre-commit-ci-gate"
+      ]
+    },
+    {
+      "id": "opencode-agents-dual-write-instructions",
+      "host": "OpenCode",
+      "canonicalReferenceId": "agent-invocation",
+      "runtimeOnly": true,
+      "references": [
+        "instructions/__header__.md",
+        "base:rules/agent-invocation.md",
+        "base:rules/iterative-plan-review.md",
+        "base:rules/iterative-code-review.md",
+        "footers/instructions-wiring.md"
+      ]
+    },
+    {
+      "id": "opencode-agents-dual-write-agents",
+      "host": "OpenCode",
+      "canonicalReferenceId": "agent-invocation",
+      "runtimeOnly": true,
+      "references": [
+        "instructions/__header__.md",
+        "base:rules/agent-invocation.md",
+        "base:rules/iterative-plan-review.md",
+        "base:rules/iterative-code-review.md",
+        "footers/instructions-wiring.md"
+      ]
     }
   ],
   "semanticOrder": [
@@ -194,7 +264,13 @@
     "vscode-pre-commit-gate-instructions",
     "vscode-skill",
     "cline-cursor-escape-loop",
-    "kilocode-cursor-escape-loop"
+    "kilocode-cursor-escape-loop",
+    "cursor-agent-invocation",
+    "cursor-iterative-plan-review",
+    "cursor-iterative-code-review",
+    "cursor-pre-commit-ci-gate",
+    "opencode-agents-dual-write-instructions",
+    "opencode-agents-dual-write-agents"
   ],
   "alwaysOn": [
     { "id": "cursor-invocation", "host": "Cursor", "gate": "invocation", "surface": "cursor-hybrid-rule", "canonicalReferenceId": "agent-invocation", "evidencePaths": ["rules/agent-invocation.md", "scripts/host-sync/manifests/cursor.manifest.psd1", "scripts/host-sync/adapters/Cursor.Adapter.ps1"] },

@@ -127,7 +127,21 @@ function Add-RenderRows {
         }
     }
     if ($StackId -eq 'OpenCode') {
-        $gate = @{ Source = 'base:rules/iterative-plan-review.md'; Dest = [string]$Manifest.AgentsDualWrite.InstructionsRel; Parts = @($Manifest.AgentsDualWrite.Parts); Footer = @($Manifest.AgentsDualWrite.Footer) }
+        # The historical ledger uses the same registry-owned composition order as
+        # the runtime writer. Its synthetic body seed is legacy evidence shape and
+        # is deliberately preserved until Phase 4G reconciles this ledger.
+        $compositionRefs = Get-RegistryRuntimeCompositionOrder -CompanionRoot $CompanionRoot `
+            -CompositionId ([string]$Manifest.AgentsDualWrite.InstructionsCompositionId)
+        $compositionParts = @($compositionRefs | Where-Object { $_ -notlike 'footers/*' })
+        $compositionFooter = @($compositionRefs | Where-Object { $_ -like 'footers/*' })
+        $gate = @{
+            # Preserve the historical ledger's synthetic body seed exactly; this
+            # legacy evidence renderer is reconciled separately in Phase 4G.
+            Source = 'base:rules/iterative-plan-review.md'
+            Dest = [string]$Manifest.AgentsDualWrite.InstructionsRel
+            Parts = $compositionParts
+            Footer = $compositionFooter
+        }
         $report = New-HostSyncReport -StackId $StackId -Mode ([HostSyncMode]::DryRun)
         Copy-ManifestEntry -Report $report -Mode ([HostSyncMode]::DryRun) -CompanionRoot $CompanionRoot -OverlayRoot $overlayRoot `
             -LiveRoot $ScratchRoot -Entry $gate -SharedRoot $sharedRoot

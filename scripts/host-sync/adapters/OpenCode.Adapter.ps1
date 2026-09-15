@@ -36,11 +36,42 @@ function Invoke-OpenCodeAgentsDualWrite {
     # 'footers/instructions-wiring.md') or base:/shared: classes resolved via the
     # shared Core path resolver. The body source is the FIRST Part when Parts are
     # declared; otherwise the plain overlay instructions file (pre-composition path).
+    # Phase 4C: require both composition IDs; reject manifest-owned semantic
+    # fields fail-closed. No legacy Parts/Footer fallback.
+    if ($DualWriteConfig.ContainsKey('Parts') -or $DualWriteConfig.ContainsKey('Footer')) {
+        Add-SyncError -Report $Report -Message 'FAIL: composition-order-ownership: manifest-owned Parts/Footer is forbidden; use InstructionsCompositionId and AgentsCompositionId'
+        return
+    }
+    if (-not $DualWriteConfig.ContainsKey('InstructionsCompositionId') -or -not $DualWriteConfig.ContainsKey('AgentsCompositionId')) {
+        Add-SyncError -Report $Report -Message 'FAIL: composition-order-ownership: both InstructionsCompositionId and AgentsCompositionId are required'
+        return
+    }
+    try {
+        $instructionRefs = Get-RegistryRuntimeCompositionOrder -CompanionRoot $CompanionRoot -CompositionId ([string]$DualWriteConfig.InstructionsCompositionId)
+        $agentsRefs = Get-RegistryRuntimeCompositionOrder -CompanionRoot $CompanionRoot -CompositionId ([string]$DualWriteConfig.AgentsCompositionId)
+        if (($instructionRefs -join '|') -cne ($agentsRefs -join '|')) {
+            Add-SyncError -Report $Report -Message 'FAIL: composition-order-ownership: OpenCode instruction/AGENTS composition orders differ'
+            return
+        }
+        $compositionRefs = $instructionRefs
+    }
+    catch {
+        Add-SyncError -Report $Report -Message $_.Exception.Message
+        return
+    }
+    $pList = [System.Collections.Generic.List[string]]::new()
+    $fList = [System.Collections.Generic.List[string]]::new()
+    foreach ($registryRef in $compositionRefs) {
+        if ($registryRef -like 'footers/*') { $fList.Add($registryRef) } else { $pList.Add($registryRef) }
+    }
+    $compositionParts = $pList.ToArray()
+    $compositionFooter = $fList.ToArray()
+
     $dualEntry = @{ }
-    $hasParts = $DualWriteConfig.ContainsKey('Parts') -and $null -ne $DualWriteConfig.Parts -and @($DualWriteConfig.Parts).Count -gt 0
-    $hasFooter = $DualWriteConfig.ContainsKey('Footer') -and $null -ne $DualWriteConfig.Footer -and @($DualWriteConfig.Footer).Count -gt 0
-    if ($hasParts) { $dualEntry['Parts'] = @($DualWriteConfig.Parts) }
-    if ($hasFooter) { $dualEntry['Footer'] = @($DualWriteConfig.Footer) }
+    $hasParts = $null -ne $compositionParts -and @($compositionParts).Count -gt 0
+    $hasFooter = $null -ne $compositionFooter -and @($compositionFooter).Count -gt 0
+    if ($hasParts) { $dualEntry['Parts'] = @($compositionParts) }
+    if ($hasFooter) { $dualEntry['Footer'] = @($compositionFooter) }
 
     # Resolve every declared reference (fail closed on missing/class-invalid refs).
     $resolvedRefs = @()
@@ -62,7 +93,7 @@ function Invoke-OpenCodeAgentsDualWrite {
                 # base: SoT) rendered individually with token merge, joined; Footer
                 # refs resolve overlay-relative via SourceClass='' (overlay artifact).
                 $segments = @()
-                foreach ($part in @($DualWriteConfig.Parts)) {
+                foreach ($part in @($compositionParts)) {
                     $pr = Resolve-HostSyncSourcePath -SourceRel ([string]$part) `
                         -CompanionRoot $CompanionRoot -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
                     $segments += (Invoke-HostSyncRender -Raw ([IO.File]::ReadAllText($pr.Path)) `
@@ -72,7 +103,7 @@ function Invoke-OpenCodeAgentsDualWrite {
                 $bodyRaw = ($segments -join "`r`n`r`n")
                 # Footer refs are overlay leaves; pass SourceClass='' so they resolve overlay-relative.
                 $composeEntry = @{ }
-                if ($hasFooter) { $composeEntry['Footer'] = @($DualWriteConfig.Footer) }
+                if ($hasFooter) { $composeEntry['Footer'] = @($compositionFooter) }
                 # (anchor for footer resolution: overlay root passed via -OverlayRoot; SourceClass empty = overlay-relative)
                 $merged = Invoke-HostSyncRender -Raw $bodyRaw -CompanionRoot $CompanionRoot `
                     -ResolvedSourcePath $OverlayRoot -Entry $composeEntry `
@@ -106,7 +137,7 @@ function Invoke-OpenCodeAgentsDualWrite {
     try {
         if ($hasParts) {
             $segments = @()
-            foreach ($part in @($DualWriteConfig.Parts)) {
+            foreach ($part in @($compositionParts)) {
                 $r = Resolve-HostSyncSourcePath -SourceRel ([string]$part) `
                     -CompanionRoot $CompanionRoot -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
                 $segments += (Invoke-HostSyncRender -Raw ([IO.File]::ReadAllText($r.Path)) `
@@ -115,7 +146,7 @@ function Invoke-OpenCodeAgentsDualWrite {
             }
             $bodyRaw = ($segments -join "`r`n`r`n")
             $composeEntry = @{ }
-            if ($hasFooter) { $composeEntry['Footer'] = @($DualWriteConfig.Footer) }
+            if ($hasFooter) { $composeEntry['Footer'] = @($compositionFooter) }
             $mergedText = Invoke-HostSyncRender -Raw $bodyRaw -CompanionRoot $CompanionRoot `
                 -ResolvedSourcePath $OverlayRoot -Entry $composeEntry `
                 -DestRel ([string]$instructionsRel) -OverlayRoot $OverlayRoot -SourceClass ''

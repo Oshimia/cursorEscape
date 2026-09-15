@@ -25,6 +25,19 @@ function Invoke-StackHarnessSync {
         $sharedRoot = [string]$Manifest.SharedRoot
     }
 
+    # Preflight: validate the registry-derived Cursor rule order BEFORE any
+    # CopyEntries mutation so Apply cannot write other destinations before
+    # rejecting reordered HybridRuleIds.
+    if ($Manifest.HybridRuleIds -and $Manifest.HybridRuleIds.Count -gt 0) {
+        try {
+            Test-RegistryCursorHybridOrder -CompanionRoot $CompanionRoot -RuleIds $Manifest.HybridRuleIds
+        }
+        catch {
+            Add-SyncError -Report $report -Message $_.Exception.Message
+            return $report
+        }
+    }
+
     foreach ($entry in $Manifest.CopyEntries) {
         if (-not $report.Success) { break }
         Copy-ManifestEntry -Report $report -Mode $Mode -CompanionRoot $CompanionRoot `

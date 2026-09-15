@@ -498,6 +498,132 @@ function Get-RegistryCompositionReferencePath {
   return $Reference
 }
 
+function Test-RegistryHostCompositionOwnership {
+  <#
+    Phase 4C fail-closed ownership bridge. The catalog owns every runtime
+    composition reference sequence; manifests own only destinations, host
+    bindings, and explicit composition IDs. Any manifest-local semantic order
+    is an ownership mismatch and is never consumed.
+  #>
+  param([Parameter(Mandatory)]$Catalog,[Parameter(Mandatory)][string]$RepoRoot,[Parameter(Mandatory)]$Failures)
+  $invariant = 'composition-order-ownership'
+  $compositionById = @{}
+  foreach ($composition in @($Catalog.compositions)) { $compositionById[[string]$composition.id] = $composition }
+
+  try { $cursorManifest = Import-PowerShellDataFile -Path (Join-Path $RepoRoot 'scripts/host-sync/manifests/cursor.manifest.psd1') } catch {
+    Add-RegistryFailure $Failures $invariant "cursor manifest read failed: $($_.Exception.Message)"; return
+  }
+  $cursorRuleIds = @(Get-RegistrySequence $cursorManifest.HybridRuleIds)
+  # Derive the host-facing rule order from semanticOrder -> runtime composition ->
+  # canonicalReferenceId. Never keep a second hardcoded canonical sequence here.
+  $cursorExpectedRules = [System.Collections.Generic.List[string]]::new()
+  foreach ($compositionId in @($Catalog.semanticOrder)) {
+    $composition = $compositionById[[string]$compositionId]
+    if ($null -eq $composition -or [string]$composition.host -cne 'Cursor' -or
+        -not ($composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly)) { continue }
+    if (-not $composition.PSObject.Properties['canonicalReferenceId']) {
+      Add-RegistryFailure $Failures $invariant "Cursor runtime composition '$compositionId' has no canonicalReferenceId"
+      continue
+    }
+    $cursorExpectedRules.Add([string]$composition.canonicalReferenceId)
+  }
+  if (-not (Test-RegistrySequence $cursorRuleIds $cursorExpectedRules)) {
+    Add-RegistryFailure $Failures $invariant "Cursor rule bindings '$($cursorRuleIds -join '|')' do not match registry surface"
+  }
+  # Complete binding validation: compare actual (RuleId, CompositionId, Destination)
+  # set against the registry-derived expected set; reject duplicates, omissions,
+  # and extras under composition-order-ownership. No hardcoded count or order.
+  $cursorExpectedBindings = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($compositionId in @($Catalog.semanticOrder)) {
+    $composition = $compositionById[[string]$compositionId]
+    if ($null -eq $composition -or [string]$composition.host -cne 'Cursor' -or
+        -not ($composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly)) { continue }
+    if (-not $composition.PSObject.Properties['canonicalReferenceId']) { continue }
+    $ruleId = [string]$composition.canonicalReferenceId
+    $null = $cursorExpectedBindings.Add("${ruleId}|cursor-${ruleId}|rules/${ruleId}.mdc")
+  }
+  $cursorActualBindings = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($row in @($cursorManifest.HybridCompositions)) {
+    $ruleId = [string]$row['RuleId']; $compositionId = [string]$row['CompositionId']; $destination = [string]$row['Destination']
+    foreach ($forbidden in @('Order','References','Parts','Footer')) {
+      if ($row -is [hashtable] -and $row.ContainsKey($forbidden)) {
+        Add-RegistryFailure $Failures $invariant "Cursor '$ruleId' manifest-owned semantic field '$forbidden'"
+      }
+    }
+    $bindingKey = "$ruleId|$compositionId|$destination"
+    if (-not $cursorActualBindings.Add($bindingKey)) {
+      Add-RegistryFailure $Failures $invariant "Cursor duplicate hybrid binding: '$bindingKey'"
+    }
+  }
+  foreach ($expected in $cursorExpectedBindings) {
+    if (-not $cursorActualBindings.Contains($expected)) {
+      Add-RegistryFailure $Failures $invariant "Cursor binding omitted from manifest: '$expected'"
+    }
+  }
+  foreach ($actual in $cursorActualBindings) {
+    if (-not $cursorExpectedBindings.Contains($actual)) {
+      Add-RegistryFailure $Failures $invariant "Cursor extra binding in manifest: '$actual'"
+    }
+  }
+
+  try { $openCodeManifest = Import-PowerShellDataFile -Path (Join-Path $RepoRoot 'scripts/host-sync/manifests/opencode.manifest.psd1') } catch {
+    Add-RegistryFailure $Failures $invariant "OpenCode manifest read failed: $($_.Exception.Message)"; return
+  }
+  if (-not $openCodeManifest.Contains('AgentsDualWrite')) {
+    Add-RegistryFailure $Failures $invariant 'OpenCode dual-write host binding is absent'; return
+  }
+  $dualWrite = $openCodeManifest.AgentsDualWrite
+  $destChecks = [ordered]@{
+    'InstructionsRel' = 'instructions/cursor-escape-loop.md'
+    'AgentsRel'       = 'AGENTS.md'
+  }
+  foreach ($key in $destChecks.Keys) {
+    $actual = if ($dualWrite.Contains($key)) { [string]$dualWrite[$key] } else { '' }
+    if ($actual -cne [string]$destChecks[$key]) {
+      Add-RegistryFailure $Failures $invariant "OpenCode dual-write $key mismatch: '$actual'"
+    }
+  }
+  foreach ($forbidden in @('Order','References','Parts','Footer')) {
+    if ($dualWrite.Contains($forbidden)) {
+      Add-RegistryFailure $Failures $invariant "OpenCode dual-write manifest-owned semantic field '$forbidden'"
+    }
+  }
+  # Derive expected OpenCode runtime composition IDs from the registry semanticOrder.
+  $openCodeRuntimeIds = [System.Collections.Generic.List[string]]::new()
+  foreach ($compositionId in @($Catalog.semanticOrder)) {
+    $composition = $compositionById[[string]$compositionId]
+    if ($null -eq $composition -or [string]$composition.host -cne 'OpenCode' -or
+        -not ($composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly)) { continue }
+    $openCodeRuntimeIds.Add([string]$compositionId)
+  }
+  $boundInstrId = if ($dualWrite.Contains('InstructionsCompositionId')) { [string]$dualWrite['InstructionsCompositionId'] } else { '' }
+  $boundAgentsId = if ($dualWrite.Contains('AgentsCompositionId')) { [string]$dualWrite['AgentsCompositionId'] } else { '' }
+  if (-not $dualWrite.Contains('InstructionsCompositionId')) {
+    Add-RegistryFailure $Failures $invariant 'OpenCode InstructionsCompositionId is absent'
+  }
+  if (-not $dualWrite.Contains('AgentsCompositionId')) {
+    Add-RegistryFailure $Failures $invariant 'OpenCode AgentsCompositionId is absent'
+  }
+  if ($openCodeRuntimeIds.Count -ne 2) {
+    Add-RegistryFailure $Failures $invariant "expected 2 OpenCode runtime compositions, got $($openCodeRuntimeIds.Count)"
+  }
+  if ($boundInstrId -and ($openCodeRuntimeIds -notcontains $boundInstrId)) {
+    Add-RegistryFailure $Failures $invariant "OpenCode instructions composition '$boundInstrId' not in registry"
+  }
+  if ($boundAgentsId -and ($openCodeRuntimeIds -notcontains $boundAgentsId)) {
+    Add-RegistryFailure $Failures $invariant "OpenCode agents composition '$boundAgentsId' not in registry"
+  }
+  if ($boundInstrId -and $boundAgentsId -and $boundInstrId -ceq $boundAgentsId) {
+    Add-RegistryFailure $Failures $invariant 'OpenCode instructions and agents composition IDs must be distinct'
+  }
+  $instructionComp = if ($boundInstrId -and $compositionById.ContainsKey($boundInstrId)) { $compositionById[$boundInstrId] } else { $null }
+  $agentsComp = if ($boundAgentsId -and $compositionById.ContainsKey($boundAgentsId)) { $compositionById[$boundAgentsId] } else { $null }
+  if ($null -ne $instructionComp -and $null -ne $agentsComp -and
+      -not (Test-RegistrySequence (Get-RegistrySequence $instructionComp.references) (Get-RegistrySequence $agentsComp.references))) {
+    Add-RegistryFailure $Failures $invariant 'OpenCode instruction/AGENTS registry orders differ'
+  }
+}
+
 function Test-RegistryCatalog {
   param([Parameter(Mandatory)]$Catalog,[Parameter(Mandatory)][ValidateSet('agents','rules','skills','workflows')][string]$Kind,[Parameter(Mandatory)][string]$RepoRoot,$OverlayRoots = @{},$Inventory = $null)
   $failures = [System.Collections.Generic.List[string]]::new()
@@ -637,6 +763,23 @@ function Test-RegistryCatalog {
         $ref = [string]$reference
         if (-not $duplicateRefs.Add($ref)) { Add-RegistryFailure $failures 'DuplicateSemanticPart' "$cid/$ref" }
       }
+      $isRuntimeComposition = $composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly
+      if ($isRuntimeComposition) {
+        # Structural validation: references are already checked for non-empty and
+        # uniqueness above. Cross-composition invariants (Cursor HybridRuleIds
+        # order, Cursor binding set, OpenCode instruction/AGENTS sequence match)
+        # are validated by Test-RegistryHostCompositionOwnership. No hardcoded
+        # canonical reference sequence is maintained here; the registry
+        # semanticOrder is the sole owner of runtime composition order.
+        if ($cid -like 'cursor-*') {
+          $ruleId = $cid.Substring('cursor-'.Length)
+          if (-not $composition.PSObject.Properties['canonicalReferenceId'] -or
+              [string]$composition.canonicalReferenceId -cne $ruleId) {
+            Add-RegistryFailure $failures 'composition-order-ownership' "Cursor runtime '$cid' canonicalReferenceId does not match ID suffix '$ruleId'"
+          }
+        }
+        continue
+      }
       $registryReferences = @(Get-RegistrySequence $composition.references)
       $matchedIndex = -1
       for ($index = 0; $index -lt @($Inventory.rules_workflows.compositions).Count; $index++) {
@@ -664,6 +807,7 @@ function Test-RegistryCatalog {
     foreach ($composition in $comps) { $null = $compositionIdSet.Add([string]$composition.id) }
     foreach ($compositionId in $order) { if (-not $compositionIdSet.Remove($compositionId)) { Add-RegistryFailure $failures 'SemanticOrderUnknownId' $compositionId } }
     foreach ($remaining in $compositionIdSet) { Add-RegistryFailure $failures 'SemanticOrderMissingId' $remaining }
+    Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $failures
     foreach ($index in @(0..(@($Inventory.rules_workflows.compositions).Count - 1))) {
       if (-not $consumedInventoryCompositions.Contains($index)) { Add-RegistryFailure $failures 'CompositionInventoryCoverage' "Phase 0 composition index $index is absent from registry" }
     }
@@ -886,6 +1030,7 @@ function Get-RegistryCompositionFiles {
     if (-not $compositionById.ContainsKey($compositionId)) { throw "FAIL: SemanticOrderUnknownId: $compositionId" }
     $compositionItem = $compositionById[$compositionId]
     $null = $compositionById.Remove($compositionId)
+    if ($compositionItem.PSObject.Properties['runtimeOnly'] -and [bool]$compositionItem.runtimeOnly) { continue }
     $parts = [System.Collections.Generic.List[string]]::new()
     $seenRefs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
     foreach ($reference in @($compositionItem.references)) {
@@ -904,6 +1049,15 @@ function Get-RegistryCompositionFiles {
   }
   foreach ($remaining in $compositionById.Keys) { throw "FAIL: SemanticOrderMissingId: $remaining" }
   return $files
+}
+
+function Get-RegistryCompositionOrderById {
+  <# Returns the registry-owned reference sequence for one runtime composition. #>
+  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$CompositionId)
+  $composition = @($Catalogs.workflows.compositions | Where-Object { [string]$_.id -eq $CompositionId })[0]
+  if ($null -eq $composition) { throw "FAIL: CompositionOrderMissing: $CompositionId" }
+  if (-not ($composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly)) { throw "FAIL: CompositionOrderNotRuntimeOwned: $CompositionId" }
+  return @(Get-RegistrySequence $composition.references)
 }
 
 function Test-RegistryCompositionOutputBoundary {
@@ -989,4 +1143,4 @@ function Write-RegistryManagedView {
   return $view
 }
 
-Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot','Get-RegistryCompositionReferencePath','Get-RegistryCompositionFiles','Test-RegistryCompositionOutputBoundary','Get-StackManifestDestinationCount','Get-RegistrySkillFrontmatter','Get-RegistrySkillCanonicalFrontmatter','Get-RegistryComparableFrontmatter','Get-RegistrySkillSourceRaw','Get-RegistrySkillFrontmatterShadow','Get-RegistrySkillWrapperFrontmatterShadow','Get-RegistrySkillWrapperSourcePath','Get-RegistrySkillHostFrontmatterShadow')
+Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot','Get-RegistryCompositionReferencePath','Get-RegistryCompositionFiles','Get-RegistryCompositionOrderById','Test-RegistryCompositionOutputBoundary','Get-StackManifestDestinationCount','Get-RegistrySkillFrontmatter','Get-RegistrySkillCanonicalFrontmatter','Get-RegistryComparableFrontmatter','Get-RegistrySkillSourceRaw','Get-RegistrySkillFrontmatterShadow','Get-RegistrySkillWrapperFrontmatterShadow','Get-RegistrySkillWrapperSourcePath','Get-RegistrySkillHostFrontmatterShadow')

@@ -734,6 +734,61 @@ function Get-PlannedHybridRuleContent {
     return $merged.TrimEnd() + "`r`n"
 }
 
+function Get-RegistryRuntimeCompositionOrder {
+    # Phase 4C: returns the registry-owned reference sequence for one runtime
+    # composition. Lightweight read for the adapter render path; full registry
+    # validity is separately enforced by Fast CI.
+    param(
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot,
+        [Parameter(Mandatory)]
+        [string] $CompositionId
+    )
+    $workflowsPath = Join-Path $CompanionRoot 'catalog/workflows.json'
+    if (-not (Test-Path -LiteralPath $workflowsPath)) {
+        throw "FAIL: composition-order-ownership: registry workflows catalog missing: $workflowsPath"
+    }
+    $catalog = Get-Content -Raw -LiteralPath $workflowsPath | ConvertFrom-Json
+    $composition = @($catalog.compositions | Where-Object { [string]$_.id -eq $CompositionId }) | Select-Object -First 1
+    if ($null -eq $composition) {
+        throw "FAIL: CompositionOrderMissing: $CompositionId"
+    }
+    if (-not ($composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly)) {
+        throw "FAIL: CompositionOrderNotRuntimeOwned: $CompositionId"
+    }
+    $refs = [System.Collections.Generic.List[string]]::new()
+    foreach ($ref in @($composition.references)) { if ($null -ne $ref) { $refs.Add([string]$ref) } }
+    return $refs.ToArray()
+}
+
+function Test-RegistryCursorHybridOrder {
+    # Phase 4C: validates the Cursor manifest rule processing order against the
+    # registry semanticOrder for cursor-* runtime compositions. Fail-closed on
+    # mismatch with composition-order-ownership.
+    param(
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot,
+        [Parameter(Mandatory)]
+        [string[]] $RuleIds
+    )
+    $workflowsPath = Join-Path $CompanionRoot 'catalog/workflows.json'
+    if (-not (Test-Path -LiteralPath $workflowsPath)) {
+        throw "FAIL: composition-order-ownership: registry workflows catalog missing: $workflowsPath"
+    }
+    $catalog = Get-Content -Raw -LiteralPath $workflowsPath | ConvertFrom-Json
+    $cursorCompositionIds = @($catalog.semanticOrder | Where-Object { $_ -like 'cursor-*' })
+    $expectedRuleIds = [System.Collections.Generic.List[string]]::new()
+    foreach ($cid in $cursorCompositionIds) {
+        $comp = @($catalog.compositions | Where-Object { [string]$_.id -eq $cid }) | Select-Object -First 1
+        if ($null -ne $comp -and $comp.PSObject.Properties['canonicalReferenceId']) {
+            $expectedRuleIds.Add([string]$comp.canonicalReferenceId)
+        }
+    }
+    if ((@($RuleIds) -join '|') -cne ($expectedRuleIds.ToArray() -join '|')) {
+        throw ("FAIL: composition-order-ownership: Cursor rule order '{0}' does not match registry order '{1}'" -f (@($RuleIds) -join '|'), ($expectedRuleIds.ToArray() -join '|'))
+    }
+}
+
 function Invoke-HybridCursorRules {
     param(
         [Parameter(Mandatory)]

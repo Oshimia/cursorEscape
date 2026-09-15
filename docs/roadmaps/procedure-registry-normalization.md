@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete — Phase 4 remains open, 4C next
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C dual-review APPROVED (renewal block) — Phase 4 remains open; 4D next
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete — Phase 4 remains open, 4C next
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C dual-review APPROVED (renewal block) — Phase 4 remains open; 4D next
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -887,6 +887,25 @@ Phase 4:             Not started
   - [x] Implementer-owned review completed at iteration 1: production readiness APPROVED and `bug_reviewer` CLEAN; both reviewers closed.
   - [x] Four deferred Batchables recorded: inventory-mismatch mutation tests, durable Git-tracked evidence invariant, removal of redundant test canonical-ref allowlist, and registry-level unique policy-ID enforcement.
   - [x] Composer observed sole normalization Full CI PASS; pre-commit gate loaded. No live Apply.
+
+#### Phase 4C — Cursor hybrid rules and OpenCode AGENTS/instruction dual-write
+
+- **Status:** Phase 4C dual-review APPROVED (renewal block, iteration 1 of 4) — overall Phase 4 remains open; 4D next.
+- **Boundary:** Registry-owned semantic composition order for four Cursor hybrid rules and two OpenCode dual-write outputs. Runtime writers consume/validate registry order; rendering bytes preserved exactly. No canonical prose change, live-host write, or unrelated projection change.
+- **Evidence:**
+  - [x] Six `runtimeOnly` compositions in `catalog/workflows.json` with correct `semanticOrder`; `runtimeOnly` added to `catalog/schema/v1.json`.
+  - [x] `Test-RegistryHostCompositionOwnership` in `ProcedureRegistry.psm1` rejects manifest-owned semantic fields and validates bindings under `composition-order-ownership`.
+  - [x] Cursor adapter validates `HybridRuleIds` against registry-derived order via `Test-RegistryCursorHybridOrder` in `HostSync.Core.ps1`.
+  - [x] OpenCode adapter derives Parts/Footer from `Get-RegistryRuntimeCompositionOrder`; read-only byte-parity verified (identical SHA-256 `3AAA0C3910849CBD5342800E0D416B1934803B0F7FE37EF447F13C987FADB37D` for legacy and registry-driven renders).
+  - [x] Manifests own only destinations/bindings/composition IDs: `Parts`/`Footer` removed from OpenCode manifest; `HybridCompositions` added to Cursor manifest.
+  - [x] Focused Phase 4C tests added to `Test-ProcedureRegistryViews.ps1` (registry order ownership, byte parity, mismatch rejection, deterministic rendering, behavior preservation).
+  - [x] Observed Fast CI: registry view checks 623 passed / 0 failed; unit checks 24 passed / 0 failed; Fast CI PASS. `git diff --check` PASS.
+  - [x] Historical six-stack ledger verification: PASS with two independent renders and six stack entries.
+  - [x] Measured changeset: 11 files, 630 insertions, 22 deletions (renewal-block snapshot).
+  - [x] Renewal-block remediation: `Test-RegistryCursorHybridOrder` safe lookup (`Select-Object -First 1`) replaces bare `[0]` indexing; focused regression proves missing Cursor composition reaches `composition-order-ownership` fail-closed path, not StrictMode indexing error.
+  - [x] Final implementer-owned dual review: production_readiness_reviewer APPROVED (Blocking None, Non-blocking None, Blocking test/docs None); bug_reviewer CLEAN.
+  - [x] Composer observed sole normalization Full CI PASS; pre-commit gate loaded. No live Apply.
+  - [x] Two deferred Batchables recorded: consistent safe first-result lookup in `ProcedureRegistry.psm1`, and indentation normalization at `OpenCode.Adapter.ps1` lines 94/104/138.
 
 ---
 

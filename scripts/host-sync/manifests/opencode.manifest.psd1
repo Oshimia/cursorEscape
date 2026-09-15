@@ -34,13 +34,8 @@
     AgentsDualWrite     = @{
         InstructionsRel = 'instructions/cursor-escape-loop.md'
         AgentsRel       = 'AGENTS.md'
-        Parts           = @(
-            'instructions/__header__.md',
-            'base:rules/agent-invocation.md',
-            'base:rules/iterative-plan-review.md',
-            'base:rules/iterative-code-review.md'
-        )
-        Footer          = @('footers/instructions-wiring.md')
+        InstructionsCompositionId = 'opencode-agents-dual-write-instructions'
+        AgentsCompositionId       = 'opencode-agents-dual-write-agents'
     }
     JsonMerge           = @{
         SpecimenRel            = 'opencode.specimen.json'
