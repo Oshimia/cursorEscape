@@ -187,7 +187,7 @@ $temp = Join-Path ([IO.Path]::GetTempPath()) ("procedure-registry-" + [Guid]::Ne
 try {
   $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
   $two = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'two') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
-  Assert-View 'double render has fourteen files (six base + eight compositions)' ($one.Files.Keys.Count -eq 14 -and $two.Files.Keys.Count -eq 14) "one=$($one.Files.Keys.Count) two=$($two.Files.Keys.Count)"
+  Assert-View 'double render has twelve files (six base + six managed compositions)' ($one.Files.Keys.Count -eq 12 -and $two.Files.Keys.Count -eq 12) "one=$($one.Files.Keys.Count) two=$($two.Files.Keys.Count)"
   foreach ($name in @($one.Files.Keys)) {
     $hashA = (Get-FileHash (Join-Path (Join-Path $temp 'one') $name) -Algorithm SHA256).Hash
     $hashB = (Get-FileHash (Join-Path (Join-Path $temp 'two') $name) -Algorithm SHA256).Hash
@@ -826,10 +826,14 @@ try {
   $originalRows = @([string]$original.Files['composition-order.tsv'] -split "`r?`n" | Where-Object { $_ })
   $reorderedCatalogs = Get-FreshCatalogs
   $order = @($reorderedCatalogs.workflows.semanticOrder)
-  $reorderedCatalogs.workflows.semanticOrder = @($order[1],$order[0]) + @($order | Select-Object -Skip 2)
+  # Phase 4D: Antigravity compositions are runtimeOnly and excluded from managed
+  # output. Swap managed composition indices (0 ↔ 3) so the assertion remains
+  # meaningful for managed-view sequence control.
+  $swap = $order[0]; $order[0] = $order[3]; $order[3] = $swap
+  $reorderedCatalogs.workflows.semanticOrder = $order
   $reordered = Get-RegistryManagedView -Catalogs $reorderedCatalogs -RepoRoot $RepoRoot
   $reorderedRows = @([string]$reordered.Files['composition-order.tsv'] -split "`r?`n" | Where-Object { $_ })
-  Assert-View 'semantic order controls rendered composition rows' (($originalRows.Count -eq $reorderedRows.Count) -and ($originalRows[1] -ne $reorderedRows[1]) -and ($originalRows[2] -ne $reorderedRows[2]))
+  Assert-View 'semantic order controls rendered composition rows' (($originalRows.Count -eq $reorderedRows.Count) -and ($originalRows[1] -ne $reorderedRows[1]) -and ($originalRows[4] -ne $reorderedRows[4]))
   $protectedRootThrew = $false
   try { $null = Test-RegistryOutputRoot -OutputRoot (Join-Path $RepoRoot 'docs') -RepoRoot $RepoRoot } catch { $protectedRootThrew = $true }
   Assert-View 'exact protected output root fails closed' $protectedRootThrew
@@ -845,7 +849,7 @@ try {
 
   # --- Phase 4A: composition renderer, semantic-order validator, and boundary verifier ---
   $compositionFileKeys = @($one.Files.Keys | Where-Object { $_ -like 'compositions/*' })
-  Assert-View 'composition render produces eight managed files' ($compositionFileKeys.Count -eq 8) "count=$($compositionFileKeys.Count)"
+  Assert-View 'composition render produces six managed files' ($compositionFileKeys.Count -eq 6) "count=$($compositionFileKeys.Count)"
   $nonRuntimeOrderIds = @($registry.Catalogs.workflows.compositions | Where-Object {
     -not ($_.PSObject.Properties['runtimeOnly'] -and [bool]$_.runtimeOnly)
   } | ForEach-Object { [string]$_.id })
@@ -980,15 +984,16 @@ try {
   # --- Phase 4C: Cursor hybrid rules and OpenCode AGENTS/instruction dual-write ---
   $runtimeComps = @($registry.Catalogs.workflows.compositions | Where-Object { $_.PSObject.Properties['runtimeOnly'] -and [bool]$_.runtimeOnly })
   $expectedRuntimeIds = [string[]]@(
+    'antigravity-gemini','antigravity-skill',
     'cursor-agent-invocation','cursor-iterative-plan-review','cursor-iterative-code-review','cursor-pre-commit-ci-gate',
     'opencode-agents-dual-write-instructions','opencode-agents-dual-write-agents'
   )
-  Assert-View 'Phase 4C registry has exactly six runtime compositions' ($runtimeComps.Count -eq 6) "count=$($runtimeComps.Count)"
+  Assert-View 'Phase 4D registry has exactly eight runtime compositions' ($runtimeComps.Count -eq 8) "count=$($runtimeComps.Count)"
   Assert-View 'Phase 4C runtime composition IDs match expected set' (
     (@($runtimeComps | ForEach-Object { [string]$_.id }) -join '|') -ceq ($expectedRuntimeIds -join '|')
   ) "observed=$(($runtimeComps | ForEach-Object { [string]$_.id }) -join '|')"
   $runtimeOrderInSemantic = @($registry.Catalogs.workflows.semanticOrder | Where-Object { $_ -in $expectedRuntimeIds })
-  Assert-View 'Phase 4C semanticOrder owns all six runtime IDs in correct order' (
+  Assert-View 'Phase 4D semanticOrder owns all eight runtime IDs in correct order' (
     (@($runtimeOrderInSemantic) -join '|') -ceq ($expectedRuntimeIds -join '|')
   ) "semantic=$(($runtimeOrderInSemantic) -join '|')"
 
@@ -1064,8 +1069,8 @@ try {
   # Runtime compositions are excluded from managed-view composition file output.
   $allCompositionFileKeys = @($one.Files.Keys | Where-Object { $_ -like 'compositions/*' })
   Assert-View 'Phase 4C runtime compositions excluded from managed composition output' (
-    $allCompositionFileKeys.Count -eq 8 -and
-    @($allCompositionFileKeys | Where-Object { $_ -match 'compositions/cursor-|compositions/opencode-agents' }).Count -eq 0
+    $allCompositionFileKeys.Count -eq 6 -and
+    @($allCompositionFileKeys | Where-Object { $_ -match 'compositions/cursor-|compositions/opencode-agents|compositions/antigravity-' }).Count -eq 0
   ) "keys=$($allCompositionFileKeys -join ';')"
 
   # Host composition ownership: validation passes on current working tree (uses full-catalog registry result which includes overlay roots).
@@ -1217,6 +1222,222 @@ try {
   Assert-View 'Phase 4C OpenCode dual-write rejects missing composition IDs fail-closed' (
     -not $dualWriteReportMissing.Success -and
     @($dualWriteReportMissing.Errors | Where-Object { $_ -like '*composition-order-ownership*' }).Count -gt 0)
+
+  # --- Phase 4D: Antigravity GEMINI/workflow compositions ---
+
+  # Registry order ownership passes on current tree (covered by Phase 4C general assertion,
+  # but verify Antigravity specifically).
+  $phase4DFailures = @($registry.Failures | Where-Object { $_ -like 'composition-order-ownership*' -and $_ -like '*Antigravity*' })
+  Assert-View 'Phase 4D Antigravity composition ownership passes on current tree' ($phase4DFailures.Count -eq 0) (($phase4DFailures | Select-Object -First 3) -join '; ')
+
+  # Antigravity manifest: forbidden semantic fields (Parts/Footer) fail-closed.
+  $phase4DAgPartsRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase4d-ag-parts-" + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $phase4DAgPartsRoot 'scripts/host-sync/manifests') -Force | Out-Null
+    Copy-Item (Join-Path $RepoRoot 'scripts/host-sync/manifests' '*.psd1') (Join-Path $phase4DAgPartsRoot 'scripts/host-sync/manifests')
+    $agManifestPath = Join-Path $phase4DAgPartsRoot 'scripts/host-sync/manifests/antigravity.manifest.psd1'
+    $agManifestText = Get-Content -Raw $agManifestPath
+    $agManifestText = $agManifestText.Replace(
+      "CompositionId = 'antigravity-gemini'",
+      "CompositionId = 'antigravity-gemini'`n           Parts = @('instructions/__header__.md')"
+    )
+    Set-Content -LiteralPath $agManifestPath -Value $agManifestText -NoNewline
+    $agPartsFailures = [System.Collections.Generic.List[string]]::new()
+    $freshWorkflows4D = (Get-FreshCatalogs).workflows
+    & (Get-Module ProcedureRegistry) { param($Catalog,$RepoRoot,$Failures)
+      Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $Failures
+    } $freshWorkflows4D $phase4DAgPartsRoot $agPartsFailures
+    Assert-View 'Phase 4D Antigravity forbidden manifest Parts fails' (
+      @($agPartsFailures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -gt 0
+    ) (($agPartsFailures | Select-Object -First 3) -join '; ')
+  } finally {
+    if (Test-Path -LiteralPath $phase4DAgPartsRoot) { Remove-Item -LiteralPath $phase4DAgPartsRoot -Recurse -Force }
+  }
+
+  # Antigravity manifest: missing CompositionId fails-closed (binding omitted).
+  $phase4DAgMissingRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase4d-ag-missing-" + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $phase4DAgMissingRoot 'scripts/host-sync/manifests') -Force | Out-Null
+    Copy-Item (Join-Path $RepoRoot 'scripts/host-sync/manifests' '*.psd1') (Join-Path $phase4DAgMissingRoot 'scripts/host-sync/manifests')
+    $agMissingPath = Join-Path $phase4DAgMissingRoot 'scripts/host-sync/manifests/antigravity.manifest.psd1'
+    $agMissingText = Get-Content -Raw $agMissingPath
+    $agMissingText = $agMissingText.Replace(
+      "           CompositionId = 'antigravity-skill' }",
+      " }"
+    )
+    Set-Content -LiteralPath $agMissingPath -Value $agMissingText -NoNewline
+    $agMissingFailures = [System.Collections.Generic.List[string]]::new()
+    $freshWorkflowsMissing = (Get-FreshCatalogs).workflows
+    & (Get-Module ProcedureRegistry) { param($Catalog,$RepoRoot,$Failures)
+      Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $Failures
+    } $freshWorkflowsMissing $phase4DAgMissingRoot $agMissingFailures
+    Assert-View 'Phase 4D Antigravity missing composition ID fails' (
+      @($agMissingFailures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -gt 0
+    ) (($agMissingFailures | Select-Object -First 3) -join '; ')
+  } finally {
+    if (Test-Path -LiteralPath $phase4DAgMissingRoot) { Remove-Item -LiteralPath $phase4DAgMissingRoot -Recurse -Force }
+  }
+
+  # Antigravity manifest: unknown composition ID fails-closed.
+  $phase4DAgUnknownRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase4d-ag-unknown-" + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $phase4DAgUnknownRoot 'scripts/host-sync/manifests') -Force | Out-Null
+    Copy-Item (Join-Path $RepoRoot 'scripts/host-sync/manifests' '*.psd1') (Join-Path $phase4DAgUnknownRoot 'scripts/host-sync/manifests')
+    $agUnknownPath = Join-Path $phase4DAgUnknownRoot 'scripts/host-sync/manifests/antigravity.manifest.psd1'
+    $agUnknownText = Get-Content -Raw $agUnknownPath
+    $agUnknownText = $agUnknownText.Replace(
+      "CompositionId = 'antigravity-gemini'",
+      "CompositionId = 'nonexistent-composition'"
+    )
+    Set-Content -LiteralPath $agUnknownPath -Value $agUnknownText -NoNewline
+    $agUnknownFailures = [System.Collections.Generic.List[string]]::new()
+    $freshWorkflowsUnknown = (Get-FreshCatalogs).workflows
+    & (Get-Module ProcedureRegistry) { param($Catalog,$RepoRoot,$Failures)
+      Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $Failures
+    } $freshWorkflowsUnknown $phase4DAgUnknownRoot $agUnknownFailures
+    Assert-View 'Phase 4D Antigravity unknown composition ID fails' (
+      @($agUnknownFailures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -gt 0
+    ) (($agUnknownFailures | Select-Object -First 3) -join '; ')
+  } finally {
+    if (Test-Path -LiteralPath $phase4DAgUnknownRoot) { Remove-Item -LiteralPath $phase4DAgUnknownRoot -Recurse -Force }
+  }
+
+  # Antigravity manifest: duplicate composition binding fails-closed.
+  $phase4DAgDupRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase4d-ag-dup-" + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $phase4DAgDupRoot 'scripts/host-sync/manifests') -Force | Out-Null
+    Copy-Item (Join-Path $RepoRoot 'scripts/host-sync/manifests' '*.psd1') (Join-Path $phase4DAgDupRoot 'scripts/host-sync/manifests')
+    $agDupPath = Join-Path $phase4DAgDupRoot 'scripts/host-sync/manifests/antigravity.manifest.psd1'
+    $agDupText = Get-Content -Raw $agDupPath
+    # Append a second entry with the same Source|CompositionId binding.
+    $agDupText = $agDupText -replace '(@\{ Source = ''base:rules/agent-invocation\.md''; Dest = ''GEMINI\.md''\r?\n\s+CompositionId = ''antigravity-gemini'' \})', "`$0`n        @{ Source = 'base:rules/agent-invocation.md'; Dest = 'GEMINI-dup.md'`n           CompositionId = 'antigravity-gemini' }"
+    Set-Content -LiteralPath $agDupPath -Value $agDupText -NoNewline
+    $agDupFailures = [System.Collections.Generic.List[string]]::new()
+    $freshWorkflowsDup = (Get-FreshCatalogs).workflows
+    & (Get-Module ProcedureRegistry) { param($Catalog,$RepoRoot,$Failures)
+      Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $Failures
+    } $freshWorkflowsDup $phase4DAgDupRoot $agDupFailures
+    Assert-View 'Phase 4D Antigravity duplicate binding fails' (
+      @($agDupFailures | Where-Object { $_ -like '*duplicate*' -or $_ -like '*Duplicate*' }).Count -gt 0
+    ) (($agDupFailures | Select-Object -First 3) -join '; ')
+  } finally {
+    if (Test-Path -LiteralPath $phase4DAgDupRoot) { Remove-Item -LiteralPath $phase4DAgDupRoot -Recurse -Force }
+  }
+
+  # Antigravity registry reference reorder fails (registry owns order; reorder triggers
+  # prose-reference mismatch from the general composition inventory).
+  $result4DRefs = Invoke-EdgeCase 'workflows' {
+    param($c)
+    $comp = @($c.workflows.compositions | Where-Object { [string]$_.id -eq 'antigravity-gemini' })[0]
+    $refs = @($comp.references); $refs[0],$refs[1] = $refs[1],$refs[0]
+    $comp.references = $refs
+  }
+  # Antigravity is runtimeOnly: registry owns order. Reordering references in
+  # the registry is valid — the Generic adapter derives order from the registry.
+  Assert-View 'Phase 4D Antigravity reference reorder remains valid' (
+    @($result4DRefs.Failures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -eq 0
+  ) (($result4DRefs.Failures | Select-Object -First 3) -join '; ')
+
+  # Byte parity: registry-derived Generic render equals the legacy manifest-owned render.
+  # Build the legacy entry manually with the pre-migration Parts/Footer and compare bytes.
+  $agOverlayRoot = Join-Path $RepoRoot 'overlays/antigravity'
+  $agSharedRoot = 'overlays/opencode'
+  $agScratch = Join-Path ([IO.Path]::GetTempPath()) ("phase4d-bytes-" + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path $agScratch -Force | Out-Null
+    $compositionEntry = @{
+      Source = 'base:rules/agent-invocation.md'
+      Dest = 'GEMINI.md'
+      CompositionId = 'antigravity-gemini'
+    }
+    $legacyEntry = @{
+      Source = 'base:rules/agent-invocation.md'
+      Dest = 'GEMINI.md'
+      Parts = @('instructions/__header__.md')
+      Footer = @('base:rules/iterative-plan-review.md', 'base:rules/iterative-code-review.md', 'footers/gemini-wiring.md')
+    }
+    $reportComp = New-HostSyncReport -StackId 'Antigravity' -Mode ([HostSyncMode]::DryRun)
+    Copy-ManifestEntry -Report $reportComp -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -OverlayRoot $agOverlayRoot `
+      -LiveRoot $agScratch -Entry $compositionEntry -SharedRoot $agSharedRoot
+    $reportLegacy = New-HostSyncReport -StackId 'Antigravity' -Mode ([HostSyncMode]::DryRun)
+    Copy-ManifestEntry -Report $reportLegacy -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -OverlayRoot $agOverlayRoot `
+      -LiveRoot $agScratch -Entry $legacyEntry -SharedRoot $agSharedRoot
+    $compBytes = if ($reportComp.PlannedContent.ContainsKey('GEMINI.md')) { [string]$reportComp.PlannedContent['GEMINI.md'] } else { '' }
+    $legacyBytes = if ($reportLegacy.PlannedContent.ContainsKey('GEMINI.md')) { [string]$reportLegacy.PlannedContent['GEMINI.md'] } else { '' }
+    Assert-View 'Phase 4D GEMINI registry render byte parity' (
+      $reportComp.Success -and $reportLegacy.Success -and ($compBytes -ceq $legacyBytes)
+    ) "comp=$($compBytes.Length) legacy=$($legacyBytes.Length) errors=$($reportComp.Errors -join '; ')"
+
+    # Deterministic double render for the composition path.
+    $reportComp2 = New-HostSyncReport -StackId 'Antigravity' -Mode ([HostSyncMode]::DryRun)
+    Copy-ManifestEntry -Report $reportComp2 -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -OverlayRoot $agOverlayRoot `
+      -LiveRoot $agScratch -Entry $compositionEntry -SharedRoot $agSharedRoot
+    $compBytes2 = if ($reportComp2.PlannedContent.ContainsKey('GEMINI.md')) { [string]$reportComp2.PlannedContent['GEMINI.md'] } else { '' }
+    Assert-View 'Phase 4D GEMINI deterministic double render' ($compBytes -ceq $compBytes2)
+
+    # Pre-commit skill entry byte parity.
+    $skillCompEntry = @{
+      Source = 'base:rules/pre-commit-ci-gate.md'
+      Dest = 'config/skills/pre-commit-ci-gate/SKILL.md'
+      CompositionId = 'antigravity-skill'
+    }
+    $skillLegacyEntry = @{
+      Source = 'base:rules/pre-commit-ci-gate.md'
+      Dest = 'config/skills/pre-commit-ci-gate/SKILL.md'
+      Parts = @('shared:pre-commit-frontmatter.md')
+      Footer = @('footers/pre-commit-antigravity.md')
+    }
+    $reportSkillComp = New-HostSyncReport -StackId 'Antigravity' -Mode ([HostSyncMode]::DryRun)
+    Copy-ManifestEntry -Report $reportSkillComp -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -OverlayRoot $agOverlayRoot `
+      -LiveRoot $agScratch -Entry $skillCompEntry -SharedRoot $agSharedRoot
+    $reportSkillLegacy = New-HostSyncReport -StackId 'Antigravity' -Mode ([HostSyncMode]::DryRun)
+    Copy-ManifestEntry -Report $reportSkillLegacy -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -OverlayRoot $agOverlayRoot `
+      -LiveRoot $agScratch -Entry $skillLegacyEntry -SharedRoot $agSharedRoot
+    $skillDest = 'config/skills/pre-commit-ci-gate/SKILL.md'
+    $skillCompBytes = if ($reportSkillComp.PlannedContent.ContainsKey($skillDest)) { [string]$reportSkillComp.PlannedContent[$skillDest] } else { '' }
+    $skillLegacyBytes = if ($reportSkillLegacy.PlannedContent.ContainsKey($skillDest)) { [string]$reportSkillLegacy.PlannedContent[$skillDest] } else { '' }
+    Assert-View 'Phase 4D pre-commit skill registry render byte parity' (
+      $reportSkillComp.Success -and $reportSkillLegacy.Success -and ($skillCompBytes -ceq $skillLegacyBytes)
+    ) "comp=$($skillCompBytes.Length) legacy=$($skillLegacyBytes.Length) errors=$($reportSkillComp.Errors -join '; ')"
+  } finally {
+    if (Test-Path -LiteralPath $agScratch) { Remove-Item -LiteralPath $agScratch -Recurse -Force }
+  }
+
+  # Runtime helper: Get-RegistryGenericCompositionBinding fails closed on missing Source.
+  $runtimeBindingThrew = $false; $runtimeBindingMsg = ''
+  try {
+    Get-RegistryGenericCompositionBinding -CompanionRoot $RepoRoot -CompositionId 'antigravity-gemini' -Source 'base:rules/nonexistent.md'
+  } catch { $runtimeBindingThrew = $true; $runtimeBindingMsg = $_.Exception.Message }
+  Assert-View 'Phase 4D generic composition binding fails on missing source' (
+    $runtimeBindingThrew -and $runtimeBindingMsg -like '*composition-order-ownership*')
+
+  # Runtime helper: Get-RegistryGenericCompositionBinding fails closed on missing composition.
+  $runtimeMissingThrew = $false; $runtimeMissingMsg = ''
+  try {
+    Get-RegistryGenericCompositionBinding -CompanionRoot $RepoRoot -CompositionId 'nonexistent-composition' -Source 'base:rules/agent-invocation.md'
+  } catch { $runtimeMissingThrew = $true; $runtimeMissingMsg = $_.Exception.Message }
+  Assert-View 'Phase 4D generic composition binding fails on missing composition' (
+    $runtimeMissingThrew -and $runtimeMissingMsg -like '*composition-order-ownership*' -and $runtimeMissingMsg -like '*CompositionOrderMissing*')
+
+  # Runtime: Copy-ManifestEntry rejects CompositionId + Parts fail-closed.
+  $runtimePartsEntry = @{
+    Source = 'base:rules/agent-invocation.md'
+    Dest = 'GEMINI.md'
+    CompositionId = 'antigravity-gemini'
+    Parts = @('instructions/__header__.md')
+  }
+  $runtimePartsScratch = Join-Path ([IO.Path]::GetTempPath()) ("phase4d-parts-reject-" + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path $runtimePartsScratch -Force | Out-Null
+    $runtimePartsReport = New-HostSyncReport -StackId 'Antigravity' -Mode ([HostSyncMode]::DryRun)
+    Copy-ManifestEntry -Report $runtimePartsReport -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -OverlayRoot $agOverlayRoot `
+      -LiveRoot $runtimePartsScratch -Entry $runtimePartsEntry -SharedRoot $agSharedRoot
+    Assert-View 'Phase 4D Copy-ManifestEntry rejects CompositionId with Parts fail-closed' (
+      -not $runtimePartsReport.Success -and
+      @($runtimePartsReport.Errors | Where-Object { $_ -like '*composition-order-ownership*' }).Count -gt 0)
+  } finally {
+    if (Test-Path -LiteralPath $runtimePartsScratch) { Remove-Item -LiteralPath $runtimePartsScratch -Recurse -Force }
+  }
 
   # Phase 3A machinery guard: the shadow slice must not change canonical skill
   # bodies or any host/runtime projection. Phase 3B replaces this guard with

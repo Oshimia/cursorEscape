@@ -10,8 +10,7 @@
     CopyEntries         = @(
         # --- composed gate: host header + promoted-twin bodies + host wiring footer ---
         @{ Source = 'base:rules/agent-invocation.md'; Dest = 'GEMINI.md'
-           Parts = @('instructions/__header__.md')
-           Footer = @('base:rules/iterative-plan-review.md', 'base:rules/iterative-code-review.md', 'footers/gemini-wiring.md') }
+           CompositionId = 'antigravity-gemini' }
         # --- migrated skills (shared: opencode authored leaves + host substitutions; fail-closed exactly-once) ---
         @{ Source = 'shared:skills/discovery/SKILL.md'; Dest = 'config/skills/discovery/SKILL.md'
            Substitutions = @(@{ Find = '(OpenCode harness)'; Replace = '(Antigravity harness)' }) }
@@ -37,8 +36,7 @@
            Substitutions = @(@{ Find = '(OpenCode harness)'; Replace = '(Antigravity overlay)' }) }
         # --- composed pre-commit stub: shared frontmatter + base SoT rule + host footer leaf ---
         @{ Source = 'base:rules/pre-commit-ci-gate.md'; Dest = 'config/skills/pre-commit-ci-gate/SKILL.md'
-           Parts = @('shared:pre-commit-frontmatter.md')
-           Footer = @('footers/pre-commit-antigravity.md') }
+           CompositionId = 'antigravity-skill' }
         # --- authored: real host deltas (implementation-review/composer) or non-substitutable delta (opencode-history-search) ---
         @{ Source = 'skills/composer/SKILL.md'; Dest = 'config/skills/composer/SKILL.md' }
         @{ Source = 'skills/implementation-review/SKILL.md'; Dest = 'config/skills/implementation-review/SKILL.md' }

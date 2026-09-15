@@ -116,7 +116,8 @@
         "base:rules/iterative-code-review.md",
         "footers/gemini-wiring.md"
       ],
-      "canonicalReferenceId": "agent-invocation"
+      "canonicalReferenceId": "agent-invocation",
+      "runtimeOnly": true
     },
     {
       "id": "antigravity-skill",
@@ -126,7 +127,8 @@
         "base:rules/pre-commit-ci-gate.md",
         "footers/pre-commit-antigravity.md"
       ],
-      "canonicalReferenceId": "pre-commit-ci-gate"
+      "canonicalReferenceId": "pre-commit-ci-gate",
+      "runtimeOnly": true
     },
     {
       "id": "vscode-cursor-escape-loop-instructions",

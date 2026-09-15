@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C dual-review APPROVED (renewal block) — Phase 4 remains open; 4D next
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D dual-review APPROVED — Phase 4 remains open; 4E next
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C dual-review APPROVED (renewal block) — Phase 4 remains open; 4D next
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D dual-review APPROVED — Phase 4 remains open; 4E next
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -906,6 +906,20 @@ Phase 4:             Not started
   - [x] Final implementer-owned dual review: production_readiness_reviewer APPROVED (Blocking None, Non-blocking None, Blocking test/docs None); bug_reviewer CLEAN.
   - [x] Composer observed sole normalization Full CI PASS; pre-commit gate loaded. No live Apply.
   - [x] Two deferred Batchables recorded: consistent safe first-result lookup in `ProcedureRegistry.psm1`, and indentation normalization at `OpenCode.Adapter.ps1` lines 94/104/138.
+
+#### Phase 4D — Antigravity GEMINI/workflow compositions
+
+- **Status:** Phase 4D dual-review APPROVED (replacement iteration 2 of 4) — overall Phase 4 remains open; 4E next.
+- **Boundary:** Registry-owned semantic order for Antigravity GEMINI and pre-commit-skill compositions. The generic host path consumes/validates registry order; rendering bytes remain preserved. No canonical prose change, live-host write, unrelated projection change, or later-slice migration.
+- **Evidence:**
+  - [x] Antigravity manifest entries use registry composition bindings instead of independently owned semantic `Parts`/`Footer` order.
+  - [x] Generic rendering consumes/validates registry-owned order; missing, extra, duplicate, divergent, and mismatched ownership fails closed under `composition-order-ownership`.
+  - [x] Historical six-stack ledger verification passes with two independent renders and six entries while preserving evidence bytes.
+  - [x] Focused tests cover order ownership, byte parity, mismatch rejection, deterministic rendering, binding failures, and existing behavior preservation.
+  - [x] Observed Fast CI: registry view checks 631 passed / 0 failed; unit checks 24 passed / 0 failed; Fast CI PASS. `git diff --check` PASS.
+  - [x] Measured changeset: 7 files, 425 insertions, 15 deletions (pre-roadmap-update snapshot).
+  - [x] Implementer-owned dual review: production_readiness_reviewer APPROVED (Blocking None, Non-blocking None, Blocking test/docs None); bug_reviewer CLEAN.
+  - [x] Two production-review Batchables deferred; no blocking or blocking test/docs findings remained.
 
 ---
 

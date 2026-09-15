@@ -600,6 +600,29 @@ function Copy-ManifestEntry {
     # Strict-mode-safe optional keys: hashtable members (.Dest) throw under
     # Set-StrictMode when absent — manifest entries may omit Dest (defaults to Source).
     $destRel = if ($Entry.ContainsKey('Dest') -and $Entry.Dest) { $Entry.Dest } else { $Entry.Source }
+    # Phase 4D: registry-owned composition binding. When the entry declares a
+    # CompositionId, derive Parts/Footer from the registry and reject independent
+    # manifest-owned semantic fields. Entries without CompositionId keep the
+    # legacy Parts/Footer path for stacks not yet migrated.
+    if ($Entry.ContainsKey('CompositionId')) {
+        if ($Entry.ContainsKey('Parts') -or $Entry.ContainsKey('Footer')) {
+            Add-SyncError -Report $Report -Message "FAIL: composition-order-ownership: manifest-owned Parts/Footer is forbidden when CompositionId is declared for '$destRel'"
+            return
+        }
+        try {
+            $binding = Get-RegistryGenericCompositionBinding -CompanionRoot $CompanionRoot `
+                -CompositionId ([string]$Entry['CompositionId']) -Source ([string]$sourceRel)
+        }
+        catch {
+            Add-SyncError -Report $Report -Message $_.Exception.Message
+            return
+        }
+        $compositionEntry = @{}
+        foreach ($k in $Entry.Keys) { $compositionEntry[$k] = $Entry[$k] }
+        if (@($binding.Parts).Count -gt 0) { $compositionEntry['Parts'] = $binding.Parts }
+        if (@($binding.Footer).Count -gt 0) { $compositionEntry['Footer'] = $binding.Footer }
+        $Entry = $compositionEntry
+    }
     # Pre-resolve classed Parts/Footer references (base:/shared:) to absolute paths.
     $Entry = Resolve-HostSyncEntryRefs -Entry $Entry -CompanionRoot $CompanionRoot `
         -OverlayRoot $OverlayRoot -SharedRoot $SharedRoot
@@ -787,6 +810,55 @@ function Test-RegistryCursorHybridOrder {
     if ((@($RuleIds) -join '|') -cne ($expectedRuleIds.ToArray() -join '|')) {
         throw ("FAIL: composition-order-ownership: Cursor rule order '{0}' does not match registry order '{1}'" -f (@($RuleIds) -join '|'), ($expectedRuleIds.ToArray() -join '|'))
     }
+}
+
+function Get-RegistryGenericCompositionBinding {
+    # Phase 4D: for a Generic-adapter entry that declares a registry CompositionId,
+    # derives the Parts/Footer split relative to the entry Source and validates the
+    # effective order matches the registry. Fail-closed under composition-order-ownership.
+    param(
+        [Parameter(Mandatory)]
+        [string] $CompanionRoot,
+        [Parameter(Mandatory)]
+        [string] $CompositionId,
+        [Parameter(Mandatory)]
+        [string] $Source
+    )
+    try {
+        $refs = Get-RegistryRuntimeCompositionOrder -CompanionRoot $CompanionRoot -CompositionId $CompositionId
+    }
+    catch {
+        $msg = [string]$_.Exception.Message
+        if ($msg -like '*CompositionOrderMissing*' -or $msg -like '*CompositionOrderNotRuntimeOwned*') {
+            throw ("FAIL: composition-order-ownership: {0}" -f $msg)
+        }
+        throw
+    }
+    $sourceIndex = -1
+    for ($i = 0; $i -lt $refs.Count; $i++) {
+        if ($refs[$i] -ceq $Source) {
+            if ($sourceIndex -ge 0) {
+                throw "FAIL: composition-order-ownership: Source '$Source' appears more than once in composition '$CompositionId'"
+            }
+            $sourceIndex = $i
+        }
+    }
+    if ($sourceIndex -lt 0) {
+        throw "FAIL: composition-order-ownership: Source '$Source' not found in composition '$CompositionId' references"
+    }
+    $parts = [System.Collections.Generic.List[string]]::new()
+    $footer = [System.Collections.Generic.List[string]]::new()
+    for ($i = 0; $i -lt $refs.Count; $i++) {
+        if ($i -lt $sourceIndex) { $parts.Add($refs[$i]) }
+        elseif ($i -gt $sourceIndex) { $footer.Add($refs[$i]) }
+    }
+    # Explicit effective-order assertion: Parts + [Source] + Footer must equal refs.
+    $effective = @($parts.ToArray()) + @($Source) + @($footer.ToArray())
+    if (($effective -join '|') -cne ($refs -join '|')) {
+        throw ("FAIL: composition-order-ownership: effective order for '$CompositionId' does not match registry " +
+               "(effective '{0}' vs registry '{1}')" -f ($effective -join '|'), ($refs -join '|'))
+    }
+    return @{ Parts = $parts.ToArray(); Footer = $footer.ToArray() }
 }
 
 function Invoke-HybridCursorRules {

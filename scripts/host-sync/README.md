@@ -47,6 +47,7 @@ CopyEntries are **v2**: each entry names its source with a class prefix, resolve
 Entry keys beyond `Source`/`Dest`:
 
 - **`Parts` / `Footer`** — compose the dest from ordered file references (e.g. host `__header__.md` part + `base:` body + wiring footer). Composed dests leave no second authored procedure.
+- **`CompositionId`** — registry-owned semantic composition. When present, the render path derives `Parts`/`Footer` from the registry composition references and **`Parts`/`Footer` are forbidden** on the same entry (`composition-order-ownership` fail-closed). Use for stacks whose reference order is governed by `catalog/workflows.json`.
 - **`Substitutions`** — fail-closed: each must match **exactly once**; no-match / double-match = hard render error.
 - **`PlannedContent`** — dry-run captures would-be written content (incl. dual-written mirrors) for CI asserts.
 - **Expected renders** — committed expected-renders under [`render-baselines/`](./render-baselines/phase2/) are the byte-exact regression anchor for composed dests.
@@ -130,7 +131,7 @@ For Apply, the baseline gate runs first. Then the orchestration lifecycle refuse
 ## Expansion recipe (add a stack)
 
 1. **Overlay:** add `overlays/<stackId>/` thin harness + `_index.md` copy-out map.
-2. **Manifest:** create `manifests/<stackid>.manifest.psd1` with `StackId`, `OverlayRelativeRoot`, `LiveRelativeRoot`, `CopyEntries`, `HardExcludes`, `NeverTouch`, and stack-specific keys (e.g. `HybridRuleIds`, `JsonMerge`, `AgentsDualWrite`).
+2. **Manifest:** create `manifests/<stackid>.manifest.psd1` with `StackId`, `OverlayRelativeRoot`, `LiveRelativeRoot`, `CopyEntries`, `HardExcludes`, `NeverTouch`, and stack-specific keys (e.g. `HybridRuleIds`, `JsonMerge`, `AgentsDualWrite`). For entries whose reference order is registry-governed, set `CompositionId` instead of `Parts`/`Footer` — the registry owns semantic order; the manifest owns destination, binding, and host-only substitutions.
 3. **Adapter:** create a specialized adapter only for real host legs; otherwise dispatch to Generic. The shared contract remains `Invoke-StackHarnessSync` (specialized roots may be mandatory when the host has multiple homes) — see [`HostSync.Contract.ps1`](./HostSync.Contract.ps1).
 4. **Registry:** add the stack id to `Get-RegisteredStackIds` in [`Register-StackAdapters.ps1`](./Register-StackAdapters.ps1).
 5. **Docs:** add or extend a host-adapter SOP; update [`editing-companion-workflow.md`](../../docs/SOPs/editing-companion-workflow.md) live-sync row; update overlay `_index`.

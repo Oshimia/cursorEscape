@@ -622,6 +622,72 @@ function Test-RegistryHostCompositionOwnership {
       -not (Test-RegistrySequence (Get-RegistrySequence $instructionComp.references) (Get-RegistrySequence $agentsComp.references))) {
     Add-RegistryFailure $Failures $invariant 'OpenCode instruction/AGENTS registry orders differ'
   }
+
+  # Phase 4D: Antigravity Generic-adapter CopyEntry composition ownership.
+  try { $antigravityManifest = Import-PowerShellDataFile -Path (Join-Path $RepoRoot 'scripts/host-sync/manifests/antigravity.manifest.psd1') } catch {
+    Add-RegistryFailure $Failures $invariant "Antigravity manifest read failed: $($_.Exception.Message)"; return
+  }
+  # Derive expected Antigravity runtime composition IDs from the registry.
+  $antigravityRuntimeIds = [System.Collections.Generic.List[string]]::new()
+  $antigravityExpectedBindings = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($compositionId in @($Catalog.semanticOrder)) {
+    $composition = $compositionById[[string]$compositionId]
+    if ($null -eq $composition -or [string]$composition.host -cne 'Antigravity' -or
+        -not ($composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly)) { continue }
+    $antigravityRuntimeIds.Add([string]$compositionId)
+    if (-not $composition.PSObject.Properties['canonicalReferenceId']) {
+      Add-RegistryFailure $Failures $invariant "Antigravity runtime composition '$compositionId' has no canonicalReferenceId"
+      continue
+    }
+    # Find the composition reference that matches the canonicalReferenceId path.
+    # The Source is the body reference; derive expected binding key.
+    $sourceRef = $null
+    foreach ($ref in @($composition.references)) {
+      $refStr = [string]$ref
+      if ($refStr -like "*$([string]$composition.canonicalReferenceId)*" -and $refStr -notlike 'footers/*' -and $refStr -notlike 'instructions/*') { $sourceRef = $refStr; break }
+    }
+    if ($null -eq $sourceRef) { $sourceRef = [string]$composition.references[1] }
+    $null = $antigravityExpectedBindings.Add("$sourceRef|$compositionId")
+  }
+  $antigravityActualBindings = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($entry in @($antigravityManifest.CopyEntries)) {
+    foreach ($forbidden in @('Parts','Footer','References','Order')) {
+      if ($entry -is [hashtable] -and $entry.ContainsKey($forbidden)) {
+        $destKey = if ($entry.ContainsKey('Dest')) { [string]$entry['Dest'] } else { [string]$entry['Source'] }
+        Add-RegistryFailure $Failures $invariant "Antigravity '$destKey' manifest-owned semantic field '$forbidden'"
+      }
+    }
+    if ($entry -is [hashtable] -and $entry.ContainsKey('CompositionId')) {
+      $boundId = [string]$entry['CompositionId']
+      $sourceRel = [string]$entry['Source']
+      $destKey = if ($entry.ContainsKey('Dest')) { [string]$entry['Dest'] } else { $sourceRel }
+      if (-not $compositionById.ContainsKey($boundId)) {
+        Add-RegistryFailure $Failures $invariant "Antigravity '$destKey' composition '$boundId' not in registry"
+        continue
+      }
+      $boundComp = $compositionById[$boundId]
+      if ([string]$boundComp.host -cne 'Antigravity') {
+        Add-RegistryFailure $Failures $invariant "Antigravity '$destKey' composition '$boundId' host mismatch"
+      }
+      if (-not ($boundComp.PSObject.Properties['runtimeOnly'] -and [bool]$boundComp.runtimeOnly)) {
+        Add-RegistryFailure $Failures $invariant "Antigravity '$destKey' composition '$boundId' is not runtimeOnly"
+      }
+      $bindingKey = "$sourceRel|$boundId"
+      if (-not $antigravityActualBindings.Add($bindingKey)) {
+        Add-RegistryFailure $Failures $invariant "Antigravity duplicate composition binding: '$bindingKey'"
+      }
+    }
+  }
+  foreach ($expected in $antigravityExpectedBindings) {
+    if (-not $antigravityActualBindings.Contains($expected)) {
+      Add-RegistryFailure $Failures $invariant "Antigravity binding omitted from manifest: '$expected'"
+    }
+  }
+  foreach ($actual in $antigravityActualBindings) {
+    if (-not $antigravityExpectedBindings.Contains($actual)) {
+      Add-RegistryFailure $Failures $invariant "Antigravity extra binding in manifest: '$actual'"
+    }
+  }
 }
 
 function Test-RegistryCatalog {
@@ -808,6 +874,25 @@ function Test-RegistryCatalog {
     foreach ($compositionId in $order) { if (-not $compositionIdSet.Remove($compositionId)) { Add-RegistryFailure $failures 'SemanticOrderUnknownId' $compositionId } }
     foreach ($remaining in $compositionIdSet) { Add-RegistryFailure $failures 'SemanticOrderMissingId' $remaining }
     Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $failures
+    # Phase 4D: runtimeOnly compositions that correspond to Phase 0 inventory
+    # entries still account for their inventory counterparts. Antigravity
+    # compositions migrated to runtimeOnly in Phase 4D consumed inventory
+    # indices 1 and 2; match them by host + canonicalReferenceId-derived source.
+    foreach ($composition in $comps) {
+      $isRuntimeComposition = $composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly
+      if (-not $isRuntimeComposition) { continue }
+      if (-not $composition.PSObject.Properties['canonicalReferenceId']) { continue }
+      $derivedSource = "base:rules/$([string]$composition.canonicalReferenceId).md"
+      for ($index = 0; $index -lt @($Inventory.rules_workflows.compositions).Count; $index++) {
+        if ($consumedInventoryCompositions.Contains($index)) { continue }
+        $inventoryComposition = $Inventory.rules_workflows.compositions[$index]
+        if ([string]$inventoryComposition.host -eq [string]$composition.host -and
+            [string]$inventoryComposition.canonical_source -eq $derivedSource) {
+          $null = $consumedInventoryCompositions.Add($index)
+          break
+        }
+      }
+    }
     foreach ($index in @(0..(@($Inventory.rules_workflows.compositions).Count - 1))) {
       if (-not $consumedInventoryCompositions.Contains($index)) { Add-RegistryFailure $failures 'CompositionInventoryCoverage' "Phase 0 composition index $index is absent from registry" }
     }

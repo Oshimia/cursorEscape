@@ -178,7 +178,38 @@ foreach ($h in $hosts) {
     try { $d = Import-PowerShellDataFile (Join-Path $RepoRoot $m.path) } catch { Add-Failure 'ManifestParse' "$h"; continue }
     $manifestData[$h] = $d
     $prop = if ($d.Contains('CopyEntries')) { 'CopyEntries' } else { 'DestinationEntries' }
+    # Phase 4D: resolve CompositionId entries to effective Parts/Footer from the
+    # registry before comparison. Manifest entries that declare CompositionId own
+    # their semantic order via the registry; the checker resolves them so the
+    # per-entry inventory comparison still validates the effective composition.
     $actualEntries = @($d[$prop])
+    $compositionById = $null
+    $actualEntries = @(foreach ($actEntry in $actualEntries) {
+        if ($actEntry -is [hashtable] -and $actEntry.ContainsKey('CompositionId') -and -not $actEntry.ContainsKey('Parts') -and -not $actEntry.ContainsKey('Footer')) {
+            if (-not $compositionById) {
+                $wfCatalog = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'catalog' 'workflows.json') | ConvertFrom-Json
+                $compositionById = @{}
+                foreach ($comp in @($wfCatalog.compositions)) { $compositionById[[string]$comp.id] = $comp }
+            }
+            $cid = [string]$actEntry['CompositionId']
+            if (-not $compositionById.ContainsKey($cid)) { Add-Failure 'CompositionBinding' "$h unknown composition '$cid'"; continue }
+            $comp = $compositionById[$cid]
+            $resolved = @{}
+            foreach ($k in $actEntry.Keys) { $resolved[$k] = $actEntry[$k] }
+            $refs = @([string[]]@($comp.references))
+            $sourceRel = [string]$actEntry['Source']
+            $sourceIdx = -1
+            for ($ri = 0; $ri -lt $refs.Count; $ri++) { if ($refs[$ri] -ceq $sourceRel) { $sourceIdx = $ri; break } }
+            if ($sourceIdx -lt 0) { Add-Failure 'CompositionSource' "$h|$cid source '$sourceRel' not found in composition references"; continue }
+            $resolvedParts = [System.Collections.Generic.List[string]]::new()
+            $resolvedFooter = [System.Collections.Generic.List[string]]::new()
+            if ($sourceIdx -gt 0) { for ($pi = 0; $pi -lt $sourceIdx; $pi++) { $resolvedParts.Add($refs[$pi]) } }
+            if ($sourceIdx -lt ($refs.Count - 1)) { for ($fi = ($sourceIdx + 1); $fi -lt $refs.Count; $fi++) { $resolvedFooter.Add($refs[$fi]) } }
+            if ($resolvedParts.Count -gt 0) { $resolved['Parts'] = $resolvedParts.ToArray() }
+            if ($resolvedFooter.Count -gt 0) { $resolved['Footer'] = $resolvedFooter.ToArray() }
+            $resolved
+        } else { $actEntry }
+    })
 
     $bindingSpec = @(
         @{ inventory='binding_model'; manifest=$null; kind='model' }
