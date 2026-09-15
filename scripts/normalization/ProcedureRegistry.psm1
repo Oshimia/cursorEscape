@@ -667,6 +667,74 @@ function Test-RegistryCatalog {
     foreach ($index in @(0..(@($Inventory.rules_workflows.compositions).Count - 1))) {
       if (-not $consumedInventoryCompositions.Contains($index)) { Add-RegistryFailure $failures 'CompositionInventoryCoverage' "Phase 0 composition index $index is absent from registry" }
     }
+    $alwaysOnHosts = [string[]]@('Cursor','OpenCode','Codex','Antigravity')
+    $alwaysOnGates = [string[]]@('invocation','plan-review','code-review','pre-commit')
+    $expectedSurfaces = @{
+      'Cursor'      = [string[]]@('cursor-hybrid-rule')
+      'OpenCode'    = [string[]]@('opencode-agents-dual-write','opencode-skill')
+      'Codex'       = [string[]]@('codex-managed-block')
+      'Antigravity' = [string[]]@('antigravity-gemini','antigravity-skill')
+    }
+    $expectedCanonicalRefs = @{
+      'invocation'  = 'agent-invocation'
+      'plan-review' = 'iterative-plan-review'
+      'code-review' = 'iterative-code-review'
+      'pre-commit'  = 'pre-commit-ci-gate'
+    }
+    $alwaysOnProps = $Catalog.PSObject.Properties['alwaysOn']
+    $alwaysOnItems = if ($null -ne $alwaysOnProps) { @($alwaysOnProps.Value) } else { @() }
+    if ($alwaysOnItems.Count -ne 16) { Add-RegistryFailure $failures 'AlwaysOnCoverage' "expected 16 policies, got $($alwaysOnItems.Count)" }
+    $seenPairs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($policy in $alwaysOnItems) {
+      $policyId = [string]$policy.id; $hostName = [string]$policy.host; $gateName = [string]$policy.gate
+      if ($hostName -notin $alwaysOnHosts) { Add-RegistryFailure $failures 'AlwaysOnInvalidHost' "$policyId host='$hostName'" }
+      if ($gateName -notin $alwaysOnGates) { Add-RegistryFailure $failures 'AlwaysOnInvalidGate' "$policyId gate='$gateName'" }
+      $pair = "${hostName}|${gateName}"
+      if (-not $seenPairs.Add($pair)) { Add-RegistryFailure $failures 'AlwaysOnDuplicateHostGate' $pair }
+      if ($policy.PSObject.Properties['surface']) {
+        $surface = [string]$policy.surface
+        if (-not ($expectedSurfaces.ContainsKey($hostName) -and $surface -in $expectedSurfaces[$hostName])) {
+          Add-RegistryFailure $failures 'AlwaysOnInvalidSurface' "$policyId host='$hostName' surface='$surface'"
+        }
+      } else { Add-RegistryFailure $failures 'AlwaysOnMissingSurface' $policyId }
+      if (-not $knownIds.Contains([string]$policy.canonicalReferenceId)) { Add-RegistryFailure $failures 'AlwaysOnInvalidCanonicalReference' "$policyId '$($policy.canonicalReferenceId)'" }
+      if ($expectedCanonicalRefs.ContainsKey($gateName) -and [string]$policy.canonicalReferenceId -cne $expectedCanonicalRefs[$gateName]) {
+        Add-RegistryFailure $failures 'AlwaysOnCanonicalReferenceMismatch' "$policyId gate='$gateName' ref='$($policy.canonicalReferenceId)' expected='$($expectedCanonicalRefs[$gateName])'"
+      }
+      if ($policy.PSObject.Properties['evidencePaths'] -and @($policy.evidencePaths).Count -gt 0) {
+        foreach ($evidence in @($policy.evidencePaths)) { $null = Test-RegistryDescendantPath $RepoRoot ([string]$evidence) $failures "AlwaysOnEvidence:$policyId" -Leaf }
+      } else { Add-RegistryFailure $failures 'AlwaysOnMissingEvidence' $policyId }
+    }
+    if ($alwaysOnItems.Count -eq 16 -and $seenPairs.Count -eq 16) {
+      $inventoryAlwaysOnProps = $Inventory.rules_workflows.PSObject.Properties['always_on']
+      $inventoryAlwaysOnItems = if ($null -ne $inventoryAlwaysOnProps) { @($inventoryAlwaysOnProps.Value) } else { @() }
+      if ($inventoryAlwaysOnItems.Count -ne 16) { Add-RegistryFailure $failures 'AlwaysOnInventoryCoverage' "inventory expected 16 policies, got $($inventoryAlwaysOnItems.Count)" }
+      else {
+        $inventoryPairs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+        foreach ($inventoryPolicy in $inventoryAlwaysOnItems) {
+          $invHost = [string]$inventoryPolicy.host; $invGate = [string]$inventoryPolicy.gate
+          $null = $inventoryPairs.Add("${invHost}|${invGate}")
+        }
+        if (-not $seenPairs.SetEquals($inventoryPairs)) {
+          Add-RegistryFailure $failures 'AlwaysOnInventoryMismatch' "registry coverage '$(($seenPairs | Sort-Object) -join '|')' differs from inventory '$(($inventoryPairs | Sort-Object) -join '|')'"
+        }
+        foreach ($registryPolicy in $alwaysOnItems) {
+          $matchedInventory = @($inventoryAlwaysOnItems | Where-Object { [string]$_.host -eq [string]$registryPolicy.host -and [string]$_.gate -eq [string]$registryPolicy.gate })
+          if ($matchedInventory.Count -ne 1) { continue }
+          $invPolicy = $matchedInventory[0]
+          foreach ($field in @('id','surface','canonicalReferenceId')) {
+            $registryValue = [string]$registryPolicy.$field
+            $invProp = $invPolicy.PSObject.Properties[$field]
+            $inventoryValue = if ($null -ne $invProp) { [string]$invProp.Value } else { '' }
+            if ($registryValue -cne $inventoryValue) { Add-RegistryFailure $failures 'AlwaysOnInventoryMismatch' "$field registry='$registryValue' inventory='$inventoryValue'" }
+          }
+          $registryEvidence = @(Get-RegistrySequence $registryPolicy.evidencePaths)
+          $invEvidenceProp = $invPolicy.PSObject.Properties['evidence_paths']
+          $inventoryEvidence = if ($null -ne $invEvidenceProp) { @(Get-RegistrySequence $invEvidenceProp.Value) } else { @() }
+          if (-not (Test-RegistrySequence $registryEvidence $inventoryEvidence)) { Add-RegistryFailure $failures 'AlwaysOnInventoryEvidenceMismatch' "$($registryPolicy.id) evidence differs from inventory" }
+        }
+      }
+    }
   }
   return $failures
 }
@@ -766,7 +834,20 @@ function Get-RegistryManagedView {
     }
     if ($shadowFailures.Count -gt 0) { throw "FAIL: $($shadowFailures[0])" }
   }
-  $files = [ordered]@{ 'identity.json' = $identityJson + "`n"; 'agent-parity.tsv' = ($parity -join "`n") + "`n"; 'composition-order.tsv' = ($composition -join "`n") + "`n"; 'skill-frontmatter-shadow.tsv' = ($skillShadow -join "`n") + "`n"; 'skill-host-frontmatter-shadow.tsv' = ($wrapperShadow -join "`n") + "`n" }
+  $alwaysOnView = [System.Collections.Generic.List[string]]::new()
+  $alwaysOnView.Add("host`tsurface`tdomain`tcanonicalReference`tpolicyId")
+  $alwaysOnProps = $Catalogs.workflows.PSObject.Properties['alwaysOn']
+  $alwaysOnItems = if ($null -ne $alwaysOnProps) { @($alwaysOnProps.Value) } else { @() }
+  $alwaysOnGateOrder = [string[]]@('invocation','plan-review','code-review','pre-commit')
+  $alwaysOnHostOrder = [string[]]@('Antigravity','Codex','Cursor','OpenCode')
+  foreach ($hostName in $alwaysOnHostOrder) {
+    foreach ($gateName in $alwaysOnGateOrder) {
+      $policy = @($alwaysOnItems | Where-Object { [string]$_.host -eq $hostName -and [string]$_.gate -eq $gateName })[0]
+      if ($null -eq $policy) { throw "FAIL: always-on view missing policy for host='$hostName' gate='$gateName'" }
+      $alwaysOnView.Add(($hostName,[string]$policy.surface,$gateName,[string]$policy.canonicalReferenceId,[string]$policy.id) -join "`t")
+    }
+  }
+  $files = [ordered]@{ 'identity.json' = $identityJson + "`n"; 'agent-parity.tsv' = ($parity -join "`n") + "`n"; 'composition-order.tsv' = ($composition -join "`n") + "`n"; 'skill-frontmatter-shadow.tsv' = ($skillShadow -join "`n") + "`n"; 'skill-host-frontmatter-shadow.tsv' = ($wrapperShadow -join "`n") + "`n"; 'always-on.tsv' = ($alwaysOnView -join "`n") + "`n" }
   $compositionFiles = Get-RegistryCompositionFiles -Catalogs $Catalogs -RepoRoot $RepoRoot -Inventory $Inventory
   foreach ($compositionKey in @($compositionFiles.Keys)) { $files[$compositionKey] = [string]$compositionFiles[$compositionKey] }
   [pscustomobject]@{ Files = $files }

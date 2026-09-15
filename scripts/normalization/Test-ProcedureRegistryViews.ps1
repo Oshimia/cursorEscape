@@ -187,7 +187,7 @@ $temp = Join-Path ([IO.Path]::GetTempPath()) ("procedure-registry-" + [Guid]::Ne
 try {
   $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
   $two = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'two') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
-  Assert-View 'double render has thirteen files (five base + eight compositions)' ($one.Files.Keys.Count -eq 13 -and $two.Files.Keys.Count -eq 13) "one=$($one.Files.Keys.Count) two=$($two.Files.Keys.Count)"
+  Assert-View 'double render has fourteen files (six base + eight compositions)' ($one.Files.Keys.Count -eq 14 -and $two.Files.Keys.Count -eq 14) "one=$($one.Files.Keys.Count) two=$($two.Files.Keys.Count)"
   foreach ($name in @($one.Files.Keys)) {
     $hashA = (Get-FileHash (Join-Path (Join-Path $temp 'one') $name) -Algorithm SHA256).Hash
     $hashB = (Get-FileHash (Join-Path (Join-Path $temp 'two') $name) -Algorithm SHA256).Hash
@@ -283,11 +283,11 @@ try {
   $publicRender = Join-Path $temp 'public-render'
   & $RenderScript -OutputRoot $publicRender -AllowTemporaryRoot | Out-Null
   $publicFiles = @(Get-ChildItem -LiteralPath $publicRender -File)
-  Assert-View 'public render integration' ($publicFiles.Count -eq 5) "files=$($publicFiles.Count)"
+  Assert-View 'public render integration' ($publicFiles.Count -eq 6) "files=$($publicFiles.Count)"
   $explicitRepoRender = Join-Path $temp 'explicit-repo-render'
   & $RenderScript -RepoRoot $RepoRoot -OutputRoot $explicitRepoRender -AllowTemporaryRoot | Out-Null
   $explicitFiles = @(Get-ChildItem -LiteralPath $explicitRepoRender -File)
-  Assert-View 'explicit RepoRoot render integration' ($explicitFiles.Count -eq 5) "files=$($explicitFiles.Count)"
+  Assert-View 'explicit RepoRoot render integration' ($explicitFiles.Count -eq 6) "files=$($explicitFiles.Count)"
   $rejected = $false
   try { & $RenderScript -OutputRoot $publicRender | Out-Null } catch { $rejected = $true }
   Assert-View 'public render rejects temporary root without ownership switch' $rejected
@@ -898,6 +898,79 @@ try {
   $phase4aDrift = @(& git -C $RepoRoot status --porcelain -- rules workflow 'overlays')
   if ($LASTEXITCODE -ne 0) { throw "FAIL: Phase 4A drift status exited $LASTEXITCODE" }
   Assert-View 'Phase 4A leaves canonical rules, workflows, and overlay leaves unchanged' ($phase4aDrift.Count -eq 0) (($phase4aDrift | Select-Object -First 5) -join '; ')
+
+  # --- Phase 4B: explicit always-on policy for invocation/plan-review/code-review/pre-commit on Cursor/OpenCode/Codex/Antigravity ---
+  $alwaysOnItems = @($registry.Catalogs.workflows.alwaysOn)
+  Assert-View 'always-on policy count is exactly 16' ($alwaysOnItems.Count -eq 16) "count=$($alwaysOnItems.Count)"
+  $expected4BHosts = [string[]]@('Cursor','OpenCode','Codex','Antigravity')
+  $expected4BGates = [string[]]@('invocation','plan-review','code-review','pre-commit')
+  $seen4BPairs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  $alwaysOnPolicyIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($policy4B in $alwaysOnItems) {
+    $policyHost = [string]$policy4B.host; $policyGate = [string]$policy4B.gate
+    Assert-View "always-on host '$policyHost' is in Phase 4B host set" ($policyHost -in $expected4BHosts) "host=$policyHost"
+    Assert-View "always-on gate '$policyGate' is in Phase 4B gate set" ($policyGate -in $expected4BGates) "gate=$policyGate"
+    $pair4B = "${policyHost}|${policyGate}"
+    Assert-View "always-on host+gate pair '${pair4B}' is unique" ($seen4BPairs.Add($pair4B)) "duplicate pair"
+    $policyId = [string]$policy4B.id
+    Assert-View "always-on policy ID '$policyId' is unique" ($alwaysOnPolicyIds.Add($policyId)) "duplicate policy ID"
+    Assert-View "always-on canonical ref resolves" ($null -ne (@($registry.Catalogs.workflows.items + $registry.Catalogs.rules.items) | Where-Object { [string]$_.id -eq [string]$policy4B.canonicalReferenceId }) -or [string]$policy4B.canonicalReferenceId -in @('agent-invocation','iterative-plan-review','iterative-code-review','pre-commit-ci-gate')) "ref='$($policy4B.canonicalReferenceId)'"
+    Assert-View "always-on policy '$policyId' has evidence paths" (@($policy4B.evidencePaths).Count -gt 0) "evidencePaths empty"
+    foreach ($evidence4B in @($policy4B.evidencePaths)) {
+      Assert-View "always-on policy '$policyId' evidence path exists" (Test-Path -LiteralPath (Join-Path $RepoRoot $evidence4B) -PathType Leaf) "path=$evidence4B"
+    }
+  }
+  Assert-View 'always-on covers exactly 4x4 host+gate pairs' ($seen4BPairs.Count -eq 16) "uniquePairs=$($seen4BPairs.Count)"
+  $inventoryAlwaysOn = @($registry.Inventory.rules_workflows.always_on)
+  Assert-View 'inventory mirrors 16 always-on policies' ($inventoryAlwaysOn.Count -eq 16) "inventoryCount=$($inventoryAlwaysOn.Count)"
+  $inventory4BPairs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($invPolicy in $inventoryAlwaysOn) { $null = $inventory4BPairs.Add("$([string]$invPolicy.host)|$([string]$invPolicy.gate)") }
+  Assert-View 'registry and inventory always-on coverage match' ($seen4BPairs.SetEquals($inventory4BPairs)) "registry=$($seen4BPairs.Count) inventory=$($inventory4BPairs.Count)"
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.alwaysOn[0].host = 'Vscode' }
+  Assert-RegistryFailure $result 'always-on unknown host fails closed' 'AlwaysOnInvalidHost'
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.alwaysOn[0].gate = 'unknown-gate' }
+  Assert-RegistryFailure $result 'always-on unknown gate fails closed' 'AlwaysOnInvalidGate'
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.alwaysOn[0].canonicalReferenceId = '__missing__' }
+  Assert-RegistryFailure $result 'always-on unknown canonical ref fails closed' 'AlwaysOnInvalidCanonicalReference'
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.alwaysOn[1].canonicalReferenceId = 'agent-invocation' }
+  Assert-RegistryFailure $result 'always-on canonical ref gate mismatch fails closed' 'AlwaysOnCanonicalReferenceMismatch'
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.alwaysOn[0].surface = 'codex-managed-block' }
+  Assert-RegistryFailure $result 'always-on invalid surface for host fails closed' 'AlwaysOnInvalidSurface'
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.alwaysOn[1].host = $c.workflows.alwaysOn[0].host; $c.workflows.alwaysOn[1].gate = $c.workflows.alwaysOn[0].gate }
+  Assert-RegistryFailure $result 'always-on duplicate host+gate fails closed' 'AlwaysOnDuplicateHostGate'
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.alwaysOn = @($c.workflows.alwaysOn | Select-Object -Skip 1) }
+  Assert-RegistryFailure $result 'always-on missing host/gate coverage fails closed' 'AlwaysOnCoverage'
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.alwaysOn[0].evidencePaths = @() }
+  Assert-RegistryFailure $result 'always-on empty evidence fails closed' 'AlwaysOnMissingEvidence'
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.alwaysOn[0].evidencePaths[0] = 'rules/__missing_evidence__.md' }
+  Assert-RegistryFailure $result 'always-on invalid evidence path fails closed' 'AlwaysOnEvidence'
+  $schemaJson4B = Get-Content -Raw (Join-Path $RepoRoot 'catalog/schema/v1.json')
+  $unknownAlwaysOnHost = Get-FreshCatalogs
+  $unknownAlwaysOnHost.workflows.alwaysOn[0].host = 'Cline'
+  Assert-View 'schema rejects always-on host outside Phase 4B set' (-not (Test-Json -Json ($unknownAlwaysOnHost.workflows | ConvertTo-Json -Depth 12) -Schema $schemaJson4B -ErrorAction SilentlyContinue))
+  $unknownAlwaysOnGate = Get-FreshCatalogs
+  $unknownAlwaysOnGate.workflows.alwaysOn[0].gate = 'deployment'
+  Assert-View 'schema rejects unknown always-on gate' (-not (Test-Json -Json ($unknownAlwaysOnGate.workflows | ConvertTo-Json -Depth 12) -Schema $schemaJson4B -ErrorAction SilentlyContinue))
+  $unknownAlwaysOnSurface = Get-FreshCatalogs
+  $unknownAlwaysOnSurface.workflows.alwaysOn[0].surface = 'generic-rule'
+  Assert-View 'schema rejects unknown always-on surface' (-not (Test-Json -Json ($unknownAlwaysOnSurface.workflows | ConvertTo-Json -Depth 12) -Schema $schemaJson4B -ErrorAction SilentlyContinue))
+  $extraAlwaysOnField = Get-FreshCatalogs
+  $extraAlwaysOnField.workflows.alwaysOn[0] | Add-Member ExtraField 'not-owned'
+  Assert-View 'schema rejects extra always-on field' (-not (Test-Json -Json ($extraAlwaysOnField.workflows | ConvertTo-Json -Depth 12) -Schema $schemaJson4B -ErrorAction SilentlyContinue))
+  $alwaysOnView = @([string]$one.Files['always-on.tsv'] -split "`r?`n" | Where-Object { $_ })
+  Assert-View 'always-on managed view has header + 16 rows' ($alwaysOnView.Count -eq 17) "rows=$($alwaysOnView.Count)"
+  $expectedAlwaysOnHeader = "host`tsurface`tdomain`tcanonicalReference`tpolicyId"
+  Assert-View 'always-on managed view header is deterministic' ($alwaysOnView[0] -ceq $expectedAlwaysOnHeader) "header='$($alwaysOnView[0])'"
+  $expectedAlwaysOnHostOrder = [string[]]@('Antigravity','Codex','Cursor','OpenCode')
+  $expectedAlwaysOnGateOrder = [string[]]@('invocation','plan-review','code-review','pre-commit')
+  for ($row4B = 1; $row4B -lt $alwaysOnView.Count; $row4B++) {
+    $expectedHost = $expectedAlwaysOnHostOrder[[Math]::Floor(($row4B - 1) / 4)]
+    $expectedGate = $expectedAlwaysOnGateOrder[($row4B - 1) % 4]
+    $cells4B = @($alwaysOnView[$row4B] -split "`t")
+    Assert-View "always-on view row $row4B deterministic ($expectedHost/$expectedGate)" ($cells4B.Count -eq 5 -and $cells4B[0] -ceq $expectedHost -and $cells4B[2] -ceq $expectedGate) "cells='$($alwaysOnView[$row4B])'"
+  }
+  $alwaysOnRenderB = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $RepoRoot
+  Assert-View 'always-on managed view is deterministic across calls' ([string]$one.Files['always-on.tsv'] -ceq [string]$alwaysOnRenderB.Files['always-on.tsv'])
 
   # Phase 3A machinery guard: the shadow slice must not change canonical skill
   # bodies or any host/runtime projection. Phase 3B replaces this guard with

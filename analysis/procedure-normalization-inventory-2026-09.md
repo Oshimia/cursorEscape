@@ -58,6 +58,7 @@ There are **22 canonical skills** plus **1 generated rule wrapper**, for 23 adve
 - Canonical rules: **6** (`rules/`).
 - Canonical workflows: **23** (`workflow/`).
 - Manifest rule/workflow/instruction compositions: **8**, each with source, destination, parts/footer, semantic order, and host in JSON. Every manifest composition is represented in the inventory and every inventory composition maps to a manifest entry.
+- Always-on policies: **16** (4 hosts × 4 gates: Cursor, OpenCode, Codex, Antigravity × invocation, plan-review, code-review, pre-commit). Registry-backed and mirrored in inventory `rules_workflows.always_on`.
 
 ## Baselines
 

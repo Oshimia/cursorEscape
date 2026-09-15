@@ -10,6 +10,7 @@
     "kind": { "enum": ["agents", "rules", "skills", "workflows"] },
     "items": { "type": "array", "items": { "type": "object" } },
     "compositions": { "type": "array", "items": { "$ref": "#/$defs/composition" } },
+    "alwaysOn": { "type": "array", "items": { "$ref": "#/$defs/alwaysOnPolicy" } },
     "semanticOrder": { "type": "array", "items": { "type": "string", "minLength": 1 } }
   },
   "allOf": [
@@ -31,7 +32,7 @@
     },
     {
       "if": { "not": { "properties": { "kind": { "const": "workflows" } }, "required": ["kind"] } },
-      "then": { "properties": { "compositions": false, "semanticOrder": false } }
+      "then": { "properties": { "compositions": false, "semanticOrder": false, "alwaysOn": false } }
     }
   ],
   "$defs": {
@@ -147,6 +148,20 @@
         "canonicalReferenceId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
         "references": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
       }
-    }
+    },
+    "alwaysOnPolicy": {
+      "type": "object",
+      "required": ["id", "host", "gate", "surface", "canonicalReferenceId", "evidencePaths"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "host": { "$ref": "#/$defs/alwaysOnHost" },
+        "gate": { "enum": ["invocation", "plan-review", "code-review", "pre-commit"] },
+        "surface": { "enum": ["cursor-hybrid-rule", "opencode-agents-dual-write", "opencode-skill", "antigravity-gemini", "antigravity-skill", "codex-managed-block"] },
+        "canonicalReferenceId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "evidencePaths": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/repoPath" } }
+      }
+    },
+    "alwaysOnHost": { "enum": ["Cursor", "OpenCode", "Codex", "Antigravity"] }
   }
 }

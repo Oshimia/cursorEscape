@@ -1,13 +1,13 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete — Phase 4 remains open, 4B next
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete — Phase 4 remains open, 4C next
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete — Phase 4 remains open, 4B next
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete — Phase 4 remains open, 4C next
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
-Last updated:        2026-09-15
+Last updated:        2026-09-16
 Live Apply:          Phase 6 only, with explicit owner authorization
 ```
 
@@ -874,6 +874,19 @@ Phase 4:             Not started
   - [x] Implementer-owned review completed at iteration 2: production readiness APPROVED and `bug_reviewer` CLEAN; both reviewers closed.
   - [x] Three deferred Batchables recorded: composition-specific source-ingress wrapper naming, tighter reference-grammar allowlist, and renderer-level `SemanticOrderMissingId` coverage.
   - [x] Composer observed sole normalization Full CI PASS; pre-commit gate loaded. No live Apply or runtime switch.
+
+#### Phase 4B — Always-on policy registry (Cursor, OpenCode, Codex, Antigravity)
+
+- **Status:** Phase 4B complete — overall Phase 4 remains open; 4C next.
+- **Boundary:** Registry-owned always-on declarations and fail-closed validation only. No manifest/adapter runtime migration, canonical prose change, generated baseline change, or live-host write.
+- **Evidence:**
+  - [x] Exactly 16 policies cover invocation, plan review, code review, and pre-commit for Cursor, OpenCode, Codex, and Antigravity.
+  - [x] Host/gate uniqueness, canonical-reference resolution, surface validity, tracked evidence existence, and inventory mirroring fail closed.
+  - [x] Deterministic managed-view output records the policy set without changing runtime writers.
+  - [x] Existing Phase 4A behavior and 49/49 agent parity remain covered.
+  - [x] Implementer-owned review completed at iteration 1: production readiness APPROVED and `bug_reviewer` CLEAN; both reviewers closed.
+  - [x] Four deferred Batchables recorded: inventory-mismatch mutation tests, durable Git-tracked evidence invariant, removal of redundant test canonical-ref allowlist, and registry-level unique policy-ID enforcement.
+  - [x] Composer observed sole normalization Full CI PASS; pre-commit gate loaded. No live Apply.
 
 ---
 
