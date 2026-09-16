@@ -688,6 +688,67 @@ function Test-RegistryHostCompositionOwnership {
       Add-RegistryFailure $Failures $invariant "Antigravity extra binding in manifest: '$actual'"
     }
   }
+
+  # Phase 4E: Cline/Kilocode Generic-adapter CopyEntry composition ownership.
+  # Standalone fallback leaves remain plain CopyEntries and are intentionally
+  # excluded from semantic-order comparison.
+  foreach ($genericHost in @('Cline', 'Kilocode')) {
+    try {
+      $genericManifest = Import-PowerShellDataFile -Path (Join-Path $RepoRoot "scripts/host-sync/manifests/$([string]$genericHost.ToLowerInvariant()).manifest.psd1")
+    } catch {
+      Add-RegistryFailure $Failures $invariant "$genericHost manifest read failed: $($_.Exception.Message)"; continue
+    }
+    $genericExpectedBindings = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($compositionId in @($Catalog.semanticOrder)) {
+      $composition = $compositionById[[string]$compositionId]
+      if ($null -eq $composition -or [string]$composition.host -cne $genericHost -or
+          -not ($composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly)) { continue }
+      if (-not $composition.PSObject.Properties['canonicalReferenceId']) {
+        Add-RegistryFailure $Failures $invariant "$genericHost runtime composition '$compositionId' has no canonicalReferenceId"
+        continue
+      }
+      $sourceRef = "base:rules/$([string]$composition.canonicalReferenceId).md"
+      $null = $genericExpectedBindings.Add("$sourceRef|$compositionId")
+    }
+    $genericActualBindings = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($entry in @($genericManifest.CopyEntries)) {
+      foreach ($forbidden in @('Parts','Footer','References','Order')) {
+        if ($entry -is [hashtable] -and $entry.ContainsKey($forbidden)) {
+          $destKey = if ($entry.ContainsKey('Dest')) { [string]$entry['Dest'] } else { [string]$entry['Source'] }
+          Add-RegistryFailure $Failures $invariant "$genericHost '$destKey' manifest-owned semantic field '$forbidden'"
+        }
+      }
+      if (-not ($entry -is [hashtable] -and $entry.ContainsKey('CompositionId'))) { continue }
+      $boundId = [string]$entry['CompositionId']
+      $sourceRel = [string]$entry['Source']
+      $destKey = if ($entry.ContainsKey('Dest')) { [string]$entry['Dest'] } else { $sourceRel }
+      if (-not $compositionById.ContainsKey($boundId)) {
+        Add-RegistryFailure $Failures $invariant "$genericHost '$destKey' composition '$boundId' not in registry"
+        continue
+      }
+      $boundComp = $compositionById[$boundId]
+      if ([string]$boundComp.host -cne $genericHost) {
+        Add-RegistryFailure $Failures $invariant "$genericHost '$destKey' composition '$boundId' host mismatch"
+      }
+      if (-not ($boundComp.PSObject.Properties['runtimeOnly'] -and [bool]$boundComp.runtimeOnly)) {
+        Add-RegistryFailure $Failures $invariant "$genericHost '$destKey' composition '$boundId' is not runtimeOnly"
+      }
+      $bindingKey = "$sourceRel|$boundId"
+      if (-not $genericActualBindings.Add($bindingKey)) {
+        Add-RegistryFailure $Failures $invariant "$genericHost duplicate composition binding: '$bindingKey'"
+      }
+    }
+    foreach ($expected in $genericExpectedBindings) {
+      if (-not $genericActualBindings.Contains($expected)) {
+        Add-RegistryFailure $Failures $invariant "$genericHost binding omitted from manifest: '$expected'"
+      }
+    }
+    foreach ($actual in $genericActualBindings) {
+      if (-not $genericExpectedBindings.Contains($actual)) {
+        Add-RegistryFailure $Failures $invariant "$genericHost extra binding in manifest: '$actual'"
+      }
+    }
+  }
 }
 
 function Test-RegistryCatalog {

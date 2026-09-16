@@ -172,7 +172,8 @@
         "base:rules/pre-commit-ci-gate.md",
         "footers/cline-wiring.md"
       ],
-      "canonicalReferenceId": "agent-invocation"
+      "canonicalReferenceId": "agent-invocation",
+      "runtimeOnly": true
     },
     {
       "id": "kilocode-cursor-escape-loop",
@@ -185,7 +186,8 @@
         "base:rules/pre-commit-ci-gate.md",
         "footers/kilocode-wiring.md"
       ],
-      "canonicalReferenceId": "agent-invocation"
+      "canonicalReferenceId": "agent-invocation",
+      "runtimeOnly": true
     },
     {
       "id": "cursor-agent-invocation",

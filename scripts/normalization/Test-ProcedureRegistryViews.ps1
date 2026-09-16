@@ -187,7 +187,7 @@ $temp = Join-Path ([IO.Path]::GetTempPath()) ("procedure-registry-" + [Guid]::Ne
 try {
   $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
   $two = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'two') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
-  Assert-View 'double render has twelve files (six base + six managed compositions)' ($one.Files.Keys.Count -eq 12 -and $two.Files.Keys.Count -eq 12) "one=$($one.Files.Keys.Count) two=$($two.Files.Keys.Count)"
+  Assert-View 'double render has ten files (six base + four managed compositions)' ($one.Files.Keys.Count -eq 10 -and $two.Files.Keys.Count -eq 10) "one=$($one.Files.Keys.Count) two=$($two.Files.Keys.Count)"
   foreach ($name in @($one.Files.Keys)) {
     $hashA = (Get-FileHash (Join-Path (Join-Path $temp 'one') $name) -Algorithm SHA256).Hash
     $hashB = (Get-FileHash (Join-Path (Join-Path $temp 'two') $name) -Algorithm SHA256).Hash
@@ -826,8 +826,8 @@ try {
   $originalRows = @([string]$original.Files['composition-order.tsv'] -split "`r?`n" | Where-Object { $_ })
   $reorderedCatalogs = Get-FreshCatalogs
   $order = @($reorderedCatalogs.workflows.semanticOrder)
-  # Phase 4D: Antigravity compositions are runtimeOnly and excluded from managed
-  # output. Swap managed composition indices (0 ↔ 3) so the assertion remains
+  # Phases 4D/4E: Antigravity/Cline/Kilocode compositions are runtimeOnly and
+  # excluded from managed output. Swap managed composition indices (0 ↔ 3) so the assertion remains
   # meaningful for managed-view sequence control.
   $swap = $order[0]; $order[0] = $order[3]; $order[3] = $swap
   $reorderedCatalogs.workflows.semanticOrder = $order
@@ -849,7 +849,7 @@ try {
 
   # --- Phase 4A: composition renderer, semantic-order validator, and boundary verifier ---
   $compositionFileKeys = @($one.Files.Keys | Where-Object { $_ -like 'compositions/*' })
-  Assert-View 'composition render produces six managed files' ($compositionFileKeys.Count -eq 6) "count=$($compositionFileKeys.Count)"
+  Assert-View 'composition render produces four managed files' ($compositionFileKeys.Count -eq 4) "count=$($compositionFileKeys.Count)"
   $nonRuntimeOrderIds = @($registry.Catalogs.workflows.compositions | Where-Object {
     -not ($_.PSObject.Properties['runtimeOnly'] -and [bool]$_.runtimeOnly)
   } | ForEach-Object { [string]$_.id })
@@ -985,15 +985,16 @@ try {
   $runtimeComps = @($registry.Catalogs.workflows.compositions | Where-Object { $_.PSObject.Properties['runtimeOnly'] -and [bool]$_.runtimeOnly })
   $expectedRuntimeIds = [string[]]@(
     'antigravity-gemini','antigravity-skill',
+    'cline-cursor-escape-loop','kilocode-cursor-escape-loop',
     'cursor-agent-invocation','cursor-iterative-plan-review','cursor-iterative-code-review','cursor-pre-commit-ci-gate',
     'opencode-agents-dual-write-instructions','opencode-agents-dual-write-agents'
   )
-  Assert-View 'Phase 4D registry has exactly eight runtime compositions' ($runtimeComps.Count -eq 8) "count=$($runtimeComps.Count)"
+  Assert-View 'Phase 4E registry has exactly ten runtime compositions' ($runtimeComps.Count -eq 10) "count=$($runtimeComps.Count)"
   Assert-View 'Phase 4C runtime composition IDs match expected set' (
     (@($runtimeComps | ForEach-Object { [string]$_.id }) -join '|') -ceq ($expectedRuntimeIds -join '|')
   ) "observed=$(($runtimeComps | ForEach-Object { [string]$_.id }) -join '|')"
   $runtimeOrderInSemantic = @($registry.Catalogs.workflows.semanticOrder | Where-Object { $_ -in $expectedRuntimeIds })
-  Assert-View 'Phase 4D semanticOrder owns all eight runtime IDs in correct order' (
+  Assert-View 'Phase 4E semanticOrder owns all ten runtime IDs in correct order' (
     (@($runtimeOrderInSemantic) -join '|') -ceq ($expectedRuntimeIds -join '|')
   ) "semantic=$(($runtimeOrderInSemantic) -join '|')"
 
@@ -1068,9 +1069,9 @@ try {
 
   # Runtime compositions are excluded from managed-view composition file output.
   $allCompositionFileKeys = @($one.Files.Keys | Where-Object { $_ -like 'compositions/*' })
-  Assert-View 'Phase 4C runtime compositions excluded from managed composition output' (
-    $allCompositionFileKeys.Count -eq 6 -and
-    @($allCompositionFileKeys | Where-Object { $_ -match 'compositions/cursor-|compositions/opencode-agents|compositions/antigravity-' }).Count -eq 0
+  Assert-View 'Phase 4E runtime compositions excluded from managed composition output' (
+    $allCompositionFileKeys.Count -eq 4 -and
+    @($allCompositionFileKeys | Where-Object { $_ -match 'compositions/cursor-|compositions/opencode-agents|compositions/antigravity-|compositions/cline-|compositions/kilocode-' }).Count -eq 0
   ) "keys=$($allCompositionFileKeys -join ';')"
 
   # Host composition ownership: validation passes on current working tree (uses full-catalog registry result which includes overlay roots).
@@ -1437,6 +1438,174 @@ try {
       @($runtimePartsReport.Errors | Where-Object { $_ -like '*composition-order-ownership*' }).Count -gt 0)
   } finally {
     if (Test-Path -LiteralPath $runtimePartsScratch) { Remove-Item -LiteralPath $runtimePartsScratch -Recurse -Force }
+  }
+
+  # --- Phase 4E: Cline/Kilocode plan/review/closeout fallback workflows ---
+
+  function Test-Phase4EOwnershipScenario {
+    param([string]$Scenario,[scriptblock]$Mutate)
+    foreach ($config in @(
+      @{ Host = 'Cline'; CompositionId = 'cline-cursor-escape-loop' },
+      @{ Host = 'Kilocode'; CompositionId = 'kilocode-cursor-escape-loop' }
+    )) {
+      $scenarioRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase4e-$Scenario-" + [Guid]::NewGuid().ToString('N'))
+      try {
+        New-Item -ItemType Directory -Path (Join-Path $scenarioRoot 'scripts/host-sync/manifests') -Force | Out-Null
+        Copy-Item (Join-Path $RepoRoot 'scripts/host-sync/manifests' '*.psd1') (Join-Path $scenarioRoot 'scripts/host-sync/manifests')
+        $manifestPath = Join-Path $scenarioRoot "scripts/host-sync/manifests/$([string]$config.Host.ToLowerInvariant()).manifest.psd1"
+        & $Mutate $manifestPath ([string]$config.CompositionId)
+        $scenarioFailures = [System.Collections.Generic.List[string]]::new()
+        $scenarioCatalog = (Get-FreshCatalogs).workflows
+        & (Get-Module ProcedureRegistry) { param($Catalog,$RepoRoot,$Failures)
+          Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $Failures
+        } $scenarioCatalog $scenarioRoot $scenarioFailures
+        Assert-View "Phase 4E $($config.Host) $Scenario ownership fails closed" (
+          @($scenarioFailures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -gt 0
+        ) (($scenarioFailures | Select-Object -First 3) -join '; ')
+      } finally {
+        if (Test-Path -LiteralPath $scenarioRoot) { Remove-Item -LiteralPath $scenarioRoot -Recurse -Force }
+      }
+    }
+  }
+
+  # Current-tree ownership and generic runtime order are validated for both hosts.
+  foreach ($phase4EHost in @('Cline', 'Kilocode')) {
+    $phase4EComposition = @($registry.Catalogs.workflows.compositions | Where-Object {
+      [string]$_.host -eq $phase4EHost -and [string]$_.id -like '*-cursor-escape-loop'
+    })[0]
+    $phase4EOwnership = @($registry.Failures | Where-Object {
+      $_ -like 'composition-order-ownership*' -and $_ -like "$phase4EHost*"
+    })
+    Assert-View "Phase 4E $phase4EHost composition ownership passes on current tree" (
+      [bool]$phase4EComposition.runtimeOnly -and $phase4EOwnership.Count -eq 0
+    ) (($phase4EOwnership | Select-Object -First 3) -join '; ')
+    $phase4EBinding = Get-RegistryGenericCompositionBinding -CompanionRoot $RepoRoot `
+      -CompositionId ([string]$phase4EComposition.id) -Source ([string]$phase4EComposition.references[1])
+    Assert-View "Phase 4E $phase4EHost registry effective order matches writer binding" (
+      ([string]$phase4EBinding.Parts) -ceq 'instructions/__header__.md' -and
+      (@($phase4EBinding.Footer) -join '|') -ceq (
+        'base:rules/iterative-plan-review.md|base:rules/iterative-code-review.md|base:rules/pre-commit-ci-gate.md|' +
+        "footers/$([string]$phase4EHost.ToLowerInvariant())-wiring.md"
+      )
+    ) "parts=$($phase4EBinding.Parts -join '|'); footer=$($phase4EBinding.Footer -join '|')"
+  }
+
+  # Manifest-owned semantic fields cannot coexist with registry ownership.
+  foreach ($phase4EField in @('Parts', 'Footer')) {
+    Test-Phase4EOwnershipScenario $phase4EField.ToLowerInvariant() {
+      param($Path,$CompositionId)
+      $text = Get-Content -Raw -LiteralPath $Path
+      $text = $text.Replace(
+        "           CompositionId = '$CompositionId' }",
+        "           CompositionId = '$CompositionId'`n           $phase4EField = @('instructions/__header__.md') }"
+      )
+      Set-Content -LiteralPath $Path -Value $text -NoNewline
+    }
+  }
+
+  # Omitted and unknown IDs, duplicate bindings, and a duplicate with a divergent
+  # source all fail closed rather than being consumed as manifest order.
+  Test-Phase4EOwnershipScenario 'missing' {
+    param($Path,$CompositionId)
+    $text = Get-Content -Raw -LiteralPath $Path
+    $text = $text.Replace("           CompositionId = '$CompositionId' }", ' }')
+    Set-Content -LiteralPath $Path -Value $text -NoNewline
+  }
+  Test-Phase4EOwnershipScenario 'unknown' {
+    param($Path,$CompositionId)
+    $text = Get-Content -Raw -LiteralPath $Path
+    $text = $text.Replace("CompositionId = '$CompositionId'", "CompositionId = '$($CompositionId -replace '^[^-]+', 'unknown-host')'")
+    Set-Content -LiteralPath $Path -Value $text -NoNewline
+  }
+  Test-Phase4EOwnershipScenario 'duplicate' {
+    param($Path,$CompositionId)
+    $text = Get-Content -Raw -LiteralPath $Path
+    $text = $text -replace "(@\{ Source = 'base:rules/agent-invocation\.md'; Dest = 'rules/cursor-escape-loop\.md'\r?\n\s+CompositionId = '$CompositionId' \})",
+      "`$0`n        @{ Source = 'base:rules/agent-invocation.md'; Dest = 'rules/cursor-escape-loop-dup.md'`n           CompositionId = '$CompositionId' }"
+    Set-Content -LiteralPath $Path -Value $text -NoNewline
+  }
+  Test-Phase4EOwnershipScenario 'divergent duplicate' {
+    param($Path,$CompositionId)
+    $text = Get-Content -Raw -LiteralPath $Path
+    $text = $text -replace "(@\{ Source = 'base:rules/agent-invocation\.md'; Dest = 'rules/cursor-escape-loop\.md'\r?\n\s+CompositionId = '$CompositionId' \})",
+      "`$0`n        @{ Source = 'base:rules/pre-commit-ci-gate.md'; Dest = 'rules/cursor-escape-loop-alt.md'`n           CompositionId = '$CompositionId' }"
+    Set-Content -LiteralPath $Path -Value $text -NoNewline
+  }
+
+  # Reordering registry references remains registry-owned: the generic writer
+  # follows the reordered sequence; no manifest semantic override is introduced.
+  foreach ($phase4EHost in @('Cline', 'Kilocode')) {
+    $reorderResult = Invoke-EdgeCase 'workflows' {
+      param($c)
+      $comp = @($c.workflows.compositions | Where-Object { [string]$_.host -eq $phase4EHost })[0]
+      $refs = @($comp.references); $refs[0],$refs[1] = $refs[1],$refs[0]
+      $comp.references = $refs
+    } $phase4EHost
+    Assert-View "Phase 4E $phase4EHost reference reorder introduces no ownership failure" (
+      @($reorderResult.Failures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -eq 0
+    ) (($reorderResult.Failures | Select-Object -First 3) -join '; ')
+  }
+
+  # Byte parity, deterministic rendering, and standalone-leaf preservation are
+  # checked against the generic writer without touching owner-owned live state.
+  $phase4EScratch = Join-Path ([IO.Path]::GetTempPath()) ("phase4e-bytes-" + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path $phase4EScratch -Force | Out-Null
+    foreach ($config in @(
+      @{ Host = 'Cline'; SharedRoot = 'overlays/opencode'; OverlayRoot = 'overlays/cline' },
+      @{ Host = 'Kilocode'; SharedRoot = 'overlays/opencode'; OverlayRoot = 'overlays/kilocode' }
+    )) {
+      $compositionId = "$([string]$config.Host.ToLowerInvariant())-cursor-escape-loop"
+      $dest = 'rules/cursor-escape-loop.md'
+      $compositionEntry = @{
+        Source = 'base:rules/agent-invocation.md'; Dest = $dest; CompositionId = $compositionId
+      }
+      $legacyEntry = @{
+        Source = 'base:rules/agent-invocation.md'; Dest = $dest
+        Parts = @('instructions/__header__.md')
+        Footer = @(
+          'base:rules/iterative-plan-review.md', 'base:rules/iterative-code-review.md',
+          'base:rules/pre-commit-ci-gate.md', "footers/$([string]$config.Host.ToLowerInvariant())-wiring.md"
+        )
+      }
+      $overlayRoot = Join-Path $RepoRoot ([string]$config.OverlayRoot)
+      $renderReport = @()
+      foreach ($entry in @($compositionEntry, $legacyEntry, $compositionEntry)) {
+        $report = New-HostSyncReport -StackId ([string]$config.Host) -Mode ([HostSyncMode]::DryRun)
+        Copy-ManifestEntry -Report $report -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -OverlayRoot $overlayRoot `
+          -LiveRoot $phase4EScratch -Entry $entry -SharedRoot ([string]$config.SharedRoot)
+        $renderReport += $report
+      }
+      $compBytes = if ($renderReport[0].PlannedContent.ContainsKey($dest)) { [string]$renderReport[0].PlannedContent[$dest] } else { '' }
+      $legacyBytes = if ($renderReport[1].PlannedContent.ContainsKey($dest)) { [string]$renderReport[1].PlannedContent[$dest] } else { '' }
+      $repeatBytes = if ($renderReport[2].PlannedContent.ContainsKey($dest)) { [string]$renderReport[2].PlannedContent[$dest] } else { '' }
+      Assert-View "Phase 4E $($config.Host) composed gate registry render byte parity" (
+        $renderReport[0].Success -and $renderReport[1].Success -and ($compBytes -ceq $legacyBytes)
+      ) "comp=$($compBytes.Length) legacy=$($legacyBytes.Length); errors=$($renderReport[0].Errors -join '; ')"
+      Assert-View "Phase 4E $($config.Host) deterministic double render" ($compBytes -ceq $repeatBytes)
+
+      foreach ($standalone in @('workflows/plan.md', 'workflows/review.md', 'workflows/closeout.md', 'workflows/agents.md')) {
+        $manifestEntry = @((Import-PowerShellDataFile (Join-Path $RepoRoot "scripts/host-sync/manifests/$([string]$config.Host.ToLowerInvariant()).manifest.psd1")).CopyEntries |
+          Where-Object { [string]$_['Source'] -eq $standalone })
+        $plainLeaf = $manifestEntry.Count -eq 1 -and
+          -not $manifestEntry[0].ContainsKey('CompositionId') -and
+          -not $manifestEntry[0].ContainsKey('Parts') -and
+          -not $manifestEntry[0].ContainsKey('Footer')
+        $standaloneReport = New-HostSyncReport -StackId ([string]$config.Host) -Mode ([HostSyncMode]::DryRun)
+        Copy-ManifestEntry -Report $standaloneReport -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -OverlayRoot $overlayRoot `
+          -LiveRoot $phase4EScratch -Entry $manifestEntry[0] -SharedRoot ([string]$config.SharedRoot)
+        $raw = [IO.File]::ReadAllText((Join-Path $RepoRoot (Join-Path ([string]$config.OverlayRoot) ([string]$manifestEntry[0]['Source']))))
+        $expectedBytes = $raw.Replace('{{COMPANION_ROOT}}', $RepoRoot)
+        $actualBytes = if ($standaloneReport.PlannedContent.ContainsKey([string]$manifestEntry[0]['Dest'])) {
+          [string]$standaloneReport.PlannedContent[[string]$manifestEntry[0]['Dest']]
+        } else { '' }
+        Assert-View "Phase 4E $($config.Host) standalone leaf remains plain and byte-preserved" (
+          $plainLeaf -and $standaloneReport.Success -and ($actualBytes -ceq $expectedBytes)
+        ) "plain=$plainLeaf; errors=$($standaloneReport.Errors -join '; ')"
+      }
+    }
+  } finally {
+    if (Test-Path -LiteralPath $phase4EScratch) { Remove-Item -LiteralPath $phase4EScratch -Recurse -Force }
   }
 
   # Phase 3A machinery guard: the shadow slice must not change canonical skill

@@ -10,8 +10,7 @@
     CopyEntries         = @(
         # --- composed always-on rule (auto-included by compat loader; no toggles) ---
         @{ Source = 'base:rules/agent-invocation.md'; Dest = 'rules/cursor-escape-loop.md'
-           Parts = @('instructions/__header__.md')
-           Footer = @('base:rules/iterative-plan-review.md', 'base:rules/iterative-code-review.md', 'base:rules/pre-commit-ci-gate.md', 'footers/kilocode-wiring.md') }
+           CompositionId = 'kilocode-cursor-escape-loop' }
         # --- plan/review/closeout workflows (parent-conducted dual review adaptation authored in this overlay) ---
         @{ Source = 'workflows/plan.md'; Dest = 'workflows/plan.md' }
         @{ Source = 'workflows/review.md'; Dest = 'workflows/review.md' }
