@@ -749,6 +749,67 @@ function Test-RegistryHostCompositionOwnership {
       }
     }
   }
+
+  # Phase 4F: Codex specialized-adapter managed AGENTS block composition
+  # ownership. The single canonical block binds exactly one registry reference;
+  # the manifest owns only the destination, binding, and composition ID.
+  try { $codexManifest = Import-PowerShellDataFile -Path (Join-Path $RepoRoot 'scripts/host-sync/manifests/codex.manifest.psd1') } catch {
+    Add-RegistryFailure $Failures $invariant "Codex manifest read failed: $($_.Exception.Message)"; return
+  }
+  $codexExpectedBindings = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($compositionId in @($Catalog.semanticOrder)) {
+    $composition = $compositionById[[string]$compositionId]
+    if ($null -eq $composition -or [string]$composition.host -cne 'Codex' -or
+        -not ($composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly)) { continue }
+    if (-not $composition.PSObject.Properties['canonicalReferenceId']) {
+      Add-RegistryFailure $Failures $invariant "Codex runtime composition '$compositionId' has no canonicalReferenceId"
+      continue
+    }
+    $codexRefs = @(Get-RegistrySequence $composition.references)
+    if ($codexRefs.Count -ne 1) {
+      Add-RegistryFailure $Failures $invariant "Codex runtime composition '$compositionId' must declare exactly one managed-block reference"
+      continue
+    }
+    $null = $codexExpectedBindings.Add("$($codexRefs[0])|$compositionId")
+  }
+  $codexActualBindings = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($codexEntry in @($codexManifest.DestinationEntries)) {
+    foreach ($forbidden in @('Parts','Footer','References','Order')) {
+      if ($codexEntry -is [hashtable] -and $codexEntry.ContainsKey($forbidden)) {
+        $codexDestKey = if ($codexEntry.ContainsKey('Dest')) { [string]$codexEntry['Dest'] } else { [string]$codexEntry['Source'] }
+        Add-RegistryFailure $Failures $invariant "Codex '$codexDestKey' manifest-owned semantic field '$forbidden'"
+      }
+    }
+    if (-not ($codexEntry -is [hashtable] -and $codexEntry.ContainsKey('CompositionId'))) { continue }
+    $codexBoundId = [string]$codexEntry['CompositionId']
+    $codexSourceRel = [string]$codexEntry['Source']
+    $codexDestKey = if ($codexEntry.ContainsKey('Dest')) { [string]$codexEntry['Dest'] } else { $codexSourceRel }
+    if (-not $compositionById.ContainsKey($codexBoundId)) {
+      Add-RegistryFailure $Failures $invariant "Codex '$codexDestKey' composition '$codexBoundId' not in registry"
+      continue
+    }
+    $codexBoundComp = $compositionById[$codexBoundId]
+    if ([string]$codexBoundComp.host -cne 'Codex') {
+      Add-RegistryFailure $Failures $invariant "Codex '$codexDestKey' composition '$codexBoundId' host mismatch"
+    }
+    if (-not ($codexBoundComp.PSObject.Properties['runtimeOnly'] -and [bool]$codexBoundComp.runtimeOnly)) {
+      Add-RegistryFailure $Failures $invariant "Codex '$codexDestKey' composition '$codexBoundId' is not runtimeOnly"
+    }
+    $codexBindingKey = "$codexSourceRel|$codexBoundId"
+    if (-not $codexActualBindings.Add($codexBindingKey)) {
+      Add-RegistryFailure $Failures $invariant "Codex duplicate composition binding: '$codexBindingKey'"
+    }
+  }
+  foreach ($expected in $codexExpectedBindings) {
+    if (-not $codexActualBindings.Contains($expected)) {
+      Add-RegistryFailure $Failures $invariant "Codex binding omitted from manifest: '$expected'"
+    }
+  }
+  foreach ($actual in $codexActualBindings) {
+    if (-not $codexExpectedBindings.Contains($actual)) {
+      Add-RegistryFailure $Failures $invariant "Codex extra binding in manifest: '$actual'"
+    }
+  }
 }
 
 function Test-RegistryCatalog {

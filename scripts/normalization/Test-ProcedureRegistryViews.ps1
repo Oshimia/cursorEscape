@@ -987,14 +987,15 @@ try {
     'antigravity-gemini','antigravity-skill',
     'cline-cursor-escape-loop','kilocode-cursor-escape-loop',
     'cursor-agent-invocation','cursor-iterative-plan-review','cursor-iterative-code-review','cursor-pre-commit-ci-gate',
-    'opencode-agents-dual-write-instructions','opencode-agents-dual-write-agents'
+    'opencode-agents-dual-write-instructions','opencode-agents-dual-write-agents',
+    'codex-cursor-escape-loop'
   )
-  Assert-View 'Phase 4E registry has exactly ten runtime compositions' ($runtimeComps.Count -eq 10) "count=$($runtimeComps.Count)"
+  Assert-View 'Phase 4F registry has exactly eleven runtime compositions' ($runtimeComps.Count -eq 11) "count=$($runtimeComps.Count)"
   Assert-View 'Phase 4C runtime composition IDs match expected set' (
     (@($runtimeComps | ForEach-Object { [string]$_.id }) -join '|') -ceq ($expectedRuntimeIds -join '|')
   ) "observed=$(($runtimeComps | ForEach-Object { [string]$_.id }) -join '|')"
   $runtimeOrderInSemantic = @($registry.Catalogs.workflows.semanticOrder | Where-Object { $_ -in $expectedRuntimeIds })
-  Assert-View 'Phase 4E semanticOrder owns all ten runtime IDs in correct order' (
+  Assert-View 'Phase 4F semanticOrder owns all eleven runtime IDs in correct order' (
     (@($runtimeOrderInSemantic) -join '|') -ceq ($expectedRuntimeIds -join '|')
   ) "semantic=$(($runtimeOrderInSemantic) -join '|')"
 
@@ -1606,6 +1607,215 @@ try {
     }
   } finally {
     if (Test-Path -LiteralPath $phase4EScratch) { Remove-Item -LiteralPath $phase4EScratch -Recurse -Force }
+  }
+
+  # --- Phase 4F: Codex managed AGENTS block composition ownership ---
+  . (Join-Path $PSScriptRoot (Join-Path '..' (Join-Path 'host-sync' (Join-Path 'adapters' 'Codex.Adapter.ps1'))))
+
+  $codexComposition = @($registry.Catalogs.workflows.compositions | Where-Object { [string]$_.id -eq 'codex-cursor-escape-loop' })[0]
+  Assert-View 'Phase 4F Codex composition is runtimeOnly with the exact one-reference sequence' (
+    $null -ne $codexComposition -and
+    [string]$codexComposition.host -ceq 'Codex' -and
+    [bool]$codexComposition.runtimeOnly -and
+    (@([string[]]@($codexComposition.references)) -join '|') -ceq 'instructions/agents-block.md'
+  ) "refs=$(($codexComposition.references) -join '|')"
+  $phase4FFailures = @($registry.Failures | Where-Object { $_ -like 'composition-order-ownership*' -and $_ -like '*Codex*' })
+  Assert-View 'Phase 4F Codex composition ownership passes on current tree' ($phase4FFailures.Count -eq 0) (($phase4FFailures | Select-Object -First 3) -join '; ')
+  $phase4FOrder = (Get-RegistryCompositionOrderById -Catalogs $registry.Catalogs -CompositionId 'codex-cursor-escape-loop') -join '|'
+  Assert-View 'Phase 4F Codex registry order is deterministic' (
+    $phase4FOrder -ceq ((Get-RegistryCompositionOrderById -Catalogs $registry.Catalogs -CompositionId 'codex-cursor-escape-loop') -join '|')
+  ) "order=$phase4FOrder"
+
+  function New-Phase4FCodexRoots {
+    $scratch = Join-Path ([IO.Path]::GetTempPath()) ('phase4f-codex-' + [Guid]::NewGuid().ToString('N'))
+    $codex = Join-Path $scratch 'codex-home'
+    $skills = Join-Path $scratch 'skills'
+    New-Item -ItemType Directory -Path $codex -Force | Out-Null
+    New-Item -ItemType Directory -Path $skills -Force | Out-Null
+    return @{ Scratch = $scratch; Codex = $codex; Skills = $skills }
+  }
+
+  # Byte parity: the composition-bound writer renders the exact legacy
+  # single-block bytes, and the render is deterministic across runs.
+  $phase4FCompositionManifest = Import-PowerShellDataFile (Join-Path $RepoRoot 'scripts/host-sync/manifests/codex.manifest.psd1')
+  $phase4FLegacyManifest = Import-PowerShellDataFile (Join-Path $RepoRoot 'scripts/host-sync/manifests/codex.manifest.psd1')
+  $phase4FLegacyManifest.DestinationEntries[0].Remove('CompositionId')
+  $phase4FParityRoots = New-Phase4FCodexRoots
+  try {
+    $phase4FReports = @()
+    foreach ($phase4FManifest in @($phase4FCompositionManifest, $phase4FLegacyManifest, $phase4FCompositionManifest)) {
+      $phase4FReports += Invoke-StackHarnessSync -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -Manifest $phase4FManifest `
+        -CodexRoot $phase4FParityRoots.Codex -SkillRoot $phase4FParityRoots.Skills
+    }
+    $phase4FRender = [string]$phase4FReports[0].PlannedOutputContent['codex-home/AGENTS.md']
+    $phase4FLegacyRender = [string]$phase4FReports[1].PlannedOutputContent['codex-home/AGENTS.md']
+    $phase4FRepeatRender = [string]$phase4FReports[2].PlannedOutputContent['codex-home/AGENTS.md']
+    $phase4FExpectedRender = ([IO.File]::ReadAllText((Join-Path $RepoRoot 'overlays/codex/instructions/agents-block.md'))).Replace('{{COMPANION_ROOT}}', $RepoRoot)
+    Assert-View 'Phase 4F composition render is byte-identical to the legacy single-block render' (
+      $phase4FReports[0].Success -and $phase4FReports[1].Success -and
+      ($phase4FRender -ceq $phase4FLegacyRender) -and ($phase4FRender -ceq $phase4FExpectedRender)
+    ) "comp=$($phase4FRender.Length) legacy=$($phase4FLegacyRender.Length); errors=$(($phase4FReports[0].Errors + $phase4FReports[1].Errors) -join '; ')"
+    Assert-View 'Phase 4F composition render is deterministic' ($phase4FRender -ceq $phase4FRepeatRender)
+    $phase4FBeginCount = [regex]::Matches($phase4FRender, [regex]::Escape('<!-- cursorEscape-managed-block:v1 id="codex-cursor-escape-loop"') + '[^\r\n]*begin managed block -->').Count
+    $phase4FEndCount = [regex]::Matches($phase4FRender, [regex]::Escape('<!-- cursorEscape-managed-block:v1 id="codex-cursor-escape-loop"') + '[^\r\n]*end managed block -->').Count
+    Assert-View 'Phase 4F planned block keeps exactly one managed begin/end pair' (
+      $phase4FBeginCount -eq 1 -and $phase4FEndCount -eq 1 -and
+      $phase4FRender.IndexOf('begin managed block') -lt $phase4FRender.IndexOf('end managed block')
+    ) "begin=$phase4FBeginCount end=$phase4FEndCount"
+  } finally {
+    Remove-Item -LiteralPath $phase4FParityRoots.Scratch -Recurse -Force
+  }
+
+  # Owner-owned text outside the managed block survives a registry-owned render.
+  $phase4FOwnerRoots = New-Phase4FCodexRoots
+  try {
+    $phase4FBlock = ([IO.File]::ReadAllText((Join-Path $RepoRoot 'overlays/codex/instructions/agents-block.md'))).Replace('{{COMPANION_ROOT}}', $RepoRoot)
+    $phase4FExisting = "owner-owned prefix`n`n$phase4FBlock`nowner-owned suffix"
+    [IO.File]::WriteAllText((Join-Path $phase4FOwnerRoots.Codex 'AGENTS.md'), $phase4FExisting, [Text.UTF8Encoding]::new($false))
+    $phase4FOwnerReport = Invoke-StackHarnessSync -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -Manifest $phase4FCompositionManifest `
+      -CodexRoot $phase4FOwnerRoots.Codex -SkillRoot $phase4FOwnerRoots.Skills
+    $phase4FOwnerOutput = [string]$phase4FOwnerReport.PlannedOutputContent['codex-home/AGENTS.md']
+    Assert-View 'Phase 4F owner-owned text outside the managed block is byte-preserved' (
+      $phase4FOwnerReport.Success -and ($phase4FOwnerOutput -ceq $phase4FExisting)
+    ) "errors=$(($phase4FOwnerReport.Errors) -join '; ')"
+  } finally {
+    Remove-Item -LiteralPath $phase4FOwnerRoots.Scratch -Recurse -Force
+  }
+
+  # Guard-only override safety is unchanged under registry-owned composition.
+  $phase4FGuardRoots = New-Phase4FCodexRoots
+  try {
+    $phase4FGuardPath = Join-Path $phase4FGuardRoots.Codex 'AGENTS.override.md'
+    [IO.File]::WriteAllText($phase4FGuardPath, 'owner override wins', [Text.UTF8Encoding]::new($false))
+    $phase4FGuardReport = Invoke-StackHarnessSync -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -Manifest $phase4FCompositionManifest `
+      -CodexRoot $phase4FGuardRoots.Codex -SkillRoot $phase4FGuardRoots.Skills
+    Assert-View 'Phase 4F guard-only override still blocks sync under registry ownership' (
+      -not $phase4FGuardReport.Success -and
+      ([IO.File]::ReadAllText($phase4FGuardPath)) -ceq 'owner override wins' -and
+      -not (Test-Path -LiteralPath (Join-Path $phase4FGuardRoots.Codex 'AGENTS.md')) -and
+      @(Get-ChildItem -LiteralPath $phase4FGuardRoots.Codex -Recurse -File -Force).Count -eq 1
+    ) "errors=$(($phase4FGuardReport.Errors) -join '; ')"
+  } finally {
+    Remove-Item -LiteralPath $phase4FGuardRoots.Scratch -Recurse -Force
+  }
+
+  # Registry-side ownership mutations fail closed under composition-order-ownership.
+  function Test-Phase4FOwnershipScenario {
+    param([string]$Scenario,[scriptblock]$Mutate)
+    $scenarioRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase4f-$Scenario-" + [Guid]::NewGuid().ToString('N'))
+    try {
+      New-Item -ItemType Directory -Path (Join-Path $scenarioRoot 'scripts/host-sync/manifests') -Force | Out-Null
+      Copy-Item (Join-Path $RepoRoot 'scripts/host-sync/manifests' '*.psd1') (Join-Path $scenarioRoot 'scripts/host-sync/manifests')
+      & $Mutate (Join-Path $scenarioRoot 'scripts/host-sync/manifests/codex.manifest.psd1')
+      $scenarioFailures = [System.Collections.Generic.List[string]]::new()
+      $scenarioCatalog = (Get-FreshCatalogs).workflows
+      & (Get-Module ProcedureRegistry) { param($Catalog,$RepoRoot,$Failures)
+        Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $Failures
+      } $scenarioCatalog $scenarioRoot $scenarioFailures
+      Assert-View "Phase 4F $Scenario ownership fails closed" (
+        @($scenarioFailures | Where-Object { $_ -like 'composition-order-ownership*' }).Count -gt 0
+      ) (($scenarioFailures | Select-Object -First 3) -join '; ')
+    } finally {
+      if (Test-Path -LiteralPath $scenarioRoot) { Remove-Item -LiteralPath $scenarioRoot -Recurse -Force }
+    }
+  }
+
+  Test-Phase4FOwnershipScenario 'forbidden-parts' {
+    param($Path)
+    $text = Get-Content -Raw -LiteralPath $Path
+    $text = $text.Replace(
+      "CompositionId = 'codex-cursor-escape-loop' }",
+      "CompositionId = 'codex-cursor-escape-loop'; Parts = @('instructions/__header__.md') }"
+    )
+    Set-Content -LiteralPath $Path -Value $text -NoNewline
+  }
+  Test-Phase4FOwnershipScenario 'missing' {
+    param($Path)
+    $text = Get-Content -Raw -LiteralPath $Path
+    $text = $text.Replace("; CompositionId = 'codex-cursor-escape-loop' }", ' }')
+    Set-Content -LiteralPath $Path -Value $text -NoNewline
+  }
+  Test-Phase4FOwnershipScenario 'unknown' {
+    param($Path)
+    $text = Get-Content -Raw -LiteralPath $Path
+    $text = $text.Replace("CompositionId = 'codex-cursor-escape-loop'", "CompositionId = 'nonexistent-composition'")
+    Set-Content -LiteralPath $Path -Value $text -NoNewline
+  }
+  Test-Phase4FOwnershipScenario 'duplicate' {
+    param($Path)
+    $text = Get-Content -Raw -LiteralPath $Path
+    $text = $text.Replace(
+      "@{ LogicalRoot = 'codex-home'; Source = 'instructions/agents-block.md'; Dest = 'AGENTS.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop' }",
+      "@{ LogicalRoot = 'codex-home'; Source = 'instructions/agents-block.md'; Dest = 'AGENTS.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop' }`n        @{ LogicalRoot = 'codex-home'; Source = 'instructions/agents-block.md'; Dest = 'AGENTS2.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop' }"
+    )
+    Set-Content -LiteralPath $Path -Value $text -NoNewline
+  }
+  Test-Phase4FOwnershipScenario 'divergent' {
+    param($Path)
+    $text = Get-Content -Raw -LiteralPath $Path
+    $text = $text.Replace("Source = 'instructions/agents-block.md'; Dest = 'AGENTS.md'", "Source = 'instructions/__divergent__.md'; Dest = 'AGENTS.md'")
+    Set-Content -LiteralPath $Path -Value $text -NoNewline
+  }
+  Test-Phase4FOwnershipScenario 'host-mismatch' {
+    param($Path)
+    $text = Get-Content -Raw -LiteralPath $Path
+    $text = $text.Replace("CompositionId = 'codex-cursor-escape-loop'", "CompositionId = 'cline-cursor-escape-loop'")
+    Set-Content -LiteralPath $Path -Value $text -NoNewline
+  }
+
+  # Catalog-side mutations: non-runtime ownership and multi-reference drift.
+  $phase4FNonRuntime = Invoke-EdgeCase 'workflows' {
+    param($c)
+    $codexComp = @($c.workflows.compositions | Where-Object { [string]$_.id -eq 'codex-cursor-escape-loop' })[0]
+    $codexComp.PSObject.Properties.Remove('runtimeOnly')
+  }
+  Assert-RegistryFailure $phase4FNonRuntime 'Phase 4F Codex non-runtime composition fails' 'composition-order-ownership'
+  $phase4FMultiRef = Invoke-EdgeCase 'workflows' {
+    param($c)
+    $codexComp = @($c.workflows.compositions | Where-Object { [string]$_.id -eq 'codex-cursor-escape-loop' })[0]
+    $codexComp.references = @('instructions/agents-block.md', 'instructions/__header__.md')
+  }
+  Assert-RegistryFailure $phase4FMultiRef 'Phase 4F Codex multi-reference composition fails' 'composition-order-ownership'
+
+  # Writer-side binding rejections with a bounded companion fixture.
+  $phase4FAdapterCompanion = Join-Path ([IO.Path]::GetTempPath()) ('phase4f-adapter-companion-' + [Guid]::NewGuid().ToString('N'))
+  try {
+    New-Item -ItemType Directory -Path (Join-Path $phase4FAdapterCompanion 'catalog') -Force | Out-Null
+    New-Item -ItemType Directory -Path (Join-Path $phase4FAdapterCompanion 'overlays/codex/instructions') -Force | Out-Null
+    Copy-Item (Join-Path $RepoRoot 'catalog/workflows.json') (Join-Path $phase4FAdapterCompanion 'catalog/workflows.json')
+    Copy-Item (Join-Path $RepoRoot 'overlays/codex/instructions/agents-block.md') (Join-Path $phase4FAdapterCompanion 'overlays/codex/instructions/agents-block.md')
+    Copy-Item (Join-Path $RepoRoot 'overlays/codex/instructions/agents-block.md') (Join-Path $phase4FAdapterCompanion 'overlays/codex/instructions/agents-block-divergent.md')
+    $phase4FAdapterRoots = New-Phase4FCodexRoots
+    try {
+      $phase4FWriterParts = Import-PowerShellDataFile (Join-Path $RepoRoot 'scripts/host-sync/manifests/codex.manifest.psd1')
+      $phase4FWriterParts.DestinationEntries[0]['Parts'] = @('instructions/__header__.md')
+      $phase4FWriterPartsReport = Invoke-StackHarnessSync -Mode ([HostSyncMode]::DryRun) -CompanionRoot $phase4FAdapterCompanion -Manifest $phase4FWriterParts `
+        -CodexRoot $phase4FAdapterRoots.Codex -SkillRoot $phase4FAdapterRoots.Skills
+      Assert-View 'Phase 4F writer rejects manifest-owned Parts under composition binding' (
+        -not $phase4FWriterPartsReport.Success -and
+        @($phase4FWriterPartsReport.Errors | Where-Object { $_ -like '*composition-order-ownership*' }).Count -gt 0
+      ) (($phase4FWriterPartsReport.Errors) -join '; ')
+      $phase4FWriterUnknown = Import-PowerShellDataFile (Join-Path $RepoRoot 'scripts/host-sync/manifests/codex.manifest.psd1')
+      $phase4FWriterUnknown.DestinationEntries[0]['CompositionId'] = 'nonexistent-composition'
+      $phase4FWriterUnknownReport = Invoke-StackHarnessSync -Mode ([HostSyncMode]::DryRun) -CompanionRoot $phase4FAdapterCompanion -Manifest $phase4FWriterUnknown `
+        -CodexRoot $phase4FAdapterRoots.Codex -SkillRoot $phase4FAdapterRoots.Skills
+      Assert-View 'Phase 4F writer rejects unknown composition ID fail-closed' (
+        -not $phase4FWriterUnknownReport.Success -and
+        @($phase4FWriterUnknownReport.Errors | Where-Object { $_ -like '*composition-order-ownership*' -and $_ -like '*CompositionOrderMissing*' }).Count -gt 0
+      ) (($phase4FWriterUnknownReport.Errors) -join '; ')
+      $phase4FWriterDivergent = Import-PowerShellDataFile (Join-Path $RepoRoot 'scripts/host-sync/manifests/codex.manifest.psd1')
+      $phase4FWriterDivergent.DestinationEntries[0]['Source'] = 'instructions/agents-block-divergent.md'
+      $phase4FWriterDivergentReport = Invoke-StackHarnessSync -Mode ([HostSyncMode]::DryRun) -CompanionRoot $phase4FAdapterCompanion -Manifest $phase4FWriterDivergent `
+        -CodexRoot $phase4FAdapterRoots.Codex -SkillRoot $phase4FAdapterRoots.Skills
+      Assert-View 'Phase 4F writer rejects divergent composition source fail-closed' (
+        -not $phase4FWriterDivergentReport.Success -and
+        @($phase4FWriterDivergentReport.Errors | Where-Object { $_ -like '*composition-order-ownership*' -and $_ -like "*not found in composition '$($phase4FWriterDivergent.DestinationEntries[0]['CompositionId'])' references*" }).Count -gt 0
+      ) (($phase4FWriterDivergentReport.Errors) -join '; ')
+    } finally {
+      Remove-Item -LiteralPath $phase4FAdapterRoots.Scratch -Recurse -Force
+    }
+  } finally {
+    Remove-Item -LiteralPath $phase4FAdapterCompanion -Recurse -Force
   }
 
   # Phase 3A machinery guard: the shadow slice must not change canonical skill

@@ -834,6 +834,10 @@ function Get-RegistryGenericCompositionBinding {
         }
         throw
     }
+    # PowerShell unwraps a single-element array return to a bare string, which
+    # has no .Count under StrictMode. Normalize before positional iteration so
+    # one-reference compositions (Codex managed block) behave like multi-ref.
+    $refs = @($refs)
     $sourceIndex = -1
     for ($i = 0; $i -lt $refs.Count; $i++) {
         if ($refs[$i] -ceq $Source) {

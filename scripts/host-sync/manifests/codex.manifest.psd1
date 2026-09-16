@@ -15,7 +15,7 @@
     SkillCatalogBudgetCharacters     = 8000
 
     DestinationEntries               = @(
-        @{ LogicalRoot = 'codex-home'; Source = 'instructions/agents-block.md'; Dest = 'AGENTS.md'; Role = 'managed-block-target' }
+        @{ LogicalRoot = 'codex-home'; Source = 'instructions/agents-block.md'; Dest = 'AGENTS.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop' }
         @{ LogicalRoot = 'codex-home'; Dest = 'AGENTS.override.md'; Role = 'guard-only-override'; GuardOnly = $true }
         @{ LogicalRoot = 'codex-home'; Source = 'agents/planner.toml'; Dest = 'agents/planner.toml'; Role = 'managed-agent-target' }
         @{ LogicalRoot = 'codex-home'; Source = 'agents/plan_reviewer.toml'; Dest = 'agents/plan_reviewer.toml'; Role = 'managed-agent-target' }

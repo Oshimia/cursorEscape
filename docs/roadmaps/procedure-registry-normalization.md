@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E dual-review APPROVED — Phase 4 remains open; 4F next
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F dual-review APPROVED — Phase 4 remains open; 4G next
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E dual-review APPROVED — Phase 4 remains open; 4F next
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F dual-review APPROVED — Phase 4 remains open; 4G next
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -934,6 +934,21 @@ Phase 4:             Not started
   - [x] Measured changeset: 5 files, 245 insertions, 15 deletions (pre-roadmap-update snapshot).
   - [x] Implementer-owned dual review: production_readiness_reviewer APPROVED (Blocking None, Non-blocking None, Blocking test/docs None); bug_reviewer CLEAN.
   - [x] Two production-review Batchables deferred; no blocking or blocking test/docs findings remained.
+
+#### Phase 4F — Codex managed AGENTS block and remaining wiring
+
+- **Status:** Phase 4F dual-review APPROVED (iteration 1 of 4) — overall Phase 4 remains open; 4G next.
+- **Boundary:** Registry-owned semantic order for the Codex managed AGENTS block. The single canonical block is represented as an exact one-reference `runtimeOnly` composition; the manifest binds `CompositionId` while retaining `LogicalRoot`, destination, ownership marker, guard-only override behavior, explicit two-root safety, staged writes, rollback, and current-state hash checks. No canonical prose, live-host write, block split/rewrite, or later-slice migration.
+- **Evidence:**
+  - [x] `codex-cursor-escape-loop` is `runtimeOnly` with the exact single reference `instructions/agents-block.md`; the AGENTS.md destination binds it via `CompositionId`.
+  - [x] The specialized adapter consumes registry order through `Get-RegistryGenericCompositionBinding`; manifest-owned semantic fields, missing/unknown IDs, duplicates, omissions, extras, divergent bindings, host mismatch, non-runtime ownership, and divergent sources fail closed under `composition-order-ownership` in both registry validation and the writer.
+  - [x] Shared `Get-RegistryGenericCompositionBinding` normalizes single-reference arrays so one-reference compositions survive StrictMode iteration; multi-reference Generic stacks are unaffected.
+  - [x] Focused tests cover composition ownership, byte parity vs the legacy single-block render, deterministic rendering, managed-block begin/end boundaries, owner-owned outside-text preservation, guard-only override preservation, registry/catalog mutation rejection, and writer-side fail-closed rejections (dry-run fixtures only).
+  - [x] Historical six-stack ledger verification: PASS with two independent renders and six entries (run because the shared helper changed).
+  - [x] Observed Fast CI: registry view checks 676 passed / 0 failed; unit checks 24 passed / 0 failed; current-state PASS; Fast CI PASS. `git diff --check` PASS.
+  - [x] Measured changeset: 6 files, 313 insertions, 6 deletions (pre-roadmap-update snapshot).
+  - [x] Implementer-owned dual review: production_readiness_reviewer APPROVED (Blocking None, Non-blocking None, Blocking test/docs None); bug_reviewer CLEAN.
+  - [x] Three production-review Batchables deferred; no blocking or blocking test/docs findings remained.
 
 ---
 

@@ -228,7 +228,29 @@ function New-CodexInstallPlan {
                 throw "Codex overlay source is a reparse point: $identity -> $sourceFull"
             }
             $raw = [IO.File]::ReadAllText($sourceFull)
+            # Phase 4F: registry-owned composition binding. When the entry
+            # declares a CompositionId, its reference sequence comes from the
+            # registry; independent manifest-owned semantic fields are forbidden
+            # and the effective render order is asserted against the registry.
             $renderEntry = $entry
+            if ($entry.ContainsKey('CompositionId')) {
+                foreach ($forbidden in @('Parts', 'Footer', 'References', 'Order')) {
+                    if ($entry.ContainsKey($forbidden)) {
+                        throw "FAIL: composition-order-ownership: manifest-owned semantic field '$forbidden' is forbidden when CompositionId is declared: $identity"
+                    }
+                }
+                try {
+                    $binding = Get-RegistryGenericCompositionBinding -CompanionRoot $CompanionRoot `
+                        -CompositionId ([string]$entry['CompositionId']) -Source $sourceRel
+                }
+                catch {
+                    throw "Codex composition binding failed for ${identity}: $($_.Exception.Message)"
+                }
+                $renderEntry = @{}
+                foreach ($k in $entry.Keys) { $renderEntry[$k] = $entry[$k] }
+                if (@($binding.Parts).Count -gt 0) { $renderEntry['Parts'] = $binding.Parts }
+                if (@($binding.Footer).Count -gt 0) { $renderEntry['Footer'] = $binding.Footer }
+            }
             try {
                 $resolvedEntry = Resolve-HostSyncEntryRefs -Entry $renderEntry -CompanionRoot $CompanionRoot `
                     -OverlayRoot $overlayFull -SharedRoot 'unused'

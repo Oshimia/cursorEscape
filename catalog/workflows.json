@@ -258,6 +258,15 @@
         "base:rules/iterative-code-review.md",
         "footers/instructions-wiring.md"
       ]
+    },
+    {
+      "id": "codex-cursor-escape-loop",
+      "host": "Codex",
+      "canonicalReferenceId": "agent-invocation",
+      "runtimeOnly": true,
+      "references": [
+        "instructions/agents-block.md"
+      ]
     }
   ],
   "semanticOrder": [
@@ -274,7 +283,8 @@
     "cursor-iterative-code-review",
     "cursor-pre-commit-ci-gate",
     "opencode-agents-dual-write-instructions",
-    "opencode-agents-dual-write-agents"
+    "opencode-agents-dual-write-agents",
+    "codex-cursor-escape-loop"
   ],
   "alwaysOn": [
     { "id": "cursor-invocation", "host": "Cursor", "gate": "invocation", "surface": "cursor-hybrid-rule", "canonicalReferenceId": "agent-invocation", "evidencePaths": ["rules/agent-invocation.md", "scripts/host-sync/manifests/cursor.manifest.psd1", "scripts/host-sync/adapters/Cursor.Adapter.ps1"] },
