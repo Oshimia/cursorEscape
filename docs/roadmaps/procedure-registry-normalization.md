@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F dual-review APPROVED — Phase 4 remains open; 4G next
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F complete; Phase 4G complete — Phase 4 complete; Phase 5 next
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F dual-review APPROVED — Phase 4 remains open; 4G next
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F complete; Phase 4G complete — Phase 4 complete; Phase 5 next
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -937,7 +937,7 @@ Phase 4:             Not started
 
 #### Phase 4F — Codex managed AGENTS block and remaining wiring
 
-- **Status:** Phase 4F dual-review APPROVED (iteration 1 of 4) — overall Phase 4 remains open; 4G next.
+- **Status:** Phase 4F complete.
 - **Boundary:** Registry-owned semantic order for the Codex managed AGENTS block. The single canonical block is represented as an exact one-reference `runtimeOnly` composition; the manifest binds `CompositionId` while retaining `LogicalRoot`, destination, ownership marker, guard-only override behavior, explicit two-root safety, staged writes, rollback, and current-state hash checks. No canonical prose, live-host write, block split/rewrite, or later-slice migration.
 - **Evidence:**
   - [x] `codex-cursor-escape-loop` is `runtimeOnly` with the exact single reference `instructions/agents-block.md`; the AGENTS.md destination binds it via `CompositionId`.
@@ -949,6 +949,20 @@ Phase 4:             Not started
   - [x] Measured changeset: 6 files, 313 insertions, 6 deletions (pre-roadmap-update snapshot).
   - [x] Implementer-owned dual review: production_readiness_reviewer APPROVED (Blocking None, Non-blocking None, Blocking test/docs None); bug_reviewer CLEAN.
   - [x] Three production-review Batchables deferred; no blocking or blocking test/docs findings remained.
+
+#### Phase 4G — Closeout: blocking composition guard, retire superseded checks, reconcile baselines
+
+- **Status:** Phase 4G dual-review APPROVED (replacement iteration 3 of 4) — Phase 4 complete; Phase 5 next.
+- **Boundary:** Audit-and-attest closeout. No runtime code, adapter, manifest, catalog, schema, or baseline changes. Confirms blocking `composition-order-ownership` coverage for all five migrated host classes, audits Phase 4C–4F additions for genuinely superseded checks, verifies baseline non-drift, and records the Phase 4 closeout. No Phase 5 documentation, live-host write, or canonical prose change.
+- **Evidence:**
+  - [x] Blocking composition-order ownership confirmed for all five migrated classes: Cursor hybrid rules, OpenCode dual-write, Antigravity, Cline/Kilocode, and Codex managed AGENTS block. `Test-RegistryHostCompositionOwnership` in `ProcedureRegistry.psm1` validates all five host classes under `composition-order-ownership` and is wired into Fast CI through `Test-RegistryCatalog` → `Test-ProcedureRegistryCatalogs` → `Test-ProcedureRegistry.ps1`. Writer-level fail-closed guards remain active in Cursor preflight (`Test-RegistryCursorHybridOrder`), OpenCode dual-write, Generic `Copy-ManifestEntry`, and Codex install-plan paths. A violation in any class fails the normalization Fast path, not merely an advisory report.
+  - [x] Representative blocking failure tests confirmed for all five migrated classes: Cursor semantic-order reorder and missing composition; OpenCode forbidden Parts and missing composition IDs; Antigravity forbidden Parts, missing/unknown IDs, and `Copy-ManifestEntry` runtime rejection; Cline/Kilocode forbidden Parts/Footer, missing/unknown/duplicate/divergent; Codex forbidden Parts, missing/unknown/duplicate/divergent, host mismatch, non-runtime, multi-reference, and writer-side Parts/unknown/divergent rejections (dry-run fixtures).
+  - [x] Superseded-check audit: no Phase 4C–4F checks retired. All `Add-SyncWarning` calls are independent behavior checks (pressure-release wording, NeverTouch paths, OpenCode instructions-path advisory), not composition checks. The current-state fixture checker's composition resolution (lines 181–210) validates Phase 0 inventory alignment — a different invariant from registry ownership — and the bidirectional composition equivalence (lines 318–349) validates inventory-to-manifest accuracy. Both are independent of the registry-owned guard and retained. The registry-level guard (`Test-RegistryHostCompositionOwnership`) validates manifest-to-registry ownership; it supersedes nothing because it is the sole durable blocking path rather than a duplicate of an existing check.
+  - [x] Consolidation audit: the HostSync.Core `Get-RegistryRuntimeCompositionOrder` (disk-based) and ProcedureRegistry `Get-RegistryCompositionOrderById` (pre-loaded catalogs) serve different loading contexts; consolidating would require a module-dependency refactor without reducing real risk. Per-adapter forbidden-field checks are 3–5 lines each with intentionally scoped contexts; a shared helper would add indirection without risk reduction. No consolidation warranted per "only where it reduces real risk without a large refactor."
+  - [x] Render baseline reconciliation: `Get-ExistingSixStackRenderLedger.ps1 -Verify` PASS with two independent renders and six entries. No baseline drift exists; no reconciliation required. No changes to `existing-six-stack-render-hashes-2026-09.json`.
+  - [x] Observed Fast CI: registry view checks 676 passed / 0 failed; unit checks 24 passed / 0 failed; current-state PASS; Fast CI PASS. `git diff --check` PASS.
+  - [x] Measured changeset: 2 files, 19 insertions, 5 deletions (roadmap closeout + ledger-helper comment audit; no runtime code, adapter, manifest, catalog, schema, or baseline changes).
+  - [x] Implementer-owned dual review (replacement iteration 3 of 4): production_readiness_reviewer APPROVED (Blocking None, Non-blocking None, Blocking test/docs None, Batchable None); bug_reviewer CLEAN (no findings).
 
 ---
 

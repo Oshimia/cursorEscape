@@ -129,14 +129,14 @@ function Add-RenderRows {
     if ($StackId -eq 'OpenCode') {
         # The historical ledger uses the same registry-owned composition order as
         # the runtime writer. Its synthetic body seed is legacy evidence shape and
-        # is deliberately preserved until Phase 4G reconciles this ledger.
+# is deliberately preserved; the Phase 4G audit verified no baseline drift and made no ledger change.
         $compositionRefs = Get-RegistryRuntimeCompositionOrder -CompanionRoot $CompanionRoot `
             -CompositionId ([string]$Manifest.AgentsDualWrite.InstructionsCompositionId)
         $compositionParts = @($compositionRefs | Where-Object { $_ -notlike 'footers/*' })
         $compositionFooter = @($compositionRefs | Where-Object { $_ -like 'footers/*' })
         $gate = @{
             # Preserve the historical ledger's synthetic body seed exactly; this
-            # legacy evidence renderer is reconciled separately in Phase 4G.
+# legacy evidence renderer was audited in Phase 4G, which verified no baseline drift.
             Source = 'base:rules/iterative-plan-review.md'
             Dest = [string]$Manifest.AgentsDualWrite.InstructionsRel
             Parts = $compositionParts
