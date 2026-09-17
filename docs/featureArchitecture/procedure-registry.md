@@ -73,8 +73,8 @@ Baselines are mechanical regression anchors generated from observed current rend
 
 | Gate | Script | Scope |
 |------|--------|-------|
-| Fast | `Invoke-NormalizationFastCI.ps1` | Registry validity + views (676 checks) + current-state + unit checks (24) + tracked hygiene + `git diff --check` |
-| Full | `Invoke-NormalizationFullCI.ps1` | Fast + Phase 2 Full + Phase 3 lifecycle Full + baseline ledger verify + drift fixtures + double-render |
+| Fast | `Invoke-NormalizationFastCI.ps1` | Registry validity + views (676 checks) + current-state + unit checks (24) + focused Codex overlay checks + tracked hygiene + `git diff --check` |
+| Full | `Invoke-NormalizationFullCI.ps1` | Fast + Phase 2 Full + focused Codex adapter checks + Phase 3 lifecycle Full + baseline ledger verify + drift fixtures + double-render |
 
 Exactly one Fast and one Full entry point exist. Host-sync phase scripts are internal to Full CI, never separate entry points.
 

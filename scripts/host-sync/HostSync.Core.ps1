@@ -1,10 +1,6 @@
 #Requires -Version 7.0
 Set-StrictMode -Version Latest
 
-function Get-HostSyncModuleRoot {
-    return $PSScriptRoot
-}
-
 function Resolve-CompanionRootPath {
     param(
         [Parameter(Mandatory)]

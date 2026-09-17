@@ -7,14 +7,17 @@ $checks = @(
   @{ Name='registry'; File=(Join-Path $PSScriptRoot 'Test-ProcedureRegistry.ps1') },
   @{ Name='views'; File=(Join-Path $PSScriptRoot 'Test-ProcedureRegistryViews.ps1') },
   @{ Name='phase0-current-state'; File=(Join-Path (Join-Path $RepoRoot 'scripts/normalization') 'Invoke-CurrentStateFixtureChecks.ps1') },
-  @{ Name='host-sync-units'; File=(Join-Path (Join-Path $RepoRoot 'scripts/host-sync') 'Invoke-RemediationUnitChecks.ps1') }
+  @{ Name='host-sync-units'; File=(Join-Path (Join-Path $RepoRoot 'scripts/host-sync') 'Invoke-RemediationUnitChecks.ps1') },
+  @{ Name='codex-phase1'; File=(Join-Path (Join-Path $RepoRoot 'scripts/host-sync') 'Invoke-CodexPhase1Checks.ps1') }
 )
 foreach ($check in $checks) {
   # The current-state checker gets a deliberate sandbox opt-out: host backup
   # directories can be unreadable under restricted CI, but absent baselines
   # still fail closed because the opt-out never waives absence.
   if ($check.Name -eq 'phase0-current-state') { & $check.File -RepoRoot $RepoRoot -AllowInaccessibleHistoricalBaseline }
-  elseif ($check.Name -in @('registry','views')) { & $check.File -RepoRoot $RepoRoot } else { & $check.File }
+  elseif ($check.Name -in @('registry','views')) { & $check.File -RepoRoot $RepoRoot }
+  elseif ($check.Name -eq 'codex-phase1') { & $check.File -CompanionRoot $RepoRoot }
+  else { & $check.File }
   if ($LASTEXITCODE -ne 0) { throw "FAIL: $($check.Name) exited $LASTEXITCODE" }
 }
 $retiredFixtureTerm = [string]::Join('', [char]0x67, [char]0x6F, [char]0x6C, [char]0x64, [char]0x65, [char]0x6E)

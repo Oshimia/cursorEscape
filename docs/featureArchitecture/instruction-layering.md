@@ -1,6 +1,6 @@
 # Instruction Layering
 
-**Last updated:** 2026-09-08
+**Last updated:** 2026-09-18
 
 ## Context
 
@@ -8,7 +8,7 @@ This document is **Target** design for how workflow instructions are **budgeted 
 
 **Required** portable intent: keep always-on text minimal; load skills, deep procedure docs, and role agents only when needed. Cursor User Rules, `.mdc` rules, and `disable-model-invocation` are **Cursor-specific** mappings of that intent.
 
-Observed Cursor files under [overlays/cursor](../../overlays/cursor/_index.md) illustrate the pattern (**thin wrappers**). Live `~/.cursor` is the running install; the overlay is the in-repo copy-out map (not Target procedure). This page is SoT for the portable layering contract. repo-root contracts are Target inventory ([design decisions](../../review/design-decisions.md)).
+Observed Cursor files under [overlays/cursor](../../overlays/cursor/_index.md) illustrate the pattern (**thin wrappers**). Live `~/.cursor` is the running install; the overlay is the in-repo copy-out map (not Target procedure). This page is SoT for the portable layering contract. repo-root contracts are Target inventory ([project decisions](./project-decisions-and-open-questions.md)).
 
 ---
 
@@ -129,5 +129,5 @@ Adapters cite this page and [agents/_index.md](../../agents/_index.md) / [skills
 - [Skill contracts](../../skills/_index.md)
 - [pre-commit-ci-gate](../../rules/pre-commit-ci-gate.md)
 - [Host recreation study](../../analysis/host-recreation-2026-08.md)
-- [Design decisions](../../review/design-decisions.md)
+- [Project decisions and open questions](./project-decisions-and-open-questions.md)
 - [Companion pointer-first](../roadmaps/pointer-first.md)

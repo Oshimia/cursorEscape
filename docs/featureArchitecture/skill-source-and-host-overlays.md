@@ -1,12 +1,12 @@
 # Skill source and host overlays
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-18
 
 ## Context
 
 This document is **Target** design for how cursorEscape **authors one workflow** and applies it across **stacks** (currently Cursor, OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex) without two documentation trees. T3 Code is a control plane (threads, diffs) and **does not** get a third skill tree ([backend abstraction](./backend-and-provider-abstraction.md)).
 
-Identity: this companion repo is the owner's **skill and workflow manager** ([design decisions](../../review/design-decisions.md)). Analog: Theo `fleet` ([Observed](../../research/theo-fleet-skill-management.md)) — **stacks**, not machines. Multi-machine sync is a **non-goal**.
+Identity: this companion repo is the owner's **skill and workflow manager** ([project decisions](./project-decisions-and-open-questions.md)). Analog: Theo `fleet` ([Observed](../../research/theo-fleet-skill-management.md)) — **stacks**, not machines. Multi-machine sync is a **non-goal**.
 
 Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 
@@ -72,7 +72,7 @@ Composition and safety semantics (current state after Phase 4 normalization):
 - **Skew degeneration** — the cross-stack skew guard keys on **source identity + sibling stacks** at whole-leaf (Dest) granularity; when sources degenerate to overlay-only, single-stack Apply stops failing closed for that leaf (documented, not silent).
 - **Ref resolution contract** (pinned by unit checks U17–U20): rooted/absolute refs are used **verbatim**; un-pre-resolved classed refs throw a clear error; overlay-relative refs resolve source-dir first, then fall back to `OverlayRoot`.
 
-Enforcement lives in [`Invoke-Phase2-RemediationChecks.ps1`](../../scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1) (63 checks) + unit checks ([Invoke-RemediationUnitChecks.ps1](../../scripts/host-sync/Invoke-RemediationUnitChecks.ps1), 22 checks). Manifest surface reference: [host-sync README](../../scripts/host-sync/README.md).
+Enforcement lives in [`Invoke-Phase2-RemediationChecks.ps1`](../../scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1) (63 checks) + unit checks ([Invoke-RemediationUnitChecks.ps1](../../scripts/host-sync/Invoke-RemediationUnitChecks.ps1), 24 checks). Manifest surface reference: [host-sync README](../../scripts/host-sync/README.md).
 
 ### Authored layers vs copy-out (Required)
 
@@ -194,7 +194,7 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 
 ## Implications / open questions
 
-1. U3 is **partial**: skill/adapter inventory SoT = this companion repo (**Target:** repo-root bases at `workflow/`, `skills/`, `agents/`, `rules/`; overlay = thin wrappers); host dirs = copy-out targets; per-target `.cursorEscape/` remains **Unknown** ([unresolved questions](../../review/unresolved-architectural-questions.md), [workspace model](./workspace-model.md)).
+1. U3 is **partial**: skill/adapter inventory SoT = this companion repo (**Target:** repo-root bases at `workflow/`, `skills/`, `agents/`, `rules/`; overlay = thin wrappers); host dirs = copy-out targets; per-target `.cursorEscape/` remains **Unknown** ([project decisions](./project-decisions-and-open-questions.md), [workspace model](./workspace-model.md)).
 2. Remaining incidental “canonical” phrasing in untouched leaves is **not** a second identity project — fix when that leaf is edited, or in a dedicated sweep, not by expanding review scope.
 3. R0 live trial runs on the Phase 3–synced global OpenCode adapter from [overlays/opencode](../../overlays/opencode/_index.md). C6 minimum smoke **pass** (2026-08-20 operator post-mirror) per [closeout](../../analysis/pointer-first-4-closeout-2026-08.md).
 4. Overlay bodies are **thin wrappers** pointing at repo-root bases — not a second `implementation-review` procedure in this tree.

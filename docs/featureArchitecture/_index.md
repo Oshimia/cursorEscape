@@ -1,12 +1,12 @@
 # Feature Architecture Documentation
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-18
 
 ## Context
 
 This section explains **how cursorEscape is intended to work** — Target design and workflow contracts. Unlike SOPs (how to perform a task), these documents describe system behavior and architecture.
 
-**Status:** Phase 6 closeout — Target synthesizing docs authored. Observed imports remain under `research/imported/`. Identity: companion repo is **Target** contract SoT at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/` — Approach A). Cursor overlay: [overlays/cursor](../../overlays/cursor/_index.md) (thin wrappers). Overlay FA: [skill-source-and-host-overlays.md](./skill-source-and-host-overlays.md).
+**Status:** Target synthesizing docs authored and current (authoring programs complete; normalization CI owns integrity checks). Observed imports remain under `research/imported/`. Identity: companion repo is **Target** contract SoT at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/` — Approach A). Cursor overlay: [overlays/cursor](../../overlays/cursor/_index.md) (thin wrappers). Overlay FA: [skill-source-and-host-overlays.md](./skill-source-and-host-overlays.md).
 
 ## Substance
 
@@ -21,13 +21,13 @@ This section explains **how cursorEscape is intended to work** — Target design
 | [`skills/`](../../skills/_index.md) | Host-agnostic skill contracts |
 | [`rules/`](../../rules/_index.md) | Always-on gate contracts |
 | [`workflow/`](../../workflow/_index.md) | Shared deep procedure (plan/review loops, discovery, CI ladder) |
-| [overlays/](../../overlays/_index.md) | Host-native thin wrappers (Cursor spawn + Read tables) |
+| [overlays/](../../overlays/_index.md) | Host-native thin wrappers and harness leaves for all seven registered stacks |
 
 ### Observed imports (Phase 2–3)
 
 Imported Observed harness and workflow snapshots live under [research/imported/](../../research/imported/COPY-MANIFEST.md) — not Target cursorEscape design.
 
-### Target documents (Phase 4)
+### Target documents
 
 | Document | Purpose |
 | -------- | ------- |
@@ -45,6 +45,7 @@ Imported Observed harness and workflow snapshots live under [research/imported/]
 | [evaluation-methodology.md](./evaluation-methodology.md) | How workflow quality is measured |
 | [bug-reviewer-finding-rubric.md](./bug-reviewer-finding-rubric.md) | bug_reviewer report vs ignore (nits / out-of-scope / pre-existing) |
 | [permission-and-native-tool-policy.md](./permission-and-native-tool-policy.md) | Shell permission policy: read-only allowlist SoT, git red line, accepted risks, measurement |
+| [project-decisions-and-open-questions.md](./project-decisions-and-open-questions.md) | Durable project decisions, framework/process fitness assessments, sibling-relationship intent, and unresolved architectural questions (U1–U13) |
 | [procedure-registry.md](./procedure-registry.md) | Semantic registry: ownership model, canonical source flow, blocking guard coverage for all migrated classes, sole Fast/Full CI orchestrators, baseline regeneration boundary, and explicit Phase 6 Apply boundary |
 
 First host attempt: [host recreation study](../../analysis/host-recreation-2026-08.md). Claim taxonomy: **Desired / Required / Nice-to-have / Cursor-specific / Unknown**.
@@ -60,7 +61,6 @@ First host attempt: [host recreation study](../../analysis/host-recreation-2026-
 ## Related
 
 - [Roadmap](../Roadmap.md)
-- [Design decisions](../../review/design-decisions.md)
-- [Unresolved architectural questions](../../review/unresolved-architectural-questions.md)
+- [Project decisions and open questions](./project-decisions-and-open-questions.md) — absorbs prior review/ intent (migrated 2026-09-18)
 - [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)
 - [Editing companion workflow](../SOPs/editing-companion-workflow.md) — operational edit map (cascade) for Approach A + pointer-first

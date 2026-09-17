@@ -1,6 +1,6 @@
 # Desired Behavior vs Cursor-Specific
 
-**Last updated:** 2026-09-10
+**Last updated:** 2026-09-18
 
 ## Context
 
@@ -18,7 +18,7 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 | **Desired** | Strong default; may yield with documented trade-off |
 | **Nice-to-have** | Improves loop quality; not blocking |
 | **Cursor-specific** | Tied to Cursor Desktop, Task/subagent IDs, or proprietary Bugbot |
-| **Unknown** | Deliberately unsettled — see [unresolved questions](../../review/unresolved-architectural-questions.md) |
+| **Unknown** | Deliberately unsettled — see [unresolved questions](./project-decisions-and-open-questions.md) |
 
 ### Portable (Desired / Required)
 
@@ -35,9 +35,9 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 | Thin always-on gates; on-demand skills / deep docs / lean agents | **Required** | [instruction layering](./instruction-layering.md) |
 | Isolated child review handoffs (no prior review transcripts) | **Required** | [clean-context isolation](./clean-context-isolation.md) |
 | Full CI before commit when Full ≠ `n/a` (on-demand policy) | **Required** | [pre-commit-ci-gate](../../rules/pre-commit-ci-gate.md) |
-| BYOK model keys | **Required** | [design decisions](../../review/design-decisions.md) |
+| BYOK model keys | **Required** | [design decisions](./project-decisions-and-open-questions.md) |
 | Replaceable backends and models | **Required** | [backend abstraction](./backend-and-provider-abstraction.md) |
-| First host: OpenCode + T3 control plane | **Desired** | [design decisions](../../review/design-decisions.md) |
+| First host: OpenCode + T3 control plane | **Desired** | [design decisions](./project-decisions-and-open-questions.md) |
 | ClinePass (or equivalent) as OpenCode provider | **Desired** | Later; U13 unproven |
 | Role + model assignment via config | **Desired** | Not hardcoded in prompts ([agent roles](./agent-roles-and-model-assignment.md)) |
 | 4-iteration pressure release for normal/review parents (Renew / Focus-narrow / Terminate+user with anti-abuse) | **Required** | [intended-workflow](./intended-workflow.md); [implementation-review](../../skills/implementation-review/SKILL.md). Supersedes historical count ≥ 9 / “no hard stop” narrowing. |
@@ -63,7 +63,7 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 | Item | Label |
 | ---- | ----- |
 | Reproduce Cursor's proprietary index | **Unknown** as v0 goal — see [repository discovery](./repository-discovery-and-context.md) |
-| Lock to Cursor subscription for review | **Required** non-goal per [design decisions](../../review/design-decisions.md) |
+| Lock to Cursor subscription for review | **Required** non-goal per [design decisions](./project-decisions-and-open-questions.md) |
 | Require VS Code | **Required** non-goal — T3 or thin client acceptable |
 
 ---

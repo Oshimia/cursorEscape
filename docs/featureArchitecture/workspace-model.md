@@ -1,6 +1,6 @@
 # Workspace Model
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-09-18
 
 ## Context
 
@@ -46,7 +46,7 @@ Operator
 | Property | Value |
 | -------- | ----- |
 | Runtime | **None** — docs only |
-| CI | Link/manifest checks ([initialization roadmap](../roadmaps/cursorEscape-initialization.md)) |
+| CI | Normalization Fast/Full CI ([procedure registry](./procedure-registry.md#ci-gates)) |
 | Canonical workflow source | **Target:** repo-root bases in this companion repo (`workflow/`, `skills/`, `agents/`, `rules/`). **Observed archaeology:** [workflow-source-delta](../../research/imported/workflow-source-delta.md) (eval freeze vs live; not a second procedure SoT) |
 | First recreation host | External T3 + OpenCode — not in-repo packages |
 
@@ -72,6 +72,6 @@ Operator
 
 - [Repository discovery and context](./repository-discovery-and-context.md)
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md)
-- [Design decisions](../../review/design-decisions.md)
+- [Project decisions and open questions](./project-decisions-and-open-questions.md)
 - [Host recreation study](../../analysis/host-recreation-2026-08.md)
 - [Skill source and host overlays](./skill-source-and-host-overlays.md)

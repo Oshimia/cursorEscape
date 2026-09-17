@@ -1,6 +1,6 @@
 # Repository Discovery and Context
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-09-18
 
 ## Context
 
@@ -32,7 +32,7 @@ Per change set, agents should gather **evidence**, not whole-repo dumps:
 | Nearby definitions / callers | **Desired** | [openBuggy context-retrieval](../../research/imported/openBuggy/featureArchitecture/context-retrieval.md) (Observed proposal) |
 | Tests touching area | **Desired** | Same |
 | `AGENTS.md`, README, section `_index.md` | **Required** when present | [discovery](../../workflow/discovery.md) |
-| Project rules / design decisions | **Required** for intent changes | cursorEscape `review/` |
+| Project rules / design decisions | **Required** for intent changes | [project decisions](./project-decisions-and-open-questions.md) |
 | Embedding index of entire repo | **Not a v0 goal** | Token/cost control |
 
 ### Ownership alternatives (Unknown — research-first)
@@ -44,7 +44,7 @@ Per change set, agents should gather **evidence**, not whole-repo dumps:
 | **Generated index** (tree-sitter, LSP, embeddings) | Higher fidelity; build cost |
 | **Host-provided index** (Cursor, IDE) | Convenient; lock-in risk |
 
-cursorEscape **Required:** Own repository knowledge in-repo ([design decisions](../../review/design-decisions.md)). **Unknown:** Which generated index tier (if any) ships in v1 runtime.
+cursorEscape **Required:** Own repository knowledge in-repo ([project decisions](./project-decisions-and-open-questions.md)). **Unknown:** Which generated index tier (if any) ships in v1 runtime.
 
 ### Non-goals
 
@@ -55,7 +55,7 @@ cursorEscape **Required:** Own repository knowledge in-repo ([design decisions](
 
 ## Implications / open questions
 
-1. Phase 5 initialization report will propose a concrete repo-discovery approach — not start implementation.
+1. The initialization Phase 5 report recorded the repo-discovery approach (2026-08-19 archaeology); the operational procedure now lives in [discovery](../../workflow/discovery.md) — runtime index tier remains Unknown.
 2. repository_explorer role explores; implementer consumes summarized context ([agent roles](./agent-roles-and-model-assignment.md)).
 
 ---

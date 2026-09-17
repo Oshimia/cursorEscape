@@ -163,14 +163,3 @@ function Get-StackAdapterScript {
     }
     throw "Adapter not found for stack '$StackId': $adapterPath (and no Generic.Adapter.ps1 at $genericPath)"
 }
-
-function Import-StackAdapter {
-    param(
-        [Parameter(Mandatory)]
-        [string] $StackId,
-        [string]$HostSyncRoot = $PSScriptRoot
-    )
-
-    $adapterPath = Get-StackAdapterScript -StackId $StackId -HostSyncRoot $HostSyncRoot
-    . $adapterPath
-}

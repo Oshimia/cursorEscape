@@ -1,6 +1,6 @@
 # Cursor Behavior to Reproduce
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-09-18
 
 ## Context
 
@@ -44,7 +44,7 @@ This document lists **Observed** Cursor behaviors worth preserving in a portable
 | Observed | Why not |
 | -------- | ------- |
 | Cursor-only `bugbot` subagent type | Use OpenCode `bug_reviewer` agent + skills |
-| Require openBuggy engine for v0 | Research / optional later — [design decisions](../../review/design-decisions.md) |
+| Require openBuggy engine for v0 | Research / optional later — [design decisions](./project-decisions-and-open-questions.md) |
 | Proprietary deep links / PR bot in v0 | [ide-and-agent-integration](../../research/imported/openBuggy/featureArchitecture/ide-and-agent-integration.md) non-goals |
 | Freeze eval `REVIEW_LOOP.md` unified APPROVED bar | Eval-packaging only |
 | Hardcoded streaming-media npm CI gate | Domain-specific freeze artifact |

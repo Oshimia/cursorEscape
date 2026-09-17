@@ -1,6 +1,6 @@
 # Host harness sync (modular layout)
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-18
 
 Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require `-Apply` and a valid Phase 0 baseline gate artifact. After Phase 4 normalization, the [procedure registry](../../docs/featureArchitecture/procedure-registry.md) owns semantic composition order for all five migrated host classes (Cursor hybrid, OpenCode dual-write, Antigravity, Cline/Kilocode, Codex managed AGENTS block); manifests own destinations, host-only substitutions, and `CompositionId` bindings. The sole normalization CI entry points are [`../normalization/Invoke-NormalizationFastCI.ps1`](../normalization/Invoke-NormalizationFastCI.ps1) (Fast) and [`../normalization/Invoke-NormalizationFullCI.ps1`](../normalization/Invoke-NormalizationFullCI.ps1) (Full); the host-sync phase scripts are internally invoked by Full CI, never separate entry points.
 
@@ -166,6 +166,8 @@ pwsh scripts/host-sync/Invoke-HostSyncDriftFixtureChecks.ps1
 ```
 
 `Invoke-Phase2FullCI.ps1` is non-mutating. It validates exact planned C1 bytes, deterministic OpenCode JSON, model/provider preservation, inventory, and zero managed-byte changes from dry-run; it must never invoke `-Apply`.
+
+Two focused Codex suites remain internal normalization coverage: `Invoke-CodexPhase1Checks.ps1` runs in Fast, and `Invoke-CodexAdapterChecks.ps1` runs in Full after the host-sync Phase 2 gate. Both accept explicit `-CompanionRoot` values and use disposable roots rather than live host profiles.
 
 ## OpenCode JSON merge — canonical key order (required)
 

@@ -7,6 +7,7 @@ $normal = $PSScriptRoot; $sync = Join-Path $RepoRoot 'scripts/host-sync'
 $commands = @(
   @{ Name='fast'; File=Join-Path $normal 'Invoke-NormalizationFastCI.ps1'; Arguments=@{} },
   @{ Name='host-sync-phase2-full'; File=Join-Path $sync 'Invoke-Phase2FullCI.ps1'; Arguments=@{} },
+  @{ Name='codex-adapter'; File=Join-Path $sync 'Invoke-CodexAdapterChecks.ps1'; Arguments=@{ CompanionRoot = $RepoRoot } },
   @{ Name='host-sync-phase3-lifecycle-full'; File=Join-Path $sync 'Invoke-Phase3FullCI.ps1'; Arguments=@{} },
   @{ Name='render-ledger'; File=Join-Path $sync 'Get-ExistingSixStackRenderLedger.ps1'; Arguments=@{ Verify=$true } },
   @{ Name='drift-fixtures'; File=Join-Path $sync 'Invoke-HostSyncDriftFixtureChecks.ps1'; Arguments=@{} }

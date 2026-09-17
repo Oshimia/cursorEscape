@@ -3,10 +3,12 @@
 .SYNOPSIS
   Phase 2 Fast CI for host-harness-sync (dry-run OpenCode + All; no live Apply).
 #>
+param(
+    [string]$RepoRoot = (Resolve-Path -LiteralPath (Join-Path -Path $PSScriptRoot -ChildPath '..\..')).Path
+)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-
-$companionRoot = 'C:\Users\admin\source\repos\general-projects\cursorEscape'
+$companionRoot = [IO.Path]::GetFullPath((Resolve-Path -LiteralPath $RepoRoot).Path)
 $syncScript = Join-Path $companionRoot 'scripts\Sync-HostHarness.ps1'
 $hostSyncRoot = Join-Path $companionRoot 'scripts\host-sync'
 
