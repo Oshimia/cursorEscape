@@ -1,10 +1,10 @@
 # Antigravity host adapter
 
-**Last updated:** 2026-09-15
+**Last updated:** 2026-09-16
 
 ## Context
 
-This SOP documents the **Antigravity adapter** for the owner's agentic stack. **Target SoT** is the companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md)). Files under `~/.gemini/` are the **host copy-out target**, not a second procedure tree. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) from [overlays/antigravity](../../overlays/antigravity/_index.md). Owner ruling (2026-08-26): **live sync not deferred** — `-Apply -Target Antigravity` is authorized whenever a distribution warrants it.
+This SOP documents the **Antigravity adapter** for the owner's agentic stack. **Target SoT** is the companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md)). Files under `~/.gemini/` are the **host copy-out target**, not a second procedure tree. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) from [overlays/antigravity](../../overlays/antigravity/_index.md). Historical owner ruling (2026-08-26): **live sync not deferred** — superseded by the Phase 6 Apply boundary: `-Apply` is now gated on explicit owner authorization for Phase 6 only; dry-run is always allowed (see [procedure registry Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary)).
 
 Owner decisions (2026-08-23): cursorEscape is **sole SoT**; live global rules (`~/.gemini/GEMINI.md`) are **wholesale-replaced** by the overlay gate; v1 surfaces = global skills + global workflows + reviewer subagent defs + GEMINI.md.
 

@@ -1,8 +1,8 @@
 # Host harness sync (modular layout)
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-16
 
-Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require `-Apply` and a valid Phase 0 baseline gate artifact.
+Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require `-Apply` and a valid Phase 0 baseline gate artifact. After Phase 4 normalization, the [procedure registry](../../docs/featureArchitecture/procedure-registry.md) owns semantic composition order for all five migrated host classes (Cursor hybrid, OpenCode dual-write, Antigravity, Cline/Kilocode, Codex managed AGENTS block); manifests own destinations, host-only substitutions, and `CompositionId` bindings. The sole normalization CI entry points are [`../normalization/Invoke-NormalizationFastCI.ps1`](../normalization/Invoke-NormalizationFastCI.ps1) (Fast) and [`../normalization/Invoke-NormalizationFullCI.ps1`](../normalization/Invoke-NormalizationFullCI.ps1) (Full); the host-sync phase scripts are internally invoked by Full CI, never separate entry points.
 
 **Entry script:** [`../Sync-HostHarness.ps1`](../Sync-HostHarness.ps1)
 
@@ -47,7 +47,7 @@ CopyEntries are **v2**: each entry names its source with a class prefix, resolve
 Entry keys beyond `Source`/`Dest`:
 
 - **`Parts` / `Footer`** — compose the dest from ordered file references (e.g. host `__header__.md` part + `base:` body + wiring footer). Composed dests leave no second authored procedure.
-- **`CompositionId`** — registry-owned semantic composition. When present, the render path derives `Parts`/`Footer` from the registry composition references and **`Parts`/`Footer` are forbidden** on the same entry (`composition-order-ownership` fail-closed). Use for stacks whose reference order is governed by `catalog/workflows.json`.
+- **`CompositionId`** — registry-owned semantic composition (current state for all five migrated host classes). When present, the render path derives `Parts`/`Footer` from the registry composition references and **`Parts`/`Footer` are forbidden** on the same entry (`composition-order-ownership` fail-closed, enforced as a blocking guard in normalization Fast CI). The semantic order lives in `catalog/workflows.json`; the manifest owns only the destination, host-only substitutions, and the `CompositionId` binding.
 - **`Substitutions`** — fail-closed: each must match **exactly once**; no-match / double-match = hard render error.
 - **`PlannedContent`** — dry-run captures would-be written content (incl. dual-written mirrors) for CI asserts.
 - **Expected renders** — committed expected-renders under [`render-baselines/`](./render-baselines/phase2/) are the byte-exact regression anchor for composed dests.
@@ -109,6 +109,10 @@ One-time baselines taken before building this tool. Used for **restore if Apply 
 Gate artifact: [`baseline-backups.paths.json`](./baseline-backups.paths.json)
 
 **Restore precedence:** Phase 0 `pre-host-sync-build` baselines → legacy archaeology only (`pre-pointer-sync`, `opencode-backup-20260820-*`, `qc-bugbot-ui-*`). No per-Apply / per-sync backup kind.
+
+**Baseline regeneration boundary:** render baselines under [`render-baselines/`](./render-baselines/) and the six-stack ledger are mechanical regression anchors generated from observed current renders. Never edit baseline or projection bytes to satisfy a stale expectation. When a render output legitimately changes: (1) regenerate the six-stack ledger with `pwsh -NoProfile -File scripts/host-sync/Get-ExistingSixStackRenderLedger.ps1 -WriteLedger`; (2) verify with `pwsh -NoProfile -File scripts/host-sync/Get-ExistingSixStackRenderLedger.ps1 -Verify`; (3) for individual expected-render files, render through the deterministic adapter path (for example, the manifest-driven dry-run `pwsh scripts/Sync-HostHarness.ps1 -Target <StackId>` to produce the planned render) or the registry renderer at `scripts/normalization/Render-ProcedureRegistry.ps1` with an explicit output root; (4) commit the regenerated artifacts in the same changeset. Direct editing of expected-render or ledger files is forbidden.
+
+**Live Apply is Phase 6 only** per the [procedure registry Apply boundary](../../docs/featureArchitecture/procedure-registry.md#phase-6-apply-boundary). Dry-run is always allowed; `-Apply` requires explicit owner authorization. Pre-Apply gates: all-host dry-run, read-only drift report, baseline parity confirmation, and normalization Full CI.
 
 ## Hard excludes (by manifest)
 

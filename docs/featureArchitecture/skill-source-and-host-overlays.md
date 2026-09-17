@@ -1,6 +1,6 @@
 # Skill source and host overlays
 
-**Last updated:** 2026-09-14
+**Last updated:** 2026-09-16
 
 ## Context
 
@@ -29,7 +29,7 @@ Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 
 ### Job (Required)
 
-This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`, `~/.gemini`, effective `CODEX_HOME`, and other registered homes) are **copy-out / install targets**, not a second authored procedure tree. **Live sync:** [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` operator-gated and global-preflighted) from the registered overlay trees, including [overlays/codex](../../overlays/codex/_index.md) — modular layout in [host-sync README](../../scripts/host-sync/README.md). Sync **does not create backups**; Phase 0 baselines are restore-only. Codex became Active on 2026-09-08 with C1–C6 attested; fresh owner authorization and C1–C6 attestation are required only if re-armed to `BringUp`. **pointer-first-4** deleted OpenCode procedure mirror (2026-08-20). C6 minimum runtime smoke **pass** (2026-08-20 operator post-mirror) per [host-adapter](../SOPs/opencode-host-adapter.md) and [closeout](../../analysis/pointer-first-4-closeout-2026-08.md). Do not create repo-root `adapters/` directories.
+This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`, `~/.gemini`, effective `CODEX_HOME`, and other registered homes) are **copy-out / install targets**, not a second authored procedure tree. **Live sync:** [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` requires explicit Phase 6 owner authorization per the [procedure registry Apply boundary](./procedure-registry.md#phase-6-apply-boundary), all-host normative, single-stack `-AllowSkew` only as an explicitly owner-authorized recovery exception) from the registered overlay trees, including [overlays/codex](../../overlays/codex/_index.md) — modular layout in [host-sync README](../../scripts/host-sync/README.md). Sync **does not create backups**; Phase 0 baselines are restore-only. Historical: Codex became Active on 2026-09-08 with C1–C6 attested; future Apply passes require fresh Phase 6 owner authorization. **pointer-first-4** deleted OpenCode procedure mirror (2026-08-20). C6 minimum runtime smoke **pass** (2026-08-20 operator post-mirror) per [host-adapter](../SOPs/opencode-host-adapter.md) and [closeout](../../analysis/pointer-first-4-closeout-2026-08.md). Do not create repo-root `adapters/` directories.
 
 ### Target taxonomy — Approach A (Required)
 
@@ -62,9 +62,10 @@ Manifest entries are **v2**: each `CopyEntry` names its source with a **class pr
 | `base:` | Repo-root SoT body rendered into this dest (promote-into-twin) | `base:rules/pre-commit-ci-gate.md` |
 | `shared:` | `SharedRoot` knob — a rooted directory shared by several stacks; rooted values accepted verbatim | `shared:skills/discovery/SKILL.md` |
 
-Composition and safety semantics (all **Required**):
+Composition and safety semantics (current state after Phase 4 normalization):
 
-- **Parts / Footer** — a dest may compose from multiple file references (a host `__header__.md` part + the `base:`/twin body + a host wiring footer), concatenated in declared order at sync time. Composed dests leave **no second authored procedure** — each part is either host-mechanics or shared SoT.
+- **CompositionId (registry-governed)** — for all five migrated host classes, the semantic composition order is owned by the [procedure registry](./procedure-registry.md) via `catalog/workflows.json`; manifest entries bind the composition via `CompositionId` and **must not** declare `Parts` or `Footer` (the blocking `composition-order-ownership` guard rejects any divergence). Deterministic rendering derives the effective `Parts`/`Footer` sequence at sync time.
+- **Parts / Footer (historical/legacy)** — before registry normalization, a dest composed from multiple file references (a host `__header__.md` part + the `base:`/twin body + a host wiring footer), concatenated in declared order at sync time. This mechanism remains available for non-composition-bound entries that carry host-mechanics-only leaves; composed dests must not introduce a second authored procedure.
 - **Substitutions are fail-closed** — declared per entry, must match **exactly once**; a no-match or double-match is a hard render error, never a silent skip.
 - **PlannedContent capture** — dry-run captures the would-be written content (including dual-written mirrors like `AGENTS.md`) so CI can assert on renders without touching live trees.
 - **Baseline substrate** — committed expected-renders under `scripts/host-sync/render-baselines/` are the regression anchor for composed dests; renders must equal baselines byte-for-byte.
@@ -182,7 +183,7 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 
 **Unknown:** Whether future refresh needs operator-merge for `opencode.json` provider/model keys beyond what the sync script preserves.
 
-**Resolved (host-harness-sync + Codex Phase 3):** Modular sync entry [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) + [`scripts/host-sync/`](../../scripts/host-sync/README.md) registers seven stacks. Apply is lifecycle-gated and dry-run-preflights every selected stack before any write. OpenCode overlay path = [`overlays/opencode/`](../../overlays/opencode/_index.md); archived [`Rewrite-OpenCodeWorkflowLinks.ps1`](../../overlays/opencode/scripts/Rewrite-OpenCodeWorkflowLinks.ps1) (**not** primary sync). **Target load path:** companion `{{COMPANION_ROOT}}/workflow/` via absolute Reads from thin harness — not mirror-as-SoT.
+**Resolved (host-harness-sync + Codex Phase 3):** Modular sync entry [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) + [`scripts/host-sync/`](../../scripts/host-sync/README.md) registers seven stacks. Apply is lifecycle-gated and global-preflighted; dry-run preflight covers every selected stack before any write. OpenCode overlay path = [`overlays/opencode/`](../../overlays/opencode/_index.md); archived [`Rewrite-OpenCodeWorkflowLinks.ps1`](../../overlays/opencode/scripts/Rewrite-OpenCodeWorkflowLinks.ps1) (**not** primary sync). **Target load path:** companion `{{COMPANION_ROOT}}/workflow/` via absolute Reads from thin harness — not mirror-as-SoT.
 
 ### Other rejected patterns (detail)
 

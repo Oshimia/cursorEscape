@@ -1,10 +1,10 @@
 # Rules
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-16
 
 ## Context
 
-Host-agnostic **portable** always-on gate contracts at repo root. Cursor overlay **thin wrappers** (alwaysApply + pointer): [overlays/cursor/rules](../overlays/cursor/rules/).
+Host-agnostic **portable** always-on gate contracts at repo root. Cursor overlay **thin wrappers** (alwaysApply + pointer): [overlays/cursor/rules](../overlays/cursor/rules/). The [procedure registry](../docs/featureArchitecture/procedure-registry.md) owns semantic composition order; host gate bodies are composed via `CompositionId` into OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex always-on surfaces.
 
 ---
 
@@ -12,7 +12,7 @@ Host-agnostic **portable** always-on gate contracts at repo root. Cursor overlay
 
 | Rule | Contract | Cursor overlay |
 | ---- | -------- | -------------- |
-| agent-invocation | [agent-invocation.md](./agent-invocation.md) | [agent-invocation.mdc](../overlays/cursor/rules/agent-invocation.mdc) (`alwaysApply: true`; also composed into OpenCode, Antigravity, VS Code, Cline, and Kilo Code gates) |
+| agent-invocation | [agent-invocation.md](./agent-invocation.md) | [agent-invocation.mdc](../overlays/cursor/rules/agent-invocation.mdc) (`alwaysApply: true`; also composed into OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex managed AGENTS gates) |
 | iterative-plan-review | [iterative-plan-review.md](./iterative-plan-review.md) | [iterative-plan-review.mdc](../overlays/cursor/rules/iterative-plan-review.mdc) |
 | iterative-code-review | [iterative-code-review.md](./iterative-code-review.md) | [iterative-code-review.mdc](../overlays/cursor/rules/iterative-code-review.mdc) |
 | pre-commit-ci-gate | [pre-commit-ci-gate.md](./pre-commit-ci-gate.md) | [pre-commit-ci-gate.mdc](../overlays/cursor/rules/pre-commit-ci-gate.mdc) (`alwaysApply: false`) |

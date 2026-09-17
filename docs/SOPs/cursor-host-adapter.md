@@ -1,12 +1,12 @@
 # Cursor host adapter
 
-**Last updated:** 2026-09-15
+**Last updated:** 2026-09-16
 
 ## Context
 
 This SOP documents the **global Cursor adapter** on the operator machine. **Target SoT** is this companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md), [agents](../../agents/_index.md), [skills](../../skills/_index.md)). Files under `~/.cursor/` are the **host adapter / copy-out target**, not a second procedure tree.
 
-**Cursor copy-out:** operator-authorized live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` for live writes). OpenCode uses the same entry script ([opencode-host-adapter](./opencode-host-adapter.md)).
+**Cursor copy-out:** live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` gated on Phase 6 owner authorization per the [procedure registry Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary)). OpenCode uses the same entry script ([opencode-host-adapter](./opencode-host-adapter.md)).
 
 **Install root (this machine):** `C:\Users\admin\.cursor\`
 
@@ -46,12 +46,12 @@ Operator entry: [`scripts/Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.
 # Dry-run — ALL stacks by default (normative: pushes are global, never per-stack)
 pwsh ./scripts/Sync-HostHarness.ps1
 
-# Live write to ALL stacks — requires Phase 0 baseline gate; does NOT create backup trees
+# Live write to ALL stacks — Phase 6 only with explicit owner authorization per [Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary); does NOT create backup trees
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply
 
 # Single-stack variants are exceptions only:
 #   -Target Cursor        dry-run manifest inspection (read-only)
-#   -Apply -Target Cursor -AllowSkew    deliberate scoped repair; siblings go stale
+#   -Apply -Target Cursor -AllowSkew    explicitly owner-authorized scoped repair; siblings go stale
 ```
 
 On `-Apply`, the script:

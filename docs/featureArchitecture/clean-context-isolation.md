@@ -1,12 +1,14 @@
 # Clean Context and Isolation
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-16
 
 ## Context
 
 This document is **Target** design for **isolated child handoffs** — how parents invoke reviewers and phase subagents without shared chat memory. It is distinct from [instruction-layering.md](./instruction-layering.md) (token/context *budget*) and from [intended-workflow.md](./intended-workflow.md) (loop *stages*). Isolation is about **honesty of each review pass**, not how thin always-on text is.
 
 **Required** portable intent: every governed child launched under [agent invocation](../../workflow/agent-invocation.md)—including `planner`, `ad_hoc_child`, `repository_explorer`, and `test_reviewer`—runs in isolated child context; the parent packs everything it needs into the invocation. Host child sessions, fresh task/session replacements, and managed-agent routes are host mappings of that intent; they never relax the packed-payload or no-prior-transcript requirements.
+
+**Registry context:** the [procedure registry](./procedure-registry.md) owns the machine metadata (identity, aliases, required reading, authority/isolation, loop/gate, host representation) that every governed child's invocation envelope references; host projections and fallback routes are derived deterministically from registry composition entries.
 
 Observed overlay agents under [overlays/cursor/agents](../../overlays/cursor/agents/) illustrate the pattern (e.g. “You run in isolated context”). Live `~/.cursor` is the running install; the overlay is the in-repo **Observed** record (thin wrappers). This page is SoT for the portable isolation contract.
 

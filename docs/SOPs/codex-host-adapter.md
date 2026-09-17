@@ -1,10 +1,12 @@
 # Codex host adapter SOP
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-16
 
 **Stack:** `Codex` · **Logical roots:** effective `CODEX_HOME` (default `~/.codex`) + `~/.agents/skills` · **Surface:** managed `AGENTS.md` block, seven TOML agents, 23 skill wrappers
 
 **Status:** registered Phase 3 2026-09-08; `ApplyState = Active` (activated 2026-09-08 after owner-authorized install; three-client smoke attested 2026-09-08: CLI, VS Code extension, ChatGPT desktop).
+
+**Apply boundary:** `-Apply` is Phase 6 only with explicit owner authorization per the [procedure registry Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary). The historical 2026-09-08 activation is a completed lifecycle event; future Apply passes require fresh owner authorization for Phase 6.
 
 ## Context
 

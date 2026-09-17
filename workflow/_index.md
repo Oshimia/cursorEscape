@@ -1,8 +1,8 @@
 # Workflow docs (shared deep procedure)
 
-**Last updated:** 2026-09-13
+**Last updated:** 2026-09-16
 
-**Ownership:** Process changes land here first. Repo SOPs may extend with local paths; they must not contradict this core.
+**Ownership:** Process changes land here first. Repo SOPs may extend with local paths; they must not contradict this core. The [procedure registry](../docs/featureArchitecture/procedure-registry.md) owns machine metadata and semantic composition order for this content; host projections composed via `CompositionId` update automatically at render time.
 
 Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflow/` (copy-out only — not overwritten from this repo).
 
@@ -82,7 +82,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | Workflow leaf | Base skill | Base agent(s) | Cursor overlay | Rule overlay |
 | ------------- | ---------- | ------------- | -------------- | ------------ |
 | `discovery.md` | `skills/discovery/SKILL.md` | `planner`, `implementer`, `repository_explorer` | overlay discovery SKILL (Phase 2) | — |
-| `agent-invocation.md` | role contracts and launch-site skills | all governed child agents, including `ad_hoc_child` | [agent-invocation.mdc](../overlays/cursor/rules/agent-invocation.mdc) | [agent-invocation.mdc](../overlays/cursor/rules/agent-invocation.mdc); also composed into OpenCode, Antigravity, VS Code, Cline, and Kilo Code |
+| `agent-invocation.md` | role contracts and launch-site skills | all governed child agents, including `ad_hoc_child` | [agent-invocation.mdc](../overlays/cursor/rules/agent-invocation.mdc) | [agent-invocation.mdc](../overlays/cursor/rules/agent-invocation.mdc); also composed into OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex managed AGENTS |
 | `iterative-plan-review.md` | `skills/plan-review/SKILL.md`, `skills/implementation-plan/SKILL.md` | `plan_reviewer` | overlay plan SKILL | `iterative-plan-review.mdc` |
 | `plan-reviewer-report.md` | `skills/plan-review/SKILL.md`, `skills/implementation-plan/SKILL.md` | `plan_reviewer` | — | — |
 | `iterative-code-review.md` | `skills/implementation-review/SKILL.md` | `production_readiness_reviewer`, `bug_reviewer` | review SKILL + `reviewer-a.md` | `iterative-code-review.mdc` |

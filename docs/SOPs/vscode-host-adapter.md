@@ -1,12 +1,12 @@
 # VS Code host adapter SOP
 
-**Stack:** `Vscode` · **Live root:** `~/.copilot/` · **Surface:** Copilot user-level instructions/agents/skills (docs-verified 2026-09-01 — [load-surface map](../analysis/vscode-load-surface-2026-09.md))
+**Stack:** `Vscode` · **Live root:** `~/.copilot/` · **Surface:** Copilot user-level instructions/agents/skills (docs-verified 2026-09-01 — [load-surface map](../../analysis/vscode-load-surface-2026-09.md))
 
 ## Must / Must-not
 
 **Must**
 
-- Sync via `pwsh scripts\Sync-HostHarness.ps1 -Target Vscode` (dry-run default). First Apply was single-stack `-AllowSkew` (bring-up exception) with **operator authorization**; converge to normative `-Target All`.
+- Sync via `pwsh scripts\Sync-HostHarness.ps1 -Target Vscode` (dry-run default). Historical first Apply was single-stack `-AllowSkew` (bring-up exception); subsequent `-Apply` is gated on Phase 6 owner authorization per the [procedure registry Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary).
 - Full VS Code restart after any Apply before trusting discovery.
 - Verify via chat **Diagnostics view** (right-click Chat → Diagnostics) — loaded instructions/agents/skills + errors are listed there.
 
@@ -27,13 +27,13 @@
 
 ## Verification (C1–C6)
 
-Deferred smoke table: [roadmap](../roadmaps/vscode-bring-up.md) (fill on Phase 4). Post-Apply order: restart → snapshot-diff (`-Target Vscode` dry-run vs live) → C1 quote-probe in clean workspace → C2 catalog → C4/C5 hash/token → C6 operator loop.
+Deferred smoke table: [roadmap](../roadmaps/vscode-bring-up.md) (fill only after fresh Phase 6 owner-authorized Apply and the required restart). Post-Apply order: restart → snapshot-diff (`-Target Vscode` dry-run vs live) → C1 quote-probe in clean workspace → C2 catalog → C4/C5 hash/token → C6 operator loop.
 
 ## Sync commands
 
 ```powershell
 pwsh scripts\Sync-HostHarness.ps1 -Target Vscode                 # dry-run (safe)
-pwsh scripts\Sync-HostHarness.ps1 -Target Vscode -AllowSkew -Apply   # bring-up exception; operator-gated
+pwsh scripts\Sync-HostHarness.ps1 -Target Vscode -AllowSkew -Apply   # historical bring-up exception; Phase 6 owner authorization per [Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary)
 pwsh scripts\Sync-HostHarness.ps1                                # normative -Target All dry-run
 ```
 

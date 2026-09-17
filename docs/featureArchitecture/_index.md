@@ -1,6 +1,6 @@
 # Feature Architecture Documentation
 
-**Last updated:** 2026-09-12
+**Last updated:** 2026-09-16
 
 ## Context
 
@@ -45,7 +45,7 @@ Imported Observed harness and workflow snapshots live under [research/imported/]
 | [evaluation-methodology.md](./evaluation-methodology.md) | How workflow quality is measured |
 | [bug-reviewer-finding-rubric.md](./bug-reviewer-finding-rubric.md) | bug_reviewer report vs ignore (nits / out-of-scope / pre-existing) |
 | [permission-and-native-tool-policy.md](./permission-and-native-tool-policy.md) | Shell permission policy: read-only allowlist SoT, git red line, accepted risks, measurement |
-| [procedure-registry.md](./procedure-registry.md) | Phase 1 semantic registry: ownership model, fail-closed validator, deterministic renderer, sole CI orchestrators; canonical Markdown and host projections unchanged |
+| [procedure-registry.md](./procedure-registry.md) | Semantic registry: ownership model, canonical source flow, blocking guard coverage for all migrated classes, sole Fast/Full CI orchestrators, baseline regeneration boundary, and explicit Phase 6 Apply boundary |
 
 First host attempt: [host recreation study](../../analysis/host-recreation-2026-08.md). Claim taxonomy: **Desired / Required / Nice-to-have / Cursor-specific / Unknown**.
 

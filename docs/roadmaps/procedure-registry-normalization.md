@@ -1,9 +1,9 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F complete; Phase 4G complete — Phase 4 complete; Phase 5 next
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F complete; Phase 4G complete — Phase 4 complete; Phase 5 complete; Phase 6 next
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F complete; Phase 4G complete — Phase 4 complete; Phase 5 next
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F complete; Phase 4G complete — Phase 4 complete; Phase 5 complete; Phase 6 next
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
@@ -952,7 +952,7 @@ Phase 4:             Not started
 
 #### Phase 4G — Closeout: blocking composition guard, retire superseded checks, reconcile baselines
 
-- **Status:** Phase 4G dual-review APPROVED (replacement iteration 3 of 4) — Phase 4 complete; Phase 5 next.
+- **Status:** Phase 4G dual-review APPROVED (replacement iteration 3 of 4) — Phase 4 complete; Phase 5 in review.
 - **Boundary:** Audit-and-attest closeout. No runtime code, adapter, manifest, catalog, schema, or baseline changes. Confirms blocking `composition-order-ownership` coverage for all five migrated host classes, audits Phase 4C–4F additions for genuinely superseded checks, verifies baseline non-drift, and records the Phase 4 closeout. No Phase 5 documentation, live-host write, or canonical prose change.
 - **Evidence:**
   - [x] Blocking composition-order ownership confirmed for all five migrated classes: Cursor hybrid rules, OpenCode dual-write, Antigravity, Cline/Kilocode, and Codex managed AGENTS block. `Test-RegistryHostCompositionOwnership` in `ProcedureRegistry.psm1` validates all five host classes under `composition-order-ownership` and is wired into Fast CI through `Test-RegistryCatalog` → `Test-ProcedureRegistryCatalogs` → `Test-ProcedureRegistry.ps1`. Writer-level fail-closed guards remain active in Cursor preflight (`Test-RegistryCursorHybridOrder`), OpenCode dual-write, Generic `Copy-ManifestEntry`, and Codex install-plan paths. A violation in any class fails the normalization Fast path, not merely an advisory report.
@@ -985,13 +985,23 @@ Phase 4:             Not started
   - all-host dry-run
   - read-only drift report
 - **Deliverables:**
-  - [ ] One Fast and one Full path remain.
-  - [ ] Blocking guards enabled for all migrated classes.
-  - [ ] Docs explain canonical change flow.
-  - [ ] Baselines verify.
-  - [ ] Roadmap copies accepted plan.
-  - [ ] Full CI observed pass after dual approval.
+  - [x] One Fast and one Full path remain.
+  - [x] Blocking guards enabled for all migrated classes.
+  - [x] Docs explain canonical change flow.
+  - [x] Baselines verify.
+  - [x] Roadmap copies accepted plan.
+  - [x] Full CI observed pass after dual approval.
 - **Risks:** Docs drift or obsolete checks being retained.
+
+#### Phase 5 execution evidence
+
+- **Status:** complete (focus-narrow renewal at focused review iteration 3 of 4, plus a post-Full-CI static-gate correction at iteration 1 of 4); **Phase 6 is next**.
+- **Boundary:** documentation, indexes, SOPs, guards, baselines, and roadmap only; 22 files. No live Apply, runtime/live-write smoke, host-state mutation, commit, or push.
+- **Focused renewal corrections:** Codex managed AGENTS is present in the composed-host lists in `rules/_index.md` and `workflow/_index.md`; stale live-Apply authorization and Phase 4 smoke timing were superseded so Phase 6 owns Apply and smoke with fresh explicit owner authorization.
+- **Observed verification on the exact replacement tree:** normalization Fast CI PASS — registry view checks 676 passed / 0 failed and unit checks 24 passed / 0 failed; historical six-stack ledger verify PASS — two independent renders and six entries; `git diff --check` PASS.
+- **Focused dual review:** `production_readiness_reviewer` APPROVED with Blocking, Non-blocking code/process, Blocking test/docs, Non-blocking test/docs, and Batchable deferred all None; `bug_reviewer` CLEAN with no findings. Both reviewers were closed after result capture.
+- **Post-Full-CI correction:** the first Composer Full run exposed three static documentation assertions. A three-file documentation correction added the required seventh-stack-closeout wording for Codex registration and lifecycle preflight; implementer Fast CI passed, and replacement focused iteration 1 returned production readiness APPROVED and `bug_reviewer` CLEAN. All correction children were closed.
+- **Final gate:** Composer observed sole normalization Full CI PASS on the corrected tree, including zero failed drift fixtures and zero managed-byte changes. The pre-commit gate was loaded; the local phase commit is the remaining Phase 5 action before Phase 6 entry.
 
 ---
 

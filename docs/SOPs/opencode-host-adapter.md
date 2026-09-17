@@ -1,6 +1,6 @@
 # OpenCode host adapter
 
-**Last updated:** 2026-08-23
+**Last updated:** 2026-09-16
 
 ## Context
 
@@ -65,12 +65,12 @@ Operator entry: [`scripts/Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.
 # Dry-run — ALL stacks by default (normative: pushes are global, never per-stack)
 pwsh ./scripts/Sync-HostHarness.ps1
 
-# Live write to ALL stacks — requires Phase 0 baseline gate; does NOT create backup trees
+# Live write to ALL stacks — requires the Phase 0 baseline gate plus explicit Phase 6 owner authorization; does NOT create backup trees
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply
 
 # Single-stack variants are exceptions only:
 #   -Target OpenCode        dry-run manifest inspection (read-only)
-#   -Apply -Target OpenCode -AllowSkew    deliberate scoped repair; siblings go stale
+#   -Apply -Target OpenCode -AllowSkew    deliberate owner-authorized Phase 6 scoped repair; siblings go stale
 ```
 
 On `-Apply`, the script:
@@ -87,7 +87,7 @@ After Apply: fully quit and restart OpenCode before smoke.
 
 1. Update **cursorEscape** contracts first (Target FA / agents / skills / overlay rules).
 2. Re-adapt OpenCode files second — do not invent gate semantics only in `~/.config/opencode`.
-3. When updating always-on gates: edit overlay `instructions/cursor-escape-loop.md`, then deploy with `pwsh ./scripts/Sync-HostHarness.ps1 -Apply` (global push; the adapter dual-writes byte-identical `instructions/` and `AGENTS.md` — C1). Manual copy to live paths is **not recommended** (bypasses token merge and JSON specimen merge).
+3. When updating always-on gates: edit overlay `instructions/cursor-escape-loop.md`; then, only at the Phase 6 Apply boundary with explicit owner authorization, deploy with `pwsh ./scripts/Sync-HostHarness.ps1 -Apply` (global push; the adapter dual-writes byte-identical `instructions/` and `AGENTS.md` — C1). Manual copy to live paths is **not recommended** (bypasses token merge and JSON specimen merge).
 4. Do **not** commit `~/.config/opencode` into this git repo (secrets, machine paths, provider plugins). Copy-out later still excludes secrets.
 5. After saving changes to `opencode.json`, an agent file, a skill, `instructions`, `AGENTS.md`, or other config-time file: **quit and restart OpenCode** (no hot-reload — DSV4F Observed).
 
@@ -128,7 +128,7 @@ Record results when running live checks. Expected: `pass` \| `fail` \| `deferred
 
 ### Restart-quiescence policy (composer hardening, 2026-08)
 
-Sync is **safe while other sessions run**: live sessions keep their session-start config; fresh CLI processes pick up new files immediately. Only config-time surfaces loaded at process start (Desktop app always-on instructions, agent catalog in a running TUI) need a **quit-and-restart** to re-read. Policy: apply `-Apply` any time; verify rows **15**/**18** immediately via fresh CLI processes/new sessions; defer rows **16**–**17** (Desktop-nested behavior) to the operator's next quiescent restart window and record `deferred` with reason here until then.
+Sync is **safe while other sessions run**: live sessions keep their session-start config; fresh CLI processes pick up new files immediately. Only config-time surfaces loaded at process start (Desktop app always-on instructions, agent catalog in a running TUI) need a **quit-and-restart** to re-read. Policy: dry-run is always allowed; `-Apply` is Phase 6 only with explicit owner authorization (see [procedure registry Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary)); verify rows **15**/**18** immediately via fresh CLI processes/new sessions; defer rows **16**–**17** (Desktop-nested behavior) to the operator's next quiescent restart window and record `deferred` with reason here until then.
 
 **Frozen probe paths (row 12):** run id `2026-08-17T143458Z-dsv4flash` (exists on disk; gitignored). **12b Target (pf4):** `C:/Users/admin/source/repos/general-projects/cursorEscape/workflow/iterative-plan-review.md` — **not** host `docs/workflow/` (deleted).
 
@@ -141,7 +141,7 @@ Backup: `C:\Users\admin\.config\opencode-backup-20260820-153803` (3475 files). P
 | # | Item | Runtime evidence | Smoke |
 | - | ---- | ---------------- | ----- |
 | **C1** | Always-on gates inject | Absolute `instructions` + `AGENTS.md` dual-write | Row **1** **pass** (2026-08-21 post–`Sync-HostHarness`) |
-| **C2** | Eleven skills incl. `roadmap`, `diagnosing-bugs`, and the `opencode-*` pair *(author-time catalog 2026-08-21; nine 2026-08-21 B1; eleven per 2026-08-26 global-pair ruling; live re-sync + re-probe completed 2026-08-22 at the nine-era)* | Live host observed at 9 `skills/*/SKILL.md` incl. `diagnosing-bugs` (2026-08-22 sync); 7 agents; mirror absent. **Rows 9–10 re-run due at Phase 4 Apply** after the eleven-id catalog syncs | Rows **9–10** **pass** (2026-08-21) |
+| **C2** | Eleven skills incl. `roadmap`, `diagnosing-bugs`, and the `opencode-*` pair *(author-time catalog 2026-08-21; nine 2026-08-21 B1; eleven per 2026-08-26 global-pair ruling; live re-sync + re-probe completed 2026-08-22 at the nine-era)* | Live host observed at 9 `skills/*/SKILL.md` incl. `diagnosing-bugs` (2026-08-22 sync); 7 agents; mirror absent. **Rows 9–10 re-run due at Phase 6 Apply** after the eleven-id catalog syncs | Rows **9–10** **pass** (2026-08-21) |
 | **C3** | Plan→plan_reviewer; impl→dual→Full | 7 overlay agents on disk; reviewers `edit: deny` + bash deny except read-only git | Rows **2**, **3**, **13** **pass** (2026-08-21); row **8** **pass**; row **14** **pass** |
 | **C4** | Deep workflow Reads on host | Absolute companion `workflow/` Reads; host procedure mirror **deleted** | Row **4** **pass** (2026-08-21) |
 | **C5** | Companion FA/SOP reads | `external_directory` includes `COMPANION_ROOT/**`; rubric companion FA | Row **8** **pass** (2026-08-21); optional **11**/**12** historical |
