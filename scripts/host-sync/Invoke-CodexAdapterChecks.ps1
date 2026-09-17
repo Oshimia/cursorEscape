@@ -226,6 +226,13 @@ $plannedAfterFirstSkills = Get-TreeHashes -Root $roots.Skills
 
 $repeat = Invoke-CodexAdapterSafe -Manifest $manifest -Roots $roots -Mode ([HostSyncMode]::Apply)
 Assert-Pass 'repeated scratch Apply succeeds' ($repeat.Success) (($repeat.Errors) -join '; ')
+Assert-Pass 'repeated unchanged Apply records zero applied destinations' (
+    @($repeat.AppliedFiles).Count -eq 0
+) ("actual=$(@($repeat.AppliedFiles).Count)")
+Assert-Pass 'repeated unchanged Apply creates no temporary files' (
+    @(Get-ChildItem -LiteralPath $roots.Codex -Recurse -Force -Filter '*.tmp').Count -eq 0 -and
+    @(Get-ChildItem -LiteralPath $roots.Skills -Recurse -Force -Filter '*.tmp').Count -eq 0
+)
 # Explicit per-file comparison avoids hashtable enumeration-order dependence.
 $idempotenceMisses = @()
 foreach ($kv in $plannedAfterFirst.GetEnumerator()) {
@@ -377,12 +384,16 @@ $lateExistingRoots = New-CodexFixtureRoots
 try {
     $lateSetup = Invoke-CodexAdapterSafe -Manifest $manifest -Roots $lateExistingRoots -Mode ([HostSyncMode]::Apply)
     Assert-Pass 'late-existing rollback fixture setup succeeds' ($lateSetup.Success) (($lateSetup.Errors) -join '; ')
+    $lateDriftPath = Join-Path $lateExistingRoots.Codex 'agents/planner.toml'
+    $lateDriftOriginal = [IO.File]::ReadAllText($lateDriftPath)
+    [IO.File]::WriteAllText($lateDriftPath, $lateDriftOriginal + "`r`n# late-failure rollback fixture drift`r`n")
+    $lateDriftedHash = Get-FileByteSha256 -Path $lateDriftPath
     $preApplyHashes = @{}
     $lateInstalled = Get-InstalledDestinationMap -Roots $lateExistingRoots -Manifest $manifest
     foreach ($kv in $lateInstalled.GetEnumerator()) {
         $preApplyHashes[$kv.Key] = Get-FileByteSha256 -Path $kv.Value
     }
-    $lateExisting = Invoke-CodexAdapterSafe -Manifest $manifest -Roots $lateExistingRoots -Mode ([HostSyncMode]::Apply) -FailAfterWrites 2
+    $lateExisting = Invoke-CodexAdapterSafe -Manifest $manifest -Roots $lateExistingRoots -Mode ([HostSyncMode]::Apply) -FailAfterWrites 1
     Assert-Pass 'late failure after existing writes fails' (-not $lateExisting.Success -and (($lateExisting.Errors) -join ' ').Contains('injected Codex late-write failure')) (($lateExisting.Errors) -join '; ')
     $rollbackMisses = @()
     foreach ($kv in $preApplyHashes.GetEnumerator()) {

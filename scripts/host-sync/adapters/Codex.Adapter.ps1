@@ -380,6 +380,11 @@ function Assert-CodexOwnershipAndOverrides {
         if ($plan.CurrentHash -ne $plan.OutputHash) {
             $plan.Drift = $true
         }
+        else {
+            # Identical existing destination: ownership render produces the
+            # exact current bytes, so skip staging and replacement entirely.
+            $plan.Write = $false
+        }
     }
 }
 
@@ -610,7 +615,7 @@ function Invoke-StackHarnessSync {
         $ok = Invoke-CodexWritePass -Report $report -Plans $plans -FailAfterWrites $FailAfterWrites -FailureMessage $FailureMessage
         if (-not $ok) { return $report }
 
-        foreach ($plan in @($plans | Where-Object { -not $_.GuardOnly })) {
+        foreach ($plan in @($plans | Where-Object { $_.Write })) {
             [void]$report.AppliedFiles.Add($plan.Identity)
         }
         [void]$report.Verifications.Add("current-state hash binding completed for $($plans.Count) destinations")

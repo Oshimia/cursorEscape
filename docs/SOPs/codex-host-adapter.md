@@ -65,6 +65,7 @@ There is no `-AllowSkew` exception for lifecycle refusal. Codex was activated on
 
 - Dry-run plans 31 writable destinations and reports 32 root-qualified identities including the override guard.
 - Apply preflights ownership, hard excludes, override absence, path containment, current-state hashes, and marker integrity.
+- Apply is a byte-level no-op for unchanged destinations: identical existing files are neither staged nor replaced, and `AppliedFiles` reports only destinations actually written.
 - Writes go through staged replacement; post-write hashes are verified. Adapter-local failure restores in-memory pre-Apply bytes and removes files created by the failed run.
 - Fast CI: `scripts/host-sync/Invoke-CodexPhase3Checks.ps1` proves explicit-root Codex dry-run, all-stack dry-run, BringUp All-Apply refusal, Active-state Codex collision with zero selected-stack writes, and complete invalid-target output.
 - Existing six-stack ledger parity remains the regression anchor for established planned renders; Codex is intentionally not in that ledger.
