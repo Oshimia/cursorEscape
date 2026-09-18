@@ -1,6 +1,6 @@
 @{
     # Cline host harness manifest (per-entry v2, kilo-cline bring-up 2026-09-01).
-    # Surface map docs-verified: analysis/cline-kilo-probes-2026-09.md; overlay: overlays/cline/_index.md.
+    # Surface map docs-verified; overlay: overlays/cline/_index.md.
     # Live root ~/.cline (global rules under rules/, global workflows under data/workflows/).
     StackId             = 'Cline'
     DisplayName         = 'Cline'

@@ -1,6 +1,6 @@
 # vscode overlay (√ VS Code / Copilot harness)
 
-**Stack:** `Vscode` · **Live root:** `~/.copilot/` (docs-verified 2026-09-01; see `analysis/vscode-load-surface-2026-09.md`) · **Manifest:** `scripts/host-sync/manifests/vscode.manifest.psd1` · **Adapter:** `scripts/host-sync/adapters/Vscode.Adapter.ps1`
+**Stack:** `Vscode` · **Live root:** `~/.copilot/` (docs-verified 2026-09-01) · **Manifest:** `scripts/host-sync/manifests/vscode.manifest.psd1` · **Adapter:** `scripts/host-sync/adapters/Vscode.Adapter.ps1`
 
 Thin host harness per Approach A (`docs/featureArchitecture/skill-source-and-host-overlays.md`). Host dirs are copy-out targets, never a second SoT. Pointer-first: stubs Read companion procedure via absolute `{{COMPANION_ROOT}}` paths after token merge.
 
@@ -25,7 +25,7 @@ Pointer-only (never copied out): `review-subagent-models.md` (Cursor-native), th
 | Agents `tools: []` semantics | array of tool names; reviewers need read-only sets | read-only enforcement via tools array (not permission fields) |
 | `handoffs` | plan → implement → review buttons | loop is literal UI in `implementer`/`planner` agents |
 | Diagnostics view | lists loaded customizations + errors | designated verification instrument (C1/C2/C6) |
-| Subagent depth | 1 (no grandchild spawn; `analysis/vscode-subagent-recursion-2026-08.md`) | deviation-attested (Antigravity C3 precedent) |
+| Subagent depth | 1 (no grandchild spawn) | deviation-attested (Antigravity C3 precedent) |
 
 ## Skills inventory (parity bar: canonical eleven)
 

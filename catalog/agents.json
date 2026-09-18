@@ -83,8 +83,7 @@
           "classification": "host wrapper",
           "evidencePaths": [
             "overlays/cline/workflows/plan.md",
-            "scripts/host-sync/manifests/cline.manifest.psd1",
-            "analysis/cline-kilo-probes-2026-09.md"
+            "scripts/host-sync/manifests/cline.manifest.psd1"
           ]
         },
         {
@@ -98,8 +97,7 @@
           "classification": "host wrapper",
           "evidencePaths": [
             "overlays/kilocode/workflows/plan.md",
-            "scripts/host-sync/manifests/kilocode.manifest.psd1",
-            "analysis/cline-kilo-probes-2026-09.md"
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
           ]
         },
         {
@@ -316,8 +314,7 @@
           "classification": "host wrapper",
           "evidencePaths": [
             "overlays/cline/workflows/agents.md",
-            "scripts/host-sync/manifests/cline.manifest.psd1",
-            "analysis/cline-kilo-probes-2026-09.md"
+            "scripts/host-sync/manifests/cline.manifest.psd1"
           ]
         },
         {
@@ -331,8 +328,7 @@
           "classification": "host wrapper",
           "evidencePaths": [
             "overlays/kilocode/workflows/agents.md",
-            "scripts/host-sync/manifests/kilocode.manifest.psd1",
-            "analysis/cline-kilo-probes-2026-09.md"
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
           ]
         },
         {
@@ -666,8 +662,7 @@
           "classification": "host wrapper",
           "evidencePaths": [
             "overlays/cline/footers/cline-wiring.md",
-            "scripts/host-sync/manifests/cline.manifest.psd1",
-            "analysis/cline-kilo-probes-2026-09.md"
+            "scripts/host-sync/manifests/cline.manifest.psd1"
           ]
         },
         {
@@ -681,8 +676,7 @@
           "classification": "host wrapper",
           "evidencePaths": [
             "overlays/kilocode/footers/kilocode-wiring.md",
-            "scripts/host-sync/manifests/kilocode.manifest.psd1",
-            "analysis/cline-kilo-probes-2026-09.md"
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
           ]
         },
         {
@@ -782,8 +776,7 @@
           "classification": "host wrapper",
           "evidencePaths": [
             "overlays/cline/workflows/agents.md",
-            "scripts/host-sync/manifests/cline.manifest.psd1",
-            "analysis/cline-kilo-probes-2026-09.md"
+            "scripts/host-sync/manifests/cline.manifest.psd1"
           ]
         },
         {
@@ -797,8 +790,7 @@
           "classification": "host wrapper",
           "evidencePaths": [
             "overlays/kilocode/workflows/agents.md",
-            "scripts/host-sync/manifests/kilocode.manifest.psd1",
-            "analysis/cline-kilo-probes-2026-09.md"
+            "scripts/host-sync/manifests/kilocode.manifest.psd1"
           ]
         },
         {

@@ -703,8 +703,7 @@
       "representation": "fallback-launch-contract",
       "evidence_paths": [
         "overlays/cline/workflows/plan.md",
-        "scripts/host-sync/manifests/cline.manifest.psd1",
-        "analysis/cline-kilo-probes-2026-09.md"
+        "scripts/host-sync/manifests/cline.manifest.psd1"
       ],
       "route_identity": "planner",
       "alias": null,
@@ -753,8 +752,7 @@
       "representation": "fallback-launch-contract",
       "evidence_paths": [
         "overlays/cline/workflows/agents.md",
-        "scripts/host-sync/manifests/cline.manifest.psd1",
-        "analysis/cline-kilo-probes-2026-09.md"
+        "scripts/host-sync/manifests/cline.manifest.psd1"
       ],
       "route_identity": "implementer",
       "alias": null,
@@ -825,8 +823,7 @@
       "representation": "fallback-launch-contract",
       "evidence_paths": [
         "overlays/cline/footers/cline-wiring.md",
-        "scripts/host-sync/manifests/cline.manifest.psd1",
-        "analysis/cline-kilo-probes-2026-09.md"
+        "scripts/host-sync/manifests/cline.manifest.psd1"
       ],
       "route_identity": "repository_explorer",
       "alias": null,
@@ -849,8 +846,7 @@
       "representation": "fallback-launch-contract",
       "evidence_paths": [
         "overlays/cline/workflows/agents.md",
-        "scripts/host-sync/manifests/cline.manifest.psd1",
-        "analysis/cline-kilo-probes-2026-09.md"
+        "scripts/host-sync/manifests/cline.manifest.psd1"
       ],
       "route_identity": "test_reviewer",
       "alias": null,
@@ -873,8 +869,7 @@
       "representation": "fallback-launch-contract",
       "evidence_paths": [
         "overlays/kilocode/workflows/plan.md",
-        "scripts/host-sync/manifests/kilocode.manifest.psd1",
-        "analysis/cline-kilo-probes-2026-09.md"
+        "scripts/host-sync/manifests/kilocode.manifest.psd1"
       ],
       "route_identity": "planner",
       "alias": null,
@@ -923,8 +918,7 @@
       "representation": "fallback-launch-contract",
       "evidence_paths": [
         "overlays/kilocode/workflows/agents.md",
-        "scripts/host-sync/manifests/kilocode.manifest.psd1",
-        "analysis/cline-kilo-probes-2026-09.md"
+        "scripts/host-sync/manifests/kilocode.manifest.psd1"
       ],
       "route_identity": "implementer",
       "alias": null,
@@ -995,8 +989,7 @@
       "representation": "fallback-launch-contract",
       "evidence_paths": [
         "overlays/kilocode/footers/kilocode-wiring.md",
-        "scripts/host-sync/manifests/kilocode.manifest.psd1",
-        "analysis/cline-kilo-probes-2026-09.md"
+        "scripts/host-sync/manifests/kilocode.manifest.psd1"
       ],
       "route_identity": "repository_explorer",
       "alias": null,
@@ -1019,8 +1012,7 @@
       "representation": "fallback-launch-contract",
       "evidence_paths": [
         "overlays/kilocode/workflows/agents.md",
-        "scripts/host-sync/manifests/kilocode.manifest.psd1",
-        "analysis/cline-kilo-probes-2026-09.md"
+        "scripts/host-sync/manifests/kilocode.manifest.psd1"
       ],
       "route_identity": "test_reviewer",
       "alias": null,

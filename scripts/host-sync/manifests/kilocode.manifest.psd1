@@ -1,6 +1,6 @@
 @{
     # Kilo Code host harness manifest (per-entry v2, kilo-cline bring-up 2026-09-01).
-    # Surface map docs-verified: analysis/cline-kilo-probes-2026-09.md; overlay: overlays/kilocode/_index.md.
+    # Surface map docs-verified; overlay: overlays/kilocode/_index.md.
     # Live root ~/.kilocode (legacy-compat: rules auto-included; workflows auto-migrate to commands on startup).
     StackId             = 'Kilocode'
     DisplayName         = 'Kilo Code'

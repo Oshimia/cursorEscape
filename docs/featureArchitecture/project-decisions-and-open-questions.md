@@ -4,7 +4,7 @@
 
 ## Context
 
-This page is the durable home for cursorEscape's current project decisions, framework and process fitness assessments, sibling-relationship intent, and unresolved architectural questions. It absorbs content from `review/design-decisions.md`, `review/relationship-to-siblings.md`, and `review/unresolved-architectural-questions.md` so that `review/` can be retired without losing live intent. It is a Target document — not a changelog or archaeology snapshot.
+This page is the durable home for cursorEscape's current project decisions, framework and process fitness assessments, sibling-relationship intent, and unresolved architectural questions. It is a Target document — not a changelog or archaeology snapshot.
 
 ---
 
@@ -163,7 +163,7 @@ Claim label: **Unknown** unless noted otherwise.
 
 | # | Question | Notes |
 | - | -------- | ----- |
-| U9 | When to invoke optional test_reviewer vs production_readiness only | [agent roles](./agent-roles-and-model-assignment.md); contract [test_reviewer.md](../../agents/test_reviewer.md) — Desired triggers only; mandatory policy still **Unknown**. *(This question was previously tracked at `review/unresolved-architectural-questions.md`; it is now tracked here.)* |
+| U9 | When to invoke optional test_reviewer vs production_readiness only | [agent roles](./agent-roles-and-model-assignment.md); contract [test_reviewer.md](../../agents/test_reviewer.md) — Desired triggers only; mandatory policy still **Unknown**. |
 | U10 | Eval harness ownership — cursorEscape repo vs AITestSuite pattern | [evaluation methodology](./evaluation-methodology.md) |
 
 ### Distribution
@@ -181,7 +181,6 @@ Claim label: **Unknown** unless noted otherwise.
 1. Target docs may cite these U-IDs when marking **Unknown** claims elsewhere.
 2. Resolving a question requires updating the relevant Target doc + this page in the same change set.
 3. The five framework/process decisions above are durable `retain` decisions; they should not be relitigated without hitting a revisit trigger.
-4. Research outputs outside cursorEscape must be discoverable via a pointer/citation in `research/_index.md` or `analysis/_index.md`.
 
 ## Related
 

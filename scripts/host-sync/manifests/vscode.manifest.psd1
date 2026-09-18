@@ -1,6 +1,6 @@
 @{
     # VS Code (Copilot) host harness manifest (per-entry v2, vscode bring-up 2026-09-01).
-    # Surface map docs-verified: analysis/vscode-load-surface-2026-09.md; overlay: overlays/vscode/_index.md.
+    # Surface map docs-verified; overlay: overlays/vscode/_index.md.
     # Live root ~/.copilot (user-level instructions/agents/skills; docs 8/26/2026).
     StackId             = 'Vscode'
     DisplayName         = 'VS Code'
