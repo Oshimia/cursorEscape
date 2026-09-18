@@ -1,12 +1,12 @@
 # Antigravity overlay — harness copy-out map
 
-**Last updated:** 2026-09-15
+**Last updated:** 2026-09-18
 
 ## Context
 
 Antigravity-native **host overlay** at `overlays/antigravity/`. Portable procedure stays at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`). Overlay = **thin harness only**. Live `~/.gemini` harness synced via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (`-Target Antigravity`; `-Apply` for live writes); SOP: [antigravity-host-adapter](../../docs/SOPs/antigravity-host-adapter.md); see [host-sync README](../../scripts/host-sync/README.md). Sync does **not** create backups; Phase 0 baseline is restore-only.
 
-Owner decisions (2026-08-23): cursorEscape is the **sole SoT** — live global rules are **wholesale-replaced** by this overlay's `GEMINI.md` gate; v1 surfaces are global skills, global workflows, subagent defs, and GEMINI.md. Gemini CLI reads the same `GEMINI.md` path — accepted consequence.
+Owner decisions (2026-08-23): cursorEscape is the **sole SoT** — live global rules are **wholesale-replaced** by the registry-composed `antigravity-gemini` runtime gate; v1 surfaces are global skills, global workflows, subagent defs, and the composed `GEMINI.md`. Gemini CLI reads the same `GEMINI.md` path — accepted consequence.
 
 **Host facts (Observed 2026-08-23):**
 
@@ -20,7 +20,7 @@ Owner decisions (2026-08-23): cursorEscape is the **sole SoT** — live global r
 
 | Live target (`~/.gemini/…`) | Overlay source | Notes |
 | --------------------------- | -------------- | ----- |
-| `GEMINI.md` | [GEMINI.md](./GEMINI.md) | Thin always-on gate — **full replacement** of live global rules (sole SoT) |
+| `GEMINI.md` | [expected-render anchor](../../scripts/host-sync/render-baselines/phase2/antigravity/overlays__antigravity__GEMINI.md) | Committed expected-render anchor for the registry-composed `antigravity-gemini` **runtime-only** destination — **full replacement** of live global rules (sole SoT); composed sync output, not an authored overlay source |
 | `config/skills/<11 ids>/SKILL.md` | [skills/*/SKILL.md](./skills/) | Thin stubs mirroring the OpenCode overlay set; absolute `{{COMPANION_ROOT}}` Reads; `pre-commit-ci-gate` composed from `base:rules/pre-commit-ci-gate.md` + host footer (Phase 2) |
 | `antigravity/global_workflows/escape-{plan,review,closeout}.md` | [workflows/](./workflows/) | Trajectory-level wrappers invoking companion procedures |
 | `config/agents/{planner,plan_reviewer,implementer,production_readiness_reviewer,bug_reviewer,repository_explorer,test_reviewer}.md` | [agents/](./agents/) | Governed planner/implementation/investigation/reviewer legs; reviewer defs use read-only tools; `implementer` canonical authority is workspace-write but live-write smoke remains Phase 6; parallel via `invoke_subagent` |

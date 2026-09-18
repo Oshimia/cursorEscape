@@ -183,6 +183,39 @@ Assert-View 'Phase 2 represented pairs are closed against every pending ambiguit
   @($registry.Inventory.ambiguities_requiring_owner_confirmation | Where-Object { [string]$_.id -eq 'U-Antigravity-Authority' }).Count -eq 0
 ) "pending=$($pendingPairs -join '; ')"
 
+# Phase 3A machinery guard baseline: capture exact canonical/host skill state
+# before the shadow-slice machinery runs — status rows, tracked diff raw
+# stdout bytes, and an untracked path/SHA-256 manifest — so the final guard
+# isolates residual changes caused by the machinery itself (including byte-
+# level content mutations of already-dirty pathscope files) while tolerating
+# pre-existing owner or implementation edits.
+function Get-Phase3ADiffRawBytes {
+  $psi = [System.Diagnostics.ProcessStartInfo]::new()
+  $psi.FileName = 'git'
+  foreach ($arg in @('diff', '--', 'skills', 'overlays/*/skills')) { $null = $psi.ArgumentList.Add($arg) }
+  $psi.WorkingDirectory = $RepoRoot
+  $psi.UseShellExecute = $false
+  $psi.RedirectStandardOutput = $true
+  $proc = [System.Diagnostics.Process]::Start($psi)
+  $buffer = [System.IO.MemoryStream]::new()
+  $proc.StandardOutput.BaseStream.CopyTo($buffer)
+  $proc.WaitForExit()
+  if ($proc.ExitCode -ne 0) { throw "FAIL: Phase 3A drift diff exited $($proc.ExitCode)" }
+  return $buffer.ToArray()
+}
+function Get-Phase3ADriftContentSnapshot {
+  $rows = @(& git -C $RepoRoot status --porcelain -- skills 'overlays/*/skills')
+  if ($LASTEXITCODE -ne 0) { throw "FAIL: Phase 3A drift status exited $LASTEXITCODE" }
+  $diffBytes = Get-Phase3ADiffRawBytes
+  $untrackedPaths = @(& git -C $RepoRoot ls-files --others --exclude-standard -- skills 'overlays/*/skills')
+  if ($LASTEXITCODE -ne 0) { throw "FAIL: Phase 3A untracked enumeration exited $LASTEXITCODE" }
+  $untracked = @()
+  foreach ($rel in $untrackedPaths) {
+    $untracked += "$rel`t" + (Get-FileHash -LiteralPath (Join-Path $RepoRoot $rel) -Algorithm SHA256).Hash
+  }
+  return [pscustomobject]@{ Status = $rows; DiffBytes = $diffBytes; Untracked = $untracked }
+}
+$sliceBefore = Get-Phase3ADriftContentSnapshot
 $temp = Join-Path ([IO.Path]::GetTempPath()) ("procedure-registry-" + [Guid]::NewGuid().ToString('N'))
 try {
   $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
@@ -1824,10 +1857,23 @@ try {
   # Phase 2 agent parity legitimately edits agent wrappers, manifests, and
   # overlay indexes. Scope the residual Phase 3A guard to canonical and host
   # skill projections; broader source agreement remains in the registry,
-  # inventory, manifest, and current-state checks.
-  $sliceDrift = @(& git -C $RepoRoot status --porcelain -- skills 'overlays/*/skills')
-  if ($LASTEXITCODE -ne 0) { throw "FAIL: Phase 3A drift status exited $LASTEXITCODE" }
-  Assert-View 'Phase 3A leaves canonical skills and host skill projections unchanged' ($sliceDrift.Count -eq 0) (($sliceDrift | Select-Object -First 5) -join '; ')
+  # inventory, manifest, and current-state checks. The final comparison uses
+  # the exact, case-sensitive before/after snapshots captured around the
+  # machinery — status rows, tracked diff raw stdout bytes compared
+  # byte-for-byte, and an untracked path/SHA-256 manifest — so it fails only
+  # on residual changes caused by the machinery (including content mutations
+  # of already-dirty pathscope files) and tolerates pre-existing owner or
+  # implementation edits present at entry. On any inequality the guard emits
+  # the complete differing rows, or full Base64 snapshots of both diff-byte
+  # buffers for byte-level mismatch diagnosis.
+  $sliceAfter = Get-Phase3ADriftContentSnapshot
+  $sliceDriftDelta = @()
+  $sliceDriftDelta += @(Compare-Object -ReferenceObject $sliceBefore.Status -DifferenceObject $sliceAfter.Status -CaseSensitive -SyncWindow 0 | Select-Object -ExpandProperty InputObject | ForEach-Object { "status: $_" })
+  if (-not [System.Linq.Enumerable]::SequenceEqual([byte[]]$sliceBefore.DiffBytes, [byte[]]$sliceAfter.DiffBytes)) {
+    $sliceDriftDelta += 'tracked-diff: exact-byte mismatch; before(base64)=' + [Convert]::ToBase64String([byte[]]$sliceBefore.DiffBytes) + '; after(base64)=' + [Convert]::ToBase64String([byte[]]$sliceAfter.DiffBytes)
+  }
+  $sliceDriftDelta += @(Compare-Object -ReferenceObject $sliceBefore.Untracked -DifferenceObject $sliceAfter.Untracked -CaseSensitive -SyncWindow 0 | Select-Object -ExpandProperty InputObject | ForEach-Object { "untracked: $_" })
+  Assert-View 'Phase 3A leaves canonical skills and host skill projections unchanged' ($sliceDriftDelta.Count -eq 0) ($sliceDriftDelta -join '; ')
 } catch { $failures++; Write-Output "FAIL: edge-case execution: $($_.Exception.Message)"; Write-Output $_.ScriptStackTrace }
 
 # Current-state checker contract: an explicit -RepoRoot is honored from any
