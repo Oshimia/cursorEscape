@@ -1,13 +1,13 @@
 # Cursor overlay — copy-out map
 
-**Last updated:** 2026-09-15
-**Status:** pointer-first live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) — thin skills/agents + hybrid rules on `~/.cursor`. Phase 0 baseline (restore-only): `C:/Users/admin/.cursor-backup-pre-host-sync-build-20260821-012600`. Sync does **not** create backups.
+**Last updated:** 2026-09-18
+**Status:** live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) — thin skills/agents + hybrid rules on `~/.cursor`. Phase 0 baseline (restore-only): `C:/Users/admin/.cursor-backup-pre-host-sync-build-20260821-012600`. Sync does **not** create backups.
 
 ## Context
 
 Thin **Cursor host overlay** for copy-out to `~/.cursor/`. Portable procedure lives at repo-root bases — overlay files add YAML, `disable-model-invocation`, Cursor Task spawn blocks, and **absolute companion Read tables** (`{{COMPANION_ROOT}}/…`).
 
-**Live sync:** Operator entry [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (`-Target Cursor`; `-Apply` for live writes). See [cursor-host-adapter](../../docs/SOPs/cursor-host-adapter.md) and [host-sync README](../../scripts/host-sync/README.md). `docs/workflow/` mirror **retained** (transitional).
+**Live sync:** Operator entry [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) — dry-run by default (add `-Target Cursor` for the planned dry-run view). Live `-Apply` requires explicit owner authorization; the normative live path is all-host `-Apply -Target All`. Single-stack `-Apply` is only an explicitly owner-authorized `-AllowSkew` recovery exception. See [cursor-host-adapter](../../docs/SOPs/cursor-host-adapter.md) and [host-sync README](../../scripts/host-sync/README.md). `docs/workflow/` mirror **retained** (transitional).
 
 ## Companion reachability (pointer-first Target)
 
@@ -108,9 +108,7 @@ There is no owner-authored `bugbot` agent file; Bugbot is a Cursor product subag
 
 ## Provenance
 
-Fat Observed extract (2026-08-20) promoted to repo-root bases in Phase 4. Phase 5 replaced overlay bodies with thin wrappers; pointer-first-3 replaced wrong-base repo-relative hops with `{{COMPANION_ROOT}}` absolute Reads.
-
-Refresh copy-out with `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor` when authorized; dry-run first without `-Apply`. Merge tokens and hybrid rules are handled by the sync script — do not claim live install tracks git automatically.
+Refresh copy-out dry-run first: `pwsh ./scripts/Sync-HostHarness.ps1 -Target Cursor`. Live Apply is owner-gated and normative as all-host: `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target All` requires explicit owner authorization; single-stack `-Apply` is only an explicitly owner-authorized `-AllowSkew` recovery exception. Merge tokens and hybrid rules are handled by the sync script — do not claim live install tracks git automatically.
 
 ## Related
 
@@ -120,4 +118,3 @@ Refresh copy-out with `pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor
 - [Agents index](../../agents/_index.md)
 - [Workflow index](../../workflow/_index.md)
 - [Skill source and host overlays](../../docs/featureArchitecture/skill-source-and-host-overlays.md)
-- [pointer-first roadmap](../../docs/roadmaps/pointer-first.md)
