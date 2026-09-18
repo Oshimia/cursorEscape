@@ -1,14 +1,14 @@
 # Roadmap: Procedure Registry Normalization
 
 ```text
-Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F complete; Phase 4G complete — Phase 4 complete; Phase 5 complete; Phase 6 next
+Status:              Phase 0 complete; Phase 1 complete; Phase 2A complete — planner parity committed 2026-09-13; Phase 2B complete — repository_explorer parity committed 2026-09-14; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F complete; Phase 4G complete — Phase 4 complete; Phase 5 complete; Phase 6 complete — program complete
 Plan review:         APPROVED, historical pass 3 of 3
-Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F complete; Phase 4G complete — Phase 4 complete; Phase 5 complete; Phase 6 next
+Execution status:    Phase 0 complete; Phase 1 complete; Phase 2A complete; Phase 2B complete; Phase 2C-native complete; Phase 2C-fallback complete — Phase 2 parity 49/49; Phase 3A complete; Phase 3B complete; Phase 3C complete; Phase 3D complete; Phase 3E complete; Phase 3F complete; Phase 3G complete; Phase 3H complete; Phase 3I complete; Phase 3J complete; Phase 3K complete; Phase 3L complete; Post-Phase 3 batchable resolution complete; Phase 4A complete; Phase 4B complete; Phase 4C complete; Phase 4D complete; Phase 4E complete; Phase 4F complete; Phase 4G complete — Phase 4 complete; Phase 5 complete; Phase 6 complete — program complete
 Owner:               Repository owner
 Conductor:           Composer-conducted, bounded slices
 Plan source:         .plans/procedure-registry-normalization.md (historical approved-plan snapshot)
-Last updated:        2026-09-16
-Live Apply:          Phase 6 only, with explicit owner authorization
+Last updated:        2026-09-18
+Live Apply:          Phase 6 complete, owner-authorized and observed
 ```
 
 ## Current execution status
@@ -26,6 +26,8 @@ The owner directed an efficiency-preserving recovery: retain the largely complet
 Phase 2B retained the efficiency-preserving recovery and closed through a separate bounded documentation-cascade correction. Composer-final Full CI then exposed one stale invariant: the `antigravity governed role defs under config/agents` expectation in `scripts/host-sync/Invoke-Phase2FastCI.ps1` still counted four destinations and was corrected to the manifest's five (including `repository_explorer`) in this working tree. The combined working tree now contains 21 files and 249 changed/new physical lines against baseline `1c87201`. The implementer-owned review used 2 of 4 iterations, ended with production readiness APPROVED and `bug_reviewer` CLEAN, and left no Batchable findings.
 
 Phase 2C-native adds only the four missing native `implementer` and `test_reviewer` routes on Cursor and Antigravity, raising represented pairs to 45 of 49. After replacement dual approval, Composer reconciled the historical six-stack render ledger and its derived inventory rows through the sanctioned writer, observed Full CI, and made local closeout commit `e007976`. The subsequent Phase 2C-fallback closes the final Cline/Kilocode implementer and test_reviewer pairs through explicit fresh-task/session contracts, reaching 49 represented / 0 missing of 49.
+
+Phase 6 closed on 2026-09-18: owner-authorized all-host Apply succeeded across Cursor, OpenCode, Antigravity, Vscode, Cline, Kilocode, and Codex; post-Apply dry-run and drift reported 127 checked, 0 missing, 0 drift, 0 error; the post-Apply Fast run exposed a CI-only Phase 3A empty-buffer edge that commit `80299d190afc1e28136a22c81aba56cfa2ba3106` repaired after production review and Composer Full CI; the owner-designated definitive VS Code Codex extension smoke passed C1–C6 including plan-review rejection of a deliberate stub, production-readiness APPROVED, and bug-review CLEAN; and 7×7 agent/current-state parity was confirmed by the passing normalization gates. The program is complete; the final boundary is this docs-only closeout with no push.
 
 ### Phase 1 recovery gates
 
@@ -1020,14 +1022,28 @@ Phase 4:             Not started
 - **Fast CI:** pre-Apply all-host dry-run.
 - **Full CI before Apply:** `Invoke-NormalizationFullCI.ps1`.
 - **Deliverables:**
-  - [ ] Lifecycle/baseline gates confirmed for all seven hosts.
-  - [ ] Owner authorization recorded.
-  - [ ] Apply observed success.
-  - [ ] Post-Apply dry-run/drift clean or unowned drift explicitly reported.
-  - [ ] Restart/reload and smoke matrix complete.
-  - [ ] 7x7 agent parity confirmed.
-  - [ ] Final docs-only verification boundary recorded.
+  - [x] Lifecycle/baseline gates confirmed for all seven hosts.
+  - [x] Owner authorization recorded.
+  - [x] Apply observed success.
+  - [x] Post-Apply dry-run/drift clean or unowned drift explicitly reported.
+  - [x] Owner-designated active-surface smoke complete (supersedes per-surface restart/reload).
+  - [x] 7x7 agent parity confirmed.
+  - [x] Final docs-only verification boundary recorded.
 - **Risks:** Partial Apply or owner-owned live drift requires stop/recovery, not silent retry.
+
+### Phase 6 execution evidence
+
+- **Status:** Phase 6 complete; program complete (2026-09-18).
+- **Owner authorization** for all-host Apply was received on 2026-09-18.
+- **Pre-Apply gates passed:** normalization Full CI, all-host dry-run, read-only all-host drift (127 checked, 0 missing, 0 drift, 0 error), and restore-baseline gate.
+- **Normative `Sync-HostHarness.ps1 -Apply` succeeded** across Cursor, OpenCode, Antigravity, Vscode, Cline, Kilocode, and Codex.
+- **Post-Apply dry-run and drift passed:** 127 checked, 0 missing, 0 drift, 0 error.
+- **Post-Apply Fast CI** exposed a CI-only Phase 3A empty-buffer edge; commit `80299d190afc1e28136a22c81aba56cfa2ba3106` repaired it after production review and Composer Full CI.
+- **Owner designated the active VS Code Codex extension surface definitive.** C1–C6 smoke passed, including plan-review rejection of a deliberate stub, production-readiness APPROVED, and bug-review CLEAN.
+- **Smoke scope:** the owner ruled the active VS Code Codex extension surface definitive for post-Apply smoke, superseding per-surface restart/reload tests; C1–C6 behavioral probes on that surface were the accepted substitute.
+- **7×7 agent/current-state parity was confirmed** by the passing normalization gates.
+- **Final boundary:** docs-only closeout; no push.
+- **Evidence paths (ignored):** `.plans/rollbacks/procedure-registry-phase6/pre-apply-drift-all.json`, `.plans/rollbacks/procedure-registry-phase6/post-apply-drift-all.json`, `.plans/procedure-registry-phase6/apply-execution-2026-09-18.md`, `.plans/procedure-registry-phase6/vscode-codex-smoke-2026-09-18.md`
 
 
 ## Historical plan acceptance
