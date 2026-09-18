@@ -1,6 +1,6 @@
 # Cursor host adapter
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-18
 
 ## Context
 
@@ -123,7 +123,7 @@ When syncing outside the script (not recommended):
 
 **Smoke notes (2026-08-21 post–host-harness sync):** Filesystem inventory **pass** (5 skills token-merged, 2 agents, 3 hybrid rules, 0 unresolved `{{COMPANION_ROOT}}`, 0 `../../../../` hops). Dry-run `Sync-HostHarness.ps1 -Target Cursor` exit 0. C1/C2/restore **pass**. User Rules paste **deferred**. Row 3 optional.
 
-**OpenCode C6 minimum:** **pass** (2026-08-20) — [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).
+**OpenCode C6 minimum:** **pass** (2026-08-20).
 
 ### Restore
 
@@ -142,7 +142,6 @@ Sync/Apply **does not** create backup trees. Ongoing harness SoT is this compani
 - [Host harness sync README](../../scripts/host-sync/README.md)
 - [Sync-HostHarness.ps1](../../scripts/Sync-HostHarness.ps1)
 - [Cursor overlay copy-out map](../../overlays/cursor/_index.md)
-- [pointer-first-3 audit](../../analysis/cursor-pointer-first-3-audit-2026-08.md)
 - [Editing companion workflow](./editing-companion-workflow.md)
 - [OpenCode host adapter](./opencode-host-adapter.md)
 - [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md)

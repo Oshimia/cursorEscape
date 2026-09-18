@@ -1,10 +1,10 @@
 # OpenCode host adapter
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-18
 
 ## Context
 
-This SOP documents the **global OpenCode adapter** installed on the operator machine for R0 live trial of the cursorEscape loop. **Target SoT** is this companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md), [agents](../../agents/_index.md), [skills](../../skills/_index.md)). Files under `~/.config/opencode/` are the **host adapter / copy-out target**, not a second procedure tree. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) from [overlays/opencode](../../overlays/opencode/_index.md). **Procedure mirror deleted** pointer-first-4 (2026-08-20). **C6 minimum smoke rows 1–4, 8, 9–10, 13: pass** (2026-08-21 post–`Sync-HostHarness`). Row **14**: **pass** (2026-08-21). Paste runbook: [opencode-smoke-prompts](./opencode-smoke-prompts.md). See also [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md).
+This SOP documents the **global OpenCode adapter** installed on the operator machine for R0 live trial of the cursorEscape loop. **Target SoT** is this companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md), [agents](../../agents/_index.md), [skills](../../skills/_index.md)). Files under `~/.config/opencode/` are the **host adapter / copy-out target**, not a second procedure tree. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) from [overlays/opencode](../../overlays/opencode/_index.md). **Procedure mirror deleted** (2026-08-20). **C6 minimum smoke rows 1–4, 8, 9–10, 13: pass** (2026-08-21 post–`Sync-HostHarness`). Row **14**: **pass** (2026-08-21). Paste runbook: [opencode-smoke-prompts](./opencode-smoke-prompts.md).
 
 **Install root (this machine):** `C:\Users\admin\.config\opencode\`
 
@@ -26,7 +26,7 @@ This SOP documents the **global OpenCode adapter** installed on the operator mac
 | ----- | ----------------- | -------------------------------------------- |
 | Always-on (thin) | Gate pointers only | `instructions/cursor-escape-loop.md` (wired via `opencode.json` → `instructions` — **absolute** `{{OPENCODE_HOME}}/…`) + matching `AGENTS.md` |
 | Skills (on-demand) | [skills/](../../skills/_index.md) — thin harness stubs | `skills/*/SKILL.md` → Read `{{COMPANION_ROOT}}/skills/…` and `{{COMPANION_ROOT}}/workflow/…` |
-| Deep workflow docs | Companion [workflow/](../../workflow/_index.md) at `{{COMPANION_ROOT}}/workflow/*.md` | **Absolute companion Read** (locked smoke row **4** How). Host `docs/workflow/*` mirror **deleted** pointer-first-4 ([closeout](../../analysis/pointer-first-4-closeout-2026-08.md)) |
+| Deep workflow docs | Companion [workflow/](../../workflow/_index.md) at `{{COMPANION_ROOT}}/workflow/*.md` | **Absolute companion Read** (locked smoke row **4** How). Host `docs/workflow/*` mirror is deleted. |
 | Role agents | [agents/](../../agents/_index.md) — thin harness | `agents/*.md` (`permission.edit: deny` on reviewers) |
 
 ### Inventory
@@ -55,7 +55,7 @@ This SOP documents the **global OpenCode adapter** installed on the operator mac
 
 - **Skills inventory:** each `skills/*/SKILL.md` must include frontmatter `name` (folder id) + `description` — required for skill-tool advertisement (Observed 2026-08-19).
 - `opencode.json` — `instructions`; `permission.skill: { "*": "allow" }`; `skills.paths` → global skills dir; `agent.build` / `agent.implementer` `permission.task` allowlists (+ skill allow).
-- **Resolved (discovery 2026-08-19):** empty skill-tool catalog was missing `name` / path registration, not contamination. See [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
+- **Resolved:** an empty skill-tool catalog is usually missing `name` / path registration, not session contamination.
 
 ### Live sync (Sync-HostHarness)
 
@@ -117,8 +117,8 @@ Record results when running live checks. Expected: `pass` \| `fail` \| `deferred
 | 8 | bug_reviewer rubric path | [opencode-smoke-prompts § Row 8](./opencode-smoke-prompts.md#row-8--bug_reviewer-rubric-companion-fa). Companion FA rubric SoT. | **pass** (2026-08-21 — companion FA rubric) |
 | 9 | Skill-tool lists workflow skills | [opencode-smoke-prompts § Rows 9+10](./opencode-smoke-prompts.md#rows-9--10--skill-catalog--sot-load) (same prompt). **C2:** **9** workflow skills including `roadmap` and `diagnosing-bugs` | **pass** (2026-08-21 — thin harness → companion skill catalog) |
 | 10 | SoT load without bash approvals | Same prompt as row **9**. Thin harness → companion Read Escalation first row; **zero** bash for adapter discovery | **pass** (2026-08-21 — companion `implementation-plan` Escalation first row) |
-| 11 | Native file tools without bash approvals | Optional — frozen prompts in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Probe B | **pass** (2026-08-19); short lookups closed; see row **12** for glob-blind residual |
-| 12 | Glob-blind paths without serial Shell asks | Optional — [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Failure mode F | **historical pass** (2026-08-19; **12b/12c companion re-probe not run** post-mirror) |
+| 11 | Native file tools without bash approvals | Optional — exercise short `read` / `glob` / `grep` lookups with no bash approval | **pass** (2026-08-19); short lookups closed; see row **12** for glob-blind residual |
+| 12 | Glob-blind paths without serial Shell asks | Optional — exercise `gitignore` / `external_directory` cases and use explicit path registration or a narrow `.ignore`/allow rule instead of broad bash | **historical pass** (2026-08-19; **12b/12c companion re-probe not run** post-mirror) |
 | 13 | Thin-plan template rejection | [opencode-smoke-prompts § Row 13](./opencode-smoke-prompts.md#row-13--thin-plan-rejection) — omit Assumptions/Unknowns → `plan_reviewer` → **CHANGES REQUESTED** | **pass** (2026-08-21 — CHANGES REQUESTED incl. missing Assumptions; marker spot-check **pass**) |
 | 14 | Copy-out map / specimen vs live `agent.*` keys | [opencode-smoke-prompts § Row 14](./opencode-smoke-prompts.md#row-14--specimen-vs-live-optional-powershell) (PowerShell). | **pass** (2026-08-21 — specimen≡live `plan`/`build`/`implementer`; 8 skills / 7 agents; mirror absent) |
 | 15 | Conductor agent visible/selectable | [opencode-smoke-prompts § Row 15](./opencode-smoke-prompts.md#row-15--composer_conductor-visible) — fresh process; `@composer_conductor` selectable; task allowlist `"*": deny` first | **pass** (2026-08-23 fresh CLI — `opencode debug config` merges `composer_conductor`; synced frontmatter has `"*": deny` first) |
@@ -188,10 +188,6 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 - [Host adaptation fidelity](../featureArchitecture/host-adaptation-fidelity.md)
 - [Skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)
 - [Authoring OpenCode adapter files](./opencode-authoring-adapter.md)
-- [Host recreation study](../../analysis/host-recreation-2026-08.md)
-- [OpenCode DSV4F session study](../../analysis/opencode-dsv4f-session-2026-08.md)
-- [OpenCode DSV4F session extension](../../analysis/opencode-dsv4f-session-extension-2026-08.md)
-- [OpenCode skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md)
 - [bug-reviewer-finding-rubric](../featureArchitecture/bug-reviewer-finding-rubric.md)
 - [Clean context and isolation](../featureArchitecture/clean-context-isolation.md)

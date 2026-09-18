@@ -1,11 +1,11 @@
 # Kilo Code host adapter — global `~/.kilocode` inventory & sync
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-18
 **Status:** brought up 2026-09-01 (6th stack; shared `Generic.Adapter.ps1` dispatch — no per-stack adapter file). Apply gated on Phase 6 owner authorization per the [Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary); Phase 0 baselines are a prerequisite, not the authorization boundary.
 
 ## Context
 
-Kilo Code VS Code extension (`kilocode.kilo-code-7.5.6`, Kilo CLI-platform rebuild) harness sync from [overlays/kilocode/](../../overlays/kilocode/_index.md). Surface map (docs-verified): [analysis/cline-kilo-probes-2026-09.md](../../analysis/cline-kilo-probes-2026-09.md). Baseline (restore-only): `C:/Users/admin/.kilocode-backup-pre-kilobringup-20260901-180000` (registered). Sync does **not** create backups.
+Kilo Code VS Code extension (`kilocode.kilo-code-7.5.6`, Kilo CLI-platform rebuild) harness sync from [overlays/kilocode/](../../overlays/kilocode/_index.md). Surface map is docs-verified. Baseline (restore-only): `C:/Users/admin/.kilocode-backup-pre-kilobringup-20260901-180000` (registered). Sync does **not** create backups.
 
 ## Sync commands
 

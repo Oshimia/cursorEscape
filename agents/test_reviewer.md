@@ -1,10 +1,10 @@
 # test_reviewer
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-18
 
 ## Context
 
-**Target** role contract. Optional test-strategy / coverage reviewer. **Nice-to-have** — not part of the default dual gate. Does **not** replace [production_readiness_reviewer](./production_readiness_reviewer.md) blocking test/docs. When to make this mandatory remains **Unknown (U9)** — see [unresolved architectural questions](../review/unresolved-architectural-questions.md).
+**Target** role contract. Optional test-strategy / coverage reviewer. **Nice-to-have** — not part of the default dual gate. Does **not** replace [production_readiness_reviewer](./production_readiness_reviewer.md) blocking test/docs. When to make this mandatory remains **Unknown (U9)** — see [project decisions and open questions](../docs/featureArchitecture/project-decisions-and-open-questions.md).
 
 ---
 
@@ -72,4 +72,4 @@ Follow [clean-context isolation](../docs/featureArchitecture/clean-context-isola
 - [bug_reviewer](./bug_reviewer.md)
 - [Agent roles and model assignment](../docs/featureArchitecture/agent-roles-and-model-assignment.md)
 - [Clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md)
-- [Unresolved architectural questions](../review/unresolved-architectural-questions.md) (U9)
+- [Project decisions and open questions](../docs/featureArchitecture/project-decisions-and-open-questions.md) (U9)

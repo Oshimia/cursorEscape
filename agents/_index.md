@@ -1,6 +1,6 @@
 # Agent Role Contracts
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-18
 
 ## Context
 
@@ -57,4 +57,3 @@ Every role page defines:
 - [Clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md)
 - [Cursor overlay](../overlays/cursor/_index.md)
 - [Codex overlay agents](../overlays/codex/agents/)
-- [Host recreation study](../analysis/host-recreation-2026-08.md)

@@ -1,6 +1,6 @@
 # Authoring OpenCode adapter files (skills, agents, rules, config)
 
-**Last updated:** 2026-08-21
+**Last updated:** 2026-09-18
 
 ## Context
 
@@ -9,7 +9,6 @@ How to write and maintain the **OpenCode host adapter** under `~/.config/opencod
 **Install root (this machine):** `C:\Users\admin\.config\opencode\`
 
 **Process SoT for inventory / smoke:** [opencode-host-adapter](./opencode-host-adapter.md)  
-**Evidence for skill-catalog failures:** [opencode-skill-binding-discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)
 
 Official OpenCode documentation (read before inventing local conventions):
 
@@ -76,7 +75,7 @@ Single section-checklist SoT: [implementation-plan](../../skills/implementation-
 
 ### Skills (required checklist)
 
-Follow [OpenCode Agent Skills](https://opencode.ai/docs/skills/) exactly. Observed live trial (2026-08-19): skills with **description only** and **no `name`** did **not** appear in the skill tool (only built-in `customize-opencode` showed) until `name` was added and `skills.paths` was set — see [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
+Follow [OpenCode Agent Skills](https://opencode.ai/docs/skills/) exactly. A skill needs frontmatter `name` (matching the folder id) and `description`, plus registered `skills.paths`, to appear in the skill tool.
 
 #### Layout
 
@@ -177,7 +176,7 @@ skill({ name: "implementation-plan" })
 | In cursorEscape | On OpenCode adapter |
 | --------------- | ------------------- |
 | `skills/<id>/SKILL.md` (portable contract at repo root) | `skills/<id>/SKILL.md` (host entry + frontmatter) |
-| Deep procedure in FA / companion `workflow/` | **Target:** absolute `{{COMPANION_ROOT}}/workflow|skills|agents|rules/...` Read from thin harness (pointer-first-2). OpenCode host `docs/workflow/...` mirror **deleted** pointer-first-4 — not procedure SoT ([closeout](../../analysis/pointer-first-4-closeout-2026-08.md)) |
+| Deep procedure in FA / companion `workflow/` | **Target:** absolute `{{COMPANION_ROOT}}/workflow|skills|agents|rules/...` Read from thin harness. OpenCode host `docs/workflow/...` is not procedure SoT. |
 
 Do not paste full iterative-plan / dual-review essays into always-on instructions.
 
@@ -325,7 +324,6 @@ Permission keys include `read`, `edit`, `bash`, `task`, `skill`, `external_direc
 
 **Date Observed:** 2026-08-20 (Desktop smoke row 1 after Phase 3 sync).  
 **Fidelity cite:** [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) § Observed failure: cwd-relative global `instructions`.  
-**Evidence:** [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § C1 / Failure mode I.
 
 | | |
 | - | - |
@@ -441,7 +439,7 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 3. **C1 path check:** global `instructions` entries are **absolute** (or specimen `{{OPENCODE_HOME}}/…`); `AGENTS.md` exists and matches `instructions/cursor-escape-loop.md`.  
 4. **C4 hop check:** `rg` zero for `\.\./\.\./(docs|skills|agents)/` under overlay skills/agents/review-subagent-models **and** live `docs/workflow` after sync.  
 5. **Full restart** OpenCode.  
-6. Clean-chat **C1** frozen prompt ([skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § C1): quotes when-in-doubt + eval/harness from session with **zero** tools.  
+6. Clean-chat **C1** prompt: quotes when-in-doubt + eval/harness from session with **zero** tools.
 7. Clean-chat **C4** / smoke row 4: load `implementation-review`; confirm Read resolves `{{COMPANION_ROOT}}/workflow/iterative-code-review.md` (locked How in [host-adapter](./opencode-host-adapter.md)). Legacy host `docs/workflow/...` pass only while mirror remains transitional.  
 8. Clean-chat Probe A (same doc): skill tool lists workflow ids; load `implementation-plan`; quote Escalation row.  
 9. Update [host adapter](./opencode-host-adapter.md) smoke rows 1 / 4–5 / 9–10 as appropriate.  
@@ -454,7 +452,7 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 1. Skill-tool catalog emptiness is usually **authoring/discovery** (`name`, paths, restart, permissions) — not native tool failure and not session contamination.
 2. Missing always-on gates with the file on disk is usually **cwd-relative `instructions`** (Failure mode I) — not “model can’t see rules.”
 3. Deep-doc path resolving to `%USERPROFILE%\docs\…` is usually **skill `../../docs/workflow` hops** (Failure mode J) — not a missing mirror.
-4. Bash-for-`read`/`glob`/`grep` on short prompts was OK in Probe B/C; residual babysitting is often **glob-blind** (gitignore / external_directory) — see Failure mode F in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md).
+4. Bash-for-`read`/`glob`/`grep` on short prompts can be acceptable, but residual babysitting is often **glob-blind** (`gitignore` / `external_directory`); prefer explicit path registration and narrow allow rules.
 5. Task allow-listed but blocked after sync: usually **`"*"` not first** in `permission.task` (Failure mode K) — not “agent missing from disk.”
 6. Reviewer write attempt via `Set-Content` despite `edit: deny`: Failure mode L — harden **bash**, not only edit.
 7. Popup on “allowed” `Get-ChildItem` compound script / plan_reviewer browse: Failure mode M.
@@ -470,7 +468,6 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 - [OpenCode Rules](https://opencode.ai/docs/rules/)
 - [OpenCode Config](https://opencode.ai/docs/config/)
 - [opencode.ai/config.json](https://opencode.ai/config.json)
-- [opencode-skill-binding-discovery-2026-08](../../analysis/opencode-skill-binding-discovery-2026-08.md) — Observed `name` / `skills.paths` / permission allow sequence; **Failure mode I** (cwd-relative instructions / C1)
 - [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) — C1–C6 bar; cwd-relative `instructions` anti-pattern
 
 ---

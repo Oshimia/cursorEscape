@@ -1,6 +1,6 @@
 # Standard Operating Procedures (SOPs)
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-18
 
 ## Context
 
@@ -40,6 +40,6 @@ This index lists repeatable procedures for maintaining cursorEscape documentatio
 ## Related
 
 * [Editing companion workflow](./editing-companion-workflow.md)
-* [Design decisions](../../review/design-decisions.md)
+* [Project decisions and open questions](../featureArchitecture/project-decisions-and-open-questions.md)
 * [Feature architecture index](../featureArchitecture/_index.md)
 * [Overlays](../../overlays/_index.md)

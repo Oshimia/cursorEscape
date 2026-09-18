@@ -56,14 +56,14 @@ Imported research files carry provenance banners. Overlay `SKILL.md` files do **
 
 ### Operator analysis
 
-[`analysis/`](../../analysis/_index.md) indexes **decision-grade studies** of the owner's existing loops. Phase 2 imported openBuggy operator studies live under [`research/imported/openBuggy/analysis/`](../../research/imported/openBuggy/analysis/_index.md) (Observed/imported) — link from `analysis/_index.md`, do not duplicate under `analysis/` as if native. Do not fold those write-ups into Observed FA suites or into future eval scoring. Committed analysis docs use aliases and theme labels; UUID/path sheets for imported openBuggy studies remain in the **openBuggy source repo** under gitignored `.local/` (not copied here). Future local studies may use `.local/` under `analysis/**` (`**/.local/` in `.gitignore`).
+Imported openBuggy operator studies remain in the owner-frozen [`research/imported/openBuggy/analysis/`](../../research/imported/openBuggy/analysis/_index.md) archive with Observed/imported classification. Do not fold those write-ups into Target FA suites or future eval scoring. UUID/path sheets for imported openBuggy studies remain in the **openBuggy source repo** under gitignored `.local/` (not copied here). Large future local study outputs may use `.local/` (`**/.local/` in `.gitignore`), with only a durable pointer/citation in current documentation.
 
 ### When adding a document
 
 1. Create the `.md` file with **Last updated**, **Context**, **Substance**, **Implications** (or **Implications / open questions**).
 2. Link it from the section `_index.md` in the **same change**.
-3. Cross-link related Roadmap / design-decisions entries when intent changes.
-4. Research docs must include a **Sources** subsection (see [research index](../../research/_index.md)).
+3. Cross-link related feature-architecture entries when intent changes; record durable decisions and unresolved questions in [project decisions and open questions](../featureArchitecture/project-decisions-and-open-questions.md).
+4. Research docs must include a **Sources** subsection.
 
 ### Path rules
 

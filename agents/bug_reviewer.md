@@ -1,10 +1,10 @@
 # bug_reviewer
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-18
 
 ## Context
 
-**Target** role contract. Bug-finder leg of the dual gate. Recreate Bugbot-shaped utility with an OpenCode (or host-equivalent) subagent + skills/rules — the same pattern as [production_readiness_reviewer](./production_readiness_reviewer.md) / live reviewer-a. **Not** Cursor proprietary `bugbot`. **openBuggy is not required** for v0 ([design decisions](../review/design-decisions.md)).
+**Target** role contract. Bug-finder leg of the dual gate. Recreate Bugbot-shaped utility with an OpenCode (or host-equivalent) subagent + skills/rules — the same pattern as [production_readiness_reviewer](./production_readiness_reviewer.md) / live reviewer-a. **Not** Cursor proprietary `bugbot`. **openBuggy is not required** for v0 ([project decisions](../docs/featureArchitecture/project-decisions-and-open-questions.md)).
 
 **Read when reviewing:** [bug-reviewer-finding-rubric.md](../docs/featureArchitecture/bug-reviewer-finding-rubric.md) — report vs ignore SoT. Then follow [bug-review-sweep](../skills/bug-review-sweep/SKILL.md) — ordered class passes + gates that operationalize the rubric (canonical SoT this repo).
 
@@ -86,5 +86,4 @@ OpenCode markdown agent (`mode: subagent`, `permission.edit: deny`) with a bug-f
 - [bug-reviewer-finding-rubric](../docs/featureArchitecture/bug-reviewer-finding-rubric.md)
 - [production_readiness_reviewer](./production_readiness_reviewer.md)
 - [Clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md)
-- [Host recreation study](../analysis/host-recreation-2026-08.md)
 - [openBuggy agent review loop SOP](../research/imported/openBuggy/SOPs/running-an-agent-review-loop-with-openBuggy.md) (Observed / optional)

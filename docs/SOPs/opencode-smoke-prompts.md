@@ -1,14 +1,12 @@
 # OpenCode smoke prompts (copy-paste)
 
-**Last updated:** 2026-08-23
+**Last updated:** 2026-09-18
 
 ## Context
 
 Operator paste-book for [opencode-host-adapter](./opencode-host-adapter.md) smoke rows. One place, C6-minimum order, frozen prompts only.
 
 **Checklist / results table:** [opencode-host-adapter § Smoke checklist](./opencode-host-adapter.md#smoke-checklist-r0)  
-**Discovery history (not the runbook):** [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)  
-**Prior attestation log:** [pointer-first-4 closeout](../../analysis/pointer-first-4-closeout-2026-08.md)
 
 Score **pass** / **fail** yourself — do **not** put pass criteria in the pasted prompt.
 
@@ -207,7 +205,7 @@ Do not use bash/shell to list ~/.config/opencode.
 **How:** Desktop restart window; new chat; assign Composer on a small roadmap with one trivial phase.
 
 ```text
-Act as Composer per the composer skill. Run phase 1 of the roadmap at docs/roadmaps/<small>.md end-to-end:
+Act as Composer per the composer skill. Run phase 1 of a small roadmap end-to-end:
 launch the implementer subagent and let its dual-review pressure-release block run without asking me
 to continue between iterations. Report each iteration number as it happens.
 ```
@@ -258,7 +256,7 @@ Brief file must be written with the native `write` tool (no bash redirection); C
 
 ## Optional probes (not C6 minimum)
 
-Frozen prompts for rows **11–12** (native tools / glob-blind) remain in [skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md) § Probe B / Failure mode F — use only if reopening those babysitting issues.
+Rows **11–12** are optional: use the corresponding native-tool and glob-blind checks in the host adapter scorecard only when reopening babysitting issues.
 
 ## Results log (this run)
 

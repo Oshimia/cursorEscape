@@ -1,11 +1,11 @@
 # Cline host adapter — global `~/.cline` inventory & sync
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-18
 **Status:** brought up 2026-09-01 (5th stack; shared `Generic.Adapter.ps1` dispatch — no per-stack adapter file). Apply gated on Phase 6 owner authorization per the [Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary); Phase 0 baselines are a prerequisite, not the authorization boundary.
 
 ## Context
 
-Cline VS Code extension (`saoudrizwan.claude-dev`) harness sync from [overlays/cline/](../../overlays/cline/_index.md). Surface map (docs-verified): [analysis/cline-kilo-probes-2026-09.md](../../analysis/cline-kilo-probes-2026-09.md). Baseline (restore-only): `C:/Users/admin/.cline-backup-pre-kilobringup-20260901-180000` (registered). Sync does **not** create backups.
+Cline VS Code extension (`saoudrizwan.claude-dev`) harness sync from [overlays/cline/](../../overlays/cline/_index.md). Surface map is docs-verified. Baseline (restore-only): `C:/Users/admin/.cline-backup-pre-kilobringup-20260901-180000` (registered). Sync does **not** create backups.
 
 ## Sync commands
 
@@ -27,7 +27,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Apply                 # global (normative)
 
 | # | Deviation | Evidence |
 | --- | --------- | -------- |
-| 1 | Separate fresh task/session per governed child-agent leg; no native subagent definitions. `workflows/agents.md` gives all seven canonical routes; `implementer` is workspace-write and `test_reviewer` is read-only. | [canonical invocation](../../workflow/agent-invocation.md); [cline-cli-subagent orchestration](../../analysis/cline-cli-subagent-orchestration-2026-08.md); [governed fallback routes](../../overlays/cline/workflows/agents.md) |
+| 1 | Separate fresh task/session per governed child-agent leg; no native subagent definitions. `workflows/agents.md` gives all seven canonical routes; `implementer` is workspace-write and `test_reviewer` is read-only. | [canonical invocation](../../workflow/agent-invocation.md); [governed fallback routes](../../overlays/cline/workflows/agents.md) |
 | 2 | Rules toggle-able by user (gates discover-default-ON but can be toggled OFF) | Cline rules docs (toggle semantics) |
 | 3 | Skills rendered as named `.md` workflows (no SKILL.md-dir contract) | Cline workflows docs |
 | 4 | `cline_mcp_settings.json` + `~/.cline/data/{sessions,db,cache,workspaces}` never touched | manifest NeverTouch |

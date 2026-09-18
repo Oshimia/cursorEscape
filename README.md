@@ -22,9 +22,6 @@
 | [`docs/SOPs/`](docs/SOPs/_index.md) | Procedures for maintainers and future implementers |
 | [`overlays/`](overlays/_index.md) | Host-native overlays — sync via [`Sync-HostHarness.ps1`](scripts/Sync-HostHarness.ps1) |
 | [`scripts/host-sync/`](scripts/host-sync/README.md) | Modular sync core, manifests, adapters, expansion recipe |
-| [`review/`](review/_index.md) | Project intent and [design decisions](review/design-decisions.md) |
-| [`research/`](research/_index.md) | Sourced facts and imported sibling research |
-| [`analysis/`](analysis/_index.md) | Operator studies ([host recreation](analysis/host-recreation-2026-08.md)) |
 
 ## Normalization CI
 
@@ -47,7 +44,6 @@ cursorEscape/
   scripts/host-sync/              # modular sync core + adapters
   docs/                           # feature architecture and SOPs
   overlays/                       # registered host overlays, incl. codex/
-  research/ review/ analysis/
 ```
 
 Application runtime, adapters, packages, and eval runners are **out of scope** until an authorized implementation phase. Recreation uses external T3 + OpenCode.
@@ -61,8 +57,8 @@ Sibling archives (local relative links; **no standing sync**):
 | [openBuggy](../openBuggy/README.md) | Research/eval archive — not v0 bug_reviewer default |
 | [AITestSuite](../AITestSuite/README.md) | Frozen plan/review eval packaging |
 
-Longer map: [relationship to siblings](review/relationship-to-siblings.md).
+Longer map: [project decisions and sibling relationships](docs/featureArchitecture/project-decisions-and-open-questions.md).
 
 ## License / remote
 
-Private-first. License and remote hosting remain TBD. See [design decisions](review/design-decisions.md).
+Private-first. License and remote hosting remain TBD. See [project decisions](docs/featureArchitecture/project-decisions-and-open-questions.md).

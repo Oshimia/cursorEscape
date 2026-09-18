@@ -1,6 +1,6 @@
 # VS Code host adapter SOP
 
-**Stack:** `Vscode` · **Live root:** `~/.copilot/` · **Surface:** Copilot user-level instructions/agents/skills (docs-verified 2026-09-01 — [load-surface map](../../analysis/vscode-load-surface-2026-09.md))
+**Stack:** `Vscode` · **Live root:** `~/.copilot/` · **Surface:** Copilot user-level instructions/agents/skills (docs-verified 2026-09-01)
 
 ## Must / Must-not
 
