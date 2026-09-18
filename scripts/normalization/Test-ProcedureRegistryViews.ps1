@@ -201,7 +201,10 @@ function Get-Phase3ADiffRawBytes {
   $proc.StandardOutput.BaseStream.CopyTo($buffer)
   $proc.WaitForExit()
   if ($proc.ExitCode -ne 0) { throw "FAIL: Phase 3A drift diff exited $($proc.ExitCode)" }
-  return $buffer.ToArray()
+  # The comma wrapper preserves a zero-length array through PowerShell's
+  # automatic return-value unrolling.
+  $diffBytes = [byte[]]$buffer.ToArray()
+  return ,$diffBytes
 }
 function Get-Phase3ADriftContentSnapshot {
   $rows = @(& git -C $RepoRoot status --porcelain -- skills 'overlays/*/skills')
