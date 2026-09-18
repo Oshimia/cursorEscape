@@ -60,7 +60,5 @@ First host attempt: [host recreation study](../../analysis/host-recreation-2026-
 
 ## Related
 
-- [Roadmap](../Roadmap.md)
 - [Project decisions and open questions](./project-decisions-and-open-questions.md) — absorbs prior review/ intent (migrated 2026-09-18)
-- [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)
 - [Editing companion workflow](../SOPs/editing-companion-workflow.md) — operational edit map (cascade) for Approach A + pointer-first

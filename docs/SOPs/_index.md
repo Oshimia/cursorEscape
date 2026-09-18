@@ -40,8 +40,6 @@ This index lists repeatable procedures for maintaining cursorEscape documentatio
 ## Related
 
 * [Editing companion workflow](./editing-companion-workflow.md)
-* [Roadmap](../Roadmap.md)
 * [Design decisions](../../review/design-decisions.md)
 * [Feature architecture index](../featureArchitecture/_index.md)
 * [Overlays](../../overlays/_index.md)
-* [Initialization roadmap](../roadmaps/cursorEscape-initialization.md)

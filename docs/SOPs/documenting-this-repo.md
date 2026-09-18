@@ -6,7 +6,7 @@
 
 cursorEscape's value is its documentation. Drift (undocumented decisions, broken indexes, invented parallel trees) destroys that value. This SOP is the local equivalent of a "reference docs check" discipline — adapted to repo paths.
 
-**SoT (Target — Approach A):** Portable procedure and contracts at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` ([shared-workflow-docs](../roadmaps/shared-workflow-docs.md) Phases 3–6 complete). `docs/` holds **this-repo-only** FA, SOPs, roadmaps, and `Roadmap.md`. Cursor overlay under `overlays/cursor/` is **thin wrappers** (spawn + Read tables). Phase 3 import under `research/imported/cursor-global-workflow/` is archaeology. Identity: skill/workflow manager across **stacks**, not machines ([project decisions](../featureArchitecture/project-decisions-and-open-questions.md)).
+**SoT (Target — Approach A):** Portable procedure and contracts at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` ([skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)). `docs/` holds **this-repo-only** FA and SOPs. Cursor overlay under `overlays/cursor/` is **thin wrappers** (spawn + Read tables). Phase 3 import under `research/imported/cursor-global-workflow/` is archaeology. Identity: skill/workflow manager across **stacks**, not machines ([project decisions](../featureArchitecture/project-decisions-and-open-questions.md)).
 
 **Changing portable workflow / gates / review loops:** follow [editing-companion-workflow](./editing-companion-workflow.md) (same-changeset cascade to Cursor + OpenCode thin harness) before editing.
 
@@ -18,7 +18,7 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 
 ### Before changing docs
 
-1. Read [Roadmap](../Roadmap.md) and the relevant `_index.md`.
+1. Read the relevant `_index.md`.
 2. Decide document kind (see table below).
 3. Do not put metrics in `competitive-landscape.md` — put them in `research/` with Sources (rule from imported openBuggy documenting SOP).
 4. When tone or distribution framing changes, re-read stewardship in [project decisions](../featureArchitecture/project-decisions-and-open-questions.md) (private-first; monetization is not a goal).
@@ -37,7 +37,6 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 | **research** | `research/` | Sourced facts and imported sibling material |
 | **review** | `review/` | Legacy intent/design decisions — **live decisions now in [project decisions](../featureArchitecture/project-decisions-and-open-questions.md)** |
 | **analysis** | `analysis/` | Operator studies of local workflows |
-| **roadmaps/** | `docs/roadmaps/` | Multi-phase handoff conductors |
 
 Promotion rule: **Target** portable procedure edits go to repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`, FA). Overlay refresh is thin-wrapper / harness **echo** of changed gates (Steps, always-on summary, Read when) — not a second authored procedure tree. Full cascade checklist: [editing-companion-workflow](./editing-companion-workflow.md).
 
@@ -101,9 +100,7 @@ Imported research files carry provenance banners. Overlay `SKILL.md` files do **
 
 ## Related
 
-- [Roadmap](../Roadmap.md)
 - [Project decisions and open questions](../featureArchitecture/project-decisions-and-open-questions.md)
 - [SOPs index](./_index.md)
-- [Shared workflow docs roadmap](../roadmaps/shared-workflow-docs.md)
 - [Skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)
 - [Editing companion workflow](./editing-companion-workflow.md)

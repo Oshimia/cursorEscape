@@ -200,4 +200,3 @@ Grep agents for required Cursor type names `bugbot` / `reviewer-a` as runtime ID
 - [Host harness sync README](../../scripts/host-sync/README.md)
 - [Sync-HostHarness.ps1](../../scripts/Sync-HostHarness.ps1)
 - [OpenCode overlay](../../overlays/opencode/_index.md)
-- [Companion pointer-first](../roadmaps/pointer-first.md)

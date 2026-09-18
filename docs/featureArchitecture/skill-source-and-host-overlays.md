@@ -10,7 +10,7 @@ Identity: this companion repo is the owner's **skill and workflow manager** ([pr
 
 Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 
-**Program:** [Companion pointer-first](../roadmaps/pointer-first.md) (`pointer-first-0` … `pointer-first-4`) locks this page’s Target stance below. Do not confuse with [opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md) phases 0–3.
+**Program:** this page locks the Target stance below; program phase labels (`pointer-first-0` … `pointer-first-4`; OpenCode overlay phases 0–3) are disambiguated in [host adaptation fidelity](./host-adaptation-fidelity.md).
 
 ---
 
@@ -23,7 +23,7 @@ Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 - cursorEscape is the **sole SoT** for skills, rules, agents, workflows, and report schemas.
 - Host folders (`~/.config/opencode`, `~/.cursor`) hold **thin harness only** — advertisement, permissions, spawn, absolute `{{COMPANION_ROOT}}` / `{{OPENCODE_HOME}}` wiring, thin always-on gates.
 - Deep procedure loads via **companion Reads** to `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — **not** host `docs/workflow/` mirror as SoT.
-- Bulk copy-out of procedure ([opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md) Phase 3 Strategy A mirror) is **transitional**; **load path superseded** by [pointer-first](../roadmaps/pointer-first.md). Harness lessons retained: Failure mode I/J, absolute `instructions`, C1–C6 behavior bar.
+- Bulk copy-out of procedure is **transitional**; **load path superseded** by absolute companion Reads. Harness lessons retained: Failure mode I/J, absolute `instructions`, C1–C6 behavior bar.
 
 **Harness-only sync (Target):** `instructions/*`, `AGENTS.md`, thin `skills/*/SKILL.md` stubs, thin `agents/*.md` harness, harness keys in `opencode.json`. **`review-subagent-models.md`:** companion overlay-Read only (`{{COMPANION_ROOT}}/overlays/opencode/review-subagent-models.md`) — not host copy-out. **Not sync SoT:** OpenCode host `docs/workflow/*` procedure mirror **deleted** pointer-first-4 ([closeout](../../analysis/pointer-first-4-closeout-2026-08.md)); Cursor `~/.cursor/docs/workflow/` may remain transitional.
 
@@ -33,7 +33,7 @@ This repo is the **canonical manager** of portable skills, agent roles, always-o
 
 ### Target taxonomy — Approach A (Required)
 
-**Approach A (locked):** Portable procedure and contracts live at **repo-root** bases (`workflow/`, `skills/`, `agents/`, `rules/`). The Cursor overlay is **thin wrappers** at `overlays/cursor/` that point at those bases. `docs/skills/` and `docs/agents/` folded into root bases in Phase 4; `research/`, `review/`, `analysis/`, and `overlays/` moved to root in Phase 2. `docs/` retains **this-repo-only** FA, SOPs, roadmaps, and `Roadmap.md`.
+**Approach A (locked):** Portable procedure and contracts live at **repo-root** bases (`workflow/`, `skills/`, `agents/`, `rules/`). The Cursor overlay is **thin wrappers** at `overlays/cursor/` that point at those bases. `docs/skills/` and `docs/agents/` folded into root bases in Phase 4; `research/`, `review/`, `analysis/`, and `overlays/` moved to root in Phase 2. `docs/` retains **this-repo-only** FA and SOPs.
 
 **Rejected alternatives (locked):**
 
@@ -179,7 +179,7 @@ Do **not** put Cursor Task IDs in shared skill bodies. Do **not** put OpenCode p
 
 Later, copy-out may generate host-native wrappers that `Read` shared deep docs. You still **author the procedure once** at repo-root bases. Secrets stay out of git.
 
-**Migration order (Target):** Phases 2–5 of [shared-workflow-docs](../roadmaps/shared-workflow-docs.md) — move deliverable trees to root, promote overlay extract to bases, thin overlay (complete). OpenCode overlay and copy-out authorization: [opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md) Phases 2–3.
+**Migration order (Target):** deliverable trees at repo root, overlay extract promoted to bases, thin overlay (complete). OpenCode overlay and copy-out authorization are recorded in [host adaptation fidelity](./host-adaptation-fidelity.md).
 
 **Unknown:** Whether future refresh needs operator-merge for `opencode.json` provider/model keys beyond what the sync script preserves.
 
@@ -204,15 +204,13 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 ## Related
 
 - [Host adaptation fidelity](./host-adaptation-fidelity.md) — binding wiring bar and C1–C6 verification matrix for every stack
-- [OpenCode overlay](../../overlays/opencode/_index.md) — host-plugged copy-out **authorized and applied** (Phase 3 live sync 2026-08-20; [opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md))
+- [OpenCode overlay](../../overlays/opencode/_index.md) — host-plugged copy-out **authorized and applied** (Phase 3 live sync 2026-08-20)
 - [Instruction layering](./instruction-layering.md)
 - [Intended workflow](./intended-workflow.md)
 - [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md)
 - [Workspace model](./workspace-model.md)
 - [OpenCode host adapter](../SOPs/opencode-host-adapter.md)
-- [Shared workflow docs roadmap](../roadmaps/shared-workflow-docs.md)
 - [Cursor overlay](../../overlays/cursor/_index.md)
 - [Codex overlay](../../overlays/codex/_index.md) — Active since 2026-09-08
 - [Theo fleet skill management (Observed)](../../research/theo-fleet-skill-management.md)
-- [Companion pointer-first](../roadmaps/pointer-first.md)

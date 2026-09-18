@@ -62,7 +62,7 @@ Model provider — BYOK; ClinePass Desired later
 
 ## Implications / open questions
 
-1. R0 spike proves OpenCode parallel Tasks before any cursorEscape engine ([implementation roadmap](../roadmaps/implementation-roadmap.md)).
+1. R0 spike proves OpenCode parallel Tasks before any cursorEscape engine ([project decisions](./project-decisions-and-open-questions.md)).
 2. Distinguishing **T3 Code** (pingdotgg control plane) from a from-scratch “T3/custom stack” fallback — see [preliminary backend landscape](../../research/preliminary-backend-landscape.md).
 3. T3 does not get a third skill tree. Host variation is overlay-only ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)).
 

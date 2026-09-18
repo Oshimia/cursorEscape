@@ -27,7 +27,7 @@
 
 ## Verification (C1–C6)
 
-Deferred smoke table: [roadmap](../roadmaps/vscode-bring-up.md) (fill only after fresh Phase 6 owner-authorized Apply and the required restart). Post-Apply order: restart → snapshot-diff (`-Target Vscode` dry-run vs live) → C1 quote-probe in clean workspace → C2 catalog → C4/C5 hash/token → C6 operator loop.
+Deferred smoke table: fill only after fresh Phase 6 owner-authorized Apply and the required restart; verify against the [host adaptation fidelity](../featureArchitecture/host-adaptation-fidelity.md) C1–C6 matrix. Post-Apply order: restart → snapshot-diff (`-Target Vscode` dry-run vs live) → C1 quote-probe in clean workspace → C2 catalog → C4/C5 hash/token → C6 operator loop.
 
 ## Sync commands
 

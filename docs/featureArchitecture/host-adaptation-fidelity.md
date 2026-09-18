@@ -6,7 +6,7 @@
 
 This document is **Target** design for **complete host adaptation** — the binding bar that every registered stack (now including Codex) must meet before an overlay or live adapter is considered **Done**. It is not implied polish: operator workflow **loops** (plan review, implementation review with Fast → dual → Full, skill ids, clean-context isolation, Incomplete-until / dual-APPROVED bars) must behave the same on every host. Codex Phase 3 registration is **Done**: ApplyState = Active (activated 2026-09-08) with three-client C1–C6 runtime attestation recorded.
 
-**Scope:** Wiring bar, anti-patterns, checklist→verification matrix (C1–C6), doc boundaries, and phase-number disambiguation for the [OpenCode overlays SoT program](../roadmaps/opencode-overlays-sot.md) (program phases **0–3**) and [Companion pointer-first](../roadmaps/pointer-first.md) (`pointer-first-0` … `pointer-first-4`). **Out of scope here:** re-pasting Observed behavior tables ([cursor-behavior-to-reproduce](./cursor-behavior-to-reproduce.md)); always-on vs skill budget ([instruction-layering](./instruction-layering.md)); SoT vs overlay taxonomy ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)).
+**Scope:** Wiring bar, anti-patterns, checklist→verification matrix (C1–C6), doc boundaries, and phase-number disambiguation for the OpenCode overlay program (phases **0–3**) and the companion pointer-first program (`pointer-first-0` … `pointer-first-4`). **Out of scope here:** re-pasting Observed behavior tables ([cursor-behavior-to-reproduce](./cursor-behavior-to-reproduce.md)); always-on vs skill budget ([instruction-layering](./instruction-layering.md)); SoT vs overlay taxonomy ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)).
 
 **Applies to:** OpenCode overlay + live adapter (Phases 2–3 of this program), future **Cursor overlay refresh**, and the **Antigravity overlay** ([antigravity-host-adapter](../SOPs/antigravity-host-adapter.md)) — any stack that claims to run the cursorEscape loop must meet this bar, not only folder shape.
 
@@ -146,9 +146,9 @@ Phase 2 reviewers use **Author-time** columns; Phase 3 use **Runtime** + smoke. 
 | Name | Phases | Meaning |
 | ---- | ------ | ------- |
 | **Companion pointer-first program** | **pointer-first-0 … pointer-first-4** | Lock companion SoT + thin harness; supersede procedure-mirror load path; stub/sync/mirror disposition through pointer-first-4 |
-| **OpenCode overlay program** | **0–3** | Historical [opencode-overlays-sot](../roadmaps/opencode-overlays-sot.md): 0 = fidelity FA; 1 = thin discovery/plan-review skills; 2 = `overlays/opencode/` + copy-out auth flip; 3 = live sync + smoke — **load path superseded** by pointer-first |
-| **Shared-workflow-docs program** | **1–6** | Completed repo-root migration ([shared-workflow-docs](../roadmaps/shared-workflow-docs.md)) |
-| **cursorEscape initialization** | **0–6** | Bootstrap / Target FA ([cursorEscape-initialization](../roadmaps/cursorEscape-initialization.md)) |
+| **OpenCode overlay program** | **0–3** | 0 = fidelity FA; 1 = thin discovery/plan-review skills; 2 = `overlays/opencode/` + copy-out auth flip; 3 = live sync + smoke — **load path superseded** |
+| **Shared-workflow-docs program** | **1–6** | Completed repo-root migration |
+| **cursorEscape initialization** | **0–6** | Bootstrap / Target FA |
 
 When a doc says “Phase 2,” confirm **which program** before editing overlays or authorization. When a doc says “pointer-first-0,” confirm it is **not** opencode-overlays-sot Phase 0.
 
@@ -175,8 +175,6 @@ Future refresh of [overlays/cursor](../../overlays/cursor/_index.md) or live `~/
 
 ## Related
 
-- [OpenCode overlays SoT roadmap](../roadmaps/opencode-overlays-sot.md) (historical bulk sync — load path superseded)
-- [Companion pointer-first](../roadmaps/pointer-first.md)
 - [Cursor behavior to reproduce](./cursor-behavior-to-reproduce.md)
 - [Instruction layering](./instruction-layering.md)
 - [Skill source and host overlays](./skill-source-and-host-overlays.md)

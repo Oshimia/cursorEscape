@@ -36,7 +36,7 @@ This page is the durable home for cursorEscape's current project decisions, fram
 | **Replaceability** | Backends, models, and execution surfaces must remain swappable without rewriting canonical intent docs. |
 | **Cursor dependency (target)** | **None** for the recreation path. Observed Cursor behavior may be imported as research/reference only. |
 | **Runtime in this repo** | **Not started.** Docs remain canonical until an explicit R0+ go-ahead. |
-| **Documentation taxonomy** | Target (Approach A): repo-root `workflow/`, `skills/`, `agents/`, `rules/`, `research/`, `analysis/`, `overlays/`; `docs/` for this-repo-only FA, SOPs, roadmaps. |
+| **Documentation taxonomy** | Target (Approach A): repo-root `workflow/`, `skills/`, `agents/`, `rules/`, `research/`, `analysis/`, `overlays/`; `docs/` for this-repo-only FA and SOPs. |
 
 ### Non-goals
 

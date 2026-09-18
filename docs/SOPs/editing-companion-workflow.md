@@ -14,7 +14,7 @@ Design essays stay in FA ([skill-source-and-host-overlays](../featureArchitectur
 
 ### Architecture (one paragraph)
 
-cursorEscape is the **sole SoT** for skills, rules, agents, workflows, and report schemas. Registered host homes (including `~/.cursor`, `~/.config/opencode`, `~/.gemini`, `~/.copilot`, `~/.cline`, `~/.kilocode`, and Codex's independent `CODEX_HOME` + skill root) hold **thin harness only** (advertisement, permissions, spawn, absolute wiring, thin always-on gates). Deep procedure loads via **companion Reads** to `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — **not** a host `docs/workflow/` mirror as SoT ([pointer-first](../roadmaps/pointer-first.md)). The [procedure registry](../featureArchitecture/procedure-registry.md) owns machine metadata and semantic composition order; deterministic rendering derives composition-bound host projections. Registered overlays are thin wrappers / harness — they **echo** gate shape and point at companion; they must not become a second authored procedure tree.
+cursorEscape is the **sole SoT** for skills, rules, agents, workflows, and report schemas. Registered host homes (including `~/.cursor`, `~/.config/opencode`, `~/.gemini`, `~/.copilot`, `~/.cline`, `~/.kilocode`, and Codex's independent `CODEX_HOME` + skill root) hold **thin harness only** (advertisement, permissions, spawn, absolute wiring, thin always-on gates). Deep procedure loads via **companion Reads** to `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — **not** a host `docs/workflow/` mirror as SoT ([skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)). The [procedure registry](../featureArchitecture/procedure-registry.md) owns machine metadata and semantic composition order; deterministic rendering derives composition-bound host projections. Registered overlays are thin wrappers / harness — they **echo** gate shape and point at companion; they must not become a second authored procedure tree.
 
 ```text
 Change portable loop/gate
@@ -101,7 +101,7 @@ rg "canonical envelope|agent-invocation|Completion gate: review-loop" workflow/a
 pwsh scripts/host-sync/Get-ExistingSixStackRenderLedger.ps1 -Verify
 
 # Active procedure surfaces plus generated evidence must not reintroduce the retired paired phase abbreviations
-rg "\b[Nn][AaBb]\b" agents rules scripts/host-sync/render-baselines skills workflow docs/featureArchitecture docs/SOPs overlays --glob '!research/imported/**' --glob '!docs/roadmaps/**'
+rg "\b[Nn][AaBb]\b" agents rules scripts/host-sync/render-baselines skills workflow docs/featureArchitecture docs/SOPs overlays --glob '!research/imported/**'
 
 # Composed surfaces (Phase 2+): gate atoms flow via composition — verify by render, not by prose grep
 pwsh scripts/host-sync/Invoke-RemediationUnitChecks.ps1      # record exact emitted summary; includes U17-U20 and U21-U22 ordering checks
@@ -126,7 +126,6 @@ Expect: normalization Fast CI exit 0; zero matches on the first `rg` after migra
 - [Documenting this repo](./documenting-this-repo.md)
 - [Skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)
 - [Instruction layering](../featureArchitecture/instruction-layering.md)
-- [Pointer-first roadmap](../roadmaps/pointer-first.md)
 - [Discovery](../../workflow/discovery.md)
 - [OpenCode host adapter](./opencode-host-adapter.md)
 - [Cursor host adapter](./cursor-host-adapter.md)
