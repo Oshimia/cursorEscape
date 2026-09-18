@@ -6,7 +6,7 @@
 
 This document is **Target** cursorEscape design for the owner's agentic loop: plan → implement → dual review → closeout. **Loop semantics** (when to plan, dual-gate, verdict bars) are owned here and in [project decisions](./project-decisions-and-open-questions.md). Current Cursor files: [overlays/cursor](../../overlays/cursor/_index.md) (**Observed** thin wrappers). Phase 3 [cursor-global-workflow](../../research/imported/cursor-global-workflow/) import is archaeology. AITestSuite Phase 4 freeze is **Observed/eval-packaging** only. Where freeze disagrees with live Cursor wording, cite [workflow-source-delta](../../research/imported/workflow-source-delta.md). Stack variation: [skill-source-and-host-overlays](./skill-source-and-host-overlays.md).
 
-Dual-gate review research (openBuggy) informs leg responsibilities. First recreation host: **T3 Code** (control plane) + **OpenCode** (harness). The bug-finder leg is an OpenCode **`bug_reviewer`** subagent + skills (reviewer-a pattern) — **not** an openBuggy engine requirement ([project decisions](./project-decisions-and-open-questions.md), [host recreation](../../analysis/host-recreation-2026-08.md)).
+Dual-gate review research (openBuggy) informs leg responsibilities. First recreation host: **T3 Code** (control plane) + **OpenCode** (harness). The bug-finder leg is an OpenCode **`bug_reviewer`** subagent + skills (reviewer-a pattern) — **not** an openBuggy engine requirement ([project decisions](./project-decisions-and-open-questions.md)).
 
 ---
 
@@ -80,7 +80,7 @@ On initialization-style roadmaps, **Composer** conducts: builds an owner approva
 
 ## Implications / open questions
 
-1. OpenCode expresses dual-gate **shape**; R0 must prove parallel Tasks + MCP/tool policy ([host recreation](../../analysis/host-recreation-2026-08.md)).
+1. OpenCode expresses dual-gate **shape**; R0 must prove parallel Tasks + MCP/tool policy.
 2. **Unknown:** Whether cursorEscape runtime re-homes a repo-local `reference-docs` skill; live owner workflow uses global discovery instead ([workflow-source-delta](../../research/imported/workflow-source-delta.md#reference-docs-skill-presence)).
 3. Dual APPROVED is the loop bar — not proven ship-class catch or proven no-escape ([recommendation](../../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)).
 
@@ -94,6 +94,5 @@ On initialization-style roadmaps, **Composer** conducts: builds an owner approva
 - [Clean context and isolation](./clean-context-isolation.md)
 - [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)
 - [bug-reviewer-finding-rubric](./bug-reviewer-finding-rubric.md)
-- [Host recreation study](../../analysis/host-recreation-2026-08.md)
 - [Evaluation methodology](./evaluation-methodology.md)
 - [Workflow source delta](../../research/imported/workflow-source-delta.md)

@@ -4,7 +4,7 @@
 
 ## Context
 
-cursorEscape is the owner's **skill/workflow manager** and a **workspace-pointing companion**: it operates *on* a target repository's working tree and docs, not as a monolithic application repo. This Target doc defines how workspaces relate to orchestration and adapters. First recreation: **T3 Code** (control plane) + **OpenCode** (harness) — see [host recreation](../../analysis/host-recreation-2026-08.md).
+cursorEscape is the owner's **skill/workflow manager** and a **workspace-pointing companion**: it operates *on* a target repository's working tree and docs, not as a monolithic application repo. This Target doc defines how workspaces relate to orchestration and adapters. First recreation: **T3 Code** (control plane) + **OpenCode** (harness); the durable decision is in [project decisions](./project-decisions-and-open-questions.md).
 
 ---
 
@@ -73,5 +73,4 @@ Operator
 - [Repository discovery and context](./repository-discovery-and-context.md)
 - [Backend and provider abstraction](./backend-and-provider-abstraction.md)
 - [Project decisions and open questions](./project-decisions-and-open-questions.md)
-- [Host recreation study](../../analysis/host-recreation-2026-08.md)
 - [Skill source and host overlays](./skill-source-and-host-overlays.md)

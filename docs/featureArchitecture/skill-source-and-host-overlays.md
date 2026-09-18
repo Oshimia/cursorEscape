@@ -6,7 +6,7 @@
 
 This document is **Target** design for how cursorEscape **authors one workflow** and applies it across **stacks** (currently Cursor, OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex) without two documentation trees. T3 Code is a control plane (threads, diffs) and **does not** get a third skill tree ([backend abstraction](./backend-and-provider-abstraction.md)).
 
-Identity: this companion repo is the owner's **skill and workflow manager** ([project decisions](./project-decisions-and-open-questions.md)). Analog: Theo `fleet` ([Observed](../../research/theo-fleet-skill-management.md)) — **stacks**, not machines. Multi-machine sync is a **non-goal**.
+Identity: this companion repo is the owner's **skill and workflow manager** ([project decisions](./project-decisions-and-open-questions.md)). Analog: Theo `fleet` (Observed) — **stacks**, not machines. Multi-machine sync is a **non-goal**.
 
 Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 
@@ -25,11 +25,11 @@ Claim labels: **Required** / **Desired** / **Cursor-specific** / **Unknown**.
 - Deep procedure loads via **companion Reads** to `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/` — **not** host `docs/workflow/` mirror as SoT.
 - Bulk copy-out of procedure is **transitional**; **load path superseded** by absolute companion Reads. Harness lessons retained: Failure mode I/J, absolute `instructions`, C1–C6 behavior bar.
 
-**Harness-only sync (Target):** `instructions/*`, `AGENTS.md`, thin `skills/*/SKILL.md` stubs, thin `agents/*.md` harness, harness keys in `opencode.json`. **`review-subagent-models.md`:** companion overlay-Read only (`{{COMPANION_ROOT}}/overlays/opencode/review-subagent-models.md`) — not host copy-out. **Not sync SoT:** OpenCode host `docs/workflow/*` procedure mirror **deleted** pointer-first-4 ([closeout](../../analysis/pointer-first-4-closeout-2026-08.md)); Cursor `~/.cursor/docs/workflow/` may remain transitional.
+**Harness-only sync (Target):** `instructions/*`, `AGENTS.md`, thin `skills/*/SKILL.md` stubs, thin `agents/*.md` harness, harness keys in `opencode.json`. **`review-subagent-models.md`:** companion overlay-Read only (`{{COMPANION_ROOT}}/overlays/opencode/review-subagent-models.md`) — not host copy-out. **Not sync SoT:** OpenCode host `docs/workflow/*` procedure mirror **deleted** pointer-first-4; Cursor `~/.cursor/docs/workflow/` may remain transitional.
 
 ### Job (Required)
 
-This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`, `~/.gemini`, effective `CODEX_HOME`, and other registered homes) are **copy-out / install targets**, not a second authored procedure tree. **Live sync:** [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` requires explicit Phase 6 owner authorization per the [procedure registry Apply boundary](./procedure-registry.md#phase-6-apply-boundary), all-host normative, single-stack `-AllowSkew` only as an explicitly owner-authorized recovery exception) from the registered overlay trees, including [overlays/codex](../../overlays/codex/_index.md) — modular layout in [host-sync README](../../scripts/host-sync/README.md). Sync **does not create backups**; Phase 0 baselines are restore-only. Historical: Codex became Active on 2026-09-08 with C1–C6 attested; future Apply passes require fresh Phase 6 owner authorization. **pointer-first-4** deleted OpenCode procedure mirror (2026-08-20). C6 minimum runtime smoke **pass** (2026-08-20 operator post-mirror) per [host-adapter](../SOPs/opencode-host-adapter.md) and [closeout](../../analysis/pointer-first-4-closeout-2026-08.md). Do not create repo-root `adapters/` directories.
+This repo is the **canonical manager** of portable skills, agent roles, always-on gates, shared workflow procedure, and thin host overlays. Host folders (`~/.config/opencode`, `~/.cursor`, `~/.gemini`, effective `CODEX_HOME`, and other registered homes) are **copy-out / install targets**, not a second authored procedure tree. **Live sync:** [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` requires explicit Phase 6 owner authorization per the [procedure registry Apply boundary](./procedure-registry.md#phase-6-apply-boundary), all-host normative, single-stack `-AllowSkew` only as an explicitly owner-authorized recovery exception) from the registered overlay trees, including [overlays/codex](../../overlays/codex/_index.md) — modular layout in [host-sync README](../../scripts/host-sync/README.md). Sync **does not create backups**; Phase 0 baselines are restore-only. Historical: Codex became Active on 2026-09-08 with C1–C6 attested; future Apply passes require fresh Phase 6 owner authorization. **pointer-first-4** deleted OpenCode procedure mirror (2026-08-20). C6 minimum runtime smoke **pass** (2026-08-20 operator post-mirror) per [host-adapter](../SOPs/opencode-host-adapter.md). Do not create repo-root `adapters/` directories.
 
 ### Target taxonomy — Approach A (Required)
 
@@ -196,7 +196,7 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 
 1. U3 is **partial**: skill/adapter inventory SoT = this companion repo (**Target:** repo-root bases at `workflow/`, `skills/`, `agents/`, `rules/`; overlay = thin wrappers); host dirs = copy-out targets; per-target `.cursorEscape/` remains **Unknown** ([project decisions](./project-decisions-and-open-questions.md), [workspace model](./workspace-model.md)).
 2. Remaining incidental “canonical” phrasing in untouched leaves is **not** a second identity project — fix when that leaf is edited, or in a dedicated sweep, not by expanding review scope.
-3. R0 live trial runs on the Phase 3–synced global OpenCode adapter from [overlays/opencode](../../overlays/opencode/_index.md). C6 minimum smoke **pass** (2026-08-20 operator post-mirror) per [closeout](../../analysis/pointer-first-4-closeout-2026-08.md).
+3. R0 live trial runs on the Phase 3–synced global OpenCode adapter from [overlays/opencode](../../overlays/opencode/_index.md). C6 minimum smoke **pass** (2026-08-20 operator post-mirror).
 4. Overlay bodies are **thin wrappers** pointing at repo-root bases — not a second `implementation-review` procedure in this tree.
 
 ---
@@ -213,4 +213,3 @@ Later, copy-out may generate host-native wrappers that `Read` shared deep docs. 
 - [OpenCode host adapter](../SOPs/opencode-host-adapter.md)
 - [Cursor overlay](../../overlays/cursor/_index.md)
 - [Codex overlay](../../overlays/codex/_index.md) — Active since 2026-09-08
-- [Theo fleet skill management (Observed)](../../research/theo-fleet-skill-management.md)

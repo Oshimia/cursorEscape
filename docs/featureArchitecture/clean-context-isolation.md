@@ -105,4 +105,3 @@ Composer **QC** reads closeout reports and may audit child transcripts for proce
 - [implementation-review](../../skills/implementation-review/SKILL.md)
 - [iterative-plan-review](../../workflow/iterative-plan-review.md)
 - [composer](../../skills/composer/SKILL.md)
-- [Host recreation study](../../analysis/host-recreation-2026-08.md)

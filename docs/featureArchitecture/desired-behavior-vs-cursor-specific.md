@@ -4,7 +4,7 @@
 
 ## Context
 
-cursorEscape separates **portable workflow intent** (Desired / Required) from **Cursor IDE mechanics** (Cursor-specific). Target contracts in [agents](../../agents/_index.md) and [skills](../../skills/_index.md) use host-agnostic wording; host IDs and extra restrictiveness live in overlays ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)). First recreation adapter is **OpenCode** (with optional **T3 Code** control plane) — see [host recreation](../../analysis/host-recreation-2026-08.md).
+cursorEscape separates **portable workflow intent** (Desired / Required) from **Cursor IDE mechanics** (Cursor-specific). Target contracts in [agents](../../agents/_index.md) and [skills](../../skills/_index.md) use host-agnostic wording; host IDs and extra restrictiveness live in overlays ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)). The first recreation adapter decision is **OpenCode** (with optional **T3 Code** control plane), recorded in [project decisions](./project-decisions-and-open-questions.md).
 
 ---
 
@@ -82,6 +82,5 @@ cursorEscape separates **portable workflow intent** (Desired / Required) from **
 - [Intended workflow](./intended-workflow.md)
 - [Instruction layering](./instruction-layering.md)
 - [Clean context and isolation](./clean-context-isolation.md)
-- [Host recreation study](../../analysis/host-recreation-2026-08.md)
 - [Agent role contracts](../../agents/_index.md)
 - [Skill source and host overlays](./skill-source-and-host-overlays.md)

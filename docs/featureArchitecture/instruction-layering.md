@@ -128,5 +128,4 @@ Adapters cite this page and [agents/_index.md](../../agents/_index.md) / [skills
 - [Agent role contracts](../../agents/_index.md)
 - [Skill contracts](../../skills/_index.md)
 - [pre-commit-ci-gate](../../rules/pre-commit-ci-gate.md)
-- [Host recreation study](../../analysis/host-recreation-2026-08.md)
 - [Project decisions and open questions](./project-decisions-and-open-questions.md)

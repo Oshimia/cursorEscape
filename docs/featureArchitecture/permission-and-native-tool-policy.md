@@ -19,7 +19,7 @@ Target design for how cursorEscape governs shell permissions and native-tool pre
 | Share of bash asks from subagent sessions | ~87% (361/415 nearest-prior attribution; 08-17: 31 vs 0; 08-18: 61 vs 0; 08-21: 257 vs 45) | `scripts/analyze-permission-asks.py` |
 | Top offenders (bash ask heads) | `python -c` ×141, `Get-ChildItem` ×99, pipeline stages (`Select-Object` ×81, `ForEach-Object` ×42, `Where-Object` ×33), read cmdlets (`Get-Content` ×60), `git status` ×39, `Get-FileHash` ×36, `Set-Content` ×31, `git -C …` ×28, `rg` ×23, mutating git correctly asking (`add` ×19, `commit` ×19), openBuggy eval scripts ≈32 | Same |
 
-Operator pain corroborated by [DSV4F session extension study](../../analysis/opencode-dsv4f-session-extension-2026-08.md): shell-approval babysitting every 2–3 minutes when bash substituted for skills/tools.
+Operator pain is corroborated by prior session measurements: shell-approval babysitting every 2–3 minutes when bash substituted for skills/tools.
 
 ### Design (Target)
 
@@ -32,7 +32,7 @@ Operator pain corroborated by [DSV4F session extension study](../../analysis/ope
 
 ### Why not alternatives
 
-- **Runtime relief only** (`--auto`, session "always"): session-scoped, non-durable, defeats the red line. Also Observed: "Allow always" accumulates in-memory until restart ([skill-binding discovery](../../analysis/opencode-skill-binding-discovery-2026-08.md)) — prefer promoting intentional patterns into reviewed config.
+- **Runtime relief only** (`--auto`, session "always"): session-scoped, non-durable, defeats the red line. Also Observed: "Allow always" accumulates in-memory until restart — prefer promoting intentional patterns into reviewed config.
 - **Patch per-agent blocks minimally:** duplicates the block ×10, leaves pipeline/python/temp/subagent pain (~40% vs ~90% projected relief).
 
 ### Host mapping
@@ -63,4 +63,3 @@ Reproducible attribution: [scripts/analyze-permission-asks.py](../../scripts/ana
 - [Instruction layering](./instruction-layering.md)
 - [Skill source and host overlays](./skill-source-and-host-overlays.md)
 - [Editing companion workflow](../SOPs/editing-companion-workflow.md)
-- [Sub-agent nesting & model control study](../../analysis/opencode-subagent-nesting-model-control-2026-08.md)

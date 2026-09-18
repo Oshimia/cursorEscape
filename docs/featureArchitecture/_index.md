@@ -15,8 +15,7 @@ This section explains **how cursorEscape is intended to work** — Target design
 | Document type | Responsibility |
 | ------------- | -------------- |
 | This folder (Target docs) | Intended workflow, instruction layering, clean-context isolation, **skill source and host overlays**, backend abstraction, agent roles, evaluation methodology |
-| [research/](../../research/_index.md) | Sourced facts and imported sibling research |
-| [analysis/](../../analysis/_index.md) | Operator studies of local workflows |
+| [research/imported/](../../research/imported/) | Owner-frozen imported sibling research |
 | [`agents/`](../../agents/_index.md) | Host-agnostic role contracts |
 | [`skills/`](../../skills/_index.md) | Host-agnostic skill contracts |
 | [`rules/`](../../rules/_index.md) | Always-on gate contracts |
@@ -48,7 +47,7 @@ Imported Observed harness and workflow snapshots live under [research/imported/]
 | [project-decisions-and-open-questions.md](./project-decisions-and-open-questions.md) | Durable project decisions, framework/process fitness assessments, sibling-relationship intent, and unresolved architectural questions (U1–U13) |
 | [procedure-registry.md](./procedure-registry.md) | Semantic registry: ownership model, canonical source flow, blocking guard coverage for all migrated classes, sole Fast/Full CI orchestrators, baseline regeneration boundary, and explicit Phase 6 Apply boundary |
 
-First host attempt: [host recreation study](../../analysis/host-recreation-2026-08.md). Claim taxonomy: **Desired / Required / Nice-to-have / Cursor-specific / Unknown**.
+First host attempt and the durable first-attempt decision live in [project decisions](./project-decisions-and-open-questions.md). Claim taxonomy: **Desired / Required / Nice-to-have / Cursor-specific / Unknown**.
 
 ---
 
