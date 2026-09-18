@@ -109,8 +109,10 @@ Assert-Pass 'host-sync README documents lifecycle/global preflight' (
     $hostReadme.Contains('## Apply lifecycle and global preflight') -and
     $hostReadme.Contains('zero writes')
 )
-$roadmap = Read-RepoFile 'docs/roadmaps/codex-bring-up.md'
-Assert-Pass 'Codex roadmap Phase 3 complete' ($roadmap.Contains('[x] **Phase 3 — Registration, orchestration-wide preflight, CI, and docs**'))
+Assert-Pass 'Codex retained status and smoke gate' (
+    $sop.Contains('registered Phase 3 2026-09-08; `ApplyState = Active`') -and
+    $sop.Contains('three-client smoke attested 2026-09-08')
+)
 
 # The legacy ledger intentionally remains a six-established-stack regression
 # artifact; Codex has no initial live install or ledger hash yet.

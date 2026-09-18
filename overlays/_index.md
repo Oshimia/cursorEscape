@@ -40,5 +40,3 @@ Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlay
 - [Agent contracts](../agents/_index.md)
 - [Rules index](../rules/_index.md)
 - [Documenting this repo](../docs/SOPs/documenting-this-repo.md)
-- [Shared workflow docs roadmap](../docs/roadmaps/shared-workflow-docs.md)
-- [Companion pointer-first](../docs/roadmaps/pointer-first.md)

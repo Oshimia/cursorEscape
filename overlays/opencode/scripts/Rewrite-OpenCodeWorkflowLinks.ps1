@@ -6,7 +6,7 @@
   **pointer-first-0 (2026-08-20):** NOT primary sync. Load path superseded by
   companion {{COMPANION_ROOT}}/workflow/ absolute Reads from thin harness.
   Retained for historical Phase 3 mirror only; mirror disposition pointer-first-4.
-  See overlays/opencode/_index.md and docs/roadmaps/pointer-first.md.
+  See overlays/opencode/_index.md.
 
 .DESCRIPTION
   Reads markdown from companion workflow/ and writes transformed copies to

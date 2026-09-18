@@ -63,8 +63,6 @@
   pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Codex -AllowSkew -BringUpException # Phase 4 initial install only
 .LINK
   scripts/host-sync/README.md
-.LINK
-  docs/roadmaps/host-harness-sync-build.md
 #>
 [CmdletBinding()]
 param(

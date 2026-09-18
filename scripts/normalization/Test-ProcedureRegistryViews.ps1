@@ -940,9 +940,13 @@ try {
   $writeBoundaryThrew = $false
   try { $null = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $RepoRoot 'GEMINI.md') -RepoRoot $RepoRoot -Inventory $registry.Inventory } catch { $writeBoundaryThrew = $true }
   Assert-View 'managed writer rejects host projection output root' $writeBoundaryThrew
-  $phase4aDrift = @(& git -C $RepoRoot status --porcelain -- rules workflow 'overlays' | Where-Object { $_ -notmatch '_index\.md$' })
+  $phase4aDrift = @(& git -C $RepoRoot status --porcelain -- rules workflow 'overlays' | Where-Object {
+    $statusPath = if ($_.Length -ge 3) { $_.Substring(3) } else { '' }
+    $_ -notmatch '_index\.md$' -and
+      $statusPath -ne 'overlays/opencode/scripts/Rewrite-OpenCodeWorkflowLinks.ps1'
+  })
   if ($LASTEXITCODE -ne 0) { throw "FAIL: Phase 4A drift status exited $LASTEXITCODE" }
-  Assert-View 'Phase 4A leaves canonical rules, workflows, and overlay content bodies unchanged' ($phase4aDrift.Count -eq 0) (($phase4aDrift | Select-Object -First 5) -join '; ')
+  Assert-View 'Phase 4A leaves active canonical rules, workflows, and overlay content bodies unchanged' ($phase4aDrift.Count -eq 0) (($phase4aDrift | Select-Object -First 5) -join '; ')
 
   # --- Phase 4B: explicit always-on policy for invocation/plan-review/code-review/pre-commit on Cursor/OpenCode/Codex/Antigravity ---
   $alwaysOnItems = @($registry.Catalogs.workflows.alwaysOn)

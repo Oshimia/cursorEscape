@@ -186,7 +186,6 @@ Full write-ups: [opencode-authoring-adapter Failure modes K–M](../../docs/SOPs
 
 ## Related
 
-- [Host harness sync build roadmap](../../docs/roadmaps/host-harness-sync-build.md)
 - [Cursor host adapter SOP](../../docs/SOPs/cursor-host-adapter.md)
 - [OpenCode host adapter SOP](../../docs/SOPs/opencode-host-adapter.md)
 - [OpenCode authoring adapter](../../docs/SOPs/opencode-authoring-adapter.md) — Failure modes I–M (permissions / bash / sync order)
