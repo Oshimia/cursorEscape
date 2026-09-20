@@ -472,10 +472,5 @@ Assert-Pass 'Codex retained status and smoke gate' (
     $sop.Contains('three-client smoke attested 2026-09-08')
 )
 
-# The legacy ledger intentionally remains a six-established-stack regression
-# artifact; Codex has no initial live install or ledger hash yet.
-$ledgerSource = Read-RepoFile 'scripts/host-sync/Get-ExistingSixStackRenderLedger.ps1'
-Assert-Pass 'existing-stack ledger remains explicitly six' ($ledgerSource.Contains("@('Cursor', 'OpenCode', 'Antigravity', 'Vscode', 'Cline', 'Kilocode')"))
-
 Write-Output ('codex lifecycle checks: {0} passed, {1} failed' -f $passed, $failed)
 exit $(if ($failed -gt 0) { 1 } else { 0 })

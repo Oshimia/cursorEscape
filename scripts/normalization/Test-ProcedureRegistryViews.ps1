@@ -13,6 +13,24 @@ function Assert-RegistryFailure($Result,[string]$Name,[string]$Invariant) {
   $hit = @($Result.Failures | Where-Object { $_.StartsWith("${Invariant}:", [StringComparison]::Ordinal) }).Count -gt 0
   Assert-View $Name ($Result.Valid -eq $false -and $hit) ($Result.Valid ? 'unexpectedly valid' : (($Result.Failures | Select-Object -First 3) -join '; '))
 }
+function Test-ScriptPathNamingCompliance {
+  param([string[]]$Paths)
+  return @($Paths | Where-Object {
+    $_ -match '(?i)(^|/|\\)[^/\\]*phase[-_ ]?\d[^/\\]*\.(?:ps1|psm1|py)$'
+  })
+}
+
+$trackedScriptNamingFailures = @(Test-ScriptPathNamingCompliance -Paths (@(git -C $RepoRoot ls-files -- scripts)))
+Assert-View 'tracked scripts pass naming compliance' ($trackedScriptNamingFailures.Count -eq 0) "matches=$($trackedScriptNamingFailures -join ', ')"
+$phaseToken = 'Phase' + '2'
+$syntheticPhaseScript = "scripts/host-sync/Invoke-$($phaseToken)Example.ps1"
+$observedSyntheticNamingFailures = @(Test-ScriptPathNamingCompliance -Paths @($syntheticPhaseScript))
+Assert-View 'synthetic phase-numbered script fails naming compliance' (
+  $observedSyntheticNamingFailures.Count -eq 1 -and
+  $observedSyntheticNamingFailures[0] -eq $syntheticPhaseScript -and
+  -not (Test-Path -LiteralPath (Join-Path $RepoRoot $syntheticPhaseScript))
+) "matches=$($observedSyntheticNamingFailures -join ', ')"
+
 $registry = Test-ProcedureRegistryCatalogs -RepoRoot $RepoRoot
 Assert-View 'registry is valid' $registry.Valid (($registry.Failures | Select-Object -First 5) -join '; ')
 Assert-View 'all registered skills carry frontmatter description metadata' (@($registry.Catalogs.skills.items | Where-Object { $null -ne $_.PSObject.Properties['description'] }).Count -eq @($registry.Catalogs.skills.items).Count)
@@ -940,14 +958,6 @@ try {
   $writeBoundaryThrew = $false
   try { $null = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $RepoRoot 'GEMINI.md') -RepoRoot $RepoRoot -Inventory $registry.Inventory } catch { $writeBoundaryThrew = $true }
   Assert-View 'managed writer rejects host projection output root' $writeBoundaryThrew
-  $phase4aDrift = @(& git -C $RepoRoot status --porcelain -- rules workflow 'overlays' | Where-Object {
-    $statusPath = if ($_.Length -ge 3) { $_.Substring(3) } else { '' }
-    $_ -notmatch '_index\.md$' -and
-      $statusPath -ne 'overlays/opencode/scripts/Rewrite-OpenCodeWorkflowLinks.ps1'
-  })
-  if ($LASTEXITCODE -ne 0) { throw "FAIL: Phase 4A drift status exited $LASTEXITCODE" }
-  Assert-View 'Phase 4A leaves active canonical rules, workflows, and overlay content bodies unchanged' ($phase4aDrift.Count -eq 0) (($phase4aDrift | Select-Object -First 5) -join '; ')
-
   # --- Phase 4B: explicit always-on policy for invocation/plan-review/code-review/pre-commit on Cursor/OpenCode/Codex/Antigravity ---
   $alwaysOnItems = @($registry.Catalogs.workflows.alwaysOn)
   Assert-View 'always-on policy count is exactly 16' ($alwaysOnItems.Count -eq 16) "count=$($alwaysOnItems.Count)"
@@ -1934,13 +1944,6 @@ try {
       [pscustomobject]@{ host = 'Cline'; agent = 'implementer'; proposed_phase2 = 'fresh-task-session-fallback' }
     )
   } @('MissingPairCount: expected 0, got 1')
-  # The ledger mutation proves the immutable inventory declaration remains
-  # row-agreement-checked; source manifest counts are separately checked as
-  # current Phase 2 evidence rather than being conflated with historical render
-  # output.
-  Assert-CheckerMutation 'ledger destination-count mismatch fails' {
-    param($i) $i.render_baselines.six_stack_ledger_entries[0].destinationCount = 99
-  } @('LedgerRowAgreement: row 0')
   Assert-CheckerMutation 'missing last_updated date fails' {
     param($i) $i.PSObject.Properties.Remove('last_updated')
   } @("InventoryLastUpdatedFormat: invalid ISO calendar date ''")

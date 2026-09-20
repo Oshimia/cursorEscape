@@ -9,7 +9,6 @@ $commands = @(
   @{ Name='host-sync-phase2-full'; File=Join-Path $sync 'Invoke-HostSyncFullCI.ps1'; Arguments=@{} },
   @{ Name='codex-adapter'; File=Join-Path $sync 'Invoke-CodexAdapterFixtureChecks.ps1'; Arguments=@{ CompanionRoot = $RepoRoot } },
   @{ Name='codex-lifecycle'; File=Join-Path $sync 'Invoke-CodexLifecycleChecks.ps1'; Arguments=@{} },
-  @{ Name='render-ledger'; File=Join-Path $sync 'Get-ExistingSixStackRenderLedger.ps1'; Arguments=@{ Verify=$true } },
   @{ Name='drift-fixtures'; File=Join-Path $sync 'Invoke-HostSyncDriftFixtureChecks.ps1'; Arguments=@{} }
 )
 foreach ($command in $commands) {

@@ -1,6 +1,6 @@
 # Permission and native tool policy
 
-**Last updated:** 2026-08-22
+**Last updated:** 2026-09-20
 
 ## Context
 
@@ -10,13 +10,13 @@ Target design for how cursorEscape governs shell permissions and native-tool pre
 
 ## Substance
 
-### Problem (Observed data; window 2026-08-17→21, as of 2026-08-22 — regenerate via script, log grows)
+### Problem (Observed data; window 2026-08-17→21, attribution completed 2026-08-22)
 
 | Metric | Value | Source |
 |---|---|---|
 | Permission prompts in log window | 558 (415 bash, 142 external_directory, 1 task) | `opencode.log` `message=asking` lines |
 | Historical bash calls that would prompt under pre-policy config | 386/644 (60%) | `opencode.db` part analysis |
-| Share of bash asks from subagent sessions | ~87% (361/415 nearest-prior attribution; 08-17: 31 vs 0; 08-18: 61 vs 0; 08-21: 257 vs 45) | `scripts/analyze-permission-asks.py` |
+| Share of bash asks from subagent sessions | ~87% (361/415 nearest-prior attribution; 08-17: 31 vs 0; 08-18: 61 vs 0; 08-21: 257 vs 45) | one-time `opencode.log` attribution |
 | Top offenders (bash ask heads) | `python -c` ×141, `Get-ChildItem` ×99, pipeline stages (`Select-Object` ×81, `ForEach-Object` ×42, `Where-Object` ×33), read cmdlets (`Get-Content` ×60), `git status` ×39, `Get-FileHash` ×36, `Set-Content` ×31, `git -C …` ×28, `rg` ×23, mutating git correctly asking (`add` ×19, `commit` ×19), openBuggy eval scripts ≈32 | Same |
 
 Operator pain is corroborated by prior session measurements: shell-approval babysitting every 2–3 minutes when bash substituted for skills/tools.
@@ -47,7 +47,7 @@ Cursor echo trigger: **before the first Cursor live sync** (editing-companion ca
 
 ### Measurement
 
-Reproducible attribution: [scripts/analyze-permission-asks.py](../../scripts/analyze-permission-asks.py) parses `opencode.log` (`asking` + session-created lines) into per-day/type/session-kind tallies. Success criterion after ≥3-day soak: subagent read-only bash asks ≈ 0 while mutating-git asks persist; residual known asks excluded ([rules leaf](../../rules/shell-native-tool-policy.md)).
+Attribution basis: a one-time parse of `opencode.log` (`asking` + session-created lines) produced per-day/type/session-kind tallies for the completed investigation. The purpose-built analyzer was removed once its policy conclusion was retained; future measurements require a newly reviewed diagnostic and must not depend on this retired tool. Success criterion after ≥3-day soak: subagent read-only bash asks ≈ 0 while mutating-git asks persist; residual known asks excluded ([rules leaf](../../rules/shell-native-tool-policy.md)).
 
 ---
 

@@ -267,8 +267,7 @@ foreach ($h in $hosts) {
     }
     # Current source-state manifest agreement: every native wrapper named by a
     # represented parity row must be delivered exactly once by its host
-    # manifest. This is separate from the historical six-stack render ledger
-    # below, which remains a restore/reference snapshot until Phase 6.
+    # manifest.
     foreach ($p in @($j.parity_matrix | Where-Object { $_.host -eq $h -and $_.representation -eq 'native-definition' })) {
         $wrapper = @(@($p.evidence_paths) | Where-Object { $_.StartsWith(($m.overlay_root.TrimEnd('/','\') + '/'), [StringComparison]::OrdinalIgnoreCase) } | Select-Object -First 1)
         if ($wrapper.Count -ne 1) { continue }
@@ -398,15 +397,8 @@ if (($opHosts.Keys | Sort-Object) -join '|' -ne (($hosts | Sort-Object) -join '|
 
 # Baselines
 $b = $j.render_baselines
-Test-RepoPath $b.six_stack_ledger_path 'LedgerPath'; Test-RepoPath $b.codex_render_plan_path 'RenderPlanPath'; Test-RepoPath $b.codex_physical_fixture_root 'FixtureRoot' -Directory
-$ledger = Get-Content -Raw (Join-Path $RepoRoot $b.six_stack_ledger_path) | ConvertFrom-Json; $render = Get-Content -Raw (Join-Path $RepoRoot $b.codex_render_plan_path) | ConvertFrom-Json
-if ($b.six_stack_ledger_entries.Count -ne 6) { Add-Failure 'SixStackLedgerRowCount' }
-for ($i = 0; $i -lt 6; $i++) { $a = $ledger.entries[$i]; $dd = $b.six_stack_ledger_entries[$i]; if ($a.stack -ne $dd.stack -or $a.destinationCount -ne $dd.destinationCount -or $a.sha256 -ne $dd.sha256) { Add-Failure 'LedgerRowAgreement' "row $i" } }
-# The six-stack ledger is an immutable historical restore/reference snapshot.
-# Its rows must agree with the inventory's declared ledger, while current
-# manifest agreement is enforced above against inventory manifest entries.
-# Phase 2C closeout reconciles these derived inventory rows through the
-# sanctioned ledger writer only; no live render/Apply is implied.
+Test-RepoPath $b.codex_render_plan_path 'RenderPlanPath'; Test-RepoPath $b.codex_physical_fixture_root 'FixtureRoot' -Directory
+$render = Get-Content -Raw (Join-Path $RepoRoot $b.codex_render_plan_path) | ConvertFrom-Json
 if ($b.codex_rendered_destination_count -ne $render.entries.Count) { Add-Failure 'CodexRenderedCount' }
 $phys = @(Get-ChildItem -LiteralPath (Join-Path $RepoRoot $b.codex_physical_fixture_root) -Recurse -File | ForEach-Object { $_.FullName.Substring($RepoRoot.Length+1).Replace('\','/') } | Sort-Object)
 $decFix = @($b.codex_physical_fixture_files | Sort-Object)

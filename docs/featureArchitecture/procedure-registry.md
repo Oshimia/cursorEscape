@@ -51,11 +51,11 @@ Every migrated ownership class has a blocking guard enforced in the sole Fast CI
 | Generated-file boundaries | `Test-RegistryCompositionOutputBoundary` + `Test-RegistryOutputRoot` | `Write-RegistryManagedView` (fail-closed at write time) |
 | Deterministic rendering | double-render hash comparison (49 rows + composition rows) | `Test-ProcedureRegistryViews.ps1` → Fast CI |
 
-Full CI additionally enforces baseline parity:
+Full CI additionally coordinates focused host and fixture gates:
 
 | Class | Guard | Gate |
 |-------|-------|------|
-| Baseline parity | `Get-ExistingSixStackRenderLedger.ps1 -Verify` (2 independent renders, 6 entries) | Full CI only |
+| Host and fixture composition | consolidated host-sync Full, Codex adapter/lifecycle fixtures, and drift fixtures | Full CI only |
 
 ### Superseded-check audit
 
@@ -63,7 +63,7 @@ Phase 4G audited Phase 4C–4F checks and found none superseded: all `Add-SyncWa
 
 ### Baseline regeneration and verification
 
-Baselines are mechanical regression anchors generated from observed current renders. Never edit baseline or projection bytes to satisfy a stale expectation. When a render output legitimately changes, regenerate the six-stack ledger with `pwsh -NoProfile -File scripts/host-sync/Get-ExistingSixStackRenderLedger.ps1 -WriteLedger`, then verify with `pwsh -NoProfile -File scripts/host-sync/Get-ExistingSixStackRenderLedger.ps1 -Verify`, and commit the updated artifact in the same changeset. Baseline parity is enforced only in the Full CI path; the Fast path validates current state but does not re-anchor bytes.
+Committed render baselines are mechanical regression anchors generated from observed current renders. Never edit baseline bytes to satisfy a stale expectation. When a render output legitimately changes, render through the deterministic adapter or registry renderer with an explicit output root, review the result, and commit the updated artifact in the same changeset. Normalization CI retains renderer repeatability through deterministic double-render comparison.
 
 ### Renderer and CI
 

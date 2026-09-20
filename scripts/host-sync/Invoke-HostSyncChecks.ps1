@@ -335,7 +335,7 @@ foreach ($sid in @('Antigravity', 'OpenCode', 'Cursor', 'Vscode', 'Cline', 'Kilo
 
 # ---------- 3. Baseline byte-equality: rendered antigravity skill dests == committed baselines ----------
 # Compare basis (remediation-checks spec, single statement): the committed render baselines
-# (scripts/host-sync/render-baselines/phase2/) are THE regression surface for the relocation class —
+# (scripts/host-sync/render-baselines/antigravity/) are THE regression surface for the relocation class —
 # each baseline is the token-merged HEAD-authored overlay leaf captured at migration time.
 $baselineRoot = Join-Path $hostSyncRoot 'render-baselines\antigravity'
 $baselinePairs = @(

@@ -78,7 +78,7 @@ Durable decisions on which mechanisms to retain, defer, or propose separately. E
 | **Decision** | **`retain`** |
 | **Reason** | Zero dependencies, maximum agent readability, deterministic, portable across all seven hosts. No build step means no lock-in, no rendering to maintain. Agent readability is the primary consumer; human navigation via `_index.md` is adequate at current scale. An SSG adds node_modules or Python/pip, a build lifecycle, and migration cost disproportionate to the rendered-navigation benefit. Rollback is trivial (delete the framework). Seven-host compatibility is preserved because plain Markdown needs no runtime. |
 | **Revisit trigger** | A public-facing docs site requirement, or owner need for rendered search/navigation that `_index.md` hubs cannot sustain. |
-| **First slice if revisited** | Audit current `_index.md` link coverage; identify gaps; prototype one section with the lowest-cost alternative (MkDocs) in a throwaway branch; measure agent-readability regression via existing render-ledger check. |
+| **First slice if revisited** | Audit current `_index.md` link coverage; identify gaps; prototype one section with the lowest-cost alternative (MkDocs) in a throwaway branch; measure agent-readability regression via the deterministic double-render check. |
 
 ### 2. Retained fail-fast PowerShell assertion harness vs Pester or another test framework
 

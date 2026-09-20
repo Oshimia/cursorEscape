@@ -37,7 +37,7 @@ Change portable loop/gate
 | Always-on gate text | [`rules/*.md`](../../rules/_index.md) | Gate-body edits land in the **repo-root rule twin** (SoT) and flow to hosts by registry-owned composition — the semantic order lives in `catalog/workflows.json`, not in any manifest. OpenCode `instructions/cursor-escape-loop.md` is **composed** (host `__header__.md` part + authored base body + [`footers/instructions-wiring.md`](../../overlays/opencode/footers/instructions-wiring.md)) with `AGENTS.md` dual-written from the render; Cursor thin `.mdc` hybrid render + matching user-rules-snippet; Antigravity, VS Code, Cline, and Kilo Code always-on gates compose `rules/agent-invocation.md` first, followed by their loop/gate bodies and host wiring; **Antigravity [`GEMINI.md` expected render](../../scripts/host-sync/render-baselines/antigravity/overlays__antigravity__GEMINI.md)** remains the full-replace regression anchor. Manifest entries use `CompositionId` (never `Parts`/`Footer`) for registry-governed order; the blocking `composition-order-ownership` guard in normalization Fast CI rejects any divergence |
 | Report / deep schema | [`workflow/<leaf>.md`](../../workflow/_index.md) (e.g. `plan-reviewer-report.md`) | Thin agent/skill **Read when** only — do **not** paste full schema into `agents/` or overlay stubs |
 | Plan-review loop | [`workflow/iterative-plan-review.md`](../../workflow/iterative-plan-review.md) + [`skills/plan-review`](../../skills/plan-review/SKILL.md) / [`implementation-plan`](../../skills/implementation-plan/SKILL.md) | Matching Cursor/OpenCode stubs **and** [Antigravity stubs](../../overlays/antigravity/skills/) (`implementation-plan`, `plan-review`) — gate-text changes also echo the Antigravity `GEMINI.md` always-on; always-on plan section in OpenCode C1 dual-write if gate text changes |
-| Composed-gate wiring (manifest `CompositionId` / `base:`/`shared:` classes) | [`catalog/workflows.json`](../../catalog/workflows.json) (semantic order) + [`scripts/host-sync/manifests/*.psd1`](../../scripts/host-sync/) (destination + `CompositionId`) + the referenced part/footer leaves | FA recording ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md#per-entry-v2-sourcing-overlay-remediation-phase-12--required)); [host-sync README](../../scripts/host-sync/README.md); render-baselines under [`scripts/host-sync/render-baselines/`](../../scripts/host-sync/render-baselines/phase2/) re-captured only from observed current renders; normalization Fast CI validates blocking ownership |
+| Composed-gate wiring (manifest `CompositionId` / `base:`/`shared:` classes) | [`catalog/workflows.json`](../../catalog/workflows.json) (semantic order) + [`scripts/host-sync/manifests/*.psd1`](../../scripts/host-sync/) (destination + `CompositionId`) + the referenced part/footer leaves | FA recording ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md#per-entry-v2-sourcing-overlay-remediation-phase-12--required)); [host-sync README](../../scripts/host-sync/README.md); render-baselines under [`scripts/host-sync/render-baselines/`](../../scripts/host-sync/render-baselines/) re-captured only from observed current renders; normalization Fast CI validates blocking ownership |
 
 ### Anti-patterns
 
@@ -97,9 +97,6 @@ pwsh scripts/host-sync/Test-HostHarnessDrift.ps1
 # Companion SoT still states the new policy
 rg "canonical envelope|agent-invocation|Completion gate: review-loop" workflow/agent-invocation.md rules/agent-invocation.md workflow skills agents overlays
 
-# Six-stack source-only render regression anchor
-pwsh scripts/host-sync/Get-ExistingSixStackRenderLedger.ps1 -Verify
-
 # Active procedure surfaces plus generated evidence must not reintroduce the retired paired phase abbreviations
 rg "\b[Nn][AaBb]\b" agents rules scripts/host-sync/render-baselines skills workflow docs/featureArchitecture docs/SOPs overlays --glob '!research/imported/**'
 
@@ -108,7 +105,7 @@ pwsh scripts/host-sync/Invoke-HostSyncChecks.ps1 -Suite Unit        # includes U
 pwsh scripts/host-sync/Invoke-HostSyncChecks.ps1 -Suite Composition # record exact emitted summary
 ```
 
-Expect: normalization Fast CI exit 0; zero matches on the first `rg` after migrating off unbounded loops; committed C1 mirrors byte-match the planned render; companion SoT still documents the current policy; authoring suites exit 0. Treat the standalone live drift audit as an evidence snapshot, not an authoring suite: exit 2 is expected before owner-authorized Apply when live drift or missing leaves exist. Capture that snapshot, then attest the observed Phase 2 pass/fail summary rather than reusing a historical count.
+Expect: normalization Fast CI exit 0; zero matches on the first `rg` after migrating off unbounded loops; committed C1 mirrors byte-match the planned render; companion SoT still documents the current policy; authoring suites exit 0. Treat the standalone live drift audit as an evidence snapshot, not an authoring suite: exit 2 is expected before owner-authorized Apply when live drift or missing leaves exist. Capture that snapshot, then attest the observed Composition pass/fail summary rather than reusing a historical count.
 
 **Live Apply is Phase 6 only.** Dry-run (`pwsh ./scripts/Sync-HostHarness.ps1`) is always allowed. `-Apply` requires explicit owner authorization per the [procedure registry Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary). No normalization or review step writes to live hosts.
 

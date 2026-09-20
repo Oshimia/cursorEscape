@@ -62,7 +62,7 @@ There are **22 canonical skills** plus **1 generated rule wrapper**, for 23 adve
 
 ## Baselines
 
-The six historical restore directories cover Cursor, OpenCode, Antigravity, Vscode, Cline, and Kilocode only. Codex uses `scripts/host-sync/render-baselines/codex-render/render-plan.json`, 31 rendered destinations, and 13 physical fixture leaves under `fixtures/`. The six-stack ledger records six exact destination-count/hash rows. Paths and counts are authoritative in JSON.
+The six historical restore directories cover Cursor, OpenCode, Antigravity, Vscode, Cline, and Kilocode only. Codex uses `scripts/host-sync/render-baselines/codex-render/render-plan.json`, 31 rendered destinations, and 13 physical fixture leaves under `fixtures/`. Paths and counts are authoritative in JSON.
 
 ## Operator matrix
 

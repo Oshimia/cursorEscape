@@ -141,7 +141,8 @@ function Get-RegistrySkillCanonicalFrontmatter {
 
 function Get-RegistryComparableFrontmatter {
   <#
-    Canonical comparison form, matching the repo render-ledger convention:
+    Canonical comparison form, matching the repository deterministic-render
+    convention:
     UTF-8 text after CRLF-to-LF and exactly one terminal LF. Existing skill
     files carry mixed historical line endings; the normalization is explicit
     and every file's observed newline pattern is still reported as evidence.
@@ -227,7 +228,7 @@ function Get-RegistrySkillWrapperFrontmatterShadow {
   <#
     Fail-closed wrapper-frontmatter comparator for one applicable host binding: the
     registry-owned host frontmatter profile must byte-match the wrapper's
-    frontmatter under the render-ledger comparison convention. Canonical
+    frontmatter under the deterministic-render comparison convention. Canonical
     name, exact description, and the effective disable-model-invocation
     policy are each checked so every mismatch names both the host and the
     canonical skill id. Nothing is rewritten or silently normalized.
