@@ -72,7 +72,7 @@ Composition and safety semantics (current state after Phase 4 normalization):
 - **Skew degeneration** — the cross-stack skew guard keys on **source identity + sibling stacks** at whole-leaf (Dest) granularity; when sources degenerate to overlay-only, single-stack Apply stops failing closed for that leaf (documented, not silent).
 - **Ref resolution contract** (pinned by unit checks U17–U20): rooted/absolute refs are used **verbatim**; un-pre-resolved classed refs throw a clear error; overlay-relative refs resolve source-dir first, then fall back to `OverlayRoot`.
 
-Enforcement lives in [`Invoke-Phase2-RemediationChecks.ps1`](../../scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1) (63 checks) + unit checks ([Invoke-RemediationUnitChecks.ps1](../../scripts/host-sync/Invoke-RemediationUnitChecks.ps1), 24 checks). Manifest surface reference: [host-sync README](../../scripts/host-sync/README.md).
+Enforcement lives in [`Invoke-HostSyncChecks.ps1`](../../scripts/host-sync/Invoke-HostSyncChecks.ps1): the Composition suite has 79 checks and the Unit suite has 24 checks. Manifest surface reference: [host-sync README](../../scripts/host-sync/README.md).
 
 ### Authored layers vs copy-out (Required)
 

@@ -88,7 +88,7 @@ rg "until dual APPROVED|count >= 9|no hard stop" overlays/opencode/AGENTS.md ove
 
 # C1 dual-write still identical
 # (hashes of AGENTS.md and instructions/cursor-escape-loop.md must match)
-pwsh scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1
+pwsh scripts/host-sync/Invoke-HostSyncChecks.ps1 -Suite Composition
 
 # Exact-render fixture guard and current live drift snapshot
 pwsh scripts/host-sync/Invoke-HostSyncDriftFixtureChecks.ps1
@@ -103,9 +103,9 @@ pwsh scripts/host-sync/Get-ExistingSixStackRenderLedger.ps1 -Verify
 # Active procedure surfaces plus generated evidence must not reintroduce the retired paired phase abbreviations
 rg "\b[Nn][AaBb]\b" agents rules scripts/host-sync/render-baselines skills workflow docs/featureArchitecture docs/SOPs overlays --glob '!research/imported/**'
 
-# Composed surfaces (Phase 2+): gate atoms flow via composition — verify by render, not by prose grep
-pwsh scripts/host-sync/Invoke-RemediationUnitChecks.ps1      # record exact emitted summary; includes U17-U20 and U21-U22 ordering checks
-pwsh scripts/host-sync/Invoke-Phase2-RemediationChecks.ps1   # record exact emitted summary
+# Composed surfaces: gate atoms flow via composition — verify by render, not by prose grep
+pwsh scripts/host-sync/Invoke-HostSyncChecks.ps1 -Suite Unit        # includes U17-U20 and U21-U22 ordering checks
+pwsh scripts/host-sync/Invoke-HostSyncChecks.ps1 -Suite Composition # record exact emitted summary
 ```
 
 Expect: normalization Fast CI exit 0; zero matches on the first `rg` after migrating off unbounded loops; committed C1 mirrors byte-match the planned render; companion SoT still documents the current policy; authoring suites exit 0. Treat the standalone live drift audit as an evidence snapshot, not an authoring suite: exit 2 is expected before owner-authorized Apply when live drift or missing leaves exist. Capture that snapshot, then attest the observed Phase 2 pass/fail summary rather than reusing a historical count.
