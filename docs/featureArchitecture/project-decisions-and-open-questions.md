@@ -95,7 +95,7 @@ Durable decisions on which mechanisms to retain, defer, or propose separately. E
 
 | Field | Value |
 | ----- | ----- |
-| **Current mechanism** | Phase-scoped `git grep -F` over `git ls-files` for exact-match reference auditing, plus the `Invoke-CodexPhase1Checks.ps1` "markdown links are absolute or anchors only" check. No general-purpose link checker tool. |
+| **Current mechanism** | Exact `git grep -F` over `git ls-files` for reference auditing, plus the `Invoke-CodexRenderChecks.ps1` "markdown links are absolute or anchors only" check. No general-purpose link checker tool. |
 | **Alternatives assessed** | Do nothing (retain); repository-local link checker script; third-party tool (markdown-link-check, lychee); extended grep pattern |
 | **Decision** | **`retain`** |
 | **Reason** | Exact-match `git grep -F` audits re-derived at phase entry are deterministic, dependency-free, and correctly scoped to catch planned-deletion cascades. The absolute-or-anchor check covers the most critical link-integrity class. A general link checker would produce noise from broken external links and imported-research interiors without proportional value for this documentation-only repo. Third-party tools add node/binary installs and network-dependent non-determinism. A repo-local script is viable but the current scale does not warrant it. |
