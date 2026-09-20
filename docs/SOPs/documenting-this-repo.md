@@ -1,16 +1,14 @@
 # Documenting This Repo
 
-**Last updated:** 2026-09-18
+**Last updated:** 2026-09-20
 
 ## Context
 
 cursorEscape's value is its documentation. Drift (undocumented decisions, broken indexes, invented parallel trees) destroys that value. This SOP is the local equivalent of a "reference docs check" discipline — adapted to repo paths.
 
-**SoT (Target — Approach A):** Portable procedure and contracts at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` ([skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)). `docs/` holds **this-repo-only** FA and SOPs. Cursor overlay under `overlays/cursor/` is **thin wrappers** (spawn + Read tables). Phase 3 import under `research/imported/cursor-global-workflow/` is archaeology. Identity: skill/workflow manager across **stacks**, not machines ([project decisions](../featureArchitecture/project-decisions-and-open-questions.md)).
+**Source-of-truth map:** portable procedures and contracts live at repo-root `workflow/`, `skills/`, `agents/`, and `rules/` ([skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)). `docs/featureArchitecture/` explains this repository's intended architecture; `docs/SOPs/` contains repeatable maintainer procedures. Machine metadata, host bindings, and composition order live in the [procedure registry](../featureArchitecture/procedure-registry.md). Host overlays contain thin harness only.
 
 **Changing portable workflow / gates / review loops:** follow [editing-companion-workflow](./editing-companion-workflow.md) (same-changeset cascade to Cursor + OpenCode thin harness) before editing.
-
-Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cursorEscape-local.
 
 ---
 
@@ -20,22 +18,21 @@ Adapted from openBuggy's `documenting-this-concept-repo` SOP; paths below are cu
 
 1. Read the relevant `_index.md`.
 2. Decide document kind (see table below).
-3. Do not put metrics in `competitive-landscape.md` — put them in `research/` with Sources (rule from imported openBuggy documenting SOP).
-4. When tone or distribution framing changes, re-read stewardship in [project decisions](../featureArchitecture/project-decisions-and-open-questions.md) (private-first; monetization is not a goal).
+3. Prefer updating an existing current-facing leaf over creating a parallel one. Keep completed investigation records in Git history, not in active SOPs.
+4. If the change affects behavior, scripts, catalogs, manifests, or CI, identify the corresponding implementation and verification seam before editing prose.
 
 ### Document kinds (Target taxonomy — Approach A)
 
 | Kind | Home | Edit rule |
 | ---- | ---- | --------- |
-| **featureArchitecture** | `docs/featureArchitecture/` | Target design. Host extra restrictiveness: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md). Cite Observed imports from `research/imported/` — do not add Observed harness subdirectories directly under `docs/featureArchitecture/` |
+| **featureArchitecture** | `docs/featureArchitecture/` | Current intended architecture and durable design rationale. Host extra restrictiveness: [skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md). |
 | **workflow** (shared deep procedure) | [`workflow/`](../../workflow/_index.md) | One authored procedure per leaf; skills **point**, they do not paste |
 | **skills** | `skills/*/SKILL.md` | Host-agnostic workflow skill contracts |
 | **agents** | `agents/*.md` | Host-agnostic role contracts |
 | **rules** | `rules/*.md` | Always-on gate contracts |
 | **overlays** | `overlays/<host>/` | Host-native wrappers (thin); spawn IDs and copy-out Read tables |
 | **SOP** | `docs/SOPs/` | How to do a task |
-| **research** | `research/` | Sourced facts and imported sibling material |
-| **review** | `review/` | Legacy intent/design decisions — **live decisions now in [project decisions](../featureArchitecture/project-decisions-and-open-questions.md)** |
+| **research** | `research/imported/**` | Owner-frozen imported material; not active Target documentation |
 | **analysis** | `analysis/` | Operator studies of local workflows |
 
 Promotion rule: **Target** portable procedure edits go to repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`, FA). Overlay refresh is thin-wrapper / harness **echo** of changed gates (Steps, always-on summary, Read when) — not a second authored procedure tree. Full cascade checklist: [editing-companion-workflow](./editing-companion-workflow.md).
@@ -49,14 +46,14 @@ Non-trivial edits to plan/review loops, Composer, always-on gates, or L3 schemas
 | Label | When to use |
 | ----- | ----------- |
 | **Observed** | Characterization of external systems (Cursor harness, imported sibling docs) — cite Sources |
-| **Target** | cursorEscape's intended workflow and architecture (Phase 4+ synthesizing docs) |
+| **Target** | cursorEscape's intended workflow and architecture |
 | **Inferred** / **Unknown** | Mark explicitly; do not present as settled Target |
 
-Imported research files carry provenance banners. Overlay `SKILL.md` files do **not** — provenance lives in the overlay `_index.md`. **Observed ≠ Target** — never merge without classification.
+Imported research remains frozen and classified as Observed/imported. Overlay wrappers do not duplicate portable procedure bodies. **Observed ≠ Target** — never merge them without classification.
 
 ### Operator analysis
 
-Imported openBuggy operator studies remain in the owner-frozen [`research/imported/openBuggy/analysis/`](../../research/imported/openBuggy/analysis/_index.md) archive with Observed/imported classification. Do not fold those write-ups into Target FA suites or future eval scoring. UUID/path sheets for imported openBuggy studies remain in the **openBuggy source repo** under gitignored `.local/` (not copied here). Large future local study outputs may use `.local/` (`**/.local/` in `.gitignore`), with only a durable pointer/citation in current documentation.
+Large local study outputs may use `.local/` (`**/.local/` in `.gitignore`), with only a durable pointer or citation in current documentation. Keep durable conclusions in feature architecture or project decisions; keep raw evidence in Git history or an explicitly owned analysis artifact.
 
 ### When adding a document
 
@@ -71,7 +68,7 @@ Imported openBuggy operator studies remain in the owner-frozen [`research/import
 | ------- | --------- |
 | Relative links under repo paths | Copying live skills into repo-root `.cursor/skills` or `.cursor/agents` as if this were a Cursor project |
 | Prose mentioning external sibling projects by absolute path or name | Pretending runtime APIs are implemented |
-| Importing under `research/imported/` with manifest updates (Phase 2+) | Ignoring COPY-MANIFEST when adding imports |
+| Importing under `research/imported/` with the owner's explicit approval | Ignoring inventory and reference-closure checks when adding imports |
 | Recording host-native files under `overlays/<host>/` with an index (hashes, date, live source) | Pasting full portable procedure essays into overlay skill/agent/rule **bodies** (second SoT) |
 | Updating thin overlay harness **echo** (Steps outline, always-on summary, spawn Inputs, Read when) when companion SoT gates change — same changeset | Leaving OpenCode/Cursor harness text on a superseded loop (e.g. unbounded “until dual APPROVED” after pressure-release SoT) |
 
@@ -79,22 +76,24 @@ Imported openBuggy operator studies remain in the owner-frozen [`research/import
 
 | Folder | Holds |
 | ------ | ----- |
-| `analysis/` | Index for operator studies; future local studies may live here |
-| `research/imported/openBuggy/analysis/` | Imported openBuggy operator studies (Observed/imported) |
-| `docs/featureArchitecture/` | How cursorEscape is **intended** to work (Target); Observed openBuggy FA under `research/imported/openBuggy/featureArchitecture/` |
+| `analysis/` | Index and durable artifacts for local operator studies |
+| `research/imported/**` | Owner-frozen imported material (Observed/imported) |
+| `docs/featureArchitecture/` | How cursorEscape is intended to work (Target) |
 
 ### After edits
 
 - Update **Last updated** dates on touched docs.
-- Spot-check that every new `_index` link resolves.
+- Confirm affected indexes, catalogs, scripts, and tests were updated in the same change.
+- Run relative-link closure for touched Markdown.
+- Run normalization Fast CI before handoff; run Full CI before a phase commit.
 
 ---
 
 ## Implications / open questions
 
-1. When runtime code appears in a future repo or branch, extend this SOP with code↔doc sync rules.
+1. Documentation, scripts, registry metadata, fixtures, and CI assertions form one contract. Update them together when the contract changes.
 2. Target docs use claim taxonomy: Desired / Required / Nice-to-have / Cursor-specific / Unknown — see [feature architecture index](../featureArchitecture/_index.md).
-3. Keep this archive docs-only until an explicit implementation phase begins.
+3. Do not retain completed migration or bring-up evidence in active SOPs; cite Git history when provenance is essential.
 
 ---
 

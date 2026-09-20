@@ -22,23 +22,23 @@ To **change** an existing governed entity (same ID, same kind):
 2. **Machine metadata change** (identity, aliases, authority, composition order, host representation): edit the registry catalog under `catalog/`. The deterministic renderer derives host projections; manifests own only destinations and host-only substitutions.
 3. **Verify:** run the sole normalization Fast CI and `git diff --check`.
 
-To **add** a new governed entity, the Phase 0 inventory must also be updated because the validator enforces exact inventory coverage per kind:
+To **add** a new governed entity, the inventory must also be updated because the validator enforces exact inventory coverage per kind:
 
 1. **Canonical body/frontmatter:** create the Markdown source under the relevant base directory.
-2. **Phase 0 inventory:** update `analysis/procedure-normalization-inventory-2026-09.json` — add the entity's `parity_matrix` row (for agents), skill inventory row, or rule/workflow inventory row with its canonical source path and evidence fields. The registry validator compares every catalog entry against this inventory; a missing inventory row fails Fast CI.
+2. **Inventory:** update `analysis/procedure-normalization-inventory-2026-09.json` — add the entity's `parity_matrix` row (for agents), skill inventory row, or rule/workflow inventory row with its canonical source path and evidence fields. The registry validator compares every catalog entry against this inventory; a missing inventory row fails Fast CI.
 3. **Registry catalog:** add the entry under `catalog/agents.json`, `catalog/skills.json`, or `catalog/rules.json (for rules) or catalog/workflows.json (for workflows/compositions)` with identity, aliases, required reading, authority/isolation, loop/gate, fail-loud behavior, and host representation fields matching the inventory.
 4. **Composition or host route (if applicable):** add the composition to `catalog/workflows.json`, bind it in the relevant manifest via `CompositionId` (never `Parts`/`Footer` for registry-governed order), and register any host-only leaves.
 5. **Verify:** run the sole normalization Fast CI and `git diff --check`; then run the sole Full CI for a baseline check.
 
-**Live Apply is Phase 6 only.** No normalization or review step writes to live hosts. `Sync-HostHarness.ps1 -Apply` remains the exclusive Phase 6 operator action, gated on owner authorization.
+**Live Apply is always owner-authorized.** No normalization or review step writes to live hosts. `Sync-HostHarness.ps1 -Apply` remains the exclusive live-write operator action, gated on fresh explicit owner authorization.
 
 ### Fail-closed boundary
 
-`ProcedureRegistry.psm1` validates schema/version, exact Phase 0 inventory coverage, IDs, canonical identity and first-read contract, required reading, aliases, authority/isolation, loop/gate, fail-loud behavior, host representation, route identity, launch mechanism and evidence, both skill booleans (`modelInvocationDisabled` against frontmatter; `explicitOnly` against inventory), explicit skill applicability, rules/workflow canonical sources, one-to-one composition coverage, duplicate-free semantic order, and path containment. Schema items are closed to their declared ownership fields; skill registry entries reject destination metadata because manifests own bindings. Any ambiguity fails rather than falling back to host metadata. Historical baseline directories fail closed when absent or inaccessible; the checker's explicit sandbox opt-out waives inaccessibility only, and absence always fails.
+`ProcedureRegistry.psm1` validates schema/version, exact inventory coverage, IDs, canonical identity and first-read contract, required reading, aliases, authority/isolation, loop/gate, fail-loud behavior, host representation, route identity, launch mechanism and evidence, both skill booleans (`modelInvocationDisabled` against frontmatter; `explicitOnly` against inventory), explicit skill applicability, rules/workflow canonical sources, one-to-one composition coverage, duplicate-free semantic order, and path containment. Schema items are closed to their declared ownership fields; skill registry entries reject destination metadata because manifests own bindings. Any ambiguity fails rather than falling back to host metadata. Restore baselines fail closed when absent or inaccessible; the checker's explicit sandbox opt-out waives inaccessibility only, and absence always fails.
 
 ### Blocking guard coverage
 
-Every migrated ownership class has a blocking guard enforced in the sole Fast CI path, except baseline parity which is Full-only:
+Every governed ownership class has a blocking guard enforced in the sole Fast CI path:
 
 | Class | Guard | Enforcement point |
 |-------|-------|-------------------|
@@ -57,10 +57,6 @@ Full CI additionally coordinates focused host and fixture gates:
 |-------|-------|------|
 | Host and fixture composition | consolidated host-sync Full, Codex adapter/lifecycle fixtures, and drift fixtures | Full CI only |
 
-### Superseded-check audit
-
-Phase 4G audited Phase 4C–4F checks and found none superseded: all `Add-SyncWarning` calls validate independent behavior (pressure-release wording, NeverTouch paths, OpenCode instructions-path advisory), and the current-state fixture checker's composition resolution validates Phase 0 inventory alignment (a different invariant from registry ownership). The Phase 2 fallback binding parity and Phase 3A machinery guard are current-state safety checks, not transition-only. The registry-level guard (`Test-RegistryHostCompositionOwnership`) is the sole durable blocking path for composition-order ownership and does not duplicate existing checks.
-
 ### Baseline regeneration and verification
 
 Committed render baselines are mechanical regression anchors generated from observed current renders. Never edit baseline bytes to satisfy a stale expectation. When a render output legitimately changes, render through the deterministic adapter or registry renderer with an explicit output root, review the result, and commit the updated artifact in the same changeset. Normalization CI retains renderer repeatability through deterministic double-render comparison.
@@ -74,16 +70,16 @@ Committed render baselines are mechanical regression anchors generated from obse
 | Gate | Script | Scope |
 |------|--------|-------|
 | Fast | `Invoke-NormalizationFastCI.ps1` | Registry validity + views (676 checks) + current-state + unit checks (24) + focused Codex overlay checks + tracked hygiene + `git diff --check` |
-| Full | `Invoke-NormalizationFullCI.ps1` | Fast + Phase 2 Full + focused Codex adapter checks + Phase 3 lifecycle Full + baseline ledger verify + drift fixtures + double-render |
+| Full | `Invoke-NormalizationFullCI.ps1` | Fast + consolidated host-sync Full + focused Codex adapter and lifecycle checks + drift fixtures + disposable double-render |
 
-Exactly one Fast and one Full entry point exist. Host-sync phase scripts are internal to Full CI, never separate entry points.
+Exactly one Fast and one Full entry point exist. Host-sync suite scripts are internal to Full CI, never separate entry points.
 
-### Phase 6 Apply boundary
+### Live Apply boundary
 
-Normalization CI and documentation are non-live. Precedence rule for every Apply surface: **dry-run is always allowed; live Apply requires explicit Phase 6 owner authorization; all-host (`-Target All`) Apply is normative; single-stack `-AllowSkew` is only an explicitly owner-authorized recovery exception.** Phase 6 is the exclusive boundary for any `Sync-HostHarness.ps1 -Apply` invocation. Pre-Apply gates include: all-host dry-run, read-only drift report (`Test-HostHarnessDrift.ps1 -Target All -Json`), baseline parity confirmation, and normalization Full CI. Post-Apply gates include: dry-run/drift re-check, 7x7 parity confirmation, restart/reload, and host-specific smoke matrix.
+Normalization CI and documentation are non-live. Precedence rule for every Apply surface: **dry-run is always allowed; live Apply requires fresh explicit owner authorization; all-host (`-Target All`) Apply is normative; single-stack `-AllowSkew` is only an explicitly owner-authorized recovery exception.** Pre-Apply gates include: all-host dry-run, read-only drift report (`Test-HostHarnessDrift.ps1 -Target All -Json`), baseline readiness confirmation, and normalization Full CI. Post-Apply gates include: dry-run/drift re-check, 7x7 parity confirmation, restart/reload, and host-specific smoke matrix.
 
 ## Implications / open questions
 
-1. Live Apply remains Phase 6; no normalization gate performs a host write.
+1. Live Apply remains separately owner-authorized; no normalization gate performs a host write.
 2. Destination metadata must remain manifest-owned; registry entries reject it.
 3. Hand-authored overlay thin wrappers (launch mechanics, permissions, host-specific wiring) are outside registry-generated compositions and still require same-changeset manual edits when their text changes.

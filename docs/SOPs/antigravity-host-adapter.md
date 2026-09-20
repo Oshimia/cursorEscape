@@ -1,78 +1,71 @@
 # Antigravity host adapter
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-20
 
 ## Context
 
-This SOP documents the **Antigravity adapter** for the owner's agentic stack. **Target SoT** is the companion repo ([skill-source-and-host-overlays](../featureArchitecture/skill-source-and-host-overlays.md)). Files under `~/.gemini/` are the **host copy-out target**, not a second procedure tree. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) from [overlays/antigravity](../../overlays/antigravity/_index.md). Historical owner ruling (2026-08-26): **live sync not deferred** — superseded by the Phase 6 Apply boundary: `-Apply` is now gated on explicit owner authorization for Phase 6 only; dry-run is always allowed (see [procedure registry Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary)).
+This SOP operates the Antigravity adapter. The companion repository is the Target SoT ([skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)); `~/.gemini/` is the host copy-out target, not a second procedure tree. Live sync is rendered from [overlays/antigravity](../../overlays/antigravity/_index.md) by [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1).
 
-Owner decisions (2026-08-23): cursorEscape is **sole SoT**; live global rules (`~/.gemini/GEMINI.md`) are **wholesale-replaced** by the overlay gate; v1 surfaces = global skills + global workflows + reviewer subagent defs + GEMINI.md.
+The global rules surface, `~/.gemini/GEMINI.md`, is intentionally wholesale-replaced by the composed overlay gate. This also propagates the cursorEscape gates to Gemini CLI sessions; it is an accepted consequence of companion-first ownership.
 
-**Install root (this machine):** `C:\Users\admin\.gemini\`
-
-**Phase 0 baseline (restore-only):** present at `%USERPROFILE%\.gemini-backup-pre-host-sync-build-20260824-064125`; path registered in [`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json) under `antigravity`.
+**Install root:** `C:\Users\admin\.gemini\`
+**Restore baseline:** registered in [`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json). Sync does not create backups.
 
 ## Substance
 
-### Must / Must-not (host adaptation fidelity)
+### Must / must-not
 
-**Must:** Meet [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) — same operator loops as Cursor/OpenCode; C1–C6 attested at runtime post-Apply; deviations attested explicitly, never silent.
+**Must:** meet [host adaptation fidelity](../featureArchitecture/host-adaptation-fidelity.md), keep all procedure bodies companion-resident, use exact native subagent tool names, and attest behavior after authorized Apply.
 
-**Must-not:** Mark adapter Done on folder presence; paste deep procedure into overlay bodies; ship skills without `description` frontmatter; claim parallel-leg parity if native subagent spawn proves non-parallel at smoke time.
+**Must-not:** mark the adapter complete from folder presence, paste deep procedure into wrapper bodies, ship skills without descriptions, or claim parallel-leg parity without runtime evidence.
 
 ### Layer map
 
 | Layer | Portable contract | Antigravity adapter path |
-| ----- | ----------------- | ------------------------ |
-| Always-on (thin) | Gate pointers only | `GEMINI.md` (global rules surface — injected across all workspaces; **full replacement**) |
-| Skills (on-demand) | [skills/](../../skills/_index.md) thin stubs | `config/skills/<id>/SKILL.md` → Read `{{COMPANION_ROOT}}/skills|workflow/…` (auto-discovered catalog) |
-| Workflows | Trajectory wrappers | `antigravity/global_workflows/escape-{plan,review,closeout}.md` → `/escape-*` slash commands |
-| Agent routes | [agents/](../../agents/_index.md) contracts | `config/agents/{planner,plan_reviewer,implementer,production_readiness_reviewer,bug_reviewer,repository_explorer,test_reviewer}.md` — planning, investigation, and reviewer legs use read-only tool allowlists (edit-deny parity); `implementer` records canonical workspace-write authority without runtime attestation. Spawned via `invoke_subagent`, concurrent clean-context children. `planner` (Phase 2A), `repository_explorer` (Phase 2B), and `implementer`/`test_reviewer` (Phase 2C-native) are source-ready; live pickup and Antigravity live-write smoke await the next authorized Apply/Phase 6. |
+| --- | --- | --- |
+| Always-on | Thin gate composition | `GEMINI.md`, full replacement |
+| Skills | [skills/](../../skills/_index.md) | `config/skills/<id>/SKILL.md`, auto-discovered |
+| Workflows | Trajectory wrappers | `antigravity/global_workflows/escape-{plan,review,closeout}.md` |
+| Agent routes | [agents/](../../agents/_index.md) | `config/agents/*.md`, spawned with `invoke_subagent` |
 
 ### Inventory
 
-- **Always-on:** `GEMINI.md` — default-on plan + dual review; when-in-doubt; eval/harness not exempt; Incomplete-until pointer.
-- **Skills (11):** `discovery`, `implementation-plan`, `plan-review`, `implementation-review`, `pre-commit-ci-gate`, `composer`, `documentation-architecture`, `roadmap`, `diagnosing-bugs`, plus the global `opencode-headless-run`, `opencode-history-search` (2026-08-26 owner ruling: opencode-* pair mirrors on every stack; parity bar otherwise = OpenCode overlay inventory; `pre-commit-ci-gate` has no companion skill base — SoT is [`rules/pre-commit-ci-gate.md`](../../rules/pre-commit-ci-gate.md)).
-- **Workflows (3):** `/escape-plan`, `/escape-review`, `/escape-closeout`.
-- **Subagents (7):** `planner` (source-ready Phase 2A; canonical `planning` gate), `repository_explorer` (source-ready Phase 2B; canonical `investigation` gate), `implementer` and `test_reviewer` (source-ready Phase 2C-native; canonical `phase` and `test-review` gates), plus the three reviewer legs with read-only tool lists (`view_file`, `grep_search`, `run_command`). `implementer` has canonical workspace-write authority, but runtime write behavior is not attested until Phase 6; source-ready routes have live pickup only at the next authorized Apply. Exact tool names only — misspellings hang subagents (known upstream issue).
-- **Never synced / never touched:** `antigravity/global_workflows/caveman.md`; credential/app-state files (`settings.json`, `config/mcp_config.json`, `oauth_creds.json`, `google_accounts.json`, `state.json`, `trustedFolders.json`, `installation_id`); `config/projects`.
+- **Skills (11):** `composer`, `diagnosing-bugs`, `discovery`, `documentation-architecture`, `implementation-plan`, `implementation-review`, `opencode-headless-run`, `opencode-history-search`, `plan-review`, `pre-commit-ci-gate`, and `roadmap`.
+- **Workflows (3):** `/escape-plan`, `/escape-review`, and `/escape-closeout`.
+- **Subagents (7):** `planner`, `repository_explorer`, `implementer`, `test_reviewer`, `production_readiness_reviewer`, `bug_reviewer`, and `plan_reviewer` routes governed by companion contracts.
+- **Reviewers:** read-only tool allowlists using exact names `view_file`, `grep_search`, and `run_command`. `implementer` records canonical workspace-write authority.
+- **Never synced or touched:** `antigravity/global_workflows/caveman.md`, credential/app-state files, and `config/projects`.
 
-### Live sync (Sync-HostHarness)
+### Sync
 
 ```powershell
-# Dry-run — ALL stacks by default (normative: pushes are global, never per-stack)
+# Normative dry-run: all stacks.
 pwsh ./scripts/Sync-HostHarness.ps1
 
-# Live write to ALL stacks (requires Phase 0 baseline gate — all present, registered)
+# Normative live write: all stacks, with fresh explicit owner authorization.
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply
 
-# Single-stack variants are exceptions only:
-#   -Target Antigravity        dry-run manifest inspection (read-only)
-#   -Apply -Target Antigravity -AllowSkew    deliberate scoped repair; siblings go stale
+# Scoped dry-run inspection.
+pwsh ./scripts/Sync-HostHarness.ps1 -Target Antigravity
+
+# Scoped repair exception: requires fresh owner authorization and -AllowSkew.
+pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Antigravity -AllowSkew
 ```
 
-### Risks / notes
+Apply first verifies registered restore baselines and globally preflights selected stacks before any selected stack writes. Restart Antigravity after a config-time Apply.
 
-1. **Gemini CLI shares `~/.gemini/GEMINI.md`.** Full replacement propagates the cursorEscape gate to Gemini CLI sessions too — owner-accepted consequence of sole-SoT (2026-08-23).
-2. **All-three-baseline Apply coupling:** until the `~/.gemini` baseline exists and its path fills the `antigravity` property, `-Apply -Target Cursor/OpenCode` also fails closed. Deliberate conservatism.
-3. **Gemini CLI tolerance of additive subtrees** (`config/skills/**`, `config/agents/**`) — accepted risk; post-Apply smoke catches anomalies.
-4. **Deliberate skill-set exclusion:** only eleven ids mirrored; extend deliberately per parity bar, not by default.
-5. **Dependency availability:** this stack's `bug_reviewer.md` harness cites `{{COMPANION_ROOT}}/skills/bug-review-sweep/SKILL.md`; that canonical base is tracked, so the wrapper has no separate land/co-commit ordering constraint ([overlay _index implication #4](../../overlays/antigravity/_index.md)).
+### Verification
 
-### Smoke table (C1–C6 mapped)
+Run after authorized Apply and restart. Record `pass`, `fail`, or `deferred: reason` with the date and surface. No row may pass on file presence alone.
 
-Rows run **after authorized `-Apply` + full quit/restart** (restart assumed required for harness pickup — D2 assumption frozen 2026-08-23; revisit if operator observes hot-reload). No row may pass on file presence alone.
-
-| # | Checklist item | Method (post-Apply) | Status |
-| - | -------------- | ------------------- | ------ |
-| C1 | Always-on gates inject | Clean chat, zero tools: model quotes default-on plan loop + when-in-doubt + eval/harness not exempt from session text | deferred: awaiting operator Apply |
-| C2 | Skill catalog complete | Skill listing shows all eleven ids; load `implementation-plan` without shell browsing | deferred: awaiting operator Apply |
-| C3 | Dual review honors isolation + deny-edit | Parent launches both reviewer subagents in one turn via `invoke_subagent`; reviewers cannot edit (read-only tools). Expected value: parity attestation if concurrent spawn confirmed; otherwise `deviation: sequential fresh-context fallback per owner decision 2026-08-23; parallel-leg parity not met` | deferred: awaiting operator Apply |
-| C4 | Deep workflow Reads resolve | Load `implementation-review`; confirm Read resolves `{{COMPANION_ROOT}}/workflow/iterative-code-review.md` | deferred: awaiting operator Apply |
-| C5 | Companion docs readable without repeated asks | Sample FA leaf read via native file-read without serial shell listing | deferred: awaiting operator Apply |
-| C6 | Behavior, not presence | All rows above attest behavior with pass/fail/deferred; no presence-only passes | n/a until rows 1–5 run |
-
-Operator checklist (post-baseline): take baseline → fill `antigravity` path → `-Apply -Target Antigravity` → full quit + restart → run rows above → record statuses here.
+| Check | Method | Pass criterion | Result |
+| --- | --- | --- | --- |
+| C1 always-on gates | Clean chat with no tools | Injected gate quotes default-on plan review, when-in-doubt, and eval/harness non-exemption | Record |
+| C2 skill catalog | Native skill listing and load | All eleven IDs are discoverable; `implementation-plan` loads without shell browsing | Record |
+| C3 isolation and deny-edit | One parent launches both reviewer legs with `invoke_subagent` | Reviewers remain read-only; record either concurrent parity or the sequential fresh-context deviation | Record |
+| C4 deep workflow Read | Load `implementation-review` | Native Read resolves companion `workflow/iterative-code-review.md` | Record |
+| C5 companion access | Read a representative FA leaf | Companion read succeeds without repeated shell approval | Record |
+| C6 operator loop | Run the preceding rows as one behavior suite | The loop completes from behavior evidence, not inventory | Record |
 
 ## Related
 

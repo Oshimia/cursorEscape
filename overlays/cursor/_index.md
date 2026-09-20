@@ -7,7 +7,7 @@
 
 Thin **Cursor host overlay** for copy-out to `~/.cursor/`. Portable procedure lives at repo-root bases — overlay files add YAML, `disable-model-invocation`, Cursor Task spawn blocks, and **absolute companion Read tables** (`{{COMPANION_ROOT}}/…`).
 
-**Live sync:** Operator entry [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) — dry-run by default (add `-Target Cursor` for the planned dry-run view). Live `-Apply` requires explicit owner authorization; the normative live path is all-host `-Apply -Target All`. Single-stack `-Apply` is only an explicitly owner-authorized `-AllowSkew` recovery exception. See [cursor-host-adapter](../../docs/SOPs/cursor-host-adapter.md) and [host-sync README](../../scripts/host-sync/README.md). `docs/workflow/` mirror **retained** (transitional).
+**Live sync:** Operator entry [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) — dry-run by default (add `-Target Cursor` for the planned dry-run view). Live `-Apply` requires explicit owner authorization; the normative live path is all-host `-Apply -Target All`. Single-stack `-Apply` is only an explicitly owner-authorized `-AllowSkew` recovery exception. See [cursor-host-adapter](../../docs/SOPs/cursor-host-adapter.md) and [host-sync README](../../scripts/host-sync/README.md). A host `docs/workflow/` procedure mirror is forbidden.
 
 ## Companion reachability (pointer-first Target)
 

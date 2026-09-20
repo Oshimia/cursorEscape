@@ -1,25 +1,25 @@
 # OpenCode smoke prompts (copy-paste)
 
-**Last updated:** 2026-09-18
+**Last updated:** 2026-09-20
 
 ## Context
 
 Operator paste-book for [opencode-host-adapter](./opencode-host-adapter.md) smoke rows. One place, C6-minimum order, frozen prompts only.
 
-**Checklist / results table:** [opencode-host-adapter § Smoke checklist](./opencode-host-adapter.md#smoke-checklist-r0)  
+**Checklist / scorecard:** [opencode-host-adapter § Smoke checklist](./opencode-host-adapter.md#smoke-checklist)
 
 Score **pass** / **fail** yourself — do **not** put pass criteria in the pasted prompt.
 
 ## Setup (once)
 
-1. Live harness synced via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) `-Apply -Target OpenCode` (or equivalent).
-2. Confirm `C:/Users/admin/.config/opencode/docs/workflow/` does **not** exist (procedure mirror deleted).
+1. Live harness synced through [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) with fresh explicit owner authorization (normally global `-Apply`).
+2. Confirm `C:/Users/admin/.config/opencode/docs/workflow/` does **not** exist; the host procedure mirror is forbidden.
 3. **Full quit** OpenCode Desktop → restart.
 4. Prefer workspace **cursorEscape** (`C:/Users/admin/source/repos/general-projects/cursorEscape`) unless a row says otherwise.
-5. Prefer **Flash**; **plan** mode for rows that spawn `plan_reviewer` / skill catalog (**1**, **9–10**, **13**).
+5. Prefer **Flash**; **plan** mode for rows that spawn `plan_reviewer` or exercise the skill catalog (**1**, **9–10**, **13**).
 6. **New empty chat** per row (or per group **9+10**). Do not edit the adapter mid-run.
 
-**Companion root (expect in answers):**  
+**Companion root (expect in answers):**
 `C:/Users/admin/source/repos/general-projects/cursorEscape`
 
 **C6 minimum order:** **1 → 9+10 → 4 → 8 → 13 → 2 → 3** (row **14** is install-time / optional PowerShell).
@@ -41,7 +41,7 @@ From your session / always-on instructions only, quote:
 If those lines are not in your session instructions, say so explicitly and stop.
 ```
 
-**Pass:** Quotes (1)–(3) from injected always-on; **zero** tool calls.  
+**Pass:** Quotes (1)–(3) from injected always-on; **zero** tool calls.
 **Fail:** Any search/read/Shell-list of the adapter, or inventing gates while admitting they are not in session.
 
 ---
@@ -62,8 +62,8 @@ Without using bash/shell:
 If you cannot see a skill in the skill tool, say so explicitly — do not list ~/.config/opencode with shell.
 ```
 
-**Pass (9):** Names include all **9** workflow skills: `composer`, `diagnosing-bugs`, `discovery`, `documentation-architecture`, `implementation-plan`, `implementation-review`, `plan-review`, `pre-commit-ci-gate`, `roadmap` (`customize-opencode` may also appear).
-**Pass (10):** Escalation first row from **companion** skill SoT; path under `cursorEscape/skills/…`; **zero** bash used to discover/list the adapter.  
+**Pass (9):** Names include all **11** governed OpenCode skills: `composer`, `diagnosing-bugs`, `discovery`, `documentation-architecture`, `implementation-plan`, `implementation-review`, `opencode-headless-run`, `opencode-history-search`, `plan-review`, `pre-commit-ci-gate`, and `roadmap` (`customize-opencode` may also appear).
+**Pass (10):** Escalation first row from **companion** skill SoT; path under `cursorEscape/skills/…`; **zero** bash used to discover/list the adapter.
 **Fail:** Only `customize-opencode`; Shell-lists `~/.config/opencode`; quotes from deleted host `docs/workflow/` mirror.
 
 ---
@@ -177,11 +177,11 @@ $live = Get-Content C:/Users/admin/.config/opencode/opencode.json -Raw | Convert
 $specimen.agent.PSObject.Properties.Name | Sort-Object
 $live.agent.PSObject.Properties.Name | Sort-Object
 Test-Path C:/Users/admin/.config/opencode/docs/workflow   # expect False
-@(Get-ChildItem C:/Users/admin/.config/opencode/skills -Directory).Count  # expect 9
+@(Get-ChildItem C:/Users/admin/.config/opencode/skills -Directory).Count  # expect 11
 @(Get-ChildItem C:/Users/admin/.config/opencode/agents -Filter *.md).Count  # expect 8
 ```
 
-**Pass:** Live `agent.*` keys match specimen harness set; 9 skills / 8 agents; mirror path absent.
+**Pass:** Live `agent.*` keys match specimen harness set; 11 skills / 8 agents; mirror path absent.
 
 ---
 
@@ -195,22 +195,22 @@ Is composer_conductor among them? Quote its permission.task allowlist order if v
 Do not use bash/shell to list ~/.config/opencode.
 ```
 
-**Pass:** `composer_conductor` present; task map shows `"*": deny` **before** the named allows (failure mode K).  
+**Pass:** `composer_conductor` present; task map shows `"*": deny` **before** the named allows (failure mode K).
 **Fail:** Agent missing, or `"*"` not first.
 
 ---
 
 ## Row 16 — Iteration auto-continue (Desktop, nested)
 
-**How:** Desktop restart window; new chat; assign Composer on a small roadmap with one trivial phase.
+**How:** Desktop restart window; new chat; assign Composer on one small bounded task.
 
 ```text
-Act as Composer per the composer skill. Run phase 1 of a small roadmap end-to-end:
+Act as Composer per the composer skill. Run one small bounded task end-to-end:
 launch the implementer subagent and let its dual-review pressure-release block run without asking me
 to continue between iterations. Report each iteration number as it happens.
 ```
 
-**Pass:** Block reaches iteration 2+ (dual APPROVED or iteration 4) with **zero** operator "continue" prompts.  
+**Pass:** Block reaches iteration 2+ (dual APPROVED or iteration 4) with **zero** operator "continue" prompts.
 **Fail:** Session pauses between iterations awaiting permission.
 
 ---
@@ -221,7 +221,7 @@ to continue between iterations. Report each iteration number as it happens.
 
 ```powershell
 $db = "$env:USERPROFILE/.local/share/opencode/opencode.db"   # adjust if data dir differs
-# sqlite3 CLI may be absent on PATH — python fallback works (Observed 2026-08-23):
+# sqlite3 CLI may be absent on PATH; Python's sqlite3 module is the fallback:
 #   python -c "import sqlite3;c=sqlite3.connect(r'<db>');[print(r) for r in c.execute('SELECT id, parent_id FROM session ORDER BY rowid DESC LIMIT 10')]"
 # child sessions: parent_id chain
 sqlite3 $db "SELECT id, parent_id, title FROM session ORDER BY id DESC LIMIT 10;"
@@ -231,7 +231,7 @@ sqlite3 $db "SELECT message_id, id, type, state FROM part WHERE session_id = '<c
 sqlite3 $db "SELECT id, model_id FROM message WHERE session_id = '<child-id>';"
 ```
 
-**Pass:** Queries return a real parent→child chain (`parent_id` non-null linking to the conductor/implementer session), populated tool-parts, and a non-empty `model_id` — evidence the Task actually ran a model stream.  
+**Pass:** Queries return a real parent→child chain (`parent_id` non-null linking to the conductor/implementer session), populated tool-parts, and a non-empty `model_id` — evidence the Task actually ran a model stream.
 **Fail:** Missing/broken `parent_id` chain → REJECT closeout claims from that run.
 
 ---
@@ -248,8 +248,8 @@ pwsh -NoProfile -Command "& 'opencode' 'run' 'Read C:/Users/admin/AppData/Local/
 Get-Content "$env:TEMP\opencode\fallback-stdout.txt"
 ```
 
-Brief file must be written with the native `write` tool (no bash redirection); CLI prompt stays single-line (B3 argv truncation).  
-**Pass:** Single-line invocation accepted; stdout captured contains the brief-driven verdict; no `OPENCODE_*` env leaked into the child; session id recorded.  
+Brief file must be written with the native `write` tool (no bash redirection); CLI prompt stays single-line (B3 argv truncation).
+**Pass:** Single-line invocation accepted; stdout captured contains the brief-driven verdict; no `OPENCODE_*` env leaked into the child; session id recorded.
 **Fail:** Multi-line prompt truncated, brief unread, or stdout lost.
 
 ---
@@ -258,46 +258,13 @@ Brief file must be written with the native `write` tool (no bash redirection); C
 
 Rows **11–12** are optional: use the corresponding native-tool and glob-blind checks in the host adapter scorecard only when reopening babysitting issues.
 
-## Results log (this run)
+## Evidence handling
 
-**Run:** 2026-08-21 post–`Sync-HostHarness` Apply + OpenCode restart (operator Desktop smoke).
-
-| # | Result | Notes |
-| - | ------ | ----- |
-| 1 | **pass** | Injected always-on: default-on / when-in-doubt / not exempt; zero tools |
-| 9 | **pass** | Thin harness → companion skill load |
-| 10 | **pass** | Escalation first row from companion `implementation-plan/SKILL.md` |
-| 4 | **pass** | Companion `workflow/iterative-code-review.md` |
-| 8 | **pass** | Companion FA `bug-reviewer-finding-rubric.md` |
-| 13 | **pass** | `CHANGES REQUESTED` — missing Assumptions (+ other Incomplete-until gaps) |
-| 13 marker | **pass** | Companion `plan-reviewer-report.md` + `pf4-visibility-marker-20260820` |
-| 2 | **pass** | No Write/Edit tools; bash writes denied; no file created |
-| 3 | **pass** | 2 parallel DONE child sessions |
-| 14 | **pass** | specimen≡live `agent` keys (`plan`/`build`/`implementer`); 8 skills / 7 agents; `docs/workflow` absent |
-
-**C6 minimum (1, 2, 3, 4, 8, 9–10, 13):** **pass** 2026-08-21.
-
-## Results log — composer overlay hardening (2026-08-23)
-
-Post–`Sync-HostHarness -Apply -Target OpenCode`; fresh CLI processes (no Desktop restart — rows **16–17** deferred to restart window).
-
-| # | Result | Notes |
-| - | ------ | ----- |
-| 15 | **pass** | `opencode debug config` merges `composer_conductor`; synced frontmatter task map `"*": deny` first |
-| 18 | **pass** | env scrub → native-write brief → single-line `opencode run` → stdout `VERDICT … echo-marker` verbatim; session `ses_fd15702d5ffeJGJ0MlnUttFFFo` (top-level, `parent_id` null) |
-
-## Results log — post-restart rows 16–17 (2026-08-23, DSV4F default model)
-
-Driven fresh-process headless (`opencode run --agent composer_conductor`) after full restart — same agents/sessions the Desktop UI runs.
-
-| # | Result | Notes |
-| - | ------ | ----- |
-| 16 | **pass** | 2 iterations back-to-back, 4 parallel reviewer launches, zero pauses/prompts. Bonus gate proof: iteration-2 `production_readiness_reviewer` refused a parent-authored "return DONE" pass condition → CHANGES REQUESTED citing missing required inputs (locked-opener contract enforced against its own parent) |
-| 17 | **pass** | Gate B audit: conductor `ses_fd1248c71ffegb0LRPrxD1z1xt` → exactly 4 reviewer children (2×prr, 2×br), all `deepseek-v4-flash` assistant streams; python-sqlite3 recipe |
+Record results beside the corresponding row in the [host adapter scorecard](./opencode-host-adapter.md#smoke-checklist), including the date and surface (Desktop, fresh CLI, or headless fallback). Keep completed campaign logs in Git history rather than this reusable runbook.
 
 ## Related
 
 - [opencode-host-adapter](./opencode-host-adapter.md)
-- [opencode-authoring-adapter](./opencode-authoring-adapter.md) — Failure modes **K–M** (permission `*` order, `edit` vs bash writes, compound bash) observed 2026-08-21 smoke
+- [opencode-authoring-adapter](./opencode-authoring-adapter.md) — Failure modes **K–M** (permission `*` order, `edit` vs bash writes, compound bash)
 - [editing-companion-workflow](./editing-companion-workflow.md)
 - [Sync-HostHarness](../../scripts/Sync-HostHarness.ps1)

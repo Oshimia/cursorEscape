@@ -6,7 +6,7 @@
 
 Host-agnostic **portable** agent contracts at repo root. Portable contracts live in `agents/*.md`; the [procedure registry](../docs/featureArchitecture/procedure-registry.md) owns machine metadata (identity, aliases, required reading, authority/isolation, host representation). Cursor overlay **thin wrappers** (spawn one-pagers + Read): [overlays/cursor/agents](../overlays/cursor/agents/). The 2026-08-17 bannered copy remains under [cursor-global-workflow/agents](../research/imported/cursor-global-workflow/agents/) (archaeology). These pages use host-agnostic role names, not Cursor Task IDs as the contract identity.
 
-Codex mirrors the seven portable roles as TOML wiring in [overlays/codex/agents](../overlays/codex/agents/). Historical: it became Active with C1–C6 smoke attested on 2026-09-08; future Apply passes require explicit Phase 6 owner authorization per the [procedure registry Apply boundary](../docs/featureArchitecture/procedure-registry.md#phase-6-apply-boundary). Six historical restore-only baselines exist for Cursor/OpenCode/Antigravity/Vscode/Cline/Kilocode; Codex relies on committed render-plan/fixture recovery evidence.
+Codex mirrors the seven portable roles as TOML wiring in [overlays/codex/agents](../overlays/codex/agents/). It became Active with C1–C6 smoke attested on 2026-09-08; every Apply pass requires fresh explicit owner authorization per the [procedure registry Apply boundary](../docs/featureArchitecture/procedure-registry.md). Six restore-only baselines exist for Cursor/OpenCode/Antigravity/Vscode/Cline/Kilocode; Codex relies on committed render-plan/fixture recovery evidence.
 
 ---
 

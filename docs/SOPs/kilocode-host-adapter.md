@@ -1,7 +1,7 @@
 # Kilo Code host adapter — global `~/.kilocode` inventory & sync
 
-**Last updated:** 2026-09-18
-**Status:** brought up 2026-09-01 (6th stack; shared `Generic.Adapter.ps1` dispatch — no per-stack adapter file). Apply gated on Phase 6 owner authorization per the [Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary); Phase 0 baselines are a prerequisite, not the authorization boundary.
+**Last updated:** 2026-09-20
+**Status:** established stack using shared `Generic.Adapter.ps1`; no Kilo Code-specific adapter file. Live Apply requires registered restore baselines and fresh explicit owner authorization.
 
 ## Context
 
@@ -11,7 +11,8 @@ Kilo Code VS Code extension (`kilocode.kilo-code-7.5.6`, Kilo CLI-platform rebui
 
 ```powershell
 pwsh ./scripts/Sync-HostHarness.ps1 -Target Kilocode          # dry-run
-pwsh ./scripts/Sync-HostHarness.ps1 -Target Kilocode -AllowSkew -Apply   # bring-up/live write (Phase 6 owner authorization per [Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary))
+# Scoped repair only: fresh owner authorization plus -AllowSkew.
+pwsh ./scripts/Sync-HostHarness.ps1 -Target Kilocode -AllowSkew -Apply
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply                    # global (normative)
 ```
 

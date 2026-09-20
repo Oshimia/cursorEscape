@@ -112,7 +112,7 @@ Gate artifact: [`baseline-backups.paths.json`](./baseline-backups.paths.json)
 
 **Baseline regeneration boundary:** render baselines under [`render-baselines/`](./render-baselines/) are mechanical regression anchors generated from observed current renders. Never edit baseline or projection bytes to satisfy a stale expectation. When a render output legitimately changes: (1) render through the deterministic adapter path (for example, the manifest-driven dry-run `pwsh scripts/Sync-HostHarness.ps1 -Target <StackId>` to produce the planned render) or the registry renderer at `scripts/normalization/Render-ProcedureRegistry.ps1` with an explicit output root; (2) review the result; and (3) commit the regenerated artifacts in the same changeset. Normalization CI retains renderer repeatability through deterministic double-render comparison. Direct editing of expected-render files is forbidden.
 
-**Live Apply is Phase 6 only** per the [procedure registry Apply boundary](../../docs/featureArchitecture/procedure-registry.md#phase-6-apply-boundary). Dry-run is always allowed; `-Apply` requires explicit owner authorization. Pre-Apply gates: all-host dry-run, read-only drift report, baseline parity confirmation, and normalization Full CI.
+**Live Apply requires fresh explicit owner authorization** per the [procedure registry Apply boundary](../../docs/featureArchitecture/procedure-registry.md). Dry-run is always allowed. Pre-Apply gates: all-host dry-run, read-only drift report, baseline readiness confirmation, and normalization Full CI.
 
 ## Hard excludes (by manifest)
 

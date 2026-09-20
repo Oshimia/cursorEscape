@@ -1,34 +1,30 @@
 # Codex host adapter SOP
 
-**Last updated:** 2026-09-16
-
-**Stack:** `Codex` · **Logical roots:** effective `CODEX_HOME` (default `~/.codex`) + `~/.agents/skills` · **Surface:** managed `AGENTS.md` block, seven TOML agents, 23 skill wrappers
-
-**Status:** registered Phase 3 2026-09-08; `ApplyState = Active` (activated 2026-09-08 after owner-authorized install; three-client smoke attested 2026-09-08: CLI, VS Code extension, ChatGPT desktop).
-
-**Apply boundary:** `-Apply` is Phase 6 only with explicit owner authorization per the [procedure registry Apply boundary](../featureArchitecture/procedure-registry.md#phase-6-apply-boundary). The historical 2026-09-08 activation is a completed lifecycle event; future Apply passes require fresh owner authorization for Phase 6.
+**Last updated:** 2026-09-20
+**Status:** `ApplyState = Active` (activated 2026-09-08 after owner-authorized install; three-client smoke attested 2026-09-08).
 
 ## Context
 
-Codex is the seventh registered sync stack. Canonical procedure remains at repository-root [`skills/`](../../skills/_index.md), [`agents/`](../../agents/_index.md), [`workflow/`](../../workflow/_index.md), and [`rules/`](../../rules/_index.md). The Codex overlay contains only thin wrappers, invocation policy, agent wiring, and managed-install mechanics ([overlays/codex](../../overlays/codex/_index.md)).
+This SOP operates the Codex adapter. The companion repository owns portable procedure and contracts; the [Codex overlay](../../overlays/codex/_index.md) owns only thin wrappers, invocation policy, agent wiring, and managed-install mechanics.
 
-The specialized adapter requires two explicit absolute roots. The operator entry resolves effective roots (`CODEX_HOME` or `~/.codex`, and `~/.agents/skills`) and passes them explicitly; the adapter never infers either root. The roots must exist, be directories, have no reparse-point ancestor, and be independent/non-nested.
+The specialized adapter requires two explicit absolute roots. The operator entry resolves effective roots (`CODEX_HOME` or `~/.codex`, and `~/.agents/skills`) and passes them explicitly; the adapter never infers either root. Both roots must exist, be directories, have no reparse-point ancestor, and be independent and non-nested.
 
-## Must / Must-not
+## Must / must-not
 
 **Must**
 
 - Use `Sync-HostHarness.ps1 -Target Codex` with explicit roots for disposable dry-runs.
-- Keep `AGENTS.md` as marker-bounded managed block content; preserve foreign text outside the block.
+- Keep `AGENTS.md` as marker-bounded managed block content and preserve foreign text outside the block.
 - Treat `codex-home/AGENTS.override.md` as guard-only: a non-empty file must block Apply.
 - Run the all-stack preflight before any Apply write pass when `Target All` is selected.
-- For re-activation after setting ApplyState = BringUp: obtain separate owner authorization, a current baseline, and three-client C1–C6 attestation.
+- Obtain fresh explicit owner authorization before every live Apply.
+- For re-activation after setting `ApplyState = BringUp`, obtain separate owner authorization, a current baseline, and fresh three-client C1–C6 attestation.
 
 **Must-not**
 
 - Never touch `config.toml`, `auth.json`, `history.jsonl`, `logs/`, `sessions/`, or `databases/`.
 - Never install `agents/openai.yaml` metadata; explicit-only policy remains overlay-only until a separately reviewed seam.
-- Never infer or normalize a missing Codex/skill root inside the adapter.
+- Never infer or normalize a missing Codex or skill root inside the adapter.
 - Never write model, reasoning, MCP, or plugin configuration.
 - Never bypass the `BringUp` lifecycle gate with an internal test resolver outside disposable CI.
 
@@ -36,40 +32,48 @@ The specialized adapter requires two explicit absolute roots. The operator entry
 
 | Logical root | Leaves |
 | --- | --- |
-| `codex-home` | marker-bounded `AGENTS.md`; guard-only `AGENTS.override.md`; seven `agents/*.toml` roles |
+| `codex-home` | Marker-bounded `AGENTS.md`; guard-only `AGENTS.override.md`; seven `agents/*.toml` roles |
 | `skill-root` | 23 thin `SKILL.md` wrappers: 22 canonical skills plus generated `pre-commit-ci-gate` |
 
-The report uses root-qualified identities (`codex-home/...`, `skill-root/...`) so same-relative names cannot be confused across roots. Standalone managed leaves carry `cursorEscape-managed:v1`; the `AGENTS.md` block uses `cursorEscape-managed-block:v1`.
+Reports use root-qualified identities (`codex-home/...`, `skill-root/...`) so same-relative names cannot be confused across roots. Standalone managed leaves carry `cursorEscape-managed:v1`; the `AGENTS.md` block uses `cursorEscape-managed-block:v1`.
 
 ## Sync commands
 
 ```powershell
-# Dry-run with explicit disposable roots (normative CI/test seam)
+# Disposable Codex-only dry-run: normative CI/test seam.
 pwsh scripts/Sync-HostHarness.ps1 -Target Codex `
   -CodexRoot C:/temp/codex-home -SkillRoot C:/temp/skills
 
-# Normative all-stack dry-run in disposable home fixtures
+# Disposable all-stack dry-run.
 pwsh scripts/Sync-HostHarness.ps1 -Target All `
   -CodexRoot C:/temp/codex-home -SkillRoot C:/temp/skills
 
-# Owner entry with effective roots on the eventual host
+# Operator dry-run with effective roots.
 pwsh scripts/Sync-HostHarness.ps1 -Target Codex
 
-# BringUp gate: zero selected-stack writes (re-arm with `ApplyState = BringUp`)
+# Live write: normative all-stack Apply with fresh explicit owner authorization.
 pwsh scripts/Sync-HostHarness.ps1 -Target All -Apply
 ```
 
-There is no `-AllowSkew` exception for lifecycle refusal. Codex was activated on 2026-09-08 via a separate Codex-only owner authorization followed by three-client C1–C6 smoke attestation (CLI, VS Code extension, ChatGPT desktop). If Codex is later re-armed to `BringUp`, reactivation requires the same policy: separate owner authorization, a current baseline, and fresh three-client C1–C6 attestation.
+If any selected stack is re-armed to `BringUp`, the lifecycle gate refuses All Apply before any selected-stack write. There is no `-AllowSkew` exception for lifecycle refusal. Reactivation from `BringUp` requires separate owner authorization, a current baseline, and fresh three-client C1–C6 attestation.
 
 ## Safety and verification
 
 - Dry-run plans 31 writable destinations and reports 32 root-qualified identities including the override guard.
 - Apply preflights ownership, hard excludes, override absence, path containment, current-state hashes, and marker integrity.
-- Apply is a byte-level no-op for unchanged destinations: identical existing files are neither staged nor replaced, and `AppliedFiles` reports only destinations actually written.
-- Writes go through staged replacement; post-write hashes are verified. Adapter-local failure restores in-memory pre-Apply bytes and removes files created by the failed run.
-- Lifecycle CI: `scripts/host-sync/Invoke-CodexLifecycleChecks.ps1` proves explicit-root Codex dry-run, all-stack dry-run, BringUp All-Apply refusal, Active-state Codex collision with zero selected-stack writes, and complete invalid-target output.
-- Committed render baselines and deterministic double-render comparison remain the regression anchors for planned renders.
+- Apply is a byte-level no-op for unchanged destinations; `AppliedFiles` reports only destinations actually written.
+- Writes use staged replacement and post-write hash verification. Adapter-local failure restores in-memory pre-Apply bytes and removes files created by the failed run.
+- Lifecycle CI: `scripts/host-sync/Invoke-CodexLifecycleChecks.ps1` proves explicit-root Codex dry-run, all-stack dry-run, `BringUp` All-Apply refusal, Active-state Codex collision with zero selected-stack writes, and complete invalid-target output.
+- Committed render baselines and deterministic double-render comparison remain regression anchors for planned renders.
 
-## Runtime acceptance (historical — completed 2026-09-08)
+The 2026-09-08 activation baseline was attested across CLI, VS Code extension, and ChatGPT desktop for plan gates, catalog behavior, isolated reviewer spawning, companion Read wiring, and end-to-end workflow behavior. A future reactivation requires a fresh equivalent attestation.
 
-C1–C6 runtime evidence was attested on 2026-09-08 across CLI, VS Code extension, and ChatGPT desktop: plan gates, catalog behavior, isolated reviewer spawning, companion Read wiring, and end-to-end workflow behavior were verified before `ApplyState` activation. See [host adaptation fidelity](../featureArchitecture/host-adaptation-fidelity.md). If Codex is later re-armed to `BringUp`, a fresh C1–C6 attestation is required before re-activation.
+## Related
+
+- [Host harness sync README](../../scripts/host-sync/README.md)
+- [Codex overlay](../../overlays/codex/_index.md)
+- [Editing companion workflow](./editing-companion-workflow.md)
+- [Host adaptation fidelity](../featureArchitecture/host-adaptation-fidelity.md)
+- [Skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)
+- [Instruction layering](../featureArchitecture/instruction-layering.md)
+- [SOPs index](./_index.md)

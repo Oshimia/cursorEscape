@@ -1,14 +1,14 @@
 # Authoring OpenCode adapter files (skills, agents, rules, config)
 
-**Last updated:** 2026-09-18
+**Last updated:** 2026-09-20
 
 ## Context
 
-How to write and maintain the **OpenCode host adapter** under `~/.config/opencode/` (and optional project `.opencode/`) so skills, agents, always-on instructions, and permissions actually load. Portable **contracts** stay in cursorEscape ([agents](../../agents/_index.md), [skills](../../skills/_index.md), [instruction-layering](../featureArchitecture/instruction-layering.md)); this SOP is the **authoring checklist** for the OpenCode mirror.
+How to author and maintain OpenCode adapter files so skills, agents, always-on instructions, and permissions actually load. Portable contracts stay in cursorEscape ([agents](../../agents/_index.md), [skills](../../skills/_index.md), [instruction-layering](../featureArchitecture/instruction-layering.md)); this SOP is the OpenCode-specific authoring checklist.
 
 **Install root (this machine):** `C:\Users\admin\.config\opencode\`
 
-**Process SoT for inventory / smoke:** [opencode-host-adapter](./opencode-host-adapter.md)  
+**Process SoT for inventory / smoke:** [opencode-host-adapter](./opencode-host-adapter.md)
 
 Official OpenCode documentation (read before inventing local conventions):
 
@@ -26,9 +26,9 @@ Official OpenCode documentation (read before inventing local conventions):
 
 ### Must / Must-not (host adaptation fidelity)
 
-**Must:** Author to [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) — OpenCode load surfaces (`instructions` with **absolute** `OPENCODE_HOME` path, matching global `AGENTS.md`, `skills` with `name`+`description`, `agents`, `skills.paths`); thin always-on; harness Read paths **Target** = absolute `{{COMPANION_ROOT}}/workflow|skills|agents|rules/...` (pointer-first-2); full restart after config edits.
+**Must:** Author to [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) — OpenCode load surfaces (`instructions` with an **absolute** `OPENCODE_HOME` path, matching global `AGENTS.md`, `skills` with `name`+`description`, `agents`, `skills.paths`); thin always-on; harness Read paths use absolute `{{COMPANION_ROOT}}/workflow|skills|agents|rules/...`; full restart after config edits.
 
-**Must-not:** Put relative `instructions/…` paths in **global** `opencode.json` (cwd-resolved — silent non-injection); ship gates only under `instructions/` without `AGENTS.md` dual-write; use `../../docs|skills|agents/` hops in overlay skills, agents, workflow mirror, or review-subagent-models (Wrong path resolution base class); treat host `docs/workflow/` mirror as procedure SoT ([skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md) — companion `{{COMPANION_ROOT}}/workflow/` is Target); invent gate semantics only on the host; use Cursor `rules/` layout on OpenCode; treat on-disk folders as Done without smoke rows in the host-adapter table; mark C1 pass from skill-description “default on” quotes alone.
+**Must-not:** Put relative `instructions/…` paths in **global** `opencode.json` (cwd-resolved — silent non-injection); ship gates only under `instructions/` without `AGENTS.md` dual-write; use `../../docs|skills|agents/` hops in overlay skills, agents, or review-subagent-models; treat a host `docs/workflow/` mirror as procedure SoT ([skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md) — companion `{{COMPANION_ROOT}}/workflow/` is Target); invent gate semantics only on the host; use Cursor `rules/` layout on OpenCode; treat on-disk folders as complete without smoke rows; mark C1 pass from skill-description “default on” quotes alone.
 
 ### Sync rule (cursorEscape first)
 
@@ -38,7 +38,7 @@ Same as [opencode-host-adapter](./opencode-host-adapter.md):
 2. Re-adapt files under `~/.config/opencode/` second — do not invent gate semantics only on the host.
 3. Do **not** commit `~/.config/opencode` into this git repo.
 4. After any change to `opencode.json`, skills, agents, instructions, `AGENTS.md`, or other config-time files: **fully quit and restart OpenCode** (Desktop: quit tray/process, not only a new chat). No hot-reload — Observed DSV4F / skill-binding discovery.
-5. When updating always-on gates: edit overlay `instructions/cursor-escape-loop.md`, copy to live `instructions/` **and** `AGENTS.md` (byte-identical), keep specimen `instructions` as `{{OPENCODE_HOME}}/…` absolute form.
+5. When updating always-on gates: render through `Sync-HostHarness.ps1` with fresh explicit owner authorization. The render dual-writes `instructions/cursor-escape-loop.md` and `AGENTS.md` byte-identically, and the specimen uses an absolute `{{OPENCODE_HOME}}/…` token.
 
 ---
 
@@ -50,25 +50,13 @@ Same as [opencode-host-adapter](./opencode-host-adapter.md):
 | **Instructions** | Extra markdown pulled in via config | Paths/globs/URLs in `opencode.json` → `instructions` | Yes (combined with AGENTS.md) |
 | **Skills** | On-demand SoT procedures | `~/.config/opencode/skills/<id>/SKILL.md`; project `.opencode/skills/…` | **No** — advertised via `skill` tool, body loaded on call |
 | **Agents** | Primary / subagent roles | `~/.config/opencode/agents/*.md` and/or `opencode.json` → `agent` | Role prompt when selected / Task-invoked |
-| **Deep docs** | Full procedures at companion `{{COMPANION_ROOT}}/workflow/` | Absolute Read from thin harness | No — load when skill/agent cites companion path. Legacy host `docs/workflow/` mirror transitional only |
+| **Deep docs** | Full procedures at companion `{{COMPANION_ROOT}}/workflow/` | Absolute Read from thin harness | No — load when skill/agent cites companion path; no host mirror |
 
 Keep always-on / AGENTS / instructions **thin** (gate pointers). Put full loops in skills + deep docs — [instruction-layering](../featureArchitecture/instruction-layering.md). Always-on edits: short gate pointers only; **do not invent** fixed line/character budgets (“≤3 lines”, “≤N new lines”) in plans, Success, Verification, or this SOP — measure by gate behavior ([instruction-layering](../featureArchitecture/instruction-layering.md) Anti-patterns).
 
-### Hard gates vs soft lists (audit log)
+### Hard gates versus soft lists
 
-Soft-spot audit from the 2026-08-19 live trial; status after this harden pass:
-
-| Target | Soft spot (pre-harden) | Status |
-| ------ | ---------------------- | ------ |
-| implementation-plan | Advisory Step 2 section list | **done 2026-08-19** — Incomplete until SoT |
-| plan-review / plan_reviewer / planner | APPROVED / handoff without section bar | **done 2026-08-19** |
-| always-on | No incompleteness pointer | **done 2026-08-19** — short gate pointer (no line budget) |
-| implementer | No phase Incomplete until | **done 2026-08-19** |
-| instruction-layering (+ this SOP) | Agents invent ≤N always-on budgets | **done 2026-08-19** — forbid invented budgets |
-| implementation-review dual “when possible” | Soft | **LOW — defer** |
-| composer QC | Soft | **LOW — defer** |
-| discovery / documentation-architecture / explorers / test_reviewer / dual-reviewers / pre-commit | Prefer or already hard | **skip** |
-
+Hard behavioral gates belong in the companion contract and must be executable or smoke-verifiable. Prose such as “prefer,” “when possible,” or advisory checklists must not be relied on for a completion gate. Single section-checklist SoT: [implementation-plan](../../skills/implementation-plan/SKILL.md) **Incomplete until**. `plan-review` / `plan_reviewer` point at that SoT — do not paste a second full enum.
 Single section-checklist SoT: [implementation-plan](../../skills/implementation-plan/SKILL.md) **Incomplete until**. `plan-review` / `plan_reviewer` point at that SoT — do not paste a second full enum.
 
 ---
@@ -184,17 +172,17 @@ Do not paste full iterative-plan / dual-review essays into always-on instruction
 
 Official ([Troubleshoot loading](https://opencode.ai/docs/skills/#troubleshoot-loading)):
 
-1. `SKILL.md` spelled in all caps  
-2. Frontmatter includes **`name` and `description`**  
-3. Names unique across locations  
-4. Permissions not `deny`  
+1. `SKILL.md` spelled in all caps
+2. Frontmatter includes **`name` and `description`**
+3. Names unique across locations
+4. Permissions not `deny`
 
 Additional Observed (this machine, Desktop ~1.18.18):
 
-5. Fully restart OpenCode after edits  
-6. Confirm `skills.paths` / install root if catalog still empty  
-7. CLI `opencode debug skill` may differ from Desktop version — treat version skew as Unknown  
-8. Some plugins (e.g. oh-my-opencode) have hidden user skills while built-ins remain — disable plugin to test  
+5. Fully restart OpenCode after edits
+6. Confirm `skills.paths` / install root if catalog still empty
+7. CLI `opencode debug skill` may differ from Desktop version — treat version skew as Unknown
+8. Some plugins (e.g. oh-my-opencode) have hidden user skills while built-ins remain — disable plugin to test
 9. Smoke: [opencode-host-adapter](./opencode-host-adapter.md) rows **9–10**
 
 ---
@@ -216,17 +204,17 @@ Place under `~/.config/opencode/agents/<agent-name>.md` (or project `.opencode/a
 
 Required / important frontmatter ([docs](https://opencode.ai/docs/agents/#options)):
 
-- `description` — required for discovery / when to use  
-- `mode` — `primary` \| `subagent` \| `all`  
-- `permission` — prefer over deprecated `tools`  
-- `temperature`, `color`, `hidden`, etc. as needed  
+- `description` — required for discovery / when to use
+- `mode` — `primary` \| `subagent` \| `all`
+- `permission` — prefer over deprecated `tools`
+- `temperature`, `color`, `hidden`, etc. as needed
 
 **cursorEscape adapter rules:**
 
 - Reviewers / `plan_reviewer`: `permission.edit: deny`; **bash deny** except read-only `git status*|log*|diff*|show*|rev-parse*` on dual-gate reviewers; `plan_reviewer` bash fully **deny** (score pasted plan text + native **read** of companion docs only). See [Failure modes K–M](#failure-mode-k--permission-pattern--not-first-last-match-wins).
-- Do **not** pin provider-specific `model:` on reviewers — inherit session default ([host adapter](./opencode-host-adapter.md))  
-- Do **not** use Cursor type names (`bugbot`, `reviewer-a`) as runtime agent ids  
-- Body = role + I/O + must-not + “load skill X / read doc Y” — not full loop essays  
+- Do **not** pin provider-specific `model:` on reviewers — inherit session default ([host adapter](./opencode-host-adapter.md))
+- Do **not** use Cursor type names (`bugbot`, `reviewer-a`) as runtime agent ids
+- Body = role + I/O + must-not + “load skill X / read doc Y” — not full loop essays
 
 JSON agents under `opencode.json` → `agent` are also valid ([docs](https://opencode.ai/docs/agents/#json)); keep Task allowlists on `build` / `implementer` (`permission.task`).
 
@@ -236,10 +224,10 @@ JSON agents under `opencode.json` → `agent` are also valid ([docs](https://ope
 
 #### Composer port (conductor) + payload/Gate B evidence
 
-Composer port recipe (2026-08 overlay hardening): conductor = **primary** thread agent (`agents/composer_conductor.md`) — never spawned via Task; `permission.task` map with `"*": "deny"` **first** (Failure mode K) then the workflow subagent allows; no `model:` pin; thin body citing companion `skills/composer/SKILL.md`. Two host-specific evidence rules live in the [composer skill stub](../../overlays/opencode/skills/composer/SKILL.md):
+Composer conductor: use the primary thread agent (`agents/composer_conductor.md`) — never spawn it via Task; put `"*": "deny"` **first** in its `permission.task` map (Failure mode K), then workflow subagent allows; do not pin a model; keep the body thin and cite companion `skills/composer/SKILL.md`. Two host-specific evidence rules live in the [composer skill stub](../../overlays/opencode/skills/composer/SKILL.md):
 
 - **Payload attestation marker:** every Task payload carries a marker line the child must echo back verbatim — detects prompt mangling (B6). Missing/unequal echo = treat the child return as unverified.
-- **Gate B DB audit:** nested-run transcript evidence via readonly `opencode.db` queries (`session.parent_id` chain, tool-part states, per-message `model_id`); Task UI summaries are secondary. Missing parent→child chain = REJECT closeout claims. Smoke rows **15–18**: [opencode-host-adapter § Smoke checklist](./opencode-host-adapter.md#smoke-checklist-r0); paste prompts in [opencode-smoke-prompts](./opencode-smoke-prompts.md).
+- **Gate B DB audit:** nested-run transcript evidence via read-only `opencode.db` queries (`session.parent_id` chain, tool-part states, per-message `model_id`); Task UI summaries are secondary. Missing parent→child chain = reject closeout claims. Smoke rows **15–18**: [opencode-host-adapter § Smoke checklist](./opencode-host-adapter.md#smoke-checklist); paste prompts in [opencode-smoke-prompts](./opencode-smoke-prompts.md).
 
 Headless fallback note: `opencode run` sessions may only be spawned **top-level** — never instruct a subagent to spawn sessions (B2 bash hang); scrub `OPENCODE_*` env before launch (B4); keep CLI prompts single-line (B3 argv truncation).
 
@@ -271,7 +259,7 @@ Use for project facts and personal prefs — **not** for full plan/review proced
 }
 ```
 
-**Must (Observed — C1 smoke fail 2026-08-20):** Paths in global `~/.config/opencode/opencode.json` → `instructions` are resolved relative to the **project cwd**, not the config directory. Relative `instructions/cursor-escape-loop.md` does **not** load when the workspace is a repo. Use an **absolute** path (specimen: `{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md`). Full write-up: [Failure mode I](#failure-mode-i--cwd-relative-global-instructions-c1) below.
+**Must:** Paths in global `~/.config/opencode/opencode.json` → `instructions` are resolved relative to the **project cwd**, not the config directory. Relative `instructions/cursor-escape-loop.md` does **not** load when the workspace is a repo. Use an **absolute** path (specimen: `{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md`). Full write-up: [Failure mode I](#failure-mode-i--cwd-relative-global-instructions-c1) below.
 
 Also dual-write the same gate body to `~/.config/opencode/AGENTS.md` (OpenCode global rules surface — applied across sessions). Keep `AGENTS.md` byte-identical to `instructions/cursor-escape-loop.md` on sync.
 
@@ -322,8 +310,7 @@ Permission keys include `read`, `edit`, `bash`, `task`, `skill`, `external_direc
 
 #### Failure mode I — cwd-relative global `instructions` (C1)
 
-**Date Observed:** 2026-08-20 (Desktop smoke row 1 after Phase 3 sync).  
-**Fidelity cite:** [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) § Observed failure: cwd-relative global `instructions`.  
+**Fidelity cite:** [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) § Observed failure: cwd-relative global `instructions`.
 
 | | |
 | - | - |
@@ -346,10 +333,9 @@ rg -n '"instructions"' overlays/opencode/opencode.specimen.json
 
 Live after merge: `opencode.json` → `instructions[0]` must be an absolute path under the real `OPENCODE_HOME`; `AGENTS.md` hash equals `instructions/cursor-escape-loop.md`.
 
-#### Failure mode J — skill / workflow `../../` hops (C4)
+#### Failure mode J — wrong path resolution base (C4)
 
-**Date Observed:** 2026-08-20 (Desktop smoke row 4; mirror audit same day).  
-**Class:** [Wrong path resolution base](../featureArchitecture/host-adaptation-fidelity.md#wrong-path-resolution-base-failure-class--i--j) (same class as Failure mode I).  
+**Class:** [Wrong path resolution base](../featureArchitecture/host-adaptation-fidelity.md#wrong-path-resolution-base-failure-class--i--j) (same class as Failure mode I).
 **Fidelity cite:** [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) § Observed failure: skill `../../docs/workflow` hops.
 
 | | |
@@ -357,8 +343,8 @@ Live after merge: `opencode.json` → `instructions[0]` must be an absolute path
 | **Symptom (skills)** | Smoke 4: deep doc path → `%USERPROFILE%\docs\workflow\…` |
 | **Symptom (mirror)** | Following workflow “Related” / skill links with `../../skills|agents` → `%USERPROFILE%\skills|agents\…` |
 | **Trap** | Hop looks correct relative to the **file**; tools resolve from **`OPENCODE_HOME`** (or cwd) |
-| **Cause** | Overlay skills used `../../docs/workflow/`; rewrite script historically emitted `../../skills|agents/` for file-depth math |
-| **Fix** | Skills: `docs/workflow/<leaf>.md`. Mirror/rubric/review-subagent-models: `skills/...`, `agents/...`. Prefer skill tool by id for procedure load. Re-sync + restart; smoke 4 read under `OPENCODE_HOME` |
+| **Cause** | Adapter leaves used file-relative `../../docs/workflow/` or similar hops that resolve from the wrong base after copy-out |
+| **Fix** | Use the thin harness to read the companion absolute path. Prefer the skill tool by ID for procedure load. Re-render through the sync harness, restart, and run smoke row 4 |
 | **Do not** | Reintroduce `../../docs|skills|agents/` in host-plugged harness; treat disk presence as C4 pass |
 
 **Regression check:**
@@ -366,13 +352,12 @@ Live after merge: `opencode.json` → `instructions[0]` must be an absolute path
 ```text
 rg -n '\.\./\.\./(docs|skills|agents)/' overlays/opencode/skills overlays/opencode/agents overlays/opencode/review-subagent-models.md
 # live after sync:
-rg -n '\.\./\.\./(docs|skills|agents)/' "$env:OPENCODE_HOME/docs/workflow" "$env:OPENCODE_HOME/skills" "$env:OPENCODE_HOME/agents"
+rg -n '\.\./\.\./(docs|skills|agents)/' "$env:OPENCODE_HOME/skills" "$env:OPENCODE_HOME/agents"
 # Expect: zero
 ```
 
 #### Failure mode K — permission pattern `"*"` not first (last-match-wins)
 
-**Date Observed:** 2026-08-21 (Desktop smoke row 13 — `Task plan_reviewer` blocked after `Sync-HostHarness -Apply`).  
 **Evidence:** Live `opencode.json` had `agent.build.permission.task` / `agent.implementer.permission.task` with `"plan_reviewer": "allow"` **before** `"*": "deny"`; UI listed allow rules but effective action was deny. Same class for bash maps with `"*": "ask"` between allow entries.
 
 | | |
@@ -381,7 +366,7 @@ rg -n '\.\./\.\./(docs|skills|agents)/' "$env:OPENCODE_HOME/docs/workflow" "$env
 | **Trap** | Reading the allow line and assuming it wins; blaming agent frontmatter (`bash: deny`) when the parent `task` map is wrong |
 | **Cause** | OpenCode evaluates permission pattern objects with **last matching rule wins**. Hashtable / JSON merge can emit `"*"` in the middle or after specifics. Catch-all after `plan_reviewer` → deny spawn |
 | **Fix (overlay / specimen)** | Always author `"*": "deny"` or `"*": "ask"` **first**, then named allows (`plan_reviewer`, `git status*`, …) |
-| **Fix (sync)** | After specimen↔live merge, run `Optimize-OpenCodePermissionKeyOrder` (in [`HostSync.Core.ps1`](../../scripts/host-sync/HostSync.Core.ps1)) so every allow/ask/deny pattern map serializes `"*"` first. Phase 2 Fast CI asserts merged `build.task` and global `bash` put `*` first |
+| **Fix (sync)** | After specimen↔live merge, run `Optimize-OpenCodePermissionKeyOrder` (in [`HostSync.Core.ps1`](../../scripts/host-sync/HostSync.Core.ps1)) so every allow/ask/deny pattern map serializes `"*"` first. Normalization Fast CI asserts merged `build.task` and global `bash` put `*` first |
 | **Do not** | Rely on PowerShell hashtable iteration order; hand-edit live JSON without re-checking key order; put `"*"` after named allows |
 
 **Regression check:**
@@ -395,8 +380,6 @@ pwsh ./scripts/host-sync/Invoke-HostSyncChecks.ps1 -Suite DryRun # includes * -f
 
 #### Failure mode L — `edit: deny` does not block bash writes
 
-**Date Observed:** 2026-08-21 (Desktop smoke row 2 — `production_readiness_reviewer` attempted `Set-Content` → permission popup).
-
 | | |
 | - | - |
 | **Symptom** | Reviewer has no Write/Edit tools, but still prompts to run `Set-Content` / redirects via **bash**; file may be ask-blocked or written if approved |
@@ -406,8 +389,6 @@ pwsh ./scripts/host-sync/Invoke-HostSyncChecks.ps1 -Suite DryRun # includes * -f
 | **Do not** | Leave reviewer bash as `"*": ask` with listing allows if the bar is “cannot edit”; mark row 2 pass solely because Edit is absent while bash writes remain ask |
 
 #### Failure mode M — compound / non-matching bash vs narrow allow-list
-
-**Date Observed:** 2026-08-21 (smoke row 13 — `plan_reviewer` browse; operator popup despite `Get-ChildItem*` / `Test-Path*` allow).
 
 | | |
 | - | - |
@@ -428,21 +409,21 @@ UI **Allow always** may persist project-scoped rows (v2: durable) in SQLite `%US
 3. Prefer approving **once** unless promoting a pattern into config SoT.
 4. After revokes or config edits: full Desktop restart; re-count rows (lean table).
 
-**Observed 2026-08-19:** durable `permission` table had **0** rows on this host at audit time — session Always and intentional config are the live surfaces. Re-audit after further trials if the table grows.
+An empty durable `permission` table is valid when session Always and intentional config are the live surfaces. Re-audit after further trials if the table grows.
 
 ---
 
 ### Verification after authoring
 
-1. Frontmatter: every skill has matching `name` + `description`.  
-2. `opencode.json` validates against schema (starts without crash).  
-3. **C1 path check:** global `instructions` entries are **absolute** (or specimen `{{OPENCODE_HOME}}/…`); `AGENTS.md` exists and matches `instructions/cursor-escape-loop.md`.  
-4. **C4 hop check:** `rg` zero for `\.\./\.\./(docs|skills|agents)/` under overlay skills/agents/review-subagent-models **and** live `docs/workflow` after sync.  
-5. **Full restart** OpenCode.  
+1. Frontmatter: every skill has matching `name` + `description`.
+2. `opencode.json` validates against schema (starts without crash).
+3. **C1 path check:** global `instructions` entries are absolute; `AGENTS.md` exists and matches `instructions/cursor-escape-loop.md`.
+4. **C4 hop check:** `rg` returns zero for `\.\./\.\./(docs|skills|agents)/` under overlay skills/agents/review-subagent-models and the synced live skills/agents trees.
+5. **Full restart** OpenCode.
 6. Clean-chat **C1** prompt: quotes when-in-doubt + eval/harness from session with **zero** tools.
-7. Clean-chat **C4** / smoke row 4: load `implementation-review`; confirm Read resolves `{{COMPANION_ROOT}}/workflow/iterative-code-review.md` (locked How in [host-adapter](./opencode-host-adapter.md)). Legacy host `docs/workflow/...` pass only while mirror remains transitional.  
-8. Clean-chat Probe A (same doc): skill tool lists workflow ids; load `implementation-plan`; quote Escalation row.  
-9. Update [host adapter](./opencode-host-adapter.md) smoke rows 1 / 4–5 / 9–10 as appropriate.  
+7. Clean-chat **C4** / smoke row 4: load `implementation-review`; confirm Read resolves `{{COMPANION_ROOT}}/workflow/iterative-code-review.md` (see [host adapter](./opencode-host-adapter.md)).
+8. Clean-chat Probe A (same doc): skill tool lists workflow ids; load `implementation-plan`; quote Escalation row.
+9. Update [host adapter](./opencode-host-adapter.md) smoke rows 1 / 4–5 / 9–10 as appropriate.
 10. If Target semantics changed, update cursorEscape contracts in the **same** doc change set ([documenting-this-repo](./documenting-this-repo.md)).
 
 ---

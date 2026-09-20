@@ -1,6 +1,6 @@
 # cursorEscape
 
-**Status:** Active skill-and-workflow manager. **Host harness sync** modular entry [`scripts/Sync-HostHarness.ps1`](scripts/Sync-HostHarness.ps1) — dry-run default; live `-Apply` requires explicit owner authorization per the [procedure registry Apply boundary](docs/featureArchitecture/procedure-registry.md#phase-6-apply-boundary). All seven stacks (Cursor, OpenCode, Antigravity, VS Code, Cline, Kilo Code, Codex) are registered; the seventh `Codex` stack is activated `Active` for registration and harness CI ([layout](scripts/host-sync/README.md)). Sync does **not** create backups; Phase 0 baselines restore-only. Runtime smoke attestation is per-stack.
+**Status:** Active skill-and-workflow manager. **Host harness sync** modular entry [`scripts/Sync-HostHarness.ps1`](scripts/Sync-HostHarness.ps1) — dry-run default; live `-Apply` requires explicit owner authorization per the [procedure registry Apply boundary](docs/featureArchitecture/procedure-registry.md). All seven stacks (Cursor, OpenCode, Antigravity, VS Code, Cline, Kilo Code, Codex) are registered; the seventh `Codex` stack is activated `Active` for registration and harness CI ([layout](scripts/host-sync/README.md)). Sync does **not** create backups; registered baselines are restore-only. Runtime smoke attestation is per-stack.
 
 ## What and why
 

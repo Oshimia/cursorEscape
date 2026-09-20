@@ -468,8 +468,9 @@ Assert-Pass 'host-sync README documents lifecycle/global preflight' (
     $hostReadme.Contains('zero writes')
 )
 Assert-Pass 'Codex retained status and smoke gate' (
-    $sop.Contains('registered Phase 3 2026-09-08; `ApplyState = Active`') -and
-    $sop.Contains('three-client smoke attested 2026-09-08')
+    $sop.Contains('`ApplyState = Active` (activated 2026-09-08') -and
+    $sop.Contains('three-client smoke attested 2026-09-08') -and
+    $sop.Contains('fresh explicit owner authorization')
 )
 
 Write-Output ('codex lifecycle checks: {0} passed, {1} failed' -f $passed, $failed)
