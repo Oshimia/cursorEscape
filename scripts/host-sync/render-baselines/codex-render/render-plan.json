@@ -8,7 +8,7 @@
       "destination": "codex-home/AGENTS.md",
       "logicalRoot": "codex-home",
       "role": "managed-block-target",
-      "sha256": "f97e67b88066417baa4d4a656c013082576d2fae019f301a5971f4d523f6cfd5"
+      "sha256": "7f4521a7c3d8ccc39b2d7e58e1145eddcb355d0a3d6dba61c8a614d3656b8822"
     },
     {
       "destination": "codex-home/agents/bug_reviewer.toml",

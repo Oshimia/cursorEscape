@@ -15,7 +15,17 @@
     SkillCatalogBudgetCharacters     = 8000
 
     DestinationEntries               = @(
-        @{ LogicalRoot = 'codex-home'; Source = 'instructions/agents-block.md'; Dest = 'AGENTS.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop' }
+        @{
+            LogicalRoot = 'codex-home'; Source = 'footers/codex-wiring.md'; Dest = 'AGENTS.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop'
+            Substitutions = @(
+                @{ Find = '# Agent invocation (mandatory)'; Replace = "<!-- cursorEscape-managed-block:v1 id=`"codex-cursor-escape-loop`" source=`"overlays/codex/footers/codex-wiring.md`"; begin managed block -->`n# Agent invocation (mandatory)" }
+                @{ Find = '../skills/implementation-review/SKILL.md'; Replace = '{{COMPANION_ROOT}}/skills/implementation-review/SKILL.md' }
+                @{ Find = '../skills/composer/SKILL.md'; Replace = '{{COMPANION_ROOT}}/skills/composer/SKILL.md' }
+                @{ Find = 'skill and [`../workflow/ci-ladder.md`]'; Replace = 'skill and [`{{COMPANION_ROOT}}/workflow/ci-ladder.md`]' }
+                @{ Find = '[ci-ladder](../workflow/ci-ladder.md)'; Replace = '[ci-ladder]({{COMPANION_ROOT}}/workflow/ci-ladder.md)' }
+                @{ Find = 'Before the final response, close all non-persistent completed descendants.'; Replace = "Before the final response, close all non-persistent completed descendants.`n<!-- cursorEscape-managed-block:v1 id=`"codex-cursor-escape-loop`"; end managed block -->" }
+            )
+        }
         @{ LogicalRoot = 'codex-home'; Dest = 'AGENTS.override.md'; Role = 'guard-only-override'; GuardOnly = $true }
         @{ LogicalRoot = 'codex-home'; Source = 'agents/planner.toml'; Dest = 'agents/planner.toml'; Role = 'managed-agent-target' }
         @{ LogicalRoot = 'codex-home'; Source = 'agents/plan_reviewer.toml'; Dest = 'agents/plan_reviewer.toml'; Role = 'managed-agent-target' }

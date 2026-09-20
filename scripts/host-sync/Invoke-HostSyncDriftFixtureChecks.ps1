@@ -231,7 +231,8 @@ try {
     [IO.File]::AppendAllText($codexManagedAgent, "`nowner-owned tail")
     $result = Invoke-DriftJson -HomeRoot $homeRoot -CodexRoot $codex -SkillRoot $skills -Target Codex
     Assert-Pass 'codex managed-block owner context fixture' (
-        $result.ExitCode -eq 0 -and $result.Report.summary.clean -eq $true)
+        $result.ExitCode -eq 0 -and $result.Report.summary.clean -eq $true) `
+        "exit=$($result.ExitCode); report=$($result.Output -join ' ')"
 
     [IO.File]::AppendAllText($codexAgent, "`nchanged")
     [IO.File]::AppendAllText($skillWrapper, "`nchanged")
@@ -263,7 +264,8 @@ try {
     try {
         $result = Invoke-DriftJson -HomeRoot $homeRoot -SkillRoot $skills -Target Codex
         Assert-Pass 'codex effective CODEX_HOME default clean fixture' (
-            $result.ExitCode -eq 0 -and $result.Report.summary.clean -eq $true)
+            $result.ExitCode -eq 0 -and $result.Report.summary.clean -eq $true) `
+            "exit=$($result.ExitCode); report=$($result.Output -join ' ')"
 
         [IO.File]::AppendAllText((Join-Path $codexAlt 'agents/planner.toml'), "`nchanged")
         $result = Invoke-DriftJson -HomeRoot $homeRoot -SkillRoot $skills -Target Codex

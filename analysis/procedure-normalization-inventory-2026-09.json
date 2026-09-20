@@ -2900,10 +2900,10 @@
       { "id": "antigravity-plan-review", "host": "Antigravity", "gate": "plan-review", "surface": "antigravity-gemini", "canonicalReferenceId": "iterative-plan-review", "evidence_paths": ["rules/iterative-plan-review.md", "scripts/host-sync/manifests/antigravity.manifest.psd1", "overlays/antigravity/footers/gemini-wiring.md"] },
       { "id": "antigravity-code-review", "host": "Antigravity", "gate": "code-review", "surface": "antigravity-gemini", "canonicalReferenceId": "iterative-code-review", "evidence_paths": ["rules/iterative-code-review.md", "scripts/host-sync/manifests/antigravity.manifest.psd1", "overlays/antigravity/footers/gemini-wiring.md"] },
       { "id": "antigravity-pre-commit", "host": "Antigravity", "gate": "pre-commit", "surface": "antigravity-skill", "canonicalReferenceId": "pre-commit-ci-gate", "evidence_paths": ["rules/pre-commit-ci-gate.md", "scripts/host-sync/manifests/antigravity.manifest.psd1", "overlays/antigravity/footers/pre-commit-antigravity.md"] },
-      { "id": "codex-invocation", "host": "Codex", "gate": "invocation", "surface": "codex-managed-block", "canonicalReferenceId": "agent-invocation", "evidence_paths": ["rules/agent-invocation.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/instructions/agents-block.md"] },
-      { "id": "codex-plan-review", "host": "Codex", "gate": "plan-review", "surface": "codex-managed-block", "canonicalReferenceId": "iterative-plan-review", "evidence_paths": ["rules/iterative-plan-review.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/instructions/agents-block.md"] },
-      { "id": "codex-code-review", "host": "Codex", "gate": "code-review", "surface": "codex-managed-block", "canonicalReferenceId": "iterative-code-review", "evidence_paths": ["rules/iterative-code-review.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/instructions/agents-block.md"] },
-      { "id": "codex-pre-commit", "host": "Codex", "gate": "pre-commit", "surface": "codex-managed-block", "canonicalReferenceId": "pre-commit-ci-gate", "evidence_paths": ["rules/pre-commit-ci-gate.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/instructions/agents-block.md"] }
+      { "id": "codex-invocation", "host": "Codex", "gate": "invocation", "surface": "codex-managed-block", "canonicalReferenceId": "agent-invocation", "evidence_paths": ["rules/agent-invocation.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/footers/codex-wiring.md"] },
+      { "id": "codex-plan-review", "host": "Codex", "gate": "plan-review", "surface": "codex-managed-block", "canonicalReferenceId": "iterative-plan-review", "evidence_paths": ["rules/iterative-plan-review.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/footers/codex-wiring.md"] },
+      { "id": "codex-code-review", "host": "Codex", "gate": "code-review", "surface": "codex-managed-block", "canonicalReferenceId": "iterative-code-review", "evidence_paths": ["rules/iterative-code-review.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/footers/codex-wiring.md"] },
+      { "id": "codex-pre-commit", "host": "Codex", "gate": "pre-commit", "surface": "codex-managed-block", "canonicalReferenceId": "pre-commit-ci-gate", "evidence_paths": ["rules/pre-commit-ci-gate.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/footers/codex-wiring.md"] }
     ]
   },
   "manifests": [
@@ -3637,10 +3637,24 @@
       "hybrid_rule_ids": [],
       "entries": [
         {
-          "source": "instructions/agents-block.md",
+          "source": "footers/codex-wiring.md",
           "destination": "AGENTS.md",
           "logical_root": "codex-home",
-          "role": "managed-block-target"
+          "role": "managed-block-target",
+          "parts": [
+            "base:rules/agent-invocation.md",
+            "base:rules/iterative-plan-review.md",
+            "base:rules/iterative-code-review.md",
+            "base:rules/pre-commit-ci-gate.md"
+          ],
+          "substitutions": [
+            { "find": "# Agent invocation (mandatory)", "replace": "<!-- cursorEscape-managed-block:v1 id=\"codex-cursor-escape-loop\" source=\"overlays/codex/footers/codex-wiring.md\"; begin managed block -->\n# Agent invocation (mandatory)" },
+            { "find": "../skills/implementation-review/SKILL.md", "replace": "{{COMPANION_ROOT}}/skills/implementation-review/SKILL.md" },
+            { "find": "../skills/composer/SKILL.md", "replace": "{{COMPANION_ROOT}}/skills/composer/SKILL.md" },
+            { "find": "skill and [`../workflow/ci-ladder.md`]", "replace": "skill and [`{{COMPANION_ROOT}}/workflow/ci-ladder.md`]" },
+            { "find": "[ci-ladder](../workflow/ci-ladder.md)", "replace": "[ci-ladder]({{COMPANION_ROOT}}/workflow/ci-ladder.md)" },
+            { "find": "Before the final response, close all non-persistent completed descendants.", "replace": "Before the final response, close all non-persistent completed descendants.\n<!-- cursorEscape-managed-block:v1 id=\"codex-cursor-escape-loop\"; end managed block -->" }
+          ]
         },
         {
           "source": null,

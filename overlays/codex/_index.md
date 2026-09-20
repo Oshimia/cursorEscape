@@ -9,7 +9,7 @@
 
 | Logical root | Planned leaves | Overlay source |
 | --- | --- | --- |
-| `codex-home` | `AGENTS.md` managed block; guard-only `AGENTS.override.md`; seven `agents/*.toml` agents | [instructions/agents-block.md](./instructions/agents-block.md), [agents/](./agents/) |
+| `codex-home` | `AGENTS.md` managed block composed from canonical rules plus [footers/codex-wiring.md](./footers/codex-wiring.md); guard-only `AGENTS.override.md`; seven `agents/*.toml` agents | [agents/](./agents/) |
 | `skill-root` | 23 `<skill-id>/SKILL.md` wrappers: 22 canonical skills plus generated `pre-commit-ci-gate` | [skills/](./skills/) |
 
 The exact leaf set is pinned by `scripts/host-sync/baselines/codex-manifest-schema-2026-09.json` and mirrored by `scripts/host-sync/manifests/codex.manifest.psd1`. The manifest is registered through `scripts/host-sync/Register-StackAdapters.ps1`; orchestration dry-runs require explicit disposable roots for CI. `AGENTS.override.md` is deliberately guard-only: a non-empty live override must block Apply, so it has no generated body.

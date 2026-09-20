@@ -322,6 +322,7 @@ $manifestComps = @{}
 foreach ($h in $hosts) { if (-not $manifestRows.ContainsKey($h)) { continue }
     $m = $manifestRows[$h]
     foreach ($entry in @($m.entries)) {
+        if ($h -eq 'Codex' -and "$($entry.destination)" -eq 'AGENTS.md') { continue }
         $p = Get-SourceProp $entry 'parts'; $f = Get-SourceProp $entry 'footer'
         $hp = $null -ne $p -and @($p).Count -gt 0; $hf = $null -ne $f -and @($f).Count -gt 0
         if ($hp -or $hf) { $manifestComps["$h|$($entry.destination)"] = $entry }

@@ -1,38 +1,101 @@
-<!-- cursorEscape-managed-block:v1 id="codex-cursor-escape-loop" source="overlays/codex/instructions/agents-block.md"; begin managed block -->
-# cursorEscape loop (always-on, thin)
+<!-- cursorEscape-managed-block:v1 id="codex-cursor-escape-loop" source="overlays/codex/footers/codex-wiring.md"; begin managed block -->
+# Agent invocation (mandatory)
 
-OpenAI Codex adapter for the owner's agentic loop. Canonical procedure is companion-resident under `C:/codex-phase1-fixture/companion/skills/`, `C:/codex-phase1-fixture/companion/workflow/`, `C:/codex-phase1-fixture/companion/agents/`, and `C:/codex-phase1-fixture/companion/rules/`; the installed harness advertises and points, it is not a second procedure tree. When asked to quote default-on, when-in-doubt, or eval/harness gates, answer from this block without searching for the policy.
+**Default on for every governed spawned child-agent invocation.**
 
-## Plan review (all repositories)
+1. Begin each child-facing invocation with the canonical envelope in [`workflow/agent-invocation.md`](C:/codex-phase1-fixture/companion/workflow/agent-invocation.md): canonical role identity, first-read contract, required companion reading, host alias, isolation, authority, and loop/gate.
+2. Put all existing task-specific inputs after the envelope separator. Never rely on host metadata, nearby prose, or prior transcripts to establish identity.
+3. A host alias is routing metadata only. The canonical role contract and required reading remain authoritative.
+4. If the envelope is missing, malformed, internally contradictory, or unreadable, the child must stop and fail loudly in its role-native output shape. It must not infer identity and proceed.
 
-**Default on** unless truly trivial or the user **explicitly** opts out. **When in doubt, run the plan loop.** Eval, harness, and multi-step operational work are **not** exempt.
+Detail and role map: [workflow/agent-invocation.md](C:/codex-phase1-fixture/companion/workflow/agent-invocation.md).
 
-1. Load skill `implementation-plan`. When Escalation=yes, Read `C:/codex-phase1-fixture/companion/workflow/plan-agent-context.md` for specimen headings only. The plan is incomplete until that skill's **Incomplete until** bar is met.
-2. Spawn custom agent `plan_reviewer` for up to three clean-context passes. Pass the full synthesized plan only; never attach prior review transcripts.
-3. Present after APPROVED or pass three. Wait for the user after CHANGES REQUESTED.
 
-Skip only for a truly trivial one-place typo/copy, comment-only change, formatting, cosmetic-only UI, or docs-only change with no behavior change, or for an explicit opt-out such as `skip plan review`, `skip planning`, `implement now`, or `no plan gate`; do not infer a skip from urgency.
+# Plan review before implementation
 
-## Implementation review (all repositories)
+**Default on** unless truly trivial or the user **explicitly** opts out.
 
-**Default on** after implementation unless Skip applies. **When in doubt, run it.**
+**When in doubt, run the plan loop.**
 
-1. Load skill `implementation-review` and run Fast CI with observed per-command pass/fail (or explicit n/a). Do not launch reviewers after a failed or claimed-only Fast run.
-2. Spawn `production_readiness_reviewer` and `bug_reviewer` in parallel in the same parent turn. Keep both children isolated; pack all required inputs fresh each pass. `bug_reviewer` must Read `C:/codex-phase1-fixture/companion/docs/featureArchitecture/bug-reviewer-finding-rubric.md`.
-3. Fix every must-fix finding within at most four dual-review iterations; rerun observed Fast CI before each replacement pair when Fast is applicable.
-4. Dual APPROVED means `bug_reviewer` returns CLEAN (no findings) and `production_readiness_reviewer` reports Blocking, Non-blocking code/process, and blocking test/docs as None; Batchable deferred findings may remain.
-5. After dual APPROVED, run Full CI only and load skill `pre-commit-ci-gate` before any local commit. Never pair Full CI with reviewer launches. At four iterations without dual APPROVED, stop with a cap-exhausted handoff and no Full-CI claim.
+Eval / harness / multi-step operational work is **not** exempt.
 
-Skip only for the truly trivial plan-review cases or explicit user opt-out such as `skip review` or `no dual review`.
+1. Load skill `implementation-plan` (Escalation *when* SoT is that skill; when Escalation=yes, read `C:/codex-phase1-fixture/companion/workflow/plan-agent-context.md` for specimen headings only). Plan is incomplete until that skill's **Incomplete until** section bar is met — load `implementation-plan` for the list; do not invent always-on line budgets.
+2. Invoke the host's `plan_reviewer` (max 3 passes), **clean context**, full synthesized plan only — no prior review transcripts. Runs for every drafted plan regardless of Escalation yes/no. APPROVED requires Incomplete until compliance (missing-Inputs urgency).
+3. Present after APPROVED or pass 3; wait for user if CHANGES REQUESTED.
+
+**Skip only if:** truly trivial one-place typo/copy, comment-only, formatting, cosmetic-only UI, docs-only with no behavior change, **or** explicit user opt-out (`skip plan review`, `skip planning`, `implement now`, `no plan gate`) — not inferred urgency.
+
+**When in doubt, run the loop.**
+
+---
+
+## Related
+
+- [Iterative code review](C:/codex-phase1-fixture/companion/rules/iterative-code-review.md)
+- [CI ladder](C:/codex-phase1-fixture/companion/workflow/ci-ladder.md)
+- [Instruction layering (FA)](C:/codex-phase1-fixture/companion/docs/featureArchitecture/instruction-layering.md)
+
+
+# Iterative code review (mandatory)
+
+**Default on** after implementation unless Skip applies.
+
+**When in doubt, run it.**
+
+1. Load skill `implementation-review`. Run **Fast CI Observed** (per-command pass|fail|skipped|n/a; do not launch on fail, skipped when Fast ≠ n/a, or claimed-only).
+2. Launch **both** `production_readiness_reviewer` and `bug_reviewer` in **parallel** in **one** session (`Completion gate: review-loop` for the ordinary loop). Isolated children — pack all Inputs; no shared review memory. `bug_reviewer` must follow `C:/codex-phase1-fixture/companion/docs/featureArchitecture/bug-reviewer-finding-rubric.md`.
+3. Fix must-fix within a **4-iteration pressure-release block**; re-run Observed Fast CI (when Fast ≠ n/a); re-launch **both** — **do not launch a 5th pair**. Dual APPROVED = bug_reviewer CLEAN/no findings; production_readiness Blocking / Non-blocking / blocking test/docs None (**Batchable (deferred)** may remain).
+4. For assembled multi-slice or reopened-closeout work, run the conditional **integrated review gate** before closeout: one integrated pair plus at most one replacement pair, tightly scoped to the assembled diff and cross-slice invariants. A single cohesive phase diff does not need a duplicate gate.
+5. Once the applicable dual approval is complete — including the integrated pair when step 4 triggered — closeout = **Full CI only** (no reviewers). Load `pre-commit-ci-gate` before commit. Dual APPROVED ≠ proven no-escape.
+6. After iteration 4 **without** dual APPROVED: normal reassessment (Renew | Focus-narrow | Terminate+user with anti-abuse) or **cap-exhausted handoff** (no Full) — detail in companion `implementation-review` / `composer` skills. Waive = Composer-only.
+
+**Skip only if:** truly trivial cases listed under plan review, or explicit user opt-out (`skip review`, `no dual review`).
+
+**When in doubt, run the loop.** Detail: `implementation-review` skill and [`C:/codex-phase1-fixture/companion/workflow/ci-ladder.md`](C:/codex-phase1-fixture/companion/workflow/ci-ladder.md).
+
+
+# Pre-commit CI gate (fallback)
+
+**Fallback only.** If the project has `.cursor/rules/pre-commit-ci-gate.mdc` (or equivalent), **follow that** — do not apply a second Full command set.
+
+Otherwise:
+
+1. Map Fast/Full via `workflow/ci-ladder.md` (and project README/scripts).
+2. Before any `git commit`, Full must pass — or Full = `n/a` with **explicit user acknowledgment**.
+3. Never substitute Fast for Full when Full exists.
+4. If install/test steps fail due to locked `node_modules` / busy processes, ask the user to stop those processes and re-run Full.
+
+**Composer:** same Full (or `n/a` ack) before automatic local phase commits; never `git push`.
+
+## When to use (Required when committing)
+
+- Before any `git commit` (implementer or Composer phase commit)
+- When Full ≠ `n/a` after dual APPROVED closeout
+- On-demand load — **not** injected every turn
+
+## Must not
+
+- Always-inject this policy into every agent turn
+- Invent hardcoded cross-repo npm / test suites
+- Treat Fast CI as commit-grade when Full exists
+- Pair Full CI with dual-gate reviewer launch
+
+## Related
+
+- [implementation-review](C:/codex-phase1-fixture/companion/skills/implementation-review/SKILL.md)
+- [composer](C:/codex-phase1-fixture/companion/skills/composer/SKILL.md)
+- [ci-ladder](C:/codex-phase1-fixture/companion/workflow/ci-ladder.md)
+
 
 ## Codex skills and pointers
 
-The installed catalog has 23 thin wrappers. Invoke the exact `$skill-id` when using Codex; load the matching canonical skill before non-trivial work. `opencode-headless-run` and `opencode-history-search` are explicit-only. For deep procedure, FA, SOP, rule, workflow, and agent-contract reads, use the absolute companion path shown by `C:/codex-phase1-fixture/companion`; never replace it with a relative hop from the Codex home or skill root, and never treat host-local files as procedure source-of-truth. When acting as Composer after resume or compaction, reread canonical `composer/SKILL.md` and the active roadmap before any phase action.
+The installed catalog has 23 thin wrappers. Invoke the exact `$skill-id`; load the matching canonical skill before non-trivial work. `opencode-headless-run` and `opencode-history-search` are **explicit-only**. For deep procedure reads, use the absolute companion paths under `C:/codex-phase1-fixture/companion`; never treat host-local files as procedure source-of-truth. When acting as Composer after resume or compaction, reread canonical `composer/SKILL.md` and the active roadmap first.
 
 ## Isolation and safety boundaries
 
-Reviewers and `plan_reviewer` run as isolated custom agents. The parent synthesizes each invocation payload, owns implementation and recovery, and does not paste prior child transcripts. `config.toml`, authentication, history, logs, sessions, databases, and unrelated host state are never modified by this loop. Read-only reviewer agents return findings only; they do not edit, run writes, install, commit, push, or rerun CI.
+Reviewers and `plan_reviewer` run as isolated custom agents. The parent synthesizes each invocation payload, owns implementation and recovery, and does not paste prior child transcripts. Read-only reviewers return findings only; they do not edit, run writes, install, commit, push, or rerun CI. Never modify `config.toml`, authentication, history, logs, sessions, databases, or unrelated host state. Every spawned child-agent launch uses the canonical envelope in `C:/codex-phase1-fixture/companion/workflow/agent-invocation.md`; missing, malformed, contradictory, or unreadable envelopes fail loudly.
 
-Every spawned child-agent launch begins with the canonical envelope defined by `C:/codex-phase1-fixture/companion/workflow/agent-invocation.md`: canonical role identity, first-read contract, required companion reads, host alias, isolation, authority, and loop/gate. If that envelope is missing, malformed, contradictory, or unreadable, the child stops and fails loudly in its role-native output shape.
+## Subagent cleanup
 
+After consuming each spawned agent's final result, the parent calls `close_agent` unless the agent is intentionally persistent with a stated reason. Before the final response, close all non-persistent completed descendants.
 <!-- cursorEscape-managed-block:v1 id="codex-cursor-escape-loop"; end managed block -->

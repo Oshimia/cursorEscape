@@ -1,3 +1,5 @@
+DEPRECATED: This file is superseded by footers/codex-wiring.md. The Codex managed block is now composed from canonical rules plus the Codex footer.
+
 <!-- cursorEscape-managed-block:v1 id="codex-cursor-escape-loop" source="overlays/codex/instructions/agents-block.md"; begin managed block -->
 # cursorEscape loop (always-on, thin)
 

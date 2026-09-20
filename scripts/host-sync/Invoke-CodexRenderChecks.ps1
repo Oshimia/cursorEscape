@@ -28,6 +28,8 @@ $marker = 'cursorEscape-managed:v1'
 $blockMarker = 'cursorEscape-managed-block:v1'
 $managedBlockId = 'codex-cursor-escape-loop'
 $failed = $false
+. (Join-Path $hostSyncRoot 'HostSync.Contract.ps1')
+. (Join-Path $hostSyncRoot 'HostSync.Core.ps1')
 
 function Assert-Pass {
     param([string] $Name, [bool] $Condition)
@@ -94,7 +96,25 @@ function Get-CodexRenderPlan {
             throw "Codex render source missing: $sourceRel"
         }
         $raw = [IO.File]::ReadAllText($sourcePath)
-        $merged = Merge-CodexCompanionToken -Content $raw -CompanionPath $CompanionPath
+        $renderEntry = $entry
+        $expandComposition = $CompanionPath -ne 'PRERENDER'
+        if ($expandComposition -and $entry.ContainsKey('CompositionId')) {
+            $binding = Get-RegistryGenericCompositionBinding -CompanionRoot $companionRoot `
+                -CompositionId ([string]$entry.CompositionId) -Source $sourceRel
+            $renderEntry = @{}
+            foreach ($key in $entry.Keys) { $renderEntry[$key] = $entry[$key] }
+            if (@($binding.Parts).Count -gt 0) { $renderEntry['Parts'] = $binding.Parts }
+            if (@($binding.Footer).Count -gt 0) { $renderEntry['Footer'] = $binding.Footer }
+        }
+        $resolvedEntry = Resolve-HostSyncEntryRefs -Entry $renderEntry -CompanionRoot $companionRoot `
+            -OverlayRoot $overlayRoot -SharedRoot 'unused'
+        if ($expandComposition) {
+            $merged = Invoke-HostSyncRender -Raw $raw -CompanionRoot $CompanionPath `
+                -ResolvedSourcePath $sourcePath -Entry $resolvedEntry -DestRel "$([string]$entry.LogicalRoot)/$destRel" `
+                -OverlayRoot $OverlayPath -SourceClass 'overlay'
+        } else {
+            $merged = Merge-CodexCompanionToken -Content $raw -CompanionPath $CompanionPath
+        }
         [void]$rows.Add(@{
             Destination = "$([string]$entry.LogicalRoot)/$destRel"
             LogicalRoot = [string]$entry.LogicalRoot
@@ -329,21 +349,19 @@ try {
 
     $markerPattern = "($([regex]::Escape($marker))|$([regex]::Escape($blockMarker)))"
     $markerMisses = @(
-        @($sourceRows | Where-Object { $_.Content -notmatch $markerPattern } | ForEach-Object Destination) +
+        @($sourceRows | Where-Object { $_.Destination -ne 'codex-home/AGENTS.md' -and $_.Content -notmatch $markerPattern } | ForEach-Object Destination) +
         @($catalog | Where-Object { $_.Raw -notmatch $markerPattern } | ForEach-Object Id)
     )
     Assert-Pass 'stable ownership marker is present on every generated leaf' ($markerMisses.Count -eq 0)
-    $agentsSource = [IO.File]::ReadAllText((Join-Path $overlayRoot 'instructions/agents-block.md'))
-    $beginCount = ([regex]::Matches($agentsSource, [regex]::Escape("<!-- $blockMarker id=`"$managedBlockId`"") + '[^\r\n]*begin managed block -->')).Count
-    $endCount = ([regex]::Matches($agentsSource, [regex]::Escape("<!-- $blockMarker id=`"$managedBlockId`"; end managed block -->"))).Count
-    Assert-Pass 'managed AGENTS block has one stable begin/end pair' ($beginCount -eq 1 -and $endCount -eq 1 -and $agentsSource.IndexOf("begin managed block") -lt $agentsSource.IndexOf("end managed block"))
+    $agentsSource = [IO.File]::ReadAllText((Join-Path $overlayRoot 'footers/codex-wiring.md'))
+    Assert-Pass 'composition-owned AGENTS block leaves no stray source markers' (-not $agentsSource.Contains($blockMarker))
 
     $functionalPlan = Get-CodexRenderPlan -Manifest $manifest -OverlayPath $overlayRoot -CompanionPath $companionRoot
     $unresolved = @($functionalPlan | Where-Object { $_.Content -match '\{\{|\}\}' } | ForEach-Object Destination)
     Assert-Pass 'zero unresolved companion tokens after render' ($unresolved.Count -eq 0)
     $relativeHops = @($functionalPlan | Where-Object { $_.Content -match '(\.\./|\.\.\\)' } | ForEach-Object Destination)
     Assert-Pass 'zero wrong-base relative hops in rendered leaves' ($relativeHops.Count -eq 0)
-    $badLinks = @($functionalPlan | Where-Object { $_.Content -match '\]\((?!#|C:/|https?://)[^)]+\)' } | ForEach-Object Destination)
+    $badLinks = @($functionalPlan | Where-Object { $_.Content -match '\]\((?!#|[A-Za-z]:[\\/]|https?://)[^)]+\)' } | ForEach-Object Destination)
     Assert-Pass 'markdown links are absolute or anchors only' ($badLinks.Count -eq 0)
 
     $pointerMisses = [System.Collections.Generic.List[string]]::new()
@@ -389,17 +407,20 @@ try {
     Assert-Pass 'ownership marker constants match manifest declarations' ($manifest.OwnershipMarker -eq $marker -and $manifest.ManagedBlockMarker -eq $blockMarker)
 
     $agentsRender = ($functionalPlan | Where-Object Destination -eq 'codex-home/AGENTS.md').Content
+    $beginCount = ([regex]::Matches($agentsRender, [regex]::Escape("<!-- $blockMarker id=`"$managedBlockId`"") + '[^\r\n]*begin managed block -->')).Count
+    $endCount = ([regex]::Matches($agentsRender, [regex]::Escape("<!-- $blockMarker id=`"$managedBlockId`"; end managed block -->"))).Count
+    Assert-Pass 'managed AGENTS block has one stable begin/end pair' ($beginCount -eq 1 -and $endCount -eq 1 -and $agentsRender.IndexOf("begin managed block") -lt $agentsRender.IndexOf("end managed block"))
     $bugRender = ($functionalPlan | Where-Object Destination -eq 'codex-home/agents/bug_reviewer.toml').Content
     Assert-Pass 'AGENTS render retains always-on gates and explicit-only policy' (
         $agentsRender.Contains('**Default on**') -and
         $agentsRender.Contains('When in doubt, run the plan loop') -and
-        $agentsRender.Contains('Eval, harness, and multi-step operational work') -and
+        $agentsRender.Contains('Eval / harness / multi-step operational work') -and
         $agentsRender.Contains('opencode-headless-run') -and
         $agentsRender.Contains('opencode-history-search') -and
         $agentsRender.Contains('explicit-only') -and
         $agentsRender.Contains($blockMarker))
     Assert-Pass 'AGENTS render preserves bug-reviewer findings-or-CLEAN split bar' (
-        $agentsRender.Contains('`bug_reviewer` returns CLEAN') -and
+        $agentsRender.Contains('bug_reviewer CLEAN/no findings') -and
         -not $agentsRender.Contains('`bug_reviewer` reports every list'))
     Assert-Pass 'bug reviewer render forbids code-review scaffolding' (
         $bugRender.Contains('Return only structured bug findings or CLEAN') -and

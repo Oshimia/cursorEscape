@@ -1663,11 +1663,18 @@ try {
   . (Join-Path $PSScriptRoot (Join-Path '..' (Join-Path 'host-sync' (Join-Path 'adapters' 'Codex.Adapter.ps1'))))
 
   $codexComposition = @($registry.Catalogs.workflows.compositions | Where-Object { [string]$_.id -eq 'codex-cursor-escape-loop' })[0]
-  Assert-View 'Phase 4F Codex composition is runtimeOnly with the exact one-reference sequence' (
+  $phase4FExpectedRefs = [string[]]@(
+    'base:rules/agent-invocation.md',
+    'base:rules/iterative-plan-review.md',
+    'base:rules/iterative-code-review.md',
+    'base:rules/pre-commit-ci-gate.md',
+    'footers/codex-wiring.md'
+  )
+  Assert-View 'Phase 4F Codex composition is runtimeOnly with the exact canonical-plus-footer sequence' (
     $null -ne $codexComposition -and
     [string]$codexComposition.host -ceq 'Codex' -and
     [bool]$codexComposition.runtimeOnly -and
-    (@([string[]]@($codexComposition.references)) -join '|') -ceq 'instructions/agents-block.md'
+    (@([string[]]@($codexComposition.references)) -join '|') -ceq ($phase4FExpectedRefs -join '|')
   ) "refs=$(($codexComposition.references) -join '|')"
   $phase4FFailures = @($registry.Failures | Where-Object { $_ -like 'composition-order-ownership*' -and $_ -like '*Codex*' })
   Assert-View 'Phase 4F Codex composition ownership passes on current tree' ($phase4FFailures.Count -eq 0) (($phase4FFailures | Select-Object -First 3) -join '; ')
@@ -1685,11 +1692,17 @@ try {
     return @{ Scratch = $scratch; Codex = $codex; Skills = $skills }
   }
 
-  # Byte parity: the composition-bound writer renders the exact legacy
-  # single-block bytes, and the render is deterministic across runs.
+  # Byte parity: the composition-bound writer renders the same bytes as an
+  # equivalent explicit Parts binding, and the render is deterministic.
   $phase4FCompositionManifest = Import-PowerShellDataFile (Join-Path $RepoRoot 'scripts/host-sync/manifests/codex.manifest.psd1')
   $phase4FLegacyManifest = Import-PowerShellDataFile (Join-Path $RepoRoot 'scripts/host-sync/manifests/codex.manifest.psd1')
   $phase4FLegacyManifest.DestinationEntries[0].Remove('CompositionId')
+  $phase4FLegacyManifest.DestinationEntries[0]['Parts'] = @(
+    'base:rules/agent-invocation.md',
+    'base:rules/iterative-plan-review.md',
+    'base:rules/iterative-code-review.md',
+    'base:rules/pre-commit-ci-gate.md'
+  )
   $phase4FParityRoots = New-Phase4FCodexRoots
   try {
     $phase4FReports = @()
@@ -1700,11 +1713,21 @@ try {
     $phase4FRender = [string]$phase4FReports[0].PlannedOutputContent['codex-home/AGENTS.md']
     $phase4FLegacyRender = [string]$phase4FReports[1].PlannedOutputContent['codex-home/AGENTS.md']
     $phase4FRepeatRender = [string]$phase4FReports[2].PlannedOutputContent['codex-home/AGENTS.md']
-    $phase4FExpectedRender = ([IO.File]::ReadAllText((Join-Path $RepoRoot 'overlays/codex/instructions/agents-block.md'))).Replace('{{COMPANION_ROOT}}', $RepoRoot)
-    Assert-View 'Phase 4F composition render is byte-identical to the legacy single-block render' (
+    $phase4FExpectedSegments = @(
+      $phase4FExpectedRefs | Select-Object -First 4 | ForEach-Object {
+        [IO.File]::ReadAllText((Join-Path $RepoRoot ($_ -replace '^base:', '')))
+      }
+      [IO.File]::ReadAllText((Join-Path $RepoRoot 'overlays/codex/footers/codex-wiring.md'))
+    )
+    $phase4FExpectedRender = ($phase4FExpectedSegments -join "`r`n`r`n")
+    foreach ($phase4FSubstitution in @($phase4FCompositionManifest.DestinationEntries[0].Substitutions)) {
+      $phase4FExpectedRender = $phase4FExpectedRender.Replace([string]$phase4FSubstitution.Find, [string]$phase4FSubstitution.Replace)
+    }
+    $phase4FExpectedRender = $phase4FExpectedRender.Replace('{{COMPANION_ROOT}}', $RepoRoot)
+    Assert-View 'Phase 4F composition render is byte-identical to the equivalent explicit Parts render' (
       $phase4FReports[0].Success -and $phase4FReports[1].Success -and
       ($phase4FRender -ceq $phase4FLegacyRender) -and ($phase4FRender -ceq $phase4FExpectedRender)
-    ) "comp=$($phase4FRender.Length) legacy=$($phase4FLegacyRender.Length); errors=$(($phase4FReports[0].Errors + $phase4FReports[1].Errors) -join '; ')"
+    ) "comp=$($phase4FRender.Length) unbound=$($phase4FLegacyRender.Length); errors=$(($phase4FReports[0].Errors + $phase4FReports[1].Errors) -join '; ')"
     Assert-View 'Phase 4F composition render is deterministic' ($phase4FRender -ceq $phase4FRepeatRender)
     $phase4FBeginCount = [regex]::Matches($phase4FRender, [regex]::Escape('<!-- cursorEscape-managed-block:v1 id="codex-cursor-escape-loop"') + '[^\r\n]*begin managed block -->').Count
     $phase4FEndCount = [regex]::Matches($phase4FRender, [regex]::Escape('<!-- cursorEscape-managed-block:v1 id="codex-cursor-escape-loop"') + '[^\r\n]*end managed block -->').Count
@@ -1719,15 +1742,20 @@ try {
   # Owner-owned text outside the managed block survives a registry-owned render.
   $phase4FOwnerRoots = New-Phase4FCodexRoots
   try {
-    $phase4FBlock = ([IO.File]::ReadAllText((Join-Path $RepoRoot 'overlays/codex/instructions/agents-block.md'))).Replace('{{COMPANION_ROOT}}', $RepoRoot)
-    $phase4FExisting = "owner-owned prefix`n`n$phase4FBlock`nowner-owned suffix"
+    $phase4FOwnerBegin = '<!-- cursorEscape-managed-block:v1 id="codex-cursor-escape-loop" source="legacy"; begin managed block -->'
+    $phase4FOwnerEnd = '<!-- cursorEscape-managed-block:v1 id="codex-cursor-escape-loop"; end managed block -->'
+    $phase4FOwnerPrefix = "owner-owned prefix`n`n"
+    $phase4FOwnerSuffix = "`nowner-owned suffix"
+    $phase4FOwnerBody = "$phase4FOwnerBegin`nlegacy managed body`n$phase4FOwnerEnd$phase4FOwnerSuffix"
+    $phase4FExisting = "$phase4FOwnerPrefix$phase4FOwnerBody"
     [IO.File]::WriteAllText((Join-Path $phase4FOwnerRoots.Codex 'AGENTS.md'), $phase4FExisting, [Text.UTF8Encoding]::new($false))
     $phase4FOwnerReport = Invoke-StackHarnessSync -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -Manifest $phase4FCompositionManifest `
       -CodexRoot $phase4FOwnerRoots.Codex -SkillRoot $phase4FOwnerRoots.Skills
     $phase4FOwnerOutput = [string]$phase4FOwnerReport.PlannedOutputContent['codex-home/AGENTS.md']
+    $phase4FOwnerExpected = "$phase4FOwnerPrefix$phase4FRender$phase4FOwnerSuffix"
     Assert-View 'Phase 4F owner-owned text outside the managed block is byte-preserved' (
-      $phase4FOwnerReport.Success -and ($phase4FOwnerOutput -ceq $phase4FExisting)
-    ) "errors=$(($phase4FOwnerReport.Errors) -join '; ')"
+      $phase4FOwnerReport.Success -and ($phase4FOwnerOutput -ceq $phase4FOwnerExpected)
+    ) "errors=$(($phase4FOwnerReport.Errors) -join '; '); output=$($phase4FOwnerOutput.Length)"
   } finally {
     Remove-Item -LiteralPath $phase4FOwnerRoots.Scratch -Recurse -Force
   }
@@ -1774,15 +1802,15 @@ try {
     param($Path)
     $text = Get-Content -Raw -LiteralPath $Path
     $text = $text.Replace(
-      "CompositionId = 'codex-cursor-escape-loop' }",
-      "CompositionId = 'codex-cursor-escape-loop'; Parts = @('instructions/__header__.md') }"
+      "CompositionId = 'codex-cursor-escape-loop'",
+      "CompositionId = 'codex-cursor-escape-loop'; Parts = @('instructions/__header__.md')"
     )
     Set-Content -LiteralPath $Path -Value $text -NoNewline
   }
   Test-Phase4FOwnershipScenario 'missing' {
     param($Path)
     $text = Get-Content -Raw -LiteralPath $Path
-    $text = $text.Replace("; CompositionId = 'codex-cursor-escape-loop' }", ' }')
+    $text = $text.Replace("CompositionId = 'codex-cursor-escape-loop'", '# CompositionId intentionally removed')
     Set-Content -LiteralPath $Path -Value $text -NoNewline
   }
   Test-Phase4FOwnershipScenario 'unknown' {
@@ -1795,15 +1823,15 @@ try {
     param($Path)
     $text = Get-Content -Raw -LiteralPath $Path
     $text = $text.Replace(
-      "@{ LogicalRoot = 'codex-home'; Source = 'instructions/agents-block.md'; Dest = 'AGENTS.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop' }",
-      "@{ LogicalRoot = 'codex-home'; Source = 'instructions/agents-block.md'; Dest = 'AGENTS.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop' }`n        @{ LogicalRoot = 'codex-home'; Source = 'instructions/agents-block.md'; Dest = 'AGENTS2.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop' }"
+      "Source = 'footers/codex-wiring.md'; Dest = 'AGENTS.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop'",
+      "Source = 'footers/codex-wiring.md'; Dest = 'AGENTS.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop'`n        @{ LogicalRoot = 'codex-home'; Source = 'footers/codex-wiring.md'; Dest = 'AGENTS2.md'; Role = 'managed-block-target'; CompositionId = 'codex-cursor-escape-loop' }"
     )
     Set-Content -LiteralPath $Path -Value $text -NoNewline
   }
   Test-Phase4FOwnershipScenario 'divergent' {
     param($Path)
     $text = Get-Content -Raw -LiteralPath $Path
-    $text = $text.Replace("Source = 'instructions/agents-block.md'; Dest = 'AGENTS.md'", "Source = 'instructions/__divergent__.md'; Dest = 'AGENTS.md'")
+    $text = $text.Replace("Source = 'footers/codex-wiring.md'; Dest = 'AGENTS.md'", "Source = 'instructions/__divergent__.md'; Dest = 'AGENTS.md'")
     Set-Content -LiteralPath $Path -Value $text -NoNewline
   }
   Test-Phase4FOwnershipScenario 'host-mismatch' {
@@ -1820,21 +1848,23 @@ try {
     $codexComp.PSObject.Properties.Remove('runtimeOnly')
   }
   Assert-RegistryFailure $phase4FNonRuntime 'Phase 4F Codex non-runtime composition fails' 'composition-order-ownership'
-  $phase4FMultiRef = Invoke-EdgeCase 'workflows' {
+  $phase4FMisorderedRef = Invoke-EdgeCase 'workflows' {
     param($c)
     $codexComp = @($c.workflows.compositions | Where-Object { [string]$_.id -eq 'codex-cursor-escape-loop' })[0]
-    $codexComp.references = @('instructions/agents-block.md', 'instructions/__header__.md')
+    $codexComp.references = @($codexComp.references + 'instructions/__header__.md')
   }
-  Assert-RegistryFailure $phase4FMultiRef 'Phase 4F Codex multi-reference composition fails' 'composition-order-ownership'
+  Assert-RegistryFailure $phase4FMisorderedRef 'Phase 4F Codex misordered multi-reference composition fails' 'composition-order-ownership'
 
   # Writer-side binding rejections with a bounded companion fixture.
   $phase4FAdapterCompanion = Join-Path ([IO.Path]::GetTempPath()) ('phase4f-adapter-companion-' + [Guid]::NewGuid().ToString('N'))
   try {
     New-Item -ItemType Directory -Path (Join-Path $phase4FAdapterCompanion 'catalog') -Force | Out-Null
     New-Item -ItemType Directory -Path (Join-Path $phase4FAdapterCompanion 'overlays/codex/instructions') -Force | Out-Null
+    New-Item -ItemType Directory -Path (Join-Path $phase4FAdapterCompanion 'overlays/codex/footers') -Force | Out-Null
+    Copy-Item (Join-Path $RepoRoot 'rules') (Join-Path $phase4FAdapterCompanion 'rules') -Recurse
     Copy-Item (Join-Path $RepoRoot 'catalog/workflows.json') (Join-Path $phase4FAdapterCompanion 'catalog/workflows.json')
-    Copy-Item (Join-Path $RepoRoot 'overlays/codex/instructions/agents-block.md') (Join-Path $phase4FAdapterCompanion 'overlays/codex/instructions/agents-block.md')
-    Copy-Item (Join-Path $RepoRoot 'overlays/codex/instructions/agents-block.md') (Join-Path $phase4FAdapterCompanion 'overlays/codex/instructions/agents-block-divergent.md')
+    Copy-Item (Join-Path $RepoRoot 'overlays/codex/footers/codex-wiring.md') (Join-Path $phase4FAdapterCompanion 'overlays/codex/footers/codex-wiring.md')
+    Copy-Item (Join-Path $RepoRoot 'overlays/codex/footers/codex-wiring.md') (Join-Path $phase4FAdapterCompanion 'overlays/codex/instructions/agents-block-divergent.md')
     $phase4FAdapterRoots = New-Phase4FCodexRoots
     try {
       $phase4FWriterParts = Import-PowerShellDataFile (Join-Path $RepoRoot 'scripts/host-sync/manifests/codex.manifest.psd1')

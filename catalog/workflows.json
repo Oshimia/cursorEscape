@@ -265,7 +265,11 @@
       "canonicalReferenceId": "agent-invocation",
       "runtimeOnly": true,
       "references": [
-        "instructions/agents-block.md"
+        "base:rules/agent-invocation.md",
+        "base:rules/iterative-plan-review.md",
+        "base:rules/iterative-code-review.md",
+        "base:rules/pre-commit-ci-gate.md",
+        "footers/codex-wiring.md"
       ]
     }
   ],
@@ -299,9 +303,9 @@
     { "id": "antigravity-plan-review", "host": "Antigravity", "gate": "plan-review", "surface": "antigravity-gemini", "canonicalReferenceId": "iterative-plan-review", "evidencePaths": ["rules/iterative-plan-review.md", "scripts/host-sync/manifests/antigravity.manifest.psd1", "overlays/antigravity/footers/gemini-wiring.md"] },
     { "id": "antigravity-code-review", "host": "Antigravity", "gate": "code-review", "surface": "antigravity-gemini", "canonicalReferenceId": "iterative-code-review", "evidencePaths": ["rules/iterative-code-review.md", "scripts/host-sync/manifests/antigravity.manifest.psd1", "overlays/antigravity/footers/gemini-wiring.md"] },
     { "id": "antigravity-pre-commit", "host": "Antigravity", "gate": "pre-commit", "surface": "antigravity-skill", "canonicalReferenceId": "pre-commit-ci-gate", "evidencePaths": ["rules/pre-commit-ci-gate.md", "scripts/host-sync/manifests/antigravity.manifest.psd1", "overlays/antigravity/footers/pre-commit-antigravity.md"] },
-    { "id": "codex-invocation", "host": "Codex", "gate": "invocation", "surface": "codex-managed-block", "canonicalReferenceId": "agent-invocation", "evidencePaths": ["rules/agent-invocation.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/instructions/agents-block.md"] },
-    { "id": "codex-plan-review", "host": "Codex", "gate": "plan-review", "surface": "codex-managed-block", "canonicalReferenceId": "iterative-plan-review", "evidencePaths": ["rules/iterative-plan-review.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/instructions/agents-block.md"] },
-    { "id": "codex-code-review", "host": "Codex", "gate": "code-review", "surface": "codex-managed-block", "canonicalReferenceId": "iterative-code-review", "evidencePaths": ["rules/iterative-code-review.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/instructions/agents-block.md"] },
-    { "id": "codex-pre-commit", "host": "Codex", "gate": "pre-commit", "surface": "codex-managed-block", "canonicalReferenceId": "pre-commit-ci-gate", "evidencePaths": ["rules/pre-commit-ci-gate.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/instructions/agents-block.md"] }
+    { "id": "codex-invocation", "host": "Codex", "gate": "invocation", "surface": "codex-managed-block", "canonicalReferenceId": "agent-invocation", "evidencePaths": ["rules/agent-invocation.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/footers/codex-wiring.md"] },
+    { "id": "codex-plan-review", "host": "Codex", "gate": "plan-review", "surface": "codex-managed-block", "canonicalReferenceId": "iterative-plan-review", "evidencePaths": ["rules/iterative-plan-review.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/footers/codex-wiring.md"] },
+    { "id": "codex-code-review", "host": "Codex", "gate": "code-review", "surface": "codex-managed-block", "canonicalReferenceId": "iterative-code-review", "evidencePaths": ["rules/iterative-code-review.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/footers/codex-wiring.md"] },
+    { "id": "codex-pre-commit", "host": "Codex", "gate": "pre-commit", "surface": "codex-managed-block", "canonicalReferenceId": "pre-commit-ci-gate", "evidencePaths": ["rules/pre-commit-ci-gate.md", "scripts/host-sync/manifests/codex.manifest.psd1", "overlays/codex/footers/codex-wiring.md"] }
   ]
 }

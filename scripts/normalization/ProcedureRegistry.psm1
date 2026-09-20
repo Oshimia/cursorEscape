@@ -752,7 +752,8 @@ function Test-RegistryHostCompositionOwnership {
   }
 
   # Phase 4F: Codex specialized-adapter managed AGENTS block composition
-  # ownership. The single canonical block binds exactly one registry reference;
+  # ownership. The managed block binds a canonical-rule prefix followed by the
+  # overlay-local Codex footer (the writer Source and registry split point);
   # the manifest owns only the destination, binding, and composition ID.
   try { $codexManifest = Import-PowerShellDataFile -Path (Join-Path $RepoRoot 'scripts/host-sync/manifests/codex.manifest.psd1') } catch {
     Add-RegistryFailure $Failures $invariant "Codex manifest read failed: $($_.Exception.Message)"; return
@@ -767,11 +768,18 @@ function Test-RegistryHostCompositionOwnership {
       continue
     }
     $codexRefs = @(Get-RegistrySequence $composition.references)
-    if ($codexRefs.Count -ne 1) {
-      Add-RegistryFailure $Failures $invariant "Codex runtime composition '$compositionId' must declare exactly one managed-block reference"
+    $expectedCodexRefs = [string[]]@(
+      'base:rules/agent-invocation.md',
+      'base:rules/iterative-plan-review.md',
+      'base:rules/iterative-code-review.md',
+      'base:rules/pre-commit-ci-gate.md',
+      'footers/codex-wiring.md'
+    )
+    if ((@($codexRefs) -join '|') -cne ($expectedCodexRefs -join '|')) {
+      Add-RegistryFailure $Failures $invariant "Codex runtime composition '$compositionId' must declare canonical rules followed by the Codex footer"
       continue
     }
-    $null = $codexExpectedBindings.Add("$($codexRefs[0])|$compositionId")
+    $null = $codexExpectedBindings.Add("$($codexRefs[-1])|$compositionId")
   }
   $codexActualBindings = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
   foreach ($codexEntry in @($codexManifest.DestinationEntries)) {

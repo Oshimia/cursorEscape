@@ -26,8 +26,8 @@
 ## Phase checklist
 
 - [x] **Phase 0** — Discovery (read-only code inspection; no commit) — COMPLETE
-- [ ] **Phase 1** — Extension architecture documentation (docs-only; Fast CI; commit) — IN PROGRESS
-- [ ] **Phase 2** — Codex composition restructure (registry + adapter + overlay; Fast + Full CI; dual review; commit)
+- [x] **Phase 1** — Extension architecture documentation (docs-only; Fast CI; commit) — COMMIT 86af3ff
+- [ ] **Phase 2** — Codex composition restructure (registry + overlay; Fast + Full CI; dual review; commit) — NEXT (no adapter change needed per Phase 0)
 - [ ] **Phase 3** — Codex hooks (overlay + manifest + inventory + CI; Fast CI; dual review; commit)
 - [ ] **Phase 4** — Cross-host extension directories (12 placeholders; Fast CI; commit)
 - [ ] **Phase 5** — Documentation cascade + CI closeout (docs + CI; Fast + Full CI; dual review; commit)
