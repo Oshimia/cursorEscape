@@ -4,62 +4,69 @@
 
 ## Context
 
-Target design for how cursorEscape governs shell permissions and native-tool preference across hosts. Contract SoT: [shell-native-tool-policy](../../rules/shell-native-tool-policy.md) (rules/) — now split: the read-only allowlist invariants live there; the mutating-git / shell-fs **red line SoT is [red-line.md](../../rules/red-line.md)** (D9 mechanical move 2026-08-28). This leaf records **why** the policy is shaped this way and how it survives the host-sync machinery. Claim taxonomy: labels below are **Required** (red line, invariants) or **Desired** (relief metrics).
+Permissions are architecture, not prompt etiquette. Instructions reduce unnecessary approval interruptions, but the host configuration remains the enforcement layer for dangerous commands. The durable goal is broad read access through native tools, narrowly scoped writes, and a hard red line around mutating Git and shell-filesystem operations.
 
 ---
 
 ## Substance
 
-### Problem (Observed data; window 2026-08-17→21, attribution completed 2026-08-22)
+### Policy (Required)
 
-| Metric | Value | Source |
-|---|---|---|
-| Permission prompts in log window | 558 (415 bash, 142 external_directory, 1 task) | `opencode.log` `message=asking` lines |
-| Historical bash calls that would prompt under pre-policy config | 386/644 (60%) | `opencode.db` part analysis |
-| Share of bash asks from subagent sessions | ~87% (361/415 nearest-prior attribution; 08-17: 31 vs 0; 08-18: 61 vs 0; 08-21: 257 vs 45) | one-time `opencode.log` attribution |
-| Top offenders (bash ask heads) | `python -c` ×141, `Get-ChildItem` ×99, pipeline stages (`Select-Object` ×81, `ForEach-Object` ×42, `Where-Object` ×33), read cmdlets (`Get-Content` ×60), `git status` ×39, `Get-FileHash` ×36, `Set-Content` ×31, `git -C …` ×28, `rg` ×23, mutating git correctly asking (`add` ×19, `commit` ×19), openBuggy eval scripts ≈32 | Same |
+| Action class | Policy |
+| --- | --- |
+| Repository reads | Prefer native read, search, glob, and inspect tools. Broad repository reads should not require repeated shell approval. |
+| Temporary analysis files | Prefer an approved writable temporary zone and native write tools. Do not use shell redirection or broad shell writes as the default analysis path. |
+| Repository writes | Allow only through the configured workspace-write surface and explicit task scope. |
+| Shell-native filesystem mutations and scriptblock-carrying pipeline stages | Prompt-gated by [`rules/red-line.md`](../../rules/red-line.md); use approved native write or temporary-zone tools instead. |
+| Git status, diff, log, and other non-mutating reads | Allowed as normal evidence gathering, preferably through the host's shell policy where native tools cannot express the query. |
+| Git add, commit, reset, clean, checkout, restore, rebase, merge, cherry-pick, push, and force operations | Mutating. Each requires the applicable workflow gate and explicit authorization; these are never inferred from ordinary task approval. |
+| Installation, service, database, network-mutating, or host-state changes | Blocked unless explicitly requested and represented in the reviewed task scope. |
 
-Operator pain is corroborated by prior session measurements: shell-approval babysitting every 2–3 minutes when bash substituted for skills/tools.
+### Enforcement model (Required)
 
-### Design (Target)
+1. **Host config is the enforcement boundary.** A prompt instruction cannot authorize an operation denied by host policy.
+2. **One canonical allowlist inherits outward.** Avoid duplicating the same shell policy in every agent body.
+3. **Order independence is required.** Allowlists must produce a deterministic outcome even when the host sorts matcher keys.
+4. **Merge-preserve is understood.** Live-only keys may survive sync; removal of stale per-agent policy requires an explicit reviewed cleanup, not an incidental propagation assumption.
+5. **Broad read, narrow write.** Read friction should be minimized; write and mutating-system friction is intentional.
 
-1. **Dual enforcement.** Config is the enforcement layer — the red line holds regardless of model compliance. Instruction text (always-on C1 section) reduces prompt *incidence* by steering to native `read`/`glob`/`grep`, so bash is rarely needed at all.
-2. **Single global SoT entry + inheritance.** One canonical allowlist in specimen global `permission.bash`; per-agent/per-stub bash blocks deleted (OpenCode merges agent permissions over global per-key). Avoids 10× duplication and entry-count CI chores.
-3. **Order independence (Required).** The sync optimizer (`HostSync.Core.ps1` `Order-OpenCodePermissionPatternMap`) hoists `*` first and sorts all other keys — insertion order cannot be part of any contract. The canonical set therefore uses disjoint prefix classes with exact-form branch/tag reads; last-match-wins semantics then have a unique winner regardless of sort order.
-4. **Merge-preserve awareness (Required).** `Merge-HashtablePreserve` keeps live-only keys, so key deletions never propagate through sync. Stale per-agent bash subtrees must be pruned manually during the apply window; rollback of removals is manual too (asymmetry documented in rules leaf).
-5. **Writable temp analysis zone (Desired).** `%TEMP%\opencode` joins `external_directory` allow so models stage helper scripts via the auditable native `write` tool instead of `Set-Content` in bash.
-6. **Project-scoped script allows.** openBuggy's five reviewed eval scripts are allowed only in openBuggy's project `.opencode/opencode.json`, pinned to logged invocation forms — not globally.
+### Host projection (Required)
 
-### Why not alternatives
+| Host | Application |
+| --- | --- |
+| Cursor | Host-native permission and rule surfaces enforce the policy; overlays carry only thin wrappers. |
+| OpenCode | Global shell and external-directory policy enforces allow/ask/deny; reviewer agents deny edits. |
+| Antigravity | Host tool permissions and overlay reviewer definitions enforce read-only review behavior. |
+| VS Code | Host handoff/tool permissions enforce the repository write boundary. |
+| Cline | Host workflow and permission configuration enforce read-only review and scoped writes. |
+| Kilo Code | Host workflow and permission configuration enforce read-only review and scoped writes. |
+| Codex | Managed AGENTS policy plus host tool sandbox permissions enforce the same read/write and Git red lines. |
 
-- **Runtime relief only** (`--auto`, session "always"): session-scoped, non-durable, defeats the red line. Also Observed: "Allow always" accumulates in-memory until restart — prefer promoting intentional patterns into reviewed config.
-- **Patch per-agent blocks minimally:** duplicates the block ×10, leaves pipeline/python/temp/subagent pain (~40% vs ~90% projected relief).
+Hosts may be more restrictive than this policy. They may not grant a mutating Git operation merely because the task was broadly approved.
 
-### Host mapping
+### Review boundary (Required)
 
-| Layer | OpenCode (Target — applied Phase 2) | Cursor (deferred) |
-|---|---|---|
-| Enforcement config | `opencode.specimen.json` global `permission.bash` + `external_directory` temp zone | n/a until Cursor live sync |
-| Always-on instruction | C1 dual-write section | user-rules snippet / `.mdc` pointer |
-| Contract SoT | this policy pair (host-agnostic) | same |
+Reviewers are read-only for repository edits. They may inspect diffs, tests, logs, and repository evidence according to their host permissions, but they must not modify files, run installs, mutate services, or perform Git state changes. Runtime reproduction is allowed only when it is read-only, inexpensive, explicitly in scope, and does not create artifacts or instrumentation.
 
-Cursor echo trigger: **before the first Cursor live sync** (editing-companion cascade requires same-changeset thin wrapper when Cursor is an active target).
+### Change control
 
-### Measurement
-
-Attribution basis: a one-time parse of `opencode.log` (`asking` + session-created lines) produced per-day/type/session-kind tallies for the completed investigation. The purpose-built analyzer was removed once its policy conclusion was retained; future measurements require a newly reviewed diagnostic and must not depend on this retired tool. Success criterion after ≥3-day soak: subagent read-only bash asks ≈ 0 while mutating-git asks persist; residual known asks excluded ([rules leaf](../../rules/shell-native-tool-policy.md)).
+New allowlist entries require a reviewed changeset that shows the exact command class, why native tools cannot express it, the blast radius, and the host-policy tests or fixture update. Never add an entry temporarily in a live host without representing and reviewing it in the repository.
 
 ---
 
-## Implications / open questions
+## Implications
 
-1. If OpenCode changes matcher semantics (segment parsing, comment stripping), re-run the Phase probe matrix before trusting allows.
-2. High-frequency residual asks may earn allowlist entries after soak data — add via this policy's contract, never ad hoc in host JSON.
-3. Sync-tooling prune semantics (removing keys via `-Apply`) would obsolete the manual prune step; tracked as follow-up, not built here.
+1. Fewer shell approvals for reads is a design goal; preserving mutating-Git friction is also a design goal.
+2. A host's more restrictive policy does not violate this contract.
+3. Permission changes are architecture changes and require normalization CI plus the implementation-review cycle.
+
+---
 
 ## Related
 
-- [Shell & native tool policy (contract)](../../rules/shell-native-tool-policy.md)
+- [Shell and native tool policy rule](../../rules/shell-native-tool-policy.md)
+- [Git and shell-filesystem red line](../../rules/red-line.md)
 - [Instruction layering](./instruction-layering.md)
+- [Clean context and isolation](./clean-context-isolation.md)
 - [Skill source and host overlays](./skill-source-and-host-overlays.md)
-- [Editing companion workflow](../SOPs/editing-companion-workflow.md)
+- [Editing companion workflow SOP](../SOPs/editing-companion-workflow.md)

@@ -1,6 +1,6 @@
 # Host harness sync (modular layout)
 
-**Last updated:** 2026-09-18
+**Last updated:** 2026-09-20
 
 Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require `-Apply` and a valid Phase 0 baseline gate artifact. After Phase 4 normalization, the [procedure registry](../../docs/featureArchitecture/procedure-registry.md) owns semantic composition order for all five migrated host classes (Cursor hybrid, OpenCode dual-write, Antigravity, Cline/Kilocode, Codex managed AGENTS block); manifests own destinations, host-only substitutions, and `CompositionId` bindings. The sole normalization CI entry points are [`../normalization/Invoke-NormalizationFastCI.ps1`](../normalization/Invoke-NormalizationFastCI.ps1) (Fast) and [`../normalization/Invoke-NormalizationFullCI.ps1`](../normalization/Invoke-NormalizationFullCI.ps1) (Full); the host-sync phase scripts are internally invoked by Full CI, never separate entry points.
 
@@ -53,7 +53,7 @@ Entry keys beyond `Source`/`Dest`:
 - **Expected renders** — committed expected-renders under [`render-baselines/`](./render-baselines/) are the byte-exact regression anchor for composed dests.
 - **Ref resolution contract** (unit checks U17–U20): rooted/absolute refs verbatim; un-pre-resolved classed refs throw; overlay-relative refs resolve source-dir first, then `OverlayRoot` fallback.
 
-FA recording: [skill-source-and-host-overlays](../../docs/featureArchitecture/skill-source-and-host-overlays.md#per-entry-v2-sourcing-overlay-remediation-phase-12--required).
+FA recording: [Per-entry sourcing](../../docs/featureArchitecture/skill-source-and-host-overlays.md#per-entry-sourcing-required).
 
 ## Operator commands
 

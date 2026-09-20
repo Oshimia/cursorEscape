@@ -1,107 +1,97 @@
 # Clean Context and Isolation
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-20
 
 ## Context
 
-This document is **Target** design for **isolated child handoffs** — how parents invoke reviewers and phase subagents without shared chat memory. It is distinct from [instruction-layering.md](./instruction-layering.md) (token/context *budget*) and from [intended-workflow.md](./intended-workflow.md) (loop *stages*). Isolation is about **honesty of each review pass**, not how thin always-on text is.
+Review and plan gates require clean child context. A new persona in the same long conversation is not isolation. Parents synthesize task inputs; children verify from evidence, not accumulated reviewer reasoning.
 
-**Required** portable intent: every governed child launched under [agent invocation](../../workflow/agent-invocation.md)—including `planner`, `ad_hoc_child`, `repository_explorer`, and `test_reviewer`—runs in isolated child context; the parent packs everything it needs into the invocation. Host child sessions, fresh task/session replacements, and managed-agent routes are host mappings of that intent; they never relax the packed-payload or no-prior-transcript requirements.
-
-**Registry context:** the [procedure registry](./procedure-registry.md) owns the machine metadata (identity, aliases, required reading, authority/isolation, loop/gate, host representation) that every governed child's invocation envelope references; host projections and fallback routes are derived deterministically from registry composition entries.
-
-Observed overlay agents under [overlays/cursor/agents](../../overlays/cursor/agents/) illustrate the pattern (e.g. “You run in isolated context”). Live `~/.cursor` is the running install; the overlay is the in-repo **Observed** record (thin wrappers). This page is SoT for the portable isolation contract.
+This page owns the architecture of isolation. [`workflow/agent-invocation.md`](../../workflow/agent-invocation.md) owns the mandatory invocation envelope, and role contracts own their inputs and outputs.
 
 ---
 
 ## Substance
 
-### Why isolate
+### Isolated work (Required)
 
-Shared parent chat history lets a child “remember” prior review transcripts, claimed CI, or pass conditions the parent never re-stated. That hides incomplete handoffs and makes re-reviews non-reproducible. Isolation forces the parent to **synthesize** (full plan text, current-fix task summary, Observed Fast CI block) and pass only what this pass needs.
+| Work | Isolation |
+| --- | --- |
+| `plan_reviewer` | Clean child context receiving the full synthesized plan. |
+| `production_readiness_reviewer` | Clean child context receiving scope, evidence, and current-fix summary. |
+| `bug_reviewer` | Clean child context receiving scope, evidence, and current-fix summary. |
+| `repository_explorer` | Read-only child or fresh task bounded to one question. |
+| Ad-hoc child | Clean task with explicit purpose, scope, output format, and applicable docs. |
+| Composer implementation phase | Child implementer owns the phase review loop; Composer later audits closeout evidence. |
 
-### Who runs isolated (Required)
-
-All governed child agents use clean context. Role-specific requirements add to, and never relax, this baseline:
-
-| Role / actor | Isolation requirements |
-| ------------ | ---------------------- |
-| [planner](../../agents/planner.md) | Child session; parent supplies task summary, applicable docs, and constraints |
-| [plan_reviewer](../../agents/plan_reviewer.md) | Child session; full synthesized plan each pass — **no** prior review transcripts |
-| [production_readiness_reviewer](../../agents/production_readiness_reviewer.md) | Child session; locked opener; parent supplies Completion gate + CI Observed |
-| [bug_reviewer](../../agents/bug_reviewer.md) | Child session; Custom Instructions envelope for scope |
-| [repository_explorer](../../agents/repository_explorer.md) | Child session; parent supplies only the bounded question, thoroughness, and path hints |
-| [test_reviewer](../../agents/test_reviewer.md) | Child session; parent supplies changeset scope and test context |
-| `ad_hoc_child` | Child session; parent supplies the packed task procedure, purpose, scope, and output format |
-| Composer phase subagent | Child implementer + review-loop parent for the phase ([composer](../../skills/composer/SKILL.md)) |
+The prior child transcript is never an input. On re-review, the parent sends updated artifacts or a narrower task summary plus applicable documents.
 
 ### Parent duties (Required)
 
-1. Launch the child with a **complete** invoke payload for that role (see agent contract Inputs), beginning with the [agent invocation](../../workflow/agent-invocation.md) envelope.
-2. On re-invoke: pass **synthesized** artifacts only — updated full plan, or narrower task summary + applicable docs — **not** the previous child’s transcript.
-3. Own Fast CI Observed before dual-gate reviewers; do not ask reviewers to re-run CI.
-4. After dual APPROVED, run Full CI **without** reviewers ([intended-workflow](./intended-workflow.md)).
+1. Begin every custom-agent launch with the canonical invocation envelope and role contract.
+2. Pack all required inputs after the envelope; metadata or chat position never establishes identity or scope.
+3. Observe Fast CI before the dual gate and keep reviewer and CI responsibilities separate.
+4. Run Full CI only after dual APPROVED and without launching reviewers.
+5. Close or reuse agent threads deliberately; a finished child is not review memory for another child.
 
-### Split envelope (Required for dual gate)
+### Dual-gate envelopes (Required)
 
-| Leg | Parent shaping |
-| --- | -------------- |
-| production_readiness_reviewer | **Locked opener** — no Bugbot-style Custom Instructions field; re-scope via narrower task summary + applicable docs |
-| bug_reviewer | **Custom Instructions** allowed — phase summary, iteration, launch count, regressions, out-of-scope |
+| Leg | Envelope rule |
+| --- | --- |
+| `production_readiness_reviewer` | Locked role opener. Re-scope by replacing the task summary and evidence, not by injecting prior review reasoning. |
+| `bug_reviewer` | May receive Custom Instructions for iteration count, known regressions, out-of-scope topics, and clean-fix signals. |
 
-### Completion gate vs closeout (Required)
+Both legs receive the same declared diff scope and checkout evidence.
 
-| Mode | Reviewers | Meaning |
-| ---- | --------- | ------- |
-| `Completion gate: review-loop` | Yes (dual gate) | Mid-loop review after Fast CI Observed |
-| Closeout | **No** | Full CI only after dual APPROVED; never pair Full with reviewer launch |
+### Completion versus closeout (Required)
 
-If the parent passes a closeout / Full / `task-phase-complete` gate to a dual-gate reviewer, the child should reject (CHANGES REQUESTED) — reviewers are not the closeout.
-
-### Composer transcript audit (Required when using Composer)
-
-Composer **QC** reads closeout reports and may audit child transcripts for process honesty (wrong actor committed, skipped gates). That audit stays on the **Composer parent**. It must **not** be used as “prior review memory” stuffed into the next plan_reviewer or dual-gate invoke. See [composer](../../skills/composer/SKILL.md) and [intended-workflow.md](./intended-workflow.md).
-
-### Anti-patterns (Required non-goals)
-
-| Anti-pattern | Why |
-| ------------ | --- |
-| Relying on shared chat history as review memory | Non-reproducible; hides missing Inputs |
-| Attaching pass-1 review transcripts to pass-2 | Child should see synthesized plan / current-fix summary only |
-| “You already saw the findings — just re-check” | Illegal override of clean context |
-| Pairing Full CI with reviewer launch | Closeout ≠ review-loop |
-| Feeding Composer transcript audit into the next reviewer Task | Confuses QC with invoke payload |
-
-### Host mapping
-
-| Host | Isolated child mapping | Invocation notes |
+| Gate | Reviewers | Meaning |
 | --- | --- | --- |
-| Cursor | Task/subagent clean context | Aliases `plan-reviewer`, `reviewer-a`, or Bugbot may route, but the envelope supplies canonical identity. |
-| OpenCode | Task / `@agent` child session | Canonical routes use host alias `none`; reviewer permissions deny edits. |
-| Antigravity | `invoke_subagent` clean context | Reviewer subagent defs are read-only; dual review launches both legs. |
-| VS Code | Custom-agent handoff / subagent at depth 1 | Handoff prompts contain fillable payload fields and attestation markers after the envelope. |
-| Cline | Separate fresh task/session per reviewer leg until child spawn is attested | Same-conversation persona blocks are not clean-context and are prohibited. |
-| Kilo Code | Separate fresh task/session per reviewer leg until `subtask` isolation is attested | The parent transfers only loop decisions, never prior reviewer reasoning. |
-| Codex | Managed agent route from TOML contract | Canonical routes use host alias `none`. |
-| Portable contract | Parent packs all role-required inputs after `---` | Host metadata, surrounding chat, and prior transcripts never establish identity or scope. |
+| Review-loop completion | Yes | Fast CI has passed; both reviewer legs evaluate the changeset. |
+| Closeout | No | Full CI runs after dual APPROVED; reviewers are not closeout actors. |
+
+A reviewer receiving a closeout gate should reject it rather than reinterpret the request.
+
+### Composer transcript audit (Required when Composer is active)
+
+Composer may audit reports and transcripts to verify process honesty: correct actor, observed CI, packed inputs, review iterations, and close boundaries. That audit informs Composer's next orchestration decision; it is not pasted into another reviewer as prior reasoning.
+
+### Anti-patterns (Required)
+
+| Anti-pattern | Why rejected |
+| --- | --- |
+| “Reviewer mode” in a long chat | No clean context and no reproducible inputs. |
+| Attaching the previous review transcript | Converts review into accumulated persuasion. |
+| Asking a reviewer to “just re-check” from memory | Hides the current changeset and evidence boundary. |
+| Pairing Full CI with reviewers | Blurs completion review and closeout. |
+| Using Composer QC as reviewer context | Confuses orchestration audit with review evidence. |
+
+### Host mapping (Required)
+
+| Host | Isolation requirement |
+| --- | --- |
+| Cursor | Clean Task/subagent context. |
+| OpenCode | Task or agent child session; reviewer edit permissions deny writes. |
+| Antigravity | Clean `invoke_subagent` context with read-only reviewer definitions. |
+| VS Code | Depth-one custom-agent handoff or subagent with a fillable payload. |
+| Cline | Separate fresh task/session per reviewer leg until child-spawn isolation is attested. |
+| Kilo Code | Separate fresh task/session per reviewer leg until subtask isolation is attested. |
+| Codex | Managed agent route from its registered TOML contract. |
+| Portable floor | Same evidence, canonical identity, packed inputs, and no prior transcript. |
 
 ---
 
-## Implications / open questions
+## Implications
 
-1. Recreation hosts that share one long chat with “reviewer mode” without child isolation violate this contract even if dual-gate *roles* exist.
-2. Target [plan_reviewer](../../agents/plan_reviewer.md) Inputs must not imply prior-transcript handoff — parent synthesizes into the plan text.
-3. Isolation and instruction layering reinforce each other: lean agent bodies + packed invokes, not full procedure paste + chat memory.
+1. Isolation is a contract boundary, not a UI preference.
+2. A host cannot claim parity while reviewers inherit prior reasoning.
+3. Parents own synthesis and thread hygiene; children own evidence-based findings.
 
 ---
 
 ## Related
 
-- [Instruction layering](./instruction-layering.md) — budget; this page is isolation honesty
 - [Intended workflow](./intended-workflow.md)
-- [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)
-- [Cursor behavior to reproduce](./cursor-behavior-to-reproduce.md)
-- [Agent role contracts](../../agents/_index.md)
-- [implementation-review](../../skills/implementation-review/SKILL.md)
-- [iterative-plan-review](../../workflow/iterative-plan-review.md)
-- [composer](../../skills/composer/SKILL.md)
+- [Agent roles and model assignment](./agent-roles-and-model-assignment.md)
+- [Instruction layering](./instruction-layering.md)
+- [Agent invocation contract](../../workflow/agent-invocation.md)
+- [Implementation review skill](../../skills/implementation-review/SKILL.md)

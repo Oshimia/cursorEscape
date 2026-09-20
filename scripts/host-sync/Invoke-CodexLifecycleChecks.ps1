@@ -447,8 +447,8 @@ Assert-Pass 'instruction-layering FA records Codex mapping' (
     $layerFa.Contains('marker-bounded managed block')
 )
 $fidelityFa = Read-RepoFile 'docs/featureArchitecture/host-adaptation-fidelity.md'
-Assert-Pass 'host-fidelity FA keeps Codex not-Done' (
-    $fidelityFa.Contains('Codex Phase 4 activated 2026-09-08') -and
+Assert-Pass 'host-fidelity FA records Codex activation and runtime attestation' (
+    $fidelityFa.Contains('Codex activated 2026-09-08') -and
     $fidelityFa.Contains('C1–C6 runtime attestation')
 )
 

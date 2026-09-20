@@ -46,7 +46,7 @@ cursorEscape/
   overlays/                       # registered host overlays, incl. codex/
 ```
 
-Application runtime, adapters, packages, and eval runners are **out of scope** until an authorized implementation phase. Recreation uses external T3 + OpenCode.
+cursorEscape is not a hosted runtime or general IDE. Its current production surface is portable contracts plus registry-owned host harness sync across the seven registered stacks. Models and providers remain owner-controlled BYOK configuration; live Apply remains separately authorized.
 
 ## Related repositories
 
@@ -57,7 +57,7 @@ Sibling archives (local relative links; **no standing sync**):
 | [openBuggy](../openBuggy/README.md) | Research/eval archive — not v0 bug_reviewer default |
 | [AITestSuite](../AITestSuite/README.md) | Frozen plan/review eval packaging |
 
-Longer map: [project decisions and sibling relationships](docs/featureArchitecture/project-decisions-and-open-questions.md).
+Durable boundary decisions: [project decisions and open questions](docs/featureArchitecture/project-decisions-and-open-questions.md).
 
 ## License / remote
 

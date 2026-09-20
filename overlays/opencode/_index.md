@@ -1,6 +1,6 @@
 # OpenCode overlay — harness copy-out map
 
-**Last updated:** 2026-09-19
+**Last updated:** 2026-09-20
 
 **Status:** harness stubs use absolute `{{COMPANION_ROOT}}` Reads; live procedure mirror **deleted** from `{{OPENCODE_HOME}}/docs/workflow/`; `review-subagent-models` overlay-Read only. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1). Phase 0 baseline (restore-only): `C:/Users/admin/.config/opencode-backup-pre-host-sync-build-20260821-012600`. Sync does **not** create backups.
 
@@ -14,7 +14,7 @@ OpenCode-native **host overlay** at `overlays/opencode/`. Portable procedure sta
 
 **C1 merge Must (Failure mode I / wrong-base class):** Specimen `instructions` must stay `{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md` (absolute after merge). Never reintroduce bare relative `instructions/…` in global config. Copy the same body to live `AGENTS.md`.
 
-**C4 merge Must (pointer-first-2, disposition pf4):** Harness leaves Read absolute `{{COMPANION_ROOT}}/workflow/...`, `{{COMPANION_ROOT}}/skills/...`, `{{COMPANION_ROOT}}/agents/...` — **zero** `../../docs|skills|agents/` hops and **zero** host `docs/workflow/` as procedure SoT in harness bodies. OpenCode host procedure mirror **deleted** pointer-first-4 — do not bulk re-sync procedure leaves. See [Wrong path resolution base](../../docs/featureArchitecture/host-adaptation-fidelity.md#wrong-path-resolution-base-failure-class--i--j).
+**C4 merge Must (pointer-first-2, disposition pf4):** Harness leaves Read absolute `{{COMPANION_ROOT}}/workflow/...`, `{{COMPANION_ROOT}}/skills/...`, `{{COMPANION_ROOT}}/agents/...` — **zero** `../../docs|skills|agents/` hops and **zero** host `docs/workflow/` as procedure SoT in harness bodies. OpenCode host procedure mirror **deleted** pointer-first-4 — do not bulk re-sync procedure leaves. See [Path-resolution failure class](../../docs/featureArchitecture/host-adaptation-fidelity.md#path-resolution-failure-class-required).
 
 ## Copy-out map (harness-only — pointer-first Target)
 
@@ -59,16 +59,7 @@ Applied historically by the script when copying companion `workflow/` → host `
 
 Idempotent: re-run after edits; grep-clean contract = zero `](../workflow/`, `](../skills/`, `](../../skills/`, `](../../agents/`, `](../rules/`, `](../overlays/` in host `docs/workflow/`.
 
-**Rubric copy-out (same script, `-IncludeRubric`):** companion `docs/featureArchitecture/bug-reviewer-finding-rubric.md` → host `docs/workflow/bug-reviewer-finding-rubric.md`. No second authored rubric SoT — single FA source, transformed on copy.
-
-| Companion rubric link | Host `docs/workflow/` after transform |
-| --------------------- | ------------------------------------- |
-| `](../../agents/` | `](agents/` (host-root — Failure mode J class) |
-| `](../../research/` | Plain text note (companion-resident — `{{COMPANION_ROOT}}/research/...`) |
-| `](../../analysis/` | Plain text note (companion-resident — `{{COMPANION_ROOT}}/analysis/...`) |
-| `](./<fa-leaf>.md)` (sibling FA) | Plain text note (companion FA — `{{COMPANION_ROOT}}/docs/featureArchitecture/<fa-leaf>.md`) |
-
-Grep-clean rubric contract = zero raw `](../../agents/`, `](../../research/`, `](../../analysis/`, `](./` sibling FA hops in host `docs/workflow/bug-reviewer-finding-rubric.md` after `-IncludeRubric` transform.
+**Rubric loading (current):** `bug_reviewer` reads companion `docs/featureArchitecture/bug-reviewer-finding-rubric.md` through its canonical Read-when path. The archived `-IncludeRubric` mirror path is not current sync and must not create a host rubric copy.
 
 ## Agent authoring recipe (strategy A)
 

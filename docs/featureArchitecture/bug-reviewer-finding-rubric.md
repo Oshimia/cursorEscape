@@ -1,6 +1,6 @@
 # bug_reviewer finding rubric
 
-**Last updated:** 2026-08-22
+**Last updated:** 2026-09-20
 
 ## Context
 
@@ -11,7 +11,7 @@ Grounded in:
 - **Observed** BugBot mission / finding personality (imported openBuggy FA)
 - **Observed** DSV4F / promote-audit ignore themes (sibling openBuggy analysis — paraphrased; not a full research import)
 
-Claim labels on Sources below. This page is Target behavior for recreation hosts (OpenCode adapter mirrors under host `docs/workflow/`).
+Claim labels on Sources below. This page is canonical companion behavior: bug-reviewer projections load it through an explicit companion Read-when path rather than a host procedure mirror.
 
 ---
 
@@ -84,7 +84,7 @@ Parents may name out-of-scope themes, regressions to re-check, and clean-case si
 
 1. **M5 copy/string recall** (helper-text / UI-copy FNs from DSV4F) is **out of scope** for this rubric revision — document only; may be added later without weakening the Ignore table.
 2. Over-suppression risk on borderline introduced defects remains **Unknown** until re-measured on eval corpora.
-3. Host adapters must mirror this page (or Read when it) into the bug_reviewer agent load path.
+3. Host adapters must give `bug_reviewer` canonical Read-when access to this page. Do not copy it into a second host source tree.
 
 ---
 

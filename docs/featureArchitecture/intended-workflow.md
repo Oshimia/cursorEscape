@@ -1,98 +1,99 @@
 # Intended Workflow
 
-**Last updated:** 2026-09-18
+**Last updated:** 2026-09-20
 
 ## Context
 
-This document is **Target** cursorEscape design for the owner's agentic loop: plan → implement → dual review → closeout. **Loop semantics** (when to plan, dual-gate, verdict bars) are owned here and in [project decisions](./project-decisions-and-open-questions.md). Current Cursor files: [overlays/cursor](../../overlays/cursor/_index.md) (**Observed** thin wrappers). Phase 3 [cursor-global-workflow](../../research/imported/cursor-global-workflow/) import is archaeology. AITestSuite Phase 4 freeze is **Observed/eval-packaging** only. Where freeze disagrees with live Cursor wording, cite [workflow-source-delta](../../research/imported/workflow-source-delta.md). Stack variation: [skill-source-and-host-overlays](./skill-source-and-host-overlays.md).
+cursorEscape defines the owner's portable agentic loop: discover, plan, implement, review, verify, and close out. The normative procedures live in [`workflow/`](../../workflow/_index.md), [`skills/`](../../skills/_index.md), [`agents/`](../../agents/_index.md), and [`rules/`](../../rules/_index.md). This page owns the architectural relationship among those gates; it does not duplicate their step-by-step procedures.
 
-Dual-gate review research (openBuggy) informs leg responsibilities. First recreation host: **T3 Code** (control plane) + **OpenCode** (harness). The bug-finder leg is an OpenCode **`bug_reviewer`** subagent + skills (reviewer-a pattern) — **not** an openBuggy engine requirement ([project decisions](./project-decisions-and-open-questions.md)).
+The same loop applies across all seven registered host stacks. Host-specific launch and wiring mechanics belong to [`skill-source-and-host-overlays.md`](./skill-source-and-host-overlays.md) and [`host-adaptation-fidelity.md`](./host-adaptation-fidelity.md).
 
 ---
 
 ## Substance
 
+### Workspace and review scope (Required)
+
+| Term | Meaning |
+| --- | --- |
+| **Companion repo** | This cursorEscape repository, which owns portable workflow IP and registry metadata. |
+| **Target workspace** | The repository being operated on. It may be cursorEscape itself or another project. |
+| **Uncommitted scope** | The current working-tree delta against the checkout base. |
+| **Branch scope** | The committed delta against an explicitly named base branch. |
+
+**Required:** Every implementation and review invoke states whether its evidence is uncommitted or branch-based. Reviewers share the same checkout and evidence boundary as the implementer; they do not reconstruct scope from chat history.
+
+Monorepo and multi-root support is not silently generalized. If a task cannot be expressed as one target workspace and one explicit diff scope, the parent must narrow the task or obtain an owner decision before implementation.
+
 ### End-to-end loop (Required)
 
 ```text
-Discover repo docs (discovery)
-  → Plan (implementation-plan skill; plan_reviewer gate)  [default on]
-  → Owner approval preview (when visual sign-off is documented or explicitly requested by the owner)
-  → Implement (implementer; Composer phase implementation subagent on multi-phase work)
-  → ≤4× (Fast CI Observed → production_readiness_reviewer ∥ bug_reviewer → fix must-fix)
-  → dual APPROVED (split bars) → Full CI (closeout; no reviewers) → phase complete / commit
-  → else: normal reassessment (Renew | Focus-narrow | Terminate+user) with anti-abuse
-       [Composer phase implementation subagent only:] cap-exhausted handoff → Composer triage
+Discover repository documentation
+  → Plan with implementation-plan and plan_reviewer
+  → Owner approval preview when visual sign-off is documented or explicitly requested
+  → Implement
+  → Fast CI observed
+  → production_readiness_reviewer ∥ bug_reviewer
+  → Fix must-fix findings and repeat review as needed
+  → Dual APPROVED
+  → Full CI closeout without reviewers
+  → Local commit; never push unless separately requested by the owner
 ```
 
-| Stage | Owner | Claim |
-| ----- | ----- | ----- |
-| Doc discovery before edits | Parent or implementer | **Required** — [discovery](../../workflow/discovery.md) |
-| Plan + plan_reviewer | planner + plan_reviewer | **Required** default on — skip only if truly trivial **or** user **explicitly** opts out ([implementation-plan](../../skills/implementation-plan/SKILL.md)). Eval/harness/multi-step operational work is **not** exempt. **When in doubt, run the plan loop.** |
-| Fast CI before reviewers | Review-loop parent | **Required** — per-command Observed rows when Fast ≠ `n/a` |
-| Parallel dual review | production_readiness_reviewer ∥ bug_reviewer | **Required** default on for non-trivial changes — same skip list as plan gate ([implementation-review](../../skills/implementation-review/SKILL.md)) |
-| Full CI at closeout | Parent (never paired with reviewers) | **Required** when Full ≠ `n/a` |
-| Owner approval preview | Composer | **Required when visual sign-off is documented or explicitly requested by the owner** — disposable UI approval preview before implementation ([composer](../../skills/composer/SKILL.md)) |
-| Composer conductor on phased roadmaps | Composer QC + phase subagent parent | **Cursor-specific** optional orchestration — see [composer skill](../../skills/composer/SKILL.md) |
+| Stage | Owner | Rule |
+| --- | --- | --- |
+| Discovery | Parent or implementer | Run repository-documentation discovery before non-trivial edits. |
+| Plan gate | Planner and `plan_reviewer` | Default on. Skip only for a truly trivial case or explicit owner opt-out; when in doubt, run the plan loop. |
+| Owner approval preview | Composer | Required when visual sign-off is documented or explicitly requested. |
+| Fast CI | Review-loop parent | Observe a passing run before launching reviewers. Never launch on failure, an inapplicable claim without explicit `n/a`, or prose-only evidence. |
+| Dual review | Both reviewer legs in parallel | Default on for non-trivial work. Repair every must-fix finding and rerun both legs. |
+| Full CI | Parent | Run once after dual APPROVED. Do not pair Full CI with reviewer launches. |
+| Closeout | Parent or Composer | Preserve evidence, state residual deferred work, and commit locally only after the applicable CI gate. |
 
 ### Dual-gate review (Required)
 
-Aligned with companion [implementation-review](../../skills/implementation-review/SKILL.md) and openBuggy dual-gate analysis ([recommendation](../../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)):
+| Leg | Responsibility |
+| --- | --- |
+| `production_readiness_reviewer` | Process, architecture drift, incomplete changesets, blocking tests, and blocking documentation. May approve with explicitly batchable deferred work. |
+| `bug_reviewer` | Introduced bugs, security, concurrency, and high-value correctness. Reports findings or CLEAN; it never emits blocking/non-blocking or test-gap scaffolding. |
 
-| Leg | Role | Target responsibility |
-| --- | ---- | --------------------- |
-| **production_readiness_reviewer** | Process, architecture drift, incomplete changesets, **blocking** test/docs | Maps to live **reviewer-a** contract |
-| **bug_reviewer** | Bugs, security, concurrency, high-value correctness | OpenCode subagent + skills (`edit: deny`); not Cursor `bugbot`; openBuggy optional later only |
+**Required:** At most four dual-review iterations per pressure-release block. At the cap, return a cap-exhausted handoff for owner or Composer triage rather than silently narrowing scope. The production reviewer owns verdict tiers and may approve with explicitly batchable deferred work; the bug leg contributes findings-vs-CLEAN under [`bug-reviewer-finding-rubric.md`](./bug-reviewer-finding-rubric.md), and any reportable bug prevents dual APPROVED.
 
-**Required:** Fix every must-fix finding from either leg before re-review. **Required:** Re-launch **both** legs after each fix batch.
+### CI architecture (Required)
 
-**Required (live):** Split verdict bars — Reviewer-a may APPROVE with **Batchable (deferred)** open; Bugbot-shaped bar requires Blocking, Non-blocking, and Test gaps all `"None"`. Freeze eval packaging used a unified bar — **do not** copy ([workflow-source-delta](../../research/imported/workflow-source-delta.md#batchable-deferred--split-verdict-bars-live-only)).
+For this repository, the registry owns machine metadata and the two normalization entry points own integrity:
 
-**Required (live):** Observed Fast CI — no launch on fail, skipped (when Fast ≠ `n/a`), or claimed-only prose. openBuggy study ranks this enforcement highly ([ci-gating](../../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/ci-gating.md)). On OpenCode, Fast CI remains **parent skill discipline** (not host-enforced).
+| Gate | Entry point | Position |
+| --- | --- | --- |
+| Fast CI | `scripts/normalization/Invoke-NormalizationFastCI.ps1` | Before every reviewer pass. |
+| Full CI | `scripts/normalization/Invoke-NormalizationFullCI.ps1` | After dual APPROVED, before closeout. |
 
-**Required:** 4-iteration pressure release for review parents — at most 4 dual-review iterations per block, then normal-agent reassessment (Renew | Focus-narrow | Terminate+user with anti-abuse); cumulative per-leg launch counts ([implementation-review](../../skills/implementation-review/SKILL.md)). Supersedes historical “narrow when `count >= 9` / no hard stop” ([workflow-source-delta](../../research/imported/workflow-source-delta.md#iteration-narrowing-live-only) = Observed archaeology). Composer phase implementation subagent cap-exhausted handoff + Waive = Composer-only when conducting ([composer](../../skills/composer/SKILL.md)).
+For another target repository, discover and run the target's own Fast/Full ladder through [`workflow/ci-ladder.md`](../../workflow/ci-ladder.md). Do not assume cursorEscape's normalization scripts apply to another project.
 
-**First host (Desired):** Dual review as **one OpenCode session** with two Task launches in parallel — not two T3 worktrees ([workspace model](./workspace-model.md)).
+### Phased multi-agent work (Optional)
 
-### CI ladder (Required for cursorEscape pre-runtime)
+Composer may conduct a roadmap in implementation phases. Composer owns phase checkpoints and QC; an implementation subagent owns the phase's implementation and review loop. The review bar is unchanged: Fast CI first, both reviewer legs, dual APPROVED, then Full CI closeout. Cap exhaustion returns to Composer with enough evidence to renew, narrow, terminate, waive, or restart from a known checkpoint.
 
-| Tier | cursorEscape (docs-only) | Runtime repos (future) |
-| ---- | ------------------------ | ---------------------- |
-| **Fast** | Hub/index link integrity for phase files; claim taxonomy spot-check | Repo-specific lint/test per [ci-ladder](../../workflow/ci-ladder.md) |
-| **Full** | Fast + deliverable checklist + no runtime scaffolding + no pretend-settled Unknowns | Commit-grade suite; never paired with reviewers |
+### Non-ownership
 
-Do **not** copy freeze baseline's hardcoded four npm commands into cursorEscape pre-runtime CI ([workflow-source-delta](../../research/imported/workflow-source-delta.md#ci-ladder--fast-vs-full-major-delta)).
-
-### Phased multi-agent (Nice-to-have / Cursor-specific)
-
-On initialization-style roadmaps, **Composer** conducts: builds an owner approval preview when visual sign-off is documented or explicitly requested by the owner; the phase implementation subagent then implements, owns the review loop (≤4 iterations per pressure-release block), reaches dual APPROVED then first Full CI when Full ≠ `n/a` (or returns after dual APPROVED when Full = `n/a`); on cap without dual APPROVED it returns a **cap-exhausted handoff** (no Full) for Composer triage. Composer QCs closeout + transcripts (or audits handoff then Renew/Focus-narrow/Terminate/Waive), runs second Full CI when Full ≠ `n/a` on the dual-APPROVED path (or single Composer Full on Cap→Waive; or obtains user ack when Full = `n/a`), then local commit (never push) ([composer](../../skills/composer/SKILL.md)). Host-agnostic equivalent: any orchestrator that enforces the same gates without Cursor Task IDs (OpenCode parent + Task subagents).
-
-### What cursorEscape does not own in v0
-
-| Item | Label |
-| ---- | ----- |
-| Bugbot engine implementation | **Non-goal** for v0 — skill/agent recreation; openBuggy research only |
-| Cursor proprietary subagent types | **Cursor-specific** — map to host-agnostic role contracts / OpenCode agents |
-| Eval runners in this repo | **Out of scope** until implementation phase |
-| T3 / OpenCode product code | External hosts — this repo holds contracts |
+cursorEscape does not own host products, model providers, source-control remotes, or a general IDE. It defines portable contracts, registry-owned projections, and verification for the owner's workflow.
 
 ---
 
-## Implications / open questions
+## Implications
 
-1. OpenCode expresses dual-gate **shape**; R0 must prove parallel Tasks + MCP/tool policy.
-2. **Unknown:** Whether cursorEscape runtime re-homes a repo-local `reference-docs` skill; live owner workflow uses global discovery instead ([workflow-source-delta](../../research/imported/workflow-source-delta.md#reference-docs-skill-presence)).
-3. Dual APPROVED is the loop bar — not proven ship-class catch or proven no-escape ([recommendation](../../research/imported/openBuggy/analysis/reviewer-effectiveness/synthesis/recommendation.md)).
+1. Review verdicts are evidence-bound to the stated workspace and diff scope.
+2. Host launch mechanics may differ, but plan, dual-review, isolation, CI-order, and closeout gates may not.
+3. Local commits are the normal boundary; pushing remains a separate owner-directed action.
 
 ---
 
 ## Related
 
 - [Agent roles and model assignment](./agent-roles-and-model-assignment.md)
-- [Skill source and host overlays](./skill-source-and-host-overlays.md)
 - [Instruction layering](./instruction-layering.md)
 - [Clean context and isolation](./clean-context-isolation.md)
-- [Desired behavior vs Cursor-specific](./desired-behavior-vs-cursor-specific.md)
-- [bug-reviewer-finding-rubric](./bug-reviewer-finding-rubric.md)
-- [Evaluation methodology](./evaluation-methodology.md)
-- [Workflow source delta](../../research/imported/workflow-source-delta.md)
+- [bug-reviewer finding rubric](./bug-reviewer-finding-rubric.md)
+- [Procedure registry](./procedure-registry.md)
+- [Implementation review skill](../../skills/implementation-review/SKILL.md)
+- [Composer skill](../../skills/composer/SKILL.md)

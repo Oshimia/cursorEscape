@@ -335,8 +335,8 @@ Live after merge: `opencode.json` → `instructions[0]` must be an absolute path
 
 #### Failure mode J — wrong path resolution base (C4)
 
-**Class:** [Wrong path resolution base](../featureArchitecture/host-adaptation-fidelity.md#wrong-path-resolution-base-failure-class--i--j) (same class as Failure mode I).
-**Fidelity cite:** [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) § Observed failure: skill `../../docs/workflow` hops.
+**Class:** [Path-resolution failure class](../featureArchitecture/host-adaptation-fidelity.md#path-resolution-failure-class-required) (same class as Failure mode I).
+**Fidelity cite:** [host-adaptation-fidelity](../featureArchitecture/host-adaptation-fidelity.md) § Path-resolution failure class.
 
 | | |
 | - | - |

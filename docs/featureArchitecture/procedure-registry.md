@@ -1,85 +1,106 @@
 # Procedure registry
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-20
 
 ## Context
 
-The semantic registry is the sole writable source for machine metadata (agent identity, aliases, required reading, authority/isolation, loop/gate, fail-loud behavior, host representation, skill applicability, composition references, and semantic composition order). Canonical Markdown remains the sole source for procedure prose; manifests remain the sole source for destination/binding. Phases 2–4 migrated all seven hosts, 22 skills, 6 rules, 23 workflows, and all five ownership classes (Cursor hybrid compositions, OpenCode dual-write, Antigravity, Cline/Kilocode, Codex managed AGENTS block) to registry-owned composition-order semantics. Every migrated class has a blocking guard wired into the sole normalization Fast path.
+The procedure registry is the sole writable source for machine metadata used to project portable procedure onto hosts. Canonical Markdown remains the sole source of procedure prose. Host manifests remain the sole source of destinations and host-only bindings. This separation prevents prose, composition order, and install destinations from drifting into separate authorities.
 
 ## Substance
 
 ### Ownership model
 
-Registry catalogs own machine identity, aliases, required reading, authority/isolation, loop/gate policy, fail-loud behavior, host representation, skill explicit-only policy, composition references, and semantic order. Markdown owns prose; manifests own destination/binding; overlays own host-only leaves and safety boundaries; baselines own byte-exact regression anchors. Skill entries keep two distinct booleans: `modelInvocationDisabled` mirrors the canonical skill frontmatter `disable-model-invocation` flag, while `explicitOnly` must exactly match Phase 0 inventory `explicit_only` (currently only `opencode-headless-run` and `opencode-history-search`).
+| Concern | Owner |
+| --- | --- |
+| Procedure language | `workflow/`, `skills/`, `agents/`, and `rules/` Markdown. |
+| Identity, aliases, required reading, authority/isolation, loop/gate, fail-loud behavior, host representation, explicit-only policy | Registry catalogs under `catalog/`. |
+| Composition references and semantic order | `catalog/workflows.json`. |
+| Destinations, excludes, host substitutions, and binding | Host manifests under `scripts/host-sync/manifests/`. |
+| Host-only leaves and safety boundaries | Registered overlays and adapters. |
+| Byte-exact regression anchors | Committed render baselines. |
 
-Host-mechanics deviations (including the retained Cursor `disable-model-invocation: true` asymmetry) and shared-source topology governance are documented in [skill-source-and-host-overlays](./skill-source-and-host-overlays.md); registry profiles enforce the fail-closed boundary.
+Registry entries are closed to their declared ownership fields. A skill entry mirrors canonical `disable-model-invocation`, while `explicitOnly` comes from inventory. Registry entries reject destination metadata because manifests own bindings.
 
 ### Canonical source flow
 
-To **change** an existing governed entity (same ID, same kind):
+To change an existing governed entity:
 
-1. **Prose change:** edit the canonical Markdown body under `workflow/`, `skills/`, `agents/`, or `rules/`. Host projections composed via `CompositionId` update automatically at render time; hand-authored thin wrappers that mirror prose must also be edited in the same changeset (see [editing-companion-workflow](../SOPs/editing-companion-workflow.md)).
-2. **Machine metadata change** (identity, aliases, authority, composition order, host representation): edit the registry catalog under `catalog/`. The deterministic renderer derives host projections; manifests own only destinations and host-only substitutions.
-3. **Verify:** run the sole normalization Fast CI and `git diff --check`.
+1. Edit prose in the canonical root tree, or machine metadata in the appropriate catalog.
+2. Edit hand-authored overlay wrappers only when they mirror prose or contain genuine host mechanics.
+3. Run normalization Fast CI and `git diff --check`.
 
-To **add** a new governed entity, the inventory must also be updated because the validator enforces exact inventory coverage per kind:
+To add a governed entity:
 
-1. **Canonical body/frontmatter:** create the Markdown source under the relevant base directory.
-2. **Inventory:** update `analysis/procedure-normalization-inventory-2026-09.json` — add the entity's `parity_matrix` row (for agents), skill inventory row, or rule/workflow inventory row with its canonical source path and evidence fields. The registry validator compares every catalog entry against this inventory; a missing inventory row fails Fast CI.
-3. **Registry catalog:** add the entry under `catalog/agents.json`, `catalog/skills.json`, or `catalog/rules.json (for rules) or catalog/workflows.json (for workflows/compositions)` with identity, aliases, required reading, authority/isolation, loop/gate, fail-loud behavior, and host representation fields matching the inventory.
-4. **Composition or host route (if applicable):** add the composition to `catalog/workflows.json`, bind it in the relevant manifest via `CompositionId` (never `Parts`/`Footer` for registry-governed order), and register any host-only leaves.
-5. **Verify:** run the sole normalization Fast CI and `git diff --check`; then run the sole Full CI for a baseline check.
+1. Create the canonical Markdown source and frontmatter.
+2. Add exact inventory coverage.
+3. Add the registry entry with required identity, authority, isolation, loop/gate, fail-loud, host representation, and applicability fields.
+4. Add a composition when order matters, bind it from the host manifest by `CompositionId`, and register host-only leaves.
+5. Run Fast CI for schema/inventory closure and Full CI for host, fixture, and baseline closure.
 
-**Live Apply is always owner-authorized.** No normalization or review step writes to live hosts. `Sync-HostHarness.ps1 -Apply` remains the exclusive live-write operator action, gated on fresh explicit owner authorization.
+Any ambiguity fails closed; the registry does not infer missing identity or order from host files.
 
 ### Fail-closed boundary
 
-`ProcedureRegistry.psm1` validates schema/version, exact inventory coverage, IDs, canonical identity and first-read contract, required reading, aliases, authority/isolation, loop/gate, fail-loud behavior, host representation, route identity, launch mechanism and evidence, both skill booleans (`modelInvocationDisabled` against frontmatter; `explicitOnly` against inventory), explicit skill applicability, rules/workflow canonical sources, one-to-one composition coverage, duplicate-free semantic order, and path containment. Schema items are closed to their declared ownership fields; skill registry entries reject destination metadata because manifests own bindings. Any ambiguity fails rather than falling back to host metadata. Restore baselines fail closed when absent or inaccessible; the checker's explicit sandbox opt-out waives inaccessibility only, and absence always fails.
+`scripts/normalization/ProcedureRegistry.psm1` validates schema/version, exact inventory coverage, IDs, canonical identity and first-read contracts, required reading, aliases, authority/isolation, loop/gate policy, fail-loud behavior, host representation, route identity, launch evidence, skill flags, explicit applicability, canonical rule/workflow sources, one-to-one composition coverage, duplicate-free semantic order, and path containment.
+
+Restore baselines fail closed when absent or inaccessible. A checker may explicitly waive host-profile inaccessibility in a disposable environment, but it may not waive an absent registered baseline.
 
 ### Blocking guard coverage
 
-Every governed ownership class has a blocking guard enforced in the sole Fast CI path:
+Every governed ownership class has a blocking guard in Fast CI:
 
-| Class | Guard | Enforcement point |
-|-------|-------|-------------------|
-| Cursor hybrid compositions | `Test-RegistryHostCompositionOwnership` | `Test-RegistryCatalog` → `Test-ProcedureRegistry.ps1` → Fast CI |
-| OpenCode dual-write | same (Parts/Footer forbidden; composition IDs required) | same |
-| Antigravity | same (`Copy-ManifestEntry` runtime rejection for forbidden fields) | same + writer preflight |
-| Cline/Kilocode | same (Parts/Footer forbidden; composition IDs required) | same + writer preflight |
-| Codex managed AGENTS block | same (writer-side Parts/unknown/divergent rejection) | same + Codex adapter writer checks |
-| Source ingress | `Get-RegistrySkillSourceRaw` BOM/missing fail-closed; `CanonicalSourceContract` | same |
-| Generated-file boundaries | `Test-RegistryCompositionOutputBoundary` + `Test-RegistryOutputRoot` | `Write-RegistryManagedView` (fail-closed at write time) |
-| Deterministic rendering | double-render hash comparison (49 rows + composition rows) | `Test-ProcedureRegistryViews.ps1` → Fast CI |
+| Class | Guarded invariant |
+| --- | --- |
+| Cursor hybrid composition | Registry-owned order; forbidden legacy composition fields. |
+| OpenCode dual-write | Identical instruction/AGENTS gate and composition ownership. |
+| Antigravity | Managed composition and runtime rejection of forbidden fields. |
+| Cline and Kilo Code | Registry-owned composition and explicit destination binding. |
+| Codex managed AGENTS block | Managed-block boundary and writer-side rejection of unknown/divergent composition. |
+| Source ingress | Missing, BOM-corrupted, or noncanonical sources fail. |
+| Generated-file boundaries | Protected roots and unrestricted output roots fail. |
+| Deterministic rendering | Double render must produce identical bytes. |
 
-Full CI additionally coordinates focused host and fixture gates:
+Full CI additionally coordinates focused host adapters, lifecycle fixtures, drift fixtures, and the disposable render pass.
 
-| Class | Guard | Gate |
-|-------|-------|------|
-| Host and fixture composition | consolidated host-sync Full, Codex adapter/lifecycle fixtures, and drift fixtures | Full CI only |
+### Baselines and renderer
 
-### Baseline regeneration and verification
+Committed baselines are generated regression anchors, never hand-edited expectations. When output legitimately changes, render through the registered deterministic path, review the result, and commit the baseline in the same changeset.
 
-Committed render baselines are mechanical regression anchors generated from observed current renders. Never edit baseline bytes to satisfy a stale expectation. When a render output legitimately changes, render through the deterministic adapter or registry renderer with an explicit output root, review the result, and commit the updated artifact in the same changeset. Normalization CI retains renderer repeatability through deterministic double-render comparison.
-
-### Renderer and CI
-
-`Render-ProcedureRegistry.ps1` renders repository-owned explicit output roots; the sole Full CI disposable render passes an explicit temporary-root ownership switch, and the public renderer rejects temporary roots without it. Output roots are segment-checked so exact protected/source roots and the OS temporary root itself fail closed. `Test-ProcedureRegistryViews.ps1` double-renders, checks the public render seam, compares hashes, checks 49 host-agent rows, renders composition rows through `semanticOrder`, exercises resolver seams, and tests fail-closed edges. CI threads one repository root through normalization checks; it never writes committed managed views or live hosts.
+`scripts/normalization/Render-ProcedureRegistry.ps1` renders only repository-owned explicit output roots unless explicitly invoked for the disposable Full CI temporary root. `scripts/normalization/Test-ProcedureRegistryViews.ps1` double-renders and validates registry views, host-agent coverage, composition order, resolver seams, and fail-closed boundaries.
 
 ### CI gates
 
-| Gate | Script | Scope |
-|------|--------|-------|
-| Fast | `Invoke-NormalizationFastCI.ps1` | Registry validity + views (676 checks) + current-state + unit checks (24) + focused Codex overlay checks + tracked hygiene + `git diff --check` |
-| Full | `Invoke-NormalizationFullCI.ps1` | Fast + consolidated host-sync Full + focused Codex adapter and lifecycle checks + drift fixtures + disposable double-render |
+| Gate | Sole entry point | Role |
+| --- | --- | --- |
+| Fast | `scripts/normalization/Invoke-NormalizationFastCI.ps1` | Blocking registry, inventory, current-state, focused overlay, hygiene, and diff checks. |
+| Full | `scripts/normalization/Invoke-NormalizationFullCI.ps1` | Fast plus consolidated host, Codex lifecycle, drift fixture, and disposable render verification. |
 
-Exactly one Fast and one Full entry point exist. Host-sync suite scripts are internal to Full CI, never separate entry points.
+There is exactly one Fast entry point and one Full entry point. Host-sync suite scripts are internal Full CI components, not alternate entry points.
 
 ### Live Apply boundary
 
-Normalization CI and documentation are non-live. Precedence rule for every Apply surface: **dry-run is always allowed; live Apply requires fresh explicit owner authorization; all-host (`-Target All`) Apply is normative; single-stack `-AllowSkew` is only an explicitly owner-authorized recovery exception.** Pre-Apply gates include: all-host dry-run, read-only drift report (`Test-HostHarnessDrift.ps1 -Target All -Json`), baseline readiness confirmation, and normalization Full CI. Post-Apply gates include: dry-run/drift re-check, 7x7 parity confirmation, restart/reload, and host-specific smoke matrix.
+Normalization CI and documentation are non-live. For every Apply surface:
 
-## Implications / open questions
+1. Dry-run is always allowed.
+2. Live Apply requires fresh explicit owner authorization.
+3. All-host Apply is normative.
+4. Single-stack `-AllowSkew` is only an explicitly owner-authorized recovery exception.
 
-1. Live Apply remains separately owner-authorized; no normalization gate performs a host write.
-2. Destination metadata must remain manifest-owned; registry entries reject it.
-3. Hand-authored overlay thin wrappers (launch mechanics, permissions, host-specific wiring) are outside registry-generated compositions and still require same-changeset manual edits when their text changes.
+Pre-Apply requires an all-host dry-run, read-only drift report, baseline readiness, and Full CI. Post-Apply requires dry-run/drift re-check, parity confirmation, host restart/reload, and the applicable host smoke matrix.
+
+---
+
+## Implications
+
+1. Never move semantic order into a manifest, wrapper, or renderer ad hoc.
+2. Never edit a baseline to hide drift; regenerate it only after reviewing the legitimate source/output change.
+3. Never let a reviewer or CI gate perform a live host write.
+
+---
+
+## Related
+
+- [Skill source and host overlays](./skill-source-and-host-overlays.md)
+- [Host adaptation fidelity](./host-adaptation-fidelity.md)
+- [Editing companion workflow SOP](../SOPs/editing-companion-workflow.md)
+- [Host harness sync README](../../scripts/host-sync/README.md)

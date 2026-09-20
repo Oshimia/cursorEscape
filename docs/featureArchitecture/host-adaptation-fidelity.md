@@ -1,14 +1,12 @@
 # Host adaptation fidelity
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-20
 
 ## Context
 
-This document is **Target** design for **complete host adaptation** — the binding bar that every registered stack (now including Codex) must meet before an overlay or live adapter is considered **Done**. It is not implied polish: operator workflow **loops** (plan review, implementation review with Fast → dual → Full, skill ids, clean-context isolation, Incomplete-until / dual-APPROVED bars) must behave the same on every host. Codex Phase 3 registration is **Done**: ApplyState = Active (activated 2026-09-08) with three-client C1–C6 runtime attestation recorded.
+Host adaptation is complete only when the same owner workflow behaves correctly on the registered stack. Folder presence, manifest registration, or a successful dry-run does not prove adaptation. The binding evidence is the host's active load surface, on-demand catalog, isolated reviewers, companion reads, and observed smoke behavior.
 
-**Scope:** Wiring bar, anti-patterns, checklist→verification matrix (C1–C6), doc boundaries, and phase-number disambiguation for the OpenCode overlay program (phases **0–3**) and the companion pointer-first program (`pointer-first-0` … `pointer-first-4`). **Out of scope here:** re-pasting Observed behavior tables ([cursor-behavior-to-reproduce](./cursor-behavior-to-reproduce.md)); always-on vs skill budget ([instruction-layering](./instruction-layering.md)); SoT vs overlay taxonomy ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)).
-
-**Applies to:** OpenCode overlay + live adapter (Phases 2–3 of this program), future **Cursor overlay refresh**, and the **Antigravity overlay** ([antigravity-host-adapter](../SOPs/antigravity-host-adapter.md)) — any stack that claims to run the cursorEscape loop must meet this bar, not only folder shape.
+This page defines the architecture bar and verification classes. Host SOPs own the exact reusable smoke commands and scorecards for their surfaces.
 
 ---
 
@@ -16,170 +14,84 @@ This document is **Target** design for **complete host adaptation** — the bind
 
 ### Success criterion (Required)
 
-**Done** means the operator can run the **same loops** on every registered stack (Cursor, OpenCode, Antigravity, Vscode, Cline, Kilocode, Codex):
+**Done** means the operator can run the same loops on every registered stack—Cursor, OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex—with these invariants:
 
 | Loop element | Required parity |
-| ------------ | --------------- |
-| Plan | `implementation-plan` → `plan_reviewer`; Incomplete-until / section checklist enforced |
-| Implement | Parent implements; isolated child context for reviewers |
-| Review | Fast CI Observed (parent) → parallel production-readiness + bug legs → fix must-fix → dual APPROVED → Full CI closeout |
-| Gates | Default-on unless truly trivial or explicit user opt-out; eval/harness/multi-step work **not** exempt |
-| Skills | On-demand load by id; deep docs via Read when skill says so |
-| Isolation | No prior review transcripts in child context; locked opener on production-readiness leg |
+| --- | --- |
+| Plan | `implementation-plan` plus `plan_reviewer`, with the plan's Incomplete-until bar enforced. |
+| Implementation | An implementer or parent executes an explicit scope in the stated workspace and diff boundary. |
+| Review | Observed Fast CI, parallel production-readiness and bug legs, repair, dual APPROVED, then Full CI. |
+| Gates | Default on unless truly trivial or explicitly waived; operational work is not exempt. |
+| Skills | Named on-demand skills load through the host's real discovery surface. |
+| Isolation | Reviewers receive packed inputs without prior transcripts; production reviewer has a locked opener. |
 
-Host chrome (Task UI, tray restart, permission prompts) may differ. **Loop semantics must not.**
+Host chrome, restart mechanics, permission prompts, and native UI may differ. Loop semantics may not.
 
-### Required adaptation vs anti-patterns
+### Adaptation requirements and anti-patterns
 
-| Required adaptation | Anti-pattern (reject) |
-| ------------------- | --------------------- |
-| Always-on gates wired to host **load surface** that actually injects (OpenCode: **absolute** `opencode.json` → `instructions` under `OPENCODE_HOME` **plus** matching global `AGENTS.md`; Cursor: User Rules / thin `.mdc`; Codex: managed `AGENTS.md` block plus independent skill-root catalog — active since 2026-09-08 with C1–C6 attested) | Relative `instructions/…` in **global** `opencode.json` (resolved vs **project cwd** — file on disk under `~/.config/opencode` but **not** injected); gates only in `instructions/` with no `AGENTS.md`; treating skill-description “default on” quotes as C1 pass; treating Codex registration or dry-run as C1 |
-| Every workflow skill advertised with matching frontmatter `name` + `description` (OpenCode); on-demand invocation (Cursor: `disable-model-invocation`) | Skills on disk with **description only** produce an empty skill-tool catalog |
-| `skills.paths` or equivalent discovery roots registered (OpenCode) | Relying on default scan when catalog is empty |
-| Reviewer agents `permission.edit: deny`; dual Task launch in one parent turn | Unwired stub agents; sequential-only “dual” review |
-| Deep workflow docs reachable via **absolute companion** Read paths (`{{COMPANION_ROOT}}/workflow/...`, `{{COMPANION_ROOT}}/skills/...`, `{{COMPANION_ROOT}}/agents/...`, `{{COMPANION_ROOT}}/rules/...`) from thin harness (pointer-first-2); OpenCode host `docs/workflow/...` mirror **deleted** pointer-first-4 — **not** procedure SoT | Any `../../docs|skills|agents` hop authored as if relative to the markdown file (tools resolve from **config root** / cwd — see [Wrong path resolution base](#wrong-path-resolution-base-failure-class--i--j)); treating host `docs/workflow/` mirror as procedure SoT after pointer-first-0 |
-| Rules → OpenCode **`instructions`** / skill deferral — **never** a Cursor-style host `rules/` tree on OpenCode | Copying `~/.cursor/rules/` shape onto OpenCode |
-| Smoke + matrix attestation prove **behavior** (gates visible, catalog lists ids, reviewers denied edit) | **Done** because folders exist without load/smoke |
-| One authored procedure per skill/workflow leaf; overlay = thin harness | Pasting full review loop into always-on or agent bodies |
+| Requirement | Reject |
+| --- | --- |
+| Wire always-on gates to a surface that actually injects them. | Treat a file on disk, a skill description, manifest registration, or dry-run success as injection evidence. |
+| Advertise every governed skill through the host's actual catalog. | Assume a default scan or rely on descriptions alone. |
+| Keep reviewer identities and edit denial explicit in the host projection. | Launch sequential personas or allow reviewers to mutate evidence. |
+| Resolve deep procedures through canonical companion pointers. | Copy a second procedure tree into host storage or author file-relative hops that resolve from another base. |
+| Preserve host-only deviations in overlays and manifests. | Put host IDs, permission JSON, or host sections into canonical bodies. |
+| Attest behavior after restart or reload. | Mark Done because folders and files exist. |
 
-### Wrong path resolution base (failure class — I + J)
+### Path-resolution failure class (Required)
 
-**Class rule:** OpenCode often resolves relative paths against **project cwd** or **`OPENCODE_HOME`**, not against the markdown file that contains the link. Authoring hops that look correct in a file browser (`../../docs/...` from `skills/<id>/`, `../../skills/...` from `docs/workflow/`) silently point at the **wrong tree** at runtime.
+Host harness paths may resolve from the project working directory, host home, or another configured base—not from the Markdown file that contains the link. A relative hop can therefore look correct in the repository and resolve outside the host at runtime.
 
-| Mode | Smoke / bar | Author mental model (wrong) | Actual base | Broken result | Fix |
-| ---- | ----------- | --------------------------- | ----------- | ------------- | --- |
-| **I** | C1 / row 1 | `instructions/…` relative to config dir | **Project cwd** | Gates never inject; model quotes skill blurbs only | Absolute `{{OPENCODE_HOME}}/instructions/…` + `AGENTS.md` dual-write |
-| **J** | C4 / row 4 | `../../docs/workflow/…` relative to skill file | **`OPENCODE_HOME`** | `%USERPROFILE%\docs\workflow\…` | Host-root `docs/workflow/…` in skills |
-| **J (mirror)** | C4 residual | `../../skills|agents/…` relative to `docs/workflow/` file | **`OPENCODE_HOME`** (same class) | `%USERPROFILE%\skills|agents\…` | Host-root `skills/…`, `agents/…` in workflow rewrite + rubric |
+Required controls:
 
-**C6 trap (shared):** File present under `~/.config/opencode/...` does **not** prove the path string in harness text resolves there.
+1. Host bootstrap instructions use explicit host-home tokens such as `{{OPENCODE_HOME}}` where the host requires absolute configuration values.
+2. Deep procedure links use canonical companion tokens such as `{{COMPANION_ROOT}}/workflow/...`.
+3. Overlay harness leaves contain no file-relative `../../docs`, `../../skills`, or `../../agents` procedure links.
+4. Smoke asks the host to resolve and read the linked procedure, not merely to show that the file exists.
 
-**Author-time Fast CI (all modes):**
+### Verification classes C1–C6 (Required)
 
-```text
-# Specimen instructions must be absolute-token form
-rg -n '"instructions"' overlays/opencode/opencode.specimen.json
-# Expect: {{OPENCODE_HOME}}/instructions/cursor-escape-loop.md
+| Class | Requirement | Minimum evidence |
+| --- | --- | --- |
+| **C1** | Always-on gates inject. | A clean session can quote the default-on plan and review gates, the when-in-doubt rule, and the non-exemption of operational work without tools. |
+| **C2** | Skill catalog is complete. | The host catalog lists the governed skill IDs for that surface; a named skill loads through real host discovery. |
+| **C3** | Plan and dual-review routes enforce isolation and gates. | Thin plan gets `CHANGES REQUESTED`; reviewers launch in parallel, deny edits, and receive separate clean inputs. |
+| **C4** | Deep workflow reads resolve. | A host-loaded skill reads the named canonical workflow document from its companion pointer. |
+| **C5** | Companion architecture and procedure reads work. | A representative FA/SOP/workflow read succeeds through the configured companion access surface without ad-hoc discovery. |
+| **C6** | Smoke proves behavior, not presence. | The host scorecard records `pass`, `fail`, or `deferred: reason`; presence alone is never `pass`. |
 
-# Zero file-relative ../../ hops in host-plugged harness leaves (overlay author-time)
-rg -n '\.\./\.\./(docs|skills|agents)/' overlays/opencode/skills overlays/opencode/agents overlays/opencode/review-subagent-models.md
-# Expect: zero
+First activation of a stack requires a full C1–C6 scorecard. A registry or wiring-only change may use the focused subset named by its host SOP, but any change to the active load surface requires renewed C1 and C6 evidence.
 
-# Zero positive docs/workflow/ Target cites in live harness (post-sync / pf4)
-rg -n '\]\([^)]*docs/workflow/' ~/.config/opencode/skills ~/.config/opencode/agents
-# Expect: zero (mirror deleted pf4)
-```
+### Current activation posture
 
-**Instances:** [Failure mode I](#observed-failure-cwd-relative-global-instructions-c1--2026-08-20) · [Failure mode J](#observed-failure-skill-docsworkflow-hops-c4--2026-08-20) · authoring [I](../SOPs/opencode-authoring-adapter.md#failure-mode-i--cwd-relative-global-instructions-c1) / [J](../SOPs/opencode-authoring-adapter.md#failure-mode-j--wrong-path-resolution-base-c4).
+All seven stacks are registered. Codex activated 2026-09-08 and has a three-client C1–C6 runtime attestation. Other active host procedures remain governed by their host SOPs and the current manifests; historical bring-up narratives are not part of this architecture page.
 
-### Observed failure: cwd-relative global `instructions` (C1) — 2026-08-20
+Future refreshes and new stacks must meet the same fidelity bar. A stack may have host-specific mechanics, but it may not have a second authored loop, a permanent procedure mirror, or weaker review gates.
 
-**Symptom (smoke row 1):** Clean chat; no-tools ask to quote always-on. Model quotes “default on” from **skill** blurbs only; states **when-in-doubt** and **eval/harness not exempt** are absent from session instructions. Operator may also see the model search FA docs or Shell-list `~/.config/opencode`.
+### Documentation boundary
 
-**Root cause (Observed):** Global `~/.config/opencode/opencode.json` listed `"instructions": ["instructions/cursor-escape-loop.md"]`. OpenCode resolves that path against the **project cwd**, not the config directory. In a normal repo workspace the path does not exist → **silent non-injection**. The correct file under `~/.config/opencode/instructions/` can still exist on disk (C6 trap: presence ≠ load).
-
-**Required fix (do not regress):**
-
-1. Specimen + live: `instructions` = **absolute** `{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md` (merged to a real absolute path on sync).
-2. Dual-write the **same** gate body to `{{OPENCODE_HOME}}/AGENTS.md` (OpenCode global rules surface — applied across sessions).
-3. Keep `AGENTS.md` byte-identical to `instructions/cursor-escape-loop.md` on every sync.
-4. Re-attest smoke row **1** after full quit/restart — pass only if when-in-doubt + eval/harness quotes come from session text with **zero** tools.
-
-**Authoring SoT:** [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) § Failure mode I. **Evidence:** C1 / Failure mode I.
-
-### Observed failure: skill `../../docs/workflow` hops (C4) — 2026-08-20
-
-**Symptom (smoke row 4):** Skill `implementation-review` loads; model resolves Read path `../../docs/workflow/iterative-code-review.md` to `C:\Users\admin\docs\workflow\…` (outside adapter) and cannot confirm the deep doc.
-
-**Root cause (Observed):** Overlay skill Read tables used markdown hops `../../docs/workflow/...` as if relative to `skills/<id>/SKILL.md`. Tool/path resolution is from **`OPENCODE_HOME`** (config root). From that root, `../..` exits to the user profile → wrong tree. Agents already used correct host-relative `docs/workflow/...`.
-
-**Required fix (do not regress):**
-
-1. All overlay + live skill Read links / prose paths: **Target** = absolute `{{COMPANION_ROOT}}/workflow/<leaf>.md` (pointer-first-2 complete) — **zero** `../../docs/workflow/` in `overlays/opencode/skills/**`.
-2. Prefer absolute `read` under `{{COMPANION_ROOT}}` when the workspace is the companion repo; host procedure mirror **deleted** on OpenCode (pointer-first-4).
-3. Smoke row **4** How cites companion `{{COMPANION_ROOT}}/workflow/...` — locked in [host-adapter](../SOPs/opencode-host-adapter.md); never `../../docs/workflow/...` as the expected resolve path.
-4. Fast CI: `rg` zero for `../../docs/workflow` under overlay skills.
-5. **Same class — workflow mirror (2026-08-20 audit; legacy transitional):** `Rewrite-OpenCodeWorkflowLinks.ps1` emitted host-root `skills/...` and `agents/...` — **archived** after pointer-first-0; not primary sync. Overlay `review-subagent-models.md` uses absolute `{{COMPANION_ROOT}}/...` companion paths after pointer-first-2.
-
-**Authoring SoT:** [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) § Failure mode J. **Class:** [Wrong path resolution base](#wrong-path-resolution-base-failure-class--i--j).
-
-### OpenCode load-surface map (Required cite)
-
-OpenCode loads workflow material through these surfaces only — **not** Cursor `rules/`:
-
-| Surface | Purpose | Authoring reference |
-| ------- | ------- | ------------------- |
-| `instructions/*` (via `opencode.json` → `instructions` — **absolute** path) | Always-on thin gates | [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) § Rules and always-on; § Failure mode I |
-| `AGENTS.md` (global under `OPENCODE_HOME`, byte-match instructions body) | Standing rules per OpenCode precedence — **required dual-write for C1** | Same |
-| `skills/<id>/SKILL.md` | On-demand skills; **`name` + `description` required** | [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) § Skills |
-| `agents/*.md` | Role agents; reviewers deny-edit | [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) § Agents |
-| `opencode.json` → `skills.paths` | Explicit skill scan roots | [opencode-authoring-adapter](../SOPs/opencode-authoring-adapter.md) § Explicit skill paths |
-| `opencode.json` → `permission.skill` | Advertise/load allow | Same |
-| `docs/workflow/*` (mirrored — **deleted OpenCode pf4**) | Former legacy deep-procedure mirror on OpenCode host — **removed** 2026-08-20; Cursor `~/.cursor/docs/workflow/` may remain transitional | [instruction-layering](./instruction-layering.md) Layer 3 — Target Reads = `{{COMPANION_ROOT}}/workflow/` |
-
-After any config-time edit: **full quit and restart** OpenCode (no hot-reload). Parent owns Observed Fast CI; empty Task ≪1s = routing/auth failure, not “no bugs.”
-
-### Checklist → verification matrix (C1–C6)
-
-Phase 2 reviewers use **Author-time** columns; Phase 3 use **Runtime** + smoke. Do not mark **Done** on file presence alone (C6).
-
-| # | Checklist item | Author-time (OpenCode overlay Phase 2) | Runtime (live sync Phase 3) | Smoke row(s) / method |
-| - | -------------- | -------------------------------------- | --------------------------- | --------------------- |
-| **C1** | Always-on gates inject (plan + dual-review default-on; when-in-doubt; eval/harness not exempt; Incomplete-until pointer) | Specimen `instructions` uses **absolute** `{{OPENCODE_HOME}}/instructions/cursor-escape-loop.md` (not cwd-relative); matching `AGENTS.md` dual-write; instruction file states **both** plan and implementation-review gates | New session after restart; model quotes default-on plan loop + when-in-doubt + eval/harness not exempt from always-on | **1** — [host-adapter](../SOPs/opencode-host-adapter.md) smoke § row 1 |
-| **C2** | Skill catalog complete | Every governed OpenCode skill has frontmatter `name` matching folder ID plus `description`; the overlay index and host-adapter inventory list the same set | Skill tool lists all 11 governed OpenCode skills; load `implementation-plan` through the thin harness and companion Read with zero bash for SoT | **9**, **10** — see the [OpenCode host adapter](../SOPs/opencode-host-adapter.md) smoke scorecard |
-| **C3** | Plan→`plan_reviewer`; implement→dual review→Full / pre-commit | Overlay agents: `plan_reviewer`, `production_readiness_reviewer`, `bug_reviewer` with `permission.edit: deny`; bodies cite companion `{{COMPANION_ROOT}}/workflow/iterative-*` and FA rubric | Dual Task in one turn (two children); reviewers cannot edit; thin plan → **CHANGES REQUESTED**; rubric file exists | **13**, **3**, **2**, **8**, **14** — thin-plan smoke; dual shape; deny-edit; rubric path; specimen/live agent map in the [OpenCode host adapter](../SOPs/opencode-host-adapter.md) |
-| **C4** | Deep workflow Reads resolve on host | Hubs + smoke row **4** How cite absolute `{{COMPANION_ROOT}}/workflow/...`. Harness skill/agent **Read when** bodies use absolute `{{COMPANION_ROOT}}/workflow|skills|agents|rules/...` after **pointer-first-2** — **zero** `../../docs/workflow/` in overlay harness. OpenCode host mirror **deleted** pointer-first-4 | `implementation-review` skill load; confirm Read resolves `{{COMPANION_ROOT}}/workflow/iterative-code-review.md` (Target How). **pass** (2026-08-20 operator post-mirror) | **4** — **pass** (2026-08-20 operator — companion path) |
-| **C5** | Companion FA/SOP reads without repeated asks | Specimen `external_directory` tokens for companion repo paths (e.g. `docs/featureArchitecture/**`); deny-edit under adapter tree if configured | Sample read of FA leaf (e.g. this doc) via native `read` without serial Shell listing | Optional **11**, **12** — native tools / glob-blind probes |
-| **C6** | Smoke proves **behavior**, not presence | N/A (runtime-only bar) | Host-adapter smoke table attests C1–C5 with `pass` / `fail` / `deferred: <reason>` — no row marked pass for “folder exists” alone. Deep-doc probes cite companion `{{COMPANION_ROOT}}/workflow/` paths where applicable | **C6 minimum:** **1, 2, 3, 4, 8, 9, 10, 13** — attest in the [OpenCode host adapter](../SOPs/opencode-host-adapter.md) smoke scorecard. Row **14** is an install-time map check |
-
-### Doc boundary (Must)
-
-| Doc | Owns | Must not |
-| --- | ---- | -------- |
-| [cursor-behavior-to-reproduce.md](./cursor-behavior-to-reproduce.md) | **Semantics** to reproduce (Observed → Target mapping) | Wiring recipes, install anti-patterns, smoke matrices |
-| **host-adaptation-fidelity.md** (this page) | Wiring bar, anti-patterns, C1–C6 matrix, **Done** definition | Re-paste Observed behavior tables from cursor-behavior |
-| [instruction-layering.md](./instruction-layering.md) | Always-on vs skill vs deep-doc **budget** | OpenCode smoke matrices, copy-out authorization |
-| [skill-source-and-host-overlays.md](./skill-source-and-host-overlays.md) | SoT vs overlay vs copy-out **authorship** stance | Full fidelity smoke matrix (cite this FA instead) |
-
-### Phase-number disambiguation (Required)
-
-| Name | Phases | Meaning |
-| ---- | ------ | ------- |
-| **Companion pointer-first program** | **pointer-first-0 … pointer-first-4** | Lock companion SoT + thin harness; supersede procedure-mirror load path; stub/sync/mirror disposition through pointer-first-4 |
-| **OpenCode overlay program** | **0–3** | 0 = fidelity FA; 1 = thin discovery/plan-review skills; 2 = `overlays/opencode/` + copy-out auth flip; 3 = live sync + smoke — **load path superseded** |
-| **Shared-workflow-docs program** | **1–6** | Completed repo-root migration |
-| **cursorEscape initialization** | **0–6** | Bootstrap / Target FA |
-
-When a doc says “Phase 2,” confirm **which program** before editing overlays or authorization. When a doc says “pointer-first-0,” confirm it is **not** opencode-overlays-sot Phase 0.
-
-### Cursor refresh (Required)
-
-Future refresh of [overlays/cursor](../../overlays/cursor/_index.md) or live `~/.cursor` copy-out must meet **this same fidelity bar**: thin wrappers only, spawn + Read tables, no second procedure tree, dual review + Fast/Full split preserved. Shape-matching Cursor folders without load verification is an anti-pattern here too.
-
-### Host-plugged vs companion-resident (cite)
-
-**Host-plugged (must meet C1–C6 at runtime):** `opencode.json` harness (absolute `instructions`), `AGENTS.md` + `instructions/*` (identical gate body), thin `skills/*/SKILL.md` stubs, overlay `agents/*.md` harness; Codex adds its managed `AGENTS.md` block, seven TOML agents, and 23 skill wrappers across its two explicit roots. OpenCode host procedure mirror **deleted** pointer-first-4 — Target deep procedure = companion `{{COMPANION_ROOT}}/workflow/`. Cursor `~/.cursor/docs/workflow/` may remain transitional.
-
-**Companion-resident (read via `external_directory` / workspace):** FA leaves, SOPs (except short excerpts in instructions), research/analysis (except required host Read targets), maintainer indexes.
+| Page | Owns | Must not own |
+| --- | --- | --- |
+| This page | Fidelity bar, anti-patterns, C1–C6 classes, Done definition. | Per-host command logs or reusable smoke matrices. |
+| [`instruction-layering.md`](./instruction-layering.md) | Context budget and load layers. | Host installation procedures. |
+| [`skill-source-and-host-overlays.md`](./skill-source-and-host-overlays.md) | Source ownership, overlays, sync, and allowed deviations. | The full smoke matrix. |
+| Host SOPs | Reusable setup, verification, smoke, and recovery commands. | Alternate canonical loop semantics. |
 
 ---
 
-## Implications / open questions
+## Implications
 
-1. Phase 0 authors this matrix; Phase 2/3 **execute** it — reviewers must not invent new smoke methods outside this table and [opencode-host-adapter](../SOPs/opencode-host-adapter.md).
-2. Empty skill-tool catalog after correct authoring = **failed adaptation**, not model preference.
-3. Relative `instructions` paths in **global** config = **failed C1** even when the file exists under `~/.config/opencode/instructions/` ([Observed failure](#observed-failure-cwd-relative-global-instructions-c1--2026-08-20)). Same class as skill/workflow `../../` hops ([Wrong path resolution base](#wrong-path-resolution-base-failure-class--i--j)).
-4. Copy-out into `~/.config/opencode` is **authorized and applied** from [overlays/opencode](../../overlays/opencode/_index.md) (Phase 3 live sync 2026-08-20; pointer-first-2 harness rewrite; pointer-first-4 mirror delete). C6 minimum smoke rows **1–4**, **8**, **9–10**, **13**: **pass** (2026-08-20 operator post-mirror). Cursor copy-out remains manual.
+1. Empty catalogs and failed companion reads are adaptation failures, not model preferences.
+2. Manifest drift and loop drift are distinct; both must be checked before a host is considered healthy.
+3. New host support is an architecture change and requires the implementation-review cycle.
 
 ---
 
 ## Related
 
-- [Cursor behavior to reproduce](./cursor-behavior-to-reproduce.md)
 - [Instruction layering](./instruction-layering.md)
 - [Skill source and host overlays](./skill-source-and-host-overlays.md)
 - [Intended workflow](./intended-workflow.md)
-- [OpenCode host adapter](../SOPs/opencode-host-adapter.md)
-- [Codex host adapter](../SOPs/codex-host-adapter.md) — Codex Phase 4 activated 2026-09-08; C1–C6 runtime attestation recorded
-- [Authoring OpenCode adapter files](../SOPs/opencode-authoring-adapter.md)
+- [Procedure registry](./procedure-registry.md)
+- [Host harness sync README](../../scripts/host-sync/README.md)
 - [Feature architecture index](./_index.md)

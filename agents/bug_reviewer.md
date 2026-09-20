@@ -1,6 +1,6 @@
 # bug_reviewer
 
-**Last updated:** 2026-09-18
+**Last updated:** 2026-09-20
 
 ## Context
 
@@ -66,9 +66,9 @@ If required inputs are missing: emit ONE finding titled "Missing required inputs
 
 ### Model
 
-**Desired:** Matched to production_readiness or a stronger bug-focused model — config override. ClinePass (or BYOK) when using OpenCode. Do **not** pin provider-specific models in the agent file.
+**Desired:** Matched to production_readiness or a stronger bug-focused model — host/model configuration override. Model credentials remain owner-controlled BYOK. Do **not** pin provider-specific models in the agent file.
 
-### Host mapping (first attempt)
+### Host mapping
 
 OpenCode markdown agent (`mode: subagent`, `permission.edit: deny`) with a bug-first system prompt, Custom Instructions envelope, and **Read when** the finding rubric. Parent launches via Task in the same session as production_readiness_reviewer.
 

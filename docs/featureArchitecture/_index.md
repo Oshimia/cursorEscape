@@ -1,63 +1,54 @@
 # Feature Architecture Documentation
 
-**Last updated:** 2026-09-18
+**Last updated:** 2026-09-20
 
 ## Context
 
-This section explains **how cursorEscape is intended to work** — Target design and workflow contracts. Unlike SOPs (how to perform a task), these documents describe system behavior and architecture.
+This section explains how cursorEscape is intended to work: the portable loop, source and overlay architecture, host fidelity model, agent roles, permission policy, project decisions, and registry-owned verification boundary.
 
-**Status:** Target synthesizing docs authored and current (authoring programs complete; normalization CI owns integrity checks). Observed imports remain under `research/imported/`. Identity: companion repo is **Target** contract SoT at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/` — Approach A). Cursor overlay: [overlays/cursor](../../overlays/cursor/_index.md) (thin wrappers). Overlay FA: [skill-source-and-host-overlays.md](./skill-source-and-host-overlays.md).
+Procedures are distinct from design. How to perform a task belongs in [`docs/SOPs/`](../SOPs/_index.md); shared deep procedure belongs in [`workflow/`](../../workflow/_index.md), with [`skills/`](../../skills/_index.md), [`agents/`](../../agents/_index.md), and [`rules/`](../../rules/_index.md) as the portable contract trees.
 
-## Substance
+## Content boundaries
 
-### Content boundaries
+| Area | Responsibility |
+| --- | --- |
+| This folder | Current this-repository feature architecture and durable design decisions. |
+| `workflow/` | Shared deep procedures and loop mechanics. |
+| `skills/` | On-demand skill contracts and Read-when pointers. |
+| `agents/` | Portable role contracts. |
+| `rules/` | Always-on gate bodies. |
+| `overlays/` | Host wrappers, host-only composition, and wiring for seven registered stacks. |
+| `catalog/` and manifests | Machine metadata, destinations, composition bindings, and source classes. |
+| `scripts/normalization/` | Sole Fast and Full CI entry points. |
 
-| Document type | Responsibility |
-| ------------- | -------------- |
-| This folder (Target docs) | Intended workflow, instruction layering, clean-context isolation, **skill source and host overlays**, backend abstraction, agent roles, evaluation methodology |
-| [research/imported/](../../research/imported/) | Owner-frozen imported sibling research |
-| [`agents/`](../../agents/_index.md) | Host-agnostic role contracts |
-| [`skills/`](../../skills/_index.md) | Host-agnostic skill contracts |
-| [`rules/`](../../rules/_index.md) | Always-on gate contracts |
-| [`workflow/`](../../workflow/_index.md) | Shared deep procedure (plan/review loops, discovery, CI ladder) |
-| [overlays/](../../overlays/_index.md) | Host-native thin wrappers and harness leaves for all seven registered stacks |
-
-### Observed imports (Phase 2–3)
-
-Imported Observed harness and workflow snapshots live under [research/imported/](../../research/imported/COPY-MANIFEST.md) — not Target cursorEscape design.
-
-### Target documents
+## Architecture documents
 
 | Document | Purpose |
-| -------- | ------- |
-| [intended-workflow.md](./intended-workflow.md) | Target loop (owner approval preview when visual sign-off is documented or explicitly requested by the owner; dual gate; OpenCode bug_reviewer). Live Cursor import = Observed interim wording |
-| [instruction-layering.md](./instruction-layering.md) | Thin always-on vs on-demand skills/docs/agents (context budget) |
-| [clean-context-isolation.md](./clean-context-isolation.md) | Isolated child handoffs; no prior review transcripts |
-| [desired-behavior-vs-cursor-specific.md](./desired-behavior-vs-cursor-specific.md) | Portable vs Cursor-specific claims |
-| [cursor-behavior-to-reproduce.md](./cursor-behavior-to-reproduce.md) | Observed behaviors worth preserving |
-| [backend-and-provider-abstraction.md](./backend-and-provider-abstraction.md) | T3 → OpenCode → provider layering |
-| [repository-discovery-and-context.md](./repository-discovery-and-context.md) | What context agents need |
-| [workspace-model.md](./workspace-model.md) | Companion vs target workspace; T3 vs OpenCode sessions |
-| [skill-source-and-host-overlays.md](./skill-source-and-host-overlays.md) | One procedure; additive host overlays; promotion rule |
-| [host-adaptation-fidelity.md](./host-adaptation-fidelity.md) | Host wiring bar; C1–C6 matrix; anti-patterns; Done definition (OpenCode overlay program Phase 0) |
-| [agent-roles-and-model-assignment.md](./agent-roles-and-model-assignment.md) | Role catalog + config |
-| [evaluation-methodology.md](./evaluation-methodology.md) | How workflow quality is measured |
-| [bug-reviewer-finding-rubric.md](./bug-reviewer-finding-rubric.md) | bug_reviewer report vs ignore (nits / out-of-scope / pre-existing) |
-| [permission-and-native-tool-policy.md](./permission-and-native-tool-policy.md) | Shell permission policy: read-only allowlist SoT, git red line, accepted risks, measurement |
-| [project-decisions-and-open-questions.md](./project-decisions-and-open-questions.md) | Durable project decisions, framework/process fitness assessments, sibling-relationship intent, and unresolved architectural questions (U1–U13) |
-| [procedure-registry.md](./procedure-registry.md) | Semantic registry: ownership model, canonical source flow, blocking guard coverage for all migrated classes, sole Fast/Full CI orchestrators, baseline regeneration boundary, and explicit Phase 6 Apply boundary |
+| --- | --- |
+| [Intended workflow](./intended-workflow.md) | Workspace scope and the plan → implement → dual-review → closeout architecture. |
+| [Agent roles and model assignment](./agent-roles-and-model-assignment.md) | Portable role catalog, dual-gate rule, and model-assignment boundary. |
+| [Instruction layering](./instruction-layering.md) | Always-on, skill, deep-procedure, and role-agent context budget. |
+| [Clean context and isolation](./clean-context-isolation.md) | Parent synthesis, child isolation, dual-gate envelopes, and thread hygiene. |
+| [Skill source and host overlays](./skill-source-and-host-overlays.md) | Canonical homes, companion-pointer overlays, sync, promotion, and host deviations. |
+| [Host adaptation fidelity](./host-adaptation-fidelity.md) | The behavior bar, path-resolution rules, and C1–C6 verification classes. |
+| [Procedure registry](./procedure-registry.md) | Registry ownership, guarded source flow, CI entry points, and Apply boundary. |
+| [Permission and native tool policy](./permission-and-native-tool-policy.md) | Read-only defaults, native-tool preference, and mutating-command red lines. |
+| [Project decisions and open questions](./project-decisions-and-open-questions.md) | Current project decisions, retained framework choices, and live open questions. |
+| [bug_reviewer finding rubric](./bug-reviewer-finding-rubric.md) | Report, ignore, clean-context, doubt, and evidence rules for the bug-review leg. |
 
-First host attempt and the durable first-attempt decision live in [project decisions](./project-decisions-and-open-questions.md). Claim taxonomy: **Desired / Required / Nice-to-have / Cursor-specific / Unknown**.
+The registered host set is Cursor, OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex. Host mechanics are documented by their overlay indexes and SOPs; this folder defines the invariants they must preserve.
 
----
+## Operating rules
 
-## Implications / open questions
-
-1. Do not mix Observed and Target in the same doc without labels.
-2. Runtime implementation must update these docs when behavior diverges.
-3. Host extra restrictiveness lives in overlays ([skill-source-and-host-overlays](./skill-source-and-host-overlays.md)), not a second procedure tree.
+1. Canonical prose has one home; hosts receive projections.
+2. Registry composition owns semantic order; manifests own destinations.
+3. Fast CI is observed before review; Full CI closes after dual APPROVED.
+4. Dry-run Apply is always allowed; live Apply requires fresh explicit owner authorization.
+5. Current-facing documentation describes the working architecture, not completed migration history.
 
 ## Related
 
-- [Project decisions and open questions](./project-decisions-and-open-questions.md) — absorbs prior review/ intent (migrated 2026-09-18)
-- [Editing companion workflow](../SOPs/editing-companion-workflow.md) — operational edit map (cascade) for Approach A + pointer-first
+- [SOP index](../SOPs/_index.md)
+- [Workflow index](../../workflow/_index.md)
+- [Overlays index](../../overlays/_index.md)
+- [Host harness sync README](../../scripts/host-sync/README.md)

@@ -1,6 +1,6 @@
 # repository_explorer
 
-**Last updated:** 2026-09-11
+**Last updated:** 2026-09-20
 
 ## Context
 
@@ -53,5 +53,4 @@ Explore the target workspace (read, search, list) within a stated question; retu
 
 ## Related
 
-- [Repository discovery and context](../docs/featureArchitecture/repository-discovery-and-context.md)
 - [discovery procedure](../workflow/discovery.md)
