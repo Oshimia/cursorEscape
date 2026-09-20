@@ -165,7 +165,7 @@ The disposable fixture suite exercises clean, drift, missing, path-error, Cursor
 pwsh scripts/host-sync/Invoke-HostSyncDriftFixtureChecks.ps1
 ```
 
-`Invoke-Phase2FullCI.ps1` is non-mutating. It validates exact planned C1 bytes, deterministic OpenCode JSON, model/provider preservation, inventory, and zero managed-byte changes from dry-run; it must never invoke `-Apply`.
+`Invoke-HostSyncFullCI.ps1` is non-mutating. It validates exact planned C1 bytes, deterministic OpenCode JSON, model/provider preservation, inventory, and zero managed-byte changes from dry-run; it must never invoke `-Apply`.
 
 Two focused Codex suites remain internal normalization coverage: `Invoke-CodexPhase1Checks.ps1` runs in Fast, and `Invoke-CodexAdapterChecks.ps1` runs in Full after the host-sync Phase 2 gate. Both accept explicit `-CompanionRoot` values and use disposable roots rather than live host profiles.
 
@@ -180,7 +180,7 @@ OpenCode JSON is byte-deterministic: ordinary mappings are sorted canonically (o
 | `"plan_reviewer": "allow"` then `"*": "deny"` → Task spawn denied | `"*": "deny"` first, then named allows |
 | `"Get-ChildItem*": "allow"` then `"*": "ask"` → listing still asks | `"*": "ask"` first, then listing allows |
 
-**Do not** replace that canonical ordering with raw hashtable serialization when editing `Merge-OpenCodeHarnessJson`. Fast CI: `Invoke-Phase2FastCI.ps1` asserts `*` is first on merged `build.task` and global `bash`.
+**Do not** replace that canonical ordering with raw hashtable serialization when editing `Merge-OpenCodeHarnessJson`. Focused CI: `Invoke-HostSyncChecks.ps1 -Suite DryRun` asserts `*` is first on merged `build.task` and global `bash`.
 
 Full write-ups: [opencode-authoring-adapter Failure modes K–M](../../docs/SOPs/opencode-authoring-adapter.md#failure-mode-k--permission-pattern--not-first-last-match-wins).
 

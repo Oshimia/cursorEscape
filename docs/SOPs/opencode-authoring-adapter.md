@@ -390,7 +390,7 @@ rg -n '\.\./\.\./(docs|skills|agents)/' "$env:OPENCODE_HOME/docs/workflow" "$env
 $j = Get-Content $env:USERPROFILE\.config\opencode\opencode.json -Raw | ConvertFrom-Json
 @($j.agent.build.permission.task.PSObject.Properties.Name)[0]   # expect *
 @($j.permission.bash.PSObject.Properties.Name)[0]               # expect *
-pwsh ./scripts/host-sync/Invoke-Phase2FastCI.ps1                # includes * -first asserts
+pwsh ./scripts/host-sync/Invoke-HostSyncChecks.ps1 -Suite DryRun # includes * -first asserts
 ```
 
 #### Failure mode L — `edit: deny` does not block bash writes

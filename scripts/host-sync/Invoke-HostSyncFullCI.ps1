@@ -211,8 +211,7 @@ Assert-Pass 'procedure mirror remains hard-excluded' (
 Assert-Pass 'review model leaf remains excluded' ($manifest.HardExcludes -contains 'review-subagent-models')
 
 Invoke-RunScriptCheck -Name 'drift fixture suite' -Path (Join-Path $hostSyncRoot 'Invoke-HostSyncDriftFixtureChecks.ps1')
-Invoke-RunScriptCheck -Name 'host-sync composition checks' -Path (Join-Path $hostSyncRoot 'Invoke-HostSyncChecks.ps1') -ArgumentList @('-Suite','Composition')
-Invoke-RunScriptCheck -Name 'Phase 2 Fast CI' -Path (Join-Path $hostSyncRoot 'Invoke-Phase2FastCI.ps1')
+Invoke-RunScriptCheck -Name 'host-sync composition and dry-run checks' -Path (Join-Path $hostSyncRoot 'Invoke-HostSyncChecks.ps1') -ArgumentList @('-Suite','All')
 
 $finalSnapshot = Get-OpenCodeManagedSnapshot -LiveRoot $liveOpenCode -Manifest $manifest
 Assert-Pass 'Full CI made zero managed-byte changes' (
