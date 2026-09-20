@@ -167,7 +167,7 @@ pwsh scripts/host-sync/Invoke-HostSyncDriftFixtureChecks.ps1
 
 `Invoke-HostSyncFullCI.ps1` is non-mutating. It validates exact planned C1 bytes, deterministic OpenCode JSON, model/provider preservation, inventory, and zero managed-byte changes from dry-run; it must never invoke `-Apply`.
 
-Two focused Codex suites remain internal normalization coverage: `Invoke-CodexPhase1Checks.ps1` runs in Fast, and `Invoke-CodexAdapterChecks.ps1` runs in Full after the host-sync Phase 2 gate. Both accept explicit `-CompanionRoot` values and use disposable roots rather than live host profiles.
+Focused Codex suites remain internal normalization coverage: `Invoke-CodexPhase1Checks.ps1` runs in Fast, while `Invoke-CodexAdapterChecks.ps1` and `Invoke-CodexLifecycleChecks.ps1` run in Full. They accept explicit `-CompanionRoot` values and use disposable roots rather than live host profiles.
 
 ## OpenCode JSON merge — canonical key order (required)
 
