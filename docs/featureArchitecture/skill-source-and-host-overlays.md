@@ -73,6 +73,12 @@ When a host-specific pattern is required by more than one stack, first express t
 
 Do not promote a host workaround into canonical prose until its portable rule is explicit. Do not leave a shared concern in one overlay after a second stack needs the same behavior.
 
+### Extension directories (Required)
+
+Every host overlay may carry `rules/` and `hooks/` directories for host-specific content. `rules/` hosts custom procedural rules beyond the canonical set; `hooks/` hosts host-specific lifecycle hook configurations. Agents and skills already have per-host surfaces; workflows remain canonical, and host-specific workflow notes belong in instruction footers rather than a copied workflow tree.
+
+One exception exists: `overlays/cursor/rules/` already contains native `.mdc` rule files. New stacks follow the same two-directory extension shape without importing that host's native format.
+
 ### Host examples (Required)
 
 | Host | Appropriate overlay concern |

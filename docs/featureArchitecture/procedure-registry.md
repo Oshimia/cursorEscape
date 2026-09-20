@@ -39,6 +39,10 @@ To add a governed entity:
 
 Any ambiguity fails closed; the registry does not infer missing identity or order from host files.
 
+### Planned `hooks` entity kind
+
+The registry schema and validator will be extended to support a `hooks` entity kind, with minimum fields `id` and either `source` (inventory) or `body` (catalog). This is an upcoming change from the [host-overlay-extension plan](../roadmaps/host-overlay-extension-architecture.md).
+
 ### Fail-closed boundary
 
 `scripts/normalization/ProcedureRegistry.psm1` validates schema/version, exact inventory coverage, IDs, canonical identity and first-read contracts, required reading, aliases, authority/isolation, loop/gate policy, fail-loud behavior, host representation, route identity, launch evidence, skill flags, explicit applicability, canonical rule/workflow sources, one-to-one composition coverage, duplicate-free semantic order, and path containment.

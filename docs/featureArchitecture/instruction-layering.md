@@ -45,7 +45,9 @@ Each skill remains short: name, description, invocation rule, outline, verificat
 | VS Code | Host instruction/handoff surfaces carry the thin gate. |
 | Cline | Composed workflow/rule surfaces carry the thin gate. |
 | Kilo Code | Composed workflow/rule surfaces carry the thin gate. |
-| Codex mapping (registered, Active) | One marker-bounded managed block in the host AGENTS surface is the thin always-on gate; the independent skill catalog remains on-demand. |
+| Codex | Canonical rules plus a Codex footer are composed into the host AGENTS surface by the shared renderer; the independent skill catalog remains on-demand. |
+
+Each host overlay may also carry extension directories for host-specific content: `rules/` for custom procedural rules beyond the canonical set, and `hooks/` for host-specific lifecycle hook configurations. Workflows remain canonical regardless of host.
 
 Hosts may add restrictions when their tool model requires them, but they may not weaken default-on gates or inline an alternate loop.
 
