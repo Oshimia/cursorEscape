@@ -1034,7 +1034,7 @@
       "agent": "planner",
       "representation": "generated-native-projection",
       "evidence_paths": [
-        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/planner.toml",
+        "scripts/host-sync/render-baselines/codex-render/fixtures/agents/planner.toml",
         "scripts/host-sync/manifests/codex.manifest.psd1"
       ],
       "route_identity": "planner",
@@ -1058,7 +1058,7 @@
       "agent": "plan_reviewer",
       "representation": "generated-native-projection",
       "evidence_paths": [
-        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/plan_reviewer.toml",
+        "scripts/host-sync/render-baselines/codex-render/fixtures/agents/plan_reviewer.toml",
         "scripts/host-sync/manifests/codex.manifest.psd1"
       ],
       "route_identity": "plan_reviewer",
@@ -1083,7 +1083,7 @@
       "agent": "implementer",
       "representation": "generated-native-projection",
       "evidence_paths": [
-        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/implementer.toml",
+        "scripts/host-sync/render-baselines/codex-render/fixtures/agents/implementer.toml",
         "scripts/host-sync/manifests/codex.manifest.psd1"
       ],
       "route_identity": "implementer",
@@ -1106,7 +1106,7 @@
       "agent": "production_readiness_reviewer",
       "representation": "generated-native-projection",
       "evidence_paths": [
-        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/production_readiness_reviewer.toml",
+        "scripts/host-sync/render-baselines/codex-render/fixtures/agents/production_readiness_reviewer.toml",
         "scripts/host-sync/manifests/codex.manifest.psd1"
       ],
       "route_identity": "production_readiness_reviewer",
@@ -1129,7 +1129,7 @@
       "agent": "bug_reviewer",
       "representation": "generated-native-projection",
       "evidence_paths": [
-        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/bug_reviewer.toml",
+        "scripts/host-sync/render-baselines/codex-render/fixtures/agents/bug_reviewer.toml",
         "scripts/host-sync/manifests/codex.manifest.psd1"
       ],
       "route_identity": "bug_reviewer",
@@ -1154,7 +1154,7 @@
       "agent": "repository_explorer",
       "representation": "generated-native-projection",
       "evidence_paths": [
-        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/repository_explorer.toml",
+        "scripts/host-sync/render-baselines/codex-render/fixtures/agents/repository_explorer.toml",
         "scripts/host-sync/manifests/codex.manifest.psd1"
       ],
       "route_identity": "repository_explorer",
@@ -1177,7 +1177,7 @@
       "agent": "test_reviewer",
       "representation": "generated-native-projection",
       "evidence_paths": [
-        "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/test_reviewer.toml",
+        "scripts/host-sync/render-baselines/codex-render/fixtures/agents/test_reviewer.toml",
         "scripts/host-sync/manifests/codex.manifest.psd1"
       ],
       "route_identity": "test_reviewer",
@@ -3912,28 +3912,28 @@
         "sha256": "0fb2e7392e8a86dd8b188fc7208df213268a5d86021e871898d60f9772e1f0c3"
       }
     ],
-    "codex_render_plan_path": "scripts/host-sync/render-baselines/codex-phase1/render-plan.json",
+    "codex_render_plan_path": "scripts/host-sync/render-baselines/codex-render/render-plan.json",
     "codex_rendered_destination_count": 31,
-    "codex_physical_fixture_root": "scripts/host-sync/render-baselines/codex-phase1/fixtures/",
+    "codex_physical_fixture_root": "scripts/host-sync/render-baselines/codex-render/fixtures/",
     "codex_physical_fixture_files": [
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/bug_reviewer.toml",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/implementer.toml",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/plan_reviewer.toml",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/planner.toml",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/production_readiness_reviewer.toml",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/repository_explorer.toml",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/test_reviewer.toml",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/AGENTS.md",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/implementation-plan/SKILL.md",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/opencode-headless-run/SKILL.md",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/pre-commit-ci-gate/SKILL.md",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/skills/opencode-headless-run/agents/openai.yaml",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/skills/opencode-history-search/agents/openai.yaml"
+      "scripts/host-sync/render-baselines/codex-render/fixtures/agents/bug_reviewer.toml",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/agents/implementer.toml",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/agents/plan_reviewer.toml",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/agents/planner.toml",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/agents/production_readiness_reviewer.toml",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/agents/repository_explorer.toml",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/agents/test_reviewer.toml",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/AGENTS.md",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/implementation-plan/SKILL.md",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/opencode-headless-run/SKILL.md",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/pre-commit-ci-gate/SKILL.md",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/skills/opencode-headless-run/agents/openai.yaml",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/skills/opencode-history-search/agents/openai.yaml"
     ],
     "codex_physical_fixture_count": 13,
     "codex_explicit_only_openai_metadata_files": [
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/skills/opencode-headless-run/agents/openai.yaml",
-      "scripts/host-sync/render-baselines/codex-phase1/fixtures/skills/opencode-history-search/agents/openai.yaml"
+      "scripts/host-sync/render-baselines/codex-render/fixtures/skills/opencode-headless-run/agents/openai.yaml",
+      "scripts/host-sync/render-baselines/codex-render/fixtures/skills/opencode-history-search/agents/openai.yaml"
     ],
     "baseline_directories_historical": [
       "C:\\Users\\admin\\.cursor-backup-pre-host-sync-build-20260821-012600",
@@ -3993,7 +3993,7 @@
       "lifecycle_evidence": "scripts/host-sync/manifests/codex.manifest.psd1; scripts/host-sync/adapters/Codex.Adapter.ps1",
       "restart_reload": "Restart Codex CLI / VS Code extension / ChatGPT desktop after Apply; agents loaded at session start.",
       "smoke_check": "Run `codex` CLI in clean terminal; verify AGENTS.md managed block; invoke planner via Codex custom-agent mechanism.",
-      "recovery_owner": "Operator (Codex has no baseline directory; committed fixtures in render-baselines/codex-phase1/ provide the expected content for manual restore)."
+      "recovery_owner": "Operator (Codex has no baseline directory; committed fixtures in render-baselines/codex-render/ provide the expected content for manual restore)."
     }
   ],
   "missing_pairs_with_proposed_phase2": [],

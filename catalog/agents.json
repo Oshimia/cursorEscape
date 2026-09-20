@@ -110,7 +110,7 @@
           "isolation": "clean-context",
           "classification": "generated output",
           "evidencePaths": [
-            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/planner.toml",
+            "scripts/host-sync/render-baselines/codex-render/fixtures/agents/planner.toml",
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
@@ -227,7 +227,7 @@
           "isolation": "clean-context",
           "classification": "generated output",
           "evidencePaths": [
-            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/plan_reviewer.toml",
+            "scripts/host-sync/render-baselines/codex-render/fixtures/agents/plan_reviewer.toml",
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
@@ -341,7 +341,7 @@
           "isolation": "clean-context",
           "classification": "generated output",
           "evidencePaths": [
-            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/implementer.toml",
+            "scripts/host-sync/render-baselines/codex-render/fixtures/agents/implementer.toml",
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
@@ -456,7 +456,7 @@
           "isolation": "clean-context",
           "classification": "generated output",
           "evidencePaths": [
-            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/production_readiness_reviewer.toml",
+            "scripts/host-sync/render-baselines/codex-render/fixtures/agents/production_readiness_reviewer.toml",
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
@@ -575,7 +575,7 @@
           "isolation": "clean-context",
           "classification": "generated output",
           "evidencePaths": [
-            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/bug_reviewer.toml",
+            "scripts/host-sync/render-baselines/codex-render/fixtures/agents/bug_reviewer.toml",
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
@@ -689,7 +689,7 @@
           "isolation": "clean-context",
           "classification": "generated output",
           "evidencePaths": [
-            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/repository_explorer.toml",
+            "scripts/host-sync/render-baselines/codex-render/fixtures/agents/repository_explorer.toml",
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }
@@ -803,7 +803,7 @@
           "isolation": "clean-context",
           "classification": "generated output",
           "evidencePaths": [
-            "scripts/host-sync/render-baselines/codex-phase1/fixtures/agents/test_reviewer.toml",
+            "scripts/host-sync/render-baselines/codex-render/fixtures/agents/test_reviewer.toml",
             "scripts/host-sync/manifests/codex.manifest.psd1"
           ]
         }

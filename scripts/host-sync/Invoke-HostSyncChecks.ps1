@@ -337,7 +337,7 @@ foreach ($sid in @('Antigravity', 'OpenCode', 'Cursor', 'Vscode', 'Cline', 'Kilo
 # Compare basis (remediation-checks spec, single statement): the committed render baselines
 # (scripts/host-sync/render-baselines/phase2/) are THE regression surface for the relocation class —
 # each baseline is the token-merged HEAD-authored overlay leaf captured at migration time.
-$baselineRoot = Join-Path $hostSyncRoot 'render-baselines\phase2\antigravity'
+$baselineRoot = Join-Path $hostSyncRoot 'render-baselines\antigravity'
 $baselinePairs = @(
     @{ Dest = 'config/skills/discovery/SKILL.md';                    Baseline = 'overlays__antigravity__skills__discovery__SKILL.md' }
     @{ Dest = 'config/skills/implementation-plan/SKILL.md';          Baseline = 'overlays__antigravity__skills__implementation-plan__SKILL.md' }

@@ -20,7 +20,7 @@ Owner decisions (2026-08-23): cursorEscape is the **sole SoT** — live global r
 
 | Live target (`~/.gemini/…`) | Overlay source | Notes |
 | --------------------------- | -------------- | ----- |
-| `GEMINI.md` | [expected-render anchor](../../scripts/host-sync/render-baselines/phase2/antigravity/overlays__antigravity__GEMINI.md) | Committed expected-render anchor for the registry-composed `antigravity-gemini` **runtime-only** destination — **full replacement** of live global rules (sole SoT); composed sync output, not an authored overlay source |
+| `GEMINI.md` | [expected-render anchor](../../scripts/host-sync/render-baselines/antigravity/overlays__antigravity__GEMINI.md) | Committed expected-render anchor for the registry-composed `antigravity-gemini` **runtime-only** destination — **full replacement** of live global rules (sole SoT); composed sync output, not an authored overlay source |
 | `config/skills/<11 ids>/SKILL.md` | [skills/*/SKILL.md](./skills/) | Thin stubs mirroring the OpenCode overlay set; absolute `{{COMPANION_ROOT}}` Reads; `pre-commit-ci-gate` composed from `base:rules/pre-commit-ci-gate.md` + host footer (Phase 2) |
 | `antigravity/global_workflows/escape-{plan,review,closeout}.md` | [workflows/](./workflows/) | Trajectory-level wrappers invoking companion procedures |
 | `config/agents/{planner,plan_reviewer,implementer,production_readiness_reviewer,bug_reviewer,repository_explorer,test_reviewer}.md` | [agents/](./agents/) | Governed planner/implementation/investigation/reviewer legs; reviewer defs use read-only tools; `implementer` canonical authority is workspace-write but live-write smoke remains Phase 6; parallel via `invoke_subagent` |

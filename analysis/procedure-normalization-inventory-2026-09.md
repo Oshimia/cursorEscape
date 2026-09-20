@@ -62,7 +62,7 @@ There are **22 canonical skills** plus **1 generated rule wrapper**, for 23 adve
 
 ## Baselines
 
-The six historical restore directories cover Cursor, OpenCode, Antigravity, Vscode, Cline, and Kilocode only. Codex uses `scripts/host-sync/render-baselines/codex-phase1/render-plan.json`, 31 rendered destinations, and 13 physical fixture leaves under `fixtures/`. The six-stack ledger records six exact destination-count/hash rows. Paths and counts are authoritative in JSON.
+The six historical restore directories cover Cursor, OpenCode, Antigravity, Vscode, Cline, and Kilocode only. Codex uses `scripts/host-sync/render-baselines/codex-render/render-plan.json`, 31 rendered destinations, and 13 physical fixture leaves under `fixtures/`. The six-stack ledger records six exact destination-count/hash rows. Paths and counts are authoritative in JSON.
 
 ## Operator matrix
 
@@ -74,7 +74,7 @@ The six historical restore directories cover Cursor, OpenCode, Antigravity, Vsco
 | Vscode | `scripts/host-sync/manifests/vscode.manifest.psd1; scripts/host-sync/adapters/Generic.Adapter.ps1` | Restart VS Code after Apply; instructions are loaded on Copilot chat open. | Open VS Code Copilot chat; verify cursor-escape-loop instructions; invoke planner agent. | Operator (restore from baseline backup). |
 | Cline | `scripts/host-sync/manifests/cline.manifest.psd1; scripts/host-sync/adapters/Generic.Adapter.ps1` | Reload VS Code window after Apply; rules are scanned on Cline tab activation. | Open Cline tab; verify cursor-escape-loop rule and data/workflows/agents.md; start fresh task with canonical envelope for implementer, then another for test_reviewer. | Operator (restore from baseline backup). |
 | Kilocode | `scripts/host-sync/manifests/kilocode.manifest.psd1; scripts/host-sync/adapters/Generic.Adapter.ps1` | Reload VS Code window after Apply; rules auto-included on startup via legacy-compat loader. | Open Kilo Code tab; verify cursor-escape-loop rule and workflows/agents.md; start fresh task with canonical envelope for implementer, then another for test_reviewer. | Operator (restore from baseline backup). |
-| Codex | `scripts/host-sync/manifests/codex.manifest.psd1; scripts/host-sync/adapters/Codex.Adapter.ps1` | Restart Codex CLI / VS Code extension / ChatGPT desktop after Apply; agents loaded at session start. | Run `codex` CLI in clean terminal; verify AGENTS.md managed block; invoke planner via Codex custom-agent mechanism. | Operator (Codex has no baseline directory; committed fixtures in render-baselines/codex-phase1/ provide the expected content for manual restore). |
+| Codex | `scripts/host-sync/manifests/codex.manifest.psd1; scripts/host-sync/adapters/Codex.Adapter.ps1` | Restart Codex CLI / VS Code extension / ChatGPT desktop after Apply; agents loaded at session start. | Run `codex` CLI in clean terminal; verify AGENTS.md managed block; invoke planner via Codex custom-agent mechanism. | Operator (Codex has no baseline directory; committed fixtures in render-baselines/codex-render/ provide the expected content for manual restore). |
 
 ## Ambiguities requiring owner confirmation
 
