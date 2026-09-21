@@ -165,15 +165,15 @@ Assert-Pass 'adapter accepts only explicit mandatory roots' (
 $overlayBefore = Get-TreeHashes -Root (Join-Path $companionRoot 'overlays/codex')
 $dry = Invoke-CodexAdapterSafe -Manifest $manifest -Roots $roots -Mode ([HostSyncMode]::DryRun)
 Assert-Pass 'dry-run succeeds in explicit scratch roots' ($dry.Success) (($dry.Errors) -join '; ')
-Assert-Pass 'dry-run plans 31 writable destinations' (@($dry.PlannedFiles).Count -eq 31) ("actual=$(@($dry.PlannedFiles).Count)")
-Assert-Pass 'dry-run reports 32 root-qualified identities including guard' (
-    @($dry.Destinations).Count -eq 32 -and
+Assert-Pass 'dry-run plans 33 writable destinations' (@($dry.PlannedFiles).Count -eq 33) ("actual=$(@($dry.PlannedFiles).Count)")
+Assert-Pass 'dry-run reports 34 root-qualified identities including guard' (
+    @($dry.Destinations).Count -eq 34 -and
     $dry.Destinations.Contains('codex-home/AGENTS.override.md') -and
     $dry.Destinations.Contains('codex-home/AGENTS.md') -and
     $dry.Destinations.Contains('skill-root/pre-commit-ci-gate/SKILL.md')
 )
 Assert-Pass 'dry-run binds current-state hashes for every destination' (
-    $dry.CurrentState.Keys.Count -eq 32 -and
+    $dry.CurrentState.Keys.Count -eq 34 -and
     $dry.CurrentState['codex-home/AGENTS.md'].Hash -eq '<absent>' -and
     $dry.CurrentState['codex-home/AGENTS.override.md'].Hash -eq '<absent>'
 )
@@ -190,7 +190,7 @@ Assert-Pass 'openai.yaml remains overlay-only and is not an install destination'
 # ---------- 2. Apply, exact planned rendering, guard, and ownership ----------
 $apply = Invoke-CodexAdapterSafe -Manifest $manifest -Roots $roots -Mode ([HostSyncMode]::Apply)
 Assert-Pass 'scratch Apply succeeds' ($apply.Success) (($apply.Errors) -join '; ')
-Assert-Pass 'Apply records 31 root-qualified applied destinations' (@($apply.AppliedFiles).Count -eq 31) ("actual=$(@($apply.AppliedFiles).Count)")
+Assert-Pass 'Apply records 33 root-qualified applied destinations' (@($apply.AppliedFiles).Count -eq 33) ("actual=$(@($apply.AppliedFiles).Count)")
 Assert-Pass 'guard-only override remains absent' (-not (Test-Path -LiteralPath (Join-Path $roots.Codex 'AGENTS.override.md')))
 
 $installed = Get-InstalledDestinationMap -Roots $roots -Manifest $manifest

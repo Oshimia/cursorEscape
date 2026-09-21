@@ -1,0 +1,20 @@
+{
+  "_ownershipMarker": "cursorEscape-managed:v1",
+  "_ownershipSource": "overlays/codex/hooks.json",
+  "description": "Bounded reminder to close finished Codex subagents that are no longer needed.",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"$HOME/.codex/hooks/subagent_reminder.ps1\"",
+            "commandWindows": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"%USERPROFILE%/.codex/hooks/subagent_reminder.ps1\"",
+            "statusMessage": "Checking for unused finished subagents",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
+  }
+}

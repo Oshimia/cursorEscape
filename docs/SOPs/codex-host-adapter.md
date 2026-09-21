@@ -1,6 +1,6 @@
 # Codex host adapter SOP
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-21
 **Status:** `ApplyState = Active` (activated 2026-09-08 after owner-authorized install; three-client smoke attested 2026-09-08).
 
 ## Context
@@ -32,10 +32,12 @@ The specialized adapter requires two explicit absolute roots. The operator entry
 
 | Logical root | Leaves |
 | --- | --- |
-| `codex-home` | Marker-bounded `AGENTS.md`; guard-only `AGENTS.override.md`; seven `agents/*.toml` roles |
+| `codex-home` | Marker-bounded `AGENTS.md`; guard-only `AGENTS.override.md`; seven `agents/*.toml` roles; `hooks.json`; `hooks/subagent_reminder.ps1` |
 | `skill-root` | 23 thin `SKILL.md` wrappers: 22 canonical skills plus generated `pre-commit-ci-gate` |
 
-Reports use root-qualified identities (`codex-home/...`, `skill-root/...`) so same-relative names cannot be confused across roots. Standalone managed leaves carry `cursorEscape-managed:v1`; the `AGENTS.md` block uses `cursorEscape-managed-block:v1`.
+Reports use root-qualified identities (`codex-home/...`, `skill-root/...`) so same-relative names cannot be confused across roots. Standalone managed leaves carry `cursorEscape-managed:v1`; the `AGENTS.md` block uses `cursorEscape-managed-block:v1`; JSON leaves use equivalent `_ownershipMarker` and `_ownershipSource` fields.
+
+The hook uses the default Codex-home path (`$HOME` on portable command forms and `%USERPROFILE%` on Windows). A non-default `CODEX_HOME` deployment must account for that path before Apply.
 
 ## Sync commands
 
@@ -59,7 +61,7 @@ If any selected stack is re-armed to `BringUp`, the lifecycle gate refuses All A
 
 ## Safety and verification
 
-- Dry-run plans 31 writable destinations and reports 32 root-qualified identities including the override guard.
+- Dry-run plans 33 writable destinations and reports 34 root-qualified identities including the override guard.
 - Apply preflights ownership, hard excludes, override absence, path containment, current-state hashes, and marker integrity.
 - Apply is a byte-level no-op for unchanged destinations; `AppliedFiles` reports only destinations actually written.
 - Writes use staged replacement and post-write hash verification. Adapter-local failure restores in-memory pre-Apply bytes and removes files created by the failed run.

@@ -1,6 +1,6 @@
 # Host Overlay Extension Architecture — Composer Roadmap
 
-**Status:** Active — Phase 0 in progress
+**Status:** Active — Phase 3 complete; Phase 4 next
 **Plan:** `.plans/host-overlay-extension-architecture.md` (APPROVED, 3 passes)
 **Escalation:** yes (`user-labeled-composer`)
 **Created:** 2026-09-21
@@ -16,8 +16,8 @@
 | Shared extend-only | `scripts/host-sync/manifests/codex.manifest.psd1` — `DestinationEntries` list is extend-only within this plan |
 | Shared extend-only | CI check assertion counts increase monotonically |
 | Composition boundary | `catalog/workflows.json` `codex-cursor-escape-loop` rewritten in Phase 2 only |
-| Adapter boundary | `Codex.Adapter.ps1` modified in Phase 2 only |
-| Hook contract | `hooks.json` deploys to `~/.codex/hooks.json`; script to `~/.codex/hooks/subagent_cleanup.ps1`; trust via `/hooks`; no `config.toml` change |
+| Adapter boundary | `Codex.Adapter.ps1` composition logic modified in Phase 2 only; Phase 3 adds JSON-native ownership-marker validation |
+| Hook contract | `hooks.json` deploys to `~/.codex/hooks.json`; stateless `subagent_reminder.ps1` deploys to `~/.codex/hooks/`; trust via `/hooks`; no `config.toml` change |
 | Documentation boundary | Model-level docs in Phase 1; implementation-level in Phase 5; no undocumented changes at closeout |
 | Baseline | Phase 2 updates `scripts/host-sync/baselines/codex-manifest-schema-2026-09.json` if it pins destination counts |
 
@@ -27,8 +27,8 @@
 
 - [x] **Phase 0** — Discovery (read-only code inspection; no commit) — COMPLETE
 - [x] **Phase 1** — Extension architecture documentation (docs-only; Fast CI; commit) — COMMIT 86af3ff
-- [ ] **Phase 2** — Codex composition restructure (registry + overlay; Fast + Full CI; dual review; commit) — NEXT (no adapter change needed per Phase 0)
-- [ ] **Phase 3** — Codex hooks (overlay + manifest + inventory + CI; Fast CI; dual review; commit)
+- [x] **Phase 2** — Codex composition restructure — COMMIT 03a90b1 (15 files, dual APPROVED, Full CI green)
+- [x] **Phase 3** — Codex hooks — COMPLETE (dual APPROVED, Full CI green)
 - [ ] **Phase 4** — Cross-host extension directories (12 placeholders; Fast CI; commit)
 - [ ] **Phase 5** — Documentation cascade + CI closeout (docs + CI; Fast + Full CI; dual review; commit)
 - [ ] **Post-Apply** — Owner: sync Apply, restart Codex, trust hooks, C1-C6 smoke
@@ -90,20 +90,21 @@
 
 ## Agent context — Phase 3
 
-- **Goal:** Add Codex lifecycle hooks for subagent cleanup enforcement.
+- **Goal:** Add the smallest Codex lifecycle hook that reminds the agent to close finished subagents no longer needed.
 - **Depends on / entry gate:** Phase 2 dual APPROVED + committed.
-- **Do not touch:** Adapter; composition; other hosts; live host state.
-- **In scope:** Hook overlay files, manifest, inventory, CI check scripts.
-- **Out of scope:** Adapter changes; composition changes.
+- **Do not touch:** Composition; other hosts; live host state.
+- **In scope:** Hook overlay files, manifest, inventory, CI check scripts, and the adapter's JSON-native ownership-marker validation only.
+- **Out of scope:** Adapter composition changes; agent inventory/persistent state.
 - **Files expected:** 5-7 files.
 - **Where to read context:** Official Codex hooks docs; `codex.manifest.psd1` current state.
 - **Fast CI:** `Invoke-NormalizationFastCI.ps1`.
 - **Full CI:** N/A.
 - **Deliverables:**
-  - [ ] `hooks.json` valid and parseable
-  - [ ] `subagent_cleanup.ps1` passes PowerShell parser with zero errors
-  - [ ] Manifest/inventory/check counts updated
-- **Risks:** Tool_name mismatch (mitigated by broad matcher); state file persistence; hook trust not yet granted by operator.
+  - [x] `hooks.json` valid and parseable
+  - [x] `subagent_reminder.ps1` passes PowerShell parser with zero errors
+  - [x] Manifest/inventory/check counts updated
+  - [x] Bounded stdin behavior covered by CI
+- **Risks:** One continuation occurs on every first main-thread `Stop`; live hook trust remains a post-Apply owner step.
 
 ## Agent context — Phase 4
 

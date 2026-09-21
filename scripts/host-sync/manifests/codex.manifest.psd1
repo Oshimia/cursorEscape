@@ -34,6 +34,8 @@
         @{ LogicalRoot = 'codex-home'; Source = 'agents/bug_reviewer.toml'; Dest = 'agents/bug_reviewer.toml'; Role = 'managed-agent-target' }
         @{ LogicalRoot = 'codex-home'; Source = 'agents/repository_explorer.toml'; Dest = 'agents/repository_explorer.toml'; Role = 'managed-agent-target' }
         @{ LogicalRoot = 'codex-home'; Source = 'agents/test_reviewer.toml'; Dest = 'agents/test_reviewer.toml'; Role = 'managed-agent-target' }
+        @{ LogicalRoot = 'codex-home'; Source = 'hooks.json'; Dest = 'hooks.json'; Role = 'managed-hook-config' }
+        @{ LogicalRoot = 'codex-home'; Source = 'hooks/subagent_reminder.ps1'; Dest = 'hooks/subagent_reminder.ps1'; Role = 'managed-hook-script' }
         @{ LogicalRoot = 'skill-root'; Source = 'skills/architecture-survey/SKILL.md'; Dest = 'architecture-survey/SKILL.md'; Role = 'generated-skill-wrapper' }
         @{ LogicalRoot = 'skill-root'; Source = 'skills/bug-review-sweep/SKILL.md'; Dest = 'bug-review-sweep/SKILL.md'; Role = 'generated-skill-wrapper' }
         @{ LogicalRoot = 'skill-root'; Source = 'skills/codebase-design/SKILL.md'; Dest = 'codebase-design/SKILL.md'; Role = 'generated-skill-wrapper' }

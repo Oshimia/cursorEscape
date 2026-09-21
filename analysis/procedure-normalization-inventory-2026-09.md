@@ -45,7 +45,7 @@ All 49 pairs are represented. Notable route facts: `planner` is represented on a
 | Vscode | `scripts/host-sync/manifests/vscode.manifest.psd1` | `single-root` | 21 | 2 | 3 | 0 |
 | Cline | `scripts/host-sync/manifests/cline.manifest.psd1` | `single-root` | 5 | 4 | 7 | 0 |
 | Kilocode | `scripts/host-sync/manifests/kilocode.manifest.psd1` | `single-root` | 5 | 1 | 1 | 0 |
-| Codex | `scripts/host-sync/manifests/codex.manifest.psd1` | `codex-two-logical-roots` | 32 | 6 | 6 | 0 |
+| Codex | `scripts/host-sync/manifests/codex.manifest.psd1` | `codex-two-logical-roots` | 34 | 6 | 6 | 0 |
 
 OpenCode records dual-write instructions plus `AGENTS.md`, JSON merge with preserved top-level keys, and an explicitly empty `HybridRuleIds` list; other non-Cursor manifests omit the field and normalize to an empty list. Codex has two independent logical roots, no single `LiveRelativeRoot` or `SharedRoot`, ApplyState `Active`, ownership/block markers, an 8,000-character catalog budget, and two explicit-only OpenAI metadata files. Cursor, like Codex, omits `SharedRoot`; the inventory records that absence as null rather than inferring a default.
 

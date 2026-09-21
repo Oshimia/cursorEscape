@@ -141,6 +141,23 @@ function Get-CodexStandaloneMarkerCount {
         [Parameter(Mandatory)][string] $Source
     )
 
+    $trimmedContent = $Content.TrimStart()
+    if ($trimmedContent.StartsWith('{') -or $trimmedContent.StartsWith('[')) {
+        try {
+            $json = $trimmedContent | ConvertFrom-Json
+            $markerProperty = $json.PSObject.Properties['_ownershipMarker']
+            $sourceProperty = $json.PSObject.Properties['_ownershipSource']
+            if ($null -ne $markerProperty -and $null -ne $sourceProperty -and
+                [string]$markerProperty.Value -eq $Marker -and [string]$sourceProperty.Value -eq $Source) {
+                return 1
+            }
+            return 0
+        }
+        catch {
+            return 0
+        }
+    }
+
     $pattern = '(?m)^(?:<!--|#)\s*' + [regex]::Escape($Marker) + '\s+source="' + [regex]::Escape($Source) + '"\s*(?:;.*)?$'
     return [regex]::Matches($Content, $pattern).Count
 }

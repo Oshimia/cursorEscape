@@ -302,7 +302,52 @@ try {
     Assert-Pass 'override destination is guard-only with no generated body' (@($guard).Count -eq 1 -and $guard[0].ContainsKey('GuardOnly') -and $guard[0].GuardOnly -eq $true -and (-not $guard[0].Contains('Source')))
 
     $sourceRows = Get-CodexRenderPlan -Manifest $manifest -OverlayPath $overlayRoot -CompanionPath 'PRERENDER'
-    Assert-Pass 'all non-guard destinations have render sources' ($sourceRows.Count -eq 31)
+    Assert-Pass 'all non-guard destinations have render sources' ($sourceRows.Count -eq 33)
+    $hooksJsonPath = Join-Path $overlayRoot 'hooks.json'
+    Assert-Pass 'hooks.json exists' (Test-Path -LiteralPath $hooksJsonPath -PathType Leaf)
+    $hooksJson = Get-Content -LiteralPath $hooksJsonPath -Raw | ConvertFrom-Json
+    Assert-Pass 'hooks.json parses as valid JSON' ($null -ne $hooksJson)
+    Assert-Pass 'hooks.json declares only Stop' (
+        @($hooksJson.hooks.PSObject.Properties.Name).Count -eq 1 -and
+        @($hooksJson.hooks.PSObject.Properties.Name) -contains 'Stop')
+    $stopGroup = @($hooksJson.hooks.Stop | Where-Object { $_.hooks })
+    Assert-Pass 'Stop hook uses one matcher group and one command handler' (
+        @($hooksJson.hooks.Stop).Count -eq 1 -and
+        @($stopGroup).Count -eq 1 -and
+        @($stopGroup[0].hooks).Count -eq 1 -and
+        $stopGroup[0].hooks[0].type -eq 'command' -and
+        $stopGroup[0].hooks[0].timeout -gt 0)
+    $hookScriptPath = Join-Path $overlayRoot 'hooks/subagent_reminder.ps1'
+    Assert-Pass 'subagent_reminder.ps1 exists' (Test-Path -LiteralPath $hookScriptPath -PathType Leaf)
+    $hookParseErrors = $null
+    $null = [System.Management.Automation.Language.Parser]::ParseFile($hookScriptPath, [ref]$null, [ref]$hookParseErrors)
+    Assert-Pass 'subagent_reminder.ps1 has zero parse errors' ($null -eq $hookParseErrors -or @($hookParseErrors).Count -eq 0)
+    $hookScript = [IO.File]::ReadAllText($hookScriptPath)
+    Assert-Pass 'subagent reminder is stateless and bounded' (
+        $hookScript -notmatch 'Set-Content|Add-Content|New-Item' -and
+        $hookScript.Contains('stop_hook_active'))
+    $hookCases = @(
+        @{ Name = 'first Stop emits one advisory continuation'; Payload = '{"hook_event_name":"Stop","stop_hook_active":false}'; ShouldBlock = $true },
+        @{ Name = 'continuation Stop is bounded'; Payload = '{"hook_event_name":"Stop","stop_hook_active":true}'; ShouldBlock = $false },
+        @{ Name = 'non-Stop event emits nothing'; Payload = '{"hook_event_name":"SubagentStop","stop_hook_active":false}'; ShouldBlock = $false },
+        @{ Name = 'malformed input fails open'; Payload = 'not-json'; ShouldBlock = $false }
+    )
+    foreach ($hookCase in $hookCases) {
+        $hookOutput = [string]($hookCase.Payload | pwsh -NoProfile -ExecutionPolicy Bypass -File $hookScriptPath)
+        $hookBlocked = $false
+        if ($hookOutput) {
+            try {
+                $hookDecision = $hookOutput | ConvertFrom-Json
+                $hookBlocked = $hookDecision.decision -eq 'block' -and
+                    $hookDecision.reason -match 'review spawned subagents' -and
+                    $hookDecision.reason -notmatch 'Immediately call'
+            }
+            catch {
+                $hookBlocked = $false
+            }
+        }
+        Assert-Pass $hookCase.Name ($hookBlocked -eq $hookCase.ShouldBlock)
+    }
 
     $wrapperEntries = @($manifest.DestinationEntries | Where-Object { $_.LogicalRoot -eq 'skill-root' })
     $catalog = [System.Collections.Generic.List[hashtable]]::new()
@@ -441,6 +486,8 @@ try {
         'skill-root/implementation-plan/SKILL.md'
         'skill-root/opencode-headless-run/SKILL.md'
         'skill-root/pre-commit-ci-gate/SKILL.md'
+        'codex-home/hooks.json'
+        'codex-home/hooks/subagent_reminder.ps1'
     )
     $actualBaseline = New-CodexRenderBaseline -Rows $fixturePlan
     $baselinePath = Join-Path $baselineRoot 'render-plan.json'
@@ -465,7 +512,7 @@ try {
     }
     if (Test-Path -LiteralPath $baselinePath) {
         $expectedBaseline = Get-Content -LiteralPath $baselinePath -Raw | ConvertFrom-Json
-        Assert-Pass 'normalized render baseline matches all 31 destinations' (Test-CodexRenderBaselineEqual $expectedBaseline $actualBaseline)
+        Assert-Pass 'normalized render baseline matches all 33 destinations' (Test-CodexRenderBaselineEqual $expectedBaseline $actualBaseline)
         $tomlEscapeLeaks = @($fixturePlan | Where-Object {
             $_.Destination -like '*.toml' -and ($_.Content -match '\\(?!\\)')
         })
@@ -487,7 +534,7 @@ try {
         }
         Assert-Pass 'focused fixture bytes match the synthetic render plan' ($fixtureMisses.Count -eq 0)
         $fixtureFileCount = @(Get-ChildItem $fixtureTextRoot -Recurse -File).Count
-        Assert-Pass 'focused fixture inventory has no orphans' ($fixtureFileCount -eq 13)
+        Assert-Pass 'focused fixture inventory has no orphans' ($fixtureFileCount -eq 15)
     }
     else {
         Assert-Pass 'normalized render baseline exists' $false

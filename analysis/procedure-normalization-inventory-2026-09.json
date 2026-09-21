@@ -3617,7 +3617,7 @@
         "codex-home",
         "skill-root"
       ],
-      "copy_entry_count": 32,
+      "copy_entry_count": 34,
       "hard_excludes": [
         "codex-home:config.toml",
         "codex-home:auth.json",
@@ -3705,6 +3705,18 @@
           "logical_root": "codex-home",
           "role": "managed-agent-target"
         },
+      {
+        "source": "hooks.json",
+        "destination": "hooks.json",
+        "logical_root": "codex-home",
+        "role": "managed-hook-config"
+      },
+      {
+        "source": "hooks/subagent_reminder.ps1",
+        "destination": "hooks/subagent_reminder.ps1",
+        "logical_root": "codex-home",
+        "role": "managed-hook-script"
+      },
         {
           "source": "skills/architecture-survey/SKILL.md",
           "destination": "architecture-survey/SKILL.md",
@@ -3885,7 +3897,7 @@
   ],
   "render_baselines": {
     "codex_render_plan_path": "scripts/host-sync/render-baselines/codex-render/render-plan.json",
-    "codex_rendered_destination_count": 31,
+    "codex_rendered_destination_count": 33,
     "codex_physical_fixture_root": "scripts/host-sync/render-baselines/codex-render/fixtures/",
     "codex_physical_fixture_files": [
       "scripts/host-sync/render-baselines/codex-render/fixtures/agents/bug_reviewer.toml",
@@ -3895,14 +3907,16 @@
       "scripts/host-sync/render-baselines/codex-render/fixtures/agents/production_readiness_reviewer.toml",
       "scripts/host-sync/render-baselines/codex-render/fixtures/agents/repository_explorer.toml",
       "scripts/host-sync/render-baselines/codex-render/fixtures/agents/test_reviewer.toml",
+    "scripts/host-sync/render-baselines/codex-render/fixtures/hooks/subagent_reminder.ps1",
       "scripts/host-sync/render-baselines/codex-render/fixtures/AGENTS.md",
+    "scripts/host-sync/render-baselines/codex-render/fixtures/hooks.json",
       "scripts/host-sync/render-baselines/codex-render/fixtures/implementation-plan/SKILL.md",
       "scripts/host-sync/render-baselines/codex-render/fixtures/opencode-headless-run/SKILL.md",
       "scripts/host-sync/render-baselines/codex-render/fixtures/pre-commit-ci-gate/SKILL.md",
       "scripts/host-sync/render-baselines/codex-render/fixtures/skills/opencode-headless-run/agents/openai.yaml",
       "scripts/host-sync/render-baselines/codex-render/fixtures/skills/opencode-history-search/agents/openai.yaml"
     ],
-    "codex_physical_fixture_count": 13,
+    "codex_physical_fixture_count": 15,
     "codex_explicit_only_openai_metadata_files": [
       "scripts/host-sync/render-baselines/codex-render/fixtures/skills/opencode-headless-run/agents/openai.yaml",
       "scripts/host-sync/render-baselines/codex-render/fixtures/skills/opencode-history-search/agents/openai.yaml"

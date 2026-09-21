@@ -13,6 +13,8 @@
     { "logicalRoot": "codex-home", "relativePath": "agents/bug_reviewer.toml", "role": "managed-agent-target" },
     { "logicalRoot": "codex-home", "relativePath": "agents/repository_explorer.toml", "role": "managed-agent-target" },
     { "logicalRoot": "codex-home", "relativePath": "agents/test_reviewer.toml", "role": "managed-agent-target" },
+    { "logicalRoot": "codex-home", "relativePath": "hooks.json", "role": "managed-hook-config" },
+    { "logicalRoot": "codex-home", "relativePath": "hooks/subagent_reminder.ps1", "role": "managed-hook-script" },
     { "logicalRoot": "skill-root", "relativePath": "architecture-survey/SKILL.md", "role": "generated-skill-wrapper" },
     { "logicalRoot": "skill-root", "relativePath": "bug-review-sweep/SKILL.md", "role": "generated-skill-wrapper" },
     { "logicalRoot": "skill-root", "relativePath": "codebase-design/SKILL.md", "role": "generated-skill-wrapper" },

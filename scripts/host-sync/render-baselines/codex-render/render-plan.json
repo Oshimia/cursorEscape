@@ -53,6 +53,18 @@
       "sha256": "df9c55719a4437ae72f59a156fbb4082cf4f3ace91b27461b1d423c9a4159519"
     },
     {
+      "destination": "codex-home/hooks.json",
+      "logicalRoot": "codex-home",
+      "role": "managed-hook-config",
+      "sha256": "a3d20a86569cb6cebb37cf0a5af64c8828e9c3248edf0e5cf667975b07066ea5"
+    },
+    {
+      "destination": "codex-home/hooks/subagent_reminder.ps1",
+      "logicalRoot": "codex-home",
+      "role": "managed-hook-script",
+      "sha256": "0a2e384d9eb5cc8f933351e2575d7c11293a799e92a2bf5111b707bb38ddc321"
+    },
+    {
       "destination": "skill-root/architecture-survey/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
