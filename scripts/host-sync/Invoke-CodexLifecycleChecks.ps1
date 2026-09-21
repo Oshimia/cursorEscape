@@ -423,9 +423,15 @@ Assert-Pass 'Codex SOP documents smoke attestation' ($sop.Contains('three-client
 Assert-Pass 'Codex SOP cites Fast CI' ($sop.Contains('Invoke-CodexLifecycleChecks.ps1'))
 
 $overlay = Read-RepoFile 'overlays/codex/_index.md'
-Assert-Pass 'Codex overlay index records registered BringUp' (
-    $overlay.Contains('Phase 3 registered source-only') -and
-    $overlay.Contains('activated 2026-09-08 after three-client smoke')
+Assert-Pass 'Codex overlay index records active composed setup' (
+    $overlay.Contains('active composed harness map') -and
+    $overlay.Contains('activated 2026-09-08 after owner-authorized three-client smoke') -and
+    $overlay.Contains('registry-composed managed-block footer')
+)
+Assert-Pass 'Codex overlay index records both extension surfaces' (
+    $overlay.Contains('## Extension surfaces') -and
+    $overlay.Contains('./rules/') -and
+    $overlay.Contains('./hooks/')
 )
 $overlayIndex = Read-RepoFile 'overlays/_index.md'
 Assert-Pass 'overlay index includes Codex' ($overlayIndex.Contains('[codex/](./codex/_index.md)'))
@@ -443,13 +449,17 @@ Assert-Pass 'skill-source FA records seven stacks and preflight' (
 )
 $layerFa = Read-RepoFile 'docs/featureArchitecture/instruction-layering.md'
 Assert-Pass 'instruction-layering FA records Codex mapping' (
-    $layerFa.Contains('Codex mapping (registered, Active)') -and
+    $layerFa.Contains('Codex mapping (Active)') -and
     $layerFa.Contains('marker-bounded managed block')
 )
 $fidelityFa = Read-RepoFile 'docs/featureArchitecture/host-adaptation-fidelity.md'
 Assert-Pass 'host-fidelity FA records Codex activation and runtime attestation' (
     $fidelityFa.Contains('Codex activated 2026-09-08') -and
     $fidelityFa.Contains('C1–C6 runtime attestation')
+)
+Assert-Pass 'host-fidelity FA records extension structure without presence-as-behavior' (
+    $fidelityFa.Contains('structural `rules/` and `hooks/` extension surfaces') -and
+    $fidelityFa.Contains('not adaptation evidence by themselves')
 )
 
 $workflowSop = Read-RepoFile 'docs/SOPs/editing-companion-workflow.md'

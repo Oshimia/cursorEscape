@@ -1,6 +1,6 @@
 # Host Overlay Extension Architecture — Composer Roadmap
 
-**Status:** Active — Phase 4 complete; Phase 5 next
+**Status:** Complete — owner Post-Apply smoke remains
 **Plan:** `.plans/host-overlay-extension-architecture.md` (APPROVED, 3 passes)
 **Escalation:** yes (`user-labeled-composer`)
 **Created:** 2026-09-21
@@ -30,7 +30,7 @@
 - [x] **Phase 2** — Codex composition restructure — COMMIT 03a90b1 (15 files, dual APPROVED, Full CI green)
 - [x] **Phase 3** — Codex hooks — COMPLETE (dual APPROVED, Full CI green)
 - [x] **Phase 4** — Cross-host extension directories — COMPLETE (dual APPROVED, Full CI green)
-- [ ] **Phase 5** — Documentation cascade + CI closeout (docs + CI; Fast + Full CI; dual review; commit)
+- [x] **Phase 5** — Documentation cascade + CI closeout — COMPLETE (dual APPROVED, Full CI green)
 - [ ] **Post-Apply** — Owner: sync Apply, restart Codex, trust hooks, C1-C6 smoke
 
 ---
@@ -134,9 +134,9 @@
 - **Fast CI:** `Invoke-NormalizationFastCI.ps1`.
 - **Full CI:** `Invoke-NormalizationFullCI.ps1`.
 - **Deliverables:**
-  - [ ] All docs updated
-  - [ ] Full CI green
-  - [ ] All-stack dry-run success
+  - [x] All docs updated (nine documentation/readme files plus one coupled lifecycle assertion after evidence-based discovery)
+  - [x] Full CI green
+  - [x] All-stack dry-run success
 - **Risks:** Documentation may miss an edge case discovered in earlier phases; final dry-run may reveal unplanned drift.
 
 ---

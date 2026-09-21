@@ -1,6 +1,6 @@
 # Host adaptation fidelity
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-22
 
 ## Context
 
@@ -65,6 +65,8 @@ First activation of a stack requires a full C1–C6 scorecard. A registry or wir
 ### Current activation posture
 
 All seven stacks are registered. Codex activated 2026-09-08 and has a three-client C1–C6 runtime attestation. Other active host procedures remain governed by their host SOPs and the current manifests; historical bring-up narratives are not part of this architecture page.
+
+Every registered overlay now has the structural `rules/` and `hooks/` extension surfaces: Cursor's rules directory retains its four native `.mdc` leaves, Codex's hooks directory carries the manifest-bound Stop hook, and the other new surfaces carry exact UTF-8 no-BOM `_index.md` placeholders. These surfaces are capacity and projection structure, not adaptation evidence by themselves. Content becomes behavior only through that host's manifest-bound load or lifecycle surface; activation still requires the applicable C1–C6 evidence. Codex's active always-on surface is the registry-composed canonical-gate and footer managed block, not a hand-authored overlay body.
 
 Future refreshes and new stacks must meet the same fidelity bar. A stack may have host-specific mechanics, but it may not have a second authored loop, a permanent procedure mirror, or weaker review gates.
 

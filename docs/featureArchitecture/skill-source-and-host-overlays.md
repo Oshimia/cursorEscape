@@ -1,6 +1,6 @@
 # Skill source and host overlays
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-22
 
 ## Context
 
@@ -75,9 +75,9 @@ Do not promote a host workaround into canonical prose until its portable rule is
 
 ### Extension directories (Required)
 
-Every host overlay may carry `rules/` and `hooks/` directories for host-specific content. `rules/` hosts custom procedural rules beyond the canonical set; `hooks/` hosts host-specific lifecycle hook configurations. Agents and skills already have per-host surfaces; workflows remain canonical, and host-specific workflow notes belong in instruction footers rather than a copied workflow tree.
+Every registered host overlay carries `rules/` and `hooks/` directories for host-specific content. `rules/` hosts custom procedural rules beyond the canonical set; `hooks/` hosts host-specific lifecycle hook configurations. Agents and skills already have per-host surfaces; workflows remain canonical, and host-specific workflow notes belong in instruction footers rather than a copied workflow tree.
 
-One exception exists: `overlays/cursor/rules/` already contains native `.mdc` rule files. New stacks follow the same two-directory extension shape without importing that host's native format.
+The current structural inventory is seven `rules/` and seven `hooks/` surfaces. Cursor's rules directory retains its four native `.mdc` files, Codex's hooks directory carries its managed Stop hook, and the other 12 surfaces contain only `_index.md` placeholders. An `_index.md` placeholder reserves source-only capacity; it is not installed or interpreted unless a host manifest binds it to a real load surface. CI pins the exact paths, filenames, placeholder bytes, and fail-closed Unit-suite propagation without importing Cursor's native format elsewhere.
 
 ### Host examples (Required)
 
@@ -88,7 +88,7 @@ One exception exists: `overlays/cursor/rules/` already contains native `.mdc` ru
 | Antigravity | Host subagent definitions and composed gate order. |
 | VS Code | Instruction and handoff wiring for its native surfaces. |
 | Cline / Kilo Code | Fresh task boundaries, workflow composition, and manifest-backed rules. |
-| Codex | Managed AGENTS block, TOML agent routes, and the independent skill catalog. |
+| Codex | Registry-composed managed AGENTS block, TOML agent routes, Stop-hook wiring, and the independent skill catalog. |
 
 Host IDs and host permission JSON never belong in shared skill, agent, workflow, or rule bodies.
 

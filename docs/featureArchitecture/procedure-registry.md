@@ -1,6 +1,6 @@
 # Procedure registry
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-22
 
 ## Context
 
@@ -39,9 +39,9 @@ To add a governed entity:
 
 Any ambiguity fails closed; the registry does not infer missing identity or order from host files.
 
-### Planned `hooks` entity kind
+### Hooks and overlay extension surfaces
 
-The registry schema and validator will be extended to support a `hooks` entity kind, with minimum fields `id` and either `source` (inventory) or `body` (catalog). This is an upcoming change from the [host-overlay-extension plan](../roadmaps/host-overlay-extension-architecture.md).
+Lifecycle hooks are currently host-only overlay and manifest concerns; the registry schema and validator do not yet have a `hooks` entity kind. That future kind will require minimum fields `id` and either `source` (inventory) or `body` (catalog). Separately, every registered overlay has one `rules/` and one `hooks/` extension surface. Their exact paths, filenames, and placeholder content are CI-owned; a placeholder is structural reserve capacity, not a deployed destination or active behavior.
 
 ### Fail-closed boundary
 
@@ -60,6 +60,7 @@ Every governed ownership class has a blocking guard in Fast CI:
 | Antigravity | Managed composition and runtime rejection of forbidden fields. |
 | Cline and Kilo Code | Registry-owned composition and explicit destination binding. |
 | Codex managed AGENTS block | Managed-block boundary and writer-side rejection of unknown/divergent composition. |
+| Overlay extension surfaces | Exactly seven `rules/` and seven `hooks/` paths with pinned filenames, UTF-8 no-BOM placeholder bytes, and fail-closed Unit-suite propagation. |
 | Source ingress | Missing, BOM-corrupted, or noncanonical sources fail. |
 | Generated-file boundaries | Protected roots and unrestricted output roots fail. |
 | Deterministic rendering | Double render must produce identical bytes. |
@@ -76,8 +77,8 @@ Committed baselines are generated regression anchors, never hand-edited expectat
 
 | Gate | Sole entry point | Role |
 | --- | --- | --- |
-| Fast | `scripts/normalization/Invoke-NormalizationFastCI.ps1` | Blocking registry, inventory, current-state, focused overlay, hygiene, and diff checks. |
-| Full | `scripts/normalization/Invoke-NormalizationFullCI.ps1` | Fast plus consolidated host, Codex lifecycle, drift fixture, and disposable render verification. |
+| Fast | `scripts/normalization/Invoke-NormalizationFastCI.ps1` | Blocking registry, inventory, current-state, host-sync Unit, extension-surface, focused Codex-render, hygiene, and diff checks. |
+| Full | `scripts/normalization/Invoke-NormalizationFullCI.ps1` | Fast plus consolidated host, all-stack disposable dry-run, Codex lifecycle, drift fixture, and disposable render verification. |
 
 There is exactly one Fast entry point and one Full entry point. Host-sync suite scripts are internal Full CI components, not alternate entry points.
 
