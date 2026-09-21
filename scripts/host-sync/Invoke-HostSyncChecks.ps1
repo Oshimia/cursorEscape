@@ -255,6 +255,95 @@ try {
         $unicodePermissionKeys[0] -eq '*' -and
         $unicodePermissionKeys[1] -eq 'z*' -and
         $unicodePermissionKeys[2] -eq 'ä*') ($unicodePermissionKeys -join ',')
+
+    # U23: every registered overlay has exactly one rules/ and one hooks/
+    # extension surface. New directories contain only their placeholder; the
+    # two pre-existing populated surfaces remain pinned to their known leaves.
+    $extensionExpectations = [ordered]@{
+        'antigravity/rules' = @('_index.md')
+        'antigravity/hooks' = @('_index.md')
+        'cline/rules'       = @('_index.md')
+        'cline/hooks'       = @('_index.md')
+        'codex/rules'       = @('_index.md')
+        'codex/hooks'       = @('subagent_reminder.ps1')
+        'cursor/rules'      = @(
+            'agent-invocation.mdc'
+            'iterative-code-review.mdc'
+            'iterative-plan-review.mdc'
+            'pre-commit-ci-gate.mdc'
+        )
+        'cursor/hooks'      = @('_index.md')
+        'kilocode/rules'    = @('_index.md')
+        'kilocode/hooks'    = @('_index.md')
+        'opencode/rules'    = @('_index.md')
+        'opencode/hooks'    = @('_index.md')
+        'vscode/rules'      = @('_index.md')
+        'vscode/hooks'      = @('_index.md')
+    }
+    Assert-True 'extension surface count is exactly 14' ($extensionExpectations.Count -eq 14)
+    $overlayExtensionRoot = Join-Path $companionRoot 'overlays'
+    $actualExtensionPaths = @(
+        Get-ChildItem -LiteralPath $overlayExtensionRoot -Directory -Force |
+            ForEach-Object {
+                Get-ChildItem -LiteralPath $_.FullName -Directory -Force |
+                    Where-Object { ($_.Name -ceq 'rules') -or ($_.Name -ceq 'hooks') }
+            } |
+            ForEach-Object {
+                [IO.Path]::GetRelativePath($overlayExtensionRoot, $_.FullName) -replace '\\', '/'
+            } |
+            Sort-Object
+    )
+    $expectedExtensionPaths = @($extensionExpectations.Keys | Sort-Object)
+    Assert-True 'filesystem extension surfaces match exactly 14 expected paths' (
+        $actualExtensionPaths.Count -eq 14 -and
+        $expectedExtensionPaths.Count -eq 14 -and
+        @((Compare-Object -ReferenceObject $expectedExtensionPaths -DifferenceObject $actualExtensionPaths -CaseSensitive)).Count -eq 0
+    ) (($actualExtensionPaths -join ', '))
+    foreach ($extensionEntry in $extensionExpectations.GetEnumerator()) {
+        $extensionPath = Join-Path $companionRoot ('overlays/' + $extensionEntry.Key)
+        $extensionExists = Test-Path -LiteralPath $extensionPath -PathType Container
+        Assert-True "extension directory exists: $($extensionEntry.Key)" $extensionExists
+        if (-not $extensionExists) { continue }
+        $extensionFiles = @(
+            Get-ChildItem -LiteralPath $extensionPath -File -Force |
+                Select-Object -ExpandProperty Name |
+                Sort-Object
+        )
+        $expectedExtensionFiles = @($extensionEntry.Value | Sort-Object)
+        Assert-True "extension surface contents match: $($extensionEntry.Key)" (
+            $extensionFiles.Count -eq $expectedExtensionFiles.Count -and
+            @((Compare-Object -ReferenceObject $expectedExtensionFiles -DifferenceObject $extensionFiles -CaseSensitive)).Count -eq 0
+        ) (($extensionFiles -join ', '))
+        if ($extensionFiles -ccontains '_index.md') {
+            $placeholderKind = ($extensionEntry.Key -split '/')[-1]
+            $expectedPlaceholder = @(
+                "# Host-specific $placeholderKind"
+                ''
+                'Add host-specific content here. See the extension model in skill-source-and-host-overlays.md.'
+            ) -join "`n"
+            $expectedPlaceholder += "`n"
+            $placeholderBytes = [IO.File]::ReadAllBytes((Join-Path $extensionPath '_index.md'))
+            $placeholderHasBom = (
+                $placeholderBytes.Length -ge 3 -and
+                $placeholderBytes[0] -eq 0xEF -and
+                $placeholderBytes[1] -eq 0xBB -and
+                $placeholderBytes[2] -eq 0xBF
+            )
+            $placeholderText = $null
+            try {
+                $placeholderText = [Text.UTF8Encoding]::new($false, $true).GetString($placeholderBytes)
+            }
+            catch [Text.DecoderFallbackException] {
+                Assert-True "placeholder content matches: $($extensionEntry.Key)" $false 'invalid UTF-8 byte sequence'
+                continue
+            }
+            $normalizedPlaceholder = $placeholderText -replace "`r`n", "`n"
+            Assert-True "placeholder content matches: $($extensionEntry.Key)" (
+                -not $placeholderHasBom -and
+                $normalizedPlaceholder -ceq $expectedPlaceholder
+            ) ($(if ($placeholderHasBom) { 'UTF-8 BOM is not allowed' } else { $normalizedPlaceholder -replace "`n", '\n' }))
+        }
+    }
 }
 catch {
     $failures++
@@ -266,6 +355,7 @@ finally {
 }
 
 Write-Output ('unit checks: {0} passed, {1} failed' -f $pass, $failures)
+$script:SuiteFailures += $(if ($failures -gt 0) { 1 } else { 0 })
     Write-Output ('unit suite boundary reached.')
 }
 

@@ -1,6 +1,6 @@
 # Host Overlay Extension Architecture — Composer Roadmap
 
-**Status:** Active — Phase 3 complete; Phase 4 next
+**Status:** Active — Phase 4 complete; Phase 5 next
 **Plan:** `.plans/host-overlay-extension-architecture.md` (APPROVED, 3 passes)
 **Escalation:** yes (`user-labeled-composer`)
 **Created:** 2026-09-21
@@ -29,7 +29,7 @@
 - [x] **Phase 1** — Extension architecture documentation (docs-only; Fast CI; commit) — COMMIT 86af3ff
 - [x] **Phase 2** — Codex composition restructure — COMMIT 03a90b1 (15 files, dual APPROVED, Full CI green)
 - [x] **Phase 3** — Codex hooks — COMPLETE (dual APPROVED, Full CI green)
-- [ ] **Phase 4** — Cross-host extension directories (12 placeholders; Fast CI; commit)
+- [x] **Phase 4** — Cross-host extension directories — COMPLETE (dual APPROVED, Full CI green)
 - [ ] **Phase 5** — Documentation cascade + CI closeout (docs + CI; Fast + Full CI; dual review; commit)
 - [ ] **Post-Apply** — Owner: sync Apply, restart Codex, trust hooks, C1-C6 smoke
 
@@ -45,7 +45,7 @@
 - **Files expected:** None (findings in report output).
 - **Where to read context:** `.plans/host-overlay-extension-architecture.md`; `docs/featureArchitecture/procedure-registry.md`; `scripts/host-sync/adapters/Codex.Adapter.ps1`.
 - **Fast CI:** N/A (read-only).
-- **Full CI:** N/A.
+- **Full CI:** N/A (read-only).
 - **Deliverables:**
   - [ ] Inventory hooks-kind compatibility determined
   - [ ] Composed block length measured
@@ -63,7 +63,7 @@
 - **Files expected:** 3-4 architecture docs.
 - **Where to read context:** Phase 0 findings; `skill-source-and-host-overlays.md`; `instruction-layering.md`.
 - **Fast CI:** `Invoke-NormalizationFastCI.ps1`.
-- **Full CI:** N/A.
+- **Full CI:** N/A (docs-only; no CI behavior change).
 - **Deliverables:**
   - [ ] Extension model documented
   - [ ] Codex hand-authored framing removed from docs
@@ -116,10 +116,11 @@
 - **Files expected:** 12 placeholder files (Cursor rules/ already populated with .mdc rules).
 - **Where to read context:** Phase 1 docs (extension model).
 - **Fast CI:** `Invoke-NormalizationFastCI.ps1`.
-- **Full CI:** N/A.
+- **Full CI:** `Invoke-NormalizationFullCI.ps1` — required after dual approval and before local commit because this phase adds CI behavior.
 - **Deliverables:**
-  - [ ] Exactly 7 rules/ + 7 hooks/ directories verified (12 new placeholders; Cursor rules/ pre-existing)
-- **Risks:** Sync adapter may warn on unexpected directories; verify in dry-run.
+  - [x] Exactly 7 rules/ + 7 hooks/ directories verified (12 new placeholders; Cursor rules/ pre-existing)
+  - [x] New placeholder bodies verified by exact-content CI; existing populated surfaces verified by exact file-name sets
+- **Risks:** Minimal; placeholder-only filesystem plus one directory-invariant assertion.
 
 ## Agent context — Phase 5
 
