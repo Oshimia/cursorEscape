@@ -1,6 +1,6 @@
 # Host Overlay Extension Architecture — Composer Roadmap
 
-**Status:** Complete — owner Post-Apply smoke remains
+**Status:** Complete — hooks retired 2026-09-25; owner Post-Apply smoke remains
 **Plan:** `.plans/host-overlay-extension-architecture.md` (APPROVED, 3 passes)
 **Escalation:** yes (`user-labeled-composer`)
 **Created:** 2026-09-21
@@ -17,7 +17,7 @@
 | Shared extend-only | CI check assertion counts increase monotonically |
 | Composition boundary | `catalog/workflows.json` `codex-cursor-escape-loop` rewritten in Phase 2 only |
 | Adapter boundary | `Codex.Adapter.ps1` composition logic modified in Phase 2 only; Phase 3 adds JSON-native ownership-marker validation |
-| Hook contract | `hooks.json` deploys to `~/.codex/hooks.json`; stateless `subagent_reminder.ps1` deploys to `~/.codex/hooks/`; trust via `/hooks`; no `config.toml` change |
+| Hook contract | Retired 2026-09-25: no managed Codex runtime hook is deployed; the composed agent rule remains the subagent-cleanup enforcement. `overlays/codex/hooks/` is placeholder-only. |
 | Documentation boundary | Model-level docs in Phase 1; implementation-level in Phase 5; no undocumented changes at closeout |
 | Baseline | Phase 2 updates `scripts/host-sync/baselines/codex-manifest-schema-2026-09.json` if it pins destination counts |
 
@@ -31,7 +31,7 @@
 - [x] **Phase 3** — Codex hooks — COMPLETE (dual APPROVED, Full CI green)
 - [x] **Phase 4** — Cross-host extension directories — COMPLETE (dual APPROVED, Full CI green)
 - [x] **Phase 5** — Documentation cascade + CI closeout — COMPLETE (dual APPROVED, Full CI green)
-- [ ] **Post-Apply** — Owner: sync Apply, restart Codex, trust hooks, C1-C6 smoke
+- [ ] **Post-Apply** — Owner: sync Apply, restart Codex, C1-C6 smoke (no hook trust step). Apply does not prune legacy live hook files; those require separate owner-authorized removal, completed for this retirement on 2026-09-25.
 
 ---
 

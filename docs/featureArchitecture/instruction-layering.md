@@ -1,6 +1,6 @@
 # Instruction Layering
 
-**Last updated:** 2026-09-22
+**Last updated:** 2026-09-25
 
 ## Context
 
@@ -45,7 +45,7 @@ Each skill remains short: name, description, invocation rule, outline, verificat
 | VS Code | Host instruction/handoff surfaces carry the thin gate. |
 | Cline | Composed workflow/rule surfaces carry the thin gate. |
 | Kilo Code | Composed workflow/rule surfaces carry the thin gate. |
-| Codex | Codex mapping (Active): canonical rules plus a Codex footer compose the marker-bounded managed block on the host AGENTS surface; the independent skill catalog remains on-demand. The managed Stop hook is a separate lifecycle surface, not an alternate always-on gate. |
+| Codex | Codex mapping (Active): canonical rules plus a Codex footer compose the marker-bounded managed block on the host AGENTS surface; the independent skill catalog remains on-demand. Subagent cleanup remains in the composed block; Codex has no managed runtime hook. |
 
 Each registered host overlay carries extension directories for host-specific content: `rules/` for custom procedural rules beyond the canonical set, and `hooks/` for host-specific lifecycle hook configurations. Unfilled surfaces contain only their `_index.md` placeholders. Extension presence is not load behavior; host content must be bound to and trust through its actual load or lifecycle surface. Workflows remain canonical regardless of host.
 

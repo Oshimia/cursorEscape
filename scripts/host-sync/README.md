@@ -1,6 +1,6 @@
 # Host harness sync (modular layout)
 
-**Last updated:** 2026-09-22
+**Last updated:** 2026-09-25
 
 Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require `-Apply` and a valid Phase 0 baseline gate artifact. The [procedure registry](../../docs/featureArchitecture/procedure-registry.md) owns semantic composition order for the migrated composition-bound host groups (Cursor hybrid, OpenCode dual-write, Antigravity, Cline/Kilo Code, and Codex managed AGENTS block); VS Code currently remains on manifest-owned `Parts`/`Footer` composition. Manifests own destinations, host-only substitutions, and `CompositionId` bindings for the migrated groups. The sole normalization CI entry points are [`../normalization/Invoke-NormalizationFastCI.ps1`](../normalization/Invoke-NormalizationFastCI.ps1) (Fast) and [`../normalization/Invoke-NormalizationFullCI.ps1`](../normalization/Invoke-NormalizationFullCI.ps1) (Full); the host-sync phase scripts are internally invoked by Full CI, never separate entry points.
 
@@ -52,7 +52,7 @@ Entry keys beyond `Source`/`Dest`:
 - **`PlannedContent`** — dry-run captures would-be written content (incl. dual-written mirrors) for CI asserts.
 - **Expected renders** — committed expected-renders under [`render-baselines/`](./render-baselines/) are the byte-exact regression anchor for composed dests.
 - **Ref resolution contract** (unit checks U17–U20): rooted/absolute refs verbatim; un-pre-resolved classed refs throw; overlay-relative refs resolve source-dir first, then `OverlayRoot` fallback.
-- **Extension surfaces** (unit check U23): all seven registered overlays have exact-case `rules/` and `hooks/` directories. The 12 new surfaces contain only strict UTF-8 no-BOM `_index.md` placeholders; Cursor's populated native rules and Codex's managed hook are pinned by exact filename sets. Any mismatch, invalid byte, or Unit-suite failure propagates as a normalization failure.
+- **Extension surfaces** (unit check U23): all seven registered overlays have exact-case `rules/` and `hooks/` directories. The 13 placeholder-only surfaces contain only strict UTF-8 no-BOM `_index.md`; Cursor's populated native rules are pinned by its exact filename set. Any mismatch, invalid byte, or Unit-suite failure propagates as a normalization failure.
 
 FA recording: [Per-entry sourcing](../../docs/featureArchitecture/skill-source-and-host-overlays.md#per-entry-sourcing-required).
 

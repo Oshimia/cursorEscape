@@ -258,14 +258,14 @@ try {
 
     # U23: every registered overlay has exactly one rules/ and one hooks/
     # extension surface. New directories contain only their placeholder; the
-    # two pre-existing populated surfaces remain pinned to their known leaves.
+    # pre-existing populated Cursor rules surface remains pinned to its leaves.
     $extensionExpectations = [ordered]@{
         'antigravity/rules' = @('_index.md')
         'antigravity/hooks' = @('_index.md')
         'cline/rules'       = @('_index.md')
         'cline/hooks'       = @('_index.md')
         'codex/rules'       = @('_index.md')
-        'codex/hooks'       = @('subagent_reminder.ps1')
+        'codex/hooks'       = @('_index.md')
         'cursor/rules'      = @(
             'agent-invocation.mdc'
             'iterative-code-review.mdc'
