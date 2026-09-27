@@ -1,7 +1,7 @@
 # Codex overlay — active composed harness map
 
-**Last updated:** 2026-09-25
-**Status:** Active (`ApplyState = Active`); activated 2026-09-08 after owner-authorized three-client smoke.
+**Last updated:** 2026-09-27
+**Status:** Active; activated 2026-09-08 after owner-authorized three-client smoke.
 **SoT boundary:** canonical procedure remains at repository-root `skills/`, `agents/`, `workflow/`, and `rules/`. This overlay contains Codex-native thin wrappers, invocation metadata, agent wiring, the registry-composed managed-block footer, and source-only extension surfaces.
 **Tokens:** `{{COMPANION_ROOT}}` is replaced with the absolute companion checkout path at render time. No rendered leaf may use a relative hop across either Codex root.
 
@@ -27,6 +27,6 @@ Codex has both registered overlay extension surfaces: [rules/](./rules/) and [ho
 - Reviewer and explorer agents use `sandbox_mode = "read-only"`. No persistent leaf pins a reasoning setting or model identity; inheritance is intentional.
 - `{{COMPANION_ROOT}}` is the only authorized base for canonical procedure, contract, rule, FA, and SOP reads.
 
-## Bring-up state
+## Apply preflight
 
-Registration exposes Codex to invalid-target help and all-stack planning. The lifecycle gate still refuses any selection containing BringUp before any selected stack writes, and a Codex preflight failure prevents every write pass. Activated 2026-09-08 after C1–C6 three-client smoke and separate owner authorization.
+Registration exposes Codex to invalid-target help and all-stack planning. Apply is globally preflighted: a failure on any selected stack prevents every write pass. Activated 2026-09-08 after C1–C6 three-client smoke and separate owner authorization.

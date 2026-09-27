@@ -294,7 +294,7 @@ foreach ($h in $hosts) {
     }
     if ($h -eq 'OpenCode') { if (-not $m.agents_dual_write -or $m.agents_dual_write.instructions_rel -ne 'instructions/cursor-escape-loop.md') { Add-Failure 'OpenCodeDualWrite' } if (-not $m.json_merge -or $m.json_merge.specimen_rel -ne 'opencode.specimen.json') { Add-Failure 'OpenCodeJsonMerge' } }
     if ($h -eq 'Codex') {
-        foreach ($f in @(@('apply_state','ApplyState'),@('ownership_marker','OwnershipMarker'),@('managed_block_marker','ManagedBlockMarker'),@('skill_catalog_budget_characters','SkillCatalogBudgetCharacters'))) { if ($m.$($f[0]) -ne $d[$f[1]]) { Add-Failure 'CodexManifestPolicy' $f[0] } }
+        foreach ($f in @(@('ownership_marker','OwnershipMarker'),@('managed_block_marker','ManagedBlockMarker'),@('skill_catalog_budget_characters','SkillCatalogBudgetCharacters'))) { if ($m.$($f[0]) -ne $d[$f[1]]) { Add-Failure 'CodexManifestPolicy' $f[0] } }
         if (($d.LogicalRoots -join '|') -ne 'codex-home|skill-root') { Add-Failure 'CodexManifestLogicalRoots' ($d.LogicalRoots -join '|') }
         if (@($m.overlay_only_skill_metadata).Count -ne 2) { Add-Failure 'CodexExplicitOnlyCount' }
         foreach ($x in @($m.overlay_only_skill_metadata)) { Test-RepoPath (Join-Path $m.overlay_root $x.relative_path) 'CodexExplicitOnlyMetadata' }
@@ -444,9 +444,7 @@ if ($md -notmatch [regex]::Escape('six historical restore directories')) { Add-F
 if ($md -notmatch [regex]::Escape('31 rendered destinations')) { Add-Failure 'MarkdownBaselineCodex' }
 if ($md -notmatch [regex]::Escape('13 physical fixture leaves')) { Add-Failure 'MarkdownFixtureLeaves' }
 
-# Codex lifecycle: Active is the manifest-backed current state. BringUp text is
-# valid only as historical context or an explicit future re-arming condition.
-if ($manifestData.ContainsKey('Codex') -and $manifestData['Codex'].ApplyState -ne 'Active') { Add-Failure 'CodexLifecycleState' "expected Active, got '$($manifestData['Codex'].ApplyState)'" }
+# Codex lifecycle docs retain activation/smoke evidence without a migration state gate.
 $lifecycleFiles = @(
     'skills/_index.md'
     'docs/SOPs/codex-host-adapter.md'
@@ -455,13 +453,7 @@ $lifecycleFiles = @(
     'scripts/host-sync/README.md'
     'scripts/host-sync/manifests/codex.manifest.psd1'
 )
-$staleLifecyclePatterns = @(
-    'currently source-only in BringUp'
-    'registered source-only manifest'
-    'force-holds this stack BringUp'
-    'remains behind the separate BringUp gate'
-    'Runtime acceptance \(Phase 4\)'
-)
+$staleLifecyclePatterns = @('ApplyState', 'BringUp')
 foreach ($relative in $lifecycleFiles) {
     $lifecyclePath = Join-Path $RepoRoot $relative
     if (-not (Test-Path -LiteralPath $lifecyclePath -PathType Leaf)) { Add-Failure 'LifecycleEvidenceMissing' $relative; continue }
@@ -470,7 +462,7 @@ foreach ($relative in $lifecycleFiles) {
 }
 $skillsText = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'skills/_index.md')
 if ($skillsText -notmatch [regex]::Escape('Active since 2026-09-08 with C1–C6 smoke attested')) { Add-Failure 'CodexLifecycleStatus' 'skills index missing Active/attested status' }
-if ($skillsText -notmatch [regex]::Escape('fresh C1–C6 attestation is required only')) { Add-Failure 'CodexRearmBoundary' 'skills index missing fresh-attestation-only boundary' }
+if ($skillsText -notmatch [regex]::Escape('Apply requires fresh explicit owner authorization')) { Add-Failure 'CodexApplyAuthorization' 'skills index missing Apply authorization boundary' }
 
 # Plan-review handoffs must exchange only the validated durable artifact path.
 # These are the explicit governed handoff/launcher templates that name the

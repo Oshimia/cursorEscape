@@ -1,7 +1,7 @@
 # Codex host adapter SOP
 
-**Last updated:** 2026-09-25
-**Status:** `ApplyState = Active` (activated 2026-09-08 after owner-authorized install; three-client smoke attested 2026-09-08).
+**Last updated:** 2026-09-27
+**Status:** Active adapter; activated 2026-09-08 after owner-authorized install; three-client smoke attested 2026-09-08.
 
 ## Context
 
@@ -18,7 +18,7 @@ The specialized adapter requires two explicit absolute roots. The operator entry
 - Treat `codex-home/AGENTS.override.md` as guard-only: a non-empty file must block Apply.
 - Run the all-stack preflight before any Apply write pass when `Target All` is selected.
 - Obtain fresh explicit owner authorization before every live Apply.
-- For re-activation after setting `ApplyState = BringUp`, obtain separate owner authorization, a current baseline, and fresh three-client C1–C6 attestation.
+- For any future machinery-changing reinstall, obtain fresh explicit owner authorization and fresh three-client C1–C6 attestation.
 
 **Must-not**
 
@@ -26,7 +26,7 @@ The specialized adapter requires two explicit absolute roots. The operator entry
 - Never install `agents/openai.yaml` metadata; explicit-only policy remains overlay-only until a separately reviewed seam.
 - Never infer or normalize a missing Codex or skill root inside the adapter.
 - Never write model, reasoning, MCP, or plugin configuration.
-- Never bypass the `BringUp` lifecycle gate with an internal test resolver outside disposable CI.
+- Never weaken ownership, managed-block, explicit-root, or global-preflight controls in disposable CI.
 
 ## Destination inventory
 
@@ -61,7 +61,7 @@ pwsh scripts/Sync-HostHarness.ps1 -Target Codex
 pwsh scripts/Sync-HostHarness.ps1 -Target All -Apply
 ```
 
-If any selected stack is re-armed to `BringUp`, the lifecycle gate refuses All Apply before any selected-stack write. There is no `-AllowSkew` exception for lifecycle refusal. Reactivation from `BringUp` requires separate owner authorization, a current baseline, and fresh three-client C1–C6 attestation.
+Apply is globally preflighted: if any selected stack fails dry-run preflight, no selected stack is written. All live Apply requires fresh explicit owner authorization.
 
 ## Safety and verification
 
@@ -69,10 +69,10 @@ If any selected stack is re-armed to `BringUp`, the lifecycle gate refuses All A
 - Apply preflights ownership, hard excludes, override absence, path containment, current-state hashes, and marker integrity.
 - Apply is a byte-level no-op for unchanged destinations; `AppliedFiles` reports only destinations actually written.
 - Writes use staged replacement and post-write hash verification. Adapter-local failure restores in-memory pre-Apply bytes and removes files created by the failed run.
-- Lifecycle CI: `scripts/host-sync/Invoke-CodexLifecycleChecks.ps1` proves explicit-root Codex dry-run, all-stack dry-run, `BringUp` All-Apply refusal, Active-state Codex collision with zero selected-stack writes, and complete invalid-target output.
+- Lifecycle CI: `scripts/host-sync/Invoke-CodexLifecycleChecks.ps1` proves explicit-root Codex dry-run, all-stack dry-run, disposable Codex Apply, collision with zero selected-stack writes, and complete invalid-target output.
 - Committed render baselines and deterministic double-render comparison remain regression anchors for planned renders.
 
-The 2026-09-08 activation baseline was attested across CLI, VS Code extension, and ChatGPT desktop for plan gates, catalog behavior, isolated reviewer spawning, companion Read wiring, and end-to-end workflow behavior. A future reactivation requires a fresh equivalent attestation.
+The 2026-09-08 activation baseline was attested across CLI, VS Code extension, and ChatGPT desktop for plan gates, catalog behavior, isolated reviewer spawning, companion Read wiring, and end-to-end workflow behavior. A future machinery-changing reinstall requires a fresh equivalent attestation.
 
 ## Related
 

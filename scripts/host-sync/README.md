@@ -27,7 +27,7 @@ scripts/
       Cursor.Adapter.ps1          # Invoke-StackHarnessSync for Cursor
       OpenCode.Adapter.ps1        # Invoke-StackHarnessSync for OpenCode
       Antigravity.Adapter.ps1     # REMOVED 2026-09-01 — dispatches to Generic.Adapter.ps1 (byte-identical engine)
-      Generic.Adapter.ps1         # SHARED manifest-driven copy-out engine (kilo-cline bring-up); dispatch fallback for stacks without specialized adapters (currently: Antigravity, Vscode, Cline, Kilocode)
+      Generic.Adapter.ps1         # SHARED manifest-driven copy-out engine; dispatch fallback for stacks without specialized adapters (currently: Antigravity, Vscode, Cline, Kilocode)
       Codex.Adapter.ps1           # specialized fail-closed two-root engine (explicit roots, ownership/hash preflight, staging, rollback)
 ```
 
@@ -72,7 +72,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target All -FailFast
 # Dry-run inspection of ONE manifest (read-only, always allowed)
 pwsh ./scripts/Sync-HostHarness.ps1 -Target OpenCode
 
-# EXCEPTION ONLY: single-stack live write (deliberate bring-up / scoped repair)
+# EXCEPTION ONLY: single-stack live write (deliberate scoped repair)
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor -AllowSkew
 
 # Disposable Codex dry-run (explicit mandatory roots; no live Codex writes)
@@ -111,11 +111,9 @@ The companion repository is the source of truth. Sync never creates backup folde
 
 Manifest `NeverTouch` paths (e.g. `docs/workflow`, Antigravity `caveman.md`) are left in place on the live host.
 
-## Apply lifecycle and global preflight
+## Apply global preflight
 
-`ApplyState` defaults to `Active`; the manifest value governs. `Codex` was force-held at `BringUp` through Phases 0–3 and activated 2026-09-08 after three-client smoke; setting its manifest back to `BringUp` re-arms the lifecycle gate.
-
-For Apply, the orchestration lifecycle refuses any selection containing BringUp before any write pass. For every Active selection, it dry-run-preflights **all** selected stacks before the first write; any failure reports the complete preflight set and performs zero writes. `-FailFast` continues to mean “stop the write pass after first failure” and never abbreviates this global preflight.
+For Apply, orchestration dry-run-preflights **all** selected stacks before the first write; any failure reports the complete preflight set and performs zero writes. `-FailFast` continues to mean “stop the write pass after first failure” and never abbreviates this global preflight.
 
 ## Expansion recipe (add a stack)
 

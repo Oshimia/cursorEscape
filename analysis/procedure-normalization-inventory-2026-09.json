@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "inventory_date": "2026-09-11",
-  "last_updated": "2026-09-26",
+  "last_updated": "2026-09-27",
   "phase": 0,
   "hosts": [
     "Cursor",
@@ -3866,7 +3866,6 @@
           "role": "generated-rule-wrapper"
         }
       ],
-      "apply_state": "Active",
       "logical_roots": [
         "codex-home",
         "skill-root"

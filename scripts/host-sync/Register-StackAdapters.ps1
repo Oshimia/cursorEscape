@@ -16,29 +16,8 @@ function Get-StackManifest {
 }
 
 function Get-RegisteredStackIds {
-    # Codex bring-up Phase 3 2026-09-08: seventh stack registered source-only.
+    # Registered stacks in normative global Apply order.
     return @('Cursor', 'OpenCode', 'Antigravity', 'Vscode', 'Cline', 'Kilocode', 'Codex')
-}
-
-function Get-StackApplyState {
-    param(
-        [Parameter(Mandatory)]
-        [hashtable] $Manifest
-    )
-
-    # Absent ApplyState means Active for all established stacks. During Phases
-    # 0-3 Codex was force-held in BringUp here; Phase 4 activation (2026-09-08)
-    # removed the force-hold after the owner-authorized install and attested
-    # three-client smoke. The manifest now governs, and re-setting it to
-    # BringUp re-arms the lifecycle gate for any future bring-down/repair.
-    $configuredState = 'Active'
-    if ($Manifest.ContainsKey('ApplyState') -and -not [string]::IsNullOrWhiteSpace([string]$Manifest.ApplyState)) {
-        $configuredState = [string]$Manifest.ApplyState
-    }
-    if ($configuredState -notin @('Active', 'BringUp')) {
-        throw "Invalid ApplyState '$configuredState' for stack '$($Manifest.StackId)'. Valid: Active, BringUp"
-    }
-    return $configuredState
 }
 
 function ConvertTo-SkewIdentitySource {

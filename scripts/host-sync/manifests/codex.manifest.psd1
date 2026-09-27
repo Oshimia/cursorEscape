@@ -1,13 +1,8 @@
 @{
-    # Codex registered manifest (Phase 3). The specialized adapter
-    # owns two-root writes. ApplyState was activated 2026-09-08 after owner
-    # authorization and three-client C1–C6 smoke attestation. Reactivation
-    # from BringUp requires explicit owner authorization and fresh
-    # three-client C1–C6 attestation.
+    # Codex registered manifest. The specialized adapter owns two-root writes.
     SchemaVersion                    = 1
     StackId                          = 'Codex'
     DisplayName                      = 'OpenAI Codex'
-    ApplyState                       = 'Active'
     OverlayRelativeRoot              = 'overlays/codex'
     LogicalRoots                     = @('codex-home', 'skill-root')
     OwnershipMarker                  = 'cursorEscape-managed:v1'
