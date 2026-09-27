@@ -18,6 +18,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot 'ProcedureRegistry.psm1') -Force
+Import-Module (Join-Path $PSScriptRoot 'LocalScratch.psm1') -Force
 $JsonPath = if ($InventoryJsonPath) { $InventoryJsonPath } else { Join-Path $RepoRoot 'analysis' 'procedure-normalization-inventory-2026-09.json' }
 $MdPath = if ($InventoryMdPath) { $InventoryMdPath } else { Join-Path $RepoRoot 'analysis' 'procedure-normalization-inventory-2026-09.md' }
 $failures = [System.Collections.Generic.List[string]]::new()
@@ -491,7 +492,7 @@ if ($skillsText -notmatch [regex]::Escape('fresh C1–C6 attestation is required
 # Plan-review handoffs must exchange only the validated durable artifact path.
 # These are the explicit governed handoff/launcher templates that name the
 # reviewer input; baselines are checked separately by byte-level fixtures.
-$planArtifactHandoffFiles = @(
+$planArtifactExactTemplates = @(
     'agents/plan_reviewer.md',
     'overlays/antigravity/agents/plan_reviewer.md',
     'overlays/codex/agents/plan_reviewer.toml',
@@ -501,32 +502,38 @@ $planArtifactHandoffFiles = @(
     'overlays/vscode/agents/plan_reviewer.agent.md',
     'overlays/vscode/agents/planner.agent.md'
 )
-foreach ($relative in $planArtifactHandoffFiles) {
+$planArtifactBoundaryOnlyLeaves = @(
+    'rules/local-scratch.md',
+    'rules/iterative-plan-review.md',
+    'workflow/local-scratch.md',
+    'workflow/iterative-plan-review.md',
+    'skills/implementation-plan/SKILL.md',
+    'skills/plan-review/SKILL.md',
+    'overlays/antigravity/workflows/escape-plan.md',
+    'overlays/cline/workflows/plan.md',
+    'overlays/kilocode/workflows/plan.md',
+    'overlays/cursor/rules/agent-invocation.mdc',
+    'overlays/cursor/skills/implementation-plan/user-rules-snippet.md',
+    'overlays/codex/agents/planner.toml',
+    'overlays/codex/instructions/agents-block.md',
+    'overlays/opencode/AGENTS.md',
+    'overlays/opencode/instructions/cursor-escape-loop.md',
+    'overlays/opencode/skills/implementation-plan/SKILL.md',
+    'overlays/opencode/skills/plan-review/SKILL.md'
+)
+$planArtifactBoundaryLeaves = @($planArtifactBoundaryOnlyLeaves) + @($planArtifactExactTemplates)
+foreach ($relative in $planArtifactBoundaryLeaves) {
     $path = Join-Path $RepoRoot $relative
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { Add-Failure 'PlanArtifactHandoffMissing' $relative; continue }
     $text = Get-Content -Raw -LiteralPath $path
-    if (-not $text.Contains('Plan artifact path')) { Add-Failure 'PlanArtifactPathField' $relative }
     if (-not $text.Contains('.scratch/plans')) { Add-Failure 'PlanArtifactPathBoundary' $relative }
     if ($text.Contains('Plan artifact status') -or $text.Contains('draft returned by planner')) { Add-Failure 'PlanArtifactStatusSubstitute' $relative }
+    if ($relative -in $planArtifactExactTemplates -and -not $text.Contains('Plan artifact path')) { Add-Failure 'PlanArtifactPathField' $relative }
 }
 
 # Retired-term search (char-code literal)
 $forbidden = -join @(103,111,108,100,101,110)
-$files = [System.Collections.Generic.List[IO.FileInfo]]::new()
-$pendingDirectories = [System.Collections.Generic.Queue[string]]::new()
-$pendingDirectories.Enqueue([IO.Path]::GetFullPath($RepoRoot))
-$gitRoot = [IO.Path]::GetFullPath((Join-Path $RepoRoot '.git'))
-$scratchRoot = [IO.Path]::GetFullPath((Join-Path $RepoRoot '.scratch'))
-while ($pendingDirectories.Count -gt 0) {
-    $currentDirectory = $pendingDirectories.Dequeue()
-    foreach ($childDirectory in [IO.Directory]::EnumerateDirectories($currentDirectory)) {
-        $childFullPath = [IO.Path]::GetFullPath($childDirectory)
-        if ($childFullPath.Equals($gitRoot, [StringComparison]::OrdinalIgnoreCase) -or
-            $childFullPath.Equals($scratchRoot, [StringComparison]::OrdinalIgnoreCase)) { continue }
-        $pendingDirectories.Enqueue($childFullPath)
-    }
-    foreach ($filePath in [IO.Directory]::EnumerateFiles($currentDirectory)) { $files.Add([IO.FileInfo]::new($filePath)) }
-}
+$files = Get-GovernedRepositoryFiles -RepositoryRoot $RepoRoot
 foreach ($f in $files) { $bytes = [System.IO.File]::ReadAllBytes($f.FullName); if ($bytes.Length -eq 0 -or ($bytes[0..([Math]::Min($bytes.Length-1,1023))] | Where-Object { $_ -eq 0 })) { continue }; $text = [Text.Encoding]::UTF8.GetString($bytes); if ($text.Contains($forbidden)) { Add-Failure 'RetiredTermAbsent' $f.FullName.Substring($RepoRoot.Length+1) } }
 
 if ($failures.Count) { Write-Host "FAIL: $($failures.Count) invariant(s) failed:" -ForegroundColor Red; $failures | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }; exit 1 }

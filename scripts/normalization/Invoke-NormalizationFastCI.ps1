@@ -6,6 +6,7 @@ $ErrorActionPreference = 'Stop'
 $checks = @(
   @{ Name='registry'; File=(Join-Path $PSScriptRoot 'Test-ProcedureRegistry.ps1') },
   @{ Name='views'; File=(Join-Path $PSScriptRoot 'Test-ProcedureRegistryViews.ps1') },
+  @{ Name='local-scratch-safety'; File=(Join-Path $PSScriptRoot 'Test-LocalScratchSafety.ps1') },
   @{ Name='phase0-current-state'; File=(Join-Path (Join-Path $RepoRoot 'scripts/normalization') 'Invoke-CurrentStateFixtureChecks.ps1') },
   @{ Name='host-sync-units'; File=(Join-Path (Join-Path $RepoRoot 'scripts/host-sync') 'Invoke-HostSyncChecks.ps1'); Arguments=@{ Suite='Unit' } },
   @{ Name='codex-render'; File=(Join-Path (Join-Path $RepoRoot 'scripts/host-sync') 'Invoke-CodexRenderChecks.ps1') }
