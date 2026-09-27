@@ -1,11 +1,11 @@
 # Cline host adapter — global `~/.cline` inventory & sync
 
-**Last updated:** 2026-09-20
-**Status:** established stack using shared `Generic.Adapter.ps1`; no Cline-specific adapter file. Live Apply requires registered restore baselines and fresh explicit owner authorization.
+**Last updated:** 2026-09-27
+**Status:** established stack using shared `Generic.Adapter.ps1`; no Cline-specific adapter file. Live Apply requires the non-backup Apply boundary and fresh explicit owner authorization.
 
 ## Context
 
-Cline VS Code extension (`saoudrizwan.claude-dev`) harness sync from [overlays/cline/](../../overlays/cline/_index.md). Surface map is docs-verified. Baseline (restore-only): `C:/Users/admin/.cline-backup-pre-kilobringup-20260901-180000` (registered). Sync does **not** create backups.
+Cline VS Code extension (`saoudrizwan.claude-dev`) harness sync from [overlays/cline/](../../overlays/cline/_index.md). Surface map is docs-verified. Sync does **not** create backups; recovery uses a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification.
 
 ## Sync commands
 

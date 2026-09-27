@@ -1,10 +1,10 @@
 # Antigravity overlay — harness copy-out map
 
-**Last updated:** 2026-09-18
+**Last updated:** 2026-09-27
 
 ## Context
 
-Antigravity-native **host overlay** at `overlays/antigravity/`. Portable procedure stays at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`). Overlay = **thin harness only**. Live `~/.gemini` harness synced via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (`-Target Antigravity`; `-Apply` for live writes); SOP: [antigravity-host-adapter](../../docs/SOPs/antigravity-host-adapter.md); see [host-sync README](../../scripts/host-sync/README.md). Sync does **not** create backups; Phase 0 baseline is restore-only.
+Antigravity-native **host overlay** at `overlays/antigravity/`. Portable procedure stays at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`). Overlay = **thin harness only**. Live `~/.gemini` harness synced via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (`-Target Antigravity`; `-Apply` for live writes); SOP: [antigravity-host-adapter](../../docs/SOPs/antigravity-host-adapter.md); see [host-sync README](../../scripts/host-sync/README.md). Sync does **not** create backups; recovery uses a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification.
 
 Owner decisions (2026-08-23): cursorEscape is the **sole SoT** — live global rules are **wholesale-replaced** by the registry-composed `antigravity-gemini` runtime gate; v1 surfaces are global skills, global workflows, subagent defs, and the composed `GEMINI.md`. Gemini CLI reads the same `GEMINI.md` path — accepted consequence.
 

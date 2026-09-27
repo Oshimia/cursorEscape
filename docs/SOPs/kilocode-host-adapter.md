@@ -1,11 +1,11 @@
 # Kilo Code host adapter — global `~/.kilocode` inventory & sync
 
-**Last updated:** 2026-09-20
-**Status:** established stack using shared `Generic.Adapter.ps1`; no Kilo Code-specific adapter file. Live Apply requires registered restore baselines and fresh explicit owner authorization.
+**Last updated:** 2026-09-27
+**Status:** established stack using shared `Generic.Adapter.ps1`; no Kilo Code-specific adapter file. Live Apply requires the non-backup Apply boundary and fresh explicit owner authorization.
 
 ## Context
 
-Kilo Code VS Code extension (`kilocode.kilo-code-7.5.6`, Kilo CLI-platform rebuild) harness sync from [overlays/kilocode/](../../overlays/kilocode/_index.md). Surface map is docs-verified. Baseline (restore-only): `C:/Users/admin/.kilocode-backup-pre-kilobringup-20260901-180000` (registered). Sync does **not** create backups.
+Kilo Code VS Code extension (`kilocode.kilo-code-7.5.6`, Kilo CLI-platform rebuild) harness sync from [overlays/kilocode/](../../overlays/kilocode/_index.md). Surface map is docs-verified. Sync does **not** create backups; recovery uses a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification.
 
 ## Sync commands
 

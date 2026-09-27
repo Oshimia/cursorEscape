@@ -1,13 +1,13 @@
 # OpenCode host adapter
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-27
 
 ## Context
 
 This SOP operates the global OpenCode adapter. The companion repository is the Target SoT for procedures, skills, agents, and rules ([skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)). `~/.config/opencode/` is a host adapter, not a second procedure tree. Live sync is rendered from [overlays/opencode](../../overlays/opencode/_index.md) by [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1).
 
 **Install root:** `C:\Users\admin\.config\opencode\`
-**Restore baseline:** registered in [`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json). Sync does not create backups.
+**Recovery:** use a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification. Sync does not create backups.
 
 ## Substance
 
@@ -77,7 +77,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Target OpenCode
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target OpenCode -AllowSkew
 ```
 
-Apply first verifies registered restore baselines, globally preflights selected stacks, then renders and writes the manifest-owned thin harness. It merges companion and OpenCode home tokens, preserves live model/provider settings, dual-writes C1 surfaces, and never recreates a procedure mirror. Fully quit and restart OpenCode after changing config-time surfaces.
+Apply globally preflights selected stacks, then renders and writes the manifest-owned thin harness. It merges companion and OpenCode home tokens, preserves live model/provider settings, dual-writes C1 surfaces, and never recreates a procedure mirror. Fully quit and restart OpenCode after changing config-time surfaces.
 
 Author in the companion repository first. Use [opencode-authoring-adapter](./opencode-authoring-adapter.md) for OpenCode-specific file requirements. Manual copy into live paths is forbidden because it bypasses token merge, JSON merge, and consistency gates.
 
@@ -112,10 +112,10 @@ Run prompts from [opencode-smoke-prompts](./opencode-smoke-prompts.md). Record `
 
 Verify rows 15 and 18 in fresh CLI processes after sync. Defer Desktop-nested rows 16–17 only to the next quiescent restart window and record the reason.
 
-## Restore
+## Recovery
 
 1. Fully quit OpenCode.
-2. Restore only from the registered baseline identified by [`baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json).
+2. Check out the known-good commit, dry-run, then owner-authorized re-Apply.
 3. Restart and run the focused smoke rows for the changed surfaces.
 
 ## Related

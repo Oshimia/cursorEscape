@@ -1,13 +1,13 @@
 # VS Code host adapter SOP
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-27
 **Stack:** `Vscode` · **Live root:** `~/.copilot/` · **Surface:** Copilot user-level instructions, agents, and skills · **Adapter:** shared `Generic.Adapter.ps1`
 
 ## Must / Must-not
 
 **Must**
 
-- Sync via `pwsh scripts\Sync-HostHarness.ps1 -Target Vscode` for scoped dry-run. Global dry-run is the normative default. Live Apply requires registered restore baselines and fresh explicit owner authorization.
+- Sync via `pwsh scripts\Sync-HostHarness.ps1 -Target Vscode` for scoped dry-run. Global dry-run is the normative default. Live Apply requires the non-backup Apply boundary and fresh explicit owner authorization.
 - Full VS Code restart after any Apply before trusting discovery.
 - Verify via chat **Diagnostics view** (right-click Chat → Diagnostics) — loaded instructions/agents/skills + errors are listed there.
 
@@ -45,5 +45,5 @@ pwsh scripts\Sync-HostHarness.ps1 -Apply
 
 - **Subagent depth 1** — reviewer fan-out parent-side (attested deviation, Antigravity C3 precedent).
 - **Seven-stack fan-out** — portable procedure edits fan out across every governed host through the editing-companion cascade.
-- **Baseline restore** — pre-bringup baseline dir is restore-only if an Apply damages pre-existing content.
+- **Recovery** — use a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification.
 - **Generic adapter** — this stack intentionally shares the generic adapter rather than maintaining a clone.

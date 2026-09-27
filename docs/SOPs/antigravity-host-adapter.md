@@ -1,6 +1,6 @@
 # Antigravity host adapter
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-27
 
 ## Context
 
@@ -9,7 +9,7 @@ This SOP operates the Antigravity adapter. The companion repository is the Targe
 The global rules surface, `~/.gemini/GEMINI.md`, is intentionally wholesale-replaced by the composed overlay gate. This also propagates the cursorEscape gates to Gemini CLI sessions; it is an accepted consequence of companion-first ownership.
 
 **Install root:** `C:\Users\admin\.gemini\`
-**Restore baseline:** registered in [`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json). Sync does not create backups.
+**Recovery:** use a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification. Sync does not create backups.
 
 ## Substance
 
@@ -52,7 +52,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Target Antigravity
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Antigravity -AllowSkew
 ```
 
-Apply first verifies registered restore baselines and globally preflights selected stacks before any selected stack writes. Restart Antigravity after a config-time Apply.
+Apply globally preflights selected stacks before any selected stack writes. Restart Antigravity after a config-time Apply.
 
 ### Verification
 

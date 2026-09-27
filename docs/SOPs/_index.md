@@ -1,6 +1,6 @@
 # Standard Operating Procedures
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-27
 
 ## Context
 
@@ -24,7 +24,7 @@ This index lists the current repeatable procedures for maintaining cursorEscape 
 - [Cline host adapter](./cline-host-adapter.md) — global `~/.cline`; shared generic adapter and serial-review adaptation.
 - [Kilo Code host adapter](./kilocode-host-adapter.md) — global `~/.kilocode`; shared generic adapter and slash-command adaptation.
 - [Codex host adapter](./codex-host-adapter.md) — explicit `CODEX_HOME` and skill root; managed `AGENTS.md`, TOML agents, and thin skill wrappers.
-- [Host harness sync README](../../scripts/host-sync/README.md) — modular adapter layout, restore baselines, render ownership, and expansion recipe.
+- [Host harness sync README](../../scripts/host-sync/README.md) — modular adapter layout, Apply safety, render ownership, and expansion recipe.
 
 Live Apply always requires fresh explicit owner authorization. Dry-run is the default and performs no live writes.
 

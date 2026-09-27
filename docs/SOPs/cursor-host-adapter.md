@@ -1,6 +1,6 @@
 # Cursor host adapter
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-27
 
 ## Context
 
@@ -8,7 +8,7 @@ This SOP operates the global Cursor adapter. The companion repository is the Tar
 
 **Install root:** `C:\Users\admin\.cursor\`
 **Companion root:** `C:\Users\admin\source\repos\general-projects\cursorEscape`
-**Restore baseline:** registered in [`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json). Sync does not create backups.
+**Recovery:** use a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification. Sync does not create backups.
 
 ## Substance
 
@@ -56,7 +56,7 @@ pwsh ./scripts/Sync-HostHarness.ps1 -Target Cursor
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply -Target Cursor -AllowSkew
 ```
 
-Apply first verifies registered restore baselines, globally preflights selected stacks, then copies the manifest-owned thin harness, merges `{{COMPANION_ROOT}}` to the absolute companion path, and renders hybrid rules from registry-owned compositions. It does not copy a procedure mirror. Fully quit and restart Cursor before runtime verification.
+Apply globally preflights selected stacks, then copies the manifest-owned thin harness, merges `{{COMPANION_ROOT}}` to the absolute companion path, and renders hybrid rules from registry-owned compositions. It does not copy a procedure mirror. Fully quit and restart Cursor before runtime verification.
 
 ### Verification
 
@@ -69,14 +69,14 @@ Run after authorized Apply and a full restart. Record `pass`, `fail`, or `deferr
 | Different workspace | Optional: open an unrelated folder | Skill Read still resolves the absolute companion path | Record |
 | User Rules integration | Install snippets from synced skill directories | Rules appear in Cursor settings and do not duplicate full procedure bodies | Record |
 | Wrong-base hop audit | Search synced harness for `../../../../` | Zero matches | Record |
-| Restore readiness | Confirm the registered baseline exists | Baseline and restore instructions are discoverable | Record |
+| Recovery readiness | Confirm the intended known-good commit and drift command are selected | Recovery path is discoverable | Record |
 
 Routine post-push hash checks are forbidden; built-in sync checks are authoritative. Smoke belongs to first-time surfaces and machinery changes.
 
-## Restore
+## Recovery
 
 1. Fully quit Cursor.
-2. Restore only from the registered baseline identified by [`baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json).
+2. Check out the known-good commit, dry-run, then owner-authorized re-Apply.
 3. Restart and run the focused verification rows for the changed surfaces.
 
 ## Related

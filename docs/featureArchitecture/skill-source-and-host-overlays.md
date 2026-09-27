@@ -1,6 +1,6 @@
 # Skill source and host overlays
 
-**Last updated:** 2026-09-25
+**Last updated:** 2026-09-27
 
 ## Context
 
@@ -40,7 +40,7 @@ Host directories are install targets and harness homes. They may contain launch 
 
 [`scripts/Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) is the operator entry for host harness sync. Dry-run is the default. Live Apply requires fresh explicit owner authorization, all-host Apply is normative, and single-stack `-AllowSkew` is only an explicitly owner-authorized recovery exception as defined by [`procedure-registry.md`](./procedure-registry.md#live-apply-boundary).
 
-Sync is global-preflighted: every selected stack is planned and checked before any write pass. It does not create ad hoc backups; registered render baselines are restore and regression anchors. No normalization or reviewer step writes to live hosts.
+Sync is global-preflighted: every selected stack is planned and checked before any write pass. It does not create ad hoc backups; registered render baselines are regression anchors only. Recovery uses a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification. No normalization or reviewer step writes to live hosts.
 
 ### Per-entry sourcing (Required)
 
