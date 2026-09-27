@@ -27,7 +27,7 @@ Place Escalation after Scope on every non-trivial plan. Specimen headings: `{{CO
 2. Optional: pre-plan alignment via skill `grilling`; skip when settled or trivial; deep rules in companion.
 3. Draft plan per companion skill template (Goal, Scope, Escalation, Assumptions, Unknowns, Discovery steps, Incremental execution, Verification).
 4. When Escalation = yes, read `{{COMPANION_ROOT}}/workflow/plan-agent-context.md`.
-5. Invoke subagent `plan_reviewer` via `invoke_subagent` — begin with the canonical `{{COMPANION_ROOT}}/workflow/agent-invocation.md` envelope, clean context, **full synthesized plan only**, max 3 passes.
+5. Save the plan at `/.scratch/plans/<plan-id>.md`, edit it in place, then invoke subagent `plan_reviewer` via `invoke_subagent` — begin with the canonical `{{COMPANION_ROOT}}/workflow/agent-invocation.md` envelope, clean context, the plan artifact's absolute path only, max 3 passes.
 6. Present to user after APPROVED or pass 3; wait if CHANGES REQUESTED.
 
 ### Incomplete until (section SoT)

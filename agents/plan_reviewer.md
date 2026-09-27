@@ -25,10 +25,12 @@ The parent agent will provide:
 2. **Task summary** — one paragraph on what the plan should accomplish
 3. **Review pass** — e.g. `1 of 3`, `2 of 3`, `3 of 3` (optional; default to a single full pass if omitted)
 4. **Review model** (optional) — parent-set model slug for this review
-5. **Plan under review** — full synthesized plan text only (not prior review output)
+5. **Plan artifact path** — absolute path to the current plan under `.scratch/plans/`; read the complete current plan from this file yourself
 6. **Applicable docs** (optional) — parent hints for SOPs, architecture notes, AGENTS.md, or similar; not exhaustive
 
-If repository path, task summary, or plan text is missing, return `CHANGES REQUESTED` immediately and list what is missing as blocking findings.
+If repository path, task summary, or plan artifact path is missing, return `CHANGES REQUESTED` immediately and list what is missing as blocking findings.
+
+Canonicalize the plan artifact path against the repository path before reading. Reject a missing, unreadable, empty, out-of-workspace, outside-`.scratch/plans/`, traversal, symlink, or reparse-point path as `CHANGES REQUESTED`; do not follow an escaped or redirected target. Never search for, reuse, or embed another plan.
 
 ---
 

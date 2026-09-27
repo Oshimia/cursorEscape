@@ -1,6 +1,6 @@
 # Procedure normalization inventory — 2026-09
 
-**Phase:** 0 · **Status:** implementation-under-review · **Schema:** v2 · **Snapshot date:** 2026-09-11 · **Last updated:** 2026-09-25
+**Phase:** 0 · **Status:** implementation-under-review · **Schema:** v2 · **Snapshot date:** 2026-09-11 · **Last updated:** 2026-09-26
 
 This is a read-only current-state snapshot. It identifies evidence and policy; it does not authorize migration or Apply. The snapshot date is the original Phase 0 capture; the last-updated date records later reconciliation edits only.
 
@@ -55,8 +55,8 @@ There are **22 canonical skills** plus **1 generated rule wrapper**, for 23 adve
 
 ## Rules, workflows, and compositions
 
-- Canonical rules: **6** (`rules/`).
-- Canonical workflows: **23** (`workflow/`).
+- Canonical rules: **7** (`rules/`).
+- Canonical workflows: **24** (`workflow/`).
 - Manifest rule/workflow/instruction compositions: **8**, each with source, destination, parts/footer, semantic order, and host in JSON. Every manifest composition is represented in the inventory and every inventory composition maps to a manifest entry.
 - Always-on policies: **16** (4 hosts × 4 gates: Cursor, OpenCode, Codex, Antigravity × invocation, plan-review, code-review, pre-commit). Registry-backed and mirrored in inventory `rules_workflows.always_on`.
 

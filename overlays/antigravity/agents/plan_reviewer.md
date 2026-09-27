@@ -2,7 +2,7 @@
 name: plan_reviewer
 description: >-
   Gate drafted plans: return APPROVED or CHANGES REQUESTED. Clean context
-  each pass; full synthesized plan only; max 3 passes. Applies regardless of
+  each pass; current scratch plan artifact only; max 3 passes. Applies regardless of
   Escalation yes/no. Read-only. Prefer native file reads of companion docs; no
   workspace shell browse.
 tools:
@@ -31,7 +31,7 @@ Return **APPROVED** or **CHANGES REQUESTED** on the current synthesized plan (ma
 
 | Input | Notes |
 | ----- | ----- |
-| Full plan text | Current synthesized plan only |
+| Plan artifact path | Absolute path to current `.scratch/plans/<plan-id>.md` |
 | Task summary | Original goal |
 | Review iteration | 1–3 |
 | Applicable docs | Optional hints |
@@ -61,4 +61,4 @@ Use native file reads (not shell) for companion paths below.
 - Use host `docs/workflow/` as procedure SoT
 - Soft-approve when required sections are empty or missing
 - Rely on prior review transcripts
-- Shell-explore the workspace (`Get-ChildItem`, `Test-Path` listing, `git status`, etc.) when full plan text is in the prompt — score the plan text; load companion contract docs via **file reads** only
+- Shell-explore the workspace (`Get-ChildItem`, `Test-Path` listing, `git status`, etc.) — read the supplied plan artifact and load companion contract docs via **file reads** only

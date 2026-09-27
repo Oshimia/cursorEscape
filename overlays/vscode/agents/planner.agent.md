@@ -27,16 +27,15 @@ handoffs:
       Review pass: <for example, 1 of 3>
       Attestation marker: <parent-generated marker>
 
-      Full synthesized plan text:
-      <paste the complete current plan>
+      Plan artifact path: <absolute path under .scratch/plans persisted by the workspace-write parent>
 
-      Use only this packed payload; do not rely on surrounding chat or host context. If any field or the plan text is missing, return `CHANGES REQUESTED` and name the missing input. Echo the attestation marker verbatim.
+      Use only this packed payload; do not rely on surrounding chat or host context. If any field or required planning input is missing, return `CHANGES REQUESTED` and name the missing input. Echo the attestation marker verbatim.
 ---
 
 # planner (VS Code harness)
 
 Thin harness. Deep contract: Read `{{COMPANION_ROOT}}/agents/planner.md`. Read-only research and plan drafting; no code changes.
 
-- **Launch boundary:** when launched as a governed child, this role requires the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`planner`; alias `planner`; clean-context; read-only; planning) plus explicit repository, task-summary, pass, and plan payload fields.
+- **Launch boundary:** when launched as a governed child, this role requires the canonical envelope at `{{COMPANION_ROOT}}/workflow/agent-invocation.md` (`planner`; alias `planner`; clean-context; read-only; planning) plus explicit repository, task-summary, and applicable-context fields. The planner remains read-only; the parent persists the accepted draft at `.scratch/plans/<plan-id>.md`.
 - Workflow: `{{COMPANION_ROOT}}/workflow/iterative-plan-review.md`
 - Skill gates: `{{COMPANION_ROOT}}/skills/implementation-plan/SKILL.md`

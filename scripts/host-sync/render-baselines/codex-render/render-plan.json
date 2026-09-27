@@ -8,7 +8,7 @@
       "destination": "codex-home/AGENTS.md",
       "logicalRoot": "codex-home",
       "role": "managed-block-target",
-      "sha256": "7f4521a7c3d8ccc39b2d7e58e1145eddcb355d0a3d6dba61c8a614d3656b8822"
+      "sha256": "24d9ae4f33ec83868bcece01e4d23f70eb716daff6abac613762f914e1b8a515"
     },
     {
       "destination": "codex-home/agents/bug_reviewer.toml",
@@ -26,13 +26,13 @@
       "destination": "codex-home/agents/plan_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "6598b96ca569645a34f0e723e167bfbdef0717105c2fe61b3418bc7c18b3b413"
+      "sha256": "82c90ee3a022c6849c22666e002effca668fa9d50ee066503a09458e989335d9"
     },
     {
       "destination": "codex-home/agents/planner.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "cb28a2c2700903de2d8c756823e95d07e5c7bf6246c1bdc8377d4eae644db02b"
+      "sha256": "b99c66958003243c2956234b745d083010c0455365d589034dfcfabff8f2df94"
     },
     {
       "destination": "codex-home/agents/production_readiness_reviewer.toml",

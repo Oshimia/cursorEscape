@@ -43,8 +43,7 @@ Repository path: <absolute path>
 Task summary: <one paragraph>
 Review pass: <1|2|3> of 3
 Review model: <model slug used for this launch>
-Plan under review:
-<full plan text>
+Plan artifact path: <absolute path under .scratch/plans>
 ```
 
 Also see [implementation-plan overlay SKILL](../skills/implementation-plan/SKILL.md) and [review-subagent-models.md](../review-subagent-models.md).

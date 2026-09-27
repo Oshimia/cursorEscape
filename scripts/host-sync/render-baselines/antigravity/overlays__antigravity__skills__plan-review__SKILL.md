@@ -19,8 +19,8 @@ Thin harness. Full procedure: Read `{{COMPANION_ROOT}}/skills/plan-review/SKILL.
 
 ## Steps
 
-1. Parent produces **full synthesized plan** each pass — plan incomplete until companion skill `implementation-plan` **Incomplete until** SoT is met.
-2. Task → `plan_reviewer` with the canonical `{{COMPANION_ROOT}}/workflow/agent-invocation.md` envelope, **clean context**, and no prior review transcripts. APPROVED requires SoT compliance.
+1. Parent maintains the **full synthesized plan artifact** at `/.scratch/plans/<plan-id>.md` and edits it in place each pass — plan incomplete until companion skill `implementation-plan` **Incomplete until** SoT is met.
+2. Task → `plan_reviewer` with the canonical `{{COMPANION_ROOT}}/workflow/agent-invocation.md` envelope, **clean context**, the plan artifact's absolute path, and no prior review transcripts. APPROVED requires SoT compliance.
 3. Synthesize: fix blockers; Unknowns → discovery steps.
 4. Repeat up to **3** passes or early APPROVED.
 5. On CHANGES REQUESTED after pass 3, present outstanding items and wait for user.

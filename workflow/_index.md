@@ -1,6 +1,6 @@
 # Workflow docs (shared deep procedure)
 
-**Last updated:** 2026-09-16
+**Last updated:** 2026-09-26
 
 **Ownership:** Process changes land here first. Repo SOPs may extend with local paths; they must not contradict this core. The [procedure registry](../docs/featureArchitecture/procedure-registry.md) owns machine metadata and semantic composition order for this content; host projections composed via `CompositionId` update automatically at render time.
 
@@ -18,6 +18,7 @@ Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflo
 | [plan-reviewer-report.md](plan-reviewer-report.md) | Plan-reviewer output schema (limits, severity, exact report structure) |
 | [iterative-plan-review.md](iterative-plan-review.md) | Plan → plan-reviewer loop |
 | [iterative-code-review.md](iterative-code-review.md) | Per-phase Reviewer A + Bugbot loop; conditional integrated gate |
+| [local-scratch.md](local-scratch.md) | Local-only `.scratch/` boundary for durable-but-temporary artifacts and saved plans |
 | [ci-ladder.md](ci-ladder.md) | Fast/Full CI discovery for any repo |
 | [tdd-tests.md](tdd-tests.md) | Test-first guidance: agreed seams, red-green slices, independent oracles |
 | [tdd-mocking.md](tdd-mocking.md) | Mocking guidance: boundary-only doubles, fakes and in-memory adapters |
@@ -43,6 +44,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | [discovery](../skills/discovery/SKILL.md) | Repo doc discovery (Step 0 + fallback) |
 | [plan-review](../skills/plan-review/SKILL.md) | Plan → plan-reviewer loop gate |
 | [implementation-plan](../skills/implementation-plan/SKILL.md) | Plan drafting + Incomplete until SoT |
+| [local-scratch](../rules/local-scratch.md) | Always-on local scratch and saved-plan gate |
 | [implementation-review](../skills/implementation-review/SKILL.md) | Per-phase Reviewer A + Bugbot; conditional integrated gate |
 | [composer](../skills/composer/SKILL.md) | Phased execution conductor: approval preview when needed, then implementation subagent |
 | [roadmap](../skills/roadmap/SKILL.md) | Repo multi-phase handoff files |
@@ -74,6 +76,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | ---- | ---- |
 | iterative-plan-review | [rules/iterative-plan-review.md](../rules/iterative-plan-review.md) |
 | agent-invocation | [rules/agent-invocation.md](../rules/agent-invocation.md) |
+| local-scratch | [rules/local-scratch.md](../rules/local-scratch.md) |
 | iterative-code-review | [rules/iterative-code-review.md](../rules/iterative-code-review.md) |
 | pre-commit-ci-gate | [rules/pre-commit-ci-gate.md](../rules/pre-commit-ci-gate.md) |
 
@@ -84,6 +87,7 @@ Cursor-only: [review-subagent-models.md](../overlays/cursor/review-subagent-mode
 | `discovery.md` | `skills/discovery/SKILL.md` | `planner`, `implementer`, `repository_explorer` | overlay discovery SKILL (Phase 2) | — |
 | `agent-invocation.md` | role contracts and launch-site skills | all governed child agents, including `ad_hoc_child` | [agent-invocation.mdc](../overlays/cursor/rules/agent-invocation.mdc) | [agent-invocation.mdc](../overlays/cursor/rules/agent-invocation.mdc); also composed into OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex managed AGENTS |
 | `iterative-plan-review.md` | `skills/plan-review/SKILL.md`, `skills/implementation-plan/SKILL.md` | `plan_reviewer` | overlay plan SKILL | `iterative-plan-review.mdc` |
+| `local-scratch.md` | [local-scratch rule](../rules/local-scratch.md) | agents persisting scratch plans | routed by `agent-invocation.mdc` | routed by `agent-invocation.mdc`; composed into six non-Cursor always-on loops |
 | `plan-reviewer-report.md` | `skills/plan-review/SKILL.md`, `skills/implementation-plan/SKILL.md` | `plan_reviewer` | — | — |
 | `iterative-code-review.md` | `skills/implementation-review/SKILL.md` | `production_readiness_reviewer`, `bug_reviewer` | review SKILL + `reviewer-a.md` | `iterative-code-review.mdc` |
 | `ci-ladder.md` | `implementation-review`, `rules/pre-commit-ci-gate.md` | implementer (parent) | review skill Read | `pre-commit-ci-gate.mdc` |

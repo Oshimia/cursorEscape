@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "inventory_date": "2026-09-11",
-  "last_updated": "2026-09-25",
+  "last_updated": "2026-09-26",
   "phase": 0,
   "hosts": [
     "Cursor",
@@ -2630,6 +2630,10 @@
         "source": "rules/iterative-plan-review.md"
       },
       {
+        "id": "local-scratch",
+        "source": "rules/local-scratch.md"
+      },
+      {
         "id": "pre-commit-ci-gate",
         "source": "rules/pre-commit-ci-gate.md"
       },
@@ -2690,6 +2694,10 @@
       {
         "id": "iterative-plan-review",
         "source": "workflow/iterative-plan-review.md"
+      },
+      {
+        "id": "local-scratch",
+        "source": "workflow/local-scratch.md"
       },
       {
         "id": "phased-multi-agent",
@@ -2758,6 +2766,7 @@
         "destination": "GEMINI.md",
         "parts": "instructions/__header__.md",
         "footer": [
+          "base:rules/local-scratch.md",
           "base:rules/iterative-plan-review.md",
           "base:rules/iterative-code-review.md",
           "footers/gemini-wiring.md"
@@ -2765,6 +2774,7 @@
         "composition_order": [
           "instructions/__header__.md",
           "base:rules/agent-invocation.md",
+          "base:rules/local-scratch.md",
           "base:rules/iterative-plan-review.md",
           "base:rules/iterative-code-review.md",
           "footers/gemini-wiring.md"
@@ -2794,6 +2804,7 @@
         "destination": "instructions/cursor-escape-loop.instructions.md",
         "parts": "instructions/__header__.md",
         "footer": [
+          "base:rules/local-scratch.md",
           "base:rules/iterative-plan-review.md",
           "base:rules/iterative-code-review.md",
           "footers/instructions-wiring.md"
@@ -2801,6 +2812,7 @@
         "composition_order": [
           "instructions/__header__.md",
           "base:rules/agent-invocation.md",
+          "base:rules/local-scratch.md",
           "base:rules/iterative-plan-review.md",
           "base:rules/iterative-code-review.md",
           "footers/instructions-wiring.md"
@@ -2846,6 +2858,7 @@
         "destination": "rules/cursor-escape-loop.md",
         "parts": "instructions/__header__.md",
         "footer": [
+          "base:rules/local-scratch.md",
           "base:rules/iterative-plan-review.md",
           "base:rules/iterative-code-review.md",
           "base:rules/pre-commit-ci-gate.md",
@@ -2854,6 +2867,7 @@
         "composition_order": [
           "instructions/__header__.md",
           "base:rules/agent-invocation.md",
+          "base:rules/local-scratch.md",
           "base:rules/iterative-plan-review.md",
           "base:rules/iterative-code-review.md",
           "base:rules/pre-commit-ci-gate.md",
@@ -2869,6 +2883,7 @@
         "destination": "rules/cursor-escape-loop.md",
         "parts": "instructions/__header__.md",
         "footer": [
+          "base:rules/local-scratch.md",
           "base:rules/iterative-plan-review.md",
           "base:rules/iterative-code-review.md",
           "base:rules/pre-commit-ci-gate.md",
@@ -2877,6 +2892,7 @@
         "composition_order": [
           "instructions/__header__.md",
           "base:rules/agent-invocation.md",
+          "base:rules/local-scratch.md",
           "base:rules/iterative-plan-review.md",
           "base:rules/iterative-code-review.md",
           "base:rules/pre-commit-ci-gate.md",
@@ -3111,6 +3127,7 @@
         "parts": [
           "instructions/__header__.md",
           "base:rules/agent-invocation.md",
+          "base:rules/local-scratch.md",
           "base:rules/iterative-plan-review.md",
           "base:rules/iterative-code-review.md"
         ],
@@ -3161,6 +3178,7 @@
             "instructions/__header__.md"
           ],
           "footer": [
+            "base:rules/local-scratch.md",
             "base:rules/iterative-plan-review.md",
             "base:rules/iterative-code-review.md",
             "footers/gemini-wiring.md"
@@ -3345,6 +3363,7 @@
             "instructions/__header__.md"
           ],
           "footer": [
+            "base:rules/local-scratch.md",
             "base:rules/iterative-plan-review.md",
             "base:rules/iterative-code-review.md",
             "footers/instructions-wiring.md"
@@ -3530,6 +3549,7 @@
             "instructions/__header__.md"
           ],
           "footer": [
+            "base:rules/local-scratch.md",
             "base:rules/iterative-plan-review.md",
             "base:rules/iterative-code-review.md",
             "base:rules/pre-commit-ci-gate.md",
@@ -3580,6 +3600,7 @@
             "instructions/__header__.md"
           ],
           "footer": [
+            "base:rules/local-scratch.md",
             "base:rules/iterative-plan-review.md",
             "base:rules/iterative-code-review.md",
             "base:rules/pre-commit-ci-gate.md",
@@ -3643,6 +3664,7 @@
           "role": "managed-block-target",
           "parts": [
             "base:rules/agent-invocation.md",
+            "base:rules/local-scratch.md",
             "base:rules/iterative-plan-review.md",
             "base:rules/iterative-code-review.md",
             "base:rules/pre-commit-ci-gate.md"

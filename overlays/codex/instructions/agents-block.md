@@ -10,7 +10,7 @@ OpenAI Codex adapter for the owner's agentic loop. Canonical procedure is compan
 **Default on** unless truly trivial or the user **explicitly** opts out. **When in doubt, run the plan loop.** Eval, harness, and multi-step operational work are **not** exempt.
 
 1. Load skill `implementation-plan`. When Escalation=yes, Read `{{COMPANION_ROOT}}/workflow/plan-agent-context.md` for specimen headings only. The plan is incomplete until that skill's **Incomplete until** bar is met.
-2. Spawn custom agent `plan_reviewer` for up to three clean-context passes. Pass the full synthesized plan only; never attach prior review transcripts.
+2. Spawn custom agent `plan_reviewer` for up to three clean-context passes. Save the plan at `.scratch/plans/<plan-id>.md`, edit it in place, and pass its absolute path only; never embed plan text or attach prior review transcripts.
 3. Present after APPROVED or pass three. Wait for the user after CHANGES REQUESTED.
 
 Skip only for a truly trivial one-place typo/copy, comment-only change, formatting, cosmetic-only UI, or docs-only change with no behavior change, or for an explicit opt-out such as `skip plan review`, `skip planning`, `implement now`, or `no plan gate`; do not infer a skip from urgency.

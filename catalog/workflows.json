@@ -51,6 +51,10 @@
       "body": "workflow/iterative-plan-review.md"
     },
     {
+      "id": "local-scratch",
+      "body": "workflow/local-scratch.md"
+    },
+    {
       "id": "phased-multi-agent",
       "body": "workflow/phased-multi-agent.md"
     },
@@ -112,6 +116,7 @@
       "references": [
         "instructions/__header__.md",
         "base:rules/agent-invocation.md",
+        "base:rules/local-scratch.md",
         "base:rules/iterative-plan-review.md",
         "base:rules/iterative-code-review.md",
         "footers/gemini-wiring.md"
@@ -136,6 +141,7 @@
       "references": [
         "instructions/__header__.md",
         "base:rules/agent-invocation.md",
+        "base:rules/local-scratch.md",
         "base:rules/iterative-plan-review.md",
         "base:rules/iterative-code-review.md",
         "footers/instructions-wiring.md"
@@ -167,6 +173,7 @@
       "references": [
         "instructions/__header__.md",
         "base:rules/agent-invocation.md",
+        "base:rules/local-scratch.md",
         "base:rules/iterative-plan-review.md",
         "base:rules/iterative-code-review.md",
         "base:rules/pre-commit-ci-gate.md",
@@ -181,6 +188,7 @@
       "references": [
         "instructions/__header__.md",
         "base:rules/agent-invocation.md",
+        "base:rules/local-scratch.md",
         "base:rules/iterative-plan-review.md",
         "base:rules/iterative-code-review.md",
         "base:rules/pre-commit-ci-gate.md",
@@ -241,6 +249,7 @@
       "references": [
         "instructions/__header__.md",
         "base:rules/agent-invocation.md",
+        "base:rules/local-scratch.md",
         "base:rules/iterative-plan-review.md",
         "base:rules/iterative-code-review.md",
         "footers/instructions-wiring.md"
@@ -254,6 +263,7 @@
       "references": [
         "instructions/__header__.md",
         "base:rules/agent-invocation.md",
+        "base:rules/local-scratch.md",
         "base:rules/iterative-plan-review.md",
         "base:rules/iterative-code-review.md",
         "footers/instructions-wiring.md"
@@ -266,6 +276,7 @@
       "runtimeOnly": true,
       "references": [
         "base:rules/agent-invocation.md",
+        "base:rules/local-scratch.md",
         "base:rules/iterative-plan-review.md",
         "base:rules/iterative-code-review.md",
         "base:rules/pre-commit-ci-gate.md",

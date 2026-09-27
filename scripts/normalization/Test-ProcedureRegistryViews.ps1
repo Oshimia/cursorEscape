@@ -1058,6 +1058,7 @@ try {
   $expectedOpenCodeRefs = [string[]]@(
     'instructions/__header__.md',
     'base:rules/agent-invocation.md',
+    'base:rules/local-scratch.md',
     'base:rules/iterative-plan-review.md',
     'base:rules/iterative-code-review.md',
     'footers/instructions-wiring.md'
@@ -1406,7 +1407,7 @@ try {
       Source = 'base:rules/agent-invocation.md'
       Dest = 'GEMINI.md'
       Parts = @('instructions/__header__.md')
-      Footer = @('base:rules/iterative-plan-review.md', 'base:rules/iterative-code-review.md', 'footers/gemini-wiring.md')
+      Footer = @('base:rules/local-scratch.md', 'base:rules/iterative-plan-review.md', 'base:rules/iterative-code-review.md', 'footers/gemini-wiring.md')
     }
     $reportComp = New-HostSyncReport -StackId 'Antigravity' -Mode ([HostSyncMode]::DryRun)
     Copy-ManifestEntry -Report $reportComp -Mode ([HostSyncMode]::DryRun) -CompanionRoot $RepoRoot -OverlayRoot $agOverlayRoot `
@@ -1535,7 +1536,7 @@ try {
     Assert-View "Phase 4E $phase4EHost registry effective order matches writer binding" (
       ([string]$phase4EBinding.Parts) -ceq 'instructions/__header__.md' -and
       (@($phase4EBinding.Footer) -join '|') -ceq (
-        'base:rules/iterative-plan-review.md|base:rules/iterative-code-review.md|base:rules/pre-commit-ci-gate.md|' +
+        'base:rules/local-scratch.md|base:rules/iterative-plan-review.md|base:rules/iterative-code-review.md|base:rules/pre-commit-ci-gate.md|' +
         "footers/$([string]$phase4EHost.ToLowerInvariant())-wiring.md"
       )
     ) "parts=$($phase4EBinding.Parts -join '|'); footer=$($phase4EBinding.Footer -join '|')"
@@ -1615,7 +1616,7 @@ try {
         Source = 'base:rules/agent-invocation.md'; Dest = $dest
         Parts = @('instructions/__header__.md')
         Footer = @(
-          'base:rules/iterative-plan-review.md', 'base:rules/iterative-code-review.md',
+          'base:rules/local-scratch.md', 'base:rules/iterative-plan-review.md', 'base:rules/iterative-code-review.md',
           'base:rules/pre-commit-ci-gate.md', "footers/$([string]$config.Host.ToLowerInvariant())-wiring.md"
         )
       }
@@ -1665,6 +1666,7 @@ try {
   $codexComposition = @($registry.Catalogs.workflows.compositions | Where-Object { [string]$_.id -eq 'codex-cursor-escape-loop' })[0]
   $phase4FExpectedRefs = [string[]]@(
     'base:rules/agent-invocation.md',
+    'base:rules/local-scratch.md',
     'base:rules/iterative-plan-review.md',
     'base:rules/iterative-code-review.md',
     'base:rules/pre-commit-ci-gate.md',
@@ -1699,6 +1701,7 @@ try {
   $phase4FLegacyManifest.DestinationEntries[0].Remove('CompositionId')
   $phase4FLegacyManifest.DestinationEntries[0]['Parts'] = @(
     'base:rules/agent-invocation.md',
+    'base:rules/local-scratch.md',
     'base:rules/iterative-plan-review.md',
     'base:rules/iterative-code-review.md',
     'base:rules/pre-commit-ci-gate.md'
@@ -1714,7 +1717,7 @@ try {
     $phase4FLegacyRender = [string]$phase4FReports[1].PlannedOutputContent['codex-home/AGENTS.md']
     $phase4FRepeatRender = [string]$phase4FReports[2].PlannedOutputContent['codex-home/AGENTS.md']
     $phase4FExpectedSegments = @(
-      $phase4FExpectedRefs | Select-Object -First 4 | ForEach-Object {
+      $phase4FExpectedRefs | Select-Object -First 5 | ForEach-Object {
         [IO.File]::ReadAllText((Join-Path $RepoRoot ($_ -replace '^base:', '')))
       }
       [IO.File]::ReadAllText((Join-Path $RepoRoot 'overlays/codex/footers/codex-wiring.md'))
@@ -1993,7 +1996,7 @@ try {
   $markdownRenamedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownRenamedPath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
   Assert-View 'markdown ambiguity id drift fails' ($LASTEXITCODE -eq 1 -and $markdownRenamedOutput.Contains("MarkdownAmbiguityId: row 0 expected 'U-Cursor-Bugbot', got 'U-Renamed-Bugbot'")) "exit=$LASTEXITCODE"
   $markdownNoUpdatePath = Join-Path $checkerTemp 'stale-dates.md'
-  ($markdownOriginal -replace ' · \*\*Last updated:\*\* 2026-09-25', '') | Set-Content -LiteralPath $markdownNoUpdatePath
+  ($markdownOriginal -replace ' · \*\*Last updated:\*\* 2026-09-26', '') | Set-Content -LiteralPath $markdownNoUpdatePath
   $markdownNoUpdateOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownNoUpdatePath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
   Assert-View 'markdown last-updated drift fails' ($LASTEXITCODE -eq 1 -and $markdownNoUpdateOutput.Contains('MarkdownInventoryLastUpdated')) "exit=$LASTEXITCODE"
 } catch { $failures++; Write-Output "FAIL: current-state checker execution: $($_.Exception.Message)" }

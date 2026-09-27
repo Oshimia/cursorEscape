@@ -67,8 +67,8 @@ Research docs → draft plan → review (max 3) → synthesize between passes �
 
 1. **Research** — [discovery.md](../../workflow/discovery.md) Step 0 / fallback. Skip missing paths; do not invent a required layout.
 2. **Optional pre-plan alignment**: when the owner wants structured alignment before drafting, run the [grilling](../grilling/SKILL.md) interview (design tree, frontier rounds, confirmation gate); skip it when thoughts are already settled or work is trivial. During the interview follow its Documented alignment rules: existing suitable glossary/design-decision documents win via discovery; unresolved terminology stays in the active plan; durable artifact writes require explicit owner approval.
-3. **Draft** using the [plan template](#plan-template) below. Fill every section.
-4. **Invoke plan-reviewer** with **clean context** — repository path, task summary, review pass number, and **synthesized plan text only**. Do **not** attach prior review transcripts. Cursor Task spawn: [implementation-plan overlay](../../overlays/cursor/skills/implementation-plan/SKILL.md#invoke-plan-reviewer-cursor-task).
+3. **Draft** at `/.scratch/plans/<plan-id>.md` using the [plan template](#plan-template) below. Fill every section. The current file contents are the sole plan-of-record; edit that same file in place during synthesis. A read-only spawned planner may return a draft/status for the workspace-write parent to persist.
+4. **Invoke plan-reviewer** with **clean context** — repository path, task summary, review pass number, and the plan artifact's **absolute path only**. Do **not** embed plan text or attach prior review transcripts. Cursor Task spawn: [implementation-plan overlay](../../overlays/cursor/skills/implementation-plan/SKILL.md#invoke-plan-reviewer-cursor-task).
    Every launch must begin with the mandatory [agent invocation](../../workflow/agent-invocation.md) envelope.
 
 5. **Synthesize** between passes (see [Synthesis between passes](#synthesis-between-passes)).
@@ -305,7 +305,7 @@ After each review, merge fixes into the **plan template sections** — do not pa
 - Cost challenge and failure forecast → update discovery steps, scope, or incremental execution
 - Low-confidence assumptions → move to Unknowns or Discovery steps
 
-Re-invoke with **synthesized plan text only** + review pass number. No review transcripts.
+Edit the same scratch plan artifact in place, then re-invoke with its **absolute path only** + review pass number. No review transcripts.
 
 ---
 
@@ -315,7 +315,7 @@ Present after pass 3 **or** early `APPROVED`.
 
 ### Package contents
 
-- Revised plan (full text)
+- Revised plan artifact path
 - Review pass count (1–3)
 - Final verdict
 - **Outstanding requested changes** — if `CHANGES REQUESTED`, lead with emitted blocking findings (max 5) and overflow themes from Findings summary
@@ -349,7 +349,7 @@ Early `APPROVED`: present plan and non-blocking findings; optional acknowledgmen
 
 | Verdict | Action |
 |---------|--------|
-| `CHANGES REQUESTED` | [Synthesize](#synthesis-between-passes) — fix emitted blockers and unacknowledged gaps only; re-invoke with full synthesized plan |
+| `CHANGES REQUESTED` | [Synthesize](#synthesis-between-passes) — fix emitted blockers and unacknowledged gaps only; edit the same scratch plan artifact in place and re-invoke with its path |
 | `APPROVED` | Present to user (normally present on `APPROVED`) |
 
 Do not start implementation until user accepts the plan (or explicitly overrides).

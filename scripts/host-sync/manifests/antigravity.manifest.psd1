@@ -17,7 +17,7 @@
         @{ Source = 'shared:skills/implementation-plan/SKILL.md'; Dest = 'config/skills/implementation-plan/SKILL.md'
            Substitutions = @(
                @{ Find = '(OpenCode harness)'; Replace = '(Antigravity harness)' }
-               @{ Find = 'Invoke OpenCode agent `plan_reviewer` via Task'; Replace = 'Invoke subagent `plan_reviewer` via `invoke_subagent`' }
+               @{ Find = 'invoke OpenCode agent `plan_reviewer` via Task'; Replace = 'invoke subagent `plan_reviewer` via `invoke_subagent`' }
            ) }
         @{ Source = 'shared:skills/plan-review/SKILL.md'; Dest = 'config/skills/plan-review/SKILL.md'
            Substitutions = @(@{ Find = '(OpenCode harness)'; Replace = '(Antigravity harness)' }) }

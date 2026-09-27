@@ -211,7 +211,7 @@ Required / important frontmatter ([docs](https://opencode.ai/docs/agents/#option
 
 **cursorEscape adapter rules:**
 
-- Reviewers / `plan_reviewer`: `permission.edit: deny`; **bash deny** except read-only `git status*|log*|diff*|show*|rev-parse*` on dual-gate reviewers; `plan_reviewer` bash fully **deny** (score pasted plan text + native **read** of companion docs only). See [Failure modes K–M](#failure-mode-k--permission-pattern--not-first-last-match-wins).
+- Reviewers / `plan_reviewer`: `permission.edit: deny`; **bash deny** except read-only `git status*|log*|diff*|show*|rev-parse*` on dual-gate reviewers; `plan_reviewer` bash fully **deny** (read the supplied `.scratch/plans/` artifact + native **read** of companion docs only). See [Failure modes K–M](#failure-mode-k--permission-pattern--not-first-last-match-wins).
 - Do **not** pin provider-specific `model:` on reviewers — inherit session default ([host adapter](./opencode-host-adapter.md))
 - Do **not** use Cursor type names (`bugbot`, `reviewer-a`) as runtime agent ids
 - Body = role + I/O + must-not + “load skill X / read doc Y” — not full loop essays
@@ -392,10 +392,10 @@ pwsh ./scripts/host-sync/Invoke-HostSyncChecks.ps1 -Suite DryRun # includes * -f
 
 | | |
 | - | - |
-| **Symptom** | Operator sees permission popup for a shell that “should” be allowed; or plan_reviewer shell-explores the repo when full plan text was already pasted |
+| **Symptom** | Operator sees permission popup for a shell that “should” be allowed; or plan_reviewer shell-explores the repo instead of reading the supplied `.scratch/plans/` artifact |
 | **Trap** | Believing any command containing `Get-ChildItem` auto-allows; treating popup as config broken rather than pattern miss |
 | **Cause** | Bash permissions match **parsed command strings**. Compound scripts (`Write-Output`, `Get-Item`, pipes, multi-statement) often **do not** match `Get-ChildItem*` / `Test-Path*`. Unmatched → `"*": ask`. Separately: listing allows on `plan_reviewer` invite workspace browse that the gate does not need |
-| **Fix** | (1) `plan_reviewer`: `bash: deny` (or `{ "*": deny }`); Must-not: shell-explore when full plan text is in the prompt — use native **read** for companion contract docs only. (2) Parents that keep listing allows: expect popups for compound scripts; do not broaden to `bash: allow *` |
+| **Fix** | (1) `plan_reviewer`: `bash: deny` (or `{ "*": deny }`); Must-not: shell-explore — use native **read** for the supplied plan artifact and companion contract docs only. (2) Parents that keep listing allows: expect popups for compound scripts; do not broaden to `bash: allow *` |
 | **Do not** | Allow-list `Get-ChildItem*` on gate agents to “make smoke quieter”; expand allows to cover every compound variant |
 
 #### Always-run / durable permission audit

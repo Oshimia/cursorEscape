@@ -25,9 +25,9 @@ The payload must begin with the canonical envelope at `{{COMPANION_ROOT}}/workfl
 | Repository path | Absolute |
 | Task summary | One paragraph |
 | Review pass | e.g. `1 of 3` |
-| Plan under review | Full synthesized plan text only — no prior review transcripts |
+| Plan artifact path | Absolute path to current `.scratch/plans/<plan-id>.md` — no prior review transcripts |
 
-Missing repository path, task summary, or plan text → return `CHANGES REQUESTED` citing what is missing.
+Missing repository path, task summary, or plan artifact path → return `CHANGES REQUESTED` citing what is missing.
 
 ## Purpose
 

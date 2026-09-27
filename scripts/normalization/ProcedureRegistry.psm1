@@ -770,6 +770,7 @@ function Test-RegistryHostCompositionOwnership {
     $codexRefs = @(Get-RegistrySequence $composition.references)
     $expectedCodexRefs = [string[]]@(
       'base:rules/agent-invocation.md',
+      'base:rules/local-scratch.md',
       'base:rules/iterative-plan-review.md',
       'base:rules/iterative-code-review.md',
       'base:rules/pre-commit-ci-gate.md',

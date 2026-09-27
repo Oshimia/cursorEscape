@@ -488,10 +488,45 @@ $skillsText = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'skills/_index.
 if ($skillsText -notmatch [regex]::Escape('Active since 2026-09-08 with C1–C6 smoke attested')) { Add-Failure 'CodexLifecycleStatus' 'skills index missing Active/attested status' }
 if ($skillsText -notmatch [regex]::Escape('fresh C1–C6 attestation is required only')) { Add-Failure 'CodexRearmBoundary' 'skills index missing fresh-attestation-only boundary' }
 
+# Plan-review handoffs must exchange only the validated durable artifact path.
+# These are the explicit governed handoff/launcher templates that name the
+# reviewer input; baselines are checked separately by byte-level fixtures.
+$planArtifactHandoffFiles = @(
+    'agents/plan_reviewer.md',
+    'overlays/antigravity/agents/plan_reviewer.md',
+    'overlays/codex/agents/plan_reviewer.toml',
+    'overlays/cursor/agents/plan-reviewer.md',
+    'overlays/cursor/skills/implementation-plan/SKILL.md',
+    'overlays/opencode/agents/plan_reviewer.md',
+    'overlays/vscode/agents/plan_reviewer.agent.md',
+    'overlays/vscode/agents/planner.agent.md'
+)
+foreach ($relative in $planArtifactHandoffFiles) {
+    $path = Join-Path $RepoRoot $relative
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { Add-Failure 'PlanArtifactHandoffMissing' $relative; continue }
+    $text = Get-Content -Raw -LiteralPath $path
+    if (-not $text.Contains('Plan artifact path')) { Add-Failure 'PlanArtifactPathField' $relative }
+    if (-not $text.Contains('.scratch/plans')) { Add-Failure 'PlanArtifactPathBoundary' $relative }
+    if ($text.Contains('Plan artifact status') -or $text.Contains('draft returned by planner')) { Add-Failure 'PlanArtifactStatusSubstitute' $relative }
+}
+
 # Retired-term search (char-code literal)
 $forbidden = -join @(103,111,108,100,101,110)
-$gitDir = (Join-Path $RepoRoot '.git') + [IO.Path]::DirectorySeparatorChar
-$files = @(Get-ChildItem -LiteralPath $RepoRoot -Recurse -File -Force | Where-Object { -not $_.FullName.StartsWith($gitDir, [StringComparison]::OrdinalIgnoreCase) })
+$files = [System.Collections.Generic.List[IO.FileInfo]]::new()
+$pendingDirectories = [System.Collections.Generic.Queue[string]]::new()
+$pendingDirectories.Enqueue([IO.Path]::GetFullPath($RepoRoot))
+$gitRoot = [IO.Path]::GetFullPath((Join-Path $RepoRoot '.git'))
+$scratchRoot = [IO.Path]::GetFullPath((Join-Path $RepoRoot '.scratch'))
+while ($pendingDirectories.Count -gt 0) {
+    $currentDirectory = $pendingDirectories.Dequeue()
+    foreach ($childDirectory in [IO.Directory]::EnumerateDirectories($currentDirectory)) {
+        $childFullPath = [IO.Path]::GetFullPath($childDirectory)
+        if ($childFullPath.Equals($gitRoot, [StringComparison]::OrdinalIgnoreCase) -or
+            $childFullPath.Equals($scratchRoot, [StringComparison]::OrdinalIgnoreCase)) { continue }
+        $pendingDirectories.Enqueue($childFullPath)
+    }
+    foreach ($filePath in [IO.Directory]::EnumerateFiles($currentDirectory)) { $files.Add([IO.FileInfo]::new($filePath)) }
+}
 foreach ($f in $files) { $bytes = [System.IO.File]::ReadAllBytes($f.FullName); if ($bytes.Length -eq 0 -or ($bytes[0..([Math]::Min($bytes.Length-1,1023))] | Where-Object { $_ -eq 0 })) { continue }; $text = [Text.Encoding]::UTF8.GetString($bytes); if ($text.Contains($forbidden)) { Add-Failure 'RetiredTermAbsent' $f.FullName.Substring($RepoRoot.Length+1) } }
 
 if ($failures.Count) { Write-Host "FAIL: $($failures.Count) invariant(s) failed:" -ForegroundColor Red; $failures | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }; exit 1 }

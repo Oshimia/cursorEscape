@@ -16,7 +16,7 @@ This page owns the architecture of isolation. [`workflow/agent-invocation.md`](.
 
 | Work | Isolation |
 | --- | --- |
-| `plan_reviewer` | Clean child context receiving the full synthesized plan. |
+| `plan_reviewer` | Clean child context receiving the absolute `.scratch/plans/` artifact path; no embedded plan text. |
 | `production_readiness_reviewer` | Clean child context receiving scope, evidence, and current-fix summary. |
 | `bug_reviewer` | Clean child context receiving scope, evidence, and current-fix summary. |
 | `repository_explorer` | Read-only child or fresh task bounded to one question. |

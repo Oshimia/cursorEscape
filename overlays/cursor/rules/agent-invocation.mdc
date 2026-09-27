@@ -10,3 +10,7 @@ alwaysApply: true
 Portable procedure: Read `{{COMPANION_ROOT}}/rules/agent-invocation.md`.
 
 Every spawned child-agent launch starts with the canonical envelope from `{{COMPANION_ROOT}}/workflow/agent-invocation.md`. A missing, malformed, or contradictory envelope is a fail-loud routing/missing-input error; do not infer identity and proceed.
+
+# Local scratch routing
+
+When intentionally persisting a durable-but-temporary artifact or saving a plan, follow `{{COMPANION_ROOT}}/rules/local-scratch.md`. Every saved plan belongs at `.scratch/plans/<plan-id>.md` and is edited in place. Do not commit, enumerate, clean, or promote scratch automatically.

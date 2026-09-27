@@ -15,6 +15,10 @@
       "body": "rules/iterative-plan-review.md"
     },
     {
+      "id": "local-scratch",
+      "body": "rules/local-scratch.md"
+    },
+    {
       "id": "pre-commit-ci-gate",
       "body": "rules/pre-commit-ci-gate.md"
     },

@@ -24,9 +24,9 @@ Every non-trivial plan must include the **Escalation** field (`Agent context req
 Draft → review → synthesize (max 3) → present to user → user decides
 ```
 
-1. Planner produces full synthesized plan each pass — plan incomplete until [implementation-plan Incomplete until](../skills/implementation-plan/SKILL.md#incomplete-until-section-sot) SoT is met
+1. Parent maintains the complete synthesized plan artifact at `/.scratch/plans/<plan-id>.md` and edits it in place each pass — plan incomplete until [implementation-plan Incomplete until](../skills/implementation-plan/SKILL.md#incomplete-until-section-sot) SoT is met
 2. Draft with [implementation-plan](../skills/implementation-plan/SKILL.md) template — apply the [phase sizing and split gate](../skills/implementation-plan/SKILL.md#phase-sizing-and-split-gate) before naming phases (oversized/bundled phases are blocking); when the plan touches migrations/schema/RPC/deploy SOPs, lift each repo post-apply checklist item into Incremental execution or Verification (not External dependencies only)
-3. Invoke [plan_reviewer](../agents/plan_reviewer.md) with clean context and the canonical [agent invocation](agent-invocation.md) envelope (full synthesized plan only). Recommended model: see [review-subagent-models.md](../overlays/cursor/review-subagent-models.md). Reviewer treats buried SOP post-apply steps as an unacknowledged verification gap
+3. Invoke [plan_reviewer](../agents/plan_reviewer.md) with clean context and the canonical [agent invocation](agent-invocation.md) envelope, providing the plan artifact's absolute path—not embedded plan text. Recommended model: see [review-subagent-models.md](../overlays/cursor/review-subagent-models.md). Reviewer treats buried SOP post-apply steps as an unacknowledged verification gap
 4. On `CHANGES REQUESTED`: fix blockers and unacknowledged gaps; re-invoke
 5. After pass 3 or early `APPROVED`: present to user; wait if still `CHANGES REQUESTED`
 
