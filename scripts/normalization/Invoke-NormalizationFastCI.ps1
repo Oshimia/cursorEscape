@@ -12,10 +12,7 @@ $checks = @(
   @{ Name='codex-render'; File=(Join-Path (Join-Path $RepoRoot 'scripts/host-sync') 'Invoke-CodexRenderChecks.ps1') }
 )
 foreach ($check in $checks) {
-  # The current-state checker gets a deliberate sandbox opt-out: host backup
-  # directories can be unreadable under restricted CI, but absent baselines
-  # still fail closed because the opt-out never waives absence.
-  if ($check.Name -eq 'phase0-current-state') { & $check.File -RepoRoot $RepoRoot -AllowInaccessibleHistoricalBaseline }
+  if ($check.Name -eq 'phase0-current-state') { & $check.File -RepoRoot $RepoRoot }
   elseif ($check.Name -in @('registry','views')) { & $check.File -RepoRoot $RepoRoot }
   elseif ($check.Name -eq 'codex-render') { & $check.File -CompanionRoot $RepoRoot }
   elseif ($check.Name -eq 'host-sync-units') { & $check.File -Suite Unit }

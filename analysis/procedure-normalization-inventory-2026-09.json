@@ -3928,16 +3928,7 @@
     "codex_explicit_only_openai_metadata_files": [
       "scripts/host-sync/render-baselines/codex-render/fixtures/skills/opencode-headless-run/agents/openai.yaml",
       "scripts/host-sync/render-baselines/codex-render/fixtures/skills/opencode-history-search/agents/openai.yaml"
-    ],
-    "baseline_directories_historical": [
-      "C:\\Users\\admin\\.cursor-backup-pre-host-sync-build-20260821-012600",
-      "C:\\Users\\admin\\.config\\opencode-backup-pre-host-sync-build-20260821-012600",
-      "C:\\Users\\admin\\.gemini-backup-pre-host-sync-build-20260824-064125",
-      "C:\\Users\\admin\\.copilot-backup-pre-vscode-bringup-20260901-120000",
-      "C:\\Users\\admin\\.cline-backup-pre-kilobringup-20260901-180000",
-      "C:\\Users\\admin\\.kilocode-backup-pre-kilobringup-20260901-180000"
-    ],
-    "baseline_directories_note": "Historical restore points for the six pre-Codex stacks only; Codex uses the committed render plan and physical fixture leaves."
+    ]
   },
   "operator_matrix": [
     {

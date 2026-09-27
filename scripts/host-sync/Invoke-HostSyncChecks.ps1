@@ -720,45 +720,6 @@ if (Test-Path -LiteralPath $agyAdapterPath) {
     Assert-Pass 'generic adapter reuses shared Copy-ManifestEntry' ($agyAdapterText -match 'Copy-ManifestEntry')
 }
 
-# Fail-closed baseline gate: antigravity property/dir required before ANY Apply (isolated temp fixtures only)
-# vscode bring-up 2026-09-01: vscode property added to the same fail-closed set (owner-approved Core gate edit).
-$agiFixtureDir = Join-Path ([IO.Path]::GetTempPath()) ("hostsync-gate-" + [Guid]::NewGuid().ToString('N'))
-New-Item -ItemType Directory -Path $agiFixtureDir -Force | Out-Null
-try {
-    $agiFixtureNoProp = Join-Path $agiFixtureDir 'no-prop.json'
-    '{"cursor":"C:\\does\\not\\exist","opencode":"C:\\does\\not\\exist","companionSha":"x","created":"y"}' | Set-Content -LiteralPath $agiFixtureNoProp
-    $agiThrewNoProp = $false
-    try { Assert-BaselineBackupsPresent -PathsFile $agiFixtureNoProp -AllowCompanionShaMismatch | Out-Null } catch { $agiThrewNoProp = ($_.Exception.Message -match 'antigravity') }
-    Assert-Pass 'baseline gate fails closed without antigravity property' $agiThrewNoProp
-
-    $agiFixtureEmpty = Join-Path $agiFixtureDir 'empty-prop.json'
-    '{"cursor":"C:\\does\\not\\exist","opencode":"C:\\does\\not\\exist","antigravity":"","companionSha":"x","created":"y"}' | Set-Content -LiteralPath $agiFixtureEmpty
-    $agiThrewEmpty = $false
-    try { Assert-BaselineBackupsPresent -PathsFile $agiFixtureEmpty -AllowCompanionShaMismatch | Out-Null } catch { $agiThrewEmpty = ($_.Exception.Message -match 'antigravity') }
-    Assert-Pass 'baseline gate fails closed on empty antigravity path' $agiThrewEmpty
-
-    $repoBaselineJson = Get-Content -LiteralPath (Get-BaselinePathsFile -HostSyncRoot $hostSyncRoot) -Raw | ConvertFrom-Json
-    Assert-Pass 'baseline-backups.paths.json parses with antigravity property' ($null -ne $repoBaselineJson.antigravity)
-
-    # vscode fail-closed negative tests (4th stack, 2026-09-01)
-    $vscFixtureNoProp = Join-Path $agiFixtureDir 'no-prop-vsc.json'
-    '{"cursor":"C:\\does\\not\\exist","opencode":"C:\\does\\not\\exist","antigravity":"C:\\does\\not\\exist","companionSha":"x","created":"y"}' | Set-Content -LiteralPath $vscFixtureNoProp
-    $vscThrewNoProp = $false
-    try { Assert-BaselineBackupsPresent -PathsFile $vscFixtureNoProp -AllowCompanionShaMismatch | Out-Null } catch { $vscThrewNoProp = ($_.Exception.Message -match 'vscode') }
-    Assert-Pass 'baseline gate fails closed without vscode property' $vscThrewNoProp
-
-    $vscFixtureEmpty = Join-Path $agiFixtureDir 'empty-prop-vsc.json'
-    '{"cursor":"C:\\does\\not\\exist","opencode":"C:\\does\\not\\exist","antigravity":"C:\\does\\not\\exist","vscode":"","companionSha":"x","created":"y"}' | Set-Content -LiteralPath $vscFixtureEmpty
-    $vscThrewEmpty = $false
-    try { Assert-BaselineBackupsPresent -PathsFile $vscFixtureEmpty -AllowCompanionShaMismatch | Out-Null } catch { $vscThrewEmpty = ($_.Exception.Message -match 'vscode') }
-    Assert-Pass 'baseline gate fails closed on empty vscode path' $vscThrewEmpty
-
-    Assert-Pass 'baseline-backups.paths.json parses with vscode property' ($null -ne $repoBaselineJson.vscode)
-}
-finally {
-    Remove-Item -LiteralPath $agiFixtureDir -Recurse -Force -ErrorAction SilentlyContinue
-}
-
 # --- VS Code stack structural blocks (vscode bring-up 2026-09-01) ---
 $vscManifestPath = Join-Path $hostSyncRoot 'manifests\vscode.manifest.psd1'
 Assert-Pass 'vscode manifest exists' (Test-Path -LiteralPath $vscManifestPath)

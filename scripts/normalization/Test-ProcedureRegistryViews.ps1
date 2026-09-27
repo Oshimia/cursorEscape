@@ -1927,34 +1927,22 @@ try {
 } catch { $failures++; Write-Output "FAIL: edge-case execution: $($_.Exception.Message)"; Write-Output $_.ScriptStackTrace }
 
 # Current-state checker contract: an explicit -RepoRoot is honored from any
-# working directory, and an absent historical baseline fails closed even under
-# the sandbox opt-out (which waives inaccessibility only, never absence).
+# working directory.
 $checker = Join-Path $PSScriptRoot 'Invoke-CurrentStateFixtureChecks.ps1'
 $checkerTemp = Join-Path ([IO.Path]::GetTempPath()) ("current-state-checker-" + [Guid]::NewGuid().ToString('N'))
 try {
   New-Item -ItemType Directory -Path $checkerTemp | Out-Null
   Push-Location $checkerTemp
   try {
-    & $checker -RepoRoot $RepoRoot -AllowInaccessibleHistoricalBaseline *> $null
+    & $checker -RepoRoot $RepoRoot *> $null
     Assert-View 'current-state checker honors explicit RepoRoot from foreign CWD' ($LASTEXITCODE -eq 0) "exit=$LASTEXITCODE"
   } finally { Pop-Location }
-  $checkerInventory = Get-Content -Raw (Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json') | ConvertFrom-Json
-  $checkerInventory.render_baselines.baseline_directories_historical = @((Join-Path $checkerTemp 'absent-historical-baseline')) + @($checkerInventory.render_baselines.baseline_directories_historical | Select-Object -Skip 1)
-  $absentInventoryPath = Join-Path $checkerTemp 'absent-baselines.json'
-  $checkerInventory | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $absentInventoryPath
-  $absentOptOutOutput = (& $checker -RepoRoot $RepoRoot -InventoryJsonPath $absentInventoryPath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
-  $absentOptOutExit = $LASTEXITCODE
-  Assert-View 'absent historical baseline fails closed under opt-out' ($absentOptOutExit -eq 1 -and $absentOptOutOutput.Contains('HistoricalBaselinePath: absent')) "exit=$absentOptOutExit"
-  $absentDefaultOutput = (& $checker -RepoRoot $RepoRoot -InventoryJsonPath $absentInventoryPath *>&1 | Out-String)
-  $absentDefaultExit = $LASTEXITCODE
-  Assert-View 'absent historical baseline fails closed by default' ($absentDefaultExit -eq 1 -and $absentDefaultOutput.Contains('HistoricalBaselinePath: absent')) "exit=$absentDefaultExit"
-
   function Invoke-InventoryMutation([scriptblock]$Mutate) {
     $inventory = Get-Content -Raw (Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json') | ConvertFrom-Json
     & $Mutate $inventory
     $path = Join-Path $checkerTemp ("inventory-" + [Guid]::NewGuid().ToString('N') + '.json')
     $inventory | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $path
-    $output = (& $checker -RepoRoot $RepoRoot -InventoryJsonPath $path -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
+    $output = (& $checker -RepoRoot $RepoRoot -InventoryJsonPath $path *>&1 | Out-String)
     return [pscustomobject]@{ Exit = $LASTEXITCODE; Output = $output }
   }
   function Assert-CheckerMutation([string]$Name,[scriptblock]$Mutate,[string[]]$Signatures) {
@@ -1989,15 +1977,15 @@ try {
   $markdownOriginal = Get-Content -Raw (Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.md')
   $markdownTrimmedPath = Join-Path $checkerTemp 'trimmed-ambiguities.md'
   ($markdownOriginal -replace '\| U-Render-Baseline-Reconciliation \|[^\r\n]+', '') | Set-Content -LiteralPath $markdownTrimmedPath
-  $markdownTrimmedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownTrimmedPath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
+  $markdownTrimmedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownTrimmedPath *>&1 | Out-String)
   Assert-View 'markdown ambiguity row removal fails' ($LASTEXITCODE -eq 1 -and $markdownTrimmedOutput.Contains('MarkdownAmbiguityCount: expected 3, got 2')) "exit=$LASTEXITCODE"
   $markdownRenamedPath = Join-Path $checkerTemp 'renamed-ambiguity.md'
   ($markdownOriginal -replace '\| U-Cursor-Bugbot \|', '| U-Renamed-Bugbot |') | Set-Content -LiteralPath $markdownRenamedPath
-  $markdownRenamedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownRenamedPath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
+  $markdownRenamedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownRenamedPath *>&1 | Out-String)
   Assert-View 'markdown ambiguity id drift fails' ($LASTEXITCODE -eq 1 -and $markdownRenamedOutput.Contains("MarkdownAmbiguityId: row 0 expected 'U-Cursor-Bugbot', got 'U-Renamed-Bugbot'")) "exit=$LASTEXITCODE"
   $markdownNoUpdatePath = Join-Path $checkerTemp 'stale-dates.md'
   ($markdownOriginal -replace ' · \*\*Last updated:\*\* 2026-09-26', '') | Set-Content -LiteralPath $markdownNoUpdatePath
-  $markdownNoUpdateOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownNoUpdatePath -AllowInaccessibleHistoricalBaseline *>&1 | Out-String)
+  $markdownNoUpdateOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownNoUpdatePath *>&1 | Out-String)
   Assert-View 'markdown last-updated drift fails' ($LASTEXITCODE -eq 1 -and $markdownNoUpdateOutput.Contains('MarkdownInventoryLastUpdated')) "exit=$LASTEXITCODE"
 } catch { $failures++; Write-Output "FAIL: current-state checker execution: $($_.Exception.Message)" }
 finally { if (Test-Path -LiteralPath $checkerTemp) { Remove-Item -LiteralPath $checkerTemp -Recurse -Force -ErrorAction SilentlyContinue } }

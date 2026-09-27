@@ -1,6 +1,6 @@
 # Editing companion workflow (agent edit map)
 
-**Last updated:** 2026-09-22
+**Last updated:** 2026-09-27
 
 ## Context
 
@@ -70,7 +70,7 @@ pwsh ./scripts/Sync-HostHarness.ps1          # dry-run all stacks
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply   # live write ALL stacks — fresh explicit owner authorization required
 ```
 
-Dry-run default (no live writes): omit `-Apply`. The `BringUp` lifecycle gate blocks any Apply write pass: if any selected stack is `BringUp`, `-Apply` for All is refused before any selected stack writes. Apply is globally preflighted: if any selected stack fails dry-run preflight, no selected stack is written. Sync **does not create backups**; registered restore baselines are a prerequisite ([`scripts/host-sync/baseline-backups.paths.json`](../../scripts/host-sync/baseline-backups.paths.json)). Modular layout: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
+Dry-run default (no live writes): omit `-Apply`. The `BringUp` lifecycle gate blocks any Apply write pass: if any selected stack is `BringUp`, `-Apply` for All is refused before any selected stack writes. Apply is globally preflighted: if any selected stack fails dry-run preflight, no selected stack is written. Sync **does not create backups**; recovery uses a known-good Git commit, dry-run, owner-authorized Apply, and drift verification. Modular layout: [`scripts/host-sync/README.md`](../../scripts/host-sync/README.md).
 
 Do **not** write live installs unless the user explicitly asks. After overlay edits, note “live sync deferred” in the closeout if applicable.
 

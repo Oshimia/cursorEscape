@@ -1,8 +1,8 @@
 # Host harness sync (modular layout)
 
-**Last updated:** 2026-09-25
+**Last updated:** 2026-09-27
 
-Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require `-Apply` and a valid Phase 0 baseline gate artifact. The [procedure registry](../../docs/featureArchitecture/procedure-registry.md) owns semantic composition order for the migrated composition-bound host groups (Cursor hybrid, OpenCode dual-write, Antigravity, Cline/Kilo Code, and Codex managed AGENTS block); VS Code currently remains on manifest-owned `Parts`/`Footer` composition. Manifests own destinations, host-only substitutions, and `CompositionId` bindings for the migrated groups. The sole normalization CI entry points are [`../normalization/Invoke-NormalizationFastCI.ps1`](../normalization/Invoke-NormalizationFastCI.ps1) (Fast) and [`../normalization/Invoke-NormalizationFullCI.ps1`](../normalization/Invoke-NormalizationFullCI.ps1) (Full); the host-sync phase scripts are internally invoked by Full CI, never separate entry points.
+Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require fresh owner authorization and the complete non-backup Apply boundary. The [procedure registry](../../docs/featureArchitecture/procedure-registry.md) owns semantic composition order for the migrated composition-bound host groups (Cursor hybrid, OpenCode dual-write, Antigravity, Cline/Kilo Code, and Codex managed AGENTS block); VS Code currently remains on manifest-owned `Parts`/`Footer` composition. Manifests own destinations, host-only substitutions, and `CompositionId` bindings for the migrated groups. The sole normalization CI entry points are [`../normalization/Invoke-NormalizationFastCI.ps1`](../normalization/Invoke-NormalizationFastCI.ps1) (Fast) and [`../normalization/Invoke-NormalizationFullCI.ps1`](../normalization/Invoke-NormalizationFullCI.ps1) (Full); the host-sync phase scripts are internally invoked by Full CI, never separate entry points.
 
 **Entry script:** [`../Sync-HostHarness.ps1`](../Sync-HostHarness.ps1)
 
@@ -15,7 +15,6 @@ scripts/
     HostSync.Contract.ps1       # shared types + adapter contract
     HostSync.Core.ps1             # token merge, copy, verify, gate helpers
     Register-StackAdapters.ps1    # stack registry (manifest + adapter paths)
-    baseline-backups.paths.json   # Phase 0 restore paths (Apply gate only)
     manifests/
       cursor.manifest.psd1      # allowlist, excludes, hybrid rule ids
       opencode.manifest.psd1
@@ -64,7 +63,7 @@ FA recording: [Per-entry sourcing](../../docs/featureArchitecture/skill-source-a
 # Dry-run, all registered stacks (DEFAULT — no -Target needed)
 pwsh ./scripts/Sync-HostHarness.ps1
 
-# Live write to ALL stacks (requires Phase 0 baseline gate; does NOT create backups)
+# Live write to ALL stacks (fresh owner authorization; does NOT create backups)
 pwsh ./scripts/Sync-HostHarness.ps1 -Apply
 
 # Stop after first stack failure
@@ -92,28 +91,13 @@ The sync script's built-in checks (token merge completeness, byte-exact writes, 
 
 Per-skill / per-workflow content updates land silently; if something is wrong it surfaces at use time and is fixed as normal procedure drift.
 
-## Phase 0 baselines (restore-only)
+## Apply safety and recovery
 
-One-time baselines taken before building this tool. Used for **restore if Apply breaks a live host** and as a **read-only gate** on `-Apply`. Sync never writes new backup folders.
-
-| Stack | Baseline path (this machine) |
-| ----- | ---------------------------- |
-| Cursor | `C:\Users\admin\.cursor-backup-pre-host-sync-build-20260821-012600` |
-| OpenCode | `C:\Users\admin\.config\opencode-backup-pre-host-sync-build-20260821-012600` |
-| Antigravity | `C:\Users\admin\.gemini-backup-pre-host-sync-build-20260824-064125` (registered) |
-| VS Code | `C:\Users\admin\.copilot-backup-pre-vscode-bringup-20260901-120000` (registered 2026-09-01) |
-| Cline | `C:\Users\admin\.cline-backup-pre-kilobringup-20260901-180000` (registered 2026-09-01) |
-| Kilo Code | `C:\Users\admin\.kilocode-backup-pre-kilobringup-20260901-180000` (registered 2026-09-01) |
-
-**Apply coupling (all six established-stack baselines required):** `-Apply` for any established stack fails closed until all six Phase 0 baselines exist — deliberate conservatism because Antigravity Apply wholesale-replaces `~/.gemini/GEMINI.md`, VS Code Apply writes into the shared user-level `~/.copilot`, and the 5th/6th stacks write into `~/.cline` and `~/.kilocode`. Dry-runs are unaffected. VS Code/Cline/Kilocode baselines registered 2026-09-01 (six-stack gate, owner-approved). Codex is governed by its own lifecycle (ApplyState = Active since 2026-09-08) but the global `-Apply` gate still requires the six-stack baseline artifact; a Codex-only baseline bypass is not implemented in the current gate.
-
-Gate artifact: [`baseline-backups.paths.json`](./baseline-backups.paths.json)
-
-**Restore precedence:** Phase 0 `pre-host-sync-build` baselines → legacy archaeology only (`pre-pointer-sync`, `opencode-backup-20260820-*`, `qc-bugbot-ui-*`). No per-Apply / per-sync backup kind.
+The companion repository is the source of truth. Sync never creates backup folders, and stale host snapshots are not an Apply gate or supported recovery path.
 
 **Baseline regeneration boundary:** render baselines under [`render-baselines/`](./render-baselines/) are mechanical regression anchors generated from observed current renders. Never edit baseline or projection bytes to satisfy a stale expectation. When a render output legitimately changes: (1) render through the deterministic adapter path (for example, the manifest-driven dry-run `pwsh scripts/Sync-HostHarness.ps1 -Target <StackId>` to produce the planned render) or the registry renderer at `scripts/normalization/Render-ProcedureRegistry.ps1` with an explicit output root; (2) review the result; and (3) commit the regenerated artifacts in the same changeset. Normalization CI retains renderer repeatability through deterministic double-render comparison. Direct editing of expected-render files is forbidden.
 
-**Live Apply requires fresh explicit owner authorization** per the [procedure registry Apply boundary](../../docs/featureArchitecture/procedure-registry.md). Dry-run is always allowed. Pre-Apply gates: all-host dry-run, read-only drift report, baseline readiness confirmation, and normalization Full CI.
+**Live Apply requires fresh explicit owner authorization** per the [procedure registry Apply boundary](../../docs/featureArchitecture/procedure-registry.md). Dry-run is always allowed. Pre-Apply gates: all-host dry-run, read-only drift report, and normalization Full CI. Post-Apply gates: dry-run/drift re-check, parity confirmation, host restart/reload, and the applicable host smoke matrix. Recovery is a known-good Git commit followed by dry-run, owner-authorized Apply, and drift verification.
 
 ## Hard excludes (by manifest)
 
@@ -131,7 +115,7 @@ Manifest `NeverTouch` paths (e.g. `docs/workflow`, Antigravity `caveman.md`) are
 
 `ApplyState` defaults to `Active`; the manifest value governs. `Codex` was force-held at `BringUp` through Phases 0–3 and activated 2026-09-08 after three-client smoke; setting its manifest back to `BringUp` re-arms the lifecycle gate.
 
-For Apply, the baseline gate runs first. Then the orchestration lifecycle refuses any selection containing BringUp before any write pass. For every Active selection, it dry-run-preflights **all** selected stacks before the first write; any failure reports the complete preflight set and performs zero writes. `-FailFast` continues to mean “stop the write pass after first failure” and never abbreviates this global preflight.
+For Apply, the orchestration lifecycle refuses any selection containing BringUp before any write pass. For every Active selection, it dry-run-preflights **all** selected stacks before the first write; any failure reports the complete preflight set and performs zero writes. `-FailFast` continues to mean “stop the write pass after first failure” and never abbreviates this global preflight.
 
 ## Expansion recipe (add a stack)
 

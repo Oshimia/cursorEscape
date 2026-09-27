@@ -1,6 +1,6 @@
 # Procedure registry
 
-**Last updated:** 2026-09-22
+**Last updated:** 2026-09-27
 
 ## Context
 
@@ -47,7 +47,7 @@ Lifecycle hooks are currently host-only overlay and manifest concerns; the regis
 
 `scripts/normalization/ProcedureRegistry.psm1` validates schema/version, exact inventory coverage, IDs, canonical identity and first-read contracts, required reading, aliases, authority/isolation, loop/gate policy, fail-loud behavior, host representation, route identity, launch evidence, skill flags, explicit applicability, canonical rule/workflow sources, one-to-one composition coverage, duplicate-free semantic order, and path containment.
 
-Restore baselines fail closed when absent or inaccessible. A checker may explicitly waive host-profile inaccessibility in a disposable environment, but it may not waive an absent registered baseline.
+Stale host-snapshot restore baselines are not part of the registry or Apply boundary.
 
 ### Blocking guard coverage
 
@@ -91,7 +91,7 @@ Normalization CI and documentation are non-live. For every Apply surface:
 3. All-host Apply is normative.
 4. Single-stack `-AllowSkew` is only an explicitly owner-authorized recovery exception.
 
-Pre-Apply requires an all-host dry-run, read-only drift report, baseline readiness, and Full CI. Post-Apply requires dry-run/drift re-check, parity confirmation, host restart/reload, and the applicable host smoke matrix.
+Pre-Apply requires an all-host dry-run, read-only drift report, and Full CI. Post-Apply requires dry-run/drift re-check, parity confirmation, host restart/reload, and the applicable host smoke matrix.
 
 ---
 

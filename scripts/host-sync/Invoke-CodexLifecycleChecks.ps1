@@ -69,15 +69,13 @@ function Invoke-CodexPhase3Sync {
         [Parameter(Mandatory)][string] $Target,
         [Parameter(Mandatory)][hashtable] $Roots,
         [switch] $Apply,
-        [Parameter(Mandatory)][string] $LiveHome,
-        [string] $BaselinePathsFile = ''
+        [Parameter(Mandatory)][string] $LiveHome
     )
     $arguments = @(
         '-NoProfile', '-File', $syncScript, '-Target', $Target,
         '-CodexRoot', $Roots.Codex, '-SkillRoot', $Roots.Skills
     )
     if ($Apply) { $arguments += '-Apply' }
-    if (-not [string]::IsNullOrWhiteSpace($BaselinePathsFile)) { $arguments += @('-BaselinePathsFile', $BaselinePathsFile) }
     $previousHome = $env:USERPROFILE
     try {
         $env:USERPROFILE = $LiveHome
@@ -302,22 +300,6 @@ foreach ($relativeLiveRoot in @('.cursor', '.config/opencode', '.gemini', '.copi
     New-Item -ItemType Directory -Path (Join-Path $roots.Scratch ('live-home/' + $relativeLiveRoot)) -Force | Out-Null
 }
 $liveHome = Join-Path $roots.Scratch 'live-home'
-$baselinePathsFile = Join-Path $roots.Scratch 'baseline-paths.json'
-$baselineFixture = [ordered]@{
-    cursor       = Join-Path $roots.Scratch 'baseline/cursor'
-    opencode     = Join-Path $roots.Scratch 'baseline/opencode'
-    antigravity  = Join-Path $roots.Scratch 'baseline/antigravity'
-    vscode       = Join-Path $roots.Scratch 'baseline/vscode'
-    cline        = Join-Path $roots.Scratch 'baseline/cline'
-    kilocode     = Join-Path $roots.Scratch 'baseline/kilocode'
-    companionSha = 'phase3-fixture'
-    created      = '2026-09-08T00:00:00.0000000Z'
-}
-foreach ($value in $baselineFixture.Values) {
-    if ($value -notlike "$scratchFull*") { continue }
-    New-Item -ItemType Directory -Path $value -Force | Out-Null
-}
-[IO.File]::WriteAllText($baselinePathsFile, ($baselineFixture | ConvertTo-Json), [Text.UTF8Encoding]::new($false))
 
 try {
     # 1. Explicit mandatory roots: Codex dry-run.
@@ -346,8 +328,8 @@ try {
     Assert-Pass 'BringUp All-Apply writes zero fixture bytes' (Test-FixtureRootsClean -Roots $roots)
 
     # 3b. Real-state (Active) Codex-only Apply succeeds in disposable fixtures.
-    # In-process plan skips the operator-level baseline gate by design; fixture
-    # live roots are redirected and disposable.
+    # Fixture live roots are redirected and disposable; ownership, managed-block,
+    # explicit-root, lifecycle, and global-preflight controls remain active.
     $realApply = Invoke-CodexPhase3RealApplyProbe -Roots $roots -LiveHome $liveHome
     Assert-Pass 'real-state Codex-only Apply succeeds in fixtures' (
         $realApply.Success -and $realApply.ExitReason -eq 'Complete' -and $realApply.WriteReportCount -eq 1
@@ -412,7 +394,7 @@ Assert-Pass 'orchestration has global preflight function' ($coreSource.Contains(
 Assert-Pass 'orchestration preflights before write pass' ($coreSource.Contains('Preflight every selected adapter before the first Apply write'))
 Assert-Pass 'entry passes explicit effective Codex roots' (
     $entrySource.Contains('-CodexRoot $CodexRoot -SkillRoot $SkillRoot') -and
-    $entrySource.Contains('BaselinePathsFile')
+    -not $entrySource.Contains('BaselinePathsFile')
 )
 Assert-Pass 'entry invalid target uses registry' ($entrySource.Contains('$validTargets = @($registeredStackIds)'))
 

@@ -6,20 +6,19 @@
   Modular sync under scripts/host-sync/: shared core + per-stack manifest + adapter.
   Registry stacks: Cursor, OpenCode, Antigravity, Vscode, Cline, Kilocode, Codex
   (see Register-StackAdapters.ps1 / manifests/).
-  Dry-run by default; use -Apply for live writes (requires Phase 0 baseline gate).
+  Dry-run by default; use -Apply for owner-authorized live writes.
   Apply is also lifecycle-gated: all selected stacks must be Active. Codex was force-held
   BringUp through Phase 3 and activated Active on 2026-09-08 after three-client smoke;
   setting its manifest back to BringUp re-arms the gate. Global Apply preflights every selected
   stack before any write pass; any preflight failure causes zero Apply writes.
   Sync does NOT create backups on Apply — companion repo is ongoing SoT.
-  Phase 0 baselines (restore-only): see scripts/host-sync/baseline-backups.paths.json.
   Layout + expansion recipe: scripts/host-sync/README.md.
 .PARAMETER Target
   Stack target: a registered stack id, or All (continue-with-report; optional -FailFast).
   DEFAULT AND NORMATIVE VALUE IS All: the harness is a global skill set; live pushes go to every registered stack in one operation.
   Single-stack Apply is an exceptional, deliberate act (new-stack bring-up, scoped repair) and is refused unless -AllowSkew is passed.
 .PARAMETER Apply
-  Live write mode. Runs Assert-BaselineBackupsPresent (read-only gate) first.
+  Live write mode. Runs lifecycle, overlap, and global dry-run preflight gates first.
 .PARAMETER AllowSkew
   Required switch to permit single-stack -Apply when that target shares source files with other registered stacks (the guard fails closed otherwise).
   Using it intentionally leaves sibling stacks stale until the next full sync.
@@ -34,8 +33,6 @@
   Optional explicit Codex skill-root override for dry-run/test seams. Defaults to ~/.agents/skills. The Codex adapter never infers roots itself.
 .PARAMETER CompanionRoot
   Optional override for companion checkout root (defaults to repo containing scripts/).
-.PARAMETER BaselinePathsFile
-  Optional baseline paths override for disposable Apply-gate fixtures. Defaults to scripts/host-sync/baseline-backups.paths.json.
 .NOTES
   Hard excludes (manifest-owned):
   - Cursor: skills-cursor/, settings.json; never delete/refresh docs/workflow/; hybrid rules only
@@ -81,9 +78,7 @@ param(
 
     [string] $SkillRoot = '',
 
-    [string] $CompanionRoot = '',
-
-    [string] $BaselinePathsFile = ''
+    [string] $CompanionRoot = ''
 )
 
 Set-StrictMode -Version Latest
@@ -116,22 +111,6 @@ function Get-TargetStackIds {
         return (Get-RegisteredStackIds)
     }
     return @($TargetName)
-}
-
-if ($mode -eq [HostSyncMode]::Apply) {
-    try {
-        $baselinePaths = if ([string]::IsNullOrWhiteSpace($BaselinePathsFile)) {
-            Get-BaselinePathsFile -HostSyncRoot $hostSyncRoot
-        }
-        else {
-            $BaselinePathsFile
-        }
-        Assert-BaselineBackupsPresent -PathsFile $baselinePaths -CompanionRoot $CompanionRoot
-    }
-    catch {
-        Write-Output "FATAL (gate): $($_.Exception.Message)"
-        exit 1
-    }
 }
 
 $stackIds = @(Get-TargetStackIds -TargetName $Target)

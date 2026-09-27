@@ -16,11 +16,6 @@ function Get-DefaultCompanionRoot {
     return (Resolve-CompanionRootPath (Split-Path -Parent $scriptsRoot))
 }
 
-function Get-BaselinePathsFile {
-    param([string]$HostSyncRoot = $PSScriptRoot)
-    return (Join-Path $HostSyncRoot 'baseline-backups.paths.json')
-}
-
 function Merge-CompanionTokens {
     param(
         [Parameter(Mandatory)]
@@ -319,45 +314,6 @@ function Add-SyncWarning {
         [string] $Message
     )
     [void]$Report.Warnings.Add($Message)
-}
-
-function Assert-BaselineBackupsPresent {
-    param(
-        [string]$PathsFile = (Get-BaselinePathsFile),
-        [string]$CompanionRoot = (Get-DefaultCompanionRoot),
-        [switch]$AllowCompanionShaMismatch
-    )
-
-    if (-not (Test-Path -LiteralPath $PathsFile)) {
-        throw "Phase 0 baseline gate: missing paths file: $PathsFile"
-    }
-
-    $json = Get-Content -LiteralPath $PathsFile -Raw | ConvertFrom-Json
-    # kilo-cline bring-up 2026-09-01: 'cline' + 'kilocode' added (owner-approved six-stack gate coverage).
-    foreach ($prop in @('cursor', 'opencode', 'antigravity', 'vscode', 'cline', 'kilocode', 'companionSha', 'created')) {
-
-        if ($null -eq $json.$prop -or [string]::IsNullOrWhiteSpace([string]$json.$prop)) {
-            throw "Phase 0 baseline gate: paths file missing required property '$prop'"
-        }
-    }
-
-    foreach ($stackPath in @($json.cursor, $json.opencode, $json.antigravity, $json.vscode, $json.cline, $json.kilocode)) {
-        if (-not (Test-Path -LiteralPath $stackPath -PathType Container)) {
-            throw "Phase 0 baseline gate: backup directory missing: $stackPath"
-        }
-    }
-
-    if (-not $AllowCompanionShaMismatch) {
-        try {
-            $headSha = (git -C $CompanionRoot rev-parse --short HEAD 2>$null).Trim()
-            if ($headSha -and $json.companionSha -ne $headSha) {
-                Write-Warning "Phase 0 baseline gate: companionSha ($($json.companionSha)) differs from HEAD ($headSha) — non-blocking for Apply gate"
-            }
-        }
-        catch {
-            Write-Warning "Phase 0 baseline gate: could not compare companionSha to HEAD — $($_.Exception.Message)"
-        }
-    }
 }
 
 function Assert-NoPerApplyBackupArtifacts {
