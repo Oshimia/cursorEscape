@@ -374,7 +374,7 @@ Assert-Pass 'host-fidelity FA records Codex activation and runtime attestation' 
     $fidelityFa.Contains('C1–C6 runtime attestation')
 )
 Assert-Pass 'host-fidelity FA records extension structure without presence-as-behavior' (
-    $fidelityFa.Contains('structural `rules/` and `hooks/` extension surfaces') -and
+    $fidelityFa.Contains('The retained structural extension surfaces are CI-pinned') -and
     $fidelityFa.Contains('not adaptation evidence by themselves')
 )
 

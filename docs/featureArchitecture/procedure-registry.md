@@ -41,7 +41,7 @@ Any ambiguity fails closed; the registry does not infer missing identity or orde
 
 ### Hooks and overlay extension surfaces
 
-Lifecycle hooks are currently host-only overlay and manifest concerns; the registry schema and validator do not yet have a `hooks` entity kind. That future kind will require minimum fields `id` and either `source` (inventory) or `body` (catalog). Separately, every registered overlay has one `rules/` and one `hooks/` extension surface. Their exact paths, filenames, and placeholder content are CI-owned; a placeholder is structural reserve capacity, not a deployed destination or active behavior.
+Lifecycle hooks are currently host-only overlay and manifest concerns; the registry schema and validator do not yet have a `hooks` entity kind. That future kind will require minimum fields `id` and either `source` (inventory) or `body` (catalog). Separately, retained overlay extension surfaces are CI-owned exactly as declared by U23. A placeholder is structural reserve capacity, not a deployed destination or active behavior.
 
 ### Fail-closed boundary
 
@@ -60,7 +60,7 @@ Every governed ownership class has a blocking guard in Fast CI:
 | Antigravity | Managed composition and runtime rejection of forbidden fields. |
 | Cline and Kilo Code | Registry-owned composition and explicit destination binding. |
 | Codex managed AGENTS block | Managed-block boundary and writer-side rejection of unknown/divergent composition. |
-| Overlay extension surfaces | Exactly seven `rules/` and seven `hooks/` paths with pinned filenames, UTF-8 no-BOM placeholder bytes, and fail-closed Unit-suite propagation. |
+| Overlay extension surfaces | CI-pinned retained paths and content; populated Cursor rules use exact filename sets, reserved surfaces use UTF-8 no-BOM placeholder bytes, and Unit-suite failures propagate. |
 | Source ingress | Missing, BOM-corrupted, or noncanonical sources fail. |
 | Generated-file boundaries | Protected roots and unrestricted output roots fail. |
 | Deterministic rendering | Double render must produce identical bytes. |

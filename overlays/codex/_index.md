@@ -16,7 +16,7 @@ The exact deployed leaf set is pinned by `scripts/host-sync/baselines/codex-mani
 
 ## Extension surfaces
 
-Codex has both registered overlay extension surfaces: [rules/](./rules/) and [hooks/](./hooks/) each contain only an `_index.md` placeholder. They reserve host-specific capacity without creating a host load surface. CI pins both surfaces alongside the six other registered stacks' `rules/` and `hooks/` surfaces. There is no managed Codex runtime hook; subagent cleanup is enforced by the composed agent rule.
+Codex has two retained overlay extension surfaces: [rules/](./rules/) and [hooks/](./hooks/) each contain only an `_index.md` placeholder. They reserve host-specific capacity without creating a host load surface. U23 pins them as part of its exact retained-surface map. There is no managed Codex runtime hook; subagent cleanup is enforced by the composed agent rule.
 
 ## Harness rules
 

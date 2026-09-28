@@ -25,7 +25,7 @@ Live OpenCode adapter at `C:\Users\admin\.config\opencode\` synced from [overlay
 ## Implications / open questions
 
 1. Portable procedure edits: **Target** → repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`, FA). Overlay refresh: run [`Sync-HostHarness.ps1`](../scripts/Sync-HostHarness.ps1) when authorized — harness only, not a second authored procedure tree. OpenCode host procedure mirror **deleted** pf4; Cursor `~/.cursor/docs/workflow/` may remain transitional.
-2. Every registered overlay now has `rules/` and `hooks/` extension directories. Unfilled surfaces contain only `_index.md` structural placeholders; placeholder presence is not sync deployment or host load behavior.
+2. Retained extension surfaces are explicitly pinned. Unfilled surfaces contain only `_index.md` structural placeholders; placeholder presence is not sync deployment or host load behavior.
 3. Do not invent `adapters/` at repo root for copy-out — use `scripts/host-sync/` modular adapters ([expansion recipe](../scripts/host-sync/README.md#expansion-recipe-add-a-third-stack)).
 4. **Apply scope:** with fresh explicit owner authorization, global targeting remains the Apply default (`Sync-HostHarness.ps1 -Apply` targets all stacks); single-stack Apply only via the `-AllowSkew` owner-authorized recovery path. Superseded rulings are not live-Apply authorization. Post-apply verification is script-authoritative for routine syncs ([policy](../scripts/host-sync/README.md#post-apply-verification-policy)) — smoke attestation belongs to first-time surfaces and machinery changes, not per-skill updates.
 

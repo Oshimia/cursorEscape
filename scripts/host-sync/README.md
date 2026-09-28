@@ -51,7 +51,7 @@ Entry keys beyond `Source`/`Dest`:
 - **`PlannedContent`** — dry-run captures would-be written content (incl. dual-written mirrors) for CI asserts.
 - **Expected renders** — committed expected-renders under [`render-baselines/`](./render-baselines/) are the byte-exact regression anchor for composed dests.
 - **Ref resolution contract** (unit checks U17–U20): rooted/absolute refs verbatim; un-pre-resolved classed refs throw; overlay-relative refs resolve source-dir first, then `OverlayRoot` fallback.
-- **Extension surfaces** (unit check U23): all seven registered overlays have exact-case `rules/` and `hooks/` directories. The 13 placeholder-only surfaces contain only strict UTF-8 no-BOM `_index.md`; Cursor's populated native rules are pinned by its exact filename set. Any mismatch, invalid byte, or Unit-suite failure propagates as a normalization failure.
+- **Extension surfaces** (unit check U23): retained extension surfaces are pinned exactly. Placeholder-only surfaces contain only strict UTF-8 no-BOM `_index.md`; Cursor's populated native rules are pinned by its exact filename set. Any mismatch, invalid byte, or Unit-suite failure propagates as a normalization failure.
 
 FA recording: [Per-entry sourcing](../../docs/featureArchitecture/skill-source-and-host-overlays.md#per-entry-sourcing-required).
 

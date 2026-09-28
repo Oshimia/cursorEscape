@@ -73,11 +73,11 @@ When a host-specific pattern is required by more than one stack, first express t
 
 Do not promote a host workaround into canonical prose until its portable rule is explicit. Do not leave a shared concern in one overlay after a second stack needs the same behavior.
 
-### Extension directories (Required)
+### Extension surfaces (Required)
 
-Every registered host overlay carries `rules/` and `hooks/` directories for host-specific content. `rules/` hosts custom procedural rules beyond the canonical set; `hooks/` hosts host-specific lifecycle hook configurations. Agents and skills already have per-host surfaces; workflows remain canonical, and host-specific workflow notes belong in instruction footers rather than a copied workflow tree.
+Retained overlay extension surfaces provide optional homes for host-specific `rules/` or `hooks/` content. Agents and skills already have per-host surfaces; workflows remain canonical, and host-specific workflow notes belong in instruction footers rather than a copied workflow tree.
 
-The current structural inventory is seven `rules/` and seven `hooks/` surfaces. Cursor's rules directory retains its four native `.mdc` files, and the other 13 surfaces contain only `_index.md` placeholders. An `_index.md` placeholder reserves source-only capacity; it is not installed or interpreted unless a host manifest binds it to a real load surface. CI pins the exact paths, filenames, placeholder bytes, and fail-closed Unit-suite propagation without importing Cursor's native format elsewhere.
+U23 owns the exact retained-surface map. Cursor's rules directory retains its four native `.mdc` files; reserved surfaces in that map contain only `_index.md` placeholders. A placeholder reserves source-only capacity; it is not installed or interpreted unless a host manifest binds it to a real load surface. CI pins retained paths and content and propagates Unit-suite failures without importing Cursor's native format elsewhere.
 
 ### Host examples (Required)
 

@@ -256,14 +256,10 @@ try {
         $unicodePermissionKeys[1] -eq 'z*' -and
         $unicodePermissionKeys[2] -eq 'ä*') ($unicodePermissionKeys -join ',')
 
-    # U23: every registered overlay has exactly one rules/ and one hooks/
-    # extension surface. New directories contain only their placeholder; the
+    # U23 pins the exact retained extension surfaces. This map is
+    # authoritative; reserved surfaces contain only their placeholder, and the
     # pre-existing populated Cursor rules surface remains pinned to its leaves.
     $extensionExpectations = [ordered]@{
-        'antigravity/rules' = @('_index.md')
-        'antigravity/hooks' = @('_index.md')
-        'cline/rules'       = @('_index.md')
-        'cline/hooks'       = @('_index.md')
         'codex/rules'       = @('_index.md')
         'codex/hooks'       = @('_index.md')
         'cursor/rules'      = @(
@@ -280,7 +276,6 @@ try {
         'vscode/rules'      = @('_index.md')
         'vscode/hooks'      = @('_index.md')
     }
-    Assert-True 'extension surface count is exactly 14' ($extensionExpectations.Count -eq 14)
     $overlayExtensionRoot = Join-Path $companionRoot 'overlays'
     $actualExtensionPaths = @(
         Get-ChildItem -LiteralPath $overlayExtensionRoot -Directory -Force |
@@ -294,9 +289,8 @@ try {
             Sort-Object
     )
     $expectedExtensionPaths = @($extensionExpectations.Keys | Sort-Object)
-    Assert-True 'filesystem extension surfaces match exactly 14 expected paths' (
-        $actualExtensionPaths.Count -eq 14 -and
-        $expectedExtensionPaths.Count -eq 14 -and
+    Assert-True 'filesystem extension surfaces match expected paths exactly' (
+        $actualExtensionPaths.Count -eq $expectedExtensionPaths.Count -and
         @((Compare-Object -ReferenceObject $expectedExtensionPaths -DifferenceObject $actualExtensionPaths -CaseSensitive)).Count -eq 0
     ) (($actualExtensionPaths -join ', '))
     foreach ($extensionEntry in $extensionExpectations.GetEnumerator()) {
