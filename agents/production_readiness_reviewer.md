@@ -243,4 +243,4 @@ PASS/FAIL/UNTESTED with evidence for each behavior at risk from this change set
 - [bug-reviewer-finding-rubric](../docs/featureArchitecture/bug-reviewer-finding-rubric.md)
 - [implementation-review skill](../skills/implementation-review/SKILL.md)
 - [Clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md)
-- [openBuggy reviewer-a angle](../research/imported/openBuggy/analysis/reviewer-effectiveness/angles/reviewer-a-skill.md)
+- External/archived evidence: openBuggy reviewer-a angle; not a current-facing contract.

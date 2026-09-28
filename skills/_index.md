@@ -1,6 +1,6 @@
 # Skills
 
-**Last updated:** 2026-09-27
+**Last updated:** 2026-09-29
 
 ## Context
 
@@ -121,4 +121,3 @@ Each SKILL states: **When to use**, **Workflow steps**, **Outputs**, **Must not*
 - [Cursor overlay](../overlays/cursor/_index.md)
 - [OpenCode overlay](../overlays/opencode/_index.md)
 - [Codex overlay](../overlays/codex/_index.md)
-- [Workflow source delta](../research/imported/workflow-source-delta.md)

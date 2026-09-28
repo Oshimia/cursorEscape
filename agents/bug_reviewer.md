@@ -1,6 +1,6 @@
 # bug_reviewer
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-29
 
 ## Context
 
@@ -76,7 +76,7 @@ OpenCode markdown agent (`mode: subagent`, `permission.edit: deny`) with a bug-f
 
 ## Implications / open questions
 
-1. openBuggy CLI/MCP remains **Nice-to-have** later — research under `research/imported/openBuggy/`.
+1. openBuggy CLI/MCP remains **Nice-to-have** later; prior openBuggy research is external archived evidence, not an in-repo contract.
 2. Until OpenCode agents are installed, Cursor-hosted workflow may still use Cursor Bugbot as **Cursor-specific** stand-in — not Target recreation path.
 
 ---
@@ -86,4 +86,4 @@ OpenCode markdown agent (`mode: subagent`, `permission.edit: deny`) with a bug-f
 - [bug-reviewer-finding-rubric](../docs/featureArchitecture/bug-reviewer-finding-rubric.md)
 - [production_readiness_reviewer](./production_readiness_reviewer.md)
 - [Clean context and isolation](../docs/featureArchitecture/clean-context-isolation.md)
-- [openBuggy agent review loop SOP](../research/imported/openBuggy/SOPs/running-an-agent-review-loop-with-openBuggy.md) (Observed / optional)
+- External/archived evidence: openBuggy agent review loop SOP; not a current-facing contract.

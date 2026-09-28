@@ -1,6 +1,6 @@
 # bug_reviewer finding rubric
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-29
 
 ## Context
 
@@ -90,7 +90,7 @@ Parents may name out-of-scope themes, regressions to re-check, and clean-case si
 
 ## Sources
 
-- **Observed/imported:** [finding-personality.md](../../research/imported/openBuggy/featureArchitecture/cursor-bugbot-agent-review/finding-personality.md), [harness-expansion-and-mission.md](../../research/imported/openBuggy/featureArchitecture/cursor-bugbot-agent-review/harness-expansion-and-mission.md)
+- **External/archived evidence:** openBuggy finding-personality and harness-expansion-and-mission analyses; not current-facing contracts.
 - **Observed (sibling, not imported):** openBuggy `docs/analysis/DSV4F/mitigations.md` (M1–M4), `docs/SOPs/agentic-promote-audit.md` reject themes, `docs/analysis/DSV4F/run-report.md`
 - **Observed signal:** Prior DSV4F session analysis showed an eager bugfinder signal.
 - **Adapted design (sibling, not imported):** openBuggy `docs/featureArchitecture/change-review-and-diagnosis-boundary.md` change-review profile (evidence-first techniques, read-only reproduction boundary, follow-up signal)

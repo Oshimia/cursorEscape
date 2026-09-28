@@ -1,10 +1,10 @@
 # Host overlays (recorded files)
 
-**Last updated:** 2026-09-28
+**Last updated:** 2026-09-29
 
 ## Context
 
-This folder holds **host-native** skill, agent, rule, and deep-workflow files recorded from a live stack. It is **not** the portable Target contract tree (repo-root bases: [`skills/`](../skills/_index.md), [`agents/`](../agents/_index.md), [`rules/`](../rules/_index.md)) and **not** the Phase 3 research import ([cursor-global-workflow](../research/imported/cursor-global-workflow/)).
+This folder holds **host-native** skill, agent, rule, and deep-workflow files recorded from a live stack. It is **not** the portable Target contract tree (repo-root bases: [`skills/`](../skills/_index.md), [`agents/`](../agents/_index.md), [`rules/`](../rules/_index.md)).
 
 Architecture: [skill source and host overlays](../docs/featureArchitecture/skill-source-and-host-overlays.md) (Approach A). **Live sync:** modular [`Sync-HostHarness.ps1`](../scripts/Sync-HostHarness.ps1) (dry-run default; `-Apply` requires fresh explicit owner authorization per the [procedure registry Apply boundary](../docs/featureArchitecture/procedure-registry.md); single-stack `-AllowSkew` only as an explicitly owner-authorized recovery exception) — layout in [`scripts/host-sync/README.md`](../scripts/host-sync/README.md). Sync **does not create backups**; recovery uses a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification. **Target load path:** thin harness on host; deep procedure via absolute `{{COMPANION_ROOT}}` Reads — host procedure mirrors are forbidden.
 

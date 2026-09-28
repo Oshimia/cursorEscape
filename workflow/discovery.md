@@ -10,7 +10,7 @@ In the **target/active repo** (the repo you are changing — not the global adap
 | ------------- | ------------------------- |
 | **Cursor** | `.cursor/skills/reference-docs/SKILL.md` |
 | **OpenCode** | Same Cursor-shaped path when present, **or** `.opencode/skills/reference-docs/SKILL.md`, **or** another project skill path named in the target repo's `AGENTS.md` / README as owning doc indexes |
-| **Eval freeze** | **When evaluating freeze baselines** (e.g. AITestSuite Phase 4 packaging), **follow** the packaged baseline [reference-docs skill](../research/imported/AITestSuite/tests/ez-pz-streaming-media-phase-4/baseline/.cursor/skills/reference-docs/SKILL.md) in the freeze tree — Observed/eval-packaging only; on-disk import is `research/imported/` (FA banners may cite `docs/research/imported/` for the same copies) |
+| **Eval freeze** | When evaluating freeze baselines (for example, archived AITestSuite packaging), follow the target repo's packaged baseline reference-docs skill; treat archived examples as external evidence, not in-repo contracts |
 
 Do **not** substitute the global adapter's [`discovery`](../skills/discovery/SKILL.md) skill for a target repo's own reference-docs procedure. If Step 0 finds nothing, use Fallback below.
 
@@ -41,7 +41,6 @@ Repo root: `workflow/` (this file). Live Cursor copy-out: `~/.cursor/docs/workfl
 
 - Invent required or parallel documentation trees
 - Skip discovery on unfamiliar repos before non-trivial plan or implementation work
-- Treat Observed import paths under `research/imported/` or `docs/research/imported/` as **Target** product homes for new procedures or architecture docs
 
 ## Related skills
 
