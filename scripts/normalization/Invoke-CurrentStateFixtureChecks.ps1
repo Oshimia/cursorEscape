@@ -153,105 +153,44 @@ $decMissing = @($j.missing_pairs_with_proposed_phase2)
 if ($decMissing.Count -ne $expMissing.Count) { Add-Failure 'MissingPairCount' "expected $($expMissing.Count), got $($decMissing.Count)" }
 else { for ($i = 0; $i -lt $expMissing.Count; $i++) { foreach ($f in @('host','agent','proposed_phase2')) { if ($expMissing[$i].$f -ne $decMissing[$i].$f) { Add-Failure 'MissingPairAgreement' "row $i $f" } } } }
 
-# Manifests: coverage + exact entry equivalence
-if ($j.manifests.Count -ne 7) { Add-Failure 'ManifestCoverage' "expected 7" }
+# Manifests: coverage + current-source validation
 $manifestRows = @{}
-$manifestData = @{}
 $manifestSummary = @{}
-foreach ($m in $j.manifests) { if ($manifestRows.ContainsKey($m.host)) { Add-Failure 'DuplicateManifestHost' $m.host } else { $manifestRows[$m.host] = $m }; Test-RepoPath $m.path "ManifestPath[$($m.host)]" }
+try { $currentManifests = @(Get-RegistryManifests -RepoRoot $RepoRoot) } catch { Add-Failure 'ManifestCurrentSource' $_.Exception.Message; $currentManifests = @() }
+if ($currentManifests.Count -ne 7) { Add-Failure 'ManifestCoverage' "expected 7, got $($currentManifests.Count)" }
+foreach ($m in $currentManifests) {
+    if ($manifestRows.ContainsKey($m.host)) { Add-Failure 'DuplicateManifestHost' $m.host } else { $manifestRows[$m.host] = $m }
+    Test-RepoPath $m.path "ManifestPath[$($m.host)]"
+}
 foreach ($h in $hosts) {
     if (-not $manifestRows.ContainsKey($h)) { Add-Failure 'ManifestHostMissing' $h; continue }
     $m = $manifestRows[$h]
-    try { $d = Import-PowerShellDataFile (Join-Path $RepoRoot $m.path) } catch { Add-Failure 'ManifestParse' "$h"; continue }
-    $manifestData[$h] = $d
-    $prop = if ($d.Contains('CopyEntries')) { 'CopyEntries' } else { 'DestinationEntries' }
-    # Phase 4D: resolve CompositionId entries to effective Parts/Footer from the
-    # registry before comparison. Manifest entries that declare CompositionId own
-    # their semantic order via the registry; the checker resolves them so the
-    # per-entry inventory comparison still validates the effective composition.
-    $actualEntries = @($d[$prop])
-    $compositionById = $null
-    $actualEntries = @(foreach ($actEntry in $actualEntries) {
-        if ($actEntry -is [hashtable] -and $actEntry.ContainsKey('CompositionId') -and -not $actEntry.ContainsKey('Parts') -and -not $actEntry.ContainsKey('Footer')) {
-            if (-not $compositionById) {
-                $wfCatalog = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'catalog' 'workflows.json') | ConvertFrom-Json
-                $compositionById = @{}
-                foreach ($comp in @($wfCatalog.compositions)) { $compositionById[[string]$comp.id] = $comp }
-            }
-            $cid = [string]$actEntry['CompositionId']
-            if (-not $compositionById.ContainsKey($cid)) { Add-Failure 'CompositionBinding' "$h unknown composition '$cid'"; continue }
-            $comp = $compositionById[$cid]
-            $resolved = @{}
-            foreach ($k in $actEntry.Keys) { $resolved[$k] = $actEntry[$k] }
-            $refs = @([string[]]@($comp.references))
-            $sourceRel = [string]$actEntry['Source']
-            $sourceIdx = -1
-            for ($ri = 0; $ri -lt $refs.Count; $ri++) { if ($refs[$ri] -ceq $sourceRel) { $sourceIdx = $ri; break } }
-            if ($sourceIdx -lt 0) { Add-Failure 'CompositionSource' "$h|$cid source '$sourceRel' not found in composition references"; continue }
-            $resolvedParts = [System.Collections.Generic.List[string]]::new()
-            $resolvedFooter = [System.Collections.Generic.List[string]]::new()
-            if ($sourceIdx -gt 0) { for ($pi = 0; $pi -lt $sourceIdx; $pi++) { $resolvedParts.Add($refs[$pi]) } }
-            if ($sourceIdx -lt ($refs.Count - 1)) { for ($fi = ($sourceIdx + 1); $fi -lt $refs.Count; $fi++) { $resolvedFooter.Add($refs[$fi]) } }
-            if ($resolvedParts.Count -gt 0) { $resolved['Parts'] = $resolvedParts.ToArray() }
-            if ($resolvedFooter.Count -gt 0) { $resolved['Footer'] = $resolvedFooter.ToArray() }
-            $resolved
-        } else { $actEntry }
-    })
-
-    $bindingSpec = @(
-        @{ inventory='binding_model'; manifest=$null; kind='model' }
-        @{ inventory='overlay_relative_root'; manifest='OverlayRelativeRoot'; kind='text' }
-        @{ inventory='live_relative_root'; manifest='LiveRelativeRoot'; kind='nullable-text' }
-        @{ inventory='shared_root'; manifest='SharedRoot'; kind='nullable-text' }
-        @{ inventory='logical_roots'; manifest='LogicalRoots'; kind='nullable-array' }
-    )
-    foreach ($field in $bindingSpec) {
-        if ($null -eq $m.PSObject.Properties[$field.inventory]) { Add-Failure 'BindingInventoryFieldMissing' "$h.$($field.inventory)"; continue }
-        if ($null -eq $field.manifest) { continue }
-        $actualBinding = Get-ManifestFieldValue $d $field.manifest
-        $declared = Get-SourceProp $m $field.inventory
-        if ($field.kind -eq 'nullable-text') {
-            if ("$declared" -ne "$($actualBinding.Value)" -or $actualBinding.Present -eq ([string]::IsNullOrEmpty("$declared"))) {
-                Add-Failure 'ManifestBindingField' "$h.$($field.inventory): manifest-present=$($actualBinding.Present), inventory='$declared', manifest='$($actualBinding.Value)'"
-            }
-        } elseif ($field.kind -eq 'text') {
-            if (-not $actualBinding.Present) {
-                Add-Failure 'ManifestBindingField' "$h.$($field.inventory): manifest omits required field"
-            } elseif ([string]::Compare([string]$declared, [string]$actualBinding.Value, $false, [StringComparison]::Ordinal) -ne 0) {
-                Add-Failure 'ManifestBindingField' "$h.$($field.inventory): expected '$declared', got '$($actualBinding.Value)'"
-            }
-        } elseif ($field.kind -eq 'nullable-array') {
-            if ($null -eq $declared) {
-                if ($actualBinding.Present) { Add-Failure 'ManifestBindingField' "$h.$($field.inventory): manifest defines field but inventory is null" }
-            } else {
-                if (-not $actualBinding.Present) { Add-Failure 'ManifestBindingField' "$h.$($field.inventory): inventory defines roots but manifest omits field" }
-                else { Compare-Arr $declared $actualBinding.Value 'ManifestBindingField' "$h.$($field.inventory)" }
-            }
-        }
-    }
+    $actualEntries = @($m.entries)
     $expectedModel = if ($h -eq 'Codex') { 'codex-two-logical-roots' } else { 'single-root' }
     if ($m.binding_model -ne $expectedModel) { Add-Failure 'BindingModel' "$h expected '$expectedModel', got '$($m.binding_model)'" }
     if ($h -ne 'Codex') {
-        if ($null -ne (Get-SourceProp $m 'logical_roots')) { Add-Failure 'BindingModelShape' "$h is single-root but inventory logical_roots is populated" }
-        if ((Get-ManifestFieldValue $d 'LogicalRoots').Present) { Add-Failure 'BindingModelShape' "$h is single-root but manifest defines LogicalRoots" }
+        if ($null -ne $m.logical_roots) { Add-Failure 'BindingModelShape' "$h is single-root but current manifest logical_roots is populated" }
     } else {
         if (($m.logical_roots -join '|') -ne 'codex-home|skill-root') { Add-Failure 'CodexLogicalRoots' ($m.logical_roots -join '|') }
     }
 
-    if ($m.copy_entry_count -ne $actualEntries.Count) { Add-Failure 'ManifestEntryCount' "$h expected $($actualEntries.Count), declared $($m.copy_entry_count)" }
-    Compare-Arr $d.HardExcludes $m.hard_excludes 'ManifestHardExcludes' $h
-    Compare-Arr $d.NeverTouch $m.never_touch 'ManifestNeverTouch' $h
-    $hybrid = if ($d.Contains('HybridRuleIds')) { $d.HybridRuleIds } else { @() }
-    $jHybrid = @($m.hybrid_rule_ids); Compare-Arr @($hybrid) $jHybrid 'ManifestHybridRuleIds' $h
+    foreach ($boundaryList in @(@('HardExcludes',$m.hard_excludes),@('NeverTouch',$m.never_touch))) {
+        $seen = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+        foreach ($boundary in @($boundaryList[1])) { if (-not $seen.Add([string]$boundary)) { Add-Failure "Manifest$($boundaryList[0])Duplicate" "$h '$boundary'" } }
+    }
+
+    if ($m.copy_entry_count -ne $actualEntries.Count) { Add-Failure 'ManifestEntryCount' "$h expected $($actualEntries.Count), normalized $($m.copy_entry_count)" }
+    $hybrid = @($m.hybrid_rule_ids)
     $manifestSummary[$h] = @{
         host = $h
         path = $m.path
         binding_model = $m.binding_model
         copy_entry_count = $actualEntries.Count
-        hard_excludes = @($d.HardExcludes).Count
-        never_touch = @($d.NeverTouch).Count
-        hybrid_rule_ids = @($hybrid).Count
+        hard_excludes = @($m.hard_excludes).Count
+        never_touch = @($m.never_touch).Count
+        hybrid_rule_ids = $hybrid.Count
     }
+
     # Current source-state manifest agreement: every native wrapper named by a
     # represented parity row must be delivered exactly once by its host
     # manifest.
@@ -262,45 +201,19 @@ foreach ($h in $hosts) {
         $matches = @(@($m.entries) | Where-Object { "$($_.source)" -ceq $expectedSource })
         if ($matches.Count -ne 1) { Add-Failure 'NativeManifestEntry' "$h|$($p.agent) expected source '$expectedSource', found $($matches.Count)" }
     }
-    if (@($m.entries).Count -ne $actualEntries.Count) { Add-Failure 'InventoryEntryCount' "$h expected $($actualEntries.Count), got $(@($m.entries).Count)" }
-    else {
-        for ($i = 0; $i -lt $actualEntries.Count; $i++) {
-            $act = $actualEntries[$i]; $dec = $m.entries[$i]; $k = "${h}[$i]"
-            $actSrc = if ($act.ContainsKey('Source')) { $act['Source'] } else { $null }
-            $decSrc = Get-SourceProp $dec 'source'
-            if ("$actSrc" -ne "$decSrc") { Add-Failure 'EntrySource' "$k expected '$actSrc' got '$decSrc'" }
-            $actDest = $act['Dest']; $decDest = $dec.destination
-            if ("$actDest" -ne "$decDest") { Add-Failure 'EntryDestination' "$k expected '$actDest' got '$decDest'" }
-            $actParts = if ($act.ContainsKey('Parts')) { @($act['Parts']) } else { @() }
-            $decParts = Get-SourceProp $dec 'parts'; $decParts = if ($null -ne $decParts) { @($decParts) } else { @() }
-            Compare-Arr $actParts $decParts "EntryParts[$k]" $h
-            $actFooter = if ($act.ContainsKey('Footer')) { @($act['Footer']) } else { @() }
-            $decFooter = Get-SourceProp $dec 'footer'; $decFooter = if ($null -ne $decFooter) { @($decFooter) } else { @() }
-            Compare-Arr $actFooter $decFooter "EntryFooter[$k]" $h
-            $actSubs = if ($act.ContainsKey('Substitutions')) { @($act['Substitutions']) } else { @() }
-            $decSubs = Get-SourceProp $dec 'substitutions'; $decSubs = if ($null -ne $decSubs) { @($decSubs) } else { @() }
-            if (@($actSubs).Count -ne @($decSubs).Count) { Add-Failure "EntrySubstitutions[$k]" "count $(@($actSubs).Count) vs $(@($decSubs).Count)" }
-            else { $si = 0; foreach ($asub in @($actSubs)) { $dsub = @($decSubs)[$si]; if ("$($asub['Find'])" -ne "$($dsub.find)") { Add-Failure "EntrySubstitutions[$k]" "sub $si find" }; if ("$($asub['Replace'])" -ne "$($dsub.replace)") { Add-Failure "EntrySubstitutions[$k]" "sub $si replace" }; $si++ } }
-            $actLr = if ($act.ContainsKey('LogicalRoot')) { $act['LogicalRoot'] } else { $null }
-            $decLr = Get-SourceProp $dec 'logical_root'
-            if ("$actLr" -ne "$decLr") { Add-Failure "EntryLogicalRoot[$k]" "expected '$actLr' got '$decLr'" }
-            $actRole = if ($act.ContainsKey('Role')) { $act['Role'] } else { $null }
-            $decRole = Get-SourceProp $dec 'role'
-            if ("$actRole" -ne "$decRole") { Add-Failure "EntryRole[$k]" "expected '$actRole' got '$decRole'" }
-            $actGo = if ($act.ContainsKey('GuardOnly')) { $act['GuardOnly'] } else { $false }
-            $decGo = Get-SourceProp $dec 'guard_only'; $decGo = if ($null -ne $decGo) { $decGo } else { $false }
-            if ([bool]$actGo -ne [bool]$decGo) { Add-Failure "EntryGuardOnly[$k]" "$actGo vs $decGo" }
-        }
+
+    if ($h -eq 'OpenCode') {
+        if (-not $m.agents_dual_write -or $m.agents_dual_write.instructions_rel -ne 'instructions/cursor-escape-loop.md') { Add-Failure 'OpenCodeDualWrite' }
+        if (-not $m.json_merge -or $m.json_merge.specimen_rel -ne 'opencode.specimen.json') { Add-Failure 'OpenCodeJsonMerge' }
     }
-    if ($h -eq 'OpenCode') { if (-not $m.agents_dual_write -or $m.agents_dual_write.instructions_rel -ne 'instructions/cursor-escape-loop.md') { Add-Failure 'OpenCodeDualWrite' } if (-not $m.json_merge -or $m.json_merge.specimen_rel -ne 'opencode.specimen.json') { Add-Failure 'OpenCodeJsonMerge' } }
     if ($h -eq 'Codex') {
-        foreach ($f in @(@('ownership_marker','OwnershipMarker'),@('managed_block_marker','ManagedBlockMarker'),@('skill_catalog_budget_characters','SkillCatalogBudgetCharacters'))) { if ($m.$($f[0]) -ne $d[$f[1]]) { Add-Failure 'CodexManifestPolicy' $f[0] } }
-        if (($d.LogicalRoots -join '|') -ne 'codex-home|skill-root') { Add-Failure 'CodexManifestLogicalRoots' ($d.LogicalRoots -join '|') }
+        if ([string]$m.ownership_marker -ne 'cursorEscape-managed:v1') { Add-Failure 'CodexManifestPolicy' 'ownership_marker' }
+        if ([string]$m.managed_block_marker -ne 'cursorEscape-managed-block:v1') { Add-Failure 'CodexManifestPolicy' 'managed_block_marker' }
+        if ([int]$m.skill_catalog_budget_characters -ne 8000) { Add-Failure 'CodexManifestPolicy' 'skill_catalog_budget_characters' }
         if (@($m.overlay_only_skill_metadata).Count -ne 2) { Add-Failure 'CodexExplicitOnlyCount' }
         foreach ($x in @($m.overlay_only_skill_metadata)) { Test-RepoPath (Join-Path $m.overlay_root $x.relative_path) 'CodexExplicitOnlyMetadata' }
     }
 }
-
 # Compositions: bidirectional exact equivalence
 $comps = @($j.rules_workflows.compositions)
 if ($comps.Count -lt 1) { Add-Failure 'CompositionCoverage' 'none' }

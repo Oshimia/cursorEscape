@@ -68,6 +68,146 @@ function Get-StackManifestDestinationCount {
   return $count
 }
 
+function Get-RegistryManifestValue {
+  param([Parameter(Mandatory)]$Manifest,[Parameter(Mandatory)][string]$Name)
+  if ($Manifest -is [System.Collections.IDictionary]) {
+    if (-not $Manifest.Contains($Name)) { return $null }
+    return $Manifest[$Name]
+  }
+  $property = $Manifest.PSObject.Properties[$Name]
+  if ($null -eq $property) { return $null }
+  return $property.Value
+}
+
+function Get-RegistryManifestEntries {
+  param([Parameter(Mandatory)]$Manifest,[string]$RepoRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)))
+  $copy = Get-RegistryManifestValue -Manifest $Manifest -Name 'CopyEntries'
+  $destinations = Get-RegistryManifestValue -Manifest $Manifest -Name 'DestinationEntries'
+  if ($null -ne $copy -and $null -ne $destinations) { throw "FAIL: manifest '$($Manifest.StackId)' defines both CopyEntries and DestinationEntries" }
+  $rows = [System.Collections.Generic.List[object]]::new()
+  $compositionById = @{}
+  foreach ($entry in @($copy) + @($destinations)) {
+    if ($null -eq $entry) { continue }
+    $source = Get-RegistryManifestValue -Manifest $entry -Name 'Source'
+    $parts = Get-RegistryManifestValue -Manifest $entry -Name 'Parts'
+    $footer = Get-RegistryManifestValue -Manifest $entry -Name 'Footer'
+    $compositionId = Get-RegistryManifestValue -Manifest $entry -Name 'CompositionId'
+    if ($null -ne $compositionId -and $null -eq $parts -and $null -eq $footer) {
+      $cid = [string]$compositionId
+      if (-not $compositionById.ContainsKey($cid)) {
+        $workflowCatalog = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'catalog/workflows.json') | ConvertFrom-Json
+        foreach ($composition in @($workflowCatalog.compositions)) { $compositionById[[string]$composition.id] = $composition }
+      }
+      if (-not $compositionById.ContainsKey($cid)) { throw "FAIL: RegistryManifestComposition '$($Manifest.StackId)' binds unknown composition '$cid'" }
+      $composition = $compositionById[$cid]
+      $references = @(Get-RegistryManifestValue -Manifest $composition -Name 'references')
+      $sourceIndex = -1
+      for ($referenceIndex = 0; $referenceIndex -lt $references.Count; $referenceIndex++) {
+        if ([string]$references[$referenceIndex] -ceq [string]$source) { $sourceIndex = $referenceIndex; break }
+      }
+      if ($sourceIndex -lt 0) { throw "FAIL: RegistryManifestCompositionSource '$($Manifest.StackId)/$cid' source '$source' is not a composition reference" }
+      $resolvedParts = [System.Collections.Generic.List[string]]::new()
+      $resolvedFooter = [System.Collections.Generic.List[string]]::new()
+      for ($referenceIndex = 0; $referenceIndex -lt $sourceIndex; $referenceIndex++) { $resolvedParts.Add([string]$references[$referenceIndex]) }
+      for ($referenceIndex = $sourceIndex + 1; $referenceIndex -lt $references.Count; $referenceIndex++) { $resolvedFooter.Add([string]$references[$referenceIndex]) }
+      $parts = $resolvedParts.ToArray()
+      $footer = $resolvedFooter.ToArray()
+    }
+    $parts = @($parts)
+    $footer = @($footer)
+    $substitutions = [System.Collections.Generic.List[object]]::new()
+    foreach ($substitution in @(Get-RegistryManifestValue -Manifest $entry -Name 'Substitutions')) {
+      if ($null -eq $substitution) { continue }
+      $substitutions.Add([pscustomobject]@{
+        find = Get-RegistryManifestValue -Manifest $substitution -Name 'Find'
+        replace = Get-RegistryManifestValue -Manifest $substitution -Name 'Replace'
+      })
+    }
+    $guardOnly = Get-RegistryManifestValue -Manifest $entry -Name 'GuardOnly'
+    $rows.Add([pscustomobject]@{
+      source = $source
+      destination = Get-RegistryManifestValue -Manifest $entry -Name 'Dest'
+      parts = $parts
+      footer = $footer
+      substitutions = $substitutions.ToArray()
+      logical_root = Get-RegistryManifestValue -Manifest $entry -Name 'LogicalRoot'
+      role = Get-RegistryManifestValue -Manifest $entry -Name 'Role'
+      guard_only = [bool]$(if ($null -eq $guardOnly) { $false } else { $guardOnly })
+    })
+  }
+  return $rows.ToArray()
+}
+
+function Get-RegistryManifests([string]$RepoRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))) {
+  <#
+    Parse the seven current stack manifests and normalize them for registry
+    consumption. PSD1 manifests are the current destination authority; no
+    dated manifest snapshot participates in this seam.
+  #>
+  $manifestRoot = Join-Path $RepoRoot 'scripts/host-sync/manifests'
+  $files = @(Get-ChildItem -LiteralPath $manifestRoot -Filter '*.manifest.psd1' -File | Sort-Object Name)
+  if ($files.Count -ne 7) { throw "FAIL: RegistryManifestCoverage: expected 7 manifests, got $($files.Count)" }
+  $manifests = [System.Collections.Generic.List[object]]::new()
+  $hostsSeen = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($file in $files) {
+    try { $parsed = Import-PowerShellDataFile -LiteralPath $file.FullName } catch { throw "FAIL: RegistryManifestParse '$($file.Name)': $($_.Exception.Message)" }
+    $stackId = [string]$(Get-RegistryManifestValue -Manifest $parsed -Name 'StackId')
+    if ([string]::IsNullOrWhiteSpace($stackId)) { throw "FAIL: RegistryManifestIdentity: '$($file.Name)' has no StackId" }
+    if (-not $hostsSeen.Add($stackId)) { throw "FAIL: DuplicateRegistryManifestHost: $stackId" }
+    $logicalRootsValue = Get-RegistryManifestValue -Manifest $parsed -Name 'LogicalRoots'
+    $logicalRoots = if ($null -eq $logicalRootsValue) { $null } else { @($logicalRootsValue | ForEach-Object { [string]$_ }) }
+    $hybridIds = @(if ($null -ne (Get-RegistryManifestValue -Manifest $parsed -Name 'HybridRuleIds')) { Get-RegistryManifestValue -Manifest $parsed -Name 'HybridRuleIds' | ForEach-Object { [string]$_ } })
+    $dualWriteValue = Get-RegistryManifestValue -Manifest $parsed -Name 'AgentsDualWrite'
+    $jsonMergeValue = Get-RegistryManifestValue -Manifest $parsed -Name 'JsonMerge'
+    $dualWrite = if ($null -eq $dualWriteValue) { $null } else { [pscustomobject]@{
+      instructions_rel = Get-RegistryManifestValue -Manifest $dualWriteValue -Name 'InstructionsRel'
+      agents_rel = Get-RegistryManifestValue -Manifest $dualWriteValue -Name 'AgentsRel'
+    } }
+    $jsonMerge = if ($null -eq $jsonMergeValue) { $null } else { [pscustomobject]@{
+      specimen_rel = Get-RegistryManifestValue -Manifest $jsonMergeValue -Name 'SpecimenRel'
+      dest_rel = Get-RegistryManifestValue -Manifest $jsonMergeValue -Name 'DestRel'
+      preserve_top_level_keys = @(Get-RegistryManifestValue -Manifest $jsonMergeValue -Name 'PreserveTopLevelKeys')
+    } }
+    $overlayOnly = [System.Collections.Generic.List[object]]::new()
+    foreach ($metadata in @(Get-RegistryManifestValue -Manifest $parsed -Name 'OverlayOnlySkillMetadata')) {
+      if ($null -eq $metadata) { continue }
+      $overlayOnly.Add([pscustomobject]@{
+        skill_id = Get-RegistryManifestValue -Manifest $metadata -Name 'SkillId'
+        relative_path = Get-RegistryManifestValue -Manifest $metadata -Name 'RelativePath'
+        allow_implicit_invocation = [bool](Get-RegistryManifestValue -Manifest $metadata -Name 'AllowImplicitInvocation')
+      })
+    }
+    $manifests.Add([pscustomobject]@{
+      host = $stackId
+      path = ('scripts/host-sync/manifests/' + $file.Name)
+      stack_id = $stackId
+      binding_model = if ($null -ne $logicalRoots) { 'codex-two-logical-roots' } else { 'single-root' }
+      overlay_root = [string](Get-RegistryManifestValue -Manifest $parsed -Name 'OverlayRelativeRoot')
+      overlay_relative_root = [string](Get-RegistryManifestValue -Manifest $parsed -Name 'OverlayRelativeRoot')
+      live_relative_root = [string]$(Get-RegistryManifestValue -Manifest $parsed -Name 'LiveRelativeRoot')
+      shared_root = [string]$(Get-RegistryManifestValue -Manifest $parsed -Name 'SharedRoot')
+      logical_roots = $logicalRoots
+      copy_entry_count = @(Get-RegistryManifestEntries -Manifest $parsed -RepoRoot $RepoRoot).Count
+      hard_excludes = @(Get-RegistryManifestValue -Manifest $parsed -Name 'HardExcludes')
+      never_touch = @(Get-RegistryManifestValue -Manifest $parsed -Name 'NeverTouch')
+      hybrid_rule_ids = $hybridIds
+      entries = Get-RegistryManifestEntries -Manifest $parsed -RepoRoot $RepoRoot
+      agents_dual_write = $dualWrite
+      json_merge = $jsonMerge
+      ownership_marker = Get-RegistryManifestValue -Manifest $parsed -Name 'OwnershipMarker'
+      managed_block_marker = Get-RegistryManifestValue -Manifest $parsed -Name 'ManagedBlockMarker'
+      skill_catalog_budget_characters = Get-RegistryManifestValue -Manifest $parsed -Name 'SkillCatalogBudgetCharacters'
+      overlay_only_skill_metadata = $overlayOnly.ToArray()
+    })
+  }
+  $expectedHosts = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+  foreach ($hostName in $script:Hosts) { $null = $expectedHosts.Add([string]$hostName) }
+  if (-not $hostsSeen.SetEquals($expectedHosts)) {
+    throw "FAIL: RegistryManifestHosts: expected '$(($expectedHosts | Sort-Object) -join '|')', got '$(($hostsSeen | Sort-Object) -join '|')'"
+  }
+  return $manifests.ToArray()
+}
+
 function Get-RegistrySkillFrontmatterDescription {
   <#
     Fail-closed accessor for one skill's registry-owned description metadata.
@@ -278,9 +418,9 @@ function Get-RegistrySkillWrapperFrontmatterShadow {
 function Get-RegistrySkillWrapperSourcePath {
   <#
     Resolves one applicable skill binding's manifest-declared wrapper source to
-    a repository-relative path through the existing Phase 0 inventory manifest
-    seam (binding source plus the host's overlay/shared root). No second
-    routing system is introduced and manifests are never duplicated.
+    a repository-relative path through the current manifest seam (binding
+    source plus the host's overlay/shared root). No second routing system is
+    introduced and manifests are never duplicated.
   #>
   param([Parameter(Mandatory)]$Binding,[Parameter(Mandatory)]$Manifest,[Parameter(Mandatory)][string]$SkillId,[Parameter(Mandatory)][string]$HostName,[System.Collections.Generic.List[string]]$Failures)
   $sourceProperty = $Binding.PSObject.Properties['source']
@@ -307,7 +447,7 @@ function Get-RegistrySkillHostFrontmatterShadow {
     manifest entry delivering the skill wrapper. Returns one row per host for
     managed-view evidence; all defects are appended as fail-closed invariants.
   #>
-  param([Parameter(Mandatory)]$Skill,[Parameter(Mandatory)]$Inventory,[Parameter(Mandatory)][string]$RepoRoot,[System.Collections.Generic.List[string]]$Failures)
+  param([Parameter(Mandatory)]$Skill,[Parameter(Mandatory)]$Inventory,[Parameter(Mandatory)][string]$RepoRoot,$Manifests = $null,[System.Collections.Generic.List[string]]$Failures)
   $id = [string]$Skill.id
   $profilesProperty = $Skill.PSObject.Properties['hostFrontmatterProfiles']
   $profiles = @(if ($null -ne $profilesProperty) { $profilesProperty.Value })
@@ -318,10 +458,11 @@ function Get-RegistrySkillHostFrontmatterShadow {
   }
   $manifestsByHost = @{}
   $manifestHostsSeen = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
-  foreach ($manifest in @($Inventory.manifests)) {
+  if ($null -eq $Manifests) { $Manifests = Get-RegistryManifests -RepoRoot $RepoRoot }
+  foreach ($manifest in @($Manifests)) {
     $manifestHost = [string]$manifest.host
     if (-not $manifestHostsSeen.Add($manifestHost)) {
-      Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id has more than one Phase 0 manifest for host '$manifestHost'"
+      Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id has more than one current manifest for host '$manifestHost'"
       continue
     }
     $manifestsByHost[$manifestHost] = $manifest
@@ -369,11 +510,11 @@ function Get-RegistrySkillHostFrontmatterShadow {
     $manifest = if ($manifestsByHost.ContainsKey($hostName)) { $manifestsByHost[$hostName] } else { $null }
     $manifestEntries = $null
     if ($null -eq $manifest) {
-      Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id/$hostName has no Phase 0 host manifest"
+      Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id/$hostName has no registered host manifest"
     } else {
       $entriesProperty = $manifest.PSObject.Properties['entries']
       if ($null -eq $entriesProperty) {
-        Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id/$hostName Phase 0 host manifest declares no entries"
+        Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id/$hostName registered host manifest declares no entries"
       } else {
         $manifestEntries = @($entriesProperty.Value)
       }
@@ -823,7 +964,7 @@ function Test-RegistryHostCompositionOwnership {
 }
 
 function Test-RegistryCatalog {
-  param([Parameter(Mandatory)]$Catalog,[Parameter(Mandatory)][ValidateSet('agents','rules','skills','workflows')][string]$Kind,[Parameter(Mandatory)][string]$RepoRoot,$OverlayRoots = @{},$Inventory = $null)
+  param([Parameter(Mandatory)]$Catalog,[Parameter(Mandatory)][ValidateSet('agents','rules','skills','workflows')][string]$Kind,[Parameter(Mandatory)][string]$RepoRoot,$OverlayRoots = @{},$Inventory = $null,$Manifests = $null)
   $failures = [System.Collections.Generic.List[string]]::new()
   $items = @($Catalog.items); $ids = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
   $allIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
@@ -907,7 +1048,7 @@ function Test-RegistryCatalog {
       if ($null -eq $raw) { continue }
       $frontmatterShadow = Get-RegistrySkillFrontmatterShadow -Skill $item -Raw $raw
       foreach ($shadowFailure in $frontmatterShadow.Failures) { $failures.Add($shadowFailure) }
-      $null = Get-RegistrySkillHostFrontmatterShadow -Skill $item -Inventory $Inventory -RepoRoot $RepoRoot -Failures $failures
+      $null = Get-RegistrySkillHostFrontmatterShadow -Skill $item -Inventory $Inventory -RepoRoot $RepoRoot -Manifests $Manifests -Failures $failures
       if ($raw -notmatch "(?m)^name:\s*$([regex]::Escape($id))\s*$") { Add-RegistryFailure $failures 'CanonicalIdentity' "$id skill frontmatter name" }
       $inventorySkill = @($Inventory.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq $id })
       if ($inventorySkill.Count -ne 1) { Add-RegistryFailure $failures 'SkillInventory' "$id has $($inventorySkill.Count) inventory rows"; continue }
@@ -1109,7 +1250,8 @@ function Test-ProcedureRegistryCatalogs {
   $schema = Get-Content -Raw -LiteralPath $schemaPath
   $inventoryPath = Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json'
   try { $inventory = Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json } catch { throw "FAIL: invalid inventory: $($_.Exception.Message)" }
-  $overlayRoots = @{}; foreach ($manifest in @($inventory.manifests)) { $overlayRoots[$manifest.host] = @{ Overlay = $manifest.overlay_root; Shared = $manifest.shared_root } }
+  $manifests = Get-RegistryManifests -RepoRoot $RepoRoot
+  $overlayRoots = @{}; foreach ($manifest in @($manifests)) { $overlayRoots[$manifest.host] = @{ Overlay = $manifest.overlay_root; Shared = $manifest.shared_root } }
   foreach ($kind in $script:ExpectedKinds.Keys) {
     $path = Join-Path (Join-Path $RepoRoot 'catalog') $script:ExpectedKinds[$kind]
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "FAIL: missing catalog $path" }
@@ -1117,7 +1259,7 @@ function Test-ProcedureRegistryCatalogs {
     if (-not (Test-Json -Json $raw -Schema $schema -ErrorAction SilentlyContinue)) { Add-RegistryFailure $failures 'SchemaValidation' $script:ExpectedKinds[$kind] }
     if ($catalog.schema -ne 'catalog/v1' -or $catalog.kind -ne $kind) { Add-RegistryFailure $failures 'SchemaVersionOrKindMismatch' "$($script:ExpectedKinds[$kind]) schema=$($catalog.schema) kind=$($catalog.kind)" }
     $catalogs[$kind] = $catalog
-    foreach ($failure in (Test-RegistryCatalog -Catalog $catalog -Kind $kind -RepoRoot $RepoRoot -OverlayRoots $overlayRoots -Inventory $inventory)) { $failures.Add($failure) }
+    foreach ($failure in (Test-RegistryCatalog -Catalog $catalog -Kind $kind -RepoRoot $RepoRoot -OverlayRoots $overlayRoots -Inventory $inventory -Manifests $manifests)) { $failures.Add($failure) }
   }
   $pairs = @{ agents = 'governed_agents'; rules = 'canonical_rules'; skills = 'canonical_skills'; workflows = 'canonical_workflows' }
   foreach ($kind in $pairs.Keys) {
@@ -1130,7 +1272,7 @@ function Test-ProcedureRegistryCatalogs {
   $knownIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
   foreach ($kind in @('agents','skills','rules','workflows')) { foreach ($item in @($catalogs[$kind].items)) { $null = $knownIds.Add([string]$item.id) } }
   foreach ($composition in @($catalogs.workflows.compositions)) { if (-not $knownIds.Contains([string]$composition.canonicalReferenceId)) { Add-RegistryFailure $failures 'InvalidCompositionReference' "$($composition.id) canonical '$($composition.canonicalReferenceId)'" } }
-  return [pscustomobject]@{ Valid = ($failures.Count -eq 0); Failures = $failures; Catalogs = $catalogs; Inventory = $inventory }
+  return [pscustomobject]@{ Valid = ($failures.Count -eq 0); Failures = $failures; Catalogs = $catalogs; Inventory = $inventory; Manifests = $manifests }
 }
 
 function New-RegistryProjectionResolver {
@@ -1151,7 +1293,7 @@ function Resolve-RegistryProjection {
 }
 
 function Get-RegistryManagedView {
-  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$RepoRoot,$Resolver = (New-RegistryProjectionResolver),$Inventory = $null)
+  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$RepoRoot,$Resolver = (New-RegistryProjectionResolver),$Inventory = $null,$Manifests = $null)
   $identity = [ordered]@{ schema = 'managed-view/v1'; generatedFrom = 'catalog/v1'; hosts = @($script:Hosts); counts = [ordered]@{} }
   foreach ($kind in @('agents','skills','rules','workflows')) { $identity.counts[$kind] = @($Catalogs[$kind].items).Count }
   $identityJson = $identity | ConvertTo-Json -Depth 5
@@ -1190,7 +1332,7 @@ function Get-RegistryManagedView {
   $wrapperShadow = [System.Collections.Generic.List[string]]::new(); $wrapperShadow.Add("skill`thost`twrapperShadow`twrapperSource")
   foreach ($skill in $Catalogs.skills.items) {
     $shadowFailures = [System.Collections.Generic.List[string]]::new()
-    foreach ($row in (Get-RegistrySkillHostFrontmatterShadow -Skill $skill -Inventory $Inventory -RepoRoot $RepoRoot -Failures $shadowFailures)) {
+    foreach ($row in (Get-RegistrySkillHostFrontmatterShadow -Skill $skill -Inventory $Inventory -RepoRoot $RepoRoot -Manifests $Manifests -Failures $shadowFailures)) {
       $wrapperShadow.Add(($row.Skill,$row.Host,$row.Status,$row.WrapperSource) -join "`t")
     }
     if ($shadowFailures.Count -gt 0) { throw "FAIL: $($shadowFailures[0])" }
@@ -1209,7 +1351,7 @@ function Get-RegistryManagedView {
     }
   }
   $files = [ordered]@{ 'identity.json' = $identityJson + "`n"; 'agent-parity.tsv' = ($parity -join "`n") + "`n"; 'composition-order.tsv' = ($composition -join "`n") + "`n"; 'skill-frontmatter-shadow.tsv' = ($skillShadow -join "`n") + "`n"; 'skill-host-frontmatter-shadow.tsv' = ($wrapperShadow -join "`n") + "`n"; 'always-on.tsv' = ($alwaysOnView -join "`n") + "`n" }
-  $compositionFiles = Get-RegistryCompositionFiles -Catalogs $Catalogs -RepoRoot $RepoRoot -Inventory $Inventory
+  $compositionFiles = Get-RegistryCompositionFiles -Catalogs $Catalogs -RepoRoot $RepoRoot -Manifests $Manifests
   foreach ($compositionKey in @($compositionFiles.Keys)) { $files[$compositionKey] = [string]$compositionFiles[$compositionKey] }
   [pscustomobject]@{ Files = $files }
 }
@@ -1223,7 +1365,7 @@ function Get-RegistryCompositionFiles {
     references, or BOM-marked inputs. Output is managed-view-only; canonical
     and host files are never written by this function.
   #>
-  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$RepoRoot,$Inventory = $null)
+  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$RepoRoot,$Manifests = $null)
   $workflowsProperty = $Catalogs.workflows.PSObject.Properties['compositions']
   $orderProperty = $Catalogs.workflows.PSObject.Properties['semanticOrder']
   if ($null -eq $workflowsProperty -or $null -eq $orderProperty) { throw 'FAIL: composition render requires registry-owned compositions and semanticOrder' }
@@ -1236,12 +1378,9 @@ function Get-RegistryCompositionFiles {
     if ($compositionById.ContainsKey($compositionId)) { throw "FAIL: DuplicateCompositionId: $compositionId" }
     $compositionById[$compositionId] = $compositionItem
   }
-  if ($null -eq $Inventory) {
-    $inventoryPath = Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json'
-    try { $Inventory = Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json } catch { throw "FAIL: invalid inventory: $($_.Exception.Message)" }
-  }
+  if ($null -eq $Manifests) { $Manifests = Get-RegistryManifests -RepoRoot $RepoRoot }
   $overlayRoots = @{}
-  foreach ($manifest in @($Inventory.manifests)) { $overlayRoots[[string]$manifest.host] = @{ Overlay = $manifest.overlay_root; Shared = $manifest.shared_root } }
+  foreach ($manifest in @($Manifests)) { $overlayRoots[[string]$manifest.host] = @{ Overlay = $manifest.overlay_root; Shared = $manifest.shared_root } }
   $files = [ordered]@{}
   foreach ($compositionId in $order) {
     if (-not $compositionById.ContainsKey($compositionId)) { throw "FAIL: SemanticOrderUnknownId: $compositionId" }
@@ -1283,7 +1422,7 @@ function Test-RegistryCompositionOutputBoundary {
     protected repository tree, or host projection may receive generated
     composition output. Temporary output under the OS temporary root passes.
   #>
-  param([Parameter(Mandatory)][string]$OutputRoot,[Parameter(Mandatory)][string]$RepoRoot,[Parameter(Mandatory)]$Catalogs,$Inventory = $null)
+  param([Parameter(Mandatory)][string]$OutputRoot,[Parameter(Mandatory)][string]$RepoRoot,[Parameter(Mandatory)]$Catalogs,$Manifests = $null)
   $full = [IO.Path]::GetFullPath($OutputRoot)
   $root = [IO.Path]::GetFullPath($RepoRoot).TrimEnd('\','/') + '\'
   $temporaryRoot = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd('\','/') + '\'
@@ -1302,11 +1441,8 @@ function Test-RegistryCompositionOutputBoundary {
       if ($relativeLower -eq $bodyLower -or $relativeLower.StartsWith("$bodyLower\")) { throw "FAIL: CompositionOutputBoundary violates canonical body '$($item.body)': $OutputRoot" }
     }
   }
-  if ($null -eq $Inventory) {
-    $inventoryPath = Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json'
-    try { $Inventory = Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json } catch { throw "FAIL: invalid inventory: $($_.Exception.Message)" }
-  }
-  foreach ($manifest in @($Inventory.manifests)) {
+  if ($null -eq $Manifests) { $Manifests = Get-RegistryManifests -RepoRoot $RepoRoot }
+  foreach ($manifest in @($Manifests)) {
     foreach ($boundaryPath in @($manifest.overlay_root, $manifest.shared_root)) {
       if ([string]::IsNullOrWhiteSpace([string]$boundaryPath)) { continue }
       $boundaryLower = ([string]$boundaryPath).Replace('/','\').TrimEnd('\','/').ToLowerInvariant()
@@ -1341,14 +1477,11 @@ function Test-RegistryOutputRoot([string]$OutputRoot,[string]$RepoRoot,[switch]$
 }
 
 function Write-RegistryManagedView {
-  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$OutputRoot,[string]$RepoRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),$Resolver = (New-RegistryProjectionResolver),$Inventory = $null,[switch]$AllowTemporaryRoot)
+  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$OutputRoot,[string]$RepoRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),$Resolver = (New-RegistryProjectionResolver),$Inventory = $null,$Manifests = $null,[switch]$AllowTemporaryRoot)
   Test-RegistryOutputRoot -OutputRoot $OutputRoot -RepoRoot $RepoRoot -AllowTemporaryRoot:$AllowTemporaryRoot
-  if ($null -eq $Inventory) {
-    $inventoryPath = Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json'
-    try { $Inventory = Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json } catch { throw "FAIL: invalid inventory: $($_.Exception.Message)" }
-  }
-  Test-RegistryCompositionOutputBoundary -OutputRoot $OutputRoot -RepoRoot $RepoRoot -Catalogs $Catalogs -Inventory $Inventory
-  $view = Get-RegistryManagedView -Catalogs $Catalogs -RepoRoot $RepoRoot -Resolver $Resolver -Inventory $Inventory
+  if ($null -eq $Manifests) { $Manifests = Get-RegistryManifests -RepoRoot $RepoRoot }
+  Test-RegistryCompositionOutputBoundary -OutputRoot $OutputRoot -RepoRoot $RepoRoot -Catalogs $Catalogs -Manifests $Manifests
+  $view = Get-RegistryManagedView -Catalogs $Catalogs -RepoRoot $RepoRoot -Resolver $Resolver -Inventory $Inventory -Manifests $Manifests
   New-Item -ItemType Directory -Force -Path $OutputRoot | Out-Null
   $encoding = [System.Text.UTF8Encoding]::new($false)
   foreach ($file in $view.Files.GetEnumerator()) {
@@ -1360,4 +1493,4 @@ function Write-RegistryManagedView {
   return $view
 }
 
-Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot','Get-RegistryCompositionReferencePath','Get-RegistryCompositionFiles','Get-RegistryCompositionOrderById','Test-RegistryCompositionOutputBoundary','Get-StackManifestDestinationCount','Get-RegistrySkillFrontmatter','Get-RegistrySkillCanonicalFrontmatter','Get-RegistryComparableFrontmatter','Get-RegistrySkillSourceRaw','Get-RegistrySkillFrontmatterShadow','Get-RegistrySkillWrapperFrontmatterShadow','Get-RegistrySkillWrapperSourcePath','Get-RegistrySkillHostFrontmatterShadow')
+Export-ModuleMember -Function @('Test-ProcedureRegistryCatalogs','Test-RegistryCatalog','New-RegistryProjectionResolver','Resolve-RegistryProjection','Get-RegistryManagedView','Write-RegistryManagedView','Test-RegistryOutputRoot','Get-RegistryCompositionReferencePath','Get-RegistryCompositionFiles','Get-RegistryCompositionOrderById','Test-RegistryCompositionOutputBoundary','Get-RegistryManifests','Get-StackManifestDestinationCount','Get-RegistrySkillFrontmatter','Get-RegistrySkillCanonicalFrontmatter','Get-RegistryComparableFrontmatter','Get-RegistrySkillSourceRaw','Get-RegistrySkillFrontmatterShadow','Get-RegistrySkillWrapperFrontmatterShadow','Get-RegistrySkillWrapperSourcePath','Get-RegistrySkillHostFrontmatterShadow')

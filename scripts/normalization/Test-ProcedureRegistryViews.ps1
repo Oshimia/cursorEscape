@@ -61,7 +61,7 @@ foreach ($pair in $phase2cPairs) {
     [string]$row.classification -eq 'host wrapper'
   ) "binding=$($binding | ConvertTo-Json -Compress)"
 
-  $manifest = @($registry.Inventory.manifests | Where-Object { [string]$_.host -eq $pair.Host })[0]
+  $manifest = @($registry.Manifests | Where-Object { [string]$_.host -eq $pair.Host })[0]
   $entries = @($manifest.entries | Where-Object {
     [string]$_.source -eq $pair.Wrapper.Substring($manifest.overlay_root.Length + 1) -and
     [string]$_.destination -eq $pair.Destination
@@ -111,9 +111,9 @@ foreach ($pair in $phase2FallbackPairs) {
   $item = @($registry.Catalogs.agents.items | Where-Object { [string]$_.id -eq $pair.Agent })[0]
   $binding = @($item.hostBindings | Where-Object { [string]$_.host -eq $pair.Host })[0]
   $row = @($registry.Inventory.parity_matrix | Where-Object { [string]$_.host -eq $pair.Host -and [string]$_.agent -eq $pair.Agent })[0]
-  $manifest = @($registry.Inventory.manifests | Where-Object { [string]$_.host -eq $pair.Host })[0]
+  $manifest = @($registry.Manifests | Where-Object { [string]$_.host -eq $pair.Host })[0]
   $workflowRelative = $pair.Workflow.Substring($manifest.overlay_root.Length + 1)
-  $inventoryEntries = @($manifest.entries | Where-Object {
+  $currentEntries = @($manifest.entries | Where-Object {
     [string]$_.source -eq $workflowRelative -and [string]$_.destination -eq $pair.Destination
   })
   $manifestData = Import-PowerShellDataFile (Join-Path $RepoRoot $manifest.path)
@@ -162,9 +162,9 @@ foreach ($pair in $phase2FallbackPairs) {
     @($binding.evidencePaths) -contains $manifest.path -and
     @($row.evidence_paths) -contains $pair.Workflow -and
     @($row.evidence_paths) -contains $manifest.path -and
-    $inventoryEntries.Count -eq 1 -and
+    $currentEntries.Count -eq 1 -and
     $manifestEntries.Count -eq 1
-  ) "inventory=$($inventoryEntries.Count); manifest=$($manifestEntries.Count)"
+  ) "current=$($currentEntries.Count); manifest=$($manifestEntries.Count)"
   Assert-View "Phase 2 fallback workflow contract: $($pair.Host)|$($pair.Agent)" (
     $workflowRaw.Contains('separate fresh') -and
     $workflowRaw.Contains('per governed leg') -and
@@ -239,8 +239,8 @@ function Get-Phase3ADriftContentSnapshot {
 $sliceBefore = Get-Phase3ADriftContentSnapshot
 $temp = Join-Path ([IO.Path]::GetTempPath()) ("procedure-registry-" + [Guid]::NewGuid().ToString('N'))
 try {
-  $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
-  $two = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'two') -RepoRoot $RepoRoot -Inventory $registry.Inventory -AllowTemporaryRoot
+  $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -Inventory $registry.Inventory -Manifests $registry.Manifests -AllowTemporaryRoot
+  $two = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'two') -RepoRoot $RepoRoot -Inventory $registry.Inventory -Manifests $registry.Manifests -AllowTemporaryRoot
   Assert-View 'double render has ten files (six base + four managed compositions)' ($one.Files.Keys.Count -eq 10 -and $two.Files.Keys.Count -eq 10) "one=$($one.Files.Keys.Count) two=$($two.Files.Keys.Count)"
   foreach ($name in @($one.Files.Keys)) {
     $hashA = (Get-FileHash (Join-Path (Join-Path $temp 'one') $name) -Algorithm SHA256).Hash
@@ -413,7 +413,7 @@ try {
     }
   }
   $mirrorOverlayRoots = @{}
-  foreach ($mirrorManifest in @($registry.Inventory.manifests)) { $mirrorOverlayRoots[[string]$mirrorManifest.host] = @{ Overlay = $mirrorManifest.overlay_root; Shared = $mirrorManifest.shared_root } }
+  foreach ($mirrorManifest in @($registry.Manifests)) { $mirrorOverlayRoots[[string]$mirrorManifest.host] = @{ Overlay = $mirrorManifest.overlay_root; Shared = $mirrorManifest.shared_root } }
   foreach ($mirrorComposition in @($registry.Catalogs.workflows.compositions)) {
     if ($mirrorComposition.PSObject.Properties['runtimeOnly'] -and [bool]$mirrorComposition.runtimeOnly) { continue }
     foreach ($mirrorReference in @($mirrorComposition.references)) {
@@ -423,11 +423,11 @@ try {
       Copy-Item -LiteralPath (Join-Path $RepoRoot $mirrorRefPath) -Destination $mirrorTarget
     }
   }
-  $cleanView = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $viewMirror -Inventory $registry.Inventory
+  $cleanView = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $viewMirror -Inventory $registry.Inventory -Manifests $registry.Manifests
   Assert-View 'managed view renders clean sources through the ingress loader' ((@(($cleanView.Files['skill-frontmatter-shadow.tsv'] -split "`n" | Where-Object { $_ }) | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`tmatch`t" })).Count -eq 0)
   [IO.File]::WriteAllBytes((Join-Path $viewMirror ([string]$bomSkill.body)), [byte[]]([byte[]]@(0xEF,0xBB,0xBF) + [Text.UTF8Encoding]::new($false).GetBytes($bomRaw)))
   $viewBomThrew = $false
-  try { $null = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $viewMirror -Inventory $registry.Inventory } catch { $viewBomThrew = ($_.Exception.Message -like 'FAIL: SkillSourceBom:*') }
+  try { $null = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $viewMirror -Inventory $registry.Inventory -Manifests $registry.Manifests } catch { $viewBomThrew = ($_.Exception.Message -like 'FAIL: SkillSourceBom:*') }
   Assert-View 'managed view rejects a BOM-prefixed canonical source before rendering shadow evidence' $viewBomThrew
   $cursorProfile = @(@($registry.Catalogs.skills.items | Where-Object { [string]$_.id -eq 'implementation-plan' }).hostFrontmatterProfiles | Where-Object { @($_.hosts) -contains 'Cursor' })[0]
   $wrongNameFailures = [System.Collections.Generic.List[string]]::new()
@@ -490,16 +490,19 @@ function Invoke-EdgeCase([string]$Kind,[scriptblock]$Mutate) {
   foreach ($name in @('agents','skills','rules','workflows')) { $catalogs[$name].schema = 'catalog/v1'; $catalogs[$name].kind = $name }
   $observed = [System.Collections.Generic.List[string]]::new()
   foreach ($name in @('agents','skills','rules','workflows')) {
-    foreach ($failure in (Test-RegistryCatalog -Catalog $catalogs[$name] -Kind $name -RepoRoot $RepoRoot -Inventory $registry.Inventory)) { $observed.Add($failure) }
+    foreach ($failure in (Test-RegistryCatalog -Catalog $catalogs[$name] -Kind $name -RepoRoot $RepoRoot -Inventory $registry.Inventory -Manifests $registry.Manifests)) { $observed.Add($failure) }
   }
   return [pscustomobject]@{ Valid = ($observed.Count -eq 0); Failures = $observed }
 }
 function Invoke-SkillInventoryEdgeCase([scriptblock]$MutateInventory) {
-  $inventory = $registry.Inventory | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+  $inventory = [pscustomobject]@{
+    skills_inventory = ($registry.Inventory.skills_inventory | ConvertTo-Json -Depth 100 | ConvertFrom-Json)
+    manifests = (Get-RegistryManifests -RepoRoot $RepoRoot | ConvertTo-Json -Depth 100 | ConvertFrom-Json)
+  }
   & $MutateInventory $inventory
   $catalog = Get-FreshCatalogs
   $catalog.skills.schema = 'catalog/v1'; $catalog.skills.kind = 'skills'
-  $observed = @(Test-RegistryCatalog -Catalog $catalog.skills -Kind 'skills' -RepoRoot $RepoRoot -Inventory $inventory)
+  $observed = @(Test-RegistryCatalog -Catalog $catalog.skills -Kind 'skills' -RepoRoot $RepoRoot -Inventory $inventory -Manifests $inventory.manifests)
   return [pscustomobject]@{ Valid = ($observed.Count -eq 0); Failures = $observed }
 }
 try {
@@ -911,7 +914,7 @@ try {
     (@($compositionFileKeys) -join '|') -ceq (@($registry.Catalogs.workflows.semanticOrder | Where-Object { $_ -in $nonRuntimeOrderIds } | ForEach-Object { "compositions/$($_).md" }) -join '|')
   ) "observed=$(($compositionFileKeys | Select-Object -First 3) -join '|')"
   $invOverlayRoots = @{}
-  foreach ($invManifest in @($registry.Inventory.manifests)) { $invOverlayRoots[[string]$invManifest.host] = @{ Overlay = $invManifest.overlay_root; Shared = $invManifest.shared_root } }
+  foreach ($invManifest in @($registry.Manifests)) { $invOverlayRoots[[string]$invManifest.host] = @{ Overlay = $invManifest.overlay_root; Shared = $invManifest.shared_root } }
   foreach ($compositionItem in @($registry.Catalogs.workflows.compositions)) {
     if ($compositionItem.PSObject.Properties['runtimeOnly'] -and [bool]$compositionItem.runtimeOnly) { continue }
     $cid = [string]$compositionItem.id
@@ -931,7 +934,7 @@ try {
   $unresolvedCatalogs = Get-FreshCatalogs
   $unresolvedCatalogs.workflows.compositions[0].references[0] = 'base:rules/__missing__.md'
   $unresolvedThrew = $false
-  try { $null = Get-RegistryCompositionFiles -Catalogs $unresolvedCatalogs -RepoRoot $RepoRoot -Inventory $registry.Inventory } catch { $unresolvedThrew = ($_.Exception.Message -like 'FAIL: SemanticReference:*') }
+  try { $null = Get-RegistryCompositionFiles -Catalogs $unresolvedCatalogs -RepoRoot $RepoRoot -Manifests $registry.Manifests } catch { $unresolvedThrew = ($_.Exception.Message -like 'FAIL: SemanticReference:*') }
   Assert-View 'unresolved composition reference fails closed in renderer' $unresolvedThrew
   $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.semanticOrder[0] = 'unknown-composition-id' }
   Assert-RegistryFailure $result 'unknown semantic order ID fails closed' 'SemanticOrderUnknownId'
@@ -949,14 +952,14 @@ try {
     @{ Name = 'protected tree config'; Path = 'config/generated' }
   )) {
     $boundaryThrew = $false
-    try { $null = Test-RegistryCompositionOutputBoundary -OutputRoot (Join-Path $RepoRoot $boundaryCase.Path) -RepoRoot $RepoRoot -Catalogs $registry.Catalogs -Inventory $registry.Inventory } catch { $boundaryThrew = $true }
+    try { $null = Test-RegistryCompositionOutputBoundary -OutputRoot (Join-Path $RepoRoot $boundaryCase.Path) -RepoRoot $RepoRoot -Catalogs $registry.Catalogs -Manifests $registry.Manifests } catch { $boundaryThrew = $true }
     Assert-View "composition output boundary: $($boundaryCase.Name) fails closed" $boundaryThrew
   }
   $boundaryTempOk = $false
-  try { $null = Test-RegistryCompositionOutputBoundary -OutputRoot (Join-Path ([IO.Path]::GetTempPath()) 'procedure-registry-boundary-ok') -RepoRoot $RepoRoot -Catalogs $registry.Catalogs -Inventory $registry.Inventory; $boundaryTempOk = $true } catch { }
+  try { $null = Test-RegistryCompositionOutputBoundary -OutputRoot (Join-Path ([IO.Path]::GetTempPath()) 'procedure-registry-boundary-ok') -RepoRoot $RepoRoot -Catalogs $registry.Catalogs -Manifests $registry.Manifests; $boundaryTempOk = $true } catch { }
   Assert-View 'composition output boundary: temporary root passes' $boundaryTempOk
   $writeBoundaryThrew = $false
-  try { $null = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $RepoRoot 'GEMINI.md') -RepoRoot $RepoRoot -Inventory $registry.Inventory } catch { $writeBoundaryThrew = $true }
+  try { $null = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $RepoRoot 'GEMINI.md') -RepoRoot $RepoRoot -Inventory $registry.Inventory -Manifests $registry.Manifests } catch { $writeBoundaryThrew = $true }
   Assert-View 'managed writer rejects host projection output root' $writeBoundaryThrew
   # --- Phase 4B: explicit always-on policy for invocation/plan-review/code-review/pre-commit on Cursor/OpenCode/Codex/Antigravity ---
   $alwaysOnItems = @($registry.Catalogs.workflows.alwaysOn)
