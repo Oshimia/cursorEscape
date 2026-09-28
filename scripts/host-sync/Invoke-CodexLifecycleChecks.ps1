@@ -344,9 +344,8 @@ Assert-Pass 'Codex overlay index records active composed setup' (
     $overlay.Contains('**Status:** Active; activated 2026-09-08 after owner-authorized three-client smoke') -and
     $overlay.Contains('registry-composed managed-block footer')
 )
-Assert-Pass 'Codex overlay index records both extension surfaces' (
+Assert-Pass 'Codex overlay index records its retained hooks surface' (
     $overlay.Contains('## Extension surfaces') -and
-    $overlay.Contains('./rules/') -and
     $overlay.Contains('./hooks/')
 )
 $overlayIndex = Read-RepoFile 'overlays/_index.md'

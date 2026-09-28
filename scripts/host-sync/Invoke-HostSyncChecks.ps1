@@ -260,7 +260,6 @@ try {
     # authoritative; reserved surfaces contain only their placeholder, and the
     # pre-existing populated Cursor rules surface remains pinned to its leaves.
     $extensionExpectations = [ordered]@{
-        'codex/rules'       = @('_index.md')
         'codex/hooks'       = @('_index.md')
         'cursor/rules'      = @(
             'agent-invocation.mdc'
@@ -269,9 +268,7 @@ try {
             'pre-commit-ci-gate.mdc'
         )
         'cursor/hooks'      = @('_index.md')
-        'kilocode/rules'    = @('_index.md')
         'kilocode/hooks'    = @('_index.md')
-        'opencode/rules'    = @('_index.md')
         'opencode/hooks'    = @('_index.md')
         'vscode/rules'      = @('_index.md')
         'vscode/hooks'      = @('_index.md')
