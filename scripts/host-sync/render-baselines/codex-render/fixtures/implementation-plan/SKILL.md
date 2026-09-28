@@ -6,4 +6,4 @@ description: Plan non-trivial implementation work into reviewed phases, assumpti
 
 # implementation-plan (Codex wrapper)
 
-Thin advertisement only. Canonical procedure: Read `C:/codex-phase1-fixture/companion/skills/implementation-plan/SKILL.md`. Do not duplicate or replace that procedure here.
+Thin advertisement only. Canonical procedure: Read `C:/codex-render-normalization-fixture/companion/skills/implementation-plan/SKILL.md`. Do not duplicate or replace that procedure here.

@@ -1,194 +1,194 @@
 {
   "schemaVersion": 1,
-  "kind": "codex-phase1-normalized-render-hash-baseline",
+  "kind": "codex-normalized-render-hash-baseline",
   "normalization": "UTF-8 SHA-256 after CRLF-to-LF and exactly one terminal LF; explicit fixture roots; no live host state",
-  "fixtureCompanionRoot": "C:/codex-phase1-fixture/companion",
+  "fixtureCompanionRoot": "C:/codex-render-normalization-fixture/companion",
   "entries": [
     {
       "destination": "codex-home/AGENTS.md",
       "logicalRoot": "codex-home",
       "role": "managed-block-target",
-      "sha256": "676bd5056b65a70274f5b23697446871285c9026e613287a9f4d5753b54b3ed6"
+      "sha256": "f4681d1d4179c11f2085b433f25f83d91885ef65e39bc35fb4b0f6793654b973"
     },
     {
       "destination": "codex-home/agents/bug_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "97eaac9a435d3b4c32c8d00ff81e120eb2a6c68957ab2ed200473926c35b1fc9"
+      "sha256": "daed2740b53682493cd1da14003d5e9f10fc9a49f93c86aeb8922ac65aa980cb"
     },
     {
       "destination": "codex-home/agents/implementer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "2d733177f792e3dcbf4dd96bc225813eac5dc46cd30b22c55766217592d9104e"
+      "sha256": "d0122e2b68d5c44ed6b0082c7ed65a2fd4b884ae09969576d608b352c76671a0"
     },
     {
       "destination": "codex-home/agents/plan_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "82c90ee3a022c6849c22666e002effca668fa9d50ee066503a09458e989335d9"
+      "sha256": "7b201c35fbd814e8de287d9d6a79d5faf259e1a269b1277df0f4cbdfd9291d5a"
     },
     {
       "destination": "codex-home/agents/planner.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "b99c66958003243c2956234b745d083010c0455365d589034dfcfabff8f2df94"
+      "sha256": "5581a7a9824e104c7e32f3123df7e1aec05558c3afdac7fba1ca6de21226c4bd"
     },
     {
       "destination": "codex-home/agents/production_readiness_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "46aecd440342c98647df4cdd51668a145f046460c08175065fc6e30009cc38c0"
+      "sha256": "59674d084cfa9c09c952936399eb8112c4cf425e74769273db90453479602221"
     },
     {
       "destination": "codex-home/agents/repository_explorer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "2cc23a45dfc115cbb796022542fd64971461e9e01535b00753480d1273f172dd"
+      "sha256": "0029f63076d4d12fc3904a55f3d328f2732da52b15258fcba99653c67c812128"
     },
     {
       "destination": "codex-home/agents/test_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "df9c55719a4437ae72f59a156fbb4082cf4f3ace91b27461b1d423c9a4159519"
+      "sha256": "cc32e821125185e630eef26f1f31ed88de1da0a26cfc0f1d6ef3c807c9c58098"
     },
     {
       "destination": "skill-root/architecture-survey/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "f35f113e1895b26e617f1cfbeffe07fef5e9a765c0b6319ccf446f68de78d167"
+      "sha256": "5e1170e6add4f12673a2b6a92235eb5cfcc6f0042c7cae40dd36436a01092afd"
     },
     {
       "destination": "skill-root/bug-review-sweep/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "6f37aa970a820f5608a42d1f0191337b84eb008fc1414a8b0d385f5ba252f415"
+      "sha256": "0bd4b0b1a3940dff58eb488fe9d97dd2ba094648a951bf6849bdb6be2fa681ea"
     },
     {
       "destination": "skill-root/codebase-design/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "308825ed1211753750c9bd7cbcd1bcfe38a27a2742f279eb37a2b01cd0151e1f"
+      "sha256": "e4ccad4b141b1400be098874064527ba7b54810e53f8701b680a3bf7fff937a2"
     },
     {
       "destination": "skill-root/composer/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "ce3fe805b565db224ae7199456c24a13a35aa08103a87253d1807d4323ac27dc"
+      "sha256": "4210d1a512ba4df8c8528df5c9aaa13651535850a8352adb46e3f1168b2a6b9a"
     },
     {
       "destination": "skill-root/diagnosing-bugs/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "5a1ae28c21c9cd5e738bc1ba34ad4be4fad44900089026611b83d796689a8373"
+      "sha256": "402587f53ac83890cebbe4b19aa6bdbfcca0b20d93a1fdf51a899f9da7fc4e55"
     },
     {
       "destination": "skill-root/discovery/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "fc7fc9b3289ae1dba7667c227df297bec4382d23f5494a4ed62706868c3a24c6"
+      "sha256": "fdec0fae91c05747a8f29b18ee5f2d7152fdf6e0fc872cc3d846e856d58ce1db"
     },
     {
       "destination": "skill-root/documentation-architecture/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "2cc0560aa6e38036d1aaa52451c797048aa485394cf1f41b5a8a02c29952f14e"
+      "sha256": "e5c201a1e8d5436037fbed2536efcf4a6a167d7f569ab21c0d4f3046ed8ddf74"
     },
     {
       "destination": "skill-root/domain-modeling/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "e7ddad922dcfe13e7421eb8676d237b222f785d22cff01f46a75758a2a209e05"
+      "sha256": "4dde6b7b15c4a1eada4b604999dd67542142ffebc2ae5f9986f5fbadc96a1a53"
     },
     {
       "destination": "skill-root/grilling/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "1be3b219bbc1ab9413bafb5fd3928ec13a5cdd84709d3878139bec4177635f32"
+      "sha256": "60e1d5eb41964331cafa68a6a366baf966e0c61f49043713ad0c66591c81a966"
     },
     {
       "destination": "skill-root/implementation-plan/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "62f08e61c2ee5f3d88e5fd8b59aa3ebee69f666a10cd0bce274e2a31f2f8879c"
+      "sha256": "001e358125511bd459dfd4e14f23eb1d037031bb103e76062c805cf8b0f01be9"
     },
     {
       "destination": "skill-root/implementation-review/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "ec708a606116e4d0662a753baaedcd324bf0d885b611c21e788c566fdf08c6a5"
+      "sha256": "0a3f525b4a33a2c0ce66adad4581e9d6ebb398963064823ab638e50fd1ca011d"
     },
     {
       "destination": "skill-root/opencode-headless-run/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper-explicit-only",
-      "sha256": "d862a9f38c1906df56834c4395d4ff59e8d8e2ebfb1d7e7dac36ee0102aac724"
+      "sha256": "8ad254907557294e7a0a1fe036158fe5ad2277e3856e9d45d045bb324e04f918"
     },
     {
       "destination": "skill-root/opencode-history-search/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper-explicit-only",
-      "sha256": "9f6e633bccd4fa1b3d9a9e54fe00058b687a1c5d1b7e9bc3b62e8b905581929d"
+      "sha256": "701ac3a67f4f295733aab9ea403f5c4f5d90ae96dee074012db3111a5df267f2"
     },
     {
       "destination": "skill-root/plan-review/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "a0934093be39ebc046af89e251a1d7560c81fd044a351860d102673cabe2e5b8"
+      "sha256": "997f9c0d0bc0dcddccb5107d30ff109e63c36d4d6af5a8171f696b2e7baf0b9e"
     },
     {
       "destination": "skill-root/pre-commit-ci-gate/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-rule-wrapper",
-      "sha256": "c91290b01ed9df36aa06abef0c44e0369c28bbbe2042ead52a44e77f82729f0b"
+      "sha256": "d44a575d22705715644e0a87ce8987685ef7d344c562c9cf602e7fc8ca3f7e93"
     },
     {
       "destination": "skill-root/prototype/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "7f027b5f3184f861432c8c800be2e63ff2f6347947d83305f18b0fec035519fc"
+      "sha256": "bff7f07eb6bacfad263bb92494cb2fd62bd996504808a5c6ef44a2d0c7a7a0a3"
     },
     {
       "destination": "skill-root/research/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "e4d277db952a36910677a37265592cb7538b48e8bf0c1ed3d785c6738a1e7825"
+      "sha256": "1625d574c6ad41b81dc53824a0e45e9c000197fd539c44d530fb42dfa8aaa3d4"
     },
     {
       "destination": "skill-root/resolving-merge-conflicts/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "9f8a9527262c604aaa7ca5bb356724cee040b50c1228a18d5ac95811dc51adb5"
+      "sha256": "3df8f9de47035dd40e626f826b184ed6d4b7b7af36de9df6b0b0c211637db1fb"
     },
     {
       "destination": "skill-root/roadmap/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "ef6427701865f47adf274daf69b901d8cb1a51f40a05e66d01f1e124ea2eed87"
+      "sha256": "b855db1dc422e397040e2d7a8f8a31d3d9641613f868a8b7636271d31f418574"
     },
     {
       "destination": "skill-root/tdd/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "f58413efd6623eeb88d34e87a7a1e944aba4b50d723d2764671262273d2b6d0d"
+      "sha256": "459b2a2d00d8d27a6ad2d6a1589e25171c8f52ec0e97d62cfc7ccd3d45783953"
     },
     {
       "destination": "skill-root/teach/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "fa0f1e4d58aa6dc5756ae4b46a42d224da6d146c565c61c5236bdad540245651"
+      "sha256": "193b63823366150b26b132aa6e0115298a539f553ba4aca399d491138a9e9038"
     },
     {
       "destination": "skill-root/wait-what/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "997ae053ee8938fd848078ff0ae82d9a52f7bbb6589581ee7d3836a5e1fd0657"
+      "sha256": "2aae207a5a81c24a6f06ee9c3dd82bb43e6fbb2ddeb7c661c317e3631433e1b8"
     },
     {
       "destination": "skill-root/wizard/SKILL.md",
       "logicalRoot": "skill-root",
       "role": "generated-skill-wrapper",
-      "sha256": "4a1cc27386d086c84803d5170ddb2d5926675bf9b013256ffdbd2e61c7faf42c"
+      "sha256": "47d9aa51e902cd4ebd1c0bebb7d18538ec48e5346a1827d77ac71a213838c35a"
     }
   ]
 }

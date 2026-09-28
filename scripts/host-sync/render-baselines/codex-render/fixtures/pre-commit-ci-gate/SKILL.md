@@ -6,4 +6,4 @@ description: Enforce Full CI, or explicit n/a user acknowledgment, before any lo
 
 # pre-commit-ci-gate (Codex wrapper)
 
-Thin advertisement only. Canonical procedure: Read `C:/codex-phase1-fixture/companion/rules/pre-commit-ci-gate.md`. Do not duplicate or replace that procedure here.
+Thin advertisement only. Canonical procedure: Read `C:/codex-render-normalization-fixture/companion/rules/pre-commit-ci-gate.md`. Do not duplicate or replace that procedure here.

@@ -2,8 +2,8 @@
 name: reviewer-a
 description: >-
   Production-readiness reviewer for post-implementation code review. Audits
-  architecture alignment, supersession closure, regression risk, and blocking
-  vs batchable test/docs.
+  architecture alignment, supersession closure, machinery lifetime/naming,
+  regression risk, and blocking vs batchable test/docs.
   Use proactively after the parent agent runs a green CI gate — at the end of
   each plan phase or before declaring a single-phase task complete. Launch in
   parallel with Bugbot.
@@ -65,8 +65,8 @@ CI gate (parent-verified, do not re-run):
 
 Review changes for this phase (committed, staged, and unstaged). Flag regressions against prior approved phases.
 Read every changed file in this phase's change set.
-Return ALL findings in Blocking, Non-blocking (code/process), Blocking test/docs, Batchable (deferred), and Supersession closure. Do not summarize or omit items.
-Use the exact output format from reviewer-a (Verdict through CI gate status, including Blocking test/docs, Batchable (deferred), and Supersession closure).
+Return ALL findings in Blocking, Non-blocking (code/process), Blocking test/docs, Batchable (deferred), Supersession closure, and Lifecycle and naming closure. Do not summarize or omit items.
+Use the exact output format from reviewer-a (Verdict through CI gate status, including Blocking test/docs, Batchable (deferred), Supersession closure, and Lifecycle and naming closure).
 Re-launch with this full prompt after each fix batch — never a shortened message.
 Do not use a Bugbot-style Full Repository Path / Custom Instructions envelope for Reviewer-a.
 ```

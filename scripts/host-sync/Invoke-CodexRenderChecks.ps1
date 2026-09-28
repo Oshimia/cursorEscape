@@ -1,12 +1,12 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-  Scratch-only Phase 1 checks for the source-only Codex overlay and two-root manifest.
+  Scratch-only Codex render checks for the source-only overlay and two-root manifest.
 
 .DESCRIPTION
   This check never reads or writes a real Codex home or skill home. Rendering is
   in-process against explicit roots; materialized evidence lives only in a fresh
-  temporary scratch root. -WriteBaseline refreshes the committed Phase 1 baselines.
+  temporary scratch root. -WriteBaseline refreshes the committed render baselines.
 #>
 [CmdletBinding()]
 param(
@@ -23,7 +23,7 @@ $overlayRoot = Join-Path $companionRoot 'overlays/codex'
 $manifestPath = Join-Path $hostSyncRoot 'manifests/codex.manifest.psd1'
 $schemaPath = Join-Path $hostSyncRoot 'baselines/codex-manifest-schema-2026-09.json'
 $baselineRoot = Join-Path $hostSyncRoot 'render-baselines/codex-render'
-$fixtureCompanion = 'C:/codex-phase1-fixture/companion'
+$fixtureCompanion = 'C:/codex-render-normalization-fixture/companion'
 $marker = 'cursorEscape-managed:v1'
 $blockMarker = 'cursorEscape-managed-block:v1'
 $managedBlockId = 'codex-cursor-escape-loop'
@@ -215,7 +215,7 @@ function New-CodexRenderBaseline {
     })
     return [ordered]@{
         schemaVersion = 1
-        kind = 'codex-phase1-normalized-render-hash-baseline'
+        kind = 'codex-normalized-render-hash-baseline'
         normalization = 'UTF-8 SHA-256 after CRLF-to-LF and exactly one terminal LF; explicit fixture roots; no live host state'
         fixtureCompanionRoot = $fixtureCompanion
         entries = $entries
@@ -246,7 +246,7 @@ $effectiveCodexRoot = if ([string]::IsNullOrWhiteSpace($env:CODEX_HOME)) {
 if ((Test-PathWithin $effectiveCodexRoot $realSkillRoot) -or (Test-PathWithin $realSkillRoot $effectiveCodexRoot)) {
     throw 'Effective CODEX_HOME and the real skill root must remain independent.'
 }
-$scratch = Join-Path ([IO.Path]::GetTempPath()) ('codex-phase1-check-' + [Guid]::NewGuid().ToString('N'))
+$scratch = Join-Path ([IO.Path]::GetTempPath()) ('codex-render-check-' + [Guid]::NewGuid().ToString('N'))
 $scratchFull = [IO.Path]::GetFullPath($scratch).TrimEnd([char]'\', [char]'/')
 Assert-NoReparseAncestor -Path $scratchFull
 if ((Test-PathWithin $scratchFull $effectiveCodexRoot) -or (Test-PathWithin $scratchFull $realSkillRoot) -or
@@ -255,7 +255,7 @@ if ((Test-PathWithin $scratchFull $effectiveCodexRoot) -or (Test-PathWithin $scr
 }
 try {
     New-Item -ItemType Directory -Path (Join-Path $scratch 'renders') -Force | Out-Null
-    [IO.File]::WriteAllText((Join-Path $scratch 'scratch-owner'), 'Codex Phase 1 scratch evidence', [Text.UTF8Encoding]::new($false))
+    [IO.File]::WriteAllText((Join-Path $scratch 'scratch-owner'), 'Codex render-check scratch evidence', [Text.UTF8Encoding]::new($false))
 
     Assert-Pass 'scratch root is outside the effective CODEX_HOME' (-not (Test-PathWithin $scratchFull $effectiveCodexRoot))
     Assert-Pass 'scratch root is outside real skill home' (-not (Test-PathWithin $scratchFull $realSkillRoot))
@@ -268,7 +268,7 @@ try {
 
     $expectedSet = @($schema.destinations | ForEach-Object { "$($_.logicalRoot)|$($_.relativePath)|$($_.role)" }) | Sort-Object
     $actualSet = @($manifest.DestinationEntries | ForEach-Object { "$($_.LogicalRoot)|$($_.Dest)|$($_.Role)" }) | Sort-Object
-    Assert-Pass 'manifest destination and role triples exactly match Phase 0 schema' (($expectedSet -join "`n") -eq ($actualSet -join "`n"))
+    Assert-Pass 'manifest destination and role triples exactly match Codex manifest destination schema' (($expectedSet -join "`n") -eq ($actualSet -join "`n"))
     $expectedHardExcludes = @(
         'codex-home:config.toml'
         'codex-home:auth.json'

@@ -86,13 +86,13 @@ Implement phase
       → else pressure-release reassessment (normal) or cap-exhausted handoff (Composer phase implementation subagent)
 ```
 
-1. **Implement** the current phase (or full scope if single-phase) using discovery + this repo’s documented conventions.
+1. **Implement** the current phase (or full scope if single-phase) using discovery + this repo’s documented conventions. When the phase introduces machinery, state whether it is **Durable** or **Transitional**; for transitional machinery, state its fulfillment and removal condition.
 2. **Review loop (within a 4-iteration block):** Run **Fast CI Observed** once, then launch **Reviewer A + Bugbot in parallel** with `Completion gate: review-loop` for the ordinary loop. Cursor Task spawn: [implementation-review overlay](../../overlays/cursor/skills/implementation-review/SKILL.md). **Do not launch reviewers if Fast CI fails, is skipped (when Fast is not `n/a`), or is claimed-only** (prose “Fast CI passed” / `ci: pass` with no per-command rows).
    Both launches must begin with the mandatory [agent invocation](../../workflow/agent-invocation.md) envelope; aliases never replace canonical reviewer identity.
 
    Optional evidence frame: when a fixed point and an originating spec both exist, the parent may add `Fixed point:` and `Spec path:` lines to the reviewer invoke payload to enable Standards/Spec axis framing with per-finding citations per [code-review-frame.md](../../workflow/code-review-frame.md). Absent those inputs, reviews are unchanged.
 
-3. If **either** reviewer returns `CHANGES REQUESTED`, or Bugbot/`bug_reviewer` does not return CLEAN/no findings, or Reviewer-a omits required `Supersession closure` or has Blocking / Non-blocking (code/process) / **blocking** test/docs ≠ `"None"`: fix **every must-fix** finding → return to step 2 (increment review iteration within the block). Do **not** treat Reviewer-a **Batchable (deferred)** as loop-blocking. **Do not launch a 5th pair** in the current block.
+3. If **either** reviewer returns `CHANGES REQUESTED`, or Bugbot/`bug_reviewer` does not return CLEAN/no findings, or Reviewer-a omits required `Supersession closure` / `Lifecycle and naming closure`, has Blocking / Non-blocking (code/process) / **blocking** test/docs ≠ `"None"`, or leaves a Supersession `Unresolved` or Lifecycle `Unresolved` / `Unclear` item absent from Blocking / Non-blocking / blocking test/docs: fix **every must-fix** finding → return to step 2 (increment review iteration within the block). Do **not** treat Reviewer-a **Batchable (deferred)** as loop-blocking. **Do not launch a 5th pair** in the current block.
 4. **Exit the block:**
    - If **both** return `APPROVED` → go to step 5 (closeout). Do **not** launch reviewers again unless you subsequently changed code.
    - If iteration **4** ends without dual APPROVED → **stop** here; follow [Pressure release](#pressure-release-4-iteration-blocks) (normal reassessment or Composer cap-exhausted handoff). Do **not** run Full CI, do **not** report `task-phase-complete`, do **not** continue to steps 5–7.
@@ -162,7 +162,7 @@ Pressure release is a **stuckness / thrash brake**, not an opt-out from dual APP
 | Reviewer | Loop-blocking result | May remain open |
 |----------|---------------------|-----------------|
 | **Bugbot / `bug_reviewer`** | CLEAN/no findings; any finding fails this leg | — |
-| **Reviewer-a** | Blocking, Non-blocking (code/process), and **blocking** test/docs are `"None"`; required `Supersession closure` is present, with every `Unresolved` routed into an open loop-blocking list | **Batchable (deferred)** |
+| **Reviewer-a** | Blocking, Non-blocking (code/process), and **blocking** test/docs are `"None"`; required `Supersession closure` and `Lifecycle and naming closure` are present, with every Supersession `Unresolved` and Lifecycle `Unresolved` or `Unclear` routed into an open loop-blocking list | **Batchable (deferred)** |
 
 **Example (Reviewer-a):** A missing unit test for a new auth branch is **blocking test/docs**. A wish-list for broader e2e coverage of an untouched flow is **Batchable (deferred)** and may remain on `APPROVED`.
 
@@ -270,6 +270,7 @@ Before requesting approval, verify for **the current phase**:
 
 - Every new module, test file, and helper imported by the phase is included in the change set
 - Every replacement has its superseded current-facing test/docs/process removed or reconciled; Reviewer-a records this in `Supersession closure`
+- Every touched mechanism has a durable/transitional disposition; fulfilled transitional machinery is removed or explicitly promoted with a responsibility-based name; Reviewer-a records this in `Lifecycle and naming closure`
 - Docs updated in the same pass when patterns or behavior changed
 - No “works on my machine” reliance on untracked files
 

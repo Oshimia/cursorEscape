@@ -6,6 +6,6 @@ description: Explicit-only OpenCode headless runs for scripting, automation, CI,
 
 # opencode-headless-run (Codex wrapper)
 
-Thin advertisement only. Canonical procedure: Read `C:/codex-phase1-fixture/companion/skills/opencode-headless-run/SKILL.md`. Do not duplicate or replace that procedure here.
+Thin advertisement only. Canonical procedure: Read `C:/codex-render-normalization-fixture/companion/skills/opencode-headless-run/SKILL.md`. Do not duplicate or replace that procedure here.
 Invocation: explicit Codex `id` only; do not invoke implicitly.
 
