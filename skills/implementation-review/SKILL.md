@@ -92,7 +92,7 @@ Implement phase
 
    Optional evidence frame: when a fixed point and an originating spec both exist, the parent may add `Fixed point:` and `Spec path:` lines to the reviewer invoke payload to enable Standards/Spec axis framing with per-finding citations per [code-review-frame.md](../../workflow/code-review-frame.md). Absent those inputs, reviews are unchanged.
 
-3. If **either** reviewer returns `CHANGES REQUESTED`, or Bugbot/`bug_reviewer` does not return CLEAN/no findings, or Reviewer-a has Blocking / Non-blocking (code/process) / **blocking** test/docs ≠ `"None"`: fix **every must-fix** finding → return to step 2 (increment review iteration within the block). Do **not** treat Reviewer-a **Batchable (deferred)** as loop-blocking. **Do not launch a 5th pair** in the current block.
+3. If **either** reviewer returns `CHANGES REQUESTED`, or Bugbot/`bug_reviewer` does not return CLEAN/no findings, or Reviewer-a omits required `Supersession closure` or has Blocking / Non-blocking (code/process) / **blocking** test/docs ≠ `"None"`: fix **every must-fix** finding → return to step 2 (increment review iteration within the block). Do **not** treat Reviewer-a **Batchable (deferred)** as loop-blocking. **Do not launch a 5th pair** in the current block.
 4. **Exit the block:**
    - If **both** return `APPROVED` → go to step 5 (closeout). Do **not** launch reviewers again unless you subsequently changed code.
    - If iteration **4** ends without dual APPROVED → **stop** here; follow [Pressure release](#pressure-release-4-iteration-blocks) (normal reassessment or Composer cap-exhausted handoff). Do **not** run Full CI, do **not** report `task-phase-complete`, do **not** continue to steps 5–7.
@@ -162,7 +162,7 @@ Pressure release is a **stuckness / thrash brake**, not an opt-out from dual APP
 | Reviewer | Loop-blocking result | May remain open |
 |----------|---------------------|-----------------|
 | **Bugbot / `bug_reviewer`** | CLEAN/no findings; any finding fails this leg | — |
-| **Reviewer-a** | Blocking, Non-blocking (code/process), and **blocking** test/docs are `"None"` | **Batchable (deferred)** |
+| **Reviewer-a** | Blocking, Non-blocking (code/process), and **blocking** test/docs are `"None"`; required `Supersession closure` is present, with every `Unresolved` routed into an open loop-blocking list | **Batchable (deferred)** |
 
 **Example (Reviewer-a):** A missing unit test for a new auth branch is **blocking test/docs**. A wish-list for broader e2e coverage of an untouched flow is **Batchable (deferred)** and may remain on `APPROVED`.
 
@@ -269,6 +269,7 @@ Do not close the phase or task or tell the user the work is “done” while any
 Before requesting approval, verify for **the current phase**:
 
 - Every new module, test file, and helper imported by the phase is included in the change set
+- Every replacement has its superseded current-facing test/docs/process removed or reconciled; Reviewer-a records this in `Supersession closure`
 - Docs updated in the same pass when patterns or behavior changed
 - No “works on my machine” reliance on untracked files
 

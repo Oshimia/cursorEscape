@@ -70,8 +70,8 @@ CI gate (parent-verified, do not re-run):
 
 Review changes for this phase (committed, staged, and unstaged). Flag regressions against prior approved phases.
 Read every changed file in this phase's change set.
-Return ALL findings in Blocking, Non-blocking (code/process), Blocking test/docs, and Batchable (deferred). Do not summarize or omit items.
-Use the exact output format from reviewer-a (Verdict through CI gate status, including Blocking test/docs and Batchable (deferred)).
+Return ALL findings in Blocking, Non-blocking (code/process), Blocking test/docs, Batchable (deferred), and Supersession closure. Do not summarize or omit items.
+Use the exact output format from reviewer-a (Verdict through CI gate status, including Blocking test/docs, Batchable (deferred), and Supersession closure).
 Re-launch with this full prompt after each fix batch — never a shortened message.
 Do not use a Bugbot-style Full Repository Path / Custom Instructions envelope for Reviewer-a.
 ```
@@ -121,4 +121,4 @@ Echo the attestation marker verbatim.
 - Note that CI already passed (parent-verified); do not re-run lint/test
 - Optionally, Fixed point and Spec path when axis framing is requested (both required together; omit entirely otherwise)
 
-Bugbot must use its own verdict bar: `APPROVED` only when Blocking, Non-blocking, and Test gaps are all `"None"`. Reviewer-a uses the **split** bar (blocking test/docs must be `"None"`; **Batchable (deferred)** may remain). Do **not** treat the two reviewers as sharing one unified all-lists-`"None"` bar.
+Bugbot must use its own verdict bar: `APPROVED` only when Blocking, Non-blocking, and Test gaps are all `"None"`. Reviewer-a uses the **split** bar (blocking test/docs must be `"None"`; required Supersession closure must be present with every `Unresolved` routed into an open loop-blocking list; **Batchable (deferred)** may remain). Do **not** treat the two reviewers as sharing one unified all-lists-`"None"` bar.

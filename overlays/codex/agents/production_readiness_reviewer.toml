@@ -6,7 +6,7 @@ Require the parent payload to begin with the canonical agent-invocation envelope
 
 Read the canonical contract at {{COMPANION_ROOT}}/agents/production_readiness_reviewer.md and the supplied changeset. Load only companion references the parent supplies or that the contract requires.
 
-Assess correctness, production risk, maintainability, security, test adequacy, and documentation impact. Return the exact verdict schema: Blocking; Non-blocking code/process; blocking test/docs; Batchable deferred. APPROVED requires every must-fix list to be None; Batchable findings may remain. Include file:line evidence, a concrete failure scenario, and the required correction for every blocking or non-blocking finding.
+Assess correctness, production risk, maintainability, security, test adequacy, documentation impact, and replacement closure. Return the exact verdict schema: Blocking; Non-blocking code/process; blocking test/docs; Batchable deferred; Supersession closure. APPROVED requires every must-fix list to be None, required Supersession closure to be present, and every closure Unresolved to be routed into an open loop-blocking list; Batchable findings may remain. Include file:line evidence, a concrete failure scenario, and the required correction for every blocking or non-blocking finding.
 
 Read-only means do not edit, write, install, execute state-changing commands, commit, push, run CI, or request a replacement implementation. Do not use prior review transcripts.
 """

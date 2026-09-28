@@ -187,6 +187,7 @@ Never commit migration-only before the implementation subagent reaches dual APPR
 - Bugbot finding lists all "None": yes | no
   - (If nested Bugbot transcript empty/redacted: yes only when same-Task-id Task UI/result zero-findings evidence was used — see Gate B)
 - Reviewer-a blocking lists "None" (Blocking / Non-blocking / blocking test/docs): yes | no
+- Reviewer-a required Supersession closure present and every Unresolved routed to Blocking / Non-blocking / blocking test/docs: yes | no
 - Batchable (deferred): None | [punch list copied from Reviewer-a]
 - Reviewer-a launches this phase (cumulative): N
 - Bugbot launches this phase (cumulative): N
@@ -279,7 +280,7 @@ QC has **two mandatory gates** on the **dual-APPROVED closeout** path — both m
 
 Compare report to **attestation** `git diff --name-only` (not the live tree after roadmap edits).
 
-**REJECT** if: missing attestation; not dual APPROVED / Bugbot lists ≠ `"None"` or Reviewer-a blocking lists ≠ `"None"` (Batchable (deferred) may be non-None — do not REJECT for that alone); Full not pass (unless blocked → ask user to stop lockers); reviewers launched with Full or after dual APPROVED without code changes; phase N+1 production paths in attestation (vs phase Agent context); required approval-preview folder still present; subagent committed/pushed; empty docs-consulted section.
+**REJECT** if: missing attestation; not dual APPROVED / Bugbot lists ≠ `"None"` or Reviewer-a blocking lists ≠ `"None"` or Reviewer-a required `Supersession closure` is missing or has an `Unresolved` item not routed to Blocking / Non-blocking / blocking test/docs (Batchable (deferred) may be non-None — do not REJECT for that alone); Full not pass (unless blocked → ask user to stop lockers); reviewers launched with Full or after dual APPROVED without code changes; phase N+1 production paths in attestation (vs phase Agent context); required approval-preview folder still present; subagent committed/pushed; empty docs-consulted section.
 
 **Cap→Waive ACCEPT:** do **not** REJECT solely for missing dual APPROVED when a complete [Composer waiver attestation](#composer-waiver-attestation) is present and Full passes (or `n/a` + user ack). Still REJECT if Fast/Full failures were “waived,” or if waived items were clearly in-spec must-fix.
 
@@ -301,12 +302,12 @@ If a nested **Reviewer-a** transcript cannot be located after a reasonable searc
 
 #### Acceptable Bugbot zero-findings evidence
 
-When the nested Bugbot transcript body is empty, redacted, or only `<answer></answer>`, **but** the Cursor Task UI or Task result summary for **that same Bugbot Task id** shows **“Bugbot found no bugs”** (or equivalent zero-findings wording), treat Bugbot as **APPROVED** with all finding lists `"None"`. Do **not** REJECT and do **not** re-launch Bugbot solely for an empty/redacted transcript body. Still **REJECT** if: the Bugbot Task cannot be located; **or** there is no transcript **and** no UI/Task zero-findings summary for that id; **or** the UI/summary shows findings / non-zero bugs; **or** the closeout claims Bugbot APPROVED with neither transcript lists nor UI/Task zero-findings evidence for the cited Task id. (Reviewer-a still requires readable Blocking / Non-blocking / blocking test/docs lists in its transcript — this exception is Bugbot-only.)
+When the nested Bugbot transcript body is empty, redacted, or only `<answer></answer>`, **but** the Cursor Task UI or Task result summary for **that same Bugbot Task id** shows **“Bugbot found no bugs”** (or equivalent zero-findings wording), treat Bugbot as **APPROVED** with all finding lists `"None"`. Do **not** REJECT and do **not** re-launch Bugbot solely for an empty/redacted transcript body. Still **REJECT** if: the Bugbot Task cannot be located; **or** there is no transcript **and** no UI/Task zero-findings summary for that id; **or** the UI/summary shows findings / non-zero bugs; **or** the closeout claims Bugbot APPROVED with neither transcript lists nor UI/Task zero-findings evidence for the cited Task id. (Reviewer-a still requires readable Blocking / Non-blocking / blocking test/docs lists and required `Supersession closure` with routed `Unresolved` items in its transcript — this exception is Bugbot-only.)
 
 **REJECT** (with a concrete gap list for `resume`) if any of:
 
 - **Discovery / SOP skip:** no reads of discovery Step 0 / required repo docs / roadmap “Where to read context” before implementing
-- **Review loop skip or compression:** missing Fast CI before reviewers; missing parallel `reviewer-a` + Bugbot; claimed APPROVED without matching reviewer output (**except** Bugbot when [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence) applies); must-fix findings left open on closeout path (Bugbot any list, or Reviewer-a Blocking / Non-blocking / blocking test/docs); do **not** treat Reviewer-a Batchable (deferred) as findings left open; iteration count doesn’t match launches/fixes
+- **Review loop skip or compression:** missing Fast CI before reviewers; missing parallel `reviewer-a` + Bugbot; claimed APPROVED without matching reviewer output (**except** Bugbot when [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence) applies); must-fix findings left open on closeout path (Bugbot any list, or Reviewer-a Blocking / Non-blocking / blocking test/docs, or missing/unrouted required Reviewer-a `Supersession closure`); do **not** treat Reviewer-a Batchable (deferred) as findings left open; iteration count doesn’t match launches/fixes
 - **Pressure-release misuse:** 5th reviewer pair in a block; Full CI run on cap-exhausted handoff; self-renew past the block without Composer triage; Normal-agent-style Terminate used by the implementation subagent to claim phase complete
 - **Gate misuse:** reviewers launched with Full CI; reviewers re-launched after dual APPROVED with no code changes; Full CI skipped or run before dual APPROVED on the closeout path
 - **Shortcut closeout:** empty/fake docs-consulted; approval-preview folder not deleted when required; `git commit` / `git push` by subagent

@@ -1,6 +1,6 @@
 # Intended Workflow
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-28
 
 ## Context
 
@@ -54,10 +54,10 @@ Discover repository documentation
 
 | Leg | Responsibility |
 | --- | --- |
-| `production_readiness_reviewer` | Process, architecture drift, incomplete changesets, blocking tests, and blocking documentation. May approve with explicitly batchable deferred work. |
+| `production_readiness_reviewer` | Process, architecture drift, incomplete changesets, superseded current-facing code/tests/process/docs, blocking tests, and blocking documentation. May approve with explicitly batchable deferred work; unresolved replacement closure blocks. |
 | `bug_reviewer` | Introduced bugs, security, concurrency, and high-value correctness. Reports findings or CLEAN; it never emits blocking/non-blocking or test-gap scaffolding. |
 
-**Required:** At most four dual-review iterations per pressure-release block. At the cap, return a cap-exhausted handoff for owner or Composer triage rather than silently narrowing scope. The production reviewer owns verdict tiers and may approve with explicitly batchable deferred work; the bug leg contributes findings-vs-CLEAN under [`bug-reviewer-finding-rubric.md`](./bug-reviewer-finding-rubric.md), and any reportable bug prevents dual APPROVED.
+**Required:** At most four dual-review iterations per pressure-release block. At the cap, return a cap-exhausted handoff for owner or Composer triage rather than silently narrowing scope. The production reviewer owns verdict tiers, must return required `Supersession closure`, and may approve with explicitly batchable deferred work; unresolved closure is routed into the applicable loop-blocking list. The bug leg contributes findings-vs-CLEAN under [`bug-reviewer-finding-rubric.md`](./bug-reviewer-finding-rubric.md), and any reportable bug prevents dual APPROVED.
 
 ### CI architecture (Required)
 

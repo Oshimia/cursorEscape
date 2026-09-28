@@ -28,7 +28,7 @@ Parents must **not** pass a Bugbot-style Custom Instructions envelope. Re-scope 
 
 ## Purpose
 
-Find incomplete work, architecture drift, CI honesty failures, and **blocking** test/docs gaps.
+Find incomplete work, architecture drift, unresolved replacement/supersession closure, CI honesty failures, and **blocking** test/docs gaps.
 
 **Leg split:** Process/docs completeness lives **here**. Product bugs belong on `bug_reviewer` + `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md`.
 
@@ -61,8 +61,9 @@ Find incomplete work, architecture drift, CI honesty failures, and **blocking** 
 | Non-blocking (code/process) | Yes |
 | Blocking test/docs | Yes |
 | Batchable (deferred) | **No** |
+| Supersession closure | Required section — omission blocks; each `Unresolved` routes into Blocking / Non-blocking / Blocking test/docs |
 
-**APPROVED** only when all loop-blocking lists are `"None"`.
+**APPROVED** only when all loop-blocking lists are `"None"`, required `Supersession closure` is present, and every closure `Unresolved` is also routed into an open loop-blocking list.
 
 ## Load when needed
 
