@@ -1,6 +1,6 @@
 # Instruction Layering
 
-**Last updated:** 2026-09-27
+**Last updated:** 2026-09-28
 
 ## Context
 
@@ -47,7 +47,7 @@ Each skill remains short: name, description, invocation rule, outline, verificat
 | Kilo Code | Composed workflow/rule surfaces carry the thin gate. |
 | Codex | Codex mapping (Active): canonical rules plus a Codex footer compose the marker-bounded managed block on the host AGENTS surface; the independent skill catalog remains on-demand. Subagent cleanup remains in the composed block; Codex has no managed runtime hook. |
 
-Retained overlay extension surfaces may carry host-specific content: `rules/` for custom procedural rules beyond the canonical set, and `hooks/` for host-specific lifecycle hook configurations. Reserved surfaces contain only their `_index.md` placeholders. Extension presence is not load behavior; host content must be bound to and trust through its actual load or lifecycle surface. Workflows remain canonical regardless of host.
+Host-specific `rules/`, `hooks/`, and analogous surfaces exist only when a manifest binds them to an actual load or lifecycle surface. Surface presence is not load behavior; host content must be bound to and trust through that surface. Workflows remain canonical regardless of host.
 
 Hosts may add restrictions when their tool model requires them, but they may not weaken default-on gates or inline an alternate loop.
 

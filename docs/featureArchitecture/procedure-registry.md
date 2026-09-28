@@ -1,6 +1,6 @@
 # Procedure registry
 
-**Last updated:** 2026-09-27
+**Last updated:** 2026-09-28
 
 ## Context
 
@@ -39,9 +39,9 @@ To add a governed entity:
 
 Any ambiguity fails closed; the registry does not infer missing identity or order from host files.
 
-### Hooks and overlay extension surfaces
+### Host-specific surfaces
 
-Lifecycle hooks are currently host-only overlay and manifest concerns; the registry schema and validator do not yet have a `hooks` entity kind. That future kind will require minimum fields `id` and either `source` (inventory) or `body` (catalog). Separately, retained overlay extension surfaces are CI-owned exactly as declared by U23. A placeholder is structural reserve capacity, not a deployed destination or active behavior.
+Lifecycle hooks and other host-specific surfaces are manifest concerns. The registry has no speculative structural `hooks` entity; if a future host requires one, add it with the same minimum identity and source/body binding fields as other manifest entities. A directory or placeholder is not a deployed destination or active behavior.
 
 ### Fail-closed boundary
 
@@ -60,7 +60,7 @@ Every governed ownership class has a blocking guard in Fast CI:
 | Antigravity | Managed composition and runtime rejection of forbidden fields. |
 | Cline and Kilo Code | Registry-owned composition and explicit destination binding. |
 | Codex managed AGENTS block | Managed-block boundary and writer-side rejection of unknown/divergent composition. |
-| Overlay extension surfaces | CI-pinned retained paths and content; populated Cursor rules use exact filename sets, reserved surfaces use UTF-8 no-BOM placeholder bytes, and Unit-suite failures propagate. |
+| Host-specific surfaces | Manifest-bound destinations and their canonical/composition sources are validated; unbound structural reserves are absent rather than pinned as behavior. |
 | Source ingress | Missing, BOM-corrupted, or noncanonical sources fail. |
 | Generated-file boundaries | Protected roots and unrestricted output roots fail. |
 | Deterministic rendering | Double render must produce identical bytes. |
@@ -77,7 +77,7 @@ Committed baselines are generated regression anchors, never hand-edited expectat
 
 | Gate | Sole entry point | Role |
 | --- | --- | --- |
-| Fast | `scripts/normalization/Invoke-NormalizationFastCI.ps1` | Blocking registry, inventory, current-state, host-sync Unit, extension-surface, focused Codex-render, hygiene, and diff checks. |
+| Fast | `scripts/normalization/Invoke-NormalizationFastCI.ps1` | Blocking registry, inventory, current-state, host-sync Unit, focused Codex-render, hygiene, and diff checks. |
 | Full | `scripts/normalization/Invoke-NormalizationFullCI.ps1` | Fast plus consolidated host, all-stack disposable dry-run, Codex lifecycle, drift fixture, and disposable render verification. |
 
 There is exactly one Fast entry point and one Full entry point. Host-sync suite scripts are internal Full CI components, not alternate entry points.

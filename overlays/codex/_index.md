@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-09-28
 **Status:** Active; activated 2026-09-08 after owner-authorized three-client smoke.
-**SoT boundary:** canonical procedure remains at repository-root `skills/`, `agents/`, `workflow/`, and `rules/`. This overlay contains Codex-native thin wrappers, invocation metadata, agent wiring, the registry-composed managed-block footer, and its source-only hooks surface.
+**SoT boundary:** canonical procedure remains at repository-root `skills/`, `agents/`, `workflow/`, and `rules/`. This overlay contains Codex-native thin wrappers, invocation metadata, agent wiring, and the registry-composed managed-block footer.
 **Tokens:** `{{COMPANION_ROOT}}` is replaced with the absolute companion checkout path at render time. No rendered leaf may use a relative hop across either Codex root.
 
 ## Destination inventory
@@ -12,11 +12,7 @@
 | `codex-home` | `AGENTS.md` marker-bounded managed block composed from canonical rules plus [footers/codex-wiring.md](./footers/codex-wiring.md); guard-only `AGENTS.override.md`; seven `agents/*.toml` agents | [agents/](./agents/), [footers/](./footers/) |
 | `skill-root` | 23 `<skill-id>/SKILL.md` wrappers: 22 canonical skills plus generated `pre-commit-ci-gate` | [skills/](./skills/) |
 
-The exact deployed leaf set is pinned by `scripts/host-sync/baselines/codex-manifest-schema-2026-09.json` and mirrored by `scripts/host-sync/manifests/codex.manifest.psd1`. The manifest is registered through `scripts/host-sync/Register-StackAdapters.ps1`; orchestration dry-runs require explicit disposable roots for CI. `AGENTS.override.md` is deliberately guard-only: a non-empty live override must block Apply, so it has no generated body. Codex has no separate `rules/` overlay surface.
-
-## Extension surfaces
-
-Codex has one retained overlay extension surface: [hooks/](./hooks/) contains only an `_index.md` placeholder. It reserves host-specific capacity without creating a host load surface. U23 pins it in its exact retained-surface map. There is no managed Codex runtime hook; subagent cleanup is enforced by the composed agent rule.
+The exact deployed leaf set is pinned by `scripts/host-sync/baselines/codex-manifest-schema-2026-09.json` and mirrored by `scripts/host-sync/manifests/codex.manifest.psd1`. The manifest is registered through `scripts/host-sync/Register-StackAdapters.ps1`; orchestration dry-runs require explicit disposable roots for CI. `AGENTS.override.md` is deliberately guard-only: a non-empty live override must block Apply, so it has no generated body. Codex has no separate `rules/` or `hooks/` overlay surface; subagent cleanup is enforced by the composed agent rule.
 
 ## Harness rules
 

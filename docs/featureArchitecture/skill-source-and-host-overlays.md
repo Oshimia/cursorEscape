@@ -1,6 +1,6 @@
 # Skill source and host overlays
 
-**Last updated:** 2026-09-27
+**Last updated:** 2026-09-28
 
 ## Context
 
@@ -73,11 +73,9 @@ When a host-specific pattern is required by more than one stack, first express t
 
 Do not promote a host workaround into canonical prose until its portable rule is explicit. Do not leave a shared concern in one overlay after a second stack needs the same behavior.
 
-### Extension surfaces (Required)
+### Host surfaces (Required)
 
-Retained overlay extension surfaces provide optional homes for host-specific `rules/` or `hooks/` content. Agents and skills already have per-host surfaces; workflows remain canonical, and host-specific workflow notes belong in instruction footers rather than a copied workflow tree.
-
-U23 owns the exact retained-surface map. Cursor's rules directory retains its four native `.mdc` files; reserved surfaces in that map contain only `_index.md` placeholders. A placeholder reserves source-only capacity; it is not installed or interpreted unless a host manifest binds it to a real load surface. CI pins retained paths and content and propagates Unit-suite failures without importing Cursor's native format elsewhere.
+A host-specific `rules/`, `hooks/`, or analogous surface exists only when that host's manifest binds it to a real load or lifecycle surface. Agents and skills already have per-host surfaces; workflows remain canonical, and host-specific workflow notes belong in instruction footers rather than a copied workflow tree. Do not create empty reserve directories or placeholder files as speculative capacity.
 
 ### Host examples (Required)
 

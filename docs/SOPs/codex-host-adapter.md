@@ -5,7 +5,7 @@
 
 ## Context
 
-This SOP operates the Codex adapter. The companion repository owns portable procedure and contracts; the [Codex overlay](../../overlays/codex/_index.md) owns thin wrappers, invocation policy, agent wiring, the registry-composed managed-block footer, and its source-only hooks surface. Codex has no managed runtime hook; subagent cleanup is enforced by the always-on agent rule.
+This SOP operates the Codex adapter. The companion repository owns portable procedure and contracts; the [Codex overlay](../../overlays/codex/_index.md) owns thin wrappers, invocation policy, agent wiring, and the registry-composed managed-block footer. Codex has no managed runtime hook or overlay structural reserve; subagent cleanup is enforced by the always-on agent rule.
 
 The specialized adapter requires two explicit absolute roots. The operator entry resolves effective roots (`CODEX_HOME` or `~/.codex`, and `~/.agents/skills`) and passes them explicitly; the adapter never infers either root. Both roots must exist, be directories, have no reparse-point ancestor, and be independent and non-nested.
 
@@ -36,8 +36,6 @@ The specialized adapter requires two explicit absolute roots. The operator entry
 | `skill-root` | 23 thin `SKILL.md` wrappers: 22 canonical skills plus generated `pre-commit-ci-gate` |
 
 Reports use root-qualified identities (`codex-home/...`, `skill-root/...`) so same-relative names cannot be confused across roots. Standalone managed leaves carry `cursorEscape-managed:v1`; the `AGENTS.md` block uses `cursorEscape-managed-block:v1`; JSON leaves use equivalent `_ownershipMarker` and `_ownershipSource` fields.
-
-The separate `overlays/codex/hooks/` extension surface is placeholder-only. It preserves host-specific capacity but is not a manifest destination and installs no runtime hook.
 
 Repository retirement is contract-only: Apply plans and writes manifest destinations; it does not prune unplanned legacy files. If a Codex home still contains retired `hooks.json` or `subagent_reminder.ps1`, remove those exact live artifacts separately under explicit owner authorization.
 

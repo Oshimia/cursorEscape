@@ -344,9 +344,9 @@ Assert-Pass 'Codex overlay index records active composed setup' (
     $overlay.Contains('**Status:** Active; activated 2026-09-08 after owner-authorized three-client smoke') -and
     $overlay.Contains('registry-composed managed-block footer')
 )
-Assert-Pass 'Codex overlay index records its retained hooks surface' (
-    $overlay.Contains('## Extension surfaces') -and
-    $overlay.Contains('./hooks/')
+Assert-Pass 'Codex overlay index has no structural extension surface' (
+    -not $overlay.Contains('## Extension surfaces') -and
+    -not $overlay.Contains('./hooks/')
 )
 $overlayIndex = Read-RepoFile 'overlays/_index.md'
 Assert-Pass 'overlay index includes Codex' ($overlayIndex.Contains('[codex/](./codex/_index.md)'))
@@ -372,9 +372,9 @@ Assert-Pass 'host-fidelity FA records Codex activation and runtime attestation' 
     $fidelityFa.Contains('Codex activated 2026-09-08') -and
     $fidelityFa.Contains('C1–C6 runtime attestation')
 )
-Assert-Pass 'host-fidelity FA records extension structure without presence-as-behavior' (
-    $fidelityFa.Contains('The retained structural extension surfaces are CI-pinned') -and
-    $fidelityFa.Contains('not adaptation evidence by themselves')
+Assert-Pass 'host-fidelity FA records manifest-bound structure without presence-as-behavior' (
+    $fidelityFa.Contains('Host-specific structure is behavior-bearing only through') -and
+    $fidelityFa.Contains('manifest-bound load or lifecycle surface')
 )
 
 $workflowSop = Read-RepoFile 'docs/SOPs/editing-companion-workflow.md'
