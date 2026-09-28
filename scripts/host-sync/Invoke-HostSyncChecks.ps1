@@ -3,9 +3,8 @@
 .SYNOPSIS
   Consolidated host-sync check suite for unit, composition, and focused dry-run checks.
 .DESCRIPTION
-  Preserves the former independent suites as named, independently callable seams.
-  Unit and Composition are available immediately; DryRun is added by the follow-up
-  consolidation phase. Read-only plus disposable scratch writes only.
+  Unit, Composition, DryRun, and All are available from this consolidated check suite.
+  Read-only plus disposable scratch writes only.
 #>
 [CmdletBinding()]
 param(
@@ -21,11 +20,11 @@ $script:SuiteFailures = 0
 if ($Suite -in @('Unit', 'All')) {
 <#
 .SYNOPSIS
-    Remediation program unit checks (D6 home): render-helper and skew-guard contract tests.
+    Consolidated host-sync unit checks: render-helper and skew-guard contract tests.
     Fails closed: any failed case exits non-zero. No writes outside this script's scratch dir.
 .NOTES
-    Home decision per roadmap Phase 0 D6: consolidates unit checks + remediation checks.
-    Phase 1 cases: fail-closed exactly-once substitutions (no-match / multi-match),
+    The unit suite validates shared render-helper and skew-guard responsibilities.
+    Cases include fail-closed exactly-once substitutions (no-match / multi-match),
     skew-guard source identities (sibling flags, same-source-different-substitution rows,
     plain/base/shared normalization, consumer unroll safety).
 #>
@@ -122,7 +121,7 @@ try {
 
     # ---------- Resolve-HostSyncSourcePath: source-class resolution ----------
     # ---------- Get-CrossStackSourceOverlap: source-identities ----------
-    # Regression anchor: unmigrated manifests (no base:/shared:/Substitutions) must still
+    # Regression anchor: manifests without base:/shared:/Substitutions must still
     # flag the known shared stump surfaces. Current manifests share no plain sources across
     # stacks by design (overlays are per-stack), so an empty result is EXPECTED today; the
     # contract under test is the empty->count-zero unroll and identity shape.
@@ -276,10 +275,10 @@ $script:SuiteFailures += $(if ($failures -gt 0) { 1 } else { 0 })
 if ($Suite -in @('Composition', 'All')) {
 <#
 .SYNOPSIS
-  Phase 2 remediation checks (per-entry v2 migration): single-source-per-Dest，
+  Composition checks: single-source-per-Dest，
   fail-closed substitution behavior (via unit checks)， residual host markers，
-  C1 gate atoms， persistent 12k rendered size， baseline byte-equality for migrated
-  whole-file shares， composed-instruction surface properties.
+  C1 gate atoms， persistent 12k rendered size， baseline byte-equality for shared
+  whole-file leaves， composed-instruction surface properties.
   Exits non-zero on any failure. Read-only + scratch only (no live writes).
 #>
 Set-StrictMode -Version Latest
@@ -338,9 +337,8 @@ foreach ($sid in @('Antigravity', 'OpenCode', 'Cursor', 'Vscode', 'Cline', 'Kilo
 }
 
 # ---------- 3. Baseline byte-equality: rendered antigravity skill dests == committed baselines ----------
-# Compare basis (remediation-checks spec, single statement): the committed render baselines
-# (scripts/host-sync/render-baselines/antigravity/) are THE regression surface for the relocation class —
-# each baseline is the token-merged HEAD-authored overlay leaf captured at migration time.
+# Baseline invariant: committed Antigravity render baselines are the regression surface for
+# shared whole-file skill leaves.
 $baselineRoot = Join-Path $hostSyncRoot 'render-baselines\antigravity'
 $baselinePairs = @(
     @{ Dest = 'config/skills/discovery/SKILL.md';                    Baseline = 'overlays__antigravity__skills__discovery__SKILL.md' }
@@ -419,11 +417,11 @@ foreach ($authored in @('skills\composer\SKILL.md', 'skills\implementation-revie
     Assert-Pass "authored leaf still present: $authored" (Test-Path -LiteralPath (Join-Path $agyOverlay $authored))
 }
 
-# ---------- 8. Migrated/composed leaves deleted from overlay ----------
+# ---------- 8. Base-sourced/composed leaves remain absent from overlay ----------
 foreach ($gone in @('skills\discovery\SKILL.md', 'skills\implementation-plan\SKILL.md', 'skills\plan-review\SKILL.md',
     'skills\documentation-architecture\SKILL.md', 'skills\roadmap\SKILL.md', 'skills\diagnosing-bugs\SKILL.md',
     'skills\opencode-headless-run\SKILL.md', 'skills\pre-commit-ci-gate\SKILL.md', 'GEMINI.md')) {
-    Assert-Pass "migrated/composed leaf deleted from overlay: $gone" (-not (Test-Path -LiteralPath (Join-Path $agyOverlay $gone)))
+    Assert-Pass "base-sourced/composed leaf absent from overlay: $gone" (-not (Test-Path -LiteralPath (Join-Path $agyOverlay $gone)))
 }
 
 # ---------- 9. Composed pre-commit stub: gate atoms + footer reached the render ----------
@@ -479,7 +477,7 @@ if ((Test-Path -LiteralPath $instrCommittedPath) -and (Test-Path -LiteralPath $a
         [BitConverter]::ToString($instrBytes) -eq [BitConverter]::ToString($agentsBytes))
 }
 
-Write-Output ('phase2 remediation checks: {0} passed, {1} failed' -f $pass, $failures)
+Write-Output ('composition checks: {0} passed, {1} failed' -f $pass, $failures)
     Write-Output ('composition suite boundary reached.')
 }
 
@@ -535,8 +533,8 @@ $beforeAll = Get-LiveOpenCodeSnapshot -LiveRoot $liveOpenCode
 $liveCursor = Join-Path $env:USERPROFILE '.cursor'
 $beforeCursor = Get-LiveOpenCodeSnapshot -LiveRoot $liveCursor
 
-$codexAllDryRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase2fastci-codex-" + [Guid]::NewGuid().ToString('N'))
-$skillsAllDryRoot = Join-Path ([IO.Path]::GetTempPath()) ("phase2fastci-skills-" + [Guid]::NewGuid().ToString('N'))
+$codexAllDryRoot = Join-Path ([IO.Path]::GetTempPath()) ("host-sync-dryrun-codex-" + [Guid]::NewGuid().ToString('N'))
+$skillsAllDryRoot = Join-Path ([IO.Path]::GetTempPath()) ("host-sync-dryrun-skills-" + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $codexAllDryRoot -Force | Out-Null
 New-Item -ItemType Directory -Path $skillsAllDryRoot -Force | Out-Null
 try {
@@ -558,7 +556,7 @@ $syncSources = @(
     (Join-Path $hostSyncRoot 'HostSync.Core.ps1')
 )
 $combined = ($syncSources | ForEach-Object { Get-Content -LiteralPath $_ -Raw }) -join "`n"
-Assert-Pass 'OpenCode adapter present (not stub)' ($combined -notmatch 'Phase 2 stub')
+Assert-Pass 'OpenCode adapter present (not stub)' ($combined -notmatch 'stub')
 Assert-Pass 'Merge-HashtablePreserve in core' ($combined -match 'Merge-HashtablePreserve')
 Assert-Pass 'AGENTS dual-write helper present' ($combined -match 'Invoke-OpenCodeAgentsDualWrite')
 Assert-Pass 'no host-sync-apply backup paths in OpenCode sources' ($combined -notmatch 'host-sync-apply-|SkipBackup')
@@ -588,7 +586,7 @@ Assert-Pass 'merged build.task permission puts * first' ($taskKeys.Count -ge 1 -
 Assert-Pass 'merged global bash permission puts * first' ($bashKeys.Count -ge 1 -and $bashKeys[0] -eq '*')
 Assert-Pass 'Optimize-OpenCodePermissionKeyOrder in core' ((Get-Content (Join-Path $hostSyncRoot 'HostSync.Core.ps1') -Raw) -match 'Optimize-OpenCodePermissionKeyOrder')
 
-# --- Antigravity stack (Phase 1 structural blocks; behavioral dry-run/snapshot/inventory blocks activate in Phase 2) ---
+# --- Antigravity stack: manifest structure, behavioral dry-run, snapshot, and inventory guards ---
 $agyManifestPath = Join-Path $hostSyncRoot 'manifests\antigravity.manifest.psd1'
 Assert-Pass 'antigravity manifest exists' (Test-Path -LiteralPath $agyManifestPath)
 if (Test-Path -LiteralPath $agyManifestPath) {
@@ -609,9 +607,9 @@ if (Test-Path -LiteralPath $agyManifestPath) {
     $geminiEntries = @($agyManifest.CopyEntries | Where-Object { $_.Dest -eq 'GEMINI.md' })
     Assert-Pass 'antigravity replaces GEMINI.md via exactly one entry' ($geminiEntries.Count -eq 1)
     $skillDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'config/skills/*' })
-    # 2026-08-29 (Phase 3 retirement, D4 map): 9 -> 11. The canonical skill inventory is
-    # now eleven ids (opencode-* pair global on every stack per the 2026-08-26 ruling;
-    # pre-commit-ci-gate composed from base: SoT in Phase 2).
+    # The canonical skill inventory is eleven ids.
+    # The opencode-* pair is global on every stack;
+    # pre-commit-ci-gate is composed from its base rule source.
     Assert-Pass 'antigravity skill dests under config/skills' ($skillDests.Count -eq 11)
     $wfDests = @($agyManifest.CopyEntries | Where-Object { $_.Dest -like 'antigravity/global_workflows/*' })
     Assert-Pass 'antigravity workflow dests under global_workflows' ($wfDests.Count -eq 3)
@@ -630,11 +628,11 @@ Assert-Pass 'antigravity clone adapter deleted (dispatches to Generic)' (-not (T
 if (Test-Path -LiteralPath $agyAdapterPath) {
     $agyAdapterText = Get-Content -LiteralPath $agyAdapterPath -Raw
     Assert-Pass 'generic adapter exports Invoke-StackHarnessSync' ($agyAdapterText -match 'function Invoke-StackHarnessSync')
-    Assert-Pass 'generic adapter is not a stub' ($agyAdapterText -notmatch 'Phase 2 stub')
+    Assert-Pass 'generic adapter is not a stub' ($agyAdapterText -notmatch 'stub')
     Assert-Pass 'generic adapter reuses shared Copy-ManifestEntry' ($agyAdapterText -match 'Copy-ManifestEntry')
 }
 
-# --- VS Code stack structural blocks (vscode bring-up 2026-09-01) ---
+# --- VS Code stack structural and dry-run guards ---
 $vscManifestPath = Join-Path $hostSyncRoot 'manifests\vscode.manifest.psd1'
 Assert-Pass 'vscode manifest exists' (Test-Path -LiteralPath $vscManifestPath)
 if (Test-Path -LiteralPath $vscManifestPath) {
@@ -658,7 +656,7 @@ if (Test-Path -LiteralPath $vscManifestPath) {
     if (Test-Path -LiteralPath $vscAdapterPath) {
         $vscAdapterText = Get-Content -LiteralPath $vscAdapterPath -Raw
         Assert-Pass 'generic adapter exports Invoke-StackHarnessSync (vscode-leg)' ($vscAdapterText -match 'function Invoke-StackHarnessSync')
-        Assert-Pass 'generic adapter is not a stub (vscode-leg)' ($vscAdapterText -notmatch 'Phase 2 stub')
+        Assert-Pass 'generic adapter is not a stub (vscode-leg)' ($vscAdapterText -notmatch 'stub')
     }
     $vscLive = Join-Path $env:USERPROFILE '.copilot'
     $beforeVsc = Get-LiveOpenCodeSnapshot -LiveRoot $vscLive
@@ -679,8 +677,8 @@ $afterAgy = Get-LiveOpenCodeSnapshot -LiveRoot $agyLive
 Assert-Pass 'dry-run Antigravity made no live writes' (Test-LiveOpenCodeUnchanged -Before $beforeAgy -After $afterAgy)
 
 # Inventory-drift guard: overlay ids equal the canonical eleven AND each exists in companion skills/
-# 2026-08-29 (Phase 3 retirement, D4 map): expectedNine -> eleven. opencode-headless-run and
-# opencode-history-search are global on every stack (opencode-overlay inventory = the parity bar).
+# opencode-headless-run and opencode-history-search are global on every stack; the OpenCode
+# overlay inventory is the parity bar.
 $expectedSkillIds = @('composer', 'diagnosing-bugs', 'discovery', 'documentation-architecture', 'implementation-plan', 'implementation-review', 'opencode-headless-run', 'opencode-history-search', 'plan-review', 'pre-commit-ci-gate', 'roadmap')
 $agyOverlaySkillsRoot = Join-Path $companionRoot 'overlays\antigravity\skills'
 $actualAgyIds = @(Get-ChildItem -LiteralPath $agyOverlaySkillsRoot -Directory | ForEach-Object { $_.Name })

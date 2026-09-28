@@ -1,6 +1,6 @@
 # Codex overlay — active composed harness map
 
-**Last updated:** 2026-09-28
+**Last updated:** 2026-09-29
 **Status:** Active; activated 2026-09-08 after owner-authorized three-client smoke.
 **SoT boundary:** canonical procedure remains at repository-root `skills/`, `agents/`, `workflow/`, and `rules/`. This overlay contains Codex-native thin wrappers, invocation metadata, agent wiring, and the registry-composed managed-block footer.
 **Tokens:** `{{COMPANION_ROOT}}` is replaced with the absolute companion checkout path at render time. No rendered leaf may use a relative hop across either Codex root.
@@ -18,8 +18,8 @@ The exact deployed leaf set is pinned by `scripts/host-sync/baselines/codex-mani
 
 - Generated standalone files carry `cursorEscape-managed:v1`; the managed `AGENTS.md` block is bounded by matching `cursorEscape-managed-block:v1` begin/end markers.
 - The managed `AGENTS.md` block is registry-composed from the four canonical gates plus the Codex wiring footer; its cleanup instruction remains part of the composed output.
-- All 23 wrappers are thin frontmatter-plus-pointer leaves. Their concise descriptions are the initial-catalog contract and must remain within the 8,000-character budget asserted by Fast CI.
-- `opencode-headless-run` and `opencode-history-search` are explicit-only. Their minimal `agents/openai.yaml` metadata sets `policy.allow_implicit_invocation: false`; the metadata is overlay-only in this phase because the Phase 0 schema pins one `SKILL.md` leaf per wrapper.
+- All 23 wrappers are thin frontmatter-plus-pointer leaves. Their concise descriptions are the current catalog contract and must remain within the 8,000-character budget asserted by Fast CI.
+- `opencode-headless-run` and `opencode-history-search` are explicit-only. Their minimal `agents/openai.yaml` metadata sets `policy.allow_implicit_invocation: false`; the metadata is overlay-only because the current manifest schema pins one `SKILL.md` leaf per wrapper.
 - Reviewer and explorer agents use `sandbox_mode = "read-only"`. No persistent leaf pins a reasoning setting or model identity; inheritance is intentional.
 - `{{COMPANION_ROOT}}` is the only authorized base for canonical procedure, contract, rule, FA, and SOP reads.
 

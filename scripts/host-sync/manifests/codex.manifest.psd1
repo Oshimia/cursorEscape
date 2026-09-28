@@ -55,9 +55,9 @@
     )
 
     # Minimal Codex skill metadata for deviations from implicit invocation.
-    # The Phase 0 schema intentionally pins only SKILL.md destinations, so this
+    # The current schema intentionally pins only SKILL.md destinations, so this
     # metadata remains overlay evidence until its installation seam is expanded
-    # in a separately reviewed phase.
+    # in a separately reviewed change.
     OverlayOnlySkillMetadata         = @(
         @{ SkillId = 'opencode-headless-run'; RelativePath = 'skills/opencode-headless-run/agents/openai.yaml'; AllowImplicitInvocation = $false }
         @{ SkillId = 'opencode-history-search'; RelativePath = 'skills/opencode-history-search/agents/openai.yaml'; AllowImplicitInvocation = $false }
