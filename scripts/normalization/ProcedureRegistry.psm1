@@ -3,7 +3,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $script:Hosts = @('Cursor','OpenCode','Antigravity','Vscode','Cline','Kilocode','Codex')
 $script:ExpectedKinds = @{ agents = 'agents.json'; skills = 'skills.json'; rules = 'rules.json'; workflows = 'workflows.json' }
-$script:CanonicalAgentContractCache = @{}
+
 $script:SkillHostFrontmatterProfileSkillIds = @('implementation-plan','plan-review','implementation-review','composer','discovery','documentation-architecture','roadmap','research','bug-review-sweep','diagnosing-bugs','architecture-survey','codebase-design','domain-modeling','grilling','prototype','tdd','resolving-merge-conflicts','teach','wait-what','wizard','opencode-headless-run','opencode-history-search')
 
 function Add-RegistryFailure([System.Collections.Generic.List[string]]$Failures,[string]$Invariant,[string]$Detail) {
@@ -578,31 +578,26 @@ function Get-RegistrySkillHostFrontmatterShadow {
   return $rows
 }
 
-function Get-CanonicalAgentContracts([string]$RepoRoot,$Inventory) {
+function Get-CanonicalAgentContracts([string]$RepoRoot,$Catalog) {
   $workflowPath = Join-Path $RepoRoot 'workflow/agent-invocation.md'
   if (-not (Test-Path -LiteralPath $workflowPath -PathType Leaf)) { throw "FAIL: canonical invocation contract missing: workflow/agent-invocation.md" }
   $workflowLines = @(Get-Content -LiteralPath $workflowPath)
   $contracts = @{}
-  foreach ($id in @($Inventory.governed_agents)) {
-    $rows = @($Inventory.parity_matrix | Where-Object { [string]$_.agent -eq [string]$id })
-    if ($rows.Count -ne 7) { throw "FAIL: CanonicalInventory: agent '$id' has $($rows.Count) parity rows" }
-    $firstReads = @($rows | ForEach-Object { [string]$_.first_read_contract } | Select-Object -Unique)
-    if ($firstReads.Count -ne 1) { throw "FAIL: CanonicalInventory: agent '$id' has ambiguous first-read contracts" }
-    $required = $Inventory.canonical_required_reading.PSObject.Properties[$id]
-    if ($null -eq $required) { throw "FAIL: CanonicalInventory: agent '$id' has no required reading" }
+  foreach ($item in @($Catalog.items)) {
+    $id = [string]$item.id
     $role = Get-MarkdownTableRow $workflowLines '## Role map' $id 5
     $failure = Get-MarkdownTableRow $workflowLines '## Malformed invocation' $id 2
-    if ($null -eq $role -or $null -eq $failure) { throw "FAIL: CanonicalContract: agent '$id' is absent from canonical invocation tables" }
-    $authorities = @($rows | ForEach-Object { [string]$_.authority } | Where-Object { $_ } | ForEach-Object { $_ -replace '\s*\(sandbox_mode\)$','' } | Select-Object -Unique)
-    $canonicalIsolation = @($rows | ForEach-Object { [string]$_.isolation } | Where-Object { $_ } | ForEach-Object { if ($_ -eq 'fresh task/session per pass') { 'clean-context' } else { $_ } } | Select-Object -Unique)
-    if ($authorities.Count -ne 1 -or $canonicalIsolation.Count -ne 1) { throw "FAIL: CanonicalInventory: agent '$id' has ambiguous policy evidence" }
+    if ($null -eq $role -or $null -eq $failure) { continue }
+    $bindings = if ($item.PSObject.Properties['hostBindings']) { @($item.hostBindings) } else { @() }
+    $represented = @($bindings | Where-Object { [string]$_.representation -ne 'missing' })
+    $authorities = @($represented | ForEach-Object { [string]$_.authority } | Where-Object { $_ } | ForEach-Object { $_ -replace '\s*\(sandbox_mode\)$','' } | Select-Object -Unique)
+    $canonicalIsolation = @($represented | ForEach-Object { [string]$_.isolation } | Where-Object { $_ } | ForEach-Object { if ($_ -eq 'fresh task/session per pass') { 'clean-context' } else { $_ } } | Select-Object -Unique)
     $aliases = if ($role[3] -eq 'none') { @() } else { @($role[3] -split ';' | ForEach-Object { $_.Trim() } | Where-Object { $_ }) }
-    $contracts[[string]$id] = [pscustomobject]@{
-      FirstRead = $firstReads[0]
-      RequiredReading = Get-RegistrySequence $required.Value
+    $contracts[$id] = [pscustomobject]@{
+      FirstRead = [string]$role[1]
       Aliases = $aliases
-      Authority = $authorities[0]
-      Isolation = $canonicalIsolation[0]
+      Authority = if ($authorities.Count -eq 1) { [string]$authorities[0] } else { '<ambiguous>' }
+      Isolation = if ($canonicalIsolation.Count -eq 1) { [string]$canonicalIsolation[0] } else { '<ambiguous>' }
       LoopGate = [string]$role[4]
       FailLoudShape = [string]$failure[1]
     }
@@ -984,6 +979,7 @@ function Test-RegistryCatalog {
     }
   }
   $aliasOwners = [System.Collections.Generic.Dictionary[string,string]]::new([StringComparer]::Ordinal)
+  $agentContracts = if ($Kind -eq 'agents') { Get-CanonicalAgentContracts -RepoRoot $RepoRoot -Catalog $Catalog } else { $null }
   foreach ($item in $items) {
     $id = [string]$item.id
     if (-not $ids.Add($id)) { Add-RegistryFailure $failures 'DuplicateId' "$Kind/$id"; continue }
@@ -991,56 +987,76 @@ function Test-RegistryCatalog {
     if ($null -eq $body) { continue }
     if ($body -and (Get-Content -LiteralPath $body -Raw).Contains('BEGIN MANAGED VIEW')) { Add-RegistryFailure $failures 'ManagedViewOwnership' "$id canonical body contains generated view" }
     if ($Kind -eq 'agents') {
-      if ($null -eq $Inventory) { throw 'FAIL: agent canonical consistency requires the Phase 0 inventory' }
-      if (-not $script:CanonicalAgentContractCache.ContainsKey($RepoRoot)) { $script:CanonicalAgentContractCache[$RepoRoot] = Get-CanonicalAgentContracts -RepoRoot $RepoRoot -Inventory $Inventory }
-      $contract = $script:CanonicalAgentContractCache[$RepoRoot][$id]
+      $contract = $agentContracts[$id]
       if ($null -eq $contract) { Add-RegistryFailure $failures 'CanonicalAgentContract' "$id has no canonical contract"; continue }
       $rawAgentBody = Get-Content -LiteralPath $body -Raw
       if ($rawAgentBody -notmatch "You are (?:\*\*)?the $([regex]::Escape($id)) agent") { Add-RegistryFailure $failures 'CanonicalIdentity' "$id body does not declare its canonical envelope identity" }
       if ([string]$item.body -cne $contract.FirstRead) { Add-RegistryFailure $failures 'FirstReadContract' "$id registry='$($item.body)' canonical='$($contract.FirstRead)'" }
       if ([string]$item.authority -notin @('read-only','workspace-write')) { Add-RegistryFailure $failures 'InvalidAuthority' "$id canonical" }
-      if ([string]$item.authority -cne $contract.Authority) { Add-RegistryFailure $failures 'AuthorityContract' "$id registry='$($item.authority)' canonical='$($contract.Authority)'" }
+      if ([string]$item.authority -cne $contract.Authority) { Add-RegistryFailure $failures 'AuthorityContract' "$id registry='$($item.authority)' current-bindings='$($contract.Authority)'" }
       if ([string]$item.isolation -ne 'clean-context') { Add-RegistryFailure $failures 'InvalidIsolation' "$id canonical" }
-      if ([string]$item.isolation -cne $contract.Isolation) { Add-RegistryFailure $failures 'IsolationContract' "$id registry='$($item.isolation)' canonical='$($contract.Isolation)'" }
+      if ([string]$item.isolation -cne $contract.Isolation) { Add-RegistryFailure $failures 'IsolationContract' "$id registry='$($item.isolation)' current-bindings='$($contract.Isolation)'" }
       $actualReading = @(Get-RegistrySequence $item.requiredReading)
       foreach ($reading in $actualReading) { $null = Test-RegistryDescendantPath $RepoRoot $reading $failures "RequiredReading:$id" -Leaf }
-      if (-not (Test-RegistrySequence $actualReading $contract.RequiredReading)) { Add-RegistryFailure $failures 'RequiredReadingContract' "$id registry='$($actualReading -join '|')' canonical='$($contract.RequiredReading -join '|')'" }
+      if ($actualReading.Count -lt 2 -or
+          $actualReading[0] -cne 'workflow/agent-invocation.md' -or
+          $actualReading[1] -cne [string]$item.body -or
+          (@($actualReading | Select-Object -Unique).Count -ne $actualReading.Count)) {
+        Add-RegistryFailure $failures 'RequiredReadingContract' "$id registry='$($actualReading -join '|')' expected invocation then '$($item.body)'"
+      }
       $actualAliases = @(Get-RegistrySequence $item.aliases)
       if (-not (Test-RegistrySequence $actualAliases $contract.Aliases)) { Add-RegistryFailure $failures 'AliasContract' "$id registry='$($actualAliases -join '|')' canonical='$($contract.Aliases -join '|')'" }
       if ([string]$item.loopGate -cne $contract.LoopGate) { Add-RegistryFailure $failures 'LoopGateContract' "$id registry='$($item.loopGate)' canonical='$($contract.LoopGate)'" }
       if ([string]$item.failLoudShape -cne $contract.FailLoudShape) { Add-RegistryFailure $failures 'FailLoudContract' "$id registry='$($item.failLoudShape)' canonical='$($contract.FailLoudShape)'" }
       if (@($item.hostBindings).Count -ne 7) { Add-RegistryFailure $failures 'AgentHostCoverage' "$id has $(@($item.hostBindings).Count) bindings" }
       $seen = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+      $canonicalAliases = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+      foreach ($alias in $actualAliases) { $null = $canonicalAliases.Add($alias) }
       foreach ($binding in @($item.hostBindings)) {
         $hostName = [string]$binding.host
         if ($hostName -notin $script:Hosts) { Add-RegistryFailure $failures 'InvalidHost' "$id/$hostName"; continue }
         if (-not $seen.Add($hostName)) { Add-RegistryFailure $failures 'DuplicateHostBinding' "$id/$hostName" }
-        if ([string]$binding.representation -notin @('native-definition','generated-native-projection','fallback-launch-contract','missing')) { Add-RegistryFailure $failures 'InvalidRepresentation' "$id/$hostName/$($binding.representation)" }
+        $representation = [string]$binding.representation
+        if ($representation -notin @('native-definition','generated-native-projection','fallback-launch-contract','missing')) { Add-RegistryFailure $failures 'InvalidRepresentation' "$id/$hostName/$representation" }
+        foreach ($name in @('routeIdentity','launchMechanism','classification')) {
+          if (-not $binding.PSObject.Properties[$name] -or [string]::IsNullOrWhiteSpace([string]$binding.$name)) { Add-RegistryFailure $failures 'HostBindingField' "$id/$hostName.$name" }
+        }
+        $routeIdentity = [string]$binding.routeIdentity
+        $allowedRoutes = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal); $null = $allowedRoutes.Add($id)
+        foreach ($alias in $actualAliases) { $null = $allowedRoutes.Add($alias) }
+        if ($routeIdentity -notin $allowedRoutes) { Add-RegistryFailure $failures 'RouteIdentityOwnership' "$id/$hostName routeIdentity '$routeIdentity'" }
         $boundAuthority = if ($binding.PSObject.Properties['authority']) { $binding.authority } else { $null }
         $boundIsolation = if ($binding.PSObject.Properties['isolation']) { $binding.isolation } else { $null }
-        $parityRow = @($Inventory.parity_matrix | Where-Object { [string]$_.agent -eq $id -and [string]$_.host -eq $hostName })
-        if ($parityRow.Count -ne 1) { Add-RegistryFailure $failures 'HostBindingInventory' "$id/$hostName has $($parityRow.Count) parity rows"; continue }
-        $parityRow = $parityRow[0]
-        if ([string]$binding.representation -cne [string]$parityRow.representation) { Add-RegistryFailure $failures 'HostRepresentation' "$id/$hostName registry='$($binding.representation)' inventory='$($parityRow.representation)'" }
-        if ([string]$binding.alias -cne [string]$parityRow.alias) { Add-RegistryFailure $failures 'HostAlias' "$id/$hostName registry='$($binding.alias)' inventory='$($parityRow.alias)'" }
-        if ([string]$binding.routeIdentity -cne [string]$parityRow.route_identity) { Add-RegistryFailure $failures 'HostRouteIdentity' "$id/$hostName registry='$($binding.routeIdentity)' inventory='$($parityRow.route_identity)'" }
-        if ([string]$binding.launchMechanism -cne [string]$parityRow.launch_mechanism) { Add-RegistryFailure $failures 'HostLaunchMechanism' "$id/$hostName registry='$($binding.launchMechanism)' inventory='$($parityRow.launch_mechanism)'" }
-        if ([string]$boundAuthority -cne [string]$parityRow.authority) { Add-RegistryFailure $failures 'HostAuthority' "$id/$hostName registry='$boundAuthority' inventory='$($parityRow.authority)'" }
-        if ([string]$boundIsolation -cne [string]$parityRow.isolation) { Add-RegistryFailure $failures 'HostIsolation' "$id/$hostName registry='$boundIsolation' inventory='$($parityRow.isolation)'" }
-        if ([string]$binding.classification -cne [string]$parityRow.classification) { Add-RegistryFailure $failures 'HostClassification' "$id/$hostName registry='$($binding.classification)' inventory='$($parityRow.classification)'" }
-        if (-not (Test-RegistrySequence $binding.evidencePaths $parityRow.evidence_paths)) { Add-RegistryFailure $failures 'HostEvidenceContract' "$id/$hostName registry and Phase 0 evidence differ" }
-        if ($null -ne $boundAuthority -and [string]$boundAuthority -notin @('read-only','workspace-write','read-only (sandbox_mode)','workspace-write (sandbox_mode)')) { Add-RegistryFailure $failures 'InvalidAuthority' "$id/$hostName" }
-        if ($null -ne $boundIsolation -and [string]$boundIsolation -notin @('clean-context','fresh task/session per pass')) { Add-RegistryFailure $failures 'InvalidIsolation' "$id/$hostName" }
-        foreach ($evidence in @($binding.evidencePaths)) { $null = Test-RegistryDescendantPath $RepoRoot ([string]$evidence) $failures "HostEvidence:$id/$hostName" }
-        if ($binding.PSObject.Properties['routeIdentity'] -and $binding.routeIdentity -and [string]$binding.routeIdentity -ne $id -and $allIds.Contains([string]$binding.routeIdentity)) {
-          Add-RegistryFailure $failures 'AliasReplacesCanonicalIdentity' "$id/$hostName routeIdentity -> $($binding.routeIdentity)"
+        $normalizedAuthority = [string]$boundAuthority -replace '\s*\(sandbox_mode\)$',''
+        if ($normalizedAuthority -cne [string]$contract.Authority) { Add-RegistryFailure $failures 'HostAuthority' "$id/$hostName registry='$boundAuthority' canonical='$($contract.Authority)'" }
+        $normalizedIsolation = if ([string]$boundIsolation -eq 'fresh task/session per pass') { 'clean-context' } else { [string]$boundIsolation }
+        if ($normalizedIsolation -cne [string]$contract.Isolation) { Add-RegistryFailure $failures 'HostIsolation' "$id/$hostName registry='$boundIsolation' canonical='$($contract.Isolation)'" }
+        if ([string]$boundAuthority -notin @('read-only','workspace-write','read-only (sandbox_mode)','workspace-write (sandbox_mode)')) { Add-RegistryFailure $failures 'InvalidAuthority' "$id/$hostName" }
+        if ([string]$boundIsolation -notin @('clean-context','fresh task/session per pass')) { Add-RegistryFailure $failures 'InvalidIsolation' "$id/$hostName" }
+        $classification = [string]$binding.classification
+        $classificationValid = if ($representation -eq 'generated-native-projection') { $classification -eq 'generated output' }
+          elseif ($representation -eq 'fallback-launch-contract') { $classification -in @('host wrapper','intentional host deviation') }
+          elseif ($representation -eq 'native-definition') { $classification -in @('host wrapper','primary-mode definition') }
+          else { $false }
+        if (-not $classificationValid) { Add-RegistryFailure $failures 'InvalidRepresentationClass' "$id/$hostName/$representation/$classification" }
+        if ($representation -eq 'missing') { Add-RegistryFailure $failures 'HostRepresentationMissing' "$id/$hostName" }
+        $bindingAlias = if ($binding.PSObject.Properties['alias']) { [string]$binding.alias } else { '' }
+        if ($bindingAlias -and $bindingAlias -notin $canonicalAliases) { Add-RegistryFailure $failures 'AliasOwnership' "$id/$hostName alias '$bindingAlias'" }
+        $evidence = @(Get-RegistrySequence $binding.evidencePaths)
+        if ($evidence.Count -lt 1) { Add-RegistryFailure $failures 'HostEvidence' "$id/$hostName has no evidence" }
+        $seenEvidence = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+        foreach ($evidencePath in $evidence) {
+          if (-not $seenEvidence.Add($evidencePath)) { Add-RegistryFailure $failures 'DuplicateHostEvidence' "$id/$hostName '$evidencePath'" }
+          $null = Test-RegistryDescendantPath $RepoRoot $evidencePath $failures "HostEvidence:$id/$hostName" -Leaf
         }
-        foreach ($name in @('alias')) { if ($binding.PSObject.Properties[$name] -and $binding.$name) {
-          $value = [string]$binding.$name
+        if ($binding.PSObject.Properties['routeIdentity'] -and $routeIdentity -ne $id -and $allIds.Contains($routeIdentity)) {
+          Add-RegistryFailure $failures 'AliasReplacesCanonicalIdentity' "$id/$hostName routeIdentity -> $routeIdentity"
+        }
+        if ($bindingAlias -and $bindingAlias -ne $id -and $allIds.Contains($bindingAlias)) { Add-RegistryFailure $failures 'AliasReplacesCanonicalIdentity' "$id/$hostName -> $bindingAlias" }
+        if ($bindingAlias) {
           $owner = $null
-          if ($value -ne $id -and $allIds.Contains($value)) { Add-RegistryFailure $failures 'AliasReplacesCanonicalIdentity' "$id/$hostName -> $value" }
-          if ($aliasOwners.TryGetValue($value, [ref]$owner)) { Add-RegistryFailure $failures 'DuplicateAlias' "$value owned by $owner and $id" } else { $aliasOwners[$value] = $id }
-        } }
+          if ($aliasOwners.TryGetValue($bindingAlias, [ref]$owner)) { Add-RegistryFailure $failures 'DuplicateAlias' "$bindingAlias owned by $owner and $id" } else { $aliasOwners[$bindingAlias] = $id }
+        }
       }
     } elseif ($Kind -eq 'skills') {
       if ($null -eq $Inventory) { throw 'FAIL: skill canonical consistency requires the Phase 0 inventory' }
@@ -1261,10 +1277,10 @@ function Test-ProcedureRegistryCatalogs {
     $catalogs[$kind] = $catalog
     foreach ($failure in (Test-RegistryCatalog -Catalog $catalog -Kind $kind -RepoRoot $RepoRoot -OverlayRoots $overlayRoots -Inventory $inventory -Manifests $manifests)) { $failures.Add($failure) }
   }
-  $pairs = @{ agents = 'governed_agents'; rules = 'canonical_rules'; skills = 'canonical_skills'; workflows = 'canonical_workflows' }
+  $pairs = @{ rules = 'canonical_rules'; skills = 'canonical_skills'; workflows = 'canonical_workflows' }
   foreach ($kind in $pairs.Keys) {
-    $source = switch ($kind) { 'agents' { $inventory.governed_agents } 'skills' { $inventory.skills_inventory.canonical_skills } default { $inventory.rules_workflows | Select-Object -ExpandProperty $pairs[$kind] } }
-    $expectedIds = if ($kind -eq 'agents') { $source } else { $source | ForEach-Object id }
+    $source = switch ($kind) { 'skills' { $inventory.skills_inventory.canonical_skills } default { $inventory.rules_workflows | Select-Object -ExpandProperty $pairs[$kind] } }
+    $expectedIds = $source | ForEach-Object id
     $expected = @($expectedIds | Sort-Object) -join '|'
     $actual = @($catalogs[$kind].items | ForEach-Object id | Sort-Object) -join '|'
     if ($expected -ne $actual) { Add-RegistryFailure $failures 'InventoryCoverageMismatch' "$kind expected '$expected' actual '$actual'" }

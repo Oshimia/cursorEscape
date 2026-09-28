@@ -1,15 +1,16 @@
 #Requires -Version 7.4
 <#
 .SYNOPSIS
-    Read-only Phase 0 current-state and fixture invariant checks.
+    Read-only current-state and fixture invariant checks.
 .DESCRIPTION
-    Fails closed on inventory/manifest/Markdown inconsistency or missing
+    Fails closed on current-catalog/inventory/manifest/Markdown inconsistency or missing
     referenced evidence. Performs no live host writes and no repository writes.
 #>
 param(
     [string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..' '..')).Path,
     [string]$InventoryJsonPath = '',
-    [string]$InventoryMdPath = ''
+    [string]$InventoryMdPath = '',
+    [string]$AgentsCatalogPath = ''
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -57,22 +58,13 @@ function Get-ManifestFieldValue($Manifest,[string]$Name) {
 foreach ($p in @($JsonPath,$MdPath)) { if (-not (Test-Path -LiteralPath $p -PathType Leaf)) { Write-Error "FAIL: Missing $p"; exit 1 } }
 try { $j = Get-Content -Raw -LiteralPath $JsonPath | ConvertFrom-Json } catch { Write-Error "FAIL: Invalid JSON: $($_.Exception.Message)"; exit 1 }
 $md = Get-Content -Raw -LiteralPath $MdPath
-$hosts = @('Cursor','OpenCode','Antigravity','Vscode','Cline','Kilocode','Codex')
-$agents = @('planner','plan_reviewer','implementer','production_readiness_reviewer','bug_reviewer','repository_explorer','test_reviewer')
+$AgentsPath = if ($AgentsCatalogPath) { $AgentsCatalogPath } else { Join-Path $RepoRoot 'catalog' 'agents.json' }
+if (-not (Test-Path -LiteralPath $AgentsPath -PathType Leaf)) { Write-Error "FAIL: Missing $AgentsPath"; exit 1 }
+try { $agentsCatalog = Get-Content -Raw -LiteralPath $AgentsPath | ConvertFrom-Json } catch { Write-Error "FAIL: Invalid agents catalog: $($_.Exception.Message)"; exit 1 }
+$agentItems = @($agentsCatalog.items)
 
-# Representation taxonomy: exactly 4
-$reps = @('native-definition','generated-native-projection','fallback-launch-contract','missing')
-if ($j.representation_values.Count -ne 4) { Add-Failure 'RepresentationCount' "expected 4, got $($j.representation_values.Count)" }
-foreach ($r in $reps) { if ($r -notin $j.representation_values) { Add-Failure 'RepresentationEnum' "missing '$r'" } }
-
-# Status
-if ($j.schema_version -ne 2) { Add-Failure 'SchemaVersion' "expected 2" }
-if ($j.status -ne 'implementation-under-review') { Add-Failure 'Status' 'wrong' }
-if ($j.review_iteration -ne 3) { Add-Failure 'ReviewIteration' "expected 3, got $($j.review_iteration)" }
-
-# Inventory dates: inventory_date is the immutable Phase 0 snapshot; last_updated
-# records later maintenance. Both are required, must parse as ISO calendar dates,
-# and must stay ordered. Presence is not optional.
+# Inventory dates: inventory_date is the immutable snapshot; last_updated
+# records later maintenance. Both remain broader inventory inputs until Phase 7.
 $snapshotDate = [string](Get-SourceProp $j 'inventory_date')
 $lastUpdated = [string](Get-SourceProp $j 'last_updated')
 if ($snapshotDate -ne '2026-09-11') { Add-Failure 'InventorySnapshotDate' "expected '2026-09-11', got '$snapshotDate'" }
@@ -81,77 +73,57 @@ $snapshotParsed = [datetime]::TryParseExact($snapshotDate, 'yyyy-MM-dd', [Global
 $updatedParsed = [datetime]::TryParseExact($lastUpdated, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$parsedUpdated)
 if (-not $updatedParsed) { Add-Failure 'InventoryLastUpdatedFormat' "invalid ISO calendar date '$lastUpdated'" }
 elseif (-not $snapshotParsed -or $parsedUpdated -lt $parsedSnapshot) { Add-Failure 'InventoryLastUpdatedFormat' "last_updated '$lastUpdated' predates snapshot '$snapshotDate'" }
-if (($j.hosts | Sort-Object) -join '|' -ne (($hosts | Sort-Object) -join '|')) { Add-Failure 'HostSet' 'differs' }
-if (($j.governed_agents | Sort-Object) -join '|' -ne (($agents | Sort-Object) -join '|')) { Add-Failure 'AgentSet' 'differs' }
-if ($j.parity_matrix.Count -ne 49) { Add-Failure 'CartesianCoverage' "expected 49, got $($j.parity_matrix.Count)" }
-
-# Parity rows
-$rows = @{}; foreach ($p in $j.parity_matrix) { $k = "$($p.host)|$($p.agent)"; if ($rows.ContainsKey($k)) { Add-Failure 'DuplicatePair' $k } else { $rows[$k] = $p } }
-foreach ($h in $hosts) { foreach ($a in $agents) { if (-not $rows.ContainsKey("$h|$a")) { Add-Failure 'MissingPair' "$h|$a" } } }
-
-$proposals = @('native','fresh-task-session-fallback','retain-fallback-with-explicit-envelope-and-isolation')
-$auths = @('read-only','workspace-write','read-only (sandbox_mode)','workspace-write (sandbox_mode)')
-$isoVals = @('clean-context','fresh task/session per pass')
-$clsVals = @('host wrapper','generated output','intentional host deviation','primary-mode definition','fallback contract')
-$canonicalReading = $j.canonical_required_reading
-# Assert authoritative expected lists (not just self-comparison)
-$expectedReading = @{
-    'planner' = @('workflow/agent-invocation.md','agents/planner.md','skills/implementation-plan/SKILL.md')
-    'plan_reviewer' = @('workflow/agent-invocation.md','agents/plan_reviewer.md','workflow/plan-reviewer-report.md','skills/implementation-plan/SKILL.md')
-    'implementer' = @('workflow/agent-invocation.md','agents/implementer.md')
-    'production_readiness_reviewer' = @('workflow/agent-invocation.md','agents/production_readiness_reviewer.md')
-    'bug_reviewer' = @('workflow/agent-invocation.md','agents/bug_reviewer.md','docs/featureArchitecture/bug-reviewer-finding-rubric.md','skills/bug-review-sweep/SKILL.md')
-    'repository_explorer' = @('workflow/agent-invocation.md','agents/repository_explorer.md')
-    'test_reviewer' = @('workflow/agent-invocation.md','agents/test_reviewer.md')
-}
-foreach ($agentName in $expectedReading.Keys) {
-    if (-not $canonicalReading.PSObject.Properties[$agentName]) { Add-Failure 'CanonicalReadingMissing' $agentName; continue }
-    Compare-Arr $canonicalReading.($agentName) $expectedReading[$agentName] 'CanonicalReadingMismatch' $agentName
-}
-
-foreach ($p in $j.parity_matrix) {
-    $k = "$($p.host)|$($p.agent)"
-    if ($p.canonical_identity -ne $p.agent) { Add-Failure 'CanonicalIdentity' "${k}: $($p.canonical_identity) != $($p.agent)" }
-    if ($p.representation -notin $reps) { Add-Failure 'RepresentationValue' "$k=$($p.representation)"; continue }
-    if ($p.representation -eq 'missing') {
-        if ($p.proposed_phase2_representation -notin $proposals) { Add-Failure 'ProposalValue' "$k=$($p.proposed_phase2_representation)" }
-        foreach ($f in @('canonical_identity','first_read_contract','proposed_phase2_representation')) { if ([string]::IsNullOrWhiteSpace([string]$p.$f)) { Add-Failure 'MissingRowField' "$k.$f" } }
-    } else {
-        foreach ($f in @('canonical_identity','route_identity','authority','isolation','first_read_contract','launch_mechanism','classification')) { if ([string]::IsNullOrWhiteSpace([string]$p.$f)) { Add-Failure 'RepresentedRowField' "$k.$f" } }
-        if ($p.authority -and $p.authority -notin $auths) { Add-Failure 'AuthorityEnum' "$k=$($p.authority)" }
-        if ($p.isolation -and $p.isolation -notin $isoVals) { Add-Failure 'IsolationEnum' "$k=$($p.isolation)" }
-        if ($p.classification -and $p.classification -notin $clsVals) { Add-Failure 'ClassificationEnum' "$k=$($p.classification)" }
-        if (@($p.evidence_paths).Count -lt 1) { Add-Failure 'RepresentedEvidence' $k }
-    }
-    if ($null -eq (Get-SourceProp $p 'required_reading')) { Add-Failure 'RequiredReadingMissing' $k }
-    elseif ($canonicalReading.PSObject.Properties[$p.agent]) { Compare-Arr $p.required_reading $canonicalReading.($p.agent) 'RequiredReadingMismatch' $k }
-    foreach ($f in @('canonical_identity','evidence_paths','first_read_contract')) { if ($null -eq $p.$f) { Add-Failure 'RequiredField' "$k.$f" } }
-    foreach ($e in @($p.evidence_paths)) { if ($e -match "/$") { Test-RepoPath $e "PairEvidence[$k]" -Directory } else { Test-RepoPath $e "PairEvidence[$k]" } }
-}
-
-# Ambiguity truth: an open owner question may reference only pairs that are
-# still missing in the parity matrix. A represented pair (or an unknown pair)
-# listed as pending reopens settled work and fails closed.
-foreach ($a in @($j.ambiguities_requiring_owner_confirmation)) {
-    $aid = [string]$a.id
-    if ([string]::IsNullOrWhiteSpace($aid)) { Add-Failure 'AmbiguityIdentity' 'missing id'; continue }
-    $pendingProp = $a.PSObject.Properties['pending_missing_pairs']
-    if ($null -eq $pendingProp) { Add-Failure 'AmbiguityPendingPairsMissing' $aid; continue }
-    $pending = @($pendingProp.Value)
-    foreach ($pair in @($pending)) {
-        $pk = "$($pair.host)|$($pair.agent)"
-        if (-not $rows.ContainsKey($pk)) { Add-Failure 'AmbiguityPendingPairUnknown' "$aid -> $pk"; continue }
-        if ($rows[$pk].representation -ne 'missing') { Add-Failure 'AmbiguityPendingPairRepresented' "$aid -> $pk is $($rows[$pk].representation)" }
+# Current agent catalog: canonical IDs, coverage, contracts, and binding shape
+# are checked directly; dated inventory parity rows are no longer an input.
+$hosts = @('Cursor','OpenCode','Antigravity','Vscode','Cline','Kilocode','Codex')
+$expectedAgents = @('planner','plan_reviewer','implementer','production_readiness_reviewer','bug_reviewer','repository_explorer','test_reviewer')
+if ($agentsCatalog.schema -ne 'catalog/v1' -or $agentsCatalog.kind -ne 'agents') { Add-Failure 'AgentCatalogIdentity' "schema=$($agentsCatalog.schema) kind=$($agentsCatalog.kind)" }
+if ($agentItems.Count -ne 7) { Add-Failure 'AgentCatalogCoverage' "expected 7, got $($agentItems.Count)" }
+$agentIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+foreach ($agent in $agentItems) {
+    $id = [string]$agent.id
+    if (-not $agentIds.Add($id)) { Add-Failure 'DuplicateAgentId' $id; continue }
+    if ([string]$agent.body -cne "agents/$id.md") { Add-Failure 'AgentFirstRead' "$id expected agents/$id.md, got '$($agent.body)'" }
+    if ([string]$agent.authority -notin @('read-only','workspace-write')) { Add-Failure 'AgentAuthority' "$id=$($agent.authority)" }
+    if ([string]$agent.isolation -ne 'clean-context') { Add-Failure 'AgentIsolation' "$id=$($agent.isolation)" }
+    $reading = @($agent.requiredReading)
+    if ($reading.Count -lt 2 -or $reading[0] -ne 'workflow/agent-invocation.md' -or $reading[1] -ne [string]$agent.body) { Add-Failure 'AgentRequiredReading' $id }
+    foreach ($readingPath in $reading) { Test-RepoPath $readingPath "AgentRequiredReadingPath[$id]" }
+    $bindings = @($agent.hostBindings)
+    if ($bindings.Count -ne 7) { Add-Failure 'AgentHostCoverage' "$id expected 7, got $($bindings.Count)" }
+    $bindingHosts = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($binding in $bindings) {
+        $h = [string]$binding.host
+        if ($h -notin $hosts) { Add-Failure 'AgentHostUnknown' "$id/$h"; continue }
+        if (-not $bindingHosts.Add($h)) { Add-Failure 'AgentHostDuplicate' "$id/$h" }
+        $representation = [string]$binding.representation
+        if ($representation -notin @('native-definition','generated-native-projection','fallback-launch-contract','missing')) { Add-Failure 'AgentRepresentation' "$id/$h=$representation" }
+        if ($representation -eq 'missing') { Add-Failure 'AgentMissingRepresentation' "$id/$h" }
+        foreach ($field in @('routeIdentity','launchMechanism','classification')) {
+            if (-not $binding.PSObject.Properties[$field] -or [string]::IsNullOrWhiteSpace([string]$binding.$field)) { Add-Failure 'AgentBindingField' "$id/$h.$field" }
+        }
+        $allowedRoutes = @($id) + @($agent.aliases)
+        if ([string]$binding.routeIdentity -notin $allowedRoutes) { Add-Failure 'AgentRouteIdentity' "$id/$h=$($binding.routeIdentity)" }
+        $alias = if ($binding.PSObject.Properties['alias']) { [string]$binding.alias } else { '' }
+        if ($alias -and $alias -notin @($agent.aliases)) { Add-Failure 'AgentAliasOwnership' "$id/$h=$alias" }
+        $authority = if ($binding.PSObject.Properties['authority']) { [string]$binding.authority } else { '' }
+        $isolation = if ($binding.PSObject.Properties['isolation']) { [string]$binding.isolation } else { '' }
+        if ($authority -notin @('read-only','workspace-write','read-only (sandbox_mode)','workspace-write (sandbox_mode)')) { Add-Failure 'AgentBindingAuthority' "$id/$h=$authority" }
+        if ($isolation -notin @('clean-context','fresh task/session per pass')) { Add-Failure 'AgentBindingIsolation' "$id/$h=$isolation" }
+        $classification = [string]$binding.classification
+        $classificationValid = if ($representation -eq 'generated-native-projection') { $classification -eq 'generated output' }
+            elseif ($representation -eq 'fallback-launch-contract') { $classification -in @('host wrapper','intentional host deviation') }
+            elseif ($representation -eq 'native-definition') { $classification -in @('host wrapper','primary-mode definition') }
+            else { $false }
+        if (-not $classificationValid) { Add-Failure 'AgentRepresentationClass' "$id/$h=$representation/$classification" }
+        $evidence = @($binding.evidencePaths)
+        if ($evidence.Count -lt 1) { Add-Failure 'AgentBindingEvidence' "$id/$h" }
+        foreach ($evidencePath in $evidence) { Test-RepoPath $evidencePath "AgentBindingEvidencePath[$id/$h]" }
     }
 }
-
-# Counts
-$actualMissing = @($j.parity_matrix | Where-Object representation -eq 'missing')
-if ($j.missing_count -ne $actualMissing.Count -or $j.represented_count -ne (49 - $actualMissing.Count) -or $j.total_pairs -ne 49) { Add-Failure 'ParityCounts' 'wrong' }
-$expMissing = @($actualMissing | ForEach-Object { [pscustomobject]@{host=$_.host;agent=$_.agent;proposed_phase2=$_.proposed_phase2_representation} })
-$decMissing = @($j.missing_pairs_with_proposed_phase2)
-if ($decMissing.Count -ne $expMissing.Count) { Add-Failure 'MissingPairCount' "expected $($expMissing.Count), got $($decMissing.Count)" }
-else { for ($i = 0; $i -lt $expMissing.Count; $i++) { foreach ($f in @('host','agent','proposed_phase2')) { if ($expMissing[$i].$f -ne $decMissing[$i].$f) { Add-Failure 'MissingPairAgreement' "row $i $f" } } } }
+$expectedAgentSet = ($expectedAgents | Sort-Object) -join '|'
+$actualAgentSet = ($agentItems | ForEach-Object id | Sort-Object) -join '|'
+if ($expectedAgentSet -ne $actualAgentSet) { Add-Failure 'AgentCatalogSet' "expected '$expectedAgentSet', got '$actualAgentSet'" }
 
 # Manifests: coverage + current-source validation
 $manifestRows = @{}
@@ -191,15 +163,15 @@ foreach ($h in $hosts) {
         hybrid_rule_ids = $hybrid.Count
     }
 
-    # Current source-state manifest agreement: every native wrapper named by a
-    # represented parity row must be delivered exactly once by its host
-    # manifest.
-    foreach ($p in @($j.parity_matrix | Where-Object { $_.host -eq $h -and $_.representation -eq 'native-definition' })) {
-        $wrapper = @(@($p.evidence_paths) | Where-Object { $_.StartsWith(($m.overlay_root.TrimEnd('/','\') + '/'), [StringComparison]::OrdinalIgnoreCase) } | Select-Object -First 1)
+    # Current source-state manifest agreement: every native-definition agent
+    # binding from the current agents catalog must be delivered exactly once
+    # by its host manifest.
+    foreach ($agentBinding in @($agentItems | ForEach-Object { $agent = $_; foreach ($binding in @($_.hostBindings)) { if ([string]$binding.host -eq $h -and [string]$binding.representation -eq 'native-definition') { [pscustomobject]@{ Agent = $agent.id; Binding = $binding } } } })) {
+        $wrapper = @(@($agentBinding.Binding.evidencePaths) | Where-Object { $_.StartsWith(($m.overlay_root.TrimEnd('/','\') + '/'), [StringComparison]::OrdinalIgnoreCase) } | Select-Object -First 1)
         if ($wrapper.Count -ne 1) { continue }
         $expectedSource = $wrapper[0].Substring($m.overlay_root.TrimEnd('/','\').Length + 1).Replace('\','/')
         $matches = @(@($m.entries) | Where-Object { "$($_.source)" -ceq $expectedSource })
-        if ($matches.Count -ne 1) { Add-Failure 'NativeManifestEntry' "$h|$($p.agent) expected source '$expectedSource', found $($matches.Count)" }
+        if ($matches.Count -ne 1) { Add-Failure 'NativeManifestEntry' "$h|$($agentBinding.Agent) expected source '$expectedSource', found $($matches.Count)" }
     }
 
     if ($h -eq 'OpenCode') {
@@ -313,8 +285,8 @@ if ($snapshotDate -and -not ($md -match [regex]::Escape("**Snapshot date:** $sna
 if ($lastUpdated -and -not ($md -match [regex]::Escape("**Last updated:** $lastUpdated"))) { Add-Failure 'MarkdownInventoryLastUpdated' "expected '$lastUpdated'" }
 if (-not ($md -match [regex]::Escape("| Represented | $($j.represented_count) |"))) { Add-Failure 'MarkdownRepresented' }
 if (-not ($md -match [regex]::Escape("| Missing | $($j.missing_count) |"))) { Add-Failure 'MarkdownMissing' }
-foreach ($h in $hosts) { $hr = @($j.parity_matrix | Where-Object host -eq $h); $n = @($hr | Where-Object representation -eq 'native-definition').Count; $g = @($hr | Where-Object representation -eq 'generated-native-projection').Count; $fb = @($hr | Where-Object representation -eq 'fallback-launch-contract').Count; $ms = @($hr | Where-Object representation -eq 'missing').Count; if ($md -notmatch [regex]::Escape("| $h | $n | $g | $fb | $ms |")) { Add-Failure 'MarkdownMatrixRow' $h } }
-foreach ($x in $j.missing_pairs_with_proposed_phase2) { $row = "| $($x.host) | ``$($x.agent)`` | ``$($x.proposed_phase2)`` |"; if (-not $md.Contains($row)) { Add-Failure 'MarkdownMissingPair' "$($x.host)/$($x.agent)" } }
+$currentAgentBindings = @($agentItems | ForEach-Object { foreach ($binding in @($_.hostBindings)) { $binding } })
+foreach ($h in $hosts) { $hr = @($currentAgentBindings | Where-Object host -eq $h); $n = @($hr | Where-Object representation -eq 'native-definition').Count; $g = @($hr | Where-Object representation -eq 'generated-native-projection').Count; $fb = @($hr | Where-Object representation -eq 'fallback-launch-contract').Count; $ms = @($hr | Where-Object representation -eq 'missing').Count; if ($md -notmatch [regex]::Escape("| $h | $n | $g | $fb | $ms |")) { Add-Failure 'MarkdownMatrixRow' $h } }
 
 # Ambiguity IDs must agree exactly between JSON and the Markdown table.
 $ambiguityHeader = '| ID | Question |'

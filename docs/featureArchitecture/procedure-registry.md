@@ -1,6 +1,6 @@
 # Procedure registry
 
-**Last updated:** 2026-09-28
+**Last updated:** 2026-09-29
 
 ## Context
 
@@ -32,10 +32,10 @@ To change an existing governed entity:
 To add a governed entity:
 
 1. Create the canonical Markdown source and frontmatter.
-2. Add exact inventory coverage.
+2. Add exact catalog coverage; agents require `catalog/agents.json`. Skill, rule, and workflow additions also require exact inventory coverage only until the Phase 7 current-source migration is complete.
 3. Add the registry entry with required identity, authority, isolation, loop/gate, fail-loud, host representation, and applicability fields.
 4. Add a composition when order matters, bind it from the host manifest by `CompositionId`, and register host-only leaves.
-5. Run Fast CI for schema/inventory closure and Full CI for host, fixture, and baseline closure.
+5. Run Fast CI for schema/coverage closure and Full CI for host, fixture, and baseline closure.
 
 Any ambiguity fails closed; the registry does not infer missing identity or order from host files.
 
@@ -45,7 +45,7 @@ Lifecycle hooks and other host-specific surfaces are manifest concerns. The regi
 
 ### Fail-closed boundary
 
-`scripts/normalization/ProcedureRegistry.psm1` validates schema/version, exact inventory coverage, IDs, canonical identity and first-read contracts, required reading, aliases, authority/isolation, loop/gate policy, fail-loud behavior, host representation, route identity, launch evidence, skill flags, explicit applicability, canonical rule/workflow sources, one-to-one composition coverage, duplicate-free semantic order, and path containment.
+`scripts/normalization/ProcedureRegistry.psm1` validates schema/version, exact coverage (catalog-derived for agents; inventory parity remains only for skills/rules/workflows until Phase 7), IDs, canonical identity and first-read contracts, required reading, aliases, authority/isolation, loop/gate policy, fail-loud behavior, host representation, route identity, launch evidence, skill flags, explicit applicability, canonical rule/workflow sources, one-to-one composition coverage, duplicate-free semantic order, and path containment.
 
 Stale host-snapshot restore baselines are not part of the registry or Apply boundary.
 

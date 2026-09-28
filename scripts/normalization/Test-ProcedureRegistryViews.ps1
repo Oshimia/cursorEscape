@@ -35,30 +35,23 @@ $registry = Test-ProcedureRegistryCatalogs -RepoRoot $RepoRoot
 Assert-View 'registry is valid' $registry.Valid (($registry.Failures | Select-Object -First 5) -join '; ')
 Assert-View 'all registered skills carry frontmatter description metadata' (@($registry.Catalogs.skills.items | Where-Object { $null -ne $_.PSObject.Properties['description'] }).Count -eq @($registry.Catalogs.skills.items).Count)
 
-$phase2cPairs = @(
+$nativeBindingPairs = @(
   @{ Host = 'Cursor'; Agent = 'implementer'; Wrapper = 'overlays/cursor/agents/implementer.md'; Destination = 'agents/implementer.md'; Launch = 'Cursor Task with subagent_type implementer'; Authority = 'workspace-write' },
   @{ Host = 'Cursor'; Agent = 'test_reviewer'; Wrapper = 'overlays/cursor/agents/test_reviewer.md'; Destination = 'agents/test_reviewer.md'; Launch = 'Cursor Task with subagent_type test_reviewer'; Authority = 'read-only' },
   @{ Host = 'Antigravity'; Agent = 'implementer'; Wrapper = 'overlays/antigravity/agents/implementer.md'; Destination = 'config/agents/implementer.md'; Launch = 'Antigravity invoke_subagent'; Authority = 'workspace-write' },
   @{ Host = 'Antigravity'; Agent = 'test_reviewer'; Wrapper = 'overlays/antigravity/agents/test_reviewer.md'; Destination = 'config/agents/test_reviewer.md'; Launch = 'Antigravity invoke_subagent'; Authority = 'read-only' }
 )
-foreach ($pair in $phase2cPairs) {
+foreach ($pair in $nativeBindingPairs) {
   $item = @($registry.Catalogs.agents.items | Where-Object { [string]$_.id -eq $pair.Agent })[0]
   $binding = @($item.hostBindings | Where-Object { [string]$_.host -eq $pair.Host })[0]
-  $row = @($registry.Inventory.parity_matrix | Where-Object { [string]$_.host -eq $pair.Host -and [string]$_.agent -eq $pair.Agent })[0]
-  Assert-View "Phase 2C registry binding parity: $($pair.Host)|$($pair.Agent)" (
+  Assert-View "registry native-definition binding coverage: $($pair.Host)|$($pair.Agent)" (
     [string]$binding.representation -eq 'native-definition' -and
     [string]$binding.routeIdentity -eq $pair.Agent -and
     [string]$binding.alias -eq '' -and
     [string]$binding.launchMechanism -eq $pair.Launch -and
     [string]$binding.authority -eq $pair.Authority -and
     [string]$binding.isolation -eq 'clean-context' -and
-    [string]$binding.classification -eq 'host wrapper' -and
-    [string]$row.representation -eq 'native-definition' -and
-    [string]$row.route_identity -eq $pair.Agent -and
-    [string]$row.launch_mechanism -eq $pair.Launch -and
-    [string]$row.authority -eq $pair.Authority -and
-    [string]$row.isolation -eq 'clean-context' -and
-    [string]$row.classification -eq 'host wrapper'
+    [string]$binding.classification -eq 'host wrapper'
   ) "binding=$($binding | ConvertTo-Json -Compress)"
 
   $manifest = @($registry.Manifests | Where-Object { [string]$_.host -eq $pair.Host })[0]
@@ -66,11 +59,9 @@ foreach ($pair in $phase2cPairs) {
     [string]$_.source -eq $pair.Wrapper.Substring($manifest.overlay_root.Length + 1) -and
     [string]$_.destination -eq $pair.Destination
   })
-  Assert-View "Phase 2C evidence-path/manifest agreement: $($pair.Host)|$($pair.Agent)" (
+  Assert-View "registry native-definition evidence/manifest agreement: $($pair.Host)|$($pair.Agent)" (
     @($binding.evidencePaths) -contains $pair.Wrapper -and
     @($binding.evidencePaths) -contains $manifest.path -and
-    @($row.evidence_paths) -contains $pair.Wrapper -and
-    @($row.evidence_paths) -contains $manifest.path -and
     $entries.Count -eq 1
   ) "entries=$($entries.Count)"
 }
@@ -78,7 +69,7 @@ $cursorImplementer = @(@($registry.Catalogs.agents.items | Where-Object { [strin
 $cursorTestReviewer = @(@($registry.Catalogs.agents.items | Where-Object { [string]$_.id -eq 'test_reviewer' })[0].hostBindings | Where-Object { [string]$_.host -eq 'Cursor' })[0]
 $cursorImplementerRaw = Get-Content -Raw (Join-Path $RepoRoot 'overlays/cursor/agents/implementer.md')
 $cursorTestReviewerRaw = Get-Content -Raw (Join-Path $RepoRoot 'overlays/cursor/agents/test_reviewer.md')
-Assert-View 'Phase 2C Cursor authority difference is explicit in metadata and spawn route' (
+Assert-View 'registry Cursor authority difference is explicit in metadata and spawn route' (
   [string]$cursorImplementer.authority -eq 'workspace-write' -and
   [string]$cursorTestReviewer.authority -eq 'read-only' -and
   $cursorImplementerRaw.Contains('readonly: false') -and
@@ -92,14 +83,14 @@ $observedTools = @(
     @($toolsMatch.Groups[1].Value -split '\r?\n' | ForEach-Object { ($_.Trim() -replace '^-\s*', '').Trim() } | Where-Object { $_ })
   }
 )
-Assert-View 'Phase 2C Antigravity test_reviewer preserves the read-only reviewer allowlist' (
+Assert-View 'registry Antigravity test_reviewer preserves the read-only reviewer allowlist' (
   [string]$antigravityTestReviewer.authority -eq 'read-only' -and
   ($observedTools -join ',') -eq 'view_file,grep_search,run_command' -and
   $antigravityTestReviewerRaw.Contains('commandExecutionPolicy: sandbox') -and
   $antigravityTestReviewerRaw.Contains('tool allowlist is read-only')
 )
 
-$phase2FallbackPairs = @(
+$fallbackBindingPairs = @(
   @{ Host = 'Cline'; Agent = 'implementer'; Workflow = 'overlays/cline/workflows/agents.md'; Destination = 'data/workflows/agents.md'; Launch = 'Cline fresh task with canonical envelope'; Authority = 'workspace-write'; LoopGate = 'phase' },
   @{ Host = 'Cline'; Agent = 'test_reviewer'; Workflow = 'overlays/cline/workflows/agents.md'; Destination = 'data/workflows/agents.md'; Launch = 'Cline fresh task with canonical envelope'; Authority = 'read-only'; LoopGate = 'test-review' },
   @{ Host = 'Kilocode'; Agent = 'implementer'; Workflow = 'overlays/kilocode/workflows/agents.md'; Destination = 'workflows/agents.md'; Launch = 'Kilocode fresh task with canonical envelope'; Authority = 'workspace-write'; LoopGate = 'phase' },
@@ -107,10 +98,9 @@ $phase2FallbackPairs = @(
 )
 $governedRouteIdentities = @('planner','plan_reviewer','implementer','production_readiness_reviewer','bug_reviewer','repository_explorer','test_reviewer')
 $routeIdentityTick = [char]96
-foreach ($pair in $phase2FallbackPairs) {
+foreach ($pair in $fallbackBindingPairs) {
   $item = @($registry.Catalogs.agents.items | Where-Object { [string]$_.id -eq $pair.Agent })[0]
   $binding = @($item.hostBindings | Where-Object { [string]$_.host -eq $pair.Host })[0]
-  $row = @($registry.Inventory.parity_matrix | Where-Object { [string]$_.host -eq $pair.Host -and [string]$_.agent -eq $pair.Agent })[0]
   $manifest = @($registry.Manifests | Where-Object { [string]$_.host -eq $pair.Host })[0]
   $workflowRelative = $pair.Workflow.Substring($manifest.overlay_root.Length + 1)
   $currentEntries = @($manifest.entries | Where-Object {
@@ -142,30 +132,22 @@ foreach ($pair in $phase2FallbackPairs) {
     }
   )
   $identityRowsExactOnce = $identityMatchFailures.Count -eq 0
-  Assert-View "Phase 2 fallback binding parity: $($pair.Host)|$($pair.Agent)" (
+  Assert-View "registry fallback-launch binding coverage: $($pair.Host)|$($pair.Agent)" (
     [string]$binding.representation -eq 'fallback-launch-contract' -and
     [string]$binding.routeIdentity -eq $pair.Agent -and
     [string]$binding.alias -eq '' -and
     [string]$binding.launchMechanism -eq $pair.Launch -and
     [string]$binding.authority -eq $pair.Authority -and
     [string]$binding.isolation -eq 'fresh task/session per pass' -and
-    [string]$binding.classification -eq 'host wrapper' -and
-    [string]$row.representation -eq 'fallback-launch-contract' -and
-    [string]$row.route_identity -eq $pair.Agent -and
-    [string]$row.launch_mechanism -eq $pair.Launch -and
-    [string]$row.authority -eq $pair.Authority -and
-    [string]$row.isolation -eq 'fresh task/session per pass' -and
-    [string]$row.classification -eq 'host wrapper'
+    [string]$binding.classification -eq 'host wrapper'
   ) "binding=$($binding | ConvertTo-Json -Compress)"
-  Assert-View "Phase 2 fallback delivery is exactly once: $($pair.Host)|$($pair.Agent)" (
+  Assert-View "registry fallback-launch delivery is exactly once: $($pair.Host)|$($pair.Agent)" (
     @($binding.evidencePaths) -contains $pair.Workflow -and
     @($binding.evidencePaths) -contains $manifest.path -and
-    @($row.evidence_paths) -contains $pair.Workflow -and
-    @($row.evidence_paths) -contains $manifest.path -and
     $currentEntries.Count -eq 1 -and
     $manifestEntries.Count -eq 1
   ) "current=$($currentEntries.Count); manifest=$($manifestEntries.Count)"
-  Assert-View "Phase 2 fallback workflow contract: $($pair.Host)|$($pair.Agent)" (
+  Assert-View "registry fallback workflow contract: $($pair.Host)|$($pair.Agent)" (
     $workflowRaw.Contains('separate fresh') -and
     $workflowRaw.Contains('per governed leg') -and
     $routeRows.Count -eq 7 -and
@@ -184,22 +166,12 @@ foreach ($pair in $phase2FallbackPairs) {
   ) "workflow=$($pair.Workflow); routeRows=$($routeRows.Count); identityFailures=$($identityMatchFailures -join ','); section=$($sectionStart -ge 0)"
 }
 
-Assert-View 'Phase 2 inventory derives exact final 49 represented / 0 missing counts' (
-  [int]$registry.Inventory.represented_count -eq 49 -and
-  [int]$registry.Inventory.missing_count -eq 0 -and
-  @($registry.Inventory.parity_matrix | Where-Object { $_.representation -ne 'missing' }).Count -eq 49 -and
-  @($registry.Inventory.parity_matrix | Where-Object { $_.representation -eq 'missing' }).Count -eq 0 -and
-  @($registry.Inventory.missing_pairs_with_proposed_phase2).Count -eq 0
-)
-$representedKeys = @(
-  $phase2cPairs + $phase2FallbackPairs | ForEach-Object { "$($_.Host)|$($_.Agent)" }
-)
-$pendingPairs = @($registry.Inventory.ambiguities_requiring_owner_confirmation | ForEach-Object { $_.pending_missing_pairs } | ForEach-Object { "$($_.host)|$($_.agent)" })
-Assert-View 'Phase 2 represented pairs are closed against every pending ambiguity' (
-  @($pendingPairs | Where-Object { $representedKeys -contains $_ }).Count -eq 0 -and
-  @($pendingPairs).Count -eq 0 -and
-  @($registry.Inventory.ambiguities_requiring_owner_confirmation | Where-Object { [string]$_.id -eq 'U-Antigravity-Authority' }).Count -eq 0
-) "pending=$($pendingPairs -join '; ')"
+$currentAgentBindings = @($registry.Catalogs.agents.items | ForEach-Object { $agent = $_; foreach ($binding in @($_.hostBindings)) { [pscustomobject]@{ Agent = $agent.id; Binding = $binding } } })
+Assert-View 'current agent catalog derives exact 49 represented / 0 missing host bindings' (
+  $currentAgentBindings.Count -eq 49 -and
+  @($currentAgentBindings | Where-Object { [string]$_.Binding.representation -eq 'missing' }).Count -eq 0 -and
+  @($registry.Catalogs.agents.items | ForEach-Object { @($_.hostBindings | Where-Object { [string]$_.host -notin @('Cursor','OpenCode','Antigravity','Vscode','Cline','Kilocode','Codex') }).Count } | Measure-Object -Sum).Sum -eq 0
+) "bindings=$($currentAgentBindings.Count)"
 
 # Phase 3A machinery guard baseline: capture exact canonical/host skill state
 # before the shadow-slice machinery runs — status rows, tracked diff raw
@@ -527,22 +499,22 @@ try {
   Assert-RegistryFailure $result 'fail-loud shape mismatch fails' 'FailLoudContract'
   $result = Invoke-EdgeCase 'agents' { param($c) if ($c.agents.items[1].hostBindings[0].alias) { $c.agents.items[1].hostBindings[0].alias = 'implementer' } else { $c.agents.items[1].hostBindings[0] | Add-Member Alias 'implementer' } }
   Assert-RegistryFailure $result 'alias cannot replace canonical identity' 'AliasReplacesCanonicalIdentity'
-  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].evidencePaths = @('analysis/procedure-normalization-inventory-2026-09.json') }
-  Assert-RegistryFailure $result 'agent host evidence mismatch fails' 'HostEvidenceContract'
+  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].evidencePaths = @('analysis/__missing-evidence__.json') }
+  Assert-RegistryFailure $result 'missing agent host evidence fails' 'HostEvidence'
   $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].routeIdentity = 'wrong-route' }
-  Assert-RegistryFailure $result 'agent route identity mismatch fails' 'HostRouteIdentity'
-  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].launchMechanism = 'wrong launch' }
-  Assert-RegistryFailure $result 'agent launch mechanism mismatch fails' 'HostLaunchMechanism'
-  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].representation = 'generated-native-projection' }
-  Assert-RegistryFailure $result 'agent host representation mismatch fails' 'HostRepresentation'
+  Assert-RegistryFailure $result 'agent route identity without ownership fails' 'RouteIdentityOwnership'
+  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].launchMechanism = '' }
+  Assert-RegistryFailure $result 'missing agent launch mechanism fails' 'HostBindingField'
+  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].representation = 'unexpected-representation' }
+  Assert-RegistryFailure $result 'invalid agent representation fails' 'InvalidRepresentation'
   $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].alias = 'wrong-alias' }
-  Assert-RegistryFailure $result 'agent host alias mismatch fails' 'HostAlias'
-  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].authority = 'workspace-write' }
-  Assert-RegistryFailure $result 'agent host authority mismatch fails' 'HostAuthority'
-  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].isolation = 'fresh task/session per pass' }
-  Assert-RegistryFailure $result 'agent host isolation mismatch fails' 'HostIsolation'
-  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].classification = 'generated output' }
-  Assert-RegistryFailure $result 'agent host classification mismatch fails' 'HostClassification'
+  Assert-RegistryFailure $result 'agent alias without canonical ownership fails' 'AliasOwnership'
+  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].authority = 'admin' }
+  Assert-RegistryFailure $result 'invalid agent host authority fails' 'InvalidAuthority'
+  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].isolation = 'shared-session' }
+  Assert-RegistryFailure $result 'invalid agent host isolation fails' 'InvalidIsolation'
+  $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].classification = 'fallback contract' }
+  Assert-RegistryFailure $result 'invalid representation/classification pair fails' 'InvalidRepresentationClass'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].explicitOnly = -not $c.skills.items[0].explicitOnly }
   Assert-RegistryFailure $result 'explicit-only mismatch fails' 'ExplicitOnlyMismatch'
   $result = Invoke-SkillInventoryEdgeCase { param($i) $i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'architecture-survey' } | ForEach-Object { $_.PSObject.Properties.Remove('explicit_only') } }
@@ -1907,7 +1879,7 @@ try {
   # Phase 3A machinery guard: the shadow slice must not change canonical skill
   # bodies or any host/runtime projection. Phase 3B replaces this guard with
   # managed-frontmatter migration checks when canonical files are regenerated.
-  # Phase 2 agent parity legitimately edits agent wrappers, manifests, and
+  # Current agent-catalog updates legitimately edit agent wrappers, manifests, and
   # overlay indexes. Scope the residual Phase 3A guard to canonical and host
   # skill projections; broader source agreement remains in the registry,
   # inventory, manifest, and current-state checks. The final comparison uses
@@ -1953,21 +1925,31 @@ try {
     $missing = @($Signatures | Where-Object { -not $observed.Output.Contains($_) })
     Assert-View $Name ($observed.Exit -eq 1 -and $missing.Count -eq 0) "exit=$($observed.Exit); missing=$($missing -join '; ')"
   }
-  Assert-CheckerMutation 'represented pair listed as pending ambiguity fails' {
-    param($i)
-    $ambiguity = $i.ambiguities_requiring_owner_confirmation | Where-Object { $_.id -eq 'U-Cursor-Bugbot' }
-    $ambiguity.pending_missing_pairs = @([pscustomobject]@{ host = 'Cline'; agent = 'planner' })
-  } @('AmbiguityPendingPairRepresented: U-Cursor-Bugbot -> Cline|planner')
-  Assert-CheckerMutation 'unknown pair listed as pending ambiguity fails' {
-    param($i)
-    $ambiguity = $i.ambiguities_requiring_owner_confirmation | Where-Object { $_.id -eq 'U-Cursor-Bugbot' }
-    $ambiguity.pending_missing_pairs = @([pscustomobject]@{ host = 'Cline'; agent = 'not-a-governed-agent' })
-  } @('AmbiguityPendingPairUnknown: U-Cursor-Bugbot -> Cline|not-a-governed-agent')
-  Assert-CheckerMutation 'invented missing pair fails closed at zero missing' {
-    param($i) $i.missing_pairs_with_proposed_phase2 = @(
-      [pscustomobject]@{ host = 'Cline'; agent = 'implementer'; proposed_phase2 = 'fresh-task-session-fallback' }
-    )
-  } @('MissingPairCount: expected 0, got 1')
+  function Invoke-AgentsCatalogMutation([scriptblock]$Mutate) {
+    $catalog = Get-Content -Raw (Join-Path $RepoRoot 'catalog/agents.json') | ConvertFrom-Json
+    & $Mutate $catalog
+    $path = Join-Path $checkerTemp ("agents-" + [Guid]::NewGuid().ToString('N') + '.json')
+    $catalog | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $path
+    $output = (& $checker -RepoRoot $RepoRoot -AgentsCatalogPath $path *>&1 | Out-String)
+    return [pscustomobject]@{ Exit = $LASTEXITCODE; Output = $output }
+  }
+  function Assert-AgentsCatalogMutation([string]$Name,[scriptblock]$Mutate,[string[]]$Signatures) {
+    $observed = Invoke-AgentsCatalogMutation $Mutate
+    $missing = @($Signatures | Where-Object { -not $observed.Output.Contains($_) })
+    Assert-View $Name ($observed.Exit -eq 1 -and $missing.Count -eq 0) "exit=$($observed.Exit); missing=$($missing -join '; ')"
+  }
+  Assert-AgentsCatalogMutation 'duplicate agent host binding fails' {
+    param($c) $c.items[0].hostBindings[1].host = $c.items[0].hostBindings[0].host
+  } @('AgentHostDuplicate: planner/Cursor')
+  Assert-AgentsCatalogMutation 'unknown agent host binding fails' {
+    param($c) $c.items[0].hostBindings[0].host = 'UnknownHost'
+  } @('AgentHostUnknown: planner/UnknownHost')
+  Assert-AgentsCatalogMutation 'invalid agent representation fails' {
+    param($c) $c.items[0].hostBindings[0].representation = 'unexpected'
+  } @('AgentRepresentation: planner/Cursor=unexpected')
+  Assert-AgentsCatalogMutation 'missing agent binding evidence fails' {
+    param($c) $c.items[0].hostBindings[0].evidencePaths = @()
+  } @('AgentBindingEvidence: planner/Cursor')
   Assert-CheckerMutation 'missing last_updated date fails' {
     param($i) $i.PSObject.Properties.Remove('last_updated')
   } @("InventoryLastUpdatedFormat: invalid ISO calendar date ''")
