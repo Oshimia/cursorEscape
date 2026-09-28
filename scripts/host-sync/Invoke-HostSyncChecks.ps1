@@ -257,8 +257,9 @@ try {
         $unicodePermissionKeys[2] -eq 'ä*') ($unicodePermissionKeys -join ',')
 
     # U23 pins the exact retained extension surfaces. This map is
-    # authoritative; reserved surfaces contain only their placeholder, and the
-    # pre-existing populated Cursor rules surface remains pinned to its leaves.
+    # authoritative; remaining reserved surfaces contain only their
+    # placeholder, and the pre-existing populated Cursor rules surface remains
+    # pinned to its leaves.
     $extensionExpectations = [ordered]@{
         'codex/hooks'       = @('_index.md')
         'cursor/rules'      = @(
@@ -267,9 +268,6 @@ try {
             'iterative-plan-review.mdc'
             'pre-commit-ci-gate.mdc'
         )
-        'cursor/hooks'      = @('_index.md')
-        'kilocode/hooks'    = @('_index.md')
-        'opencode/hooks'    = @('_index.md')
         'vscode/rules'      = @('_index.md')
         'vscode/hooks'      = @('_index.md')
     }
