@@ -447,7 +447,7 @@ function Get-RegistrySkillHostFrontmatterShadow {
     manifest entry delivering the skill wrapper. Returns one row per host for
     managed-view evidence; all defects are appended as fail-closed invariants.
   #>
-  param([Parameter(Mandatory)]$Skill,[Parameter(Mandatory)]$Inventory,[Parameter(Mandatory)][string]$RepoRoot,$Manifests = $null,[System.Collections.Generic.List[string]]$Failures)
+  param([Parameter(Mandatory)]$Skill,[Parameter(Mandatory)][string]$RepoRoot,$Manifests = $null,[System.Collections.Generic.List[string]]$Failures)
   $id = [string]$Skill.id
   $profilesProperty = $Skill.PSObject.Properties['hostFrontmatterProfiles']
   $profiles = @(if ($null -ne $profilesProperty) { $profilesProperty.Value })
@@ -462,16 +462,13 @@ function Get-RegistrySkillHostFrontmatterShadow {
   foreach ($manifest in @($Manifests)) {
     $manifestHost = [string]$manifest.host
     if (-not $manifestHostsSeen.Add($manifestHost)) {
-      Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id has more than one current manifest for host '$manifestHost'"
+      Add-RegistryFailure $Failures 'SkillWrapperManifest' "$id has more than one current manifest for host '$manifestHost'"
       continue
     }
     $manifestsByHost[$manifestHost] = $manifest
   }
   $bindingsByHost = @{}
   foreach ($binding in @($Skill.hostApplicability)) { $bindingsByHost[[string]$binding.host] = $binding }
-  $inventorySkill = @($Inventory.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq $id })
-  $inventoryBindingsByHost = @{}
-  if ($inventorySkill.Count -eq 1) { foreach ($binding in @($inventorySkill[0].host_applicability)) { $inventoryBindingsByHost[[string]$binding.host] = $binding } }
   $profileByHost = @{}
   $covered = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
   foreach ($profile in $profiles) {
@@ -510,11 +507,11 @@ function Get-RegistrySkillHostFrontmatterShadow {
     $manifest = if ($manifestsByHost.ContainsKey($hostName)) { $manifestsByHost[$hostName] } else { $null }
     $manifestEntries = $null
     if ($null -eq $manifest) {
-      Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id/$hostName has no registered host manifest"
+      Add-RegistryFailure $Failures 'SkillWrapperManifest' "$id/$hostName has no registered host manifest"
     } else {
       $entriesProperty = $manifest.PSObject.Properties['entries']
       if ($null -eq $entriesProperty) {
-        Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id/$hostName registered host manifest declares no entries"
+        Add-RegistryFailure $Failures 'SkillWrapperManifest' "$id/$hostName registered host manifest declares no entries"
       } else {
         $manifestEntries = @($entriesProperty.Value)
       }
@@ -523,37 +520,33 @@ function Get-RegistrySkillHostFrontmatterShadow {
       if (-not $covered.Contains($hostName)) { Add-RegistryFailure $Failures 'SkillHostFrontmatterProfileCoverage' "$id/$hostName applicable binding has no host frontmatter profile" }
       $rowStatus = 'mismatch'; $wrapperSource = '-'
       $profile = if ($profileByHost.ContainsKey($hostName)) { $profileByHost[$hostName] } else { $null }
-      $inventoryBinding = if ($inventoryBindingsByHost.ContainsKey($hostName)) { $inventoryBindingsByHost[$hostName] } else { $null }
       $sourceProperty = if ($null -ne $profile) { $profile.PSObject.Properties['wrapperSource'] } else { $null }
-      $bindingSource = ''; $bindingDestination = ''
-      $deliveryEvidence = -1
-      if ($null -ne $inventoryBinding -and $null -ne $manifestEntries) {
-        $bindingSourceProperty = $inventoryBinding.PSObject.Properties['source']
-        $bindingDestinationProperty = $inventoryBinding.PSObject.Properties['destination']
-        $bindingSource = if ($null -ne $bindingSourceProperty) { [string]$bindingSourceProperty.Value } else { '' }
-        $bindingDestination = if ($null -ne $bindingDestinationProperty) { [string]$bindingDestinationProperty.Value } else { '' }
-        $deliveryEvidence = @($manifestEntries | Where-Object {
-          $entrySource = if ($_.PSObject.Properties['source']) { [string]$_.source } else { '' }
-          $entryDestination = if ($_.PSObject.Properties['destination']) { [string]$_.destination } else { '' }
-          $entrySource -ceq $bindingSource -and $entryDestination -ceq $bindingDestination
-        }).Count
-      }
-      if ($deliveryEvidence -ne 1) {
-        Add-RegistryFailure $Failures 'SkillWrapperManifestInventory' "$id/$hostName expected exactly one manifest entry delivering source='$bindingSource' destination='$bindingDestination'; found $deliveryEvidence"
-      }
-      if ($null -ne $profile -and $null -ne $sourceProperty -and $null -ne $inventoryBinding -and $null -ne $manifest -and $null -ne $manifestEntries) {
-        $wrapperSource = [string]$sourceProperty.Value
-        $resolved = Get-RegistrySkillWrapperSourcePath -Binding $inventoryBinding -Manifest $manifest -SkillId $id -HostName $hostName -Failures $Failures
-        if ($null -ne $resolved) {
-          if ($resolved -cne $wrapperSource) {
-            Add-RegistryFailure $Failures 'SkillWrapperRouting' "$id/$hostName manifest-resolved='$resolved' profile='$wrapperSource'"
-          } elseif ($deliveryEvidence -eq 1) {
-            $raw = Get-RegistrySkillSourceRaw -Path (Join-Path $RepoRoot $resolved) -Label "$id/$hostName" -Failures $Failures
-            if ($null -ne $raw) {
-              $rowStatus = Get-RegistrySkillWrapperFrontmatterShadow -SkillId $id -Profile $profile -HostName $hostName -Raw $raw -Failures $Failures
+      $delivery = @($manifestEntries | Where-Object {
+        $entrySource = if ($_.PSObject.Properties['source']) { [string]$_.source } else { '' }
+        $entryDestination = if ($_.PSObject.Properties['destination']) { [string]$_.destination } else { '' }
+        $entrySource -ceq "skills/$id/SKILL.md" -or
+        $entrySource -ceq "shared:skills/$id/SKILL.md" -or
+        $entryDestination -cmatch "(^|/)$([regex]::Escape($id))/SKILL\.md$"
+      })
+      if ($delivery.Count -eq 1) {
+        $bindingSource = [string]$delivery[0].source
+        $bindingDestination = [string]$delivery[0].destination
+        if ($null -ne $profile -and $null -ne $sourceProperty) {
+          $wrapperSource = [string]$sourceProperty.Value
+          $resolved = Get-RegistrySkillWrapperSourcePath -Binding ([pscustomobject]@{ source = $bindingSource }) -Manifest $manifest -SkillId $id -HostName $hostName -Failures $Failures
+          if ($null -ne $resolved) {
+            if ($resolved -cne $wrapperSource) {
+              Add-RegistryFailure $Failures 'SkillWrapperRouting' "$id/$hostName manifest-resolved='$resolved' profile='$wrapperSource'"
+            } else {
+              $raw = Get-RegistrySkillSourceRaw -Path (Join-Path $RepoRoot $resolved) -Label "$id/$hostName" -Failures $Failures
+              if ($null -ne $raw) {
+                $rowStatus = Get-RegistrySkillWrapperFrontmatterShadow -SkillId $id -Profile $profile -HostName $hostName -Raw $raw -Failures $Failures
+              }
             }
           }
         }
+      } else {
+        Add-RegistryFailure $Failures 'SkillWrapperDelivery' "$id/$hostName expected exactly one manifest wrapper delivery; found $($delivery.Count)"
       }
       $rows.Add([pscustomobject]@{ Skill = $id; Host = $hostName; Status = $rowStatus; WrapperSource = $wrapperSource })
     } else {
@@ -959,23 +952,20 @@ function Test-RegistryHostCompositionOwnership {
 }
 
 function Test-RegistryCatalog {
-  param([Parameter(Mandatory)]$Catalog,[Parameter(Mandatory)][ValidateSet('agents','rules','skills','workflows')][string]$Kind,[Parameter(Mandatory)][string]$RepoRoot,$OverlayRoots = @{},$Inventory = $null,$Manifests = $null)
+  param([Parameter(Mandatory)]$Catalog,[Parameter(Mandatory)][ValidateSet('agents','rules','skills','workflows')][string]$Kind,[Parameter(Mandatory)][string]$RepoRoot,$OverlayRoots = @{},$Manifests = $null)
   $failures = [System.Collections.Generic.List[string]]::new()
   $items = @($Catalog.items); $ids = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
   $allIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
   foreach ($item in $items) { if (-not $allIds.Add([string]$item.id)) { Add-RegistryFailure $failures 'DuplicateId' "$Kind/$($item.id)" } }
   if ($Kind -eq 'skills') {
-    if ($null -eq $Inventory) { throw 'FAIL: skill canonical consistency requires the Phase 0 inventory' }
     $registeredSkillIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
     foreach ($item in $items) { $null = $registeredSkillIds.Add([string]$item.id) }
-    $inventorySkillIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
-    foreach ($item in @($Inventory.skills_inventory.canonical_skills)) { $null = $inventorySkillIds.Add([string]$item.id) }
     $governedProfileIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
     foreach ($skillId in $script:SkillHostFrontmatterProfileSkillIds) { $null = $governedProfileIds.Add([string]$skillId) }
-    $guardComplete = $registeredSkillIds.Count -eq 22 -and $inventorySkillIds.Count -eq 22 -and $governedProfileIds.Count -eq 22 -and
-      $registeredSkillIds.SetEquals($inventorySkillIds) -and $registeredSkillIds.SetEquals($governedProfileIds)
+    $guardComplete = $registeredSkillIds.Count -eq 22 -and $governedProfileIds.Count -eq 22 -and
+      $registeredSkillIds.SetEquals($governedProfileIds)
     if (-not $guardComplete) {
-      Add-RegistryFailure $failures 'SkillHostFrontmatterProfileGuard' "registered=$($registeredSkillIds.Count) inventory=$($inventorySkillIds.Count) governed=$($governedProfileIds.Count) sets-equal=$($registeredSkillIds.SetEquals($inventorySkillIds) -and $registeredSkillIds.SetEquals($governedProfileIds))"
+      Add-RegistryFailure $failures 'SkillHostFrontmatterProfileGuard' "registered=$($registeredSkillIds.Count) governed=$($governedProfileIds.Count) sets-equal=$($registeredSkillIds.SetEquals($governedProfileIds))"
     }
   }
   $aliasOwners = [System.Collections.Generic.Dictionary[string,string]]::new([StringComparer]::Ordinal)
@@ -1059,44 +1049,59 @@ function Test-RegistryCatalog {
         }
       }
     } elseif ($Kind -eq 'skills') {
-      if ($null -eq $Inventory) { throw 'FAIL: skill canonical consistency requires the Phase 0 inventory' }
       $raw = Get-RegistrySkillSourceRaw -Path $body -Label $id -Failures $failures
       if ($null -eq $raw) { continue }
       $frontmatterShadow = Get-RegistrySkillFrontmatterShadow -Skill $item -Raw $raw
       foreach ($shadowFailure in $frontmatterShadow.Failures) { $failures.Add($shadowFailure) }
-      $null = Get-RegistrySkillHostFrontmatterShadow -Skill $item -Inventory $Inventory -RepoRoot $RepoRoot -Manifests $Manifests -Failures $failures
+      $null = Get-RegistrySkillHostFrontmatterShadow -Skill $item -RepoRoot $RepoRoot -Manifests $Manifests -Failures $failures
       if ($raw -notmatch "(?m)^name:\s*$([regex]::Escape($id))\s*$") { Add-RegistryFailure $failures 'CanonicalIdentity' "$id skill frontmatter name" }
-      $inventorySkill = @($Inventory.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq $id })
-      if ($inventorySkill.Count -ne 1) { Add-RegistryFailure $failures 'SkillInventory' "$id has $($inventorySkill.Count) inventory rows"; continue }
       $declaredDisabled = $raw -match '(?mi)^disable-model-invocation:\s*true\s*$'
       if ($item.modelInvocationDisabled -isnot [bool] -or $item.modelInvocationDisabled -ne $declaredDisabled) { Add-RegistryFailure $failures 'ModelInvocationDisabledMismatch' "$id registry=$($item.modelInvocationDisabled) markdown=$declaredDisabled" }
-      $inventoryExplicitOnlyProp = $inventorySkill[0].PSObject.Properties['explicit_only']
-      $inventoryExplicitOnly = if ($null -ne $inventoryExplicitOnlyProp) { $inventoryExplicitOnlyProp.Value } else { $null }
-      $inventoryExplicitOnlyText = if ($null -eq $inventoryExplicitOnly) { '<missing>' } else { $inventoryExplicitOnly }
-      if ($item.explicitOnly -isnot [bool] -or $inventoryExplicitOnly -isnot [bool] -or $item.explicitOnly -ne $inventoryExplicitOnly) { Add-RegistryFailure $failures 'ExplicitOnlyMismatch' "$id registry=$($item.explicitOnly) inventory=$inventoryExplicitOnlyText" }
+      $codexManifest = @(@($Manifests) | Where-Object { [string]$_.host -eq 'Codex' })[0]
+      $explicitIds = @()
+      if ($null -ne $codexManifest) {
+        $metadataProperty = $codexManifest.PSObject.Properties['overlay_only_skill_metadata']
+        if ($null -ne $metadataProperty) { $explicitIds = @($metadataProperty.Value | ForEach-Object { [string]$_.skill_id }) }
+      }
+      $expectedExplicit = $explicitIds -contains $id
+      $explicitProperty = $item.PSObject.Properties['explicitOnly']
+      $actualExplicit = if ($null -ne $explicitProperty) { $explicitProperty.Value } else { $null }
+      if ($actualExplicit -isnot [bool] -or $actualExplicit -ne $expectedExplicit) { Add-RegistryFailure $failures 'ExplicitOnlyManifestMismatch' "$id registry=$actualExplicit current-manifest=$expectedExplicit" }
       if (@($item.hostApplicability).Count -ne 7) { Add-RegistryFailure $failures 'SkillHostCoverage' "$id has $(@($item.hostApplicability).Count) bindings" }
       $seen = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+      $manifestsByHost = @{}
+      foreach ($manifest in @($Manifests)) { $manifestsByHost[[string]$manifest.host] = $manifest }
       foreach ($binding in @($item.hostApplicability)) {
         $hostName = [string]$binding.host
         if ($hostName -notin $script:Hosts) { Add-RegistryFailure $failures 'InvalidHost' "$id/$hostName"; continue }
         if (-not $seen.Add($hostName)) { Add-RegistryFailure $failures 'DuplicateHostBinding' "$id/$hostName" }
         if ([string]$binding.status -notin @('applicable','not-applicable')) { Add-RegistryFailure $failures 'NonExplicitSkillBehavior' "$id/$hostName/$($binding.status)" }
-        if ([string]$item.body -cne [string]$inventorySkill[0].source) { Add-RegistryFailure $failures 'SkillCanonicalSource' "$id registry='$($item.body)' inventory='$($inventorySkill[0].source)'" }
-        $inventoryBinding = @($inventorySkill[0].host_applicability | Where-Object { [string]$_.host -eq $hostName })
-        if ($inventoryBinding.Count -ne 1) { Add-RegistryFailure $failures 'SkillHostInventory' "$id/$hostName has $($inventoryBinding.Count) inventory rows"; continue }
-        if ([string]$binding.status -cne [string]$inventoryBinding[0].status) { Add-RegistryFailure $failures 'SkillHostStatus' "$id/$hostName registry='$($binding.status)' inventory='$($inventoryBinding[0].status)'" }
-        if (-not (Test-RegistrySequence $binding.evidencePaths $inventoryBinding[0].evidence_paths)) { Add-RegistryFailure $failures 'SkillHostEvidence' "$id/$hostName registry and Phase 0 evidence differ" }
+        $manifest = if ($manifestsByHost.ContainsKey($hostName)) { $manifestsByHost[$hostName] } else { $null }
+        if ($null -eq $manifest) { Add-RegistryFailure $failures 'SkillHostManifest' "$id/$hostName has no registered manifest"; continue }
+        $entriesProperty = $manifest.PSObject.Properties['entries']
+        $manifestEntries = if ($null -ne $entriesProperty -and $null -ne $entriesProperty.Value) { @($entriesProperty.Value) } else { @() }
+        if ($entriesProperty -eq $null -or $null -eq $entriesProperty.Value) { Add-RegistryFailure $failures 'SkillWrapperManifest' "$id/$hostName current manifest has no entries" }
+        $deliveries = @($manifestEntries | Where-Object {
+          $entrySource = if ($_.PSObject.Properties['source']) { [string]$_.source } else { '' }
+          $entryDestination = if ($_.PSObject.Properties['destination']) { [string]$_.destination } else { '' }
+          $entrySource -ceq "skills/$id/SKILL.md" -or
+          $entrySource -ceq "shared:skills/$id/SKILL.md" -or
+          $entryDestination -cmatch "(^|/)$([regex]::Escape($id))/SKILL\.md$"
+        })
+        if ($deliveries.Count -gt 1) { Add-RegistryFailure $failures 'SkillHostManifest' "$id/$hostName has $($deliveries.Count) wrapper deliveries"; continue }
+        $expectedStatus = if ($deliveries.Count -eq 1) { 'applicable' } else { 'not-applicable' }
+        if ([string]$binding.status -cne $expectedStatus) { Add-RegistryFailure $failures 'SkillHostManifestStatus' "$id/$hostName registry='$($binding.status)' manifest='$expectedStatus'" }
+        if (@($binding.evidencePaths) -notcontains [string]$manifest.path) {
+          Add-RegistryFailure $failures 'SkillHostEvidence' "$id/$hostName does not cite its current manifest"
+        }
         foreach ($evidence in @($binding.evidencePaths)) { $null = Test-RegistryDescendantPath $RepoRoot ([string]$evidence) $failures "HostEvidence:$id/$hostName" }
         if ($binding.PSObject.Properties['destination']) { Add-RegistryFailure $failures 'DestinationOwnership' "$id/$hostName registry cannot own manifest destination metadata" }
       }
     } else {
       $first = Get-Content -LiteralPath $body -TotalCount 1
       if ($first -notmatch '^#\s+') { Add-RegistryFailure $failures 'CanonicalBodyHeading' "$id starts '$first'" }
-      if ($null -eq $Inventory) { throw 'FAIL: rules/workflow consistency requires the Phase 0 inventory' }
-      $inventoryName = if ($Kind -eq 'rules') { 'canonical_rules' } else { 'canonical_workflows' }
-      $inventoryItems = @($Inventory.rules_workflows.PSObject.Properties[$inventoryName].Value | Where-Object { [string]$_.id -eq $id })
-      if ($inventoryItems.Count -ne 1) { Add-RegistryFailure $failures 'RulesWorkflowInventory' "$Kind/$id has $($inventoryItems.Count) inventory rows"; continue }
-      if ([string]$item.body -cne [string]$inventoryItems[0].source) { Add-RegistryFailure $failures 'CanonicalSourceContract' "$Kind/$id registry='$($item.body)' inventory='$($inventoryItems[0].source)'" }
+      $expectedBody = if ($Kind -eq 'workflows') { "workflow/$id.md" } else { "$($Kind)/$id.md" }
+      if ([string]$item.body -cne $expectedBody) { Add-RegistryFailure $failures 'CanonicalSourceContract' "$Kind/$id registry='$($item.body)' expected '$expectedBody'" }
     }
   }
   if ($Kind -eq 'workflows') {
@@ -1106,13 +1111,11 @@ function Test-RegistryCatalog {
     foreach ($item in $items) { $null = $knownIds.Add([string]$item.id) }
     foreach ($item in @($rulesCatalog.items)) { $null = $knownIds.Add([string]$item.id) }
     $compIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
-    $consumedInventoryCompositions = [System.Collections.Generic.HashSet[int]]::new()
     foreach ($composition in $comps) {
       $cid = [string]$composition.id
       if (-not $compIds.Add($cid)) { Add-RegistryFailure $failures 'DuplicateCompositionId' $cid }
       if ([string]$composition.host -notin $script:Hosts) { Add-RegistryFailure $failures 'InvalidHost' "$cid/$($composition.host)" }
       if (-not $knownIds.Contains([string]$composition.canonicalReferenceId)) { Add-RegistryFailure $failures 'InvalidCompositionReference' "$cid canonical '$($composition.canonicalReferenceId)'" }
-      if ($null -eq $Inventory) { throw 'FAIL: composition consistency requires the Phase 0 inventory' }
       $duplicateRefs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
       foreach ($reference in @($composition.references)) {
         $ref = [string]$reference
@@ -1136,18 +1139,7 @@ function Test-RegistryCatalog {
         continue
       }
       $registryReferences = @(Get-RegistrySequence $composition.references)
-      $matchedIndex = -1
-      for ($index = 0; $index -lt @($Inventory.rules_workflows.compositions).Count; $index++) {
-        if ($consumedInventoryCompositions.Contains($index)) { continue }
-        $inventoryComposition = $Inventory.rules_workflows.compositions[$index]
-        if ([string]$inventoryComposition.host -eq [string]$composition.host -and
-            [string]$inventoryComposition.canonical_source -eq "base:rules/$([string]$composition.canonicalReferenceId).md" -and
-            (Test-RegistrySequence $inventoryComposition.composition_order $registryReferences)) {
-          $matchedIndex = $index; break
-        }
-      }
-      if ($matchedIndex -lt 0) { Add-RegistryFailure $failures 'CompositionInventory' "$cid has no unused matching Phase 0 composition"; continue }
-      $null = $consumedInventoryCompositions.Add($matchedIndex)
+      if ($registryReferences.Count -eq 0) { Add-RegistryFailure $failures 'EmptySemanticComposition' $cid }
       foreach ($reference in @($composition.references)) {
         $ref = [string]$reference
         $path = Get-RegistryCompositionReferencePath -Reference $ref -HostName ([string]$composition.host) -OverlayRoots $OverlayRoots
@@ -1163,28 +1155,6 @@ function Test-RegistryCatalog {
     foreach ($compositionId in $order) { if (-not $compositionIdSet.Remove($compositionId)) { Add-RegistryFailure $failures 'SemanticOrderUnknownId' $compositionId } }
     foreach ($remaining in $compositionIdSet) { Add-RegistryFailure $failures 'SemanticOrderMissingId' $remaining }
     Test-RegistryHostCompositionOwnership -Catalog $Catalog -RepoRoot $RepoRoot -Failures $failures
-    # Phase 4D: runtimeOnly compositions that correspond to Phase 0 inventory
-    # entries still account for their inventory counterparts. Antigravity
-    # compositions migrated to runtimeOnly in Phase 4D consumed inventory
-    # indices 1 and 2; match them by host + canonicalReferenceId-derived source.
-    foreach ($composition in $comps) {
-      $isRuntimeComposition = $composition.PSObject.Properties['runtimeOnly'] -and [bool]$composition.runtimeOnly
-      if (-not $isRuntimeComposition) { continue }
-      if (-not $composition.PSObject.Properties['canonicalReferenceId']) { continue }
-      $derivedSource = "base:rules/$([string]$composition.canonicalReferenceId).md"
-      for ($index = 0; $index -lt @($Inventory.rules_workflows.compositions).Count; $index++) {
-        if ($consumedInventoryCompositions.Contains($index)) { continue }
-        $inventoryComposition = $Inventory.rules_workflows.compositions[$index]
-        if ([string]$inventoryComposition.host -eq [string]$composition.host -and
-            [string]$inventoryComposition.canonical_source -eq $derivedSource) {
-          $null = $consumedInventoryCompositions.Add($index)
-          break
-        }
-      }
-    }
-    foreach ($index in @(0..(@($Inventory.rules_workflows.compositions).Count - 1))) {
-      if (-not $consumedInventoryCompositions.Contains($index)) { Add-RegistryFailure $failures 'CompositionInventoryCoverage' "Phase 0 composition index $index is absent from registry" }
-    }
     $alwaysOnHosts = [string[]]@('Cursor','OpenCode','Codex','Antigravity')
     $alwaysOnGates = [string[]]@('invocation','plan-review','code-review','pre-commit')
     $expectedSurfaces = @{
@@ -1223,36 +1193,6 @@ function Test-RegistryCatalog {
         foreach ($evidence in @($policy.evidencePaths)) { $null = Test-RegistryDescendantPath $RepoRoot ([string]$evidence) $failures "AlwaysOnEvidence:$policyId" -Leaf }
       } else { Add-RegistryFailure $failures 'AlwaysOnMissingEvidence' $policyId }
     }
-    if ($alwaysOnItems.Count -eq 16 -and $seenPairs.Count -eq 16) {
-      $inventoryAlwaysOnProps = $Inventory.rules_workflows.PSObject.Properties['always_on']
-      $inventoryAlwaysOnItems = if ($null -ne $inventoryAlwaysOnProps) { @($inventoryAlwaysOnProps.Value) } else { @() }
-      if ($inventoryAlwaysOnItems.Count -ne 16) { Add-RegistryFailure $failures 'AlwaysOnInventoryCoverage' "inventory expected 16 policies, got $($inventoryAlwaysOnItems.Count)" }
-      else {
-        $inventoryPairs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
-        foreach ($inventoryPolicy in $inventoryAlwaysOnItems) {
-          $invHost = [string]$inventoryPolicy.host; $invGate = [string]$inventoryPolicy.gate
-          $null = $inventoryPairs.Add("${invHost}|${invGate}")
-        }
-        if (-not $seenPairs.SetEquals($inventoryPairs)) {
-          Add-RegistryFailure $failures 'AlwaysOnInventoryMismatch' "registry coverage '$(($seenPairs | Sort-Object) -join '|')' differs from inventory '$(($inventoryPairs | Sort-Object) -join '|')'"
-        }
-        foreach ($registryPolicy in $alwaysOnItems) {
-          $matchedInventory = @($inventoryAlwaysOnItems | Where-Object { [string]$_.host -eq [string]$registryPolicy.host -and [string]$_.gate -eq [string]$registryPolicy.gate })
-          if ($matchedInventory.Count -ne 1) { continue }
-          $invPolicy = $matchedInventory[0]
-          foreach ($field in @('id','surface','canonicalReferenceId')) {
-            $registryValue = [string]$registryPolicy.$field
-            $invProp = $invPolicy.PSObject.Properties[$field]
-            $inventoryValue = if ($null -ne $invProp) { [string]$invProp.Value } else { '' }
-            if ($registryValue -cne $inventoryValue) { Add-RegistryFailure $failures 'AlwaysOnInventoryMismatch' "$field registry='$registryValue' inventory='$inventoryValue'" }
-          }
-          $registryEvidence = @(Get-RegistrySequence $registryPolicy.evidencePaths)
-          $invEvidenceProp = $invPolicy.PSObject.Properties['evidence_paths']
-          $inventoryEvidence = if ($null -ne $invEvidenceProp) { @(Get-RegistrySequence $invEvidenceProp.Value) } else { @() }
-          if (-not (Test-RegistrySequence $registryEvidence $inventoryEvidence)) { Add-RegistryFailure $failures 'AlwaysOnInventoryEvidenceMismatch' "$($registryPolicy.id) evidence differs from inventory" }
-        }
-      }
-    }
   }
   return $failures
 }
@@ -1264,8 +1204,6 @@ function Test-ProcedureRegistryCatalogs {
   $schemaPath = Join-Path $RepoRoot 'catalog/schema/v1.json'
   if (-not (Test-Path -LiteralPath $schemaPath -PathType Leaf)) { throw "FAIL: missing schema $schemaPath" }
   $schema = Get-Content -Raw -LiteralPath $schemaPath
-  $inventoryPath = Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json'
-  try { $inventory = Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json } catch { throw "FAIL: invalid inventory: $($_.Exception.Message)" }
   $manifests = Get-RegistryManifests -RepoRoot $RepoRoot
   $overlayRoots = @{}; foreach ($manifest in @($manifests)) { $overlayRoots[$manifest.host] = @{ Overlay = $manifest.overlay_root; Shared = $manifest.shared_root } }
   foreach ($kind in $script:ExpectedKinds.Keys) {
@@ -1275,20 +1213,12 @@ function Test-ProcedureRegistryCatalogs {
     if (-not (Test-Json -Json $raw -Schema $schema -ErrorAction SilentlyContinue)) { Add-RegistryFailure $failures 'SchemaValidation' $script:ExpectedKinds[$kind] }
     if ($catalog.schema -ne 'catalog/v1' -or $catalog.kind -ne $kind) { Add-RegistryFailure $failures 'SchemaVersionOrKindMismatch' "$($script:ExpectedKinds[$kind]) schema=$($catalog.schema) kind=$($catalog.kind)" }
     $catalogs[$kind] = $catalog
-    foreach ($failure in (Test-RegistryCatalog -Catalog $catalog -Kind $kind -RepoRoot $RepoRoot -OverlayRoots $overlayRoots -Inventory $inventory -Manifests $manifests)) { $failures.Add($failure) }
-  }
-  $pairs = @{ rules = 'canonical_rules'; skills = 'canonical_skills'; workflows = 'canonical_workflows' }
-  foreach ($kind in $pairs.Keys) {
-    $source = switch ($kind) { 'skills' { $inventory.skills_inventory.canonical_skills } default { $inventory.rules_workflows | Select-Object -ExpandProperty $pairs[$kind] } }
-    $expectedIds = $source | ForEach-Object id
-    $expected = @($expectedIds | Sort-Object) -join '|'
-    $actual = @($catalogs[$kind].items | ForEach-Object id | Sort-Object) -join '|'
-    if ($expected -ne $actual) { Add-RegistryFailure $failures 'InventoryCoverageMismatch' "$kind expected '$expected' actual '$actual'" }
+    foreach ($failure in (Test-RegistryCatalog -Catalog $catalog -Kind $kind -RepoRoot $RepoRoot -OverlayRoots $overlayRoots -Manifests $manifests)) { $failures.Add($failure) }
   }
   $knownIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
   foreach ($kind in @('agents','skills','rules','workflows')) { foreach ($item in @($catalogs[$kind].items)) { $null = $knownIds.Add([string]$item.id) } }
   foreach ($composition in @($catalogs.workflows.compositions)) { if (-not $knownIds.Contains([string]$composition.canonicalReferenceId)) { Add-RegistryFailure $failures 'InvalidCompositionReference' "$($composition.id) canonical '$($composition.canonicalReferenceId)'" } }
-  return [pscustomobject]@{ Valid = ($failures.Count -eq 0); Failures = $failures; Catalogs = $catalogs; Inventory = $inventory; Manifests = $manifests }
+  return [pscustomobject]@{ Valid = ($failures.Count -eq 0); Failures = $failures; Catalogs = $catalogs; Manifests = $manifests }
 }
 
 function New-RegistryProjectionResolver {
@@ -1309,7 +1239,7 @@ function Resolve-RegistryProjection {
 }
 
 function Get-RegistryManagedView {
-  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$RepoRoot,$Resolver = (New-RegistryProjectionResolver),$Inventory = $null,$Manifests = $null)
+  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$RepoRoot,$Resolver = (New-RegistryProjectionResolver),$Manifests = $null)
   $identity = [ordered]@{ schema = 'managed-view/v1'; generatedFrom = 'catalog/v1'; hosts = @($script:Hosts); counts = [ordered]@{} }
   foreach ($kind in @('agents','skills','rules','workflows')) { $identity.counts[$kind] = @($Catalogs[$kind].items).Count }
   $identityJson = $identity | ConvertTo-Json -Depth 5
@@ -1341,14 +1271,10 @@ function Get-RegistryManagedView {
     $shadow = Get-RegistrySkillFrontmatterShadow -Skill $skill -Raw $skillRaw
     $skillShadow.Add(($shadow.Id,$shadow.Status,$shadow.Newlines) -join "`t")
   }
-  if ($null -eq $Inventory) {
-    $inventoryPath = Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json'
-    try { $Inventory = Get-Content -Raw -LiteralPath $inventoryPath | ConvertFrom-Json } catch { throw "FAIL: invalid inventory: $($_.Exception.Message)" }
-  }
   $wrapperShadow = [System.Collections.Generic.List[string]]::new(); $wrapperShadow.Add("skill`thost`twrapperShadow`twrapperSource")
   foreach ($skill in $Catalogs.skills.items) {
     $shadowFailures = [System.Collections.Generic.List[string]]::new()
-    foreach ($row in (Get-RegistrySkillHostFrontmatterShadow -Skill $skill -Inventory $Inventory -RepoRoot $RepoRoot -Manifests $Manifests -Failures $shadowFailures)) {
+    foreach ($row in (Get-RegistrySkillHostFrontmatterShadow -Skill $skill -RepoRoot $RepoRoot -Manifests $Manifests -Failures $shadowFailures)) {
       $wrapperShadow.Add(($row.Skill,$row.Host,$row.Status,$row.WrapperSource) -join "`t")
     }
     if ($shadowFailures.Count -gt 0) { throw "FAIL: $($shadowFailures[0])" }
@@ -1493,11 +1419,11 @@ function Test-RegistryOutputRoot([string]$OutputRoot,[string]$RepoRoot,[switch]$
 }
 
 function Write-RegistryManagedView {
-  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$OutputRoot,[string]$RepoRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),$Resolver = (New-RegistryProjectionResolver),$Inventory = $null,$Manifests = $null,[switch]$AllowTemporaryRoot)
+  param([Parameter(Mandatory)]$Catalogs,[Parameter(Mandatory)][string]$OutputRoot,[string]$RepoRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),$Resolver = (New-RegistryProjectionResolver),$Manifests = $null,[switch]$AllowTemporaryRoot)
   Test-RegistryOutputRoot -OutputRoot $OutputRoot -RepoRoot $RepoRoot -AllowTemporaryRoot:$AllowTemporaryRoot
   if ($null -eq $Manifests) { $Manifests = Get-RegistryManifests -RepoRoot $RepoRoot }
   Test-RegistryCompositionOutputBoundary -OutputRoot $OutputRoot -RepoRoot $RepoRoot -Catalogs $Catalogs -Manifests $Manifests
-  $view = Get-RegistryManagedView -Catalogs $Catalogs -RepoRoot $RepoRoot -Resolver $Resolver -Inventory $Inventory -Manifests $Manifests
+  $view = Get-RegistryManagedView -Catalogs $Catalogs -RepoRoot $RepoRoot -Resolver $Resolver -Manifests $Manifests
   New-Item -ItemType Directory -Force -Path $OutputRoot | Out-Null
   $encoding = [System.Text.UTF8Encoding]::new($false)
   foreach ($file in $view.Files.GetEnumerator()) {

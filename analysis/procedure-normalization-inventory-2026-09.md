@@ -1,8 +1,8 @@
 # Procedure normalization inventory — 2026-09
 
-**Phase:** 0 · **Status:** implementation-under-review · **Schema:** v2 · **Snapshot date:** 2026-09-11 · **Last updated:** 2026-09-27
+**Phase:** 0 · **Status:** historical · **Schema:** v2 · **Snapshot date:** 2026-09-11 · **Last updated:** 2026-09-27 · **Superseded by:** `catalog/` and current host manifests
 
-This is a read-only current-state snapshot. It identifies evidence and policy; it does not authorize migration or Apply. The snapshot date is the original Phase 0 capture; the last-updated date records later reconciliation edits only.
+This is a historical Phase 0 record, not a current-state authority. Current authority lives in the four catalog files and the current host manifests. The snapshot date is the original Phase 0 capture; the last-updated date records later reconciliation edits only. This record does not authorize migration or Apply.
 
 ## Representation terms
 

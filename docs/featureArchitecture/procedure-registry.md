@@ -19,7 +19,7 @@ The procedure registry is the sole writable source for machine metadata used to 
 | Host-only leaves and safety boundaries | Registered overlays and adapters. |
 | Byte-exact regression anchors | Committed render baselines. |
 
-Registry entries are closed to their declared ownership fields. A skill entry mirrors canonical `disable-model-invocation`, while `explicitOnly` comes from inventory. Registry entries reject destination metadata because manifests own bindings.
+Registry entries are closed to their declared ownership fields. A skill entry mirrors canonical `disable-model-invocation`; Codex `OverlayOnlySkillMetadata` supplies the explicit-only evidence, and the registry compares catalog policy to that current manifest metadata. Registry entries reject destination metadata because manifests own bindings.
 
 ### Canonical source flow
 
@@ -32,7 +32,7 @@ To change an existing governed entity:
 To add a governed entity:
 
 1. Create the canonical Markdown source and frontmatter.
-2. Add exact catalog coverage; agents require `catalog/agents.json`. Skill, rule, and workflow additions also require exact inventory coverage only until the Phase 7 current-source migration is complete.
+2. Add exact coverage to the applicable catalog: `catalog/agents.json`, `catalog/skills.json`, `catalog/rules.json`, or `catalog/workflows.json`.
 3. Add the registry entry with required identity, authority, isolation, loop/gate, fail-loud, host representation, and applicability fields.
 4. Add a composition when order matters, bind it from the host manifest by `CompositionId`, and register host-only leaves.
 5. Run Fast CI for schema/coverage closure and Full CI for host, fixture, and baseline closure.
@@ -45,7 +45,7 @@ Lifecycle hooks and other host-specific surfaces are manifest concerns. The regi
 
 ### Fail-closed boundary
 
-`scripts/normalization/ProcedureRegistry.psm1` validates schema/version, exact coverage (catalog-derived for agents; inventory parity remains only for skills/rules/workflows until Phase 7), IDs, canonical identity and first-read contracts, required reading, aliases, authority/isolation, loop/gate policy, fail-loud behavior, host representation, route identity, launch evidence, skill flags, explicit applicability, canonical rule/workflow sources, one-to-one composition coverage, duplicate-free semantic order, and path containment.
+`scripts/normalization/ProcedureRegistry.psm1` validates schema/version, exact current catalog coverage, IDs, canonical identity and first-read contracts, required reading, aliases, authority/isolation, loop/gate policy, fail-loud behavior, host representation, route identity, launch evidence, skill flags, manifest-derived applicability, canonical rule/workflow sources, one-to-one composition coverage, duplicate-free semantic order, and path containment.
 
 Stale host-snapshot restore baselines are not part of the registry or Apply boundary.
 
@@ -77,7 +77,7 @@ Committed baselines are generated regression anchors, never hand-edited expectat
 
 | Gate | Sole entry point | Role |
 | --- | --- | --- |
-| Fast | `scripts/normalization/Invoke-NormalizationFastCI.ps1` | Blocking registry, inventory, current-state, host-sync Unit, focused Codex-render, hygiene, and diff checks. |
+| Fast | `scripts/normalization/Invoke-NormalizationFastCI.ps1` | Blocking registry, current-state, host-sync Unit, focused Codex-render, hygiene, and diff checks. |
 | Full | `scripts/normalization/Invoke-NormalizationFullCI.ps1` | Fast plus consolidated host, all-stack disposable dry-run, Codex lifecycle, drift fixture, and disposable render verification. |
 
 There is exactly one Fast entry point and one Full entry point. Host-sync suite scripts are internal Full CI components, not alternate entry points.

@@ -3,6 +3,11 @@
   "inventory_date": "2026-09-11",
   "last_updated": "2026-09-27",
   "phase": 0,
+  "historical": true,
+  "superseded_by": [
+    "catalog/",
+    "scripts/host-sync/manifests/"
+  ],
   "hosts": [
     "Cursor",
     "OpenCode",

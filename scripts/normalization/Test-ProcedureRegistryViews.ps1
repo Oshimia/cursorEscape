@@ -211,8 +211,8 @@ function Get-Phase3ADriftContentSnapshot {
 $sliceBefore = Get-Phase3ADriftContentSnapshot
 $temp = Join-Path ([IO.Path]::GetTempPath()) ("procedure-registry-" + [Guid]::NewGuid().ToString('N'))
 try {
-  $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -Inventory $registry.Inventory -Manifests $registry.Manifests -AllowTemporaryRoot
-  $two = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'two') -RepoRoot $RepoRoot -Inventory $registry.Inventory -Manifests $registry.Manifests -AllowTemporaryRoot
+  $one = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'one') -RepoRoot $RepoRoot -Manifests $registry.Manifests -AllowTemporaryRoot
+  $two = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $temp 'two') -RepoRoot $RepoRoot -Manifests $registry.Manifests -AllowTemporaryRoot
   Assert-View 'double render has ten files (six base + four managed compositions)' ($one.Files.Keys.Count -eq 10 -and $two.Files.Keys.Count -eq 10) "one=$($one.Files.Keys.Count) two=$($two.Files.Keys.Count)"
   foreach ($name in @($one.Files.Keys)) {
     $hashA = (Get-FileHash (Join-Path (Join-Path $temp 'one') $name) -Algorithm SHA256).Hash
@@ -395,11 +395,11 @@ try {
       Copy-Item -LiteralPath (Join-Path $RepoRoot $mirrorRefPath) -Destination $mirrorTarget
     }
   }
-  $cleanView = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $viewMirror -Inventory $registry.Inventory -Manifests $registry.Manifests
+  $cleanView = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $viewMirror -Manifests $registry.Manifests
   Assert-View 'managed view renders clean sources through the ingress loader' ((@(($cleanView.Files['skill-frontmatter-shadow.tsv'] -split "`n" | Where-Object { $_ }) | Select-Object -Skip 1 | Where-Object { $_ -notmatch "`tmatch`t" })).Count -eq 0)
   [IO.File]::WriteAllBytes((Join-Path $viewMirror ([string]$bomSkill.body)), [byte[]]([byte[]]@(0xEF,0xBB,0xBF) + [Text.UTF8Encoding]::new($false).GetBytes($bomRaw)))
   $viewBomThrew = $false
-  try { $null = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $viewMirror -Inventory $registry.Inventory -Manifests $registry.Manifests } catch { $viewBomThrew = ($_.Exception.Message -like 'FAIL: SkillSourceBom:*') }
+  try { $null = Get-RegistryManagedView -Catalogs $registry.Catalogs -RepoRoot $viewMirror -Manifests $registry.Manifests } catch { $viewBomThrew = ($_.Exception.Message -like 'FAIL: SkillSourceBom:*') }
   Assert-View 'managed view rejects a BOM-prefixed canonical source before rendering shadow evidence' $viewBomThrew
   $cursorProfile = @(@($registry.Catalogs.skills.items | Where-Object { [string]$_.id -eq 'implementation-plan' }).hostFrontmatterProfiles | Where-Object { @($_.hosts) -contains 'Cursor' })[0]
   $wrongNameFailures = [System.Collections.Generic.List[string]]::new()
@@ -460,24 +460,36 @@ function Invoke-EdgeCase([string]$Kind,[scriptblock]$Mutate) {
   $catalogs = Get-FreshCatalogs
   & $Mutate $catalogs
   foreach ($name in @('agents','skills','rules','workflows')) { $catalogs[$name].schema = 'catalog/v1'; $catalogs[$name].kind = $name }
+  $overlayRoots = @{}
+  foreach ($manifest in $registry.Manifests) { $overlayRoots[$manifest.host] = @{ Overlay = $manifest.overlay_root; Shared = $manifest.shared_root } }
   $observed = [System.Collections.Generic.List[string]]::new()
   foreach ($name in @('agents','skills','rules','workflows')) {
-    foreach ($failure in (Test-RegistryCatalog -Catalog $catalogs[$name] -Kind $name -RepoRoot $RepoRoot -Inventory $registry.Inventory -Manifests $registry.Manifests)) { $observed.Add($failure) }
+    foreach ($failure in (Test-RegistryCatalog -Catalog $catalogs[$name] -Kind $name -RepoRoot $RepoRoot -OverlayRoots $overlayRoots -Manifests $registry.Manifests)) { $observed.Add($failure) }
   }
   return [pscustomobject]@{ Valid = ($observed.Count -eq 0); Failures = $observed }
 }
-function Invoke-SkillInventoryEdgeCase([scriptblock]$MutateInventory) {
-  $inventory = [pscustomobject]@{
-    skills_inventory = ($registry.Inventory.skills_inventory | ConvertTo-Json -Depth 100 | ConvertFrom-Json)
-    manifests = (Get-RegistryManifests -RepoRoot $RepoRoot | ConvertTo-Json -Depth 100 | ConvertFrom-Json)
-  }
-  & $MutateInventory $inventory
-  $catalog = Get-FreshCatalogs
-  $catalog.skills.schema = 'catalog/v1'; $catalog.skills.kind = 'skills'
-  $observed = @(Test-RegistryCatalog -Catalog $catalog.skills -Kind 'skills' -RepoRoot $RepoRoot -Inventory $inventory -Manifests $inventory.manifests)
+function Invoke-SkillManifestSourceEdgeCase([string]$SkillId,[string]$HostName,[string]$Source) {
+  $catalogs = Get-FreshCatalogs
+  $manifests = @(Get-RegistryManifests -RepoRoot $RepoRoot | ConvertTo-Json -Depth 100 | ConvertFrom-Json)
+  $manifest = @($manifests | Where-Object { [string]$_.host -eq $HostName })[0]
+  $entries = @(@($manifest.entries) | Where-Object {
+    ("$($_.destination)" -cmatch "(^|/)$([regex]::Escape($SkillId))/SKILL\.md$") -or
+    ("$($_.source)" -cmatch "(^|:)skills/$([regex]::Escape($SkillId))/SKILL\.md$")
+  })
+  if ($entries.Count -ne 1) { throw "FAIL: expected one current $HostName manifest entry for $SkillId, found $($entries.Count)" }
+  $entries[0].source = $Source
+  $observed = @(Test-RegistryCatalog -Catalog $catalogs.skills -Kind 'skills' -RepoRoot $RepoRoot -Manifests $manifests)
   return [pscustomobject]@{ Valid = ($observed.Count -eq 0); Failures = $observed }
 }
-try {
+function Invoke-SkillManifestEdgeCase([scriptblock]$MutateState) {
+  $catalogs = Get-FreshCatalogs
+  $manifests = @(Get-RegistryManifests -RepoRoot $RepoRoot | ConvertTo-Json -Depth 100 | ConvertFrom-Json)
+  $state = [pscustomobject]@{ skills = @($catalogs.skills.items); manifests = $manifests }
+  & $MutateState $state
+  $catalogs.skills.items = @($state.skills)
+  $observed = @(Test-RegistryCatalog -Catalog $catalogs.skills -Kind 'skills' -RepoRoot $RepoRoot -Manifests $state.manifests)
+  return [pscustomobject]@{ Valid = ($observed.Count -eq 0); Failures = $observed }
+}try {
   $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].id = 'duplicate-id'; $c.agents.items[1].id = 'duplicate-id' }
   Assert-RegistryFailure $result 'duplicate agent ID fails' 'DuplicateId'
   $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].body = 'agents/__missing__.md' }
@@ -516,11 +528,11 @@ try {
   $result = Invoke-EdgeCase 'agents' { param($c) $c.agents.items[0].hostBindings[0].classification = 'fallback contract' }
   Assert-RegistryFailure $result 'invalid representation/classification pair fails' 'InvalidRepresentationClass'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].explicitOnly = -not $c.skills.items[0].explicitOnly }
-  Assert-RegistryFailure $result 'explicit-only mismatch fails' 'ExplicitOnlyMismatch'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'architecture-survey' } | ForEach-Object { $_.PSObject.Properties.Remove('explicit_only') } }
-  Assert-RegistryFailure $result 'missing inventory explicit_only fails' 'ExplicitOnlyMismatch'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'architecture-survey' } | ForEach-Object { $_.explicit_only = 'yes' } }
-  Assert-RegistryFailure $result 'non-boolean inventory explicit_only fails' 'ExplicitOnlyMismatch'
+  Assert-RegistryFailure $result 'explicit-only mismatch fails' 'ExplicitOnlyManifestMismatch'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $s.skills | Where-Object { [string]$_.id -eq 'architecture-survey' } | ForEach-Object { $_.PSObject.Properties.Remove('explicitOnly') } }
+  Assert-RegistryFailure $result 'missing catalog explicitOnly fails' 'ExplicitOnlyManifestMismatch'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $s.skills | Where-Object { [string]$_.id -eq 'architecture-survey' } | ForEach-Object { $_.explicitOnly = 'yes' } }
+  Assert-RegistryFailure $result 'non-boolean catalog explicitOnly fails' 'ExplicitOnlyManifestMismatch'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].modelInvocationDisabled = -not $c.skills.items[0].modelInvocationDisabled }
   Assert-RegistryFailure $result 'model-invocation-disabled mismatch fails' 'ModelInvocationDisabledMismatch'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].description.lines[0] = 'mutated registry description line' }
@@ -536,7 +548,7 @@ try {
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].hostApplicability[0].status = 'maybe' }
   Assert-RegistryFailure $result 'non-explicit skill behavior fails' 'NonExplicitSkillBehavior'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].hostApplicability[0].status = 'applicable' }
-  Assert-RegistryFailure $result 'skill host applicability mismatch fails' 'SkillHostStatus'
+  Assert-RegistryFailure $result 'skill host applicability mismatch fails' 'SkillHostManifestStatus'
   $result = Invoke-EdgeCase 'skills' { param($c) $c.skills.items[0].hostApplicability[0] | Add-Member Destination 'owned-by-registry' }
   Assert-RegistryFailure $result 'registry-owned skill destination fails' 'DestinationOwnership'
   foreach ($yamlScalar in @('no','on','null','42','0b1010','1:30','190:20:30','190:20:30.15')) {
@@ -589,14 +601,14 @@ try {
     Assert-RegistryFailure $result "$profileId profile removal fails closed" 'SkillHostFrontmatterProfileMissing'
     $result = Invoke-EdgeCase 'skills' { param($c) @((@($c.skills.items | Where-Object { [string]$_.id -eq $profileId }))[0].hostFrontmatterProfiles)[0].hosts = @('Cursor') }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId profile covering a not-applicable host fails closed" 'SkillHostFrontmatterProfileCoverage'
-    $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq $profileId }))[0].host_applicability | Where-Object { $_.host -eq 'Codex' } | ForEach-Object { $_.source = 'skills/roadmap/SKILL.md' } }.GetNewClosure()
+    $result = Invoke-SkillManifestSourceEdgeCase -SkillId $profileId -HostName 'Codex' -Source 'skills/roadmap/SKILL.md'
     Assert-RegistryFailure $result "$profileId wrong-source routing fails closed" 'SkillWrapperRouting'
     $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq $profileId }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Codex' })[0].description.lines = @('Wrong plain scalar.') }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId Codex plain-scalar wrapper description mismatch fails closed" 'SkillWrapperFrontmatterShadow'
     $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq $profileId }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Codex' })[0].modelInvocationDisabled = $true }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId Codex disable mismatch fails closed" 'SkillWrapperDisableModelInvocation'
     $notApplicableHost = if ($profileId -eq 'domain-modeling') { 'Cursor' } elseif ($profileId -eq 'grilling') { 'Kilocode' } else { 'Cline' }
-    $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq $notApplicableHost }))[0].entries += [pscustomobject]@{ source = "skills/$profileId/SKILL.md"; destination = "skills/$profileId/SKILL.md" } }.GetNewClosure()
+    $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq $notApplicableHost }))[0].entries += [pscustomobject]@{ source = "skills/$profileId/SKILL.md"; destination = "skills/$profileId/SKILL.md" } }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId not-applicable delivery injection fails closed" 'SkillWrapperNotApplicable'
   }
   foreach ($profileId in @('tdd','resolving-merge-conflicts','teach','wait-what','wizard')) {
@@ -604,7 +616,7 @@ try {
     Assert-RegistryFailure $result "$profileId profile removal fails closed" 'SkillHostFrontmatterProfileMissing'
     $result = Invoke-EdgeCase 'skills' { param($c) @((@($c.skills.items | Where-Object { [string]$_.id -eq $profileId }))[0].hostFrontmatterProfiles)[0].hosts = @('Cursor') }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId uncovered Codex binding and not-applicable profile fail closed" 'SkillHostFrontmatterProfileCoverage'
-    $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq $profileId }))[0].host_applicability | Where-Object { $_.host -eq 'Codex' } | ForEach-Object { $_.source = 'skills/roadmap/SKILL.md' } }.GetNewClosure()
+    $result = Invoke-SkillManifestSourceEdgeCase -SkillId $profileId -HostName 'Codex' -Source 'skills/roadmap/SKILL.md'
     Assert-RegistryFailure $result "$profileId wrong-source routing fails closed" 'SkillWrapperRouting'
     $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq $profileId }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Codex' })[0].description.lines = @('Wrong plain scalar.') }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId Codex plain-scalar wrapper description mismatch fails closed" 'SkillWrapperFrontmatterShadow'
@@ -613,12 +625,12 @@ try {
     $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq $profileId }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Codex' })[0].wrapperSource = 'overlays/codex/skills/roadmap/SKILL.md' }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId wrong profile-source routing fails closed" 'SkillWrapperRouting'
     $notApplicableHost = if ($profileId -eq 'tdd') { 'Cursor' } elseif ($profileId -eq 'resolving-merge-conflicts') { 'Kilocode' } elseif ($profileId -eq 'teach') { 'OpenCode' } elseif ($profileId -eq 'wait-what') { 'Antigravity' } else { 'Vscode' }
-    $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq $notApplicableHost }))[0].entries += [pscustomobject]@{ source = "skills/$profileId/SKILL.md"; destination = "skills/$profileId/SKILL.md" } }.GetNewClosure()
+    $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq $notApplicableHost }))[0].entries += [pscustomobject]@{ source = "skills/$profileId/SKILL.md"; destination = "skills/$profileId/SKILL.md" } }.GetNewClosure()
     Assert-RegistryFailure $result "$profileId not-applicable delivery injection fails closed" 'SkillWrapperNotApplicable'
-    $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0].entries += [pscustomobject]@{ source = "skills/$profileId/SKILL.md"; destination = "$profileId/SKILL.md" } }.GetNewClosure()
-    Assert-RegistryFailure $result "$profileId duplicate manifest delivery fails closed" 'SkillWrapperManifestInventory'
-    $result = Invoke-SkillInventoryEdgeCase { param($i) $codexManifest = @(@($i.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq "skills/$profileId/SKILL.md" -and $_.destination -ceq "$profileId/SKILL.md") }) }.GetNewClosure()
-    Assert-RegistryFailure $result "$profileId missing manifest delivery fails closed" 'SkillWrapperManifestInventory'
+    $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0].entries += [pscustomobject]@{ source = "skills/$profileId/SKILL.md"; destination = "$profileId/SKILL.md" } }.GetNewClosure()
+    Assert-RegistryFailure $result "$profileId duplicate manifest delivery fails closed" 'SkillWrapperDelivery'
+    $result = Invoke-SkillManifestEdgeCase { param($s) $codexManifest = @(@($s.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq "skills/$profileId/SKILL.md" -and $_.destination -ceq "$profileId/SKILL.md") }) }.GetNewClosure()
+    Assert-RegistryFailure $result "$profileId missing manifest delivery fails closed" 'SkillWrapperDelivery'
   }
   $governedSkillIdSet = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
   foreach ($governedId in @(& (Get-Module ProcedureRegistry) { $script:SkillHostFrontmatterProfileSkillIds })) { $null = $governedSkillIdSet.Add([string]$governedId) }
@@ -642,7 +654,7 @@ try {
     Assert-RegistryFailure $result "$phase3KId profile removal fails closed" 'SkillHostFrontmatterProfileMissing'
     $result = Invoke-EdgeCase 'skills' { param($c) @((@($c.skills.items | Where-Object { [string]$_.id -eq $phase3KId }))[0].hostFrontmatterProfiles)[0].hosts = @('Cline') }.GetNewClosure()
     Assert-RegistryFailure $result "$phase3KId uncovered Codex binding and not-applicable profile fail closed" 'SkillHostFrontmatterProfileCoverage'
-    $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq $phase3KId }))[0].host_applicability | Where-Object { $_.host -eq 'Codex' } | ForEach-Object { $_.source = 'skills/roadmap/SKILL.md' } }.GetNewClosure()
+    $result = Invoke-SkillManifestSourceEdgeCase -SkillId $phase3KId -HostName 'Codex' -Source 'skills/roadmap/SKILL.md'
     Assert-RegistryFailure $result "$phase3KId wrong-source routing fails closed" 'SkillWrapperRouting'
     $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq $phase3KId }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Codex' })[0].description.lines = @('Wrong plain scalar.') }.GetNewClosure()
     Assert-RegistryFailure $result "$phase3KId Codex plain-scalar wrapper description mismatch fails closed" 'SkillWrapperFrontmatterShadow'
@@ -650,12 +662,12 @@ try {
     Assert-RegistryFailure $result "$phase3KId Codex disable mismatch fails closed" 'SkillWrapperDisableModelInvocation'
     $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq $phase3KId }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Codex' })[0].wrapperSource = 'overlays/codex/skills/roadmap/SKILL.md' }.GetNewClosure()
     Assert-RegistryFailure $result "$phase3KId wrong profile-source routing fails closed" 'SkillWrapperRouting'
-    $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Cline' }))[0].entries += [pscustomobject]@{ source = "skills/$phase3KId/SKILL.md"; destination = "skills/$phase3KId/SKILL.md" } }.GetNewClosure()
+    $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Cline' }))[0].entries += [pscustomobject]@{ source = "skills/$phase3KId/SKILL.md"; destination = "skills/$phase3KId/SKILL.md" } }.GetNewClosure()
     Assert-RegistryFailure $result "$phase3KId not-applicable delivery injection fails closed" 'SkillWrapperNotApplicable'
-    $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0].entries += [pscustomobject]@{ source = "skills/$phase3KId/SKILL.md"; destination = "$phase3KId/SKILL.md" } }.GetNewClosure()
-    Assert-RegistryFailure $result "$phase3KId duplicate manifest delivery fails closed" 'SkillWrapperManifestInventory'
-    $result = Invoke-SkillInventoryEdgeCase { param($i) $codexManifest = @(@($i.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq "skills/$phase3KId/SKILL.md" -and $_.destination -ceq "$phase3KId/SKILL.md") }) }.GetNewClosure()
-    Assert-RegistryFailure $result "$phase3KId missing manifest delivery fails closed" 'SkillWrapperManifestInventory'
+    $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0].entries += [pscustomobject]@{ source = "skills/$phase3KId/SKILL.md"; destination = "$phase3KId/SKILL.md" } }.GetNewClosure()
+    Assert-RegistryFailure $result "$phase3KId duplicate manifest delivery fails closed" 'SkillWrapperDelivery'
+    $result = Invoke-SkillManifestEdgeCase { param($s) $codexManifest = @(@($s.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq "skills/$phase3KId/SKILL.md" -and $_.destination -ceq "$phase3KId/SKILL.md") }) }.GetNewClosure()
+    Assert-RegistryFailure $result "$phase3KId missing manifest delivery fails closed" 'SkillWrapperDelivery'
   }
   $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq 'plan-review' }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Codex' })[0].description.lines = @('Wrong wrapper description.') }
   Assert-RegistryFailure $result 'wrapper description mismatch fails closed' 'SkillWrapperFrontmatterShadow'
@@ -707,106 +719,106 @@ try {
   Assert-RegistryFailure $result 'architecture-survey wrong-source routing fails closed' 'SkillWrapperRouting'
   $result = Invoke-EdgeCase 'skills' { param($c) (@((@($c.skills.items | Where-Object { [string]$_.id -eq 'codebase-design' }))[0].hostFrontmatterProfiles) | Where-Object { @($_.hosts) -contains 'Codex' })[0].wrapperSource = 'overlays/codex/skills/architecture-survey/SKILL.md' }
   Assert-RegistryFailure $result 'codebase-design wrong-source routing fails closed' 'SkillWrapperRouting'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'implementation-plan' }))[0].host_applicability | Where-Object { [string]$_.host -eq 'Antigravity' } | ForEach-Object { $_.source = 'skills/implementation-plan/SKILL.md' } }
+  $result = Invoke-SkillManifestSourceEdgeCase -SkillId 'implementation-plan' -HostName 'Antigravity' -Source 'skills/implementation-plan/SKILL.md'
   Assert-RegistryFailure $result 'shared wrapper source rebinding fails closed' 'SkillWrapperRouting'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'composer' }))[0].host_applicability | Where-Object { $_.host -eq 'Vscode' } | ForEach-Object { $_.source = 'shared:skills/composer/SKILL.md' } }
+  $result = Invoke-SkillManifestSourceEdgeCase -SkillId 'composer' -HostName 'Vscode' -Source 'shared:skills/composer/SKILL.md'
   Assert-RegistryFailure $result 'composer authored wrapper source rebinding fails closed' 'SkillWrapperRouting'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'discovery' }))[0].host_applicability | Where-Object { $_.host -eq 'Antigravity' } | ForEach-Object { $_.source = 'shared:skills/implementation-plan/SKILL.md' } }
+  $result = Invoke-SkillManifestSourceEdgeCase -SkillId 'discovery' -HostName 'Antigravity' -Source 'shared:skills/implementation-plan/SKILL.md'
   Assert-RegistryFailure $result 'discovery wrong-source routing fails closed' 'SkillWrapperRouting'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'documentation-architecture' }))[0].host_applicability | Where-Object { $_.host -eq 'Vscode' } | ForEach-Object { $_.source = 'shared:skills/discovery/SKILL.md' } }
+  $result = Invoke-SkillManifestSourceEdgeCase -SkillId 'documentation-architecture' -HostName 'Vscode' -Source 'shared:skills/discovery/SKILL.md'
   Assert-RegistryFailure $result 'documentation-architecture wrong-source routing fails closed' 'SkillWrapperRouting'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'roadmap' }))[0].host_applicability | Where-Object { $_.host -eq 'Antigravity' } | ForEach-Object { $_.source = 'shared:skills/discovery/SKILL.md' } }
+  $result = Invoke-SkillManifestSourceEdgeCase -SkillId 'roadmap' -HostName 'Antigravity' -Source 'shared:skills/discovery/SKILL.md'
   Assert-RegistryFailure $result 'roadmap wrong-source routing fails closed' 'SkillWrapperRouting'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'research' }))[0].host_applicability | Where-Object { $_.host -eq 'Codex' } | ForEach-Object { $_.source = 'skills/roadmap/SKILL.md' } }
+  $result = Invoke-SkillManifestSourceEdgeCase -SkillId 'research' -HostName 'Codex' -Source 'skills/roadmap/SKILL.md'
   Assert-RegistryFailure $result 'research wrong-source routing fails closed' 'SkillWrapperRouting'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'architecture-survey' }))[0].host_applicability | Where-Object { $_.host -eq 'Codex' } | ForEach-Object { $_.source = 'skills/codebase-design/SKILL.md' } }
+  $result = Invoke-SkillManifestSourceEdgeCase -SkillId 'architecture-survey' -HostName 'Codex' -Source 'skills/codebase-design/SKILL.md'
   Assert-RegistryFailure $result 'architecture-survey wrong-source routing fails closed' 'SkillWrapperRouting'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.skills_inventory.canonical_skills | Where-Object { [string]$_.id -eq 'codebase-design' }))[0].host_applicability | Where-Object { $_.host -eq 'Codex' } | ForEach-Object { $_.source = 'skills/architecture-survey/SKILL.md' } }
+  $result = Invoke-SkillManifestSourceEdgeCase -SkillId 'codebase-design' -HostName 'Codex' -Source 'skills/architecture-survey/SKILL.md'
   Assert-RegistryFailure $result 'codebase-design wrong-source routing fails closed' 'SkillWrapperRouting'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Cursor' }))[0].entries += [pscustomobject]@{ source = 'skills/plan-review/SKILL.md'; destination = 'skills/plan-review/SKILL.md' } }
+  $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Cursor' }))[0].entries += [pscustomobject]@{ source = 'skills/plan-review/SKILL.md'; destination = 'skills/plan-review/SKILL.md' } }
   Assert-RegistryFailure $result 'declared not-applicable wrapper delivery fails closed' 'SkillWrapperNotApplicable'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/composer/SKILL.md'; destination = 'skills/composer/SKILL.md' } }
+  $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/composer/SKILL.md'; destination = 'skills/composer/SKILL.md' } }
   Assert-RegistryFailure $result 'composer not-applicable delivery injection fails closed' 'SkillWrapperNotApplicable'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Cursor' }))[0].entries += [pscustomobject]@{ source = 'skills/discovery/SKILL.md'; destination = 'skills/discovery/SKILL.md' } }
+  $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Cursor' }))[0].entries += [pscustomobject]@{ source = 'skills/discovery/SKILL.md'; destination = 'skills/discovery/SKILL.md' } }
   Assert-RegistryFailure $result 'discovery not-applicable delivery injection fails closed' 'SkillWrapperNotApplicable'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/documentation-architecture/SKILL.md'; destination = 'skills/documentation-architecture/SKILL.md' } }
+  $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/documentation-architecture/SKILL.md'; destination = 'skills/documentation-architecture/SKILL.md' } }
   Assert-RegistryFailure $result 'documentation-architecture not-applicable delivery injection fails closed' 'SkillWrapperNotApplicable'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/roadmap/SKILL.md'; destination = 'skills/roadmap/SKILL.md' } }
+  $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/roadmap/SKILL.md'; destination = 'skills/roadmap/SKILL.md' } }
   Assert-RegistryFailure $result 'roadmap not-applicable delivery injection fails closed' 'SkillWrapperNotApplicable'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Cursor' }))[0].entries += [pscustomobject]@{ source = 'skills/research/SKILL.md'; destination = 'skills/research/SKILL.md' } }
+  $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Cursor' }))[0].entries += [pscustomobject]@{ source = 'skills/research/SKILL.md'; destination = 'skills/research/SKILL.md' } }
   Assert-RegistryFailure $result 'research not-applicable delivery injection fails closed' 'SkillWrapperNotApplicable'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/bug-review-sweep/SKILL.md'; destination = 'skills/bug-review-sweep/SKILL.md' } }
+  $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/bug-review-sweep/SKILL.md'; destination = 'skills/bug-review-sweep/SKILL.md' } }
   Assert-RegistryFailure $result 'bug-review-sweep not-applicable delivery injection fails closed' 'SkillWrapperNotApplicable'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Cursor' }))[0].entries += [pscustomobject]@{ source = 'skills/diagnosing-bugs/SKILL.md'; destination = 'skills/diagnosing-bugs/SKILL.md' } }
+  $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Cursor' }))[0].entries += [pscustomobject]@{ source = 'skills/diagnosing-bugs/SKILL.md'; destination = 'skills/diagnosing-bugs/SKILL.md' } }
   Assert-RegistryFailure $result 'diagnosing-bugs not-applicable delivery injection fails closed' 'SkillWrapperNotApplicable'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/architecture-survey/SKILL.md'; destination = 'skills/architecture-survey/SKILL.md' } }
+  $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/architecture-survey/SKILL.md'; destination = 'skills/architecture-survey/SKILL.md' } }
   Assert-RegistryFailure $result 'architecture-survey not-applicable delivery injection fails closed' 'SkillWrapperNotApplicable'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/codebase-design/SKILL.md'; destination = 'skills/codebase-design/SKILL.md' } }
+  $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Kilocode' }))[0].entries += [pscustomobject]@{ source = 'skills/codebase-design/SKILL.md'; destination = 'skills/codebase-design/SKILL.md' } }
   Assert-RegistryFailure $result 'codebase-design not-applicable delivery injection fails closed' 'SkillWrapperNotApplicable'
   foreach ($deliveryId in @('domain-modeling','grilling','prototype')) {
-    $result = Invoke-SkillInventoryEdgeCase { param($i) @(@($i.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0].entries += [pscustomobject]@{ source = "skills/$deliveryId/SKILL.md"; destination = "$deliveryId/SKILL.md" } }.GetNewClosure()
-    Assert-RegistryFailure $result "$deliveryId duplicate manifest delivery fails closed" 'SkillWrapperManifestInventory'
-    $result = Invoke-SkillInventoryEdgeCase { param($i) $codexManifest = @(@($i.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq "skills/$deliveryId/SKILL.md" -and $_.destination -ceq "$deliveryId/SKILL.md") }) }.GetNewClosure()
-    Assert-RegistryFailure $result "$deliveryId missing manifest delivery fails closed" 'SkillWrapperManifestInventory'
+    $result = Invoke-SkillManifestEdgeCase { param($s) @(@($s.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0].entries += [pscustomobject]@{ source = "skills/$deliveryId/SKILL.md"; destination = "$deliveryId/SKILL.md" } }.GetNewClosure()
+    Assert-RegistryFailure $result "$deliveryId duplicate manifest delivery fails closed" 'SkillWrapperDelivery'
+    $result = Invoke-SkillManifestEdgeCase { param($s) $codexManifest = @(@($s.manifests | Where-Object { [string]$_.host -eq 'Codex' }))[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq "skills/$deliveryId/SKILL.md" -and $_.destination -ceq "$deliveryId/SKILL.md") }) }.GetNewClosure()
+    Assert-RegistryFailure $result "$deliveryId missing manifest delivery fails closed" 'SkillWrapperDelivery'
   }
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $i.manifests = @($i.manifests | Where-Object { [string]$_.host -ne 'Cline' }) }
-  Assert-RegistryFailure $result 'missing host manifest evidence fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) @($i.manifests | Where-Object { [string]$_.host -eq 'Cline' })[0].PSObject.Properties.Remove('entries') }
-  Assert-RegistryFailure $result 'manifest without entries fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $i.manifests = @($i.manifests) + @($i.manifests[0]) }
-  Assert-RegistryFailure $result 'duplicate host manifest inventory fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $cursorManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Cursor' })[0]; $cursorManifest.entries = @($cursorManifest.entries | Where-Object { -not ($_.source -ceq 'skills/implementation-plan/SKILL.md' -and $_.destination -ceq 'skills/implementation-plan/SKILL.md') }) }
-  Assert-RegistryFailure $result 'applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $vscodeManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Vscode' })[0]; $vscodeManifest.entries = @($vscodeManifest.entries | Where-Object { -not ($_.source -ceq 'skills/composer/SKILL.md' -and $_.destination -ceq 'skills/composer/SKILL.md') }) }
-  Assert-RegistryFailure $result 'composer applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $opencodeManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'OpenCode' })[0]; $opencodeManifest.entries = @($opencodeManifest.entries | Where-Object { -not ($_.source -ceq 'skills/discovery/SKILL.md' -and $_.destination -ceq 'skills/discovery/SKILL.md') }) }
-  Assert-RegistryFailure $result 'discovery applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $cursorManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Cursor' })[0]; $cursorManifest.entries = @($cursorManifest.entries | Where-Object { -not ($_.source -ceq 'skills/documentation-architecture/SKILL.md' -and $_.destination -ceq 'skills/documentation-architecture/SKILL.md') }) }
-  Assert-RegistryFailure $result 'documentation-architecture applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $cursorManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Cursor' })[0]; $cursorManifest.entries = @($cursorManifest.entries | Where-Object { -not ($_.source -ceq 'skills/roadmap/SKILL.md' -and $_.destination -ceq 'skills/roadmap/SKILL.md') }) }
-  Assert-RegistryFailure $result 'roadmap applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $codexManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq 'skills/research/SKILL.md' -and $_.destination -ceq 'research/SKILL.md') }) }
-  Assert-RegistryFailure $result 'research applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $codexManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq 'skills/bug-review-sweep/SKILL.md' -and $_.destination -ceq 'bug-review-sweep/SKILL.md') }) }
-  Assert-RegistryFailure $result 'bug-review-sweep applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $opencodeManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'OpenCode' })[0]; $opencodeManifest.entries = @($opencodeManifest.entries | Where-Object { -not ($_.source -ceq 'skills/diagnosing-bugs/SKILL.md' -and $_.destination -ceq 'skills/diagnosing-bugs/SKILL.md') }) }
-  Assert-RegistryFailure $result 'diagnosing-bugs applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $codexManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq 'skills/architecture-survey/SKILL.md' -and $_.destination -ceq 'architecture-survey/SKILL.md') }) }
-  Assert-RegistryFailure $result 'architecture-survey applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $codexManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq 'skills/codebase-design/SKILL.md' -and $_.destination -ceq 'codebase-design/SKILL.md') }) }
-  Assert-RegistryFailure $result 'codebase-design applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $cursorManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Cursor' })[0]; $cursorManifest.entries = @($cursorManifest.entries) + @(@($cursorManifest.entries | Where-Object { $_.source -ceq 'skills/implementation-plan/SKILL.md' }) | Select-Object -First 1) }
-  Assert-RegistryFailure $result 'duplicate delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $antigravityManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Antigravity' })[0]; $antigravityManifest.entries = @($antigravityManifest.entries) + @(@($antigravityManifest.entries | Where-Object { $_.source -ceq 'skills/implementation-review/SKILL.md' }) | Select-Object -First 1) }
-  Assert-RegistryFailure $result 'implementation-review duplicate delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $antigravityManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Antigravity' })[0]; $antigravityManifest.entries = @($antigravityManifest.entries) + @(@($antigravityManifest.entries | Where-Object { $_.source -ceq 'shared:skills/discovery/SKILL.md' }) | Select-Object -First 1) }
-  Assert-RegistryFailure $result 'discovery duplicate delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $opencodeManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'OpenCode' })[0]; $opencodeManifest.entries = @($opencodeManifest.entries) + @(@($opencodeManifest.entries | Where-Object { $_.source -ceq 'skills/documentation-architecture/SKILL.md' }) | Select-Object -First 1) }
-  Assert-RegistryFailure $result 'documentation-architecture duplicate delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $antigravityManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Antigravity' })[0]; $antigravityManifest.entries = @($antigravityManifest.entries) + @(@($antigravityManifest.entries | Where-Object { $_.source -ceq 'shared:skills/roadmap/SKILL.md' }) | Select-Object -First 1) }
-  Assert-RegistryFailure $result 'roadmap duplicate delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $codexManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries) + @(@($codexManifest.entries | Where-Object { $_.source -ceq 'skills/research/SKILL.md' }) | Select-Object -First 1) }
-  Assert-RegistryFailure $result 'research duplicate delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $codexManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries) + @(@($codexManifest.entries | Where-Object { $_.source -ceq 'skills/bug-review-sweep/SKILL.md' }) | Select-Object -First 1) }
-  Assert-RegistryFailure $result 'bug-review-sweep duplicate delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $antigravityManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Antigravity' })[0]; $antigravityManifest.entries = @($antigravityManifest.entries) + @(@($antigravityManifest.entries | Where-Object { $_.source -ceq 'shared:skills/diagnosing-bugs/SKILL.md' }) | Select-Object -First 1) }
-  Assert-RegistryFailure $result 'diagnosing-bugs duplicate delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $codexManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries) + @(@($codexManifest.entries | Where-Object { $_.source -ceq 'skills/architecture-survey/SKILL.md' }) | Select-Object -First 1) }
-  Assert-RegistryFailure $result 'architecture-survey duplicate delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
-  $result = Invoke-SkillInventoryEdgeCase { param($i) $codexManifest = @($i.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries) + @(@($codexManifest.entries | Where-Object { $_.source -ceq 'skills/codebase-design/SKILL.md' }) | Select-Object -First 1) }
-  Assert-RegistryFailure $result 'codebase-design duplicate delivering manifest entry fails closed' 'SkillWrapperManifestInventory'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $s.manifests = @($s.manifests | Where-Object { [string]$_.host -ne 'Cline' }) }
+  Assert-RegistryFailure $result 'missing host manifest evidence fails closed' 'SkillWrapperManifest'
+  $result = Invoke-SkillManifestEdgeCase { param($s) @($s.manifests | Where-Object { [string]$_.host -eq 'Cline' })[0].PSObject.Properties.Remove('entries') }
+  Assert-RegistryFailure $result 'manifest without entries fails closed' 'SkillWrapperManifest'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $s.manifests = @($s.manifests) + @($s.manifests[0]) }
+  Assert-RegistryFailure $result 'duplicate host manifest fails closed' 'SkillWrapperManifest'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $cursorManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Cursor' })[0]; $cursorManifest.entries = @($cursorManifest.entries | Where-Object { -not ($_.source -ceq 'skills/implementation-plan/SKILL.md' -and $_.destination -ceq 'skills/implementation-plan/SKILL.md') }) }
+  Assert-RegistryFailure $result 'applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $vscodeManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Vscode' })[0]; $vscodeManifest.entries = @($vscodeManifest.entries | Where-Object { -not ($_.source -ceq 'skills/composer/SKILL.md' -and $_.destination -ceq 'skills/composer/SKILL.md') }) }
+  Assert-RegistryFailure $result 'composer applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $opencodeManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'OpenCode' })[0]; $opencodeManifest.entries = @($opencodeManifest.entries | Where-Object { -not ($_.source -ceq 'skills/discovery/SKILL.md' -and $_.destination -ceq 'skills/discovery/SKILL.md') }) }
+  Assert-RegistryFailure $result 'discovery applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $cursorManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Cursor' })[0]; $cursorManifest.entries = @($cursorManifest.entries | Where-Object { -not ($_.source -ceq 'skills/documentation-architecture/SKILL.md' -and $_.destination -ceq 'skills/documentation-architecture/SKILL.md') }) }
+  Assert-RegistryFailure $result 'documentation-architecture applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $cursorManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Cursor' })[0]; $cursorManifest.entries = @($cursorManifest.entries | Where-Object { -not ($_.source -ceq 'skills/roadmap/SKILL.md' -and $_.destination -ceq 'skills/roadmap/SKILL.md') }) }
+  Assert-RegistryFailure $result 'roadmap applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $codexManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq 'skills/research/SKILL.md' -and $_.destination -ceq 'research/SKILL.md') }) }
+  Assert-RegistryFailure $result 'research applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $codexManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq 'skills/bug-review-sweep/SKILL.md' -and $_.destination -ceq 'bug-review-sweep/SKILL.md') }) }
+  Assert-RegistryFailure $result 'bug-review-sweep applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $opencodeManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'OpenCode' })[0]; $opencodeManifest.entries = @($opencodeManifest.entries | Where-Object { -not ($_.source -ceq 'skills/diagnosing-bugs/SKILL.md' -and $_.destination -ceq 'skills/diagnosing-bugs/SKILL.md') }) }
+  Assert-RegistryFailure $result 'diagnosing-bugs applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $codexManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq 'skills/architecture-survey/SKILL.md' -and $_.destination -ceq 'architecture-survey/SKILL.md') }) }
+  Assert-RegistryFailure $result 'architecture-survey applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $codexManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries | Where-Object { -not ($_.source -ceq 'skills/codebase-design/SKILL.md' -and $_.destination -ceq 'codebase-design/SKILL.md') }) }
+  Assert-RegistryFailure $result 'codebase-design applicable wrapper without a delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $cursorManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Cursor' })[0]; $cursorManifest.entries = @($cursorManifest.entries) + @(@($cursorManifest.entries | Where-Object { $_.source -ceq 'skills/implementation-plan/SKILL.md' }) | Select-Object -First 1) }
+  Assert-RegistryFailure $result 'duplicate delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $antigravityManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Antigravity' })[0]; $antigravityManifest.entries = @($antigravityManifest.entries) + @(@($antigravityManifest.entries | Where-Object { $_.source -ceq 'skills/implementation-review/SKILL.md' }) | Select-Object -First 1) }
+  Assert-RegistryFailure $result 'implementation-review duplicate delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $antigravityManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Antigravity' })[0]; $antigravityManifest.entries = @($antigravityManifest.entries) + @(@($antigravityManifest.entries | Where-Object { $_.source -ceq 'shared:skills/discovery/SKILL.md' }) | Select-Object -First 1) }
+  Assert-RegistryFailure $result 'discovery duplicate delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $opencodeManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'OpenCode' })[0]; $opencodeManifest.entries = @($opencodeManifest.entries) + @(@($opencodeManifest.entries | Where-Object { $_.source -ceq 'skills/documentation-architecture/SKILL.md' }) | Select-Object -First 1) }
+  Assert-RegistryFailure $result 'documentation-architecture duplicate delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $antigravityManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Antigravity' })[0]; $antigravityManifest.entries = @($antigravityManifest.entries) + @(@($antigravityManifest.entries | Where-Object { $_.source -ceq 'shared:skills/roadmap/SKILL.md' }) | Select-Object -First 1) }
+  Assert-RegistryFailure $result 'roadmap duplicate delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $codexManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries) + @(@($codexManifest.entries | Where-Object { $_.source -ceq 'skills/research/SKILL.md' }) | Select-Object -First 1) }
+  Assert-RegistryFailure $result 'research duplicate delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $codexManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries) + @(@($codexManifest.entries | Where-Object { $_.source -ceq 'skills/bug-review-sweep/SKILL.md' }) | Select-Object -First 1) }
+  Assert-RegistryFailure $result 'bug-review-sweep duplicate delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $antigravityManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Antigravity' })[0]; $antigravityManifest.entries = @($antigravityManifest.entries) + @(@($antigravityManifest.entries | Where-Object { $_.source -ceq 'shared:skills/diagnosing-bugs/SKILL.md' }) | Select-Object -First 1) }
+  Assert-RegistryFailure $result 'diagnosing-bugs duplicate delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $codexManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries) + @(@($codexManifest.entries | Where-Object { $_.source -ceq 'skills/architecture-survey/SKILL.md' }) | Select-Object -First 1) }
+  Assert-RegistryFailure $result 'architecture-survey duplicate delivering manifest entry fails closed' 'SkillWrapperDelivery'
+  $result = Invoke-SkillManifestEdgeCase { param($s) $codexManifest = @($s.manifests | Where-Object { [string]$_.host -eq 'Codex' })[0]; $codexManifest.entries = @($codexManifest.entries) + @(@($codexManifest.entries | Where-Object { $_.source -ceq 'skills/codebase-design/SKILL.md' }) | Select-Object -First 1) }
+  Assert-RegistryFailure $result 'codebase-design duplicate delivering manifest entry fails closed' 'SkillWrapperDelivery'
   $result = Invoke-EdgeCase 'rules' { param($c) $c.rules.items[0].body = 'rules/pre-commit-ci-gate.md' }
   Assert-RegistryFailure $result 'rules canonical source mismatch fails' 'CanonicalSourceContract'
   $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.compositions[0].canonicalReferenceId = '__missing__' }
   Assert-RegistryFailure $result 'invalid composition reference fails' 'InvalidCompositionReference'
-  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.compositions[0].references = @($c.workflows.compositions[0].references | Select-Object -Skip 1) }
-  Assert-RegistryFailure $result 'composition prose reference mismatch fails' 'CompositionInventory'
+  $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.compositions[0].references[0] = '__missing__.md' }
+  Assert-RegistryFailure $result 'composition semantic reference drift fails' 'SemanticReference'
   $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.semanticOrder = @($c.workflows.semanticOrder | Select-Object -Skip 1) }
   Assert-RegistryFailure $result 'missing semantic order ID fails' 'SemanticOrderCoverage'
   $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.semanticOrder[1] = $c.workflows.semanticOrder[0] }
   Assert-RegistryFailure $result 'duplicate semantic order ID fails' 'SemanticOrderDuplicate'
   $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.compositions = @($c.workflows.compositions | Select-Object -Skip 1) }
-  Assert-RegistryFailure $result 'omitted inventory composition fails' 'CompositionInventoryCoverage'
+  Assert-RegistryFailure $result 'omitted composition fails' 'SemanticOrderCoverage'
 
   $destinationCatalog = Get-FreshCatalogs
   $destinationCatalog.skills.items[0].hostApplicability[0] | Add-Member Destination 'owned-by-registry'
@@ -931,7 +943,7 @@ try {
   try { $null = Test-RegistryCompositionOutputBoundary -OutputRoot (Join-Path ([IO.Path]::GetTempPath()) 'procedure-registry-boundary-ok') -RepoRoot $RepoRoot -Catalogs $registry.Catalogs -Manifests $registry.Manifests; $boundaryTempOk = $true } catch { }
   Assert-View 'composition output boundary: temporary root passes' $boundaryTempOk
   $writeBoundaryThrew = $false
-  try { $null = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $RepoRoot 'GEMINI.md') -RepoRoot $RepoRoot -Inventory $registry.Inventory -Manifests $registry.Manifests } catch { $writeBoundaryThrew = $true }
+  try { $null = Write-RegistryManagedView -Catalogs $registry.Catalogs -OutputRoot (Join-Path $RepoRoot 'GEMINI.md') -RepoRoot $RepoRoot -Manifests $registry.Manifests } catch { $writeBoundaryThrew = $true }
   Assert-View 'managed writer rejects host projection output root' $writeBoundaryThrew
   # --- Phase 4B: explicit always-on policy for invocation/plan-review/code-review/pre-commit on Cursor/OpenCode/Codex/Antigravity ---
   $alwaysOnItems = @($registry.Catalogs.workflows.alwaysOn)
@@ -955,11 +967,6 @@ try {
     }
   }
   Assert-View 'always-on covers exactly 4x4 host+gate pairs' ($seen4BPairs.Count -eq 16) "uniquePairs=$($seen4BPairs.Count)"
-  $inventoryAlwaysOn = @($registry.Inventory.rules_workflows.always_on)
-  Assert-View 'inventory mirrors 16 always-on policies' ($inventoryAlwaysOn.Count -eq 16) "inventoryCount=$($inventoryAlwaysOn.Count)"
-  $inventory4BPairs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
-  foreach ($invPolicy in $inventoryAlwaysOn) { $null = $inventory4BPairs.Add("$([string]$invPolicy.host)|$([string]$invPolicy.gate)") }
-  Assert-View 'registry and inventory always-on coverage match' ($seen4BPairs.SetEquals($inventory4BPairs)) "registry=$($seen4BPairs.Count) inventory=$($inventory4BPairs.Count)"
   $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.alwaysOn[0].host = 'Vscode' }
   Assert-RegistryFailure $result 'always-on unknown host fails closed' 'AlwaysOnInvalidHost'
   $result = Invoke-EdgeCase 'workflows' { param($c) $c.workflows.alwaysOn[0].gate = 'unknown-gate' }
@@ -1353,7 +1360,7 @@ try {
   }
 
   # Antigravity registry reference reorder fails (registry owns order; reorder triggers
-  # prose-reference mismatch from the general composition inventory).
+  # prose-reference mismatch from the current workflow catalog).
   $result4DRefs = Invoke-EdgeCase 'workflows' {
     param($c)
     $comp = @($c.workflows.compositions | Where-Object { [string]$_.id -eq 'antigravity-gemini' })[0]
@@ -1882,7 +1889,7 @@ try {
   # Current agent-catalog updates legitimately edit agent wrappers, manifests, and
   # overlay indexes. Scope the residual Phase 3A guard to canonical and host
   # skill projections; broader source agreement remains in the registry,
-  # inventory, manifest, and current-state checks. The final comparison uses
+  # manifest, and current-state checks. The final comparison uses
   # the exact, case-sensitive before/after snapshots captured around the
   # machinery — status rows, tracked diff raw stdout bytes compared
   # byte-for-byte, and an untracked path/SHA-256 manifest — so it fails only
@@ -1912,19 +1919,6 @@ try {
     & $checker -RepoRoot $RepoRoot *> $null
     Assert-View 'current-state checker honors explicit RepoRoot from foreign CWD' ($LASTEXITCODE -eq 0) "exit=$LASTEXITCODE"
   } finally { Pop-Location }
-  function Invoke-InventoryMutation([scriptblock]$Mutate) {
-    $inventory = Get-Content -Raw (Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.json') | ConvertFrom-Json
-    & $Mutate $inventory
-    $path = Join-Path $checkerTemp ("inventory-" + [Guid]::NewGuid().ToString('N') + '.json')
-    $inventory | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $path
-    $output = (& $checker -RepoRoot $RepoRoot -InventoryJsonPath $path *>&1 | Out-String)
-    return [pscustomobject]@{ Exit = $LASTEXITCODE; Output = $output }
-  }
-  function Assert-CheckerMutation([string]$Name,[scriptblock]$Mutate,[string[]]$Signatures) {
-    $observed = Invoke-InventoryMutation $Mutate
-    $missing = @($Signatures | Where-Object { -not $observed.Output.Contains($_) })
-    Assert-View $Name ($observed.Exit -eq 1 -and $missing.Count -eq 0) "exit=$($observed.Exit); missing=$($missing -join '; ')"
-  }
   function Invoke-AgentsCatalogMutation([scriptblock]$Mutate) {
     $catalog = Get-Content -Raw (Join-Path $RepoRoot 'catalog/agents.json') | ConvertFrom-Json
     & $Mutate $catalog
@@ -1940,38 +1934,16 @@ try {
   }
   Assert-AgentsCatalogMutation 'duplicate agent host binding fails' {
     param($c) $c.items[0].hostBindings[1].host = $c.items[0].hostBindings[0].host
-  } @('AgentHostDuplicate: planner/Cursor')
+  } @('DuplicateHostBinding: planner/Cursor')
   Assert-AgentsCatalogMutation 'unknown agent host binding fails' {
     param($c) $c.items[0].hostBindings[0].host = 'UnknownHost'
-  } @('AgentHostUnknown: planner/UnknownHost')
+  } @('InvalidHost: planner/UnknownHost')
   Assert-AgentsCatalogMutation 'invalid agent representation fails' {
     param($c) $c.items[0].hostBindings[0].representation = 'unexpected'
-  } @('AgentRepresentation: planner/Cursor=unexpected')
+  } @('InvalidRepresentation: planner/Cursor/unexpected')
   Assert-AgentsCatalogMutation 'missing agent binding evidence fails' {
     param($c) $c.items[0].hostBindings[0].evidencePaths = @()
-  } @('AgentBindingEvidence: planner/Cursor')
-  Assert-CheckerMutation 'missing last_updated date fails' {
-    param($i) $i.PSObject.Properties.Remove('last_updated')
-  } @("InventoryLastUpdatedFormat: invalid ISO calendar date ''")
-  Assert-CheckerMutation 'snapshot date drift fails' {
-    param($i) $i.inventory_date = '2026-09-12'
-  } @("InventorySnapshotDate: expected '2026-09-11', got '2026-09-12'")
-
-  # Markdown drift uses a temporary fixture through the -InventoryMdPath seam;
-  # repository evidence is never mutated.
-  $markdownOriginal = Get-Content -Raw (Join-Path $RepoRoot 'analysis/procedure-normalization-inventory-2026-09.md')
-  $markdownTrimmedPath = Join-Path $checkerTemp 'trimmed-ambiguities.md'
-  ($markdownOriginal -replace '\| U-Render-Baseline-Reconciliation \|[^\r\n]+', '') | Set-Content -LiteralPath $markdownTrimmedPath
-  $markdownTrimmedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownTrimmedPath *>&1 | Out-String)
-  Assert-View 'markdown ambiguity row removal fails' ($LASTEXITCODE -eq 1 -and $markdownTrimmedOutput.Contains('MarkdownAmbiguityCount: expected 3, got 2')) "exit=$LASTEXITCODE"
-  $markdownRenamedPath = Join-Path $checkerTemp 'renamed-ambiguity.md'
-  ($markdownOriginal -replace '\| U-Cursor-Bugbot \|', '| U-Renamed-Bugbot |') | Set-Content -LiteralPath $markdownRenamedPath
-  $markdownRenamedOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownRenamedPath *>&1 | Out-String)
-  Assert-View 'markdown ambiguity id drift fails' ($LASTEXITCODE -eq 1 -and $markdownRenamedOutput.Contains("MarkdownAmbiguityId: row 0 expected 'U-Cursor-Bugbot', got 'U-Renamed-Bugbot'")) "exit=$LASTEXITCODE"
-  $markdownNoUpdatePath = Join-Path $checkerTemp 'stale-dates.md'
-  ($markdownOriginal -replace ' · \*\*Last updated:\*\* 2026-09-27', '') | Set-Content -LiteralPath $markdownNoUpdatePath
-  $markdownNoUpdateOutput = (& $checker -RepoRoot $RepoRoot -InventoryMdPath $markdownNoUpdatePath *>&1 | Out-String)
-  Assert-View 'markdown last-updated drift fails' ($LASTEXITCODE -eq 1 -and $markdownNoUpdateOutput.Contains('MarkdownInventoryLastUpdated')) "exit=$LASTEXITCODE"
+  } @('HostEvidence: planner/Cursor has no evidence')
 } catch { $failures++; Write-Output "FAIL: current-state checker execution: $($_.Exception.Message)" }
 finally { if (Test-Path -LiteralPath $checkerTemp) { Remove-Item -LiteralPath $checkerTemp -Recurse -Force -ErrorAction SilentlyContinue } }
 
