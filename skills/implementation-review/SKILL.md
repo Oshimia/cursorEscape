@@ -170,7 +170,7 @@ Pressure release is a **stuckness / thrash brake**, not an opt-out from dual APP
 
 The ordinary phase review already covers integration when one bounded implementer produces one cohesive diff. Use a separate integrated gate only when independently reviewed slices, recovered scopes, or reopened closeouts are assembled into one phase diff. It is not a default loop and never rescues an oversized changeset that should be split.
 
-The integrated gate uses the same reviewer pair and approval bar, but `Completion gate: integrated-review`, the true pre-assembly baseline, and an explicitly bounded assembled diff. Findings must concern concrete integration defects in that diff: cross-slice contracts, direct callers/callees, shared configuration/schema/CI behavior, generated-projection compatibility, or status truth. Broad repository review, prior transcripts, pre-existing issues, and unrelated improvements remain out of scope.
+The integrated gate uses the same reviewer pair, accepted `Completion gate: review-loop`, and approval bar, plus `Review mode: integrated`, the true pre-assembly baseline, and an explicitly bounded assembled diff. Findings must concern concrete integration defects in that diff: cross-slice contracts, direct callers/callees, shared configuration/schema/CI behavior, generated-projection compatibility, or status truth. Broad repository review, prior transcripts, pre-existing issues, and unrelated improvements remain out of scope.
 
 Run at most an initial integrated pair plus one replacement pair after targeted fixes and fresh Fast CI. A second non-approval stops as `INTEGRATION REVIEW EXHAUSTED` before Full CI for Composer/owner triage. Deep procedure: [iterative-code-review.md](../../workflow/iterative-code-review.md#integrated-review-gate-conditional).
 
@@ -178,12 +178,12 @@ Run at most an initial integrated pair plus one replacement pair after targeted 
 
 ## Completion gate selection & stop rules
 
-Reviewers are invoked only under the ordinary `Completion gate: review-loop` or the conditional integrated gate below, always after observed **Fast** CI. **`task-phase-complete` is not a reviewer gate** — it labels the phase closeout report after dual `APPROVED` + Full CI.
+Reviewers are invoked only with the accepted `Completion gate: review-loop`, always after observed **Fast** CI; integrated work is distinguished by `Review mode: integrated`. **`task-phase-complete` is not a reviewer gate** — it labels the phase closeout report after dual `APPROVED` + Full CI.
 
 | Situation | CI tier | Reviewers? | Completion gate (reviewers) | Next step |
 |-----------|---------|------------|----------------------------|-----------|
 | Mid-loop / still fixing (iterations 1–3 of block, or 4 with dual APPROVED pending after this launch) | **Fast** | Yes — Reviewer A + Bugbot | `review-loop` | Fix must-fix findings → new review iteration **within the block** (max 4) |
-| Assembled multi-slice / reopened-closeout gate | **Fast** | Yes — fresh Reviewer A + Bugbot | `integrated-review` | Fix cross-slice must-fix findings → at most one replacement integrated pair |
+| Assembled multi-slice / reopened-closeout gate | **Fast** | Yes — fresh Reviewer A + Bugbot | `review-loop` + `Review mode: integrated` | Fix cross-slice must-fix findings → at most one replacement integrated pair |
 | Dual `APPROVED` (split bars; Reviewer-a batchable may remain) | — | **No** | — | Run **Full** CI only (closeout) |
 | Full CI pass after dual `APPROVED` | **Full** | **No** | — | Report `task-phase-complete`; stop |
 | Iteration 4 without dual `APPROVED` | — | **No** further launches | — | Pressure release: normal reassessment or Composer cap-exhausted handoff — **no Full**, **no** `task-phase-complete` |

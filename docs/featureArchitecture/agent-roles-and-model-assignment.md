@@ -1,6 +1,6 @@
 # Agent Roles and Model Assignment
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-28
 
 ## Context
 
@@ -19,7 +19,7 @@ Model assignment is host configuration, not prompt identity. A role remains the 
 | `planner` | Plan | Draft the implementation plan and identify discovery or escalation needs. | No |
 | `plan_reviewer` | Plan gate | Clean-context plan review, maximum three passes. | No |
 | `implementer` | Implement | Execute the approved scope; on phased work, own the phase review loop. | No |
-| `production_readiness_reviewer` | Dual gate | Process, architecture drift, changeset completeness, blocking tests/docs. | Yes |
+| `production_readiness_reviewer` | Dual gate | Process, architecture drift, changeset completeness, replacement/lifecycle-naming closure, blocking tests/docs. | Yes |
 | `bug_reviewer` | Dual gate | Introduced bugs, security, concurrency, and high-value correctness. | Yes |
 | `repository_explorer` | Investigation | Read-only, bounded evidence search. | No |
 | `test_reviewer` | Explicit review advice | Test strategy and regression-risk advice when explicitly requested. | No |

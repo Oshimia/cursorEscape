@@ -29,7 +29,7 @@ The gate does **not** rescue oversized new work. If the changeset is beyond the 
 Integrated-gate rules:
 
 1. The review-loop parent records the true pre-assembly baseline and every included/excluded path.
-2. After observed Fast CI, launch one fresh `production_readiness_reviewer` + `bug_reviewer` pair with `Completion gate: integrated-review`.
+2. After observed Fast CI, launch one fresh `production_readiness_reviewer` + `bug_reviewer` pair with `Completion gate: review-loop` and `Review mode: integrated`.
 3. Review the integrated diff against that baseline, the named cross-slice invariants, direct callers/callees, status truth, and configuration/contract compatibility. Findings must identify a concrete defect in the assembled changeset; broad repository sweeps, prior transcripts, pre-existing issues, and unrelated improvements are out of scope.
 4. If the first pair requests changes, fix only must-fix findings, rerun observed Fast CI, and launch one replacement integrated pair. If that replacement also requests changes, stop with `INTEGRATION REVIEW EXHAUSTED`; do not launch a third pair, run Full CI, or report phase complete without Composer/owner triage.
 5. Same dual bar applies: `bug_reviewer` CLEAN and production readiness without Blocking, Non-blocking code/process, or blocking test/docs findings; required `Supersession closure` and `Lifecycle and naming closure` are present and every Supersession `Unresolved` and Lifecycle `Unresolved` or `Unclear` item is routed into an open loop-blocking list. Batchable deferred findings may remain.
