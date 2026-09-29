@@ -1,7 +1,5 @@
 # Editing companion workflow (agent edit map)
 
-**Last updated:** 2026-09-29
-
 ## Context
 
 Agents editing **this** repo (cursorEscape) often update companion SoT correctly and miss host harness echoes — or treat overlays as forbidden. This SOP is the checklist for non-trivial changes to portable loops, gates, skills, agents, or always-on text.

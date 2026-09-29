@@ -1,7 +1,5 @@
 # OpenCode smoke prompts (copy-paste)
 
-**Last updated:** 2026-09-20
-
 ## Context
 
 Operator paste-book for [opencode-host-adapter](./opencode-host-adapter.md) smoke rows. One place, C6-minimum order, frozen prompts only.

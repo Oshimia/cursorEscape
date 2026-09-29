@@ -1,6 +1,5 @@
 # Cline host adapter — global `~/.cline` inventory & sync
 
-**Last updated:** 2026-09-27
 **Status:** established stack using shared `Generic.Adapter.ps1`; no Cline-specific adapter file. Live Apply requires the non-backup Apply boundary and fresh explicit owner authorization.
 
 ## Context

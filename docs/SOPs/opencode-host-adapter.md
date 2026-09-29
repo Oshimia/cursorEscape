@@ -1,7 +1,5 @@
 # OpenCode host adapter
 
-**Last updated:** 2026-09-27
-
 ## Context
 
 This SOP operates the global OpenCode adapter. The companion repository is the Target SoT for procedures, skills, agents, and rules ([skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)). `~/.config/opencode/` is a host adapter, not a second procedure tree. Live sync is rendered from [overlays/opencode](../../overlays/opencode/_index.md) by [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1).

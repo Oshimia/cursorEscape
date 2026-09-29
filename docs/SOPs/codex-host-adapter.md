@@ -1,6 +1,5 @@
 # Codex host adapter SOP
 
-**Last updated:** 2026-09-28
 **Status:** Active adapter; activated 2026-09-08 after owner-authorized install; three-client smoke attested 2026-09-08.
 
 ## Context

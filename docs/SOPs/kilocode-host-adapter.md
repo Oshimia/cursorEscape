@@ -1,6 +1,5 @@
 # Kilo Code host adapter — global `~/.kilocode` inventory & sync
 
-**Last updated:** 2026-09-27
 **Status:** established stack using shared `Generic.Adapter.ps1`; no Kilo Code-specific adapter file. Live Apply requires the non-backup Apply boundary and fresh explicit owner authorization.
 
 ## Context

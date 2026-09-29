@@ -1,7 +1,5 @@
 # Authoring OpenCode adapter files (skills, agents, rules, config)
 
-**Last updated:** 2026-09-20
-
 ## Context
 
 How to author and maintain OpenCode adapter files so skills, agents, always-on instructions, and permissions actually load. Portable contracts stay in cursorEscape ([agents](../../agents/_index.md), [skills](../../skills/_index.md), [instruction-layering](../featureArchitecture/instruction-layering.md)); this SOP is the OpenCode-specific authoring checklist.

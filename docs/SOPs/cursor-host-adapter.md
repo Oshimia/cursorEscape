@@ -1,7 +1,5 @@
 # Cursor host adapter
 
-**Last updated:** 2026-09-27
-
 ## Context
 
 This SOP operates the global Cursor adapter. The companion repository is the Target SoT for skills, agents, workflows, and rules ([skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)). `~/.cursor/` is a host adapter, not a second procedure tree.
