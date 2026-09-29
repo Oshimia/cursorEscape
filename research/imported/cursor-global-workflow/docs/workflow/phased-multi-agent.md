@@ -40,4 +40,4 @@ Without Composer, one clean-context agent per phase still ends with the [impleme
 
 **Workflow docs:** [plan-agent-context.md](plan-agent-context.md), [iterative-plan-review.md](iterative-plan-review.md), [iterative-code-review.md](iterative-code-review.md), [discovery.md](discovery.md), [ci-ladder.md](ci-ladder.md), [documentation-architecture.md](documentation-architecture.md), [README.md](README.md)
 
-**Skills / agents:** [implementation-plan](../../skills/implementation-plan/SKILL.md), [roadmap](../../skills/roadmap/SKILL.md), [composer](../../skills/composer/SKILL.md), [implementation-review](../../skills/implementation-review/SKILL.md), [plan-reviewer](../../agents/plan-reviewer.md), [reviewer-a](../../agents/reviewer-a.md)
+**Skills / agents:** [implementation-plan](../../skills/implementation-plan/SKILL.md), [roadmap](../../skills/roadmap/SKILL.md), [composer](../../skills/composer/SKILL.md), [implementation-review](../../skills/implementation-review/SKILL.md), `plan-reviewer mirror removed; recover from Git history`, `reviewer-a mirror removed; recover from Git history`

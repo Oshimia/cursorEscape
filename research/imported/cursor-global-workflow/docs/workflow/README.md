@@ -32,7 +32,7 @@ Absolute root: `C:/Users/admin/.cursor/docs/workflow/`
 
 | Agent | Path |
 |-------|------|
-| [plan-reviewer](../../agents/plan-reviewer.md) | Adversarial plan review |
-| [reviewer-a](../../agents/reviewer-a.md) | Production-readiness code review |
+| `plan-reviewer mirror removed; recover from Git history` | Adversarial plan review |
+| `reviewer-a mirror removed; recover from Git history` | Production-readiness code review |
 
 Repo product/architecture docs and multi-phase roadmaps live **in the repo**, not here.

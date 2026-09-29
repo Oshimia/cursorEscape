@@ -1,7 +1,7 @@
 > **Imported research** — Source: live `~/.cursor`; copied 2026-08-17 into cursorEscape. Status: Observed/imported (Observed interim Cursor wording; companion repo is Target contract SoT). Do not treat as Target cursorEscape design unless a Target doc cites it.
 # Review subagent models
 
-**Recommended default** for [plan-reviewer](../../agents/plan-reviewer.md), [reviewer-a](../../agents/reviewer-a.md), and Bugbot: `composer-2.5`.
+**Recommended default** for `plan-reviewer mirror removed; recover from Git history`, `reviewer-a mirror removed; recover from Git history`, and Bugbot: `composer-2.5`.
 
 Override anytime via chat or the Task `model` parameter. There is **no** profile swap system — do not look for `.cursor/review-profiles/` or swap scripts.
 

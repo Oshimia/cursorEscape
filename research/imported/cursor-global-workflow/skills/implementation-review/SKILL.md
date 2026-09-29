@@ -271,6 +271,6 @@ Incomplete changesets are a common blocking finding on re-review.
 
 ## Related
 
-**Skills / agents:** [`composer`](../composer/SKILL.md), [`implementation-plan`](../implementation-plan/SKILL.md), [`roadmap`](../roadmap/SKILL.md), [`reviewer-a`](../../agents/reviewer-a.md)
+**Skills / agents:** [`composer`](../composer/SKILL.md), [`implementation-plan`](../implementation-plan/SKILL.md), [`roadmap`](../roadmap/SKILL.md), `reviewer-a mirror removed; recover from Git history`
 
 **Workflow docs:** [discovery.md](../../docs/workflow/discovery.md), [iterative-code-review.md](../../docs/workflow/iterative-code-review.md), [ci-ladder.md](../../docs/workflow/ci-ladder.md), [review-subagent-models.md](../../docs/workflow/review-subagent-models.md), [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md), [README.md](../../docs/workflow/README.md)

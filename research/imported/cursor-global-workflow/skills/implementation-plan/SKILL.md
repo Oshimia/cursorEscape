@@ -346,6 +346,6 @@ After approval, use the [`roadmap`](../roadmap/SKILL.md) skill to write a **repo
 
 ## Related
 
-**Skills / agents:** [`roadmap`](../roadmap/SKILL.md), [`implementation-review`](../implementation-review/SKILL.md), [`composer`](../composer/SKILL.md), [`documentation-architecture`](../documentation-architecture/SKILL.md), [`plan-reviewer`](../../agents/plan-reviewer.md)
+**Skills / agents:** [`roadmap`](../roadmap/SKILL.md), [`implementation-review`](../implementation-review/SKILL.md), [`composer`](../composer/SKILL.md), [`documentation-architecture`](../documentation-architecture/SKILL.md), `plan-reviewer mirror removed; recover from Git history`
 
 **Workflow docs:** [discovery.md](../../docs/workflow/discovery.md), [iterative-plan-review.md](../../docs/workflow/iterative-plan-review.md), [plan-agent-context.md](../../docs/workflow/plan-agent-context.md), [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md), [iterative-code-review.md](../../docs/workflow/iterative-code-review.md), [review-subagent-models.md](../../docs/workflow/review-subagent-models.md), [README.md](../../docs/workflow/README.md)

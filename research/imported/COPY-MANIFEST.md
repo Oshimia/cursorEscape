@@ -91,6 +91,8 @@ Every file under `research/imported/` is a **copy or cursorEscape-authored trimm
 
 ### cursor-global-workflow (Phase 3 — live `~/.cursor`)
 
+Historical copy manifest, not a current inventory. Five Cursor agent/rule mirrors were later removed and remain recoverable from Git history; retained rows record import provenance only.
+
 | Dest (under `imported/cursor-global-workflow/`) | Source (`~/.cursor`) | Source absolute | Copied | Why | Status | Host-only / broken-in-import links |
 | --- | --- | --- | --- | --- | --- | --- |
 | `agents/plan-reviewer.md` | `agents/plan-reviewer.md` | `C:\Users\admin\.cursor\agents\plan-reviewer.md` | 2026-08-17 | Live Cursor workflow (Observed interim wording) | Observed/imported (Observed interim Cursor wording) | Relative links use import mirror paths |
@@ -118,4 +120,4 @@ Every file under `research/imported/` is a **copy or cursorEscape-authored trimm
 
 ## File count
 
-Total markdown/mdc files in imported trees: 86 (openBuggy 47 + AITestSuite 17 + cursor-global-workflow 22)
+Historical import total: 86 (openBuggy 47 + AITestSuite 17 + cursor-global-workflow 22). Current tracked archive group files: 64 (openBuggy 47 + cursor-global-workflow 17); AITestSuite and the five Cursor agent/rule mirrors are removed and recoverable from Git history.

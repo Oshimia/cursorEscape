@@ -1,7 +1,7 @@
 > **Imported research** — Source: live `~/.cursor`; copied 2026-08-17 into cursorEscape. Status: Observed/imported (Observed interim Cursor wording; companion repo is Target contract SoT). Do not treat as Target cursorEscape design unless a Target doc cites it.
 # Iterative plan review
 
-**Skill:** [implementation-plan](../../skills/implementation-plan/SKILL.md). **Agent:** [plan-reviewer](../../agents/plan-reviewer.md).
+**Skill:** [implementation-plan](../../skills/implementation-plan/SKILL.md). **Agent:** `plan-reviewer mirror removed; recover from Git history`.
 
 ## When mandatory
 
@@ -20,7 +20,7 @@ Draft → review → synthesize (max 3) → present to user → user decides
 ```
 
 1. Draft with [implementation-plan](../../skills/implementation-plan/SKILL.md) template — when the plan touches migrations/schema/RPC/deploy SOPs, lift each repo post-apply checklist item into Incremental execution or Verification (not External dependencies only)
-2. Invoke [plan-reviewer](../../agents/plan-reviewer.md) with clean context (full synthesized plan only). Recommended model: see [review-subagent-models.md](review-subagent-models.md). Reviewer treats buried SOP post-apply steps as an unacknowledged verification gap
+2. Invoke `plan-reviewer mirror removed; recover from Git history` with clean context (full synthesized plan only). Recommended model: see [review-subagent-models.md](review-subagent-models.md). Reviewer treats buried SOP post-apply steps as an unacknowledged verification gap
 3. On `CHANGES REQUESTED`: fix blockers and unacknowledged gaps; re-invoke
 4. After pass 3 or early `APPROVED`: present to user; wait if still `CHANGES REQUESTED`
 

@@ -5,7 +5,7 @@
 # Plan Agent context (escalated plans)
 
 **Skills:** [implementation-plan](../../skills/implementation-plan/SKILL.md), [roadmap](../../skills/roadmap/SKILL.md), [composer](../../skills/composer/SKILL.md).  
-**Agent:** [plan-reviewer](../../agents/plan-reviewer.md).
+**Agent:** `plan-reviewer mirror removed; recover from Git history`.
 
 Use when a plan’s **Escalation** section sets `Agent context required: **yes**`.
 
