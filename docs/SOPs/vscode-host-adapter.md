@@ -1,6 +1,5 @@
 # VS Code host adapter SOP
 
-**Last updated:** 2026-09-27
 **Stack:** `Vscode` · **Live root:** `~/.copilot/` · **Surface:** Copilot user-level instructions, agents, and skills · **Adapter:** shared `Generic.Adapter.ps1`
 
 ## Must / Must-not

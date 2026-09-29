@@ -1,7 +1,5 @@
 # Agent Roles and Model Assignment
 
-**Last updated:** 2026-09-28
-
 ## Context
 
 Agent roles are portable contracts in [`agents/`](../../agents/_index.md). Host overlays may provide launch mechanics, permissions, aliases, or native-agent wrappers, but they must not redefine a role's identity, isolation, authority, loop/gate, or fail-loud behavior.

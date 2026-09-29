@@ -1,7 +1,5 @@
 # Feature Architecture Documentation
 
-**Last updated:** 2026-09-20
-
 ## Context
 
 This section explains how cursorEscape is intended to work: the portable loop, source and overlay architecture, host fidelity model, agent roles, permission policy, project decisions, and registry-owned verification boundary.

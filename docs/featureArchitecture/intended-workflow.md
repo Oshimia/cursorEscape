@@ -1,7 +1,5 @@
 # Intended Workflow
 
-**Last updated:** 2026-09-28
-
 ## Context
 
 cursorEscape defines the owner's portable agentic loop: discover, plan, implement, review, verify, and close out. The normative procedures live in [`workflow/`](../../workflow/_index.md), [`skills/`](../../skills/_index.md), [`agents/`](../../agents/_index.md), and [`rules/`](../../rules/_index.md). This page owns the architectural relationship among those gates; it does not duplicate their step-by-step procedures.

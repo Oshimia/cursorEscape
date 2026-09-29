@@ -1,7 +1,5 @@
 # Host adaptation fidelity
 
-**Last updated:** 2026-09-28
-
 ## Context
 
 Host adaptation is complete only when the same owner workflow behaves correctly on the registered stack. Folder presence, manifest registration, or a successful dry-run does not prove adaptation. The binding evidence is the host's active load surface, on-demand catalog, isolated reviewers, companion reads, and observed smoke behavior.

@@ -1,7 +1,5 @@
 # Clean Context and Isolation
 
-**Last updated:** 2026-09-20
-
 ## Context
 
 Review and plan gates require clean child context. A new persona in the same long conversation is not isolation. Parents synthesize task inputs; children verify from evidence, not accumulated reviewer reasoning.

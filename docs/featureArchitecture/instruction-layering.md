@@ -1,7 +1,5 @@
 # Instruction Layering
 
-**Last updated:** 2026-09-28
-
 ## Context
 
 Instruction layering keeps always-on context small while preserving default-on gates. Full procedures belong in skills, workflow docs, and role contracts that are loaded only when needed. This page owns the budget rule; [`intended-workflow.md`](./intended-workflow.md) owns loop order.

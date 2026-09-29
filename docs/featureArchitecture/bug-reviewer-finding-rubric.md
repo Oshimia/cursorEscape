@@ -1,7 +1,5 @@
 # bug_reviewer finding rubric
 
-**Last updated:** 2026-09-29
-
 ## Context
 
 **Target** companion for the [bug_reviewer](../../agents/bug_reviewer.md) role. Encodes **what to report vs ignore** so spawned bug-finder agents suppress nits, out-of-scope, and pre-existing issues while still hunting **introduced production** defects.
