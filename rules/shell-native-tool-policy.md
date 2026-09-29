@@ -1,7 +1,5 @@
 # Shell & native tool policy
 
-**Last updated:** 2026-08-22
-
 ## Context
 
 Always-on gate contract for shell usage and permissions across hosts. Companion SoT (Target): this file owns the canonical read-only bash allowlist and the accepted-risk register; the mutating-git / shell-fs **red line moved to [red-line.md](./red-line.md)** (D9 mechanical move 2026-08-28 — that leaf is the red-line SoT, this file keeps the allowlist invariants). Host harnesses **echo** it (OpenCode echo lands via `overlays/opencode/opencode.specimen.json` + C1 dual-write in Phase 2, live on next operator `-Apply`; Cursor thin wrapper **deferred — required before the first Cursor live sync**). Design rationale: [permission-and-native-tool-policy](../docs/featureArchitecture/permission-and-native-tool-policy.md).

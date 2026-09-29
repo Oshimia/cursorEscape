@@ -1,7 +1,5 @@
 # Skills
 
-**Last updated:** 2026-09-29
-
 ## Context
 
 Host-agnostic **portable** workflow skills at repo root. Cursor overlay: [overlays/cursor](../overlays/cursor/_index.md). OpenCode overlay: [overlays/opencode](../overlays/opencode/_index.md). Codex installs 22 canonical wrappers plus generated `pre-commit-ci-gate` from [overlays/codex](../overlays/codex/_index.md); Codex is Active since 2026-09-08 with C1–C6 smoke attested, and Apply requires fresh explicit owner authorization.

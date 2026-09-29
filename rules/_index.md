@@ -1,7 +1,5 @@
 # Rules
 
-**Last updated:** 2026-09-26
-
 ## Context
 
 Host-agnostic **portable** always-on gate contracts at repo root. Cursor overlay **thin wrappers** (alwaysApply + pointer): [overlays/cursor/rules](../overlays/cursor/rules/). The [procedure registry](../docs/featureArchitecture/procedure-registry.md) owns semantic composition order; host gate bodies are composed via `CompositionId` into OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex always-on surfaces.

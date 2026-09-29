@@ -1,7 +1,5 @@
 # Git & shell-filesystem red line
 
-**Last updated:** 2026-08-28
-
 Single SoT for the mutating-git / shell-fs red line. Moved wholesale from
 [rules/shell-native-tool-policy.md](./shell-native-tool-policy.md) (D9 mechanical move, 2026-08-28) —
 content-preserving SoT re-location; shell-native-tool-policy.md remains the SoT for the read-only

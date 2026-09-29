@@ -1,6 +1,5 @@
 # Cursor overlay — copy-out map
 
-**Last updated:** 2026-09-27
 **Status:** live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) — thin skills/agents + hybrid rules on `~/.cursor`. Sync does **not** create backups; recovery uses a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification.
 
 ## Context

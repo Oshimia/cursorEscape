@@ -53,7 +53,7 @@ If Composer is assigned and Escalation was **yes** but Agent context is missing/
 
 | Section | Purpose |
 |---------|---------|
-| Status / last updated | Conductor and agents share state |
+| Status | Conductor and agents share state |
 | Product decisions | Locked user choices |
 | Inter-phase contracts | Must not drift silently |
 | Migration / external apply order | When the repo has user-apply gates |

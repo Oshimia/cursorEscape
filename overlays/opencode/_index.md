@@ -1,7 +1,5 @@
 # OpenCode overlay — harness copy-out map
 
-**Last updated:** 2026-09-29
-
 **Status:** harness stubs use absolute `{{COMPANION_ROOT}}` Reads; live procedure mirror **deleted** from `{{OPENCODE_HOME}}/docs/workflow/`; `review-subagent-models` overlay-Read only. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1). Sync does **not** create backups; recovery uses a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification.
 
 **Fidelity bar:** [host-adaptation-fidelity](../../docs/featureArchitecture/host-adaptation-fidelity.md) (C1–C6).

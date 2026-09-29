@@ -1,7 +1,5 @@
 # Host harness sync (modular layout)
 
-**Last updated:** 2026-09-28
-
 Modular sync distributes companion overlay harness to live host stacks. **Dry-run is the default.** Live writes require fresh owner authorization and the complete non-backup Apply boundary. The [procedure registry](../../docs/featureArchitecture/procedure-registry.md) owns semantic composition order for the migrated composition-bound host groups (Cursor hybrid, OpenCode dual-write, Antigravity, Cline/Kilo Code, and Codex managed AGENTS block); VS Code currently remains on manifest-owned `Parts`/`Footer` composition. Manifests own destinations, host-only substitutions, and `CompositionId` bindings for the migrated groups. The sole normalization CI entry points are [`../normalization/Invoke-NormalizationFastCI.ps1`](../normalization/Invoke-NormalizationFastCI.ps1) (Fast) and [`../normalization/Invoke-NormalizationFullCI.ps1`](../normalization/Invoke-NormalizationFullCI.ps1) (Full); the host-sync phase scripts are internally invoked by Full CI, never separate entry points.
 
 **Entry script:** [`../Sync-HostHarness.ps1`](../Sync-HostHarness.ps1)
