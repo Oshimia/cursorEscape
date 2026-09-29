@@ -85,4 +85,4 @@ For non-URL observational sources, mark:
 - [Bugbot product and API limits (research)](../../research/bugbot-product-and-api-limits.md)
 - Skill: `~/.cursor/skills-cursor/review-bugbot/SKILL.md`
 - Skill: `~/.cursor/skills/implementation-review/SKILL.md`
-- [Reviewer-a / BugBot effectiveness (analysis)](../../analysis/reviewer-effectiveness/_index.md) — live-loop study; not this Observed harness suite
+- Reviewer-a / BugBot effectiveness (analysis) — historical mirror removed; recoverable from Git history; not this Observed harness suite

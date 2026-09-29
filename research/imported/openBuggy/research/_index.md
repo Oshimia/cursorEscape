@@ -21,7 +21,7 @@ Product and market research copied from openBuggy. `community-benchmarks-and-opi
 * [Cursor BugBot Observed suite](../featureArchitecture/cursor-bugbot-agent-review/_index.md)
 * [Competitive landscape](../featureArchitecture/competitive-landscape.md)
 * [Market gap and positioning](../featureArchitecture/market-gap-and-positioning.md)
-* [Reviewer effectiveness analysis](../analysis/reviewer-effectiveness/_index.md)
+* Reviewer effectiveness analysis — historical mirror removed; recoverable from Git history
 
 ## Related (cursorEscape)
 

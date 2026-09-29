@@ -69,4 +69,4 @@ openBuggy exists so the owner does not lose a Bugbot-shaped bug-finder gate when
 - [Roadmap](../Roadmap.md)
 - [Feature architecture index](../featureArchitecture/_index.md)
 - [Documenting this concept repo (SOP)](../SOPs/documenting-this-concept-repo.md)
-- [Reviewer-a / BugBot effectiveness (analysis)](../analysis/reviewer-effectiveness/_index.md)
+- Reviewer-a / BugBot effectiveness (analysis) — historical mirror removed; recoverable from Git history

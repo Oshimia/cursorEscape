@@ -32,7 +32,7 @@ This repository’s value is its documentation. Drift (undocumented decisions, b
 
 ### Operator analysis under `docs/analysis/`
 
-[`docs/analysis/`](../analysis/_index.md) holds **decision-grade studies** of the owner’s existing loops (today: [reviewer-effectiveness](../analysis/reviewer-effectiveness/_index.md)). Do not fold those write-ups into the Observed BugBot FA suite or into `eval/` scoring. Committed analysis docs use aliases and theme labels; UUID/path sheets stay gitignored under the study’s `.local/` directory.
+The historical `docs/analysis/` archive held **decision-grade studies** of the owner’s existing loops (today: reviewer-effectiveness). Those removed mirrors are recoverable from Git history. Do not fold those write-ups into the Observed BugBot FA suite or into `eval/` scoring. Committed analysis docs use aliases and theme labels; UUID/path sheets stay gitignored under the study’s `.local/` directory.
 
 ### When adding a document
 
