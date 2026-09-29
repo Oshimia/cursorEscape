@@ -1,7 +1,5 @@
 # Standard Operating Procedures
 
-**Last updated:** 2026-09-29
-
 ## Context
 
 This index lists the current repeatable procedures for maintaining cursorEscape documentation and operating its seven registered host adapters. Portable procedure and contracts live in repo-root `workflow/`, `skills/`, `agents/`, and `rules/`; SOPs describe how maintainers apply and verify those contracts in this repository.

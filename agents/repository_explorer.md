@@ -1,7 +1,5 @@
 # repository_explorer
 
-**Last updated:** 2026-09-20
-
 ## Context
 
 **Target** role contract. Bounded investigation — codebase and doc search — to answer specific questions for planner or implementer. Not a substitute for full context retrieval pipeline.

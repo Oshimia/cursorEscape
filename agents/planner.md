@@ -1,7 +1,5 @@
 # planner
 
-**Last updated:** 2026-09-11
-
 ## Context
 
 **Target** role contract. Drafts structured plans before implementation. Derived from live [implementation-plan](../overlays/cursor/skills/implementation-plan/SKILL.md) skill — host-agnostic wording. Gate policy SoT: [implementation-plan](../skills/implementation-plan/SKILL.md).

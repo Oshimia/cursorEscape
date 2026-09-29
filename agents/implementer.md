@@ -1,7 +1,5 @@
 # implementer
 
-**Last updated:** 2026-09-11
-
 ## Context
 
 **Target** role contract. Executes approved plan scope — code, docs, or both. On multi-phase roadmaps, the phase subagent is typically the implementer **and** review-loop parent.

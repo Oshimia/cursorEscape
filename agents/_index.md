@@ -1,7 +1,5 @@
 # Agent Role Contracts
 
-**Last updated:** 2026-09-29
-
 ## Context
 
 Host-agnostic **portable** agent contracts at repo root. Portable contracts live in `agents/*.md`; the [procedure registry](../docs/featureArchitecture/procedure-registry.md) owns machine metadata (identity, aliases, required reading, authority/isolation, host representation). Cursor overlay **thin wrappers** (spawn one-pagers + Read): [overlays/cursor/agents](../overlays/cursor/agents/). These pages use host-agnostic role names, not Cursor Task IDs as the contract identity.

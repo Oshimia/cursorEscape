@@ -1,7 +1,5 @@
 # Antigravity host adapter
 
-**Last updated:** 2026-09-27
-
 ## Context
 
 This SOP operates the Antigravity adapter. The companion repository is the Target SoT ([skill source and host overlays](../featureArchitecture/skill-source-and-host-overlays.md)); `~/.gemini/` is the host copy-out target, not a second procedure tree. Live sync is rendered from [overlays/antigravity](../../overlays/antigravity/_index.md) by [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1).

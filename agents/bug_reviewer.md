@@ -1,7 +1,5 @@
 # bug_reviewer
 
-**Last updated:** 2026-09-29
-
 ## Context
 
 **Target** role contract. Bug-finder leg of the dual gate. Recreate Bugbot-shaped utility with an OpenCode (or host-equivalent) subagent + skills/rules — the same pattern as [production_readiness_reviewer](./production_readiness_reviewer.md) / live reviewer-a. **Not** Cursor proprietary `bugbot`. **openBuggy is not required** for v0 ([project decisions](../docs/featureArchitecture/project-decisions-and-open-questions.md)).

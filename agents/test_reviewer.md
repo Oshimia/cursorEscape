@@ -1,7 +1,5 @@
 # test_reviewer
 
-**Last updated:** 2026-09-20
-
 ## Context
 
 **Target** role contract. Optional test-strategy / coverage reviewer. **Nice-to-have** — not part of the default dual gate. Does **not** replace [production_readiness_reviewer](./production_readiness_reviewer.md) blocking test/docs. Add this leg only when the owner or phase explicitly elevates it.
