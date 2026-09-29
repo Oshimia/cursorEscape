@@ -1,7 +1,5 @@
 # Portable handoff
 
-**Last updated:** 2026-08-22
-
 Contract for a redacted Markdown artifact that lets work continue in a fresh session, host, directory, or colleague context. User-invoked only.
 
 ## What this is

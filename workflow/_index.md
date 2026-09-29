@@ -1,7 +1,5 @@
 # Workflow docs (shared deep procedure)
 
-**Last updated:** 2026-09-26
-
 **Ownership:** Process changes land here first. Repo SOPs may extend with local paths; they must not contradict this core. The [procedure registry](../docs/featureArchitecture/procedure-registry.md) owns machine metadata and semantic composition order for this content; host projections composed via `CompositionId` update automatically at render time.
 
 Repo root: `workflow/` (this tree). Live Cursor install: `~/.cursor/docs/workflow/` (copy-out only — not overwritten from this repo).

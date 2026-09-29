@@ -1,7 +1,5 @@
 # Wait-what procedure
 
-**Last updated:** 2026-08-23
-
 Deep companion for the [wait-what skill](../skills/wait-what/SKILL.md): a user-invoked communication-repair loop. When the owner signals that the last explanation did not land, the agent re-pitches it: adding the missing premise instead of bluntly truncating, in a simplified technical register. User-invoked only.
 
 ## Trigger semantics

@@ -1,7 +1,5 @@
 # Teach procedure
 
-**Last updated:** 2026-08-22
-
 Deep companion for the [teach skill](../skills/teach/SKILL.md): a dedicated opt-in Markdown learning workspace where the owner learns a named topic from cited resources through small lessons and spaced retrieval. User-invoked only.
 
 ## Workspace boundary

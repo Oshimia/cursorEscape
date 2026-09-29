@@ -1,7 +1,5 @@
 # Resolving merge conflicts procedure
 
-**Last updated:** 2026-08-23
-
 Deep companion for the [resolving-merge-conflicts skill](../skills/resolving-merge-conflicts/SKILL.md): a user-invoked Git procedure for working through an active merge, rebase, or cherry-pick conflict hunk by hunk with intent traced to each side's primary source, then verifying and finishing. User-invoked only.
 
 ## Merge-state safety
