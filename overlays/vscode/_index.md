@@ -13,7 +13,7 @@ Thin host harness per Approach A (`docs/featureArchitecture/skill-source-and-hos
 | `skills/<11 ids>/SKILL.md` | `shared:` opencode authored leaves + host Substitutions; composed pre-commit stub | nothing (render-out) |
 | `agents/<8 roles>.agent.md` | local `agents/*.agent.md` (host frontmatter + pointer bodies) | frontmatter + thin pointers |
 
-Pointer-only (never copied out): `review-subagent-models.md` (Cursor-native), this `_index.md`, `analysis/`, `research/`.
+Pointer-only (never copied out): `review-subagent-models.md` (Cursor-native), this `_index.md`, `analysis/`.
 
 ## Host facts (stable 2026-09, docs-verified)
 

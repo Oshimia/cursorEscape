@@ -1,6 +1,6 @@
 # Project Decisions and Open Questions
 
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-29
 
 ## Context
 
@@ -63,7 +63,7 @@ The current checks are deterministic repository and fixture assertions. They nee
 
 **Decision:** retain repository-local exact-reference and current-state checks as the blocking layer.
 
-Generic link checkers can confirm URL syntax but do not understand frozen imports, managed blocks, required-reading contracts, or source-class boundaries. Revisit only for a narrowly scoped external URL health report; do not make it the semantic gate.
+Generic link checkers can confirm URL syntax but do not understand managed blocks, required-reading contracts, or source-class boundaries. Revisit only for a narrowly scoped external URL health report; do not make it the semantic gate.
 
 ### Explicit operator Apply gates versus a migration framework
 
@@ -73,9 +73,9 @@ A general migration framework would hide the safety boundary behind abstractions
 
 ### Research placement
 
-**Decision:** retain durable imported research in `research/imported/`; keep large working outputs outside the repository.
+**Decision:** archive external research outside this repository; only owner-selected canonical conclusions may be represented in current docs.
 
-Current-facing design belongs in architecture and procedure docs. `research/imported/` is a frozen evidence boundary, not active design. Revisit only for reproducibility artifacts that cannot live in an external or ignored workspace.
+Current-facing design belongs in architecture and procedure docs. Do not maintain a durable imported-research tree in this repository; keep large working outputs outside the repository.
 
 ---
 

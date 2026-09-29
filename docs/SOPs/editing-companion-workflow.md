@@ -1,6 +1,6 @@
 # Editing companion workflow (agent edit map)
 
-**Last updated:** 2026-09-27
+**Last updated:** 2026-09-29
 
 ## Context
 
@@ -46,7 +46,6 @@ Change portable loop/gate
 | Edit only `skills/` or `workflow/` and skip overlays | Hosts load thin harness first; stale Steps / always-on fight companion SoT |
 | Treat Path rules as “never edit overlay bodies” | Thin **echo** of a changed gate (Steps, always-on summary) **must** update; pasting full procedure into overlays remains forbidden |
 | Hardcode machine paths in overlay harness leaves | Token merge cannot catch them; use `{{COMPANION_ROOT}}` (Fast CI guards the Antigravity tree) |
-| Treat `research/imported/**` as Target SoT | Archaeology / Observed only |
 | Reintroduce host `docs/workflow/` as procedure SoT | Superseded by pointer-first |
 | Leave OpenCode always-on saying “until dual APPROVED” after SoT moved to ≤4 pressure-release blocks | C1 drift; agents follow injected text |
 | Claim live `~/.cursor` / `~/.config/opencode` / `~/.gemini` updated because overlay changed | Overlay edit ≠ live sync |
@@ -98,7 +97,7 @@ pwsh scripts/host-sync/Test-HostHarnessDrift.ps1
 rg "canonical envelope|agent-invocation|Completion gate: review-loop" workflow/agent-invocation.md rules/agent-invocation.md workflow skills agents overlays
 
 # Active procedure surfaces plus generated evidence must not reintroduce the retired paired abbreviations
-rg "\b[Nn][AaBb]\b" agents rules scripts/host-sync/render-baselines skills workflow docs/featureArchitecture docs/SOPs overlays --glob '!research/imported/**'
+rg "\b[Nn][AaBb]\b" agents rules scripts/host-sync/render-baselines skills workflow docs/featureArchitecture docs/SOPs overlays
 
 # Composed surfaces: gate atoms flow via composition — verify by render, not by prose grep
 pwsh scripts/host-sync/Invoke-HostSyncChecks.ps1 -Suite Unit        # includes U17-U20 and U21-U22 ordering checks

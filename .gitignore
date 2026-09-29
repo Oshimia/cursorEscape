@@ -8,15 +8,9 @@ Desktop.ini
 .env.*
 !.env.example
 
-# Local operator material (studies, scratch, coding sheets)
-**/.local/
-.plans
-
 # Editors / agent tooling (do not commit local IDE state)
 .vscode/
 .cursor/
-!docs/research/imported/**/.cursor/
-!docs/research/imported/**/.cursor/**
 *.swp
 *~
 
@@ -29,6 +23,3 @@ build/
 .pytest_cache/
 .venv/
 venv/
-
-# Scratch / throwaway output (git-ignored temp folder)
-temp/

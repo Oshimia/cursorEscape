@@ -20,11 +20,11 @@ Each claim carries its source URL and an access date. The artifact header carrie
 
 ## Artifact format
 
-Exactly one Markdown file under research/, kebab-case descriptive name. Header block: question, run date, freshness label, scope notes, and the packed success criterion. Body: findings grouped by sub-topic, every claim citation-annotated, an explicit Unknowns section listing what could not be verified, and a Sources list. The artifact is Observed evidence: it may inform plans, grilling sessions, and reviews, but it is never contract source of truth and may go stale; re-verify before reuse in later decisions. The caller materializes the file from the returned report; the child only drafts content.
+Exactly one Markdown file under `.scratch/research/`, kebab-case descriptive name. Apply the current local-scratch bootstrap before first persistence. Header block: question, run date, freshness label, scope notes, and the packed success criterion. Body: findings grouped by sub-topic, every claim citation-annotated, an explicit Unknowns section listing what could not be verified, and a Sources list. The artifact is local-only Observed evidence: it may inform plans, grilling sessions, and reviews, but it is never contract source of truth, may go stale, and must not be committed, enumerated, cleaned, or promoted automatically; re-verify before reuse in later decisions. The caller materializes the file from the returned report; the child only drafts content.
 
 ## Parent interpretation
 
-The child returns the full report content and a proposed artifact path; the caller then writes the report to that path under research/ (the read-only child never writes the workspace itself). The parent reads the artifact, judges relevance and confidence, and decides follow-up. The child does not interpret, recommend, or extend scope.
+The child returns the full report content and a proposed artifact path; the caller then writes the report to that path under `.scratch/research/` (the read-only child never writes the workspace itself). The parent reads the artifact, judges relevance and confidence, and decides follow-up. The child does not interpret, recommend, or extend scope.
 
 ## Related
 

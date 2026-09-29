@@ -1,12 +1,12 @@
 # Standard Operating Procedures
 
-**Last updated:** 2026-09-27
+**Last updated:** 2026-09-29
 
 ## Context
 
 This index lists the current repeatable procedures for maintaining cursorEscape documentation and operating its seven registered host adapters. Portable procedure and contracts live in repo-root `workflow/`, `skills/`, `agents/`, and `rules/`; SOPs describe how maintainers apply and verify those contracts in this repository.
 
-**Path rule:** in-repo links use repo-relative paths. External projects may be named in prose, imported only under the owner-frozen `research/imported/` boundary, or represented by host-native files under `overlays/`. Do not copy external trees into this repository as active documentation.
+**Path rule:** in-repo links use repo-relative paths. External projects may be named in prose or represented by host-native files under `overlays/`. Do not copy external trees into this repository as active documentation.
 
 ## Documentation hygiene
 

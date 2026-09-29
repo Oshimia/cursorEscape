@@ -1,6 +1,6 @@
 # OpenCode overlay — harness copy-out map
 
-**Last updated:** 2026-09-27
+**Last updated:** 2026-09-29
 
 **Status:** harness stubs use absolute `{{COMPANION_ROOT}}` Reads; live procedure mirror **deleted** from `{{OPENCODE_HOME}}/docs/workflow/`; `review-subagent-models` overlay-Read only. Live sync via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1). Sync does **not** create backups; recovery uses a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification.
 
@@ -37,7 +37,7 @@ OpenCode-native **host overlay** at `overlays/opencode/`. Portable procedure sta
 | Class | Paths | Action |
 | ----- | ----- | ------ |
 | **Sync (harness-only)** | `instructions/*`, `AGENTS.md` (same body as loop instructions), thin `skills/*/SKILL.md`, thin `agents/*.md`, harness keys in `opencode.json` | Copy overlay harness; resolve `{{COMPANION_ROOT}}` / `{{OPENCODE_HOME}}` tokens on live merge; stub bodies Read `{{COMPANION_ROOT}}/workflow/`, `skills/`, `agents/`, `overlays/opencode/review-subagent-models.md` — **not** procedure mirror |
-| **Pointer (companion-resident — SoT)** | `workflow/**`, repo-root `skills/**`, `agents/**`, `rules/**`, `overlays/opencode/review-subagent-models.md`, `docs/featureArchitecture/**`, `docs/SOPs/**`, `research/**`, `analysis/**`, maintainer indexes | `external_directory` allow on `{{COMPANION_ROOT}}/**` (C5); absolute Reads from harness |
+| **Pointer (companion-resident — SoT)** | `workflow/**`, repo-root `skills/**`, `agents/**`, `rules/**`, `overlays/opencode/review-subagent-models.md`, `docs/featureArchitecture/**`, `docs/SOPs/**`, `analysis/**`, maintainer indexes | `external_directory` allow on `{{COMPANION_ROOT}}/**` (C5); absolute Reads from harness |
 | **Deleted (pointer-first-4)** | Former host `docs/workflow/*` procedure mirror | Removed from live OpenCode 2026-08-20 — recover with a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification |
 | **Contract SoT (diff only)** | Repo-root `agents/*.md` | Portable contracts — **do not paste** onto host files; re-diff when portable `agents/` change |
 
@@ -52,7 +52,6 @@ Applied historically by the script when copying companion `workflow/` → host `
 | `](../skills/` | `](skills/` (**host-root** — not `../../skills/`; Failure mode J class) |
 | `](../agents/` | `](agents/` (same) |
 | `](../rules/` | Plain text note (OpenCode uses instructions + skills) |
-| `](../research/` | Plain text note (companion-resident — `{{COMPANION_ROOT}}/research/...`) |
 | `](../overlays/cursor/review-subagent-models.md)` | `](review-subagent-models.md)` |
 | `](_index.md)` | `](README.md)` |
 | `+ Bugbot (built-in)` | `+ bug_reviewer` |

@@ -2,7 +2,7 @@
 name: research
 description: >-
   Bounded primary-source research producing one cited Markdown artifact under
-  research/. One question, one packed read-only child, claim-level citations
+  local .scratch/research/. One question, one packed read-only child, claim-level citations
   with freshness labels. Output is Observed evidence, not contract source of
   truth.
 disable-model-invocation: true
@@ -20,7 +20,7 @@ The companion procedure defines the bounded loop; the caller owns the question, 
 
 ## Outputs
 
-Exactly one cited Markdown artifact under research/, plus the artifact path returned to the caller. The parent interprets the artifact; the artifact itself is Observed evidence and never contract source of truth.
+Exactly one cited Markdown artifact under local `.scratch/research/`, plus the artifact path returned to the caller. The artifact is local-only, is never committed automatically, and is Observed evidence rather than contract source of truth.
 
 ## Read
 
