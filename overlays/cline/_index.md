@@ -1,7 +1,5 @@
 # cline overlay (5th stack — VS Code extension harness)
 
-**Last updated:** 2026-09-15
-
 **Stack:** `Cline` · **Live root:** `~/.cline/` (docs-verified 2026-09-01) · **Manifest:** `scripts/host-sync/manifests/cline.manifest.psd1` · **Adapter:** shared `Generic.Adapter.ps1` (dispatch fallback — no per-stack adapter file)
 
 Thin host harness per Approach A. Pointer-first: rule/workflow bodies Read companion procedure via absolute `{{COMPANION_ROOT}}` paths after token merge.

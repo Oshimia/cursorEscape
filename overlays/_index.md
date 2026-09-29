@@ -1,7 +1,5 @@
 # Host overlays (recorded files)
 
-**Last updated:** 2026-09-29
-
 ## Context
 
 This folder holds **host-native** skill, agent, rule, and deep-workflow files recorded from a live stack. It is **not** the portable Target contract tree (repo-root bases: [`skills/`](../skills/_index.md), [`agents/`](../agents/_index.md), [`rules/`](../rules/_index.md)).

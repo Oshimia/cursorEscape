@@ -1,7 +1,5 @@
 # Antigravity overlay — harness copy-out map
 
-**Last updated:** 2026-09-27
-
 ## Context
 
 Antigravity-native **host overlay** at `overlays/antigravity/`. Portable procedure stays at repo-root bases (`workflow/`, `skills/`, `agents/`, `rules/`). Overlay = **thin harness only**. Live `~/.gemini` harness synced via [`Sync-HostHarness.ps1`](../../scripts/Sync-HostHarness.ps1) (`-Target Antigravity`; `-Apply` for live writes); SOP: [antigravity-host-adapter](../../docs/SOPs/antigravity-host-adapter.md); see [host-sync README](../../scripts/host-sync/README.md). Sync does **not** create backups; recovery uses a known-good Git commit, dry-run, owner-authorized re-Apply, and drift verification.

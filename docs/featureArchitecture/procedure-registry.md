@@ -1,7 +1,5 @@
 # Procedure registry
 
-**Last updated:** 2026-09-29
-
 ## Context
 
 The procedure registry is the sole writable source for machine metadata used to project portable procedure onto hosts. Canonical Markdown remains the sole source of procedure prose. Host manifests remain the sole source of destinations and host-only bindings. This separation prevents prose, composition order, and install destinations from drifting into separate authorities.

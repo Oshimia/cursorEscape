@@ -1,7 +1,5 @@
 # Skill source and host overlays
 
-**Last updated:** 2026-09-28
-
 ## Context
 
 cursorEscape authors one portable workflow and projects it across seven stacks—currently Cursor, OpenCode, Antigravity, VS Code, Cline, Kilo Code, and Codex—without a second authored documentation tree. This companion repository is the source of truth for skills, agents, rules, workflows, report schemas, and registry-owned semantic order.

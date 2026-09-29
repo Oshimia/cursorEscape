@@ -1,6 +1,5 @@
 # Codex overlay — active composed harness map
 
-**Last updated:** 2026-09-29
 **Status:** Active; activated 2026-09-08 after owner-authorized three-client smoke.
 **SoT boundary:** canonical procedure remains at repository-root `skills/`, `agents/`, `workflow/`, and `rules/`. This overlay contains Codex-native thin wrappers, invocation metadata, agent wiring, and the registry-composed managed-block footer.
 **Tokens:** `{{COMPANION_ROOT}}` is replaced with the absolute companion checkout path at render time. No rendered leaf may use a relative hop across either Codex root.

@@ -1,7 +1,5 @@
 # Project Decisions and Open Questions
 
-**Last updated:** 2026-09-29
-
 ## Context
 
 This page records durable decisions that shape cursorEscape today and the small set of questions that remain genuinely open. It is not a changelog, migration history, or archive of superseded alternatives.

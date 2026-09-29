@@ -1,7 +1,5 @@
 # Permission and native tool policy
 
-**Last updated:** 2026-09-20
-
 ## Context
 
 Permissions are architecture, not prompt etiquette. Instructions reduce unnecessary approval interruptions, but the host configuration remains the enforcement layer for dangerous commands. The durable goal is broad read access through native tools, narrowly scoped writes, and a hard red line around mutating Git and shell-filesystem operations.
