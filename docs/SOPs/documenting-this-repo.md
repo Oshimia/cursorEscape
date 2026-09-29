@@ -1,7 +1,5 @@
 # Documenting This Repo
 
-**Last updated:** 2026-09-29
-
 ## Context
 
 cursorEscape's value is its documentation. Drift (undocumented decisions, broken indexes, invented parallel trees) destroys that value. This SOP is the local equivalent of a "reference docs check" discipline — adapted to repo paths.
@@ -52,7 +50,7 @@ Overlay wrappers do not duplicate portable procedure bodies. **Observed ≠ Targ
 
 ### When adding a document
 
-1. Create the `.md` file with **Last updated**, **Context**, **Substance**, **Implications** (or **Implications / open questions**).
+1. Create the `.md` file with **Context**, **Substance**, **Implications** (or **Implications / open questions**).
 2. Link it from the section `_index.md` in the **same change**.
 3. Cross-link related feature-architecture entries when intent changes; record durable decisions and unresolved questions in [project decisions and open questions](../featureArchitecture/project-decisions-and-open-questions.md).
 4. Observed claims must include a **Sources** subsection.
@@ -75,7 +73,6 @@ Overlay wrappers do not duplicate portable procedure bodies. **Observed ≠ Targ
 
 ### After edits
 
-- Update **Last updated** dates on touched docs.
 - Confirm affected indexes, catalogs, scripts, and tests were updated in the same change.
 - Run relative-link closure for touched Markdown.
 - Run normalization Fast CI before handoff; run Full CI before a phase commit.
