@@ -19,12 +19,12 @@ This skill is **repo-agnostic**. Do not assume a fixed doc tree or scripts.
 
 | Doc | When |
 |-----|------|
-| [discovery.md](../../docs/workflow/discovery.md) | Find repo docs (Step 0 + fallback) |
-| [iterative-plan-review.md](../../docs/workflow/iterative-plan-review.md) | Plan → plan-reviewer loop |
-| [plan-agent-context.md](../../docs/workflow/plan-agent-context.md) | Escalation field + Agent context when escalated |
-| [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md) | Multi-phase / Composer handoffs |
-| [review-subagent-models.md](../../docs/workflow/review-subagent-models.md) | Recommended `plan-reviewer` model |
-| [README.md](../../docs/workflow/README.md) | Index of all workflow docs |
+| `discovery.md mirror removed; recover from Git history` | Find repo docs (Step 0 + fallback) |
+| `iterative-plan-review.md mirror removed; recover from Git history` | Plan → plan-reviewer loop |
+| `plan-agent-context.md mirror removed; recover from Git history` | Escalation field + Agent context when escalated |
+| `phased-multi-agent.md mirror removed; recover from Git history` | Multi-phase / Composer handoffs |
+| `review-subagent-models.md mirror removed; recover from Git history` | Recommended `plan-reviewer` model |
+| `README.md mirror removed; recover from Git history` | Index of all workflow docs |
 
 Absolute fallback: `C:/Users/admin/.cursor/docs/workflow/`.
 
@@ -62,7 +62,7 @@ If the plan touches tests, APIs, auth, migrations, shared utilities, or logic/st
 Research docs → draft plan → review (max 3) → synthesize between passes → present to user
 ```
 
-1. **Research** — [discovery.md](../../docs/workflow/discovery.md) Step 0 / fallback. Skip missing paths; do not invent a required layout.
+1. **Research** — `discovery.md mirror removed; recover from Git history` Step 0 / fallback. Skip missing paths; do not invent a required layout.
 2. **Draft** using the [plan template](#plan-template) below. Fill every section.
 3. **Invoke plan-reviewer** with **clean context** — repository path, task summary, review pass number, and **synthesized plan text only**. Do **not** attach prior review transcripts.
 
@@ -119,7 +119,7 @@ One paragraph: what success looks like.
 
 ### Escalation
 
-Mandatory on every non-trivial plan. Place **immediately after Scope**. Schema and Agent context headings: [plan-agent-context.md](../../docs/workflow/plan-agent-context.md).
+Mandatory on every non-trivial plan. Place **immediately after Scope**. Schema and Agent context headings: `plan-agent-context.md mirror removed; recover from Git history`.
 
 ```markdown
 ### Escalation
@@ -205,7 +205,7 @@ On multi-phase plans, treat each phase as a review boundary during implementatio
 
 - **Inter-phase contracts** (N/A OK for a single-phase escalated plan)
 - **Migration / external apply order** when the repo has those gates (else none)
-- **`#### Agent context — Phase N`** for every execution phase — required headings in [plan-agent-context.md](../../docs/workflow/plan-agent-context.md) (link; do not paste the full specimen into this skill)
+- **`#### Agent context — Phase N`** for every execution phase — required headings in `plan-agent-context.md mirror removed; recover from Git history` (link; do not paste the full specimen into this skill)
 
 When Escalation is **no**, keep light phase bullets only — no Agent context blocks.
 
@@ -247,7 +247,7 @@ When the plan includes DB/schema/RPC work, also include Verification rows (or an
 | Safe sequencing | Incremental execution |
 | Documented patterns | Architecture and docs |
 | Escalation field present | Escalation |
-| Escalated Agent context / contracts | Escalation **yes** → [plan-agent-context.md](../../docs/workflow/plan-agent-context.md) headings |
+| Escalated Agent context / contracts | Escalation **yes** → `plan-agent-context.md mirror removed; recover from Git history` headings |
 | Composer planning mismatch | Planning signal + Escalation **no** → blocking |
 
 ---
@@ -338,9 +338,9 @@ When the user assigns the `composer` skill for execution, planning is already co
 
 ### Large & complex / escalated plans
 
-When Escalation is **yes**, put full Agent context (and contracts) **in the accepted plan** per [plan-agent-context.md](../../docs/workflow/plan-agent-context.md) — not only after accept in a repo roadmap.
+When Escalation is **yes**, put full Agent context (and contracts) **in the accepted plan** per `plan-agent-context.md mirror removed; recover from Git history` — not only after accept in a repo roadmap.
 
-After approval, use the [`roadmap`](../roadmap/SKILL.md) skill to write a **repo** roadmap: Escalation **yes** → **copy** from the plan (fail-closed if stub); Escalation **no** → optional roadmap that **may restructure** thin Incremental execution into Agent context **without new scope**. See [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md). Do not store roadmaps under `~/.cursor`. Prefer [`documentation-architecture`](../documentation-architecture/SKILL.md) when bootstrapping new docs areas.
+After approval, use the [`roadmap`](../roadmap/SKILL.md) skill to write a **repo** roadmap: Escalation **yes** → **copy** from the plan (fail-closed if stub); Escalation **no** → optional roadmap that **may restructure** thin Incremental execution into Agent context **without new scope**. See `phased-multi-agent.md mirror removed; recover from Git history`. Do not store roadmaps under `~/.cursor`. Prefer [`documentation-architecture`](../documentation-architecture/SKILL.md) when bootstrapping new docs areas.
 
 ---
 
@@ -348,4 +348,4 @@ After approval, use the [`roadmap`](../roadmap/SKILL.md) skill to write a **repo
 
 **Skills / agents:** [`roadmap`](../roadmap/SKILL.md), [`implementation-review`](../implementation-review/SKILL.md), [`composer`](../composer/SKILL.md), [`documentation-architecture`](../documentation-architecture/SKILL.md), `plan-reviewer mirror removed; recover from Git history`
 
-**Workflow docs:** [discovery.md](../../docs/workflow/discovery.md), [iterative-plan-review.md](../../docs/workflow/iterative-plan-review.md), [plan-agent-context.md](../../docs/workflow/plan-agent-context.md), [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md), [iterative-code-review.md](../../docs/workflow/iterative-code-review.md), [review-subagent-models.md](../../docs/workflow/review-subagent-models.md), [README.md](../../docs/workflow/README.md)
+**Workflow docs:** `discovery.md mirror removed; recover from Git history`, `iterative-plan-review.md mirror removed; recover from Git history`, `plan-agent-context.md mirror removed; recover from Git history`, `phased-multi-agent.md mirror removed; recover from Git history`, `iterative-code-review.md mirror removed; recover from Git history`, `review-subagent-models.md mirror removed; recover from Git history`, `README.md mirror removed; recover from Git history`

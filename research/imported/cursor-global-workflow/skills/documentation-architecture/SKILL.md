@@ -11,13 +11,13 @@ disable-model-invocation: true
 
 # Documentation architecture
 
-Lean entry point. **Full detail:** [documentation-architecture.md](../../docs/workflow/documentation-architecture.md)
+Lean entry point. **Full detail:** `documentation-architecture.md mirror removed; recover from Git history`
 
 Absolute fallback: `C:/Users/admin/.cursor/docs/workflow/documentation-architecture.md`.
 
 ## Instructions
 
-1. Run [discovery.md](../../docs/workflow/discovery.md) (Step 0 local `reference-docs` if present).
+1. Run `discovery.md mirror removed; recover from Git history` (Step 0 local `reference-docs` if present).
 2. If the repo already has a coherent docs layout → **follow it**. Map procedures vs design onto existing folders.
 3. If greenfield / user asks to adopt defaults → bootstrap under the docs root (or create `docs/`):
 
@@ -34,4 +34,4 @@ Absolute fallback: `C:/Users/admin/.cursor/docs/workflow/documentation-architect
 
 **Skills:** [`roadmap`](../roadmap/SKILL.md), [`implementation-plan`](../implementation-plan/SKILL.md), [`composer`](../composer/SKILL.md)
 
-**Workflow docs:** [documentation-architecture.md](../../docs/workflow/documentation-architecture.md), [discovery.md](../../docs/workflow/discovery.md), [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md), [README.md](../../docs/workflow/README.md)
+**Workflow docs:** `documentation-architecture.md mirror removed; recover from Git history`, `discovery.md mirror removed; recover from Git history`, `phased-multi-agent.md mirror removed; recover from Git history`, `README.md mirror removed; recover from Git history`

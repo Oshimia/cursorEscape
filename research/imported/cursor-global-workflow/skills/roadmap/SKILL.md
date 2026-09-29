@@ -17,11 +17,11 @@ Roadmaps are **repo documentation**. Never write them under `~/.cursor`.
 
 | Doc | When |
 |-----|------|
-| [plan-agent-context.md](../../docs/workflow/plan-agent-context.md) | Escalation dual path + Agent context headings |
-| [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md) | When to use, Composer handoff |
-| [discovery.md](../../docs/workflow/discovery.md) | Find existing docs / roadmap conventions |
-| [documentation-architecture.md](../../docs/workflow/documentation-architecture.md) | Default `docs/roadmaps/` layout when bootstrapping |
-| [README.md](../../docs/workflow/README.md) | Index of all workflow docs |
+| `plan-agent-context.md mirror removed; recover from Git history` | Escalation dual path + Agent context headings |
+| `phased-multi-agent.md mirror removed; recover from Git history` | When to use, Composer handoff |
+| `discovery.md mirror removed; recover from Git history` | Find existing docs / roadmap conventions |
+| `documentation-architecture.md mirror removed; recover from Git history` | Default `docs/roadmaps/` layout when bootstrapping |
+| `README.md mirror removed; recover from Git history` | Index of all workflow docs |
 
 Absolute fallback: `C:/Users/admin/.cursor/docs/workflow/`.
 
@@ -39,14 +39,14 @@ Without Composer, a roadmap is **recommended** for large/complex work; ad-hoc ch
 2. Else if a docs root exists (`docs/`, `documentation/`, `referenceFiles/`, …) → `<that-root>/roadmaps/<feature>.md` (or keep an existing equivalent folder name if the repo already uses one)
 3. Else → **`docs/roadmaps/<feature>.md`** (create folders as needed)
 
-Do not hard-code any one repo’s folder name as a global requirement. See [discovery.md](../../docs/workflow/discovery.md).
+Do not hard-code any one repo’s folder name as a global requirement. See `discovery.md mirror removed; recover from Git history`.
 
 ## Copy vs restructure (from accepted plan Escalation)
 
 | Escalation was | Behavior |
 |----------------|----------|
 | **yes** | **Copy** Inter-phase contracts + Agent context from the accepted plan. **Fail-closed** if contexts are missing or stub. **Never invent** scope, files, or CI commands that were not in the plan. |
-| **no** | **May restructure** thin Incremental execution bullets into Agent context headings (schema in [plan-agent-context.md](../../docs/workflow/plan-agent-context.md)) **without adding new scope**. Do not invent new phases, files, or behaviors. |
+| **no** | **May restructure** thin Incremental execution bullets into Agent context headings (schema in `plan-agent-context.md mirror removed; recover from Git history`) **without adding new scope**. Do not invent new phases, files, or behaviors. |
 
 If Composer is assigned and Escalation was **yes** but Agent context is missing/stub in the plan: **do not invent** — fail and send back to planning (`implementation-plan` + plan-reviewer).
 
@@ -58,7 +58,7 @@ If Composer is assigned and Escalation was **yes** but Agent context is missing/
 | Product decisions | Locked user choices |
 | Inter-phase contracts | Must not drift silently |
 | Migration / external apply order | When the repo has user-apply gates |
-| Agent context — Phase N | Per phase — headings in [plan-agent-context.md](../../docs/workflow/plan-agent-context.md) |
+| Agent context — Phase N | Per phase — headings in `plan-agent-context.md mirror removed; recover from Git history` |
 
 Title example: `# Roadmap: <Human-readable feature name>`.
 
@@ -75,4 +75,4 @@ Optional: mirror todos in `.cursor/plans/`; keep in sync when the roadmap change
 
 **Skills:** [`composer`](../composer/SKILL.md), [`implementation-plan`](../implementation-plan/SKILL.md), [`implementation-review`](../implementation-review/SKILL.md), [`documentation-architecture`](../documentation-architecture/SKILL.md)
 
-**Workflow docs:** [plan-agent-context.md](../../docs/workflow/plan-agent-context.md), [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md), [discovery.md](../../docs/workflow/discovery.md), [documentation-architecture.md](../../docs/workflow/documentation-architecture.md), [iterative-code-review.md](../../docs/workflow/iterative-code-review.md), [README.md](../../docs/workflow/README.md)
+**Workflow docs:** `plan-agent-context.md mirror removed; recover from Git history`, `phased-multi-agent.md mirror removed; recover from Git history`, `discovery.md mirror removed; recover from Git history`, `documentation-architecture.md mirror removed; recover from Git history`, `iterative-code-review.md mirror removed; recover from Git history`, `README.md mirror removed; recover from Git history`

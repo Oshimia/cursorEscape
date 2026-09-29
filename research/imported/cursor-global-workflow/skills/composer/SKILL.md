@@ -20,18 +20,18 @@ Composer is the **run manager**: launch work, then **verify process and evidence
 
 If assigned as Composer and the user asks you to **plan** (e.g. “plan with Composer”, “composer-level plan”): tell them to stay in Plan mode / [`implementation-plan`](../implementation-plan/SKILL.md) with Escalation **yes** / `user-labeled-composer`. Do not author the plan while conducting.
 
-Multi-phase Composer work **requires** a **repo** roadmap file via the `roadmap` skill (never under `~/.cursor`). Nb launches still require full Agent context from that roadmap ([plan-agent-context.md](../../docs/workflow/plan-agent-context.md)).
+Multi-phase Composer work **requires** a **repo** roadmap file via the `roadmap` skill (never under `~/.cursor`). Nb launches still require full Agent context from that roadmap (`plan-agent-context.md mirror removed; recover from Git history`).
 
 **Read before conducting** (workflow docs):
 
 | Doc | When |
 |-----|------|
-| [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md) | Phase handoffs, roadmap shape, Composer lifecycle context |
-| [plan-agent-context.md](../../docs/workflow/plan-agent-context.md) | Agent context headings Nb must receive |
-| [discovery.md](../../docs/workflow/discovery.md) | How to find repo docs (Step 0 + fallback) |
-| [iterative-code-review.md](../../docs/workflow/iterative-code-review.md) | Review loop the phase subagent must run |
-| [ci-ladder.md](../../docs/workflow/ci-ladder.md) | Fast/Full CI mapping for any repo |
-| [review-subagent-models.md](../../docs/workflow/review-subagent-models.md) | Recommended models + chat override |
+| `phased-multi-agent.md mirror removed; recover from Git history` | Phase handoffs, roadmap shape, Composer lifecycle context |
+| `plan-agent-context.md mirror removed; recover from Git history` | Agent context headings Nb must receive |
+| `discovery.md mirror removed; recover from Git history` | How to find repo docs (Step 0 + fallback) |
+| `iterative-code-review.md mirror removed; recover from Git history` | Review loop the phase subagent must run |
+| `ci-ladder.md mirror removed; recover from Git history` | Fast/Full CI mapping for any repo |
+| `review-subagent-models.md mirror removed; recover from Git history` | Recommended models + chat override |
 
 Absolute fallback if relative links fail: `C:/Users/admin/.cursor/docs/workflow/`.
 
@@ -70,11 +70,11 @@ User ── git push (manual) ──► origin
 - Ensure a repo roadmap exists (`roadmap` skill) before multi-phase Nb
 - Build disposable **Na** previews only when the roadmap/repo docs call for sign-off
 - Draft migration / external-apply artifacts only when the repo documents a user-apply gate; wait for user confirmation
-- Follow [discovery](../../docs/workflow/discovery.md) (Step 0 local `reference-docs` if present)
+- Follow `discovery.md mirror removed; recover from Git history` (Step 0 local `reference-docs` if present)
 - Launch one phase subagent at a time (see [Launch contract](#phase-subagent-launch-contract))
 - QC closeout reports **and audit transcripts** (see [Composer QC](#composer-qc)); resume/relaunch on rejection (max 2 substantive rejections)
 - Update roadmap status after QC accept
-- After QC accept: run **Full** CI (per [ci-ladder](../../docs/workflow/ci-ladder.md)), then **automatic local `git commit`**
+- After QC accept: run **Full** CI (per `ci-ladder.md mirror removed; recover from Git history`), then **automatic local `git commit`**
 - Report commit SHA; never ask for commit confirmation
 
 ### Composer DOES NOT
@@ -88,7 +88,7 @@ User ── git push (manual) ──► origin
 
 ### Phase subagent DOES
 
-- Discover docs first ([discovery](../../docs/workflow/discovery.md); Step 0 `reference-docs` if present)
+- Discover docs first (`discovery.md mirror removed; recover from Git history`; Step 0 `reference-docs` if present)
 - Implement Nb per roadmap **Agent context**
 - Run full `implementation-review` as review-loop parent
 - Delete disposable Na preview folder on closeout when required
@@ -301,10 +301,10 @@ Against attestation paths vs **this phase’s Agent context** — do not assume 
 
 **Workflow docs:**
 
-- [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md)
-- [plan-agent-context.md](../../docs/workflow/plan-agent-context.md)
-- [discovery.md](../../docs/workflow/discovery.md)
-- [iterative-code-review.md](../../docs/workflow/iterative-code-review.md)
-- [ci-ladder.md](../../docs/workflow/ci-ladder.md)
-- [review-subagent-models.md](../../docs/workflow/review-subagent-models.md)
-- [README.md](../../docs/workflow/README.md) — index of all workflow docs
+- `phased-multi-agent.md mirror removed; recover from Git history`
+- `plan-agent-context.md mirror removed; recover from Git history`
+- `discovery.md mirror removed; recover from Git history`
+- `iterative-code-review.md mirror removed; recover from Git history`
+- `ci-ladder.md mirror removed; recover from Git history`
+- `review-subagent-models.md mirror removed; recover from Git history`
+- `README.md mirror removed; recover from Git history` — index of all workflow docs

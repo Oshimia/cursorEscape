@@ -20,11 +20,11 @@ This skill is **repo-agnostic**. Do not assume a fixed script tree.
 
 | Doc | When |
 |-----|------|
-| [discovery.md](../../docs/workflow/discovery.md) | Find repo docs before judging architecture |
-| [iterative-code-review.md](../../docs/workflow/iterative-code-review.md) | Loop rules, per-phase boundaries, Composer carve-out |
-| [ci-ladder.md](../../docs/workflow/ci-ladder.md) | Fast/Full CI mapping |
-| [review-subagent-models.md](../../docs/workflow/review-subagent-models.md) | Recommended reviewer models |
-| [README.md](../../docs/workflow/README.md) | Index of all workflow docs |
+| `discovery.md mirror removed; recover from Git history` | Find repo docs before judging architecture |
+| `iterative-code-review.md mirror removed; recover from Git history` | Loop rules, per-phase boundaries, Composer carve-out |
+| `ci-ladder.md mirror removed; recover from Git history` | Fast/Full CI mapping |
+| `review-subagent-models.md mirror removed; recover from Git history` | Recommended reviewer models |
+| `README.md mirror removed; recover from Git history` | Index of all workflow docs |
 
 Absolute fallback: `C:/Users/admin/.cursor/docs/workflow/`.
 
@@ -138,7 +138,7 @@ Use a different model only when the user explicitly requests it.
 
 ## CI gate
 
-Run from repo root. Full mapping: [ci-ladder.md](../../docs/workflow/ci-ladder.md).
+Run from repo root. Full mapping: `ci-ladder.md mirror removed; recover from Git history`.
 
 If a project `pre-commit-ci-gate` (or equivalent) rule exists, follow it for Full/commit.
 
@@ -273,4 +273,4 @@ Incomplete changesets are a common blocking finding on re-review.
 
 **Skills / agents:** [`composer`](../composer/SKILL.md), [`implementation-plan`](../implementation-plan/SKILL.md), [`roadmap`](../roadmap/SKILL.md), `reviewer-a mirror removed; recover from Git history`
 
-**Workflow docs:** [discovery.md](../../docs/workflow/discovery.md), [iterative-code-review.md](../../docs/workflow/iterative-code-review.md), [ci-ladder.md](../../docs/workflow/ci-ladder.md), [review-subagent-models.md](../../docs/workflow/review-subagent-models.md), [phased-multi-agent.md](../../docs/workflow/phased-multi-agent.md), [README.md](../../docs/workflow/README.md)
+**Workflow docs:** `discovery.md mirror removed; recover from Git history`, `iterative-code-review.md mirror removed; recover from Git history`, `ci-ladder.md mirror removed; recover from Git history`, `review-subagent-models.md mirror removed; recover from Git history`, `phased-multi-agent.md mirror removed; recover from Git history`, `README.md mirror removed; recover from Git history`
