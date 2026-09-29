@@ -120,4 +120,4 @@ Historical copy manifest, not a current inventory. AITestSuite files, five Curso
 
 ## File count
 
-Historical import total: 86 (openBuggy 47 + AITestSuite 17 + cursor-global-workflow 22). Current tracked archive group files: 7 (openBuggy 7); the openBuggy analysis and featureArchitecture groups, Cursor BugBot Observed FA suite, AITestSuite, all Cursor-global-workflow mirrors, and its manifest root records are removed or historical and recoverable from Git history.
+Historical import total: 86 (openBuggy 47 + AITestSuite 17 + cursor-global-workflow 22). Current tracked archive group files: 0; all openBuggy archive content (including its analysis and featureArchitecture groups and Cursor BugBot Observed FA suite), AITestSuite, all Cursor-global-workflow mirrors, and its manifest root records are removed or historical and recoverable from Git history.
