@@ -8,6 +8,8 @@
 3. A host alias is routing metadata only. The canonical role contract and required reading remain authoritative.
 4. If the envelope is missing, malformed, internally contradictory, or unreadable, the child must stop and fail loudly in its role-native output shape. It must not infer identity and proceed.
 
+**Authoring language (always-on):** Author all prose in plain domain terms; do not introduce opaque placeholder jargon (e.g., "golden") — if a term needs a glossary to be understood, name the concrete thing instead.
+
 Detail and role map: [workflow/agent-invocation.md](C:/codex-render-normalization-fixture/companion/workflow/agent-invocation.md).
 
 

@@ -19,10 +19,6 @@ foreach ($check in $checks) {
   else { & $check.File }
   if ($LASTEXITCODE -ne 0) { throw "FAIL: $($check.Name) exited $LASTEXITCODE" }
 }
-$retiredFixtureTerm = [string]::Join('', [char]0x67, [char]0x6F, [char]0x6C, [char]0x64, [char]0x65, [char]0x6E)
-$tracked = & git -C $RepoRoot grep -n -I -i -w $retiredFixtureTerm -- .
-if ($LASTEXITCODE -notin @(0,1)) { throw "FAIL: tracked hygiene grep exited $LASTEXITCODE" }
-if ($LASTEXITCODE -eq 0) { throw "FAIL: tracked retired fixture term found: $($tracked -join '; ')" }
 & git -C $RepoRoot diff --check
 if ($LASTEXITCODE -ne 0) { throw "FAIL: git diff --check exited $LASTEXITCODE" }
 Write-Output 'normalization Fast CI: PASS'

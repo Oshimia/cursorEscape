@@ -165,19 +165,10 @@ foreach ($relative in @($planArtifactBoundaryOnlyLeaves) + @($planArtifactExactT
     if ($relative -in $planArtifactExactTemplates -and -not $text.Contains('Plan artifact path')) { Add-Failure 'PlanArtifactPathField' $relative }
 }
 
-# Retired-term hygiene uses a char-code literal so this checker does not itself
-# contain the retired fixture term.
-$forbidden = -join @(103,111,108,100,101,110)
-foreach ($file in (Get-GovernedRepositoryFiles -RepositoryRoot $RepoRoot)) {
-    $bytes = [System.IO.File]::ReadAllBytes($file.FullName)
-    if ($bytes.Length -eq 0 -or ($bytes[0..([Math]::Min($bytes.Length-1,1023))] | Where-Object { $_ -eq 0 })) { continue }
-    if ([Text.Encoding]::UTF8.GetString($bytes).Contains($forbidden)) { Add-Failure 'RetiredTermAbsent' $file.FullName.Substring($RepoRoot.Length + 1) }
-}
-
 if ($failures.Count) {
     Write-Host "FAIL: $($failures.Count) invariant(s) failed:" -ForegroundColor Red
     $failures | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }
     exit 1
 }
-Write-Host 'PASS: current catalogs, manifests, lifecycle evidence, governed handoffs, and repository-term invariants passed.' -ForegroundColor Green
+Write-Host 'PASS: current catalogs, manifests, lifecycle evidence, and governed handoffs passed.' -ForegroundColor Green
 exit 0

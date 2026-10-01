@@ -75,7 +75,7 @@ Committed baselines are generated regression anchors, never hand-edited expectat
 
 | Gate | Sole entry point | Role |
 | --- | --- | --- |
-| Fast | `scripts/normalization/Invoke-NormalizationFastCI.ps1` | Blocking registry, current-state, host-sync Unit, focused Codex-render, hygiene, and diff checks. |
+| Fast | `scripts/normalization/Invoke-NormalizationFastCI.ps1` | Blocking registry, current-state, host-sync Unit, focused Codex-render, and diff checks. |
 | Full | `scripts/normalization/Invoke-NormalizationFullCI.ps1` | Fast plus consolidated host, all-stack disposable dry-run, Codex lifecycle, drift fixture, and disposable render verification. |
 
 There is exactly one Fast entry point and one Full entry point. Host-sync suite scripts are internal Full CI components, not alternate entry points.
