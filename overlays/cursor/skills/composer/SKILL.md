@@ -49,7 +49,7 @@ Phase rules (parent instructions to the child, outside the launch envelope):
 - Before code: discovery Step 0 (local reference-docs if present) else discovery fallback. Roadmap "Where to read context" is an index, not a substitute.
 - Do NOT git commit or git push. Composer commits after QC ACCEPT.
 - Prefer dual APPROVED (Fast + review-loop) then Full CI. Never launch reviewers with Full.
-- After dual APPROVED (Bugbot all None; Reviewer-a blocking lists None; required Supersession closure and Lifecycle and naming closure present with every Supersession Unresolved and Lifecycle Unresolved or Unclear routed to Blocking / Non-blocking / blocking test/docs — Batchable (deferred) may remain): Full CI only — do not re-launch reviewers; return closeout report.
+- After dual APPROVED (Bugbot all None; Reviewer-a must-fix lists None; required Supersession closure, Lifecycle and naming closure, and Fix verification present with every unresolved closure and prior claim routed to an applicable must-fix list — Batchable (deferred) may remain): Full CI only — do not re-launch reviewers; return closeout report.
 - After iteration 4 without dual APPROVED: do NOT self-renew; do NOT run Full CI; return Phase cap-exhausted handoff (schema in companion composer SKILL).
 ```
 

@@ -28,7 +28,7 @@ Parents must **not** pass a Bugbot-style Custom Instructions envelope. Re-scope 
 
 ## Purpose
 
-Find incomplete work, architecture drift, unresolved replacement/supersession closure, machinery lifetime/naming closure, CI honesty failures, and **blocking** test/docs gaps.
+Find incomplete work, architecture drift, unresolved replacement/supersession closure, machinery lifetime/naming closure, CI honesty failures, unresolved prior-finding claims, and **must-fix** test & docs gaps.
 
 **Leg split:** Process/docs completeness lives **here**. Product bugs belong on `bug_reviewer` + `{{COMPANION_ROOT}}/docs/featureArchitecture/bug-reviewer-finding-rubric.md`.
 
@@ -38,15 +38,15 @@ Find incomplete work, architecture drift, unresolved replacement/supersession cl
 | ----- | ----- |
 | Repository path | Absolute workspace root |
 | Task summary | Phase goal (may name what changed; must not set pass conditions) |
-| Review iteration + launch count | Iteration **1–4** within current pressure-release block; cumulative per-leg launch count for the phase |
+| Review iteration + launch count | Iteration **1–4** within current pressure-release block; a clear equivalent is acceptable; cumulative per-leg launch count for the phase. Absent iteration: proceed unspecified and report it in Payload defects |
 | Completion gate | Must be `review-loop` |
 | CI gate (parent-verified) | Fast mode + per-command rows — **do not re-run** |
 | Changeset scope | Committed / staged / unstaged as stated |
-| Optional evidence frame | When parent supplies Fixed point + Spec path, tag findings by axis with citations; deep rules: {{COMPANION_ROOT}}/workflow/code-review-frame.md |
+| Prior-findings claims | Iterations **2–4** only: one line per prior must-fix item—prior claim plus parent's asserted resolution; claims are verification targets, never pass conditions |
 
 **Immediate CHANGES REQUESTED if:**
 
-- Required inputs missing
+- Required inputs missing (except that absent iteration proceeds as `unspecified` and is reported in Payload defects)
 - Completion gate ≠ `review-loop` (including `task-phase-complete`, Full/closeout pairing)
 - Any CI result fail or pending
 - Fast ≠ n/a and any Fast check is skipped
@@ -57,14 +57,15 @@ Find incomplete work, architecture drift, unresolved replacement/supersession cl
 
 | List | Loop-blocking? |
 | ---- | -------------- |
-| Blocking | Yes |
-| Non-blocking (code/process) | Yes |
-| Blocking test/docs | Yes |
+| Must-fix findings | Yes |
+| Must-fix test & docs | Yes |
 | Batchable (deferred) | **No** |
-| Supersession closure | Required section — omission blocks; each `Unresolved` routes into Blocking / Non-blocking / Blocking test/docs |
-| Lifecycle and naming closure | Required section — omission blocks; each `Unresolved` or `Unclear` routes into Blocking / Non-blocking / Blocking test/docs |
+| Fix verification | Required section (N/A on iteration 1); each Reopened or Not-addressed claim routes into the applicable must-fix list |
+| Payload defects | Required section; `iteration: unspecified` does not independently reject the launch |
+| Supersession closure | Required section — omission blocks; each `Unresolved` routes into an applicable must-fix list |
+| Lifecycle and naming closure | Required section — omission blocks; each `Unresolved` or `Unclear` routes into an applicable must-fix list |
 
-**APPROVED** only when all loop-blocking lists are `"None"`, required `Supersession closure` and `Lifecycle and naming closure` are present, and every Supersession `Unresolved` and Lifecycle `Unresolved` or `Unclear` is also routed into an open loop-blocking list.
+**APPROVED** only when all must-fix lists are `"None"`, required `Supersession closure`, `Lifecycle and naming closure`, and `Fix verification` are present, every prior claim is Resolved, and every Supersession `Unresolved` and Lifecycle `Unresolved` or `Unclear` is also routed into an applicable must-fix list.
 
 ## Load when needed
 

@@ -6,7 +6,7 @@ Require the parent payload to begin with the canonical agent-invocation envelope
 
 Read the canonical contract at C:/codex-render-normalization-fixture/companion/agents/test_reviewer.md and the supplied changeset and test context.
 
-Advisory review only: identify test-strategy defects, weak oracles, missing boundary and failure-path coverage, regression risk, and maintenance concerns. Return Blocking, Non-blocking, and Test gaps with evidence and concrete suggestions. This leg does not replace the production-readiness blocking test/docs bar and does not gate dual APPROVED unless the user elevates it.
+Advisory review only: identify test-strategy defects, weak oracles, missing boundary and failure-path coverage, regression risk, and maintenance concerns. Return Blocking, Non-blocking, and Test gaps with evidence and concrete suggestions. This leg does not replace the production-readiness Must-fix test & docs bar and does not gate dual APPROVED unless the user elevates it.
 
 Read-only means do not edit, write, install, execute state-changing commands, run CI, commit, push, or join the default dual gate without explicit instruction.
 """

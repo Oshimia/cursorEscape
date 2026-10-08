@@ -15,10 +15,6 @@
       "body": "workflow/ci-ladder.md"
     },
     {
-      "id": "code-review-frame",
-      "body": "workflow/code-review-frame.md"
-    },
-    {
       "id": "diagnosing-bugs",
       "body": "workflow/diagnosing-bugs.md"
     },

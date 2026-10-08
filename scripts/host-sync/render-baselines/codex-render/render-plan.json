@@ -8,7 +8,7 @@
       "destination": "codex-home/AGENTS.md",
       "logicalRoot": "codex-home",
       "role": "managed-block-target",
-      "sha256": "c49aefafc45f40538175b913ce13b46bdf3a2ec46bc949254e0b9d24c71980de"
+      "sha256": "9a5748f385a79dd483a61e335d543faa292809eb7531adbdbfde377873291c17"
     },
     {
       "destination": "codex-home/agents/bug_reviewer.toml",
@@ -38,7 +38,7 @@
       "destination": "codex-home/agents/production_readiness_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "59674d084cfa9c09c952936399eb8112c4cf425e74769273db90453479602221"
+      "sha256": "5fff90d9ffd0cb14c24fa5b969a57c51226238dcb85ed459a9ed8b4708f2a5bc"
     },
     {
       "destination": "codex-home/agents/repository_explorer.toml",
@@ -50,7 +50,7 @@
       "destination": "codex-home/agents/test_reviewer.toml",
       "logicalRoot": "codex-home",
       "role": "managed-agent-target",
-      "sha256": "cc32e821125185e630eef26f1f31ed88de1da0a26cfc0f1d6ef3c807c9c58098"
+      "sha256": "cb4a09b62511b0d73bc41dc625503a39096a9a1a3bb2fb78ab2e6d5176fffe38"
     },
     {
       "destination": "skill-root/architecture-survey/SKILL.md",

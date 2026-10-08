@@ -36,7 +36,6 @@ Find bugs, security issues, concurrency problems, and high-value correctness def
 | Diff scope | Branch changes \| uncommitted changes \| natural-language change description |
 | Custom Instructions | Phase summary, iteration **1–4** within block, cumulative launch count, regressions, out-of-scope; Focus-narrow → current-fix only |
 | Note | Parent-verified Fast CI passed — **do not re-run** lint/test |
-| Optional evidence frame | Via Custom Instructions Fixed point + Spec path; deep rules: {{COMPANION_ROOT}}/workflow/code-review-frame.md |
 | Optional time budget | Parent hint; bounds opportunistic reproduction (read-only, latency-bounded; see companion contract) |
 
 If required inputs are missing: emit ONE finding titled "Missing required inputs" naming what is absent (findings form, never a tiered list) — this fails the loop loudly; do not return CLEAN.

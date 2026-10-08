@@ -38,7 +38,7 @@ Every role page defines:
 | Role | APPROVED when |
 | ---- | ------------- |
 | plan_reviewer | No blocking plan issues (CHANGES REQUESTED otherwise) |
-| production_readiness_reviewer | Blocking, Non-blocking (code/process), blocking test/docs = `"None"`; required Supersession closure and Lifecycle and naming closure present; every Supersession `Unresolved` and Lifecycle `Unresolved` or `Unclear` routed to an open loop-blocking list; Batchable deferred may remain |
+| production_readiness_reviewer | Must-fix findings and Must-fix test & docs = `"None"`; required Supersession closure, Lifecycle and naming closure, and Fix verification present; every Supersession `Unresolved`, Lifecycle `Unresolved` or `Unclear`, and unresolved prior claim routed to an applicable must-fix list; Batchable deferred may remain |
 | bug_reviewer | Findings → CHANGES REQUESTED; CLEAN (empty answer) → contributes APPROVED |
 | test_reviewer | Advisory findings — not required for dual APPROVED unless user elevates ([test_reviewer](./test_reviewer.md)) |
 

@@ -25,7 +25,6 @@ Process/docs completeness belongs on [production_readiness_reviewer](./productio
 | Repository path | Absolute workspace root |
 | Diff scope | Branch changes \| uncommitted changes \| natural-language change description |
 | Custom Instructions | Phase summary, iteration, launch count, regressions to flag, out-of-scope, clean-case signals |
-| Optional evidence frame | When parent supplies `Fixed point` + `Spec path` in Custom Instructions, tag findings by Standards/Spec axis with citations per [code-review-frame](../workflow/code-review-frame.md); without both, ignore framing |
 | Optional time budget | Parent hint bounding opportunistic reproduction; absence means default (no reproduction) |
 | Note | Parent-verified Fast CI passed — do not re-run lint/test |
 

@@ -23,7 +23,6 @@ This skill is **repo-agnostic**. Do not assume a fixed script tree.
 | [discovery.md](../../workflow/discovery.md) | Find repo docs before judging architecture |
 | [iterative-code-review.md](../../workflow/iterative-code-review.md) | Loop rules, per-phase boundaries, Composer carve-out |
 | [ci-ladder.md](../../workflow/ci-ladder.md) | Fast/Full CI mapping |
-| [code-review-frame.md](../../workflow/code-review-frame.md) | Optional Standards/Spec evidence frame |
 | [review-subagent-models.md](../../overlays/cursor/review-subagent-models.md) | Recommended reviewer models |
 | [_index.md](../../workflow/_index.md) | Index of all workflow docs |
 
@@ -87,12 +86,11 @@ Implement phase
 ```
 
 1. **Implement** the current phase (or full scope if single-phase) using discovery + this repo’s documented conventions. When the phase introduces machinery, state whether it is **Durable** or **Transitional**; for transitional machinery, state its fulfillment and removal condition.
-2. **Review loop (within a 4-iteration block):** Run **Fast CI Observed** once, then launch **Reviewer A + Bugbot in parallel** with `Completion gate: review-loop` for the ordinary loop. Cursor Task spawn: [implementation-review overlay](../../overlays/cursor/skills/implementation-review/SKILL.md). **Do not launch reviewers if Fast CI fails, is skipped (when Fast is not `n/a`), or is claimed-only** (prose “Fast CI passed” / `ci: pass` with no per-command rows).
+2. **Review loop (within a 4-iteration block):** Run **Fast CI Observed** once. Before each parallel launch, verify that each fully composed payload has the canonical envelope, a recognizable review iteration, and observed per-command CI rows (or explicit `n/a` CI status); repair the payload rather than launching a defect. Then launch **Reviewer A + Bugbot** with `Completion gate: review-loop` for the ordinary loop. Cursor Task spawn: [implementation-review overlay](../../overlays/cursor/skills/implementation-review/SKILL.md). **Do not launch reviewers if Fast CI fails, is skipped (when Fast is not `n/a`), or is claimed-only** (prose “Fast CI passed” / `ci: pass` with no per-command rows).
    Both launches must begin with the mandatory [agent invocation](../../workflow/agent-invocation.md) envelope; aliases never replace canonical reviewer identity.
+   For Reviewer A iterations 2–4, include one line per prior must-fix item stating the prior claim and the parent’s asserted resolution. These are claims to verify—not pass conditions—and no prior review transcript may be supplied.
 
-   Optional evidence frame: when a fixed point and an originating spec both exist, the parent may add `Fixed point:` and `Spec path:` lines to the reviewer invoke payload to enable Standards/Spec axis framing with per-finding citations per [code-review-frame.md](../../workflow/code-review-frame.md). Absent those inputs, reviews are unchanged.
-
-3. If **either** reviewer returns `CHANGES REQUESTED`, or Bugbot/`bug_reviewer` does not return CLEAN/no findings, or Reviewer-a omits required `Supersession closure` / `Lifecycle and naming closure`, has Blocking / Non-blocking (code/process) / **blocking** test/docs ≠ `"None"`, or leaves a Supersession `Unresolved` or Lifecycle `Unresolved` / `Unclear` item absent from Blocking / Non-blocking / blocking test/docs: fix **every must-fix** finding → return to step 2 (increment review iteration within the block). Do **not** treat Reviewer-a **Batchable (deferred)** as loop-blocking. **Do not launch a 5th pair** in the current block.
+3. If **either** reviewer returns `CHANGES REQUESTED`, or Bugbot/`bug_reviewer` does not return CLEAN/no findings, or Reviewer-a omits required `Supersession closure` / `Lifecycle and naming closure` / `Fix verification`, has **Must-fix findings** or **Must-fix test & docs** ≠ `"None"`, or leaves a Supersession `Unresolved` or Lifecycle `Unresolved` / `Unclear` item absent from an applicable must-fix list: fix **every must-fix** finding → return to step 2 (increment review iteration within the block). Do **not** treat Reviewer-a **Batchable (deferred)** or a `review iteration: unspecified` payload defect alone as loop-blocking. **Do not launch a 5th pair** in the current block.
 4. **Exit the block:**
    - If **both** return `APPROVED` → go to step 5 (closeout). Do **not** launch reviewers again unless you subsequently changed code.
    - If iteration **4** ends without dual APPROVED → **stop** here; follow [Pressure release](#pressure-release-4-iteration-blocks) (normal reassessment or Composer cap-exhausted handoff). Do **not** run Full CI, do **not** report `task-phase-complete`, do **not** continue to steps 5–7.
@@ -162,9 +160,9 @@ Pressure release is a **stuckness / thrash brake**, not an opt-out from dual APP
 | Reviewer | Loop-blocking result | May remain open |
 |----------|---------------------|-----------------|
 | **Bugbot / `bug_reviewer`** | CLEAN/no findings; any finding fails this leg | — |
-| **Reviewer-a** | Blocking, Non-blocking (code/process), and **blocking** test/docs are `"None"`; required `Supersession closure` and `Lifecycle and naming closure` are present, with every Supersession `Unresolved` and Lifecycle `Unresolved` or `Unclear` routed into an open loop-blocking list | **Batchable (deferred)** |
+| **Reviewer-a** | Must-fix findings and Must-fix test & docs are `"None"`; `Fix verification` is present and every prior claim is resolved; required `Supersession closure` and `Lifecycle and naming closure` are present, with every Supersession `Unresolved` and Lifecycle `Unresolved` or `Unclear` routed into an open must-fix list | **Batchable (deferred)** |
 
-**Example (Reviewer-a):** A missing unit test for a new auth branch is **blocking test/docs**. A wish-list for broader e2e coverage of an untouched flow is **Batchable (deferred)** and may remain on `APPROVED`.
+**Example (Reviewer-a):** A missing unit test for a new auth branch is **Must-fix test & docs**. A wish-list for broader e2e coverage of an untouched flow is **Batchable (deferred)** and may remain on `APPROVED`.
 
 ### Integrated review gate (conditional)
 
@@ -255,9 +253,8 @@ Cap-exhausted handoff (Composer phase implementation subagent, no dual APPROVED)
 
 | Finding type | Action |
 |--------------|--------|
-| Blocking (either reviewer) | Must fix before next review |
-| Non-blocking code/process (either reviewer) | Must fix — cannot dual-APPROVE with these open |
-| Reviewer-a **blocking** test/docs | Must fix — Reviewer-a cannot APPROVE with these open |
+| Must-fix finding (either reviewer) | Must fix before next review |
+| Reviewer-a **Must-fix test & docs** | Must fix — Reviewer-a cannot APPROVE with these open |
 | Reviewer-a **Batchable (deferred)** | Do **not** re-block the loop; list in closeout punch list |
 
 Do not close the phase or task or tell the user the work is “done” while any **must-fix** finding remains open. **Batchable (deferred)** items may remain after dual APPROVED.

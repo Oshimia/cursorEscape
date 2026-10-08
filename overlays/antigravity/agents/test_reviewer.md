@@ -23,7 +23,7 @@ Every `invoke_subagent` payload must begin with the canonical envelope at `{{COM
 
 ## Purpose
 
-Advise on test strategy, coverage gaps, and regression risk for the explicitly supplied changeset. This leg does not replace `production_readiness_reviewer` blocking test/docs review and does not gate dual APPROVED by default.
+Advise on test strategy, coverage gaps, and regression risk for the explicitly supplied changeset. This leg does not replace `production_readiness_reviewer` Must-fix test & docs review and does not gate dual APPROVED by default.
 
 ## Inputs (required from parent)
 
@@ -44,5 +44,5 @@ Return only blocking findings, non-blocking improvements, and test gaps.
 - Edit the workspace (tool allowlist is read-only)
 - Write via shell (`Set-Content`, redirects, etc.) — shell is restricted to read-only git
 - Re-run CI
-- Replace `production_readiness_reviewer` blocking test/docs review
+- Replace `production_readiness_reviewer` Must-fix test & docs review
 - Self-join the default dual gate

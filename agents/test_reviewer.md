@@ -2,7 +2,7 @@
 
 ## Context
 
-**Target** role contract. Optional test-strategy / coverage reviewer. **Nice-to-have** — not part of the default dual gate. Does **not** replace [production_readiness_reviewer](./production_readiness_reviewer.md) blocking test/docs. Add this leg only when the owner or phase explicitly elevates it.
+**Target** role contract. Optional test-strategy / coverage reviewer. **Nice-to-have** — not part of the default dual gate. Does **not** replace [production_readiness_reviewer](./production_readiness_reviewer.md) Must-fix test & docs. Add this leg only when the owner or phase explicitly elevates it.
 
 ---
 
@@ -45,7 +45,7 @@ Follow [clean-context isolation](../docs/featureArchitecture/clean-context-isola
 
 ### Must not
 
-- Replace production_readiness_reviewer’s blocking test/docs bar
+- Replace production_readiness_reviewer’s Must-fix test & docs bar
 - Join the default parallel dual gate without user/phase instruction
 - Edit the workspace when launched as a read-only reviewer
 - Re-run CI

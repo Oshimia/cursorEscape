@@ -44,6 +44,6 @@ Applicable test docs: <paths — or "none supplied">
 Parent-verified Fast CI note: <parent-verified result — do not re-run CI; or "not supplied">
 
 If any envelope element above is missing, malformed, contradictory, or unreadable, return one blocking advisory finding titled `Missing invocation envelope`; do not review and do not infer identity from host routing.
-Return only blocking findings, non-blocking improvements, and test gaps. This leg is advisory and does not replace production_readiness_reviewer's blocking test/docs review.
+Return only blocking findings, non-blocking improvements, and test gaps. This leg is advisory and does not replace production_readiness_reviewer's Must-fix test & docs review.
 Do not edit the workspace, join the default dual gate, or re-run CI.
 ```

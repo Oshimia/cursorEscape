@@ -23,7 +23,7 @@ Advise on test strategy, coverage gaps, and regression risk. Does not gate dual 
 
 ## Must not
 
-- Replace production_readiness_reviewer's blocking test/docs bar
+- Replace production_readiness_reviewer's Must-fix test & docs bar
 - Self-join the default dual gate
 - Edit the workspace or re-run CI
 - Use host `docs/workflow/` as procedure SoT

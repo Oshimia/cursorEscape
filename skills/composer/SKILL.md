@@ -186,9 +186,10 @@ Never commit migration-only before the implementation subagent reaches dual APPR
 - Bugbot final: APPROVED (iter #) | CHANGES REQUESTED
 - Bugbot finding lists all "None": yes | no
   - (If nested Bugbot transcript empty/redacted: yes only when same-Task-id Task UI/result zero-findings evidence was used — see Gate B)
-- Reviewer-a blocking lists "None" (Blocking / Non-blocking / blocking test/docs): yes | no
-- Reviewer-a required Supersession closure present and every Unresolved routed to Blocking / Non-blocking / blocking test/docs: yes | no
-- Reviewer-a required Lifecycle and naming closure present and every Unresolved or Unclear routed to Blocking / Non-blocking / blocking test/docs: yes | no
+- Reviewer-a must-fix lists "None" (Must-fix findings / Must-fix test & docs): yes | no
+- Reviewer-a required Supersession closure present and every Unresolved routed to an applicable must-fix list: yes | no
+- Reviewer-a required Lifecycle and naming closure present and every Unresolved or Unclear routed to an applicable must-fix list: yes | no
+- Reviewer-a required Fix verification present with prior claims Resolved: yes | no | n/a
 - Batchable (deferred): None | [punch list copied from Reviewer-a]
 - Reviewer-a launches this phase (cumulative): N
 - Bugbot launches this phase (cumulative): N
@@ -229,7 +230,7 @@ When iteration 4 ends without dual APPROVED, the implementation subagent returns
 - Reviewer A final: …
 - Bugbot final: …
 - Remaining Bugbot lists (Blocking / Non-blocking / Test gaps):
-- Remaining Reviewer-a lists (Blocking / Non-blocking / blocking test/docs / Batchable deferred):
+- Remaining Reviewer-a lists (Must-fix findings / Must-fix test & docs / Batchable deferred):
 - In-spec must-fix: [list]
 - Out-of-spec / process-only: [list]
 - Reviewer-a launches this phase (cumulative): N
@@ -281,7 +282,7 @@ QC has **two mandatory gates** on the **dual-APPROVED closeout** path — both m
 
 Compare report to **attestation** `git diff --name-only` (not the live tree after roadmap edits).
 
-**REJECT** if: missing attestation; not dual APPROVED / Bugbot lists ≠ `"None"` or Reviewer-a blocking lists ≠ `"None"` or Reviewer-a required `Supersession closure` / `Lifecycle and naming closure` is missing or has a Supersession `Unresolved` or Lifecycle `Unresolved` / `Unclear` item not routed to Blocking / Non-blocking / blocking test/docs (Batchable (deferred) may be non-None — do not REJECT for that alone); Full not pass (unless blocked → ask user to stop lockers); reviewers launched with Full or after dual APPROVED without code changes; phase N+1 production paths in attestation (vs phase Agent context); required approval-preview folder still present; subagent committed/pushed; empty docs-consulted section.
+**REJECT** if: missing attestation; not dual APPROVED / Bugbot lists ≠ `"None"` or Reviewer-a must-fix lists ≠ `"None"` or Reviewer-a required `Supersession closure` / `Lifecycle and naming closure` / `Fix verification` is missing, or has a Supersession `Unresolved`, Lifecycle `Unresolved` / `Unclear`, or unresolved prior claim not routed to an applicable must-fix list (Batchable (deferred) may be non-None — do not REJECT for that alone); Full not pass (unless blocked → ask user to stop lockers); reviewers launched with Full or after dual APPROVED without code changes; phase N+1 production paths in attestation (vs phase Agent context); required approval-preview folder still present; subagent committed/pushed; empty docs-consulted section.
 
 **Cap→Waive ACCEPT:** do **not** REJECT solely for missing dual APPROVED when a complete [Composer waiver attestation](#composer-waiver-attestation) is present and Full passes (or `n/a` + user ack). Still REJECT if Fast/Full failures were “waived,” or if waived items were clearly in-spec must-fix.
 
@@ -303,12 +304,12 @@ If a nested **Reviewer-a** transcript cannot be located after a reasonable searc
 
 #### Acceptable Bugbot zero-findings evidence
 
-When the nested Bugbot transcript body is empty, redacted, or only `<answer></answer>`, **but** the Cursor Task UI or Task result summary for **that same Bugbot Task id** shows **“Bugbot found no bugs”** (or equivalent zero-findings wording), treat Bugbot as **APPROVED** with all finding lists `"None"`. Do **not** REJECT and do **not** re-launch Bugbot solely for an empty/redacted transcript body. Still **REJECT** if: the Bugbot Task cannot be located; **or** there is no transcript **and** no UI/Task zero-findings summary for that id; **or** the UI/summary shows findings / non-zero bugs; **or** the closeout claims Bugbot APPROVED with neither transcript lists nor UI/Task zero-findings evidence for the cited Task id. (Reviewer-a still requires readable Blocking / Non-blocking / blocking test/docs lists and required `Supersession closure` / `Lifecycle and naming closure` with Supersession `Unresolved` and Lifecycle `Unresolved` / `Unclear` items routed in its transcript — this exception is Bugbot-only.)
+When the nested Bugbot transcript body is empty, redacted, or only `<answer></answer>`, **but** the Cursor Task UI or Task result summary for **that same Bugbot Task id** shows **“Bugbot found no bugs”** (or equivalent zero-findings wording), treat Bugbot as **APPROVED** with all finding lists `"None"`. Do **not** REJECT and do **not** re-launch Bugbot solely for an empty/redacted transcript body. Still **REJECT** if: the Bugbot Task cannot be located; **or** there is no transcript **and** no UI/Task zero-findings summary for that id; **or** the UI/summary shows findings / non-zero bugs; **or** the closeout claims Bugbot APPROVED with neither transcript lists nor UI/Task zero-findings evidence for the cited Task id. (Reviewer-a still requires readable Must-fix findings / Must-fix test & docs lists and required `Supersession closure` / `Lifecycle and naming closure` / `Fix verification` with unresolved items and claims routed in its transcript — this exception is Bugbot-only.)
 
 **REJECT** (with a concrete gap list for `resume`) if any of:
 
 - **Discovery / SOP skip:** no reads of discovery Step 0 / required repo docs / roadmap “Where to read context” before implementing
-- **Review loop skip or compression:** missing Fast CI before reviewers; missing parallel `reviewer-a` + Bugbot; claimed APPROVED without matching reviewer output (**except** Bugbot when [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence) applies); must-fix findings left open on closeout path (Bugbot any list, or Reviewer-a Blocking / Non-blocking / blocking test/docs, or missing/unrouted required Reviewer-a `Supersession closure` / `Lifecycle and naming closure`, including Lifecycle `Unclear`); do **not** treat Reviewer-a Batchable (deferred) as findings left open; iteration count doesn’t match launches/fixes
+- **Review loop skip or compression:** missing Fast CI before reviewers; missing pre-spawn payload gate, parallel ``reviewer-a`` + Bugbot, or required Reviewer-a prior-findings claims; claimed APPROVED without matching reviewer output (**except** Bugbot when [Acceptable Bugbot zero-findings evidence](#acceptable-bugbot-zero-findings-evidence) applies); must-fix findings left open on closeout path (Bugbot any list, or Reviewer-a Must-fix findings / Must-fix test & docs, or missing/unrouted required Reviewer-a ``Supersession closure`` / ``Lifecycle and naming closure`` / ``Fix verification``, including Lifecycle ``Unclear``); do **not** treat Reviewer-a Batchable (deferred) as findings left open; iteration count does not match launches/fixes
 - **Pressure-release misuse:** 5th reviewer pair in a block; Full CI run on cap-exhausted handoff; self-renew past the block without Composer triage; Normal-agent-style Terminate used by the implementation subagent to claim phase complete
 - **Gate misuse:** reviewers launched with Full CI; reviewers re-launched after dual APPROVED with no code changes; Full CI skipped or run before dual APPROVED on the closeout path
 - **Shortcut closeout:** empty/fake docs-consulted; approval-preview folder not deleted when required; `git commit` / `git push` by subagent

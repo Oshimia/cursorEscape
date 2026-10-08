@@ -6,6 +6,7 @@
 2. Put all existing task-specific inputs after the envelope separator. Never rely on host metadata, nearby prose, or prior transcripts to establish identity.
 3. A host alias is routing metadata only. The canonical role contract and required reading remain authoritative.
 4. If the envelope is missing, malformed, internally contradictory, or unreadable, the child must stop and fail loudly in its role-native output shape. It must not infer identity and proceed.
+5. Before spawning either review-loop reviewer, verify the fully composed payload contains the canonical envelope, a recognizable review iteration, and observed per-command CI rows (or the role contract's explicit `n/a` CI status). If any is absent, repair the parent payload before launch.
 
 **Authoring language (always-on):** Author all prose in plain domain terms; do not introduce opaque placeholder jargon (e.g., "golden") — if a term needs a glossary to be understood, name the concrete thing instead.
 

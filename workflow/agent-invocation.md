@@ -41,6 +41,16 @@ Use `{{COMPANION_ROOT}}` in harness sources; resolve it to the absolute cursorEs
 
 `composer` is a user-assigned thread role, not a spawned child role. It is governed by `skills/composer/SKILL.md`; every child-agent launch that Composer makes must use this envelope.
 
+## Pre-spawn payload gate
+
+Before spawning either review-loop reviewer (`production_readiness_reviewer` or `bug_reviewer`), the parent must verify the fully composed child payload. It must contain all three:
+
+1. the canonical envelope above;
+2. the review iteration or an unambiguous equivalent; and
+3. observed per-command CI rows, or the role contract’s explicit `n/a` CI status.
+
+If any item is absent, the parent must repair its own payload before launch. This gate prevents wasted reviewer launches; it does not replace the child’s independent validation.
+
 ## Malformed invocation
 
 If any envelope element is missing, ambiguous, contradicted by task text, or the contract path cannot be resolved, stop task work and fail loudly in the role-native output shape:
